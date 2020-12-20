@@ -9,15 +9,15 @@ import {
   Icon,
   Left,
   Right,
-  Body,
+  Body
 } from 'native-base';
 
 import styles from './styles';
-export interface Props {
+export interface BlankPageProps {
   navigation: any;
 }
-export interface State {}
-class BlankPage extends React.Component<Props, State> {
+export interface BlankPageState {}
+class BlankPage extends React.Component<BlankPageProps, BlankPageState> {
   // <Icon name="ios-arrow-back" />
   render() {
     const param = this.props.navigation.state.params;
@@ -30,7 +30,7 @@ class BlankPage extends React.Component<Props, State> {
               onPress={() => {
                 this.props.navigation.openDrawer();
               }}>
-              <Text>Menu</Text>
+              <Icon name="search-outline" />
             </Button>
           </Left>
           <Body style={{ flex: 3 }}>

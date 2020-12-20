@@ -1,23 +1,22 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Home from '../../screens/Home';
+import ListPage from '../../screens/ListPage';
 import datas from './data';
 import { fetchList } from './actions';
-export interface HomeContainerProps {
+export interface Props {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
-export interface HomeContainerState {}
-class HomeContainer extends React.Component<
-  HomeContainerProps,
-  HomeContainerState
-> {
+export interface State {}
+class ListPageContainer extends React.Component<Props, State> {
   componentDidMount() {
     this.props.fetchList(datas);
   }
   render() {
-    return <Home navigation={this.props.navigation} list={this.props.data} />;
+    return (
+      <ListPage navigation={this.props.navigation} list={this.props.data} />
+    );
   }
 }
 
@@ -28,7 +27,7 @@ function bindAction(dispatch: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.HomeReducer.list,
-  isLoading: state.HomeReducer.isLoading
+  data: state.ExploreReducer.list,
+  isLoading: state.ExploreReducer.isLoading,
 });
-export default connect(mapStateToProps, bindAction)(HomeContainer);
+export default connect(mapStateToProps, bindAction)(ListPageContainer);

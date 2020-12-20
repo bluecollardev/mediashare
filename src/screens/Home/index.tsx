@@ -1,45 +1,42 @@
 import * as React from 'react';
 import {
   Container,
-  Header,
-  Title,
   Content,
+  View,
   Text,
   Button,
-  Icon,
-  Left,
-  Body,
-  Right,
-  List,
-  ListItem,
+  Icon
 } from 'native-base';
 
+import { MediaListItem } from '../../components/layout/MediaListItem';
+
 import styles from './styles';
-export interface Props {
+import { AppHeader } from '../../components/layout/AppHeader';
+import { MediaCard } from '../../components/layout/MediaCard';
+
+export interface HomeProps {
   navigation: any;
   list: any;
 }
-export interface State {}
-class Home extends React.Component<Props, State> {
+export interface HomeState {}
+
+const dataArray = [
+  { title: 'First Element', content: 'Lorem ipsum dolor sit amet' },
+  { title: 'Second Element', content: 'Lorem ipsum dolor sit amet' },
+  { title: 'Third Element', content: 'Lorem ipsum dolor sit amet' }
+];
+
+class Home extends React.Component<HomeProps, HomeState> {
   render() {
+    const { navigation } = this.props;
     return (
       <Container style={styles.container}>
-        <Header>
-          <Left>
-            <Button
-              transparent
-              onPress={() => {
-                this.props.navigation.openDrawer();
-              }}>
-              <Text>Menu</Text>
-            </Button>
-          </Left>
-          <Body>
-            <Title>Home</Title>
-          </Body>
-          <Right />
-        </Header>
-        <Content />
+        <AppHeader title="Home" navigation={navigation} />
+        <Content>
+          <View padder>
+            <MediaCard />
+          </View>
+        </Content>
       </Container>
     );
   }

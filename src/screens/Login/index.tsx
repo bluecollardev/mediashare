@@ -13,12 +13,12 @@ import {
   Footer,
 } from 'native-base';
 //import styles from "./styles";
-export interface Props {
+export interface LoginProps {
   loginForm: any;
   onLogin: Function;
 }
-export interface State {}
-class Login extends React.Component<Props, State> {
+export interface LoginState {}
+class Login extends React.Component<LoginProps, LoginState> {
   // <Icon name="flash" style={{ fontSize: 104 }} />
   render() {
     return (

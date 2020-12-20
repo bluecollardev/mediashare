@@ -13,11 +13,11 @@ import {
 } from 'native-base';
 
 import styles from './styles';
-export interface Props {
+export interface SettingsProps {
   navigation: any;
 }
-export interface State {}
-class Settings extends React.Component<Props, State> {
+export interface SettingsState {}
+class Settings extends React.Component<SettingsProps, SettingsState> {
   // <Icon name="ios-arrow-back" />
   render() {
     const param = this.props.navigation.state.params;
@@ -30,7 +30,7 @@ class Settings extends React.Component<Props, State> {
               onPress={() => {
                 this.props.navigation.openDrawer();
               }}>
-              <Text>Menu</Text>
+              <Icon name="search-outline" />
             </Button>
           </Left>
           <Body style={{ flex: 3 }}>
@@ -46,8 +46,7 @@ class Settings extends React.Component<Props, State> {
             </Button>
           </Right>
         </Header>
-        <Content padder>
-        </Content>
+        <Content padder />
       </Container>
     );
   }

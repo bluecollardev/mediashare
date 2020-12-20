@@ -11,9 +11,21 @@ const routes = [
     route: 'Explore',
     caption: 'Explore'
   },
+  {
+    route: 'Playlists',
+    caption: 'Playlists'
+  },
+  {
+    route: 'Library',
+    caption: 'Library'
+  },
   /* {
     route: 'BlankPage',
     caption: 'Blank Page'
+  }, */
+  /* {
+    route: 'ListPage',
+    caption: 'List Page'
   }, */
   {
     route: 'Settings',
@@ -25,15 +37,18 @@ const routes = [
   }
 ];
 
-export interface Props {
+export interface SidebarProps {
   navigation: any;
 }
-export interface State {}
+export interface SidebarState {}
 const resetAction = StackActions.reset({
   index: 0,
   actions: [NavigationActions.navigate({ routeName: 'Login' })]
 });
-export default class Sidebar extends React.Component<Props, State> {
+export default class Sidebar extends React.Component<
+  SidebarProps,
+  SidebarState
+> {
   render() {
     return (
       <Container>

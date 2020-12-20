@@ -3,13 +3,16 @@ import { connect } from 'react-redux';
 import Explore from '../../screens/Explore';
 import datas from './data';
 import { fetchList } from './actions';
-export interface Props {
+export interface ExploreContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
-export interface State {}
-class ExploreContainer extends React.Component<Props, State> {
+export interface ExploreContainerState {}
+class ExploreContainer extends React.Component<
+  ExploreContainerProps,
+  ExploreContainerState
+> {
   componentDidMount() {
     this.props.fetchList(datas);
   }
@@ -22,7 +25,7 @@ class ExploreContainer extends React.Component<Props, State> {
 
 function bindAction(dispatch: any) {
   return {
-    fetchList: (url: any) => dispatch(fetchList(url)),
+    fetchList: (url: any) => dispatch(fetchList(url))
   };
 }
 

@@ -21,6 +21,9 @@ import { Footer, FooterTab, Button, Icon } from 'native-base';
 import Login from './container/LoginContainer';
 import Home from './container/HomeContainer';
 import Explore from './container/ExploreContainer';
+import Playlists from './container/PlaylistsContainer';
+import Library from './container/LibraryContainer';
+import ListPage from './container/ListPageContainer';
 import BlankPage from './container/BlankPageContainer';
 import Settings from './container/SettingsContainer';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,7 +38,10 @@ const DrawerNavigator = createDrawerNavigator(
     Login: { screen: Login },
     Home: { screen: Home },
     Explore: { screen: Explore },
+    Playlists: { screen: Playlists },
+    Library: { screen: Library },
     BlankPage: { screen: BlankPage },
+    ListPage: { screen: ListPage },
     Settings: { screen: Settings }
   },
   {
@@ -52,7 +58,7 @@ const DrawerNavigator = createDrawerNavigator(
 /* const AppNavigator = createStackNavigator(
   {
     Home: { screen: Home },
-    Explore: { screen: Explore },
+    ListPage: { screen: ListPage },
     Login: { screen: Login },
     BlankPage: { screen: BlankPage }
   },
@@ -78,19 +84,19 @@ export default class App extends React.Component {
         <Footer style={{ backgroundColor: '#F8F8F8' }}>
           <FooterTab>
             <Button>
-              <Icon name="globe" />
+              <Icon name="earth-outline" />
             </Button>
             <Button>
-              <Icon name="play" />
+              <Icon name="play-circle-outline" />
             </Button>
             <Button>
-              <Icon name="list" />
+              <Icon name="film-outline" />
             </Button>
             <Button>
-              <Icon name="link" />
+              <Icon name="share-social-outline" />
             </Button>
             <Button>
-              <Icon name="settings" />
+              <Icon name="settings-outline" />
             </Button>
           </FooterTab>
         </Footer>
