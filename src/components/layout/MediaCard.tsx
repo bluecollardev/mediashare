@@ -15,7 +15,8 @@ export interface MediaListItemProps {
   navigation?: any;
 }
 
-export const MediaCard = () => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const MediaCard = (props: MediaListItemProps) => {
   return (
     <Card style={{ flex: 0 }}>
       <CardItem cardBody>
