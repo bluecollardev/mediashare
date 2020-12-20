@@ -11,7 +11,9 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@expo/vector-icons": "^12.0.2",
     "@react-native-community/masked-view": "^0.1.10",
+    "@types/react-native-vector-icons": "^6.4.6",
     "@types/react-navigation": "^3.4.0",
     "@types/react-redux": "^7.1.12",
     "@types/redux-form": "^8.3.1",
@@ -23,6 +25,7 @@
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.16.1",
+    "react-native-vector-icons": "^7.1.0",
     "react-navigation": "^4.4.3",
     "react-navigation-drawer": "^2.6.0",
     "react-navigation-stack": "^2.10.2",

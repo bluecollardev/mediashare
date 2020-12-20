@@ -10,41 +10,13 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
-/* import {
-  SafeAreaView,
-  StyleSheet,
-  StatusBar,
-} from 'react-native'; */
-
-// import { View, Text } from 'react-native';
-
 import { Dimensions } from 'react-native';
-
 import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+// import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
-// import Explore from './container/ExploreContainer';
-
-declare const global: { HermesInternal: null | {} };
-
-const deviceWidth = Dimensions.get('window').width;
-
-/* class ExploreScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Explore Screen</Text>
-      </View>
-    );
-  }
-} */
-
-/* const AppNavigator = createStackNavigator({
-  Explore: {
-    screen: Explore
-  },
-}); */
+import { Footer, FooterTab, Button, Icon } from 'native-base';
+// import Icon from 'react-native-vector-icons/Ionicons';
 
 import Login from './container/LoginContainer';
 import Home from './container/HomeContainer';
@@ -53,6 +25,10 @@ import BlankPage from './container/BlankPageContainer';
 import Settings from './container/SettingsContainer';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Sidebar from './container/SidebarContainer';
+
+declare const global: { HermesInternal: null | {} };
+
+const deviceWidth = Dimensions.get('window').width;
 
 const DrawerNavigator = createDrawerNavigator(
   {
@@ -93,11 +69,32 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <AppContainer
-        ref={(nav) => {
-          this.navigator = nav;
-        }}
-      />
+      <>
+        <AppContainer
+          ref={(nav) => {
+            this.navigator = nav;
+          }}
+        />
+        <Footer style={{ backgroundColor: '#F8F8F8' }}>
+          <FooterTab>
+            <Button>
+              <Icon name="globe" />
+            </Button>
+            <Button>
+              <Icon name="play" />
+            </Button>
+            <Button>
+              <Icon name="list" />
+            </Button>
+            <Button>
+              <Icon name="link" />
+            </Button>
+            <Button>
+              <Icon name="settings" />
+            </Button>
+          </FooterTab>
+        </Footer>
+      </>
     );
   }
 }

@@ -41,20 +41,6 @@ class Login extends React.Component<Props, State> {
             </Button>
           </View>
         </Content>
-        <Footer style={{ backgroundColor: '#F8F8F8' }}>
-          <View
-            style={{
-              alignItems: 'center',
-              opacity: 0.5,
-              flexDirection: 'row',
-            }}>
-            <View padder>
-              <Text style={{ color: '#000' }}>
-                Made with love at Blue Collar
-              </Text>
-            </View>
-          </View>
-        </Footer>
       </Container>
     );
   }

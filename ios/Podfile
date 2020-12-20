@@ -8,6 +8,8 @@ target 'bluecollar_mediashare' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'bluecollar_mediashareTests' do
     inherit! :complete
     # Pods for testing
