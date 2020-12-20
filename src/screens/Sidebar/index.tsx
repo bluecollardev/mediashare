@@ -5,16 +5,24 @@ import { NavigationActions, StackActions } from 'react-navigation';
 const routes = [
   {
     route: 'Home',
-    caption: 'Home',
+    caption: 'Home'
   },
   {
+    route: 'Explore',
+    caption: 'Explore'
+  },
+  /* {
     route: 'BlankPage',
-    caption: 'Blank Page',
+    caption: 'Blank Page'
+  }, */
+  {
+    route: 'Settings',
+    caption: 'Settings'
   },
   {
     route: 'Login',
-    caption: 'Logout',
-  },
+    caption: 'Logout'
+  }
 ];
 
 export interface Props {
@@ -23,7 +31,7 @@ export interface Props {
 export interface State {}
 const resetAction = StackActions.reset({
   index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Login' })],
+  actions: [NavigationActions.navigate({ routeName: 'Login' })]
 });
 export default class Sidebar extends React.Component<Props, State> {
   render() {

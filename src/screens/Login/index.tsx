@@ -19,13 +19,13 @@ export interface Props {
 }
 export interface State {}
 class Login extends React.Component<Props, State> {
+  // <Icon name="flash" style={{ fontSize: 104 }} />
   render() {
     return (
       <Container>
         <Header style={{ height: 200 }}>
           <Body style={{ alignItems: 'center' }}>
-            <Icon name="flash" style={{ fontSize: 104 }} />
-            <Title>ReactNativeSeed.com</Title>
+            <Title>Blue Collar Software</Title>
             <View padder>
               <Text
                 style={{ color: Platform.OS === 'ios' ? '#000' : '#FFF' }}
@@ -49,12 +49,10 @@ class Login extends React.Component<Props, State> {
               flexDirection: 'row',
             }}>
             <View padder>
-              <Text style={{ color: '#000' }}>Made with love at </Text>
+              <Text style={{ color: '#000' }}>
+                Made with love at Blue Collar
+              </Text>
             </View>
-            <Image
-              source={{ uri: 'https://geekyants.com/images/logo-dark.png' }}
-              style={{ width: 422 / 4, height: 86 / 4 }}
-            />
           </View>
         </Footer>
       </Container>

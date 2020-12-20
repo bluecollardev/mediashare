@@ -16,64 +16,88 @@ import React from 'react';
   StatusBar,
 } from 'react-native'; */
 
-import { View, Text } from 'react-native';
+// import { View, Text } from 'react-native';
 
-// import { Dimensions } from 'react-native';
+import { Dimensions } from 'react-native';
 
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-// import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+
+// import Explore from './container/ExploreContainer';
 
 declare const global: { HermesInternal: null | {} };
 
-// const deviceWidth = Dimensions.get('window').width;
+const deviceWidth = Dimensions.get('window').width;
 
-class HomeScreen extends React.Component {
+/* class ExploreScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
+        <Text>Explore Screen</Text>
       </View>
     );
   }
-}
+} */
 
-const AppNavigator = createStackNavigator({
-  Home: {
-    screen: HomeScreen,
+/* const AppNavigator = createStackNavigator({
+  Explore: {
+    screen: Explore
   },
-});
+}); */
 
-/* import Login from './container/LoginContainer';
+import Login from './container/LoginContainer';
 import Home from './container/HomeContainer';
+import Explore from './container/ExploreContainer';
 import BlankPage from './container/BlankPageContainer';
+import Settings from './container/SettingsContainer';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Sidebar from './container/SidebarContainer';
 
-const Drawer = createDrawerNavigator(
+const DrawerNavigator = createDrawerNavigator(
   {
+    Login: { screen: Login },
     Home: { screen: Home },
+    Explore: { screen: Explore },
+    BlankPage: { screen: BlankPage },
+    Settings: { screen: Settings }
   },
   {
+    initialRouteName: 'Login',
+    // headerMode: 'none',
     drawerWidth: deviceWidth - 50,
     drawerPosition: 'left',
     contentComponent: (props: any) => {
-      return null; // (<Sidebar {...props} />)
+      return <Sidebar {...props} />;
     }
   }
 );
 
-const AppNavigator = createStackNavigator(
+/* const AppNavigator = createStackNavigator(
   {
     Home: { screen: Home },
+    Explore: { screen: Explore },
     Login: { screen: Login },
-    BlankPage: { screen: BlankPage },
-    Drawer: { screen: Drawer }
+    BlankPage: { screen: BlankPage }
   },
   {
-    initialRouteName: 'Home',
-    // headerMode: 'none'
+    initialRouteName: 'Login',
+    headerMode: 'none'
   }
-);*/
+); */
 
-export default createAppContainer(AppNavigator);
+const AppContainer = createAppContainer(DrawerNavigator);
+
+export default class App extends React.Component {
+  public navigator: any;
+
+  render() {
+    return (
+      <AppContainer
+        ref={(nav) => {
+          this.navigator = nav;
+        }}
+      />
+    );
+  }
+}

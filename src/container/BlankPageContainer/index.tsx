@@ -1,5 +1,5 @@
 import * as React from 'react';
-import BlankPage from '../../../src/stories/screens/BlankPage';
+import BlankPage from '../../screens/BlankPage';
 export interface Props {
   navigation: any;
 }

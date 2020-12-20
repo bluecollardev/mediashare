@@ -17,35 +17,40 @@ export interface Props {
   navigation: any;
 }
 export interface State {}
-class BlankPage extends React.Component<Props, State> {
+class Settings extends React.Component<Props, State> {
+  // <Icon name="ios-arrow-back" />
   render() {
     const param = this.props.navigation.state.params;
     return (
       <Container style={styles.container}>
         <Header>
           <Left>
-            <Button transparent onPress={() => this.props.navigation.goBack()}>
-              <Icon name="ios-arrow-back" />
+            <Button
+              transparent
+              onPress={() => {
+                this.props.navigation.openDrawer();
+              }}>
+              <Text>Menu</Text>
             </Button>
           </Left>
-
           <Body style={{ flex: 3 }}>
-            <Title>{param ? param.name.item : 'Blank Page'}</Title>
+            <Title>{param ? param.name.item : 'Settings'}</Title>
           </Body>
-
-          <Right />
+          <Right>
+            <Button
+              transparent
+              onPress={() => {
+                this.props.navigation.navigate('Home');
+              }}>
+              <Text>Back</Text>
+            </Button>
+          </Right>
         </Header>
-
         <Content padder>
-          <Text>
-            {param !== undefined
-              ? param.name.item
-              : 'Create Something Awesome . . .'}
-          </Text>
         </Content>
       </Container>
     );
   }
 }
 
-export default BlankPage;
+export default Settings;

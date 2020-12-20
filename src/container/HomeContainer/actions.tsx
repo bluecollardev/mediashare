@@ -7,7 +7,7 @@ export function listIsLoading(bool: boolean) {
 export function fetchListSuccess(list: Object) {
   return {
     type: 'FETCH_LIST_SUCCESS',
-    list,
+    list
   };
 }
 export function fetchList(url: any) {

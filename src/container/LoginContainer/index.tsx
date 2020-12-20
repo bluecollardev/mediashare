@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Item, Input, Icon, Form, Toast } from 'native-base';
-import { Field, reduxForm } from 'redux-form';
-import Login from '../../../src/stories/screens/Login';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
+import Login from '../../screens/Login';
 
 const required = (value: any) => (value ? undefined : 'Required');
 const maxLength = (max: any) => (value: any) =>
@@ -19,18 +19,19 @@ const alphaNumeric = (value: any) =>
     ? 'Only alphanumeric characters'
     : undefined;
 
-export interface Props {
-  navigation: any;
+export interface LoginFormProps extends InjectedFormProps {
+  navigation?: any;
   valid: boolean;
 }
-export interface State {}
-class LoginForm extends React.Component<Props, State> {
+export interface LoginFormState {}
+class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
+  navigation: any;
   textInput: any;
 
   renderInput({ input, meta: { touched, error } }) {
+    // <Icon active name={input.name === 'email' ? 'person' : 'unlock'} />
     return (
       <Item error={error && touched}>
-        <Icon active name={input.name === 'email' ? 'person' : 'unlock'} />
         <Input
           ref={(c) => (this.textInput = c)}
           placeholder={input.name === 'email' ? 'Email' : 'Password'}
@@ -42,16 +43,16 @@ class LoginForm extends React.Component<Props, State> {
   }
 
   login() {
-    if (this.props.valid) {
-      this.props.navigation.navigate('Drawer');
-    } else {
+    //if (this.props.valid) {
+    this.props.navigation.navigate('Home');
+    /* } else {
       Toast.show({
         text: 'Enter Valid Username & password!',
         duration: 2000,
         position: 'top',
-        textStyle: { textAlign: 'center' },
+        textStyle: { textAlign: 'center' }
       });
-    }
+    } */
   }
 
   render() {
@@ -72,9 +73,7 @@ class LoginForm extends React.Component<Props, State> {
     return <Login loginForm={form} onLogin={() => this.login()} />;
   }
 }
-// @ts-ignore
-/* const LoginContainer = reduxForm({
-  form: 'login',
-})(LoginForm); */
-// export default LoginContainer;
-export default LoginForm;
+const LoginContainer = reduxForm({
+  form: 'login'
+})(LoginForm);
+export default LoginContainer;

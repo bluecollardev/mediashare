@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Home from '../../../src/stories/screens/Home';
+import Home from '../../screens/Home';
 import datas from './data';
 import { fetchList } from './actions';
 export interface Props {
@@ -25,7 +25,7 @@ function bindAction(dispatch: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.homeReducer.list,
-  isLoading: state.homeReducer.isLoading,
+  data: state.HomeReducer.list,
+  isLoading: state.HomeReducer.isLoading
 });
 export default connect(mapStateToProps, bindAction)(HomeContainer);

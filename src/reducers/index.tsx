@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
-import homeReducer from '../container/HomeContainer/reducer';
+import HomeReducer from '../container/HomeContainer/reducer';
+import ExploreReducer from '../container/ExploreContainer/reducer';
 
 export default combineReducers({
   form: formReducer,
-  homeReducer,
+  HomeReducer,
+  ExploreReducer
 });

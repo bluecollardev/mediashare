@@ -1,13 +1,13 @@
 const initialState = {
   list: [],
-  isLoading: true,
+  isLoading: true
 };
 
 export default function (state = initialState, action: any) {
   if (action.type === 'FETCH_LIST_SUCCESS') {
     return {
       ...state,
-      list: action.list,
+      list: action.list
     };
   }
   if (action.type === 'LIST_IS_LOADING') {

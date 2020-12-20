@@ -20,23 +20,22 @@ export interface Props {
   list: any;
 }
 export interface State {}
-class Home extends React.Component<Props, State> {
+class Explore extends React.Component<Props, State> {
   render() {
     return (
       <Container style={styles.container}>
         <Header>
-          <Text>Testing testing 123</Text>
           <Left>
-            <Button transparent>
-              <Icon
-                active
-                name="menu"
-                onPress={() => this.props.navigation.navigate('DrawerOpen')}
-              />
+            <Button
+              transparent
+              onPress={() => {
+                this.props.navigation.openDrawer();
+              }}>
+              <Text>Menu</Text>
             </Button>
           </Left>
           <Body>
-            <Title>Home</Title>
+            <Title>Explore</Title>
           </Body>
           <Right />
         </Header>
@@ -46,7 +45,7 @@ class Home extends React.Component<Props, State> {
               <ListItem
                 key={i}
                 onPress={() =>
-                  this.props.navigation.navigate('BlankPage', {
+                  this.props.navigation.navigate('Blankq  Page', {
                     name: { item },
                   })
                 }>
@@ -60,4 +59,4 @@ class Home extends React.Component<Props, State> {
   }
 }
 
-export default Home;
+export default Explore;
