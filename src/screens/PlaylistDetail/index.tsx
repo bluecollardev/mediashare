@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { Container, Content, View } from 'native-base';
+import {
+  Container,
+  Content,
+  List,
+  View
+} from 'native-base';
 
 import styles from './styles';
 import { AppHeader } from '../../components/layout/AppHeader';
@@ -9,6 +14,7 @@ import MediaDetail, {
   MediaDetailProps,
   MediaDetailState,
 } from '../MediaDetail';
+import { MediaListItem } from '../../components/layout/MediaListItem';
 
 export interface PlaylistDetailProps extends MediaDetailProps {
   navigation: any;
@@ -26,6 +32,11 @@ class PlaylistDetail extends MediaDetail {
           <View padder>
             <PlaylistCard />
           </View>
+          <List>
+            <MediaListItem />
+            <MediaListItem />
+            <MediaListItem />
+          </List>
         </Content>
       </Container>
     );

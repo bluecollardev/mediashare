@@ -7,7 +7,7 @@ import { LibraryItemCard } from '../../components/layout/LibraryItemCard';
 
 import MediaDetail, {
   MediaDetailProps,
-  MediaDetailState,
+  MediaDetailState
 } from '../MediaDetail';
 
 export interface LibraryItemDetailProps extends MediaDetailProps {

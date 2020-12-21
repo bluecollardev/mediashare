@@ -24,12 +24,6 @@ export interface ExploreProps {
 }
 export interface ExploreState {}
 
-const dataArray = [
-  { title: 'First Element', content: 'Lorem ipsum dolor sit amet' },
-  { title: 'Second Element', content: 'Lorem ipsum dolor sit amet' },
-  { title: 'Third Element', content: 'Lorem ipsum dolor sit amet' }
-];
-
 class Explore extends React.Component<ExploreProps, ExploreState> {
   render() {
     const { navigation } = this.props;

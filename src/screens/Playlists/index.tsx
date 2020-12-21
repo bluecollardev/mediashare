@@ -16,19 +16,12 @@ import { MediaListItem } from '../../components/layout/MediaListItem';
 
 import styles from './styles';
 import { AppHeader } from '../../components/layout/AppHeader';
-import { MediaCard } from '../../components/layout/MediaCard';
 
 export interface PlaylistsProps {
   navigation: any;
   list: any;
 }
 export interface PlaylistsState {}
-
-const dataArray = [
-  { title: 'First Element', content: 'Lorem ipsum dolor sit amet' },
-  { title: 'Second Element', content: 'Lorem ipsum dolor sit amet' },
-  { title: 'Third Element', content: 'Lorem ipsum dolor sit amet' }
-];
 
 class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
   render() {

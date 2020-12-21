@@ -16,19 +16,12 @@ import { MediaListItem } from '../../components/layout/MediaListItem';
 
 import styles from './styles';
 import { AppHeader } from '../../components/layout/AppHeader';
-import { MediaCard } from '../../components/layout/MediaCard';
 
 export interface LibraryProps {
   navigation: any;
   list: any;
 }
 export interface LibraryState {}
-
-const dataArray = [
-  { title: 'First Element', content: 'Lorem ipsum dolor sit amet' },
-  { title: 'Second Element', content: 'Lorem ipsum dolor sit amet' },
-  { title: 'Third Element', content: 'Lorem ipsum dolor sit amet' }
-];
 
 class Library extends React.Component<LibraryProps, LibraryState> {
   render() {
