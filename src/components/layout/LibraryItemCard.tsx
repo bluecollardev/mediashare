@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import { MediaCard } from './MediaCard';
 
-export interface PlaylistItemCardProps {
+export interface LibraryItemCardProps {
   navigation?: any;
 }
 
-export const PlaylistItemCard = (props: PlaylistItemCardProps) => {
+export const LibraryItemCard = (props: LibraryItemCardProps) => {
   const { navigation } = props;
   return <MediaCard navigation={navigation} />;
 };

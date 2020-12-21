@@ -9,11 +9,11 @@ import styles from './styles';
 import { AppHeader } from '../../components/layout/AppHeader';
 import { MediaCard } from '../../components/layout/MediaCard';
 
-export interface HomeProps {
+export interface MediaDetailProps {
   navigation: any;
   list: any;
 }
-export interface HomeState {}
+export interface MediaDetailState {}
 
 const dataArray = [
   { title: 'First Element', content: 'Lorem ipsum dolor sit amet' },
@@ -21,7 +21,7 @@ const dataArray = [
   { title: 'Third Element', content: 'Lorem ipsum dolor sit amet' }
 ];
 
-class Home extends React.Component<HomeProps, HomeState> {
+class MediaDetail extends React.Component<MediaDetailProps, MediaDetailState> {
   render() {
     const { navigation } = this.props;
     return (
@@ -37,4 +37,4 @@ class Home extends React.Component<HomeProps, HomeState> {
   }
 }
 
-export default Home;
+export default MediaDetail;

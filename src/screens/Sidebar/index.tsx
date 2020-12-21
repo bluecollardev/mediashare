@@ -16,8 +16,16 @@ const routes = [
     caption: 'Playlists'
   },
   {
+    route: 'PlaylistDetail',
+    caption: 'Playlist Detail'
+  },
+  {
     route: 'Library',
     caption: 'Library'
+  },
+  {
+    route: 'LibraryItemDetail',
+    caption: 'Item Detail'
   },
   /* {
     route: 'BlankPage',
