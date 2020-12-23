@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import Library from '../../screens/Library';
-import datas from './data';
 import { fetchList } from './actions';
 export interface LibraryContainerProps {
   navigation: any;
@@ -14,7 +13,7 @@ class LibraryContainer extends React.Component<
   LibraryContainerState
 > {
   componentDidMount() {
-    this.props.fetchList(datas);
+    this.props.fetchList();
   }
   render() {
     return (
@@ -23,14 +22,14 @@ class LibraryContainer extends React.Component<
   }
 }
 
-function bindAction(dispatch: any) {
+function mapDispatchToProps(dispatch: any) {
   return {
     fetchList: (url: any) => dispatch(fetchList(url))
   };
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.HomeReducer.list,
-  isLoading: state.HomeReducer.isLoading
+  data: state.library.list,
+  isLoading: state.library.isLoading
 });
-export default connect(mapStateToProps, bindAction)(LibraryContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LibraryContainer);

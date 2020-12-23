@@ -16,7 +16,10 @@ export interface LibraryItemDetailProps extends MediaDetailProps {
 }
 export interface LibraryItemDetailState extends MediaDetailState {}
 
-class LibraryItemDetail extends MediaDetail {
+class LibraryItemDetail extends MediaDetail<
+  LibraryItemDetailProps,
+  LibraryItemDetailState
+> {
   render() {
     const { navigation } = this.props;
     return (

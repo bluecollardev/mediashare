@@ -8,18 +8,17 @@ import { Root } from 'native-base';
 
 import configureStore from './configureStore';
 import App from '../../src/App';
-export interface Props {}
-export interface State {
-  store: Object;
+export interface SetupProps {}
+export interface SetupState {
   isLoading: boolean;
 }
-export default class Setup extends React.Component<Props, State> {
+
+const onCompletion = () => {};
+const store = configureStore(onCompletion);
+
+export default class Setup extends React.Component<SetupProps, SetupState> {
   constructor(props) {
     super(props);
-    this.state = {
-      isLoading: false,
-      store: configureStore(() => this.setState({ isLoading: false }))
-    };
   }
 
   render() {
@@ -33,7 +32,7 @@ export default class Setup extends React.Component<Props, State> {
     </StyleProvider>
     */
     return (
-      <Provider store={this.state.store}>
+      <Provider store={store}>
         <Root>
           <App />
         </Root>

@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  Container,
-  Content,
-  List,
-  View
-} from 'native-base';
+import { Container, Content, List, View } from 'native-base';
 
 import styles from './styles';
 import { AppHeader } from '../../components/layout/AppHeader';
@@ -12,7 +7,7 @@ import { PlaylistCard } from '../../components/layout/PlaylistCard';
 
 import MediaDetail, {
   MediaDetailProps,
-  MediaDetailState,
+  MediaDetailState
 } from '../MediaDetail';
 import { MediaListItem } from '../../components/layout/MediaListItem';
 
@@ -22,7 +17,10 @@ export interface PlaylistDetailProps extends MediaDetailProps {
 }
 export interface PlaylistDetailState extends MediaDetailState {}
 
-class PlaylistDetail extends MediaDetail {
+class PlaylistDetail extends MediaDetail<
+  PlaylistDetailProps,
+  PlaylistDetailState
+> {
   render() {
     const { navigation } = this.props;
     return (

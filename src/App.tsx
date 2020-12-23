@@ -23,6 +23,7 @@ import Home from './container/HomeContainer';
 import Explore from './container/ExploreContainer';
 import Playlists from './container/PlaylistsContainer';
 import PlaylistDetail from './container/PlaylistDetailContainer';
+import PlaylistEdit from './container/PlaylistEditContainer';
 import Library from './container/LibraryContainer';
 import LibraryItemDetail from './container/LibraryItemDetailContainer';
 import ListPage from './container/ListPageContainer';
@@ -42,6 +43,7 @@ const DrawerNavigator = createDrawerNavigator(
     Explore: { screen: Explore },
     Playlists: { screen: Playlists },
     PlaylistDetail: { screen: PlaylistDetail },
+    PlaylistEdit: { screen: PlaylistEdit },
     Library: { screen: Library },
     LibraryItemDetail: { screen: LibraryItemDetail },
     BlankPage: { screen: BlankPage },

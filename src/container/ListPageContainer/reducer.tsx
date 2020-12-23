@@ -1,6 +1,6 @@
 const initialState = {
   list: [],
-  isLoading: true,
+  isLoading: true
 };
 
 export default function (state = initialState, action: any) {
@@ -13,7 +13,7 @@ export default function (state = initialState, action: any) {
   if (action.type === 'LIST_IS_LOADING') {
     return {
       ...state,
-      isLoading: action.isLoading,
+      isLoading: action.isLoading
     };
   }
   return state;

@@ -21,14 +21,14 @@ class HomeContainer extends React.Component<
   }
 }
 
-function bindAction(dispatch: any) {
+function mapDispatchToProps(dispatch: any) {
   return {
     fetchList: (url: any) => dispatch(fetchList(url)),
   };
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.HomeReducer.list,
-  isLoading: state.HomeReducer.isLoading
+  data: state.home.list,
+  isLoading: state.home.isLoading
 });
-export default connect(mapStateToProps, bindAction)(HomeContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

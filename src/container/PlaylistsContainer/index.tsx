@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import Playlists from '../../screens/Playlists';
-import datas from './data';
 import { fetchList } from './actions';
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -14,7 +13,7 @@ class PlaylistsContainer extends React.Component<
   PlaylistsContainerState
 > {
   componentDidMount() {
-    this.props.fetchList(datas);
+    this.props.fetchList();
   }
   render() {
     return (
@@ -23,14 +22,14 @@ class PlaylistsContainer extends React.Component<
   }
 }
 
-function bindAction(dispatch: any) {
+function mapDispatchToProps(dispatch: any) {
   return {
     fetchList: (url: any) => dispatch(fetchList(url))
   };
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.HomeReducer.list,
-  isLoading: state.HomeReducer.isLoading
+  data: state.playlists.list,
+  isLoading: state.playlists.isLoading
 });
-export default connect(mapStateToProps, bindAction)(PlaylistsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(PlaylistsContainer);

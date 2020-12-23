@@ -1,10 +1,13 @@
 import * as React from 'react';
 import BlankPage from '../../screens/BlankPage';
-export interface Props {
+export interface BlankPageProps {
   navigation: any;
 }
-export interface State {}
-export default class BlankPageContainer extends React.Component<Props, State> {
+export interface BlankPageState {}
+export default class BlankPageContainer extends React.Component<
+  BlankPageProps,
+  BlankPageState
+> {
   render() {
     return <BlankPage navigation={this.props.navigation} />;
   }

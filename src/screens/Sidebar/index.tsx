@@ -20,6 +20,10 @@ const routes = [
     caption: 'Playlist Detail'
   },
   {
+    route: 'PlaylistEdit',
+    caption: 'Edit Playlist'
+  },
+  {
     route: 'Library',
     caption: 'Library'
   },

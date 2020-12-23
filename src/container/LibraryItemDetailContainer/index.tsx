@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import LibraryItemDetail from '../../screens/LibraryItemDetail';
-import datas from './data';
 import { fetchList } from './actions';
 export interface LibraryItemDetailContainerProps {
   navigation: any;
@@ -14,7 +13,7 @@ class LibraryItemDetailContainer extends React.Component<
   LibraryItemDetailContainerState
 > {
   componentDidMount() {
-    this.props.fetchList(datas);
+    this.props.fetchList();
   }
   render() {
     return (
@@ -26,14 +25,14 @@ class LibraryItemDetailContainer extends React.Component<
   }
 }
 
-function bindAction(dispatch: any) {
+function mapDispatchToProps(dispatch: any) {
   return {
     fetchList: (url: any) => dispatch(fetchList(url))
   };
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.HomeReducer.list,
-  isLoading: state.HomeReducer.isLoading
+  data: state.libraryItemDetail.list,
+  isLoading: state.libraryItemDetail.isLoading
 });
-export default connect(mapStateToProps, bindAction)(LibraryItemDetailContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LibraryItemDetailContainer);

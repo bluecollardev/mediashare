@@ -11,7 +11,10 @@ export interface MediaDetailProps {
 }
 export interface MediaDetailState {}
 
-class MediaDetail extends React.Component<MediaDetailProps, MediaDetailState> {
+class MediaDetail<P, S> extends React.Component<
+  MediaDetailProps & P,
+  MediaDetailState & S
+> {
   render() {
     const { navigation } = this.props;
     return (

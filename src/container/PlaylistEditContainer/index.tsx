@@ -1,23 +1,23 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import PlaylistDetail from '../../screens/PlaylistDetail';
+import PlaylistEdit from '../../screens/PlaylistEdit';
 import { fetchList } from './actions';
-export interface PlaylistDetailContainerProps {
+export interface PlaylistEditContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
-export interface PlaylistDetailContainerState {}
-class PlaylistDetailContainer extends React.Component<
-  PlaylistDetailContainerProps,
-  PlaylistDetailContainerState
+export interface PlaylistEditContainerState {}
+class PlaylistEditContainer extends React.Component<
+  PlaylistEditContainerProps,
+  PlaylistEditContainerState
 > {
   componentDidMount() {
     this.props.fetchList();
   }
   render() {
     return (
-      <PlaylistDetail
+      <PlaylistEdit
         navigation={this.props.navigation}
         list={this.props.data}
       />
@@ -32,7 +32,10 @@ function mapDispatchToProps(dispatch: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.playlistDetail.list,
-  isLoading: state.playlistDetail.isLoading
+  data: state.playlistEdit.list,
+  isLoading: state.playlistEdit.isLoading
 });
-export default connect(mapStateToProps, mapDispatchToProps)(PlaylistDetailContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PlaylistEditContainer);

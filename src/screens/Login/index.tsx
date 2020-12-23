@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import {
   Container,
   Content,
@@ -8,11 +8,9 @@ import {
   Title,
   Button,
   Text,
-  View,
-  Icon,
-  Footer,
+  View
 } from 'native-base';
-//import styles from "./styles";
+
 export interface LoginProps {
   loginForm: any;
   onLogin: Function;

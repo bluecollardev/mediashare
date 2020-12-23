@@ -4,5 +4,5 @@ export default [
   'NativeBase Easy Grid',
   'NativeBase',
   'CodePush',
-  'Redux',
+  'Redux'
 ];

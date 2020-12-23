@@ -23,14 +23,14 @@ class ExploreContainer extends React.Component<
   }
 }
 
-function bindAction(dispatch: any) {
+function mapDispatchToProps(dispatch: any) {
   return {
     fetchList: (url: any) => dispatch(fetchList(url))
   };
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.ExploreReducer.list,
-  isLoading: state.ExploreReducer.isLoading,
+  data: state.explore.list,
+  isLoading: state.explore.isLoading
 });
-export default connect(mapStateToProps, bindAction)(ExploreContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ExploreContainer);
