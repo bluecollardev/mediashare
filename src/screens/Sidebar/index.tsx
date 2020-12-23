@@ -31,6 +31,10 @@ const routes = [
     route: 'LibraryItemDetail',
     caption: 'Item Detail'
   },
+  {
+    route: 'LibraryItemEdit',
+    caption: 'Edit Item'
+  },
   /* {
     route: 'BlankPage',
     caption: 'Blank Page'
