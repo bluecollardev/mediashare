@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, Container, List, ListItem, Content } from 'native-base';
+import { Text, Container, List, ListItem, View } from 'native-base';
 import { NavigationActions, StackActions } from 'react-navigation';
 
 const routes = [
@@ -68,13 +68,15 @@ export default class Sidebar extends React.Component<
   render() {
     return (
       <Container>
-        <Content>
+        <View>
           <List
             style={{ marginTop: 40 }}
             dataArray={routes}
+            keyExtractor={(item, idx) => idx.toString()}
             renderRow={(data) => {
               return (
                 <ListItem
+                  // key={`item-${idx}`}
                   button
                   onPress={() => {
                     data.route === 'Login'
@@ -86,7 +88,7 @@ export default class Sidebar extends React.Component<
               );
             }}
           />
-        </Content>
+        </View>
       </Container>
     );
   }

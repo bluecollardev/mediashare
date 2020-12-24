@@ -12,15 +12,16 @@ import {
   Right,
   List,
   ListItem,
+  View
 } from 'native-base';
 
 import styles from './styles';
-export interface Props {
+export interface ListPageProps {
   navigation: any;
   list: any;
 }
-export interface State {}
-class ListPage extends React.Component<Props, State> {
+export interface ListPageState {}
+class ListPage extends React.Component<ListPageProps, ListPageState> {
   render() {
     return (
       <Container style={styles.container}>
@@ -40,19 +41,21 @@ class ListPage extends React.Component<Props, State> {
           <Right />
         </Header>
         <Content>
-          <List>
-            {this.props.list.map((item, i) => (
-              <ListItem
-                key={i}
-                onPress={() =>
-                  this.props.navigation.navigate('Blank Page', {
-                    name: { item },
-                  })
-                }>
-                <Text>{item}</Text>
-              </ListItem>
-            ))}
-          </List>
+          <View>
+            <List>
+              {this.props.list.map((item, i) => (
+                <ListItem
+                  key={`item-${i}`}
+                  onPress={() =>
+                    this.props.navigation.navigate('Blank Page', {
+                      name: { item }
+                    })
+                  }>
+                  <Text>{item}</Text>
+                </ListItem>
+              ))}
+            </List>
+          </View>
         </Content>
       </Container>
     );

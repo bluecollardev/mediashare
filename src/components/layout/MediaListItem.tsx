@@ -8,7 +8,7 @@ import {
   Right,
   ListItem,
   CheckBox,
-  Thumbnail,
+  Thumbnail
 } from 'native-base';
 
 export interface MediaListItemProps {

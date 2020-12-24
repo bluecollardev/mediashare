@@ -13,6 +13,7 @@ import {
 } from 'native-base';
 
 import { MediaListItem } from '../../components/layout/MediaListItem';
+import { ListItemGroup } from '../../components/layout/ListItemGroup';
 
 import styles from './styles';
 import { AppHeader } from '../../components/layout/AppHeader';
@@ -40,25 +41,16 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
               <Text style={{ paddingRight: 30 }}>Share Playlists</Text>
             </Button>
           </View>
-          <List>
-            <ListItem itemDivider>
-              <Left style={{ width: '85%', flex: 0 }}>
-                <Text>Group 1</Text>
-              </Left>
-              <Right style={{ width: '15%', flex: 1 }}>
-                <Button transparent>
-                  <Icon name="chevron-forward-outline" />
-                </Button>
-              </Right>
-            </ListItem>
-            <MediaListItem />
-            <MediaListItem />
-            <ListItem itemDivider>
-              <Text>Group 2</Text>
-            </ListItem>
-            <MediaListItem />
-            <MediaListItem />
-          </List>
+          <View>
+            <List>
+              <ListItemGroup key={'group1'} text={'Group 1'} />
+              <MediaListItem key={'item1'} />
+              <MediaListItem key={'item2'} />
+              <ListItemGroup key={'group2'} text={'Group 2'} />
+              <MediaListItem key={'item3'} />
+              <MediaListItem key={'item4'} />
+            </List>
+          </View>
         </Content>
       </Container>
     );

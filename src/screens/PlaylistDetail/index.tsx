@@ -30,11 +30,13 @@ class PlaylistDetail extends MediaDetail<
           <View padder>
             <PlaylistCard />
           </View>
-          <List>
-            <MediaListItem />
-            <MediaListItem />
-            <MediaListItem />
-          </List>
+          <View>
+            <List>
+              <MediaListItem key={'item1'} />
+              <MediaListItem key={'item2'} />
+              <MediaListItem key={'item3'} />
+            </List>
+          </View>
         </Content>
       </Container>
     );
