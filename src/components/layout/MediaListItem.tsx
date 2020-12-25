@@ -13,22 +13,20 @@ import {
 
 export interface MediaListItemProps {
   navigation?: any;
+  title?: string;
+  description?: string;
+  image?: string;
 }
 
-export const MediaListItem = () => {
+export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
+  const { title, description, image } = props;
   return (
     <ListItem style={{ borderWidth: 0 }}>
       <Left style={{ width: '10%', flex: 1 }}>
         <CheckBox color="black" checked={false} />
       </Left>
       <Left style={{ width: '20%', flex: 1 }}>
-        <Thumbnail
-          square
-          source={{
-            uri:
-              'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg'
-          }}
-        />
+        <Thumbnail square source={{ uri: image }} />
       </Left>
       <Body
         style={{
@@ -38,9 +36,9 @@ export const MediaListItem = () => {
           alignItems: 'flex-start',
           borderWidth: 0
         }}>
-        <Text style={{ borderWidth: 0 }}>My Video #1</Text>
+        <Text style={{ borderWidth: 0 }}>{title}</Text>
         <Text note numberOfLines={2} style={{ color: 'black' }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          {description}
         </Text>
       </Body>
       <Right style={{ width: '10%', flex: 1 }}>

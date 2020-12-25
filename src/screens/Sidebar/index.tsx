@@ -28,12 +28,12 @@ const routes = [
     caption: 'Library'
   },
   {
-    route: 'LibraryItemDetail',
-    caption: 'Item Detail'
-  },
-  {
     route: 'LibraryItemEdit',
     caption: 'Edit Item'
+  },
+  {
+    route: 'LibraryItemDetail',
+    caption: 'Preview Item'
   },
   /* {
     route: 'BlankPage',

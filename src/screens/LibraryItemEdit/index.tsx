@@ -1,10 +1,18 @@
 import * as React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Container, Content, View, Card } from 'native-base';
+import {
+  Container,
+  Content,
+  View,
+  Card,
+  Button,
+  Icon,
+  Text,
+} from 'native-base';
 
 import styles from './styles';
 import { AppHeader } from '../../components/layout/AppHeader';
-import { PlaylistCard } from '../../components/layout/PlaylistCard';
+import { LibraryItemCard } from '../../components/layout/LibraryItemCard';
 
 import MediaEdit, { MediaDetailProps, MediaDetailState } from '../MediaDetail';
 import TextField from '../../components/form/TextField';
@@ -52,15 +60,38 @@ class LibraryItemEdit extends MediaEdit<
 
   render() {
     const { navigation } = this.props;
+    const title = 'My Video #1';
+    const author = 'Blue Collar Dev';
+    const description =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
+      'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+    const image =
+      'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+
     return (
       <Container style={styles.container}>
-        <AppHeader title="Edit Item" navigation={navigation} />
+        <AppHeader
+          title="Edit Item"
+          navigation={navigation}
+          showBack={true}
+        />
         <Content>
           <View padder>
-            <PlaylistCard />
-          </View>
-          <View padder>
-            <Card>
+            <LibraryItemCard
+              title={title}
+              author={author}
+              description={description}
+              image={image}
+              buttons={() => (
+                <Button
+                  iconLeft
+                  bordered
+                  danger
+                  style={{ flex: 0, marginRight: 10 }}>
+                  <Icon name="trash" />
+                  <Text style={{ paddingRight: 30 }}>Remove</Text>
+                </Button>
+              )}>
               <View padder>
                 <Field name="title" label="Title" component={TextField} />
                 <Field
@@ -69,7 +100,33 @@ class LibraryItemEdit extends MediaEdit<
                   component={TextField}
                 />
               </View>
-            </Card>
+              <View padder style={{ flexDirection: 'row' }}>
+                <Button
+                  iconLeft
+                  bordered
+                  danger
+                  style={{
+                    flex: 1,
+                    marginRight: 10,
+                    justifyContent: 'center',
+                  }}>
+                  <Icon name="close-outline" />
+                  <Text style={{ paddingRight: 30 }}>Cancel</Text>
+                </Button>
+                <Button
+                  iconLeft
+                  bordered
+                  success
+                  style={{
+                    flex: 1,
+                    marginRight: 10,
+                    justifyContent: 'center'
+                  }}>
+                  <Icon name="checkmark" />
+                  <Text style={{ paddingRight: 30 }}>Save</Text>
+                </Button>
+              </View>
+            </LibraryItemCard>
           </View>
         </Content>
       </Container>

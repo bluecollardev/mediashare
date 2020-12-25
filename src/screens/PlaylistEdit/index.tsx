@@ -1,6 +1,14 @@
 import * as React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Container, Content, View, Card } from 'native-base';
+import {
+  Container,
+  Content,
+  View,
+  Card,
+  Button,
+  Icon,
+  Text,
+} from 'native-base';
 
 import styles from './styles';
 import { AppHeader } from '../../components/layout/AppHeader';
@@ -49,28 +57,48 @@ class PlaylistEdit extends MediaEdit<PlaylistEditProps, PlaylistEditState> {
 
   render() {
     const { navigation } = this.props;
+    const title = 'My First Playlist';
+    const author = 'Blue Collar Dev';
+    const description =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
+      'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
     return (
       <Container style={styles.container}>
-        <AppHeader title="Playlist" navigation={navigation} />
+        <AppHeader
+          title="Edit Playlist"
+          navigation={navigation}
+          showBack={true}
+        />
         <Content>
           <View padder>
-            <PlaylistCard />
-          </View>
-          <View padder>
-            <Card>
+            <PlaylistCard
+              title={title}
+              author={author}
+              // description={description}
+            >
               <View padder>
-                <Field
-                  name="title"
-                  label="Title"
-                  component={TextField}
-                />
+                <Field name="title" label="Title" component={TextField} />
                 <Field
                   name="description"
                   label="Description"
                   component={TextField}
                 />
               </View>
-            </Card>
+              <View padder style={{ flexDirection: 'row' }}>
+                <Button
+                  iconLeft
+                  bordered
+                  success
+                  style={{ flex: 1, marginRight: 10, justifyContent: 'center' }}>
+                  <Icon name="checkmark" />
+                  <Text style={{ paddingRight: 30 }}>Save</Text>
+                </Button>
+                <Button iconLeft bordered danger style={{ flex: 0 }}>
+                  <Icon name="close-outline" />
+                  <Text style={{ paddingRight: 0 }} />
+                </Button>
+              </View>
+            </PlaylistCard>
           </View>
         </Content>
       </Container>

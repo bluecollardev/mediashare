@@ -28,22 +28,57 @@ export interface ExploreState {}
 class Explore extends React.Component<ExploreProps, ExploreState> {
   render() {
     const { navigation } = this.props;
+    const imageSrc =
+      'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+
+    const items1 = [
+      { title: 'Playlist 1', description: '9 Videos', image: imageSrc },
+      { title: 'Playlist 2', description: '2 Videos', image: imageSrc }
+    ];
+    const items2 = [
+      { title: 'Playlist 3', description: '3 Videos', image: imageSrc },
+      { title: 'Playlist 4', description: '6 Videos', image: imageSrc }
+    ];
+
     return (
       <Container style={styles.container}>
-        <AppHeader title="Explore" navigation={navigation} />
+        <AppHeader
+          title="Explore"
+          navigation={navigation}
+          showSearch={true}
+          showSort={true}
+        />
         <Content>
-          <View padder>
+          {/* <View padder>
             <MediaCard />
-          </View>
+          </View> */}
           {/*<Accordion dataArray={dataArray} expanded={0} />*/}
           <View>
             <List>
-              <ListItemGroup key={'group1'} text={'Category 1'} />
-              <MediaListItem key={'item1'} />
-              <MediaListItem key={'item2'} />
-              <ListItemGroup key={'group2'} text={'Category 2'} />
-              <MediaListItem key={'item3'} />
-              <MediaListItem key={'item4'} />
+              <ListItemGroup key={'group1'} text={'Playlists by Bob Johnson'} />
+              {items1.map((item, idx) => {
+                const { title, description, image } = item;
+                return (
+                  <MediaListItem
+                    key={`item-${idx}`}
+                    title={title}
+                    description={description}
+                    image={image}
+                  />
+                );
+              })}
+              <ListItemGroup key={'group2'} text={'Playlists by Jane Doe'} />
+              {items2.map((item, idx) => {
+                const { title, description, image } = item;
+                return (
+                  <MediaListItem
+                    key={`item-${idx}`}
+                    title={title}
+                    description={description}
+                    image={image}
+                  />
+                );
+              })}
             </List>
           </View>
         </Content>

@@ -26,10 +26,10 @@ class Home extends React.Component<HomeProps, HomeState> {
     const { navigation } = this.props;
     return (
       <Container style={styles.container}>
-        <AppHeader title="Home" navigation={navigation} />
+        <AppHeader title="Home" navigation={navigation} showSearch={true} />
         <Content>
           <View padder>
-            <MediaCard />
+            {/* <MediaCard /> */}
           </View>
         </Content>
       </Container>

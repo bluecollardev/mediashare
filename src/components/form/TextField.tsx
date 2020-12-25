@@ -34,7 +34,11 @@ export default function TextField(props: TextFieldProps) {
             <Text>{label}</Text>
           </Label>
         )}
-        <Input {...input} onFocus={onFocus} />
+        <Input
+          {...input}
+          onFocus={onFocus}
+          style={{ borderColor: 'lightgrey', borderWidth: 1, borderRadius: 3 }}
+        />
         {hasError ? <Text>{error}</Text> : <Text />}
       </Item>
     </View>

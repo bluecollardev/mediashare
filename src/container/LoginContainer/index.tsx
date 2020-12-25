@@ -44,7 +44,7 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
 
   login() {
     //if (this.props.valid) {
-    this.props.navigation.navigate('PlaylistEdit');
+    this.props.navigation.navigate('Explore');
     /* } else {
       Toast.show({
         text: 'Enter Valid Username & password!',

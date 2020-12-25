@@ -22,12 +22,29 @@ class LibraryItemDetail extends MediaDetail<
 > {
   render() {
     const { navigation } = this.props;
+    const title = 'My Video #1';
+    const author = 'Blue Collar Dev';
+    const description =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
+      'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+    const image =
+      'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+
     return (
       <Container style={styles.container}>
-        <AppHeader title="Library Item" navigation={navigation} />
+        <AppHeader
+          title="Preview Item"
+          navigation={navigation}
+          showBack={true}
+        />
         <Content>
           <View padder>
-            <LibraryItemCard />
+            <LibraryItemCard
+              title={title}
+              author={author}
+              description={description}
+              image={image}
+            />
           </View>
         </Content>
       </Container>
