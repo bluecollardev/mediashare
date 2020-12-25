@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { PropsWithChildren } from 'react';
-import { Item } from 'native-base';
 import { Field, reduxForm } from 'redux-form';
 import TextField from '../form/TextField';
 
@@ -10,7 +9,7 @@ export interface AccountFormProps {
   items?: any[];
 }
 
-export const AccountForm: React.FC<AccountFormProps> = (
+export const AccountFormLayout: React.FC<AccountFormProps> = (
   props: PropsWithChildren<any>
 ) => {
   const {} = props;
@@ -24,6 +23,6 @@ export const AccountForm: React.FC<AccountFormProps> = (
   );
 };
 
-export default reduxForm<{}, AccountFormProps>({
-  form: 'accountForm'
-})(AccountForm as any);
+export const AccountForm = reduxForm<{}, AccountFormProps>({
+  form: 'accountEdit'
+})(AccountFormLayout as any);

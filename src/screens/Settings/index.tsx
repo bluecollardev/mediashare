@@ -16,43 +16,46 @@ import {
 
 import styles from './styles';
 import { ContactList } from '../../components/layout/ContactList';
-import AccountForm from '../../components/layout/AccountForm';
+import Account from '../../container/AccountContainer';
 
 export interface SettingsProps {
   navigation: any;
 }
 export interface SettingsState {}
-class Settings extends React.Component<SettingsProps, SettingsState> {
-  sections = [
-    {
-      title: 'My Account',
-      content: (
-        <View padder>
-          <AccountForm />
-        </View>
-      )
-    },
-    {
-      title: 'Manage Clients',
-      content: (
-        <View padder>
-          <ContactList />
-        </View>
-      )
-    },
-    {
-      title: 'Manage Groups',
-      content: (
-        <View padder>
-          <ContactList />
-        </View>
-      )
-    },
-  ];
 
-  renderHeader(item: any, expanded: boolean) {
+class Settings extends React.Component<SettingsProps, SettingsState> {
+  sections = [];
+
+  constructor(props: SettingsProps) {
+    super(props);
+
+    this.sections = [
+      {
+        title: 'My Account',
+        content: (props: SettingsProps) => (
+          <Account navigation={props.navigation} />
+        )
+      },
+      {
+        title: 'Manage Clients',
+        content: () => <ContactList />
+      },
+      {
+        title: 'Manage Groups',
+        content: () => <ContactList />
+      },
+    ];
+  }
+
+  renderHeader = (item: any, expanded: boolean) => {
     return (
-      <View padder style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <View
+        padder
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
         <Text>{item.title}</Text>
         {expanded ? (
           <Icon name="caret-up-outline" />
@@ -61,10 +64,12 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
         )}
       </View>
     );
-  }
-  renderContent(item: any) {
-    return <Text>{item.content}</Text>;
-  }
+  };
+
+  renderContent = (item: any) => {
+    const { props } = this;
+    return <View padder>{item.content(props)}</View>;
+  };
 
   // <Icon name="ios-arrow-back" />
   render() {
@@ -95,13 +100,11 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
           </Right>
         </Header>
         <Content padder>
-          <View>
-            <Accordion
-              dataArray={this.sections}
-              renderHeader={this.renderHeader}
-              renderContent={this.renderContent}
-            />
-          </View>
+          <Accordion
+            dataArray={this.sections}
+            renderHeader={this.renderHeader}
+            renderContent={this.renderContent}
+          />
         </Content>
       </Container>
     );

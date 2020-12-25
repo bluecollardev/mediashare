@@ -50,7 +50,7 @@ class AddFrom extends MediaDetail<AddFromProps, AddFromState> {
         <Content>
           <View>
             <List>
-              <ListItemGroup key={'group1'} text={'Group 1'} />
+              <ListItemGroup key={'group1'} text={'Vimeo'} />
               {items1.map((item, idx) => {
                 const { title, description, image } = item;
                 return (
@@ -62,7 +62,7 @@ class AddFrom extends MediaDetail<AddFromProps, AddFromState> {
                   />
                 );
               })}
-              <ListItemGroup key={'group2'} text={'Group 2'} />
+              <ListItemGroup key={'group2'} text={'YouTube'} />
               {items2.map((item, idx) => {
                 const { title, description, image } = item;
                 return (
