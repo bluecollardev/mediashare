@@ -1,29 +1,35 @@
 import * as React from 'react';
 import {
+  Button,
   Container,
   Content,
-  View,
-  Text,
-  Button,
   Icon,
-  List
+  List,
+  Text,
+  View,
 } from 'native-base';
-
-import { MediaListItem } from '../../components/layout/MediaListItem';
-// import { ListItemGroup } from '../../components/layout/ListItemGroup';
 
 import styles from './styles';
 import { AppHeader } from '../../components/layout/AppHeader';
+import { PlaylistCard } from '../../components/layout/PlaylistCard';
+import { ListItemGroup } from '../../components/layout/ListItemGroup';
 
-export interface LibraryProps {
+import MediaDetail, {
+  MediaDetailProps,
+  MediaDetailState
+} from '../MediaDetail';
+import { MediaListItem } from '../../components/layout/MediaListItem';
+
+export interface AddFromProps extends MediaDetailProps {
   navigation: any;
   list: any;
 }
-export interface LibraryState {}
+export interface AddFromState extends MediaDetailState {}
 
-class Library extends React.Component<LibraryProps, LibraryState> {
+class AddFrom extends MediaDetail<AddFromProps, AddFromState> {
   render() {
     const { navigation } = this.props;
+
     const descriptionText =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
       'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
@@ -41,26 +47,11 @@ class Library extends React.Component<LibraryProps, LibraryState> {
 
     return (
       <Container style={styles.container}>
-        <AppHeader
-          title="Library"
-          navigation={navigation}
-          showSearch={true}
-          showSort={true}
-        />
+        <AppHeader title="Add From" navigation={navigation} showBack={true} />
         <Content>
-          <View padder style={{ flexDirection: 'row' }}>
-            <Button iconLeft bordered dark style={{ flex: 1, marginRight: 10 }}>
-              <Icon name="add-outline" />
-              <Text style={{ paddingRight: 30 }}>Add From Feed</Text>
-            </Button>
-            <Button iconLeft bordered dark style={{ flex: 1 }}>
-              <Icon name="add-outline" />
-              <Text style={{ paddingRight: 30 }}>Add to Playlist</Text>
-            </Button>
-          </View>
           <View>
             <List>
-              {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
+              <ListItemGroup key={'group1'} text={'Group 1'} />
               {items1.map((item, idx) => {
                 const { title, description, image } = item;
                 return (
@@ -72,7 +63,7 @@ class Library extends React.Component<LibraryProps, LibraryState> {
                   />
                 );
               })}
-              {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
+              <ListItemGroup key={'group2'} text={'Group 2'} />
               {items2.map((item, idx) => {
                 const { title, description, image } = item;
                 return (
@@ -90,10 +81,26 @@ class Library extends React.Component<LibraryProps, LibraryState> {
             <Button
               iconLeft
               bordered
-              dark
-              style={{ flex: 1, justifyContent: 'center' }}>
-              <Icon name="add-outline" />
-              <Text style={{ paddingRight: 30 }}>Add to Playlist</Text>
+              danger
+              style={{
+                flex: 1,
+                marginRight: 10,
+                justifyContent: 'center',
+              }}>
+              <Icon name="close-outline" />
+              <Text style={{ paddingRight: 30 }}>Cancel</Text>
+            </Button>
+            <Button
+              iconLeft
+              bordered
+              success
+              style={{
+                flex: 1,
+                marginRight: 10,
+                justifyContent: 'center'
+              }}>
+              <Icon name="checkmark" />
+              <Text style={{ paddingRight: 30 }}>Save</Text>
             </Button>
           </View>
         </Content>
@@ -102,4 +109,4 @@ class Library extends React.Component<LibraryProps, LibraryState> {
   }
 }
 
-export default Library;
+export default AddFrom;

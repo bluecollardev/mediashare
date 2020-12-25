@@ -88,14 +88,26 @@ class PlaylistEdit extends MediaEdit<PlaylistEditProps, PlaylistEditState> {
                 <Button
                   iconLeft
                   bordered
+                  danger
+                  style={{
+                    flex: 1,
+                    marginRight: 10,
+                    justifyContent: 'center',
+                  }}>
+                  <Icon name="close-outline" />
+                  <Text style={{ paddingRight: 30 }}>Cancel</Text>
+                </Button>
+                <Button
+                  iconLeft
+                  bordered
                   success
-                  style={{ flex: 1, marginRight: 10, justifyContent: 'center' }}>
+                  style={{
+                    flex: 1,
+                    marginRight: 10,
+                    justifyContent: 'center'
+                  }}>
                   <Icon name="checkmark" />
                   <Text style={{ paddingRight: 30 }}>Save</Text>
-                </Button>
-                <Button iconLeft bordered danger style={{ flex: 0 }}>
-                  <Icon name="close-outline" />
-                  <Text style={{ paddingRight: 0 }} />
                 </Button>
               </View>
             </PlaylistCard>

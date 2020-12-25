@@ -20,6 +20,10 @@ const routes = [
     caption: 'Playlist Detail'
   },
   {
+    route: 'AddFromLibrary',
+    caption: 'Add From Library'
+  },
+  {
     route: 'PlaylistEdit',
     caption: 'Edit Playlist'
   },
@@ -34,6 +38,10 @@ const routes = [
   {
     route: 'LibraryItemDetail',
     caption: 'Preview Item'
+  },
+  {
+    route: 'AddFromFeed',
+    caption: 'Add From Feed'
   },
   /* {
     route: 'BlankPage',

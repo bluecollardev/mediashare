@@ -21,6 +21,8 @@ import { Footer, FooterTab, Button, Icon } from 'native-base';
 import Login from './container/LoginContainer';
 import Home from './container/HomeContainer';
 import Explore from './container/ExploreContainer';
+import AddFromLibrary from './container/AddFromLibraryContainer';
+import AddFromFeed from './container/AddFromFeedContainer';
 import Playlists from './container/PlaylistsContainer';
 import PlaylistDetail from './container/PlaylistDetailContainer';
 import PlaylistEdit from './container/PlaylistEditContainer';
@@ -44,9 +46,11 @@ const DrawerNavigator = createDrawerNavigator(
     Explore: { screen: Explore },
     Playlists: { screen: Playlists },
     PlaylistDetail: { screen: PlaylistDetail },
+    AddFromLibrary: { screen: AddFromLibrary },
     PlaylistEdit: { screen: PlaylistEdit },
     Library: { screen: Library },
     LibraryItemDetail: { screen: LibraryItemDetail },
+    AddFromFeed: { screen: AddFromFeed },
     LibraryItemEdit: { screen: LibraryItemEdit },
     BlankPage: { screen: BlankPage },
     ListPage: { screen: ListPage },
