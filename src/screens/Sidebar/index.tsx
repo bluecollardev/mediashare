@@ -43,6 +43,10 @@ const routes = [
     route: 'AddFromFeed',
     caption: 'Add From Feed'
   },
+  {
+    route: 'ShareWith',
+    caption: 'Share With User'
+  },
   /* {
     route: 'BlankPage',
     caption: 'Blank Page'

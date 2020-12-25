@@ -19,51 +19,33 @@ import MediaDetail, {
 } from '../MediaDetail';
 import { MediaListItem } from '../../components/layout/MediaListItem';
 
-export interface AddFromProps extends MediaDetailProps {
+export interface ShareWithProps extends MediaDetailProps {
   navigation: any;
   list: any;
 }
-export interface AddFromState extends MediaDetailState {}
+export interface ShareWithState extends MediaDetailState {}
 
-class AddFrom extends MediaDetail<AddFromProps, AddFromState> {
+class ShareWith extends MediaDetail<ShareWithProps, ShareWithState> {
   render() {
     const { navigation } = this.props;
 
-    const descriptionText =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
-      'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
     const imageSrc =
       'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
-    const items1 = [
-      { title: 'Video 1', description: descriptionText, image: imageSrc },
-      { title: 'Video 2', description: descriptionText, image: imageSrc }
-    ];
-    const items2 = [
-      { title: 'Video 3', description: descriptionText, image: imageSrc },
-      { title: 'Video 4', description: descriptionText, image: imageSrc }
+    const items = [
+      { title: 'John Doe', description: 'john.doe@example.com', image: imageSrc },
+      { title: 'Jane Smith', description: 'jane.smith@example.com', image: imageSrc },
+      { title: 'Jennifer Hawthorne', description: 'jenniferhaw@example.com', image: imageSrc }
     ];
 
     return (
       <Container style={styles.container}>
-        <AppHeader title="Add From" navigation={navigation} showBack={true} />
+        <AppHeader title="Share With" navigation={navigation} showBack={true} />
         <Content>
           <View>
             <List>
-              <ListItemGroup key={'group1'} text={'Group 1'} />
-              {items1.map((item, idx) => {
-                const { title, description, image } = item;
-                return (
-                  <MediaListItem
-                    key={`item-${idx}`}
-                    title={title}
-                    description={description}
-                    image={image}
-                  />
-                );
-              })}
-              <ListItemGroup key={'group2'} text={'Group 2'} />
-              {items2.map((item, idx) => {
+              <ListItemGroup key={'group1'} text={'Sample Group'} />
+              {items.map((item, idx) => {
                 const { title, description, image } = item;
                 return (
                   <MediaListItem
@@ -99,7 +81,7 @@ class AddFrom extends MediaDetail<AddFromProps, AddFromState> {
                 justifyContent: 'center'
               }}>
               <Icon name="checkmark" />
-              <Text style={{ paddingRight: 30 }}>Save</Text>
+              <Text style={{ paddingRight: 30 }}>Share</Text>
             </Button>
           </View>
         </Content>
@@ -108,4 +90,4 @@ class AddFrom extends MediaDetail<AddFromProps, AddFromState> {
   }
 }
 
-export default AddFrom;
+export default ShareWith;
