@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import {
   Container,
   Content,
@@ -8,17 +8,15 @@ import {
   Title,
   Button,
   Text,
-  View,
-  Icon,
-  Footer,
+  View
 } from 'native-base';
-//import styles from "./styles";
-export interface Props {
+
+export interface LoginProps {
   loginForm: any;
   onLogin: Function;
 }
-export interface State {}
-class Login extends React.Component<Props, State> {
+export interface LoginState {}
+class Login extends React.Component<LoginProps, LoginState> {
   // <Icon name="flash" style={{ fontSize: 104 }} />
   render() {
     return (

@@ -1,9 +1,11 @@
 import * as React from 'react';
 import {
   Container,
+  View,
   Header,
   Title,
   Content,
+  Accordion,
   Text,
   Button,
   Icon,
@@ -13,11 +15,62 @@ import {
 } from 'native-base';
 
 import styles from './styles';
-export interface Props {
+import { ContactList } from '../../components/layout/ContactList';
+import Account from '../../container/AccountContainer';
+
+export interface SettingsProps {
   navigation: any;
 }
-export interface State {}
-class Settings extends React.Component<Props, State> {
+export interface SettingsState {}
+
+class Settings extends React.Component<SettingsProps, SettingsState> {
+  sections = [];
+
+  constructor(props: SettingsProps) {
+    super(props);
+
+    this.sections = [
+      {
+        title: 'My Account',
+        content: (props: SettingsProps) => (
+          <Account navigation={props.navigation} />
+        )
+      },
+      {
+        title: 'Manage Clients',
+        content: () => <ContactList />
+      },
+      {
+        title: 'Manage Groups',
+        content: () => <ContactList />
+      },
+    ];
+  }
+
+  renderHeader = (item: any, expanded: boolean) => {
+    return (
+      <View
+        padder
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        <Text>{item.title}</Text>
+        {expanded ? (
+          <Icon name="caret-up-outline" />
+        ) : (
+          <Icon name="caret-down-outline" />
+        )}
+      </View>
+    );
+  };
+
+  renderContent = (item: any) => {
+    const { props } = this;
+    return <View padder>{item.content(props)}</View>;
+  };
+
   // <Icon name="ios-arrow-back" />
   render() {
     const param = this.props.navigation.state.params;
@@ -30,7 +83,7 @@ class Settings extends React.Component<Props, State> {
               onPress={() => {
                 this.props.navigation.openDrawer();
               }}>
-              <Text>Menu</Text>
+              <Icon name="search-outline" />
             </Button>
           </Left>
           <Body style={{ flex: 3 }}>
@@ -47,6 +100,11 @@ class Settings extends React.Component<Props, State> {
           </Right>
         </Header>
         <Content padder>
+          <Accordion
+            dataArray={this.sections}
+            renderHeader={this.renderHeader}
+            renderContent={this.renderContent}
+          />
         </Content>
       </Container>
     );

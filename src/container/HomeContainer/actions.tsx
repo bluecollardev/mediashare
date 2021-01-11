@@ -1,7 +1,7 @@
 export function listIsLoading(bool: boolean) {
   return {
     type: 'LIST_IS_LOADING',
-    isLoading: bool,
+    isLoading: bool
   };
 }
 export function fetchListSuccess(list: Object) {
