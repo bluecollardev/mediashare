@@ -10,6 +10,7 @@ export interface PlaylistCardProps {
   title?: string;
   author?: string;
   description?: string;
+  showActions?: boolean;
   onEditClicked?: () => void;
   onDeleteClicked?: () => void;
 }
@@ -27,6 +28,7 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
     showSocial,
     buttons,
     children,
+    showActions = false,
     onEditClicked = () => {},
     onDeleteClicked = () => {}
   } = props;
@@ -60,6 +62,7 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
       showSocial={showSocial}
       buttons={buttons}
       children={children}
+      showActions={showSocial}
       onActionsClicked={showCardMenu}
     />
   );

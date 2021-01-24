@@ -22,6 +22,7 @@ export interface MediaListItemProps {
   showSocial?: any | boolean;
   buttons?: any | boolean;
   content?: any;
+  showActions?: boolean;
   onActionsClicked?: () => void;
 }
 
@@ -33,6 +34,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     mediaSrc = null,
     showSocial = false,
     buttons = false,
+    showActions = false,
     onActionsClicked = () => {},
     children
   } = props;
@@ -55,11 +57,13 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           </Text>
           <Text style={{ fontSize: 12, color: 'grey' }}>5 items - 1h 20m</Text>
         </Body>
-        <Right>
-          <Button transparent onPress={onActionsClicked}>
-            <Icon name="ellipsis-vertical" />
-          </Button>
-        </Right>
+        {showActions && (
+          <Right>
+            <Button transparent onPress={onActionsClicked}>
+              <Icon name="ellipsis-vertical" />
+            </Button>
+          </Right>
+        )}
       </CardItem>
       <CardItem>
         <Text note numberOfLines={3} style={{ color: 'black' }}>

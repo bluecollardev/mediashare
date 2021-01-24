@@ -47,6 +47,7 @@ class LibraryItemDetail extends MediaDetail<
               author={author}
               description={description}
               image={image}
+              showActions={true}
               onEditClicked={onEditClicked}
               onDeleteClicked={onDeleteClicked}
             />

@@ -11,6 +11,7 @@ export interface LibraryItemCardProps {
   description?: string;
   image?: string;
   content?: any;
+  showActions?: boolean;
   onEditClicked?: () => void;
   onDeleteClicked?: () => void;
 }
@@ -29,6 +30,7 @@ export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
     buttons,
     content,
     children,
+    showActions = false,
     onEditClicked = () => {},
     onDeleteClicked = () => {}
   } = props;
@@ -63,6 +65,7 @@ export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
       buttons={buttons}
       content={content}
       children={children}
+      showActions={showActions}
       onActionsClicked={showCardMenu}
     />
   );

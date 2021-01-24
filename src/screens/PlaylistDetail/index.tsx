@@ -63,6 +63,7 @@ class PlaylistDetail extends MediaDetail<
               author={author}
               description={description}
               showSocial={true}
+              showActions={true}
               onEditClicked={onEditClicked}
               onDeleteClicked={onDeleteClicked}
             />

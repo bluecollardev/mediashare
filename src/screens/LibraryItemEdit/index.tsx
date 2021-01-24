@@ -69,17 +69,7 @@ class LibraryItemEdit extends MediaEdit<
               title={title}
               author={author}
               description={description}
-              image={image}
-              buttons={() => (
-                <Button
-                  iconLeft
-                  bordered
-                  danger
-                  style={{ flex: 0, marginRight: 10 }}>
-                  <Icon name="trash" />
-                  <Text style={{ paddingRight: 30 }}>Remove</Text>
-                </Button>
-              )}>
+              image={image}>
               <View padder>
                 <Field name="title" label="Title" component={TextField} />
                 <Field
