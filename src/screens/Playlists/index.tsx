@@ -6,17 +6,13 @@ import {
   Text,
   Button,
   Icon,
-  Left,
-  Right,
-  List,
-  ListItem
+  List
 } from 'native-base';
 
 import { MediaListItem } from '../../components/layout/MediaListItem';
-import { ListItemGroup } from '../../components/layout/ListItemGroup';
 
+import { routeConfig } from '../../routes';
 import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
 
 export interface PlaylistsProps {
   navigation: any;
@@ -41,19 +37,25 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
 
     return (
       <Container style={styles.container}>
-        <AppHeader
-          title="Playlists"
-          navigation={navigation}
-          showSearch={true}
-          showSort={true}
-        />
         <Content>
           <View padder style={{ flexDirection: 'row' }}>
-            <Button iconLeft bordered dark style={{ flex: 1, marginRight: 10 }}>
+            <Button
+              iconLeft
+              bordered
+              dark
+              style={{ flex: 1, marginRight: 10 }}
+              onPress={() =>
+                navigation.navigate(routeConfig.playlistEdit.name)
+              }>
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Create Playlist</Text>
             </Button>
-            <Button iconLeft bordered dark style={{ flex: 1 }}>
+            <Button
+              iconLeft
+              bordered
+              dark
+              style={{ flex: 1 }}
+              onPress={() => navigation.navigate(routeConfig.shareWith.name)}>
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Share Playlists</Text>
             </Button>
@@ -69,6 +71,9 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
                     title={title}
                     description={description}
                     image={image}
+                    onViewDetail={() =>
+                      navigation.navigate(routeConfig.playlistDetail.name)
+                    }
                   />
                 );
               })}
@@ -81,6 +86,9 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
                     title={title}
                     description={description}
                     image={image}
+                    onViewDetail={() =>
+                      navigation.navigate(routeConfig.playlistDetail.name)
+                    }
                   />
                 );
               })}
@@ -91,7 +99,8 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
               iconLeft
               bordered
               dark
-              style={{ flex: 1, justifyContent: 'center' }}>
+              style={{ flex: 1, justifyContent: 'center' }}
+              onPress={() => navigation.navigate(routeConfig.shareWith.name)}>
               <Icon name="share-outline" />
               <Text style={{ paddingRight: 30 }}>Share with User</Text>
             </Button>

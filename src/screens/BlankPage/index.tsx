@@ -28,7 +28,8 @@ class BlankPage extends React.Component<BlankPageProps, BlankPageState> {
             <Button
               transparent
               onPress={() => {
-                this.props.navigation.openDrawer();
+                // TODO: Fix this!
+                // this.props.navigation.openDrawer();
               }}>
               <Icon name="search-outline" />
             </Button>

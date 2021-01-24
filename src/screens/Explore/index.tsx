@@ -3,21 +3,14 @@ import {
   Container,
   Content,
   View,
-  Text,
-  Button,
-  Icon,
-  Left,
-  Right,
   List,
-  ListItem
 } from 'native-base';
 
 import { MediaListItem } from '../../components/layout/MediaListItem';
 import { ListItemGroup } from '../../components/layout/ListItemGroup';
 
+import { routeConfig } from '../../routes';
 import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
-import { MediaCard } from '../../components/layout/MediaCard';
 
 export interface ExploreProps {
   navigation: any;
@@ -42,12 +35,6 @@ class Explore extends React.Component<ExploreProps, ExploreState> {
 
     return (
       <Container style={styles.container}>
-        <AppHeader
-          title="Explore"
-          navigation={navigation}
-          showSearch={true}
-          showSort={true}
-        />
         <Content>
           {/* <View padder>
             <MediaCard />
@@ -64,6 +51,9 @@ class Explore extends React.Component<ExploreProps, ExploreState> {
                     title={title}
                     description={description}
                     image={image}
+                    onViewDetail={() =>
+                      navigation.navigate(routeConfig.playlistDetail.name)
+                    }
                   />
                 );
               })}
@@ -76,6 +66,9 @@ class Explore extends React.Component<ExploreProps, ExploreState> {
                     title={title}
                     description={description}
                     image={image}
+                    onViewDetail={() =>
+                      navigation.navigate(routeConfig.playlistDetail.name)
+                    }
                   />
                 );
               })}

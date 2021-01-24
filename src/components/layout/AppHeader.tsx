@@ -11,10 +11,10 @@ export interface AppHeaderProps {
 
 export const AppHeader = (props: AppHeaderProps) => {
   const {
-    navigation = { openDrawer: () => {} },
+    navigation,
     title = '',
     showBack = false,
-    showSearch = false,
+    // showSearch = false,
     showSort = false
   } = props;
   return (
@@ -23,17 +23,16 @@ export const AppHeader = (props: AppHeaderProps) => {
         {showBack && (
           <Button
             transparent
-            onPress={() => {
-              navigation.openDrawer();
-            }}>
+            onPress={navigation.goBack}>
             <Icon name="chevron-back-outline" />
           </Button>
         )}
-        {showSearch && (
+        {!showBack && (
           <Button
             transparent
             onPress={() => {
-              navigation.openDrawer();
+              // TODO: Fix this!
+              // navigation.openDrawer();
             }}>
             <Icon name="search-outline" />
           </Button>

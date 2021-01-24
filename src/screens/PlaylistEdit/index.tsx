@@ -1,21 +1,14 @@
 import * as React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import {
-  Container,
-  Content,
-  View,
-  Card,
-  Button,
-  Icon,
-  Text,
-} from 'native-base';
-
-import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
-import { PlaylistCard } from '../../components/layout/PlaylistCard';
+import { Container, Content, View, Button, Icon, Text } from 'native-base';
 
 import MediaEdit, { MediaDetailProps, MediaDetailState } from '../MediaDetail';
+import { PlaylistCard } from '../../components/layout/PlaylistCard';
 import TextField from '../../components/form/TextField';
+
+// import { routeConfig } from '../../routes';
+
+import styles from './styles';
 
 const validate = (values) => {
   const error = {} as any;
@@ -56,19 +49,16 @@ class PlaylistEdit extends MediaEdit<PlaylistEditProps, PlaylistEditState> {
   };
 
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { navigation } = this.props;
     const title = 'My First Playlist';
     const author = 'Blue Collar Dev';
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const description =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
       'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
     return (
       <Container style={styles.container}>
-        <AppHeader
-          title="Edit Playlist"
-          navigation={navigation}
-          showBack={true}
-        />
         <Content>
           <View padder>
             <PlaylistCard

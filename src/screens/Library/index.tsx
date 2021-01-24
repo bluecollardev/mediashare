@@ -10,10 +10,9 @@ import {
 } from 'native-base';
 
 import { MediaListItem } from '../../components/layout/MediaListItem';
-// import { ListItemGroup } from '../../components/layout/ListItemGroup';
 
+import { routeConfig } from '../../routes';
 import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
 
 export interface LibraryProps {
   navigation: any;
@@ -41,19 +40,23 @@ class Library extends React.Component<LibraryProps, LibraryState> {
 
     return (
       <Container style={styles.container}>
-        <AppHeader
-          title="Library"
-          navigation={navigation}
-          showSearch={true}
-          showSort={true}
-        />
         <Content>
           <View padder style={{ flexDirection: 'row' }}>
-            <Button iconLeft bordered dark style={{ flex: 1, marginRight: 10 }}>
+            <Button
+              iconLeft
+              bordered
+              dark
+              style={{ flex: 1, marginRight: 10 }}
+              onPress={() => navigation.navigate(routeConfig.addFromFeed.name)}>
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Add From Feed</Text>
             </Button>
-            <Button iconLeft bordered dark style={{ flex: 1 }}>
+            <Button
+              iconLeft
+              bordered
+              dark
+              style={{ flex: 1 }}
+              onPress={() => navigation.navigate('')}>
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Add to Playlist</Text>
             </Button>
@@ -69,6 +72,9 @@ class Library extends React.Component<LibraryProps, LibraryState> {
                     title={title}
                     description={description}
                     image={image}
+                    onViewDetail={() =>
+                      navigation.navigate(routeConfig.libraryItemDetail.name)
+                    }
                   />
                 );
               })}
@@ -81,6 +87,9 @@ class Library extends React.Component<LibraryProps, LibraryState> {
                     title={title}
                     description={description}
                     image={image}
+                    onViewDetail={() =>
+                      navigation.navigate(routeConfig.libraryItemDetail.name)
+                    }
                   />
                 );
               })}

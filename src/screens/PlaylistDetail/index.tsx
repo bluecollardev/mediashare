@@ -6,18 +6,19 @@ import {
   Icon,
   List,
   Text,
-  View,
+  View
 } from 'native-base';
-
-import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
-import { PlaylistCard } from '../../components/layout/PlaylistCard';
 
 import MediaDetail, {
   MediaDetailProps,
   MediaDetailState
 } from '../MediaDetail';
 import { MediaListItem } from '../../components/layout/MediaListItem';
+
+import { routeConfig } from '../../routes';
+import styles from './styles';
+
+import { PlaylistCard } from '../../components/layout/PlaylistCard';
 
 export interface PlaylistDetailProps extends MediaDetailProps {
   navigation: any;
@@ -50,7 +51,6 @@ class PlaylistDetail extends MediaDetail<
 
     return (
       <Container style={styles.container}>
-        <AppHeader title="Playlist" navigation={navigation} showBack={true} />
         <Content>
           <View padder>
             <PlaylistCard
@@ -64,7 +64,10 @@ class PlaylistDetail extends MediaDetail<
               iconLeft
               bordered
               dark
-              style={{ flex: 1, marginRight: 10, justifyContent: 'center' }}>
+              style={{ flex: 1, marginRight: 10, justifyContent: 'center' }}
+              onPress={() => {
+                navigation.navigate(routeConfig.addFromLibrary.name);
+              }}>
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Add Video From Library</Text>
             </Button>
@@ -79,6 +82,9 @@ class PlaylistDetail extends MediaDetail<
                     title={title}
                     description={description}
                     image={image}
+                    onViewDetail={() => {
+                      navigation.navigate(routeConfig.libraryItemDetail.name);
+                    }}
                   />
                 );
               })}

@@ -9,15 +9,15 @@ import {
   View,
 } from 'native-base';
 
-import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
-import { ListItemGroup } from '../../components/layout/ListItemGroup';
-
 import MediaDetail, {
   MediaDetailProps,
   MediaDetailState
 } from '../MediaDetail';
 import { MediaListItem } from '../../components/layout/MediaListItem';
+import { ListItemGroup } from '../../components/layout/ListItemGroup';
+
+import { routeConfig } from '../../routes';
+import styles from './styles';
 
 export interface AddFromProps extends MediaDetailProps {
   navigation: any;
@@ -46,7 +46,6 @@ class AddFrom extends MediaDetail<AddFromProps, AddFromState> {
 
     return (
       <Container style={styles.container}>
-        <AppHeader title="Add From" navigation={navigation} showBack={true} />
         <Content>
           <View>
             <List>
@@ -59,6 +58,9 @@ class AddFrom extends MediaDetail<AddFromProps, AddFromState> {
                     title={title}
                     description={description}
                     image={image}
+                    onViewDetail={() => {
+                      navigation.navigate(routeConfig.libraryItemDetail.name);
+                    }}
                   />
                 );
               })}
@@ -71,6 +73,9 @@ class AddFrom extends MediaDetail<AddFromProps, AddFromState> {
                     title={title}
                     description={description}
                     image={image}
+                    onViewDetail={() => {
+                      navigation.navigate(routeConfig.libraryItemDetail.name);
+                    }}
                   />
                 );
               })}

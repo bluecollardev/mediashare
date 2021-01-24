@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Container, Content, View } from 'native-base';
 
-import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
-import { LibraryItemCard } from '../../components/layout/LibraryItemCard';
-
 import MediaDetail, {
   MediaDetailProps,
   MediaDetailState
 } from '../MediaDetail';
+import { LibraryItemCard } from '../../components/layout/LibraryItemCard';
+// import { routeConfig } from '../../routes';
+
+import styles from './styles';
 
 export interface LibraryItemDetailProps extends MediaDetailProps {
   navigation: any;
@@ -21,6 +21,7 @@ class LibraryItemDetail extends MediaDetail<
   LibraryItemDetailState
 > {
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { navigation } = this.props;
     const title = 'My Video #1';
     const author = 'Blue Collar Dev';
@@ -32,11 +33,6 @@ class LibraryItemDetail extends MediaDetail<
 
     return (
       <Container style={styles.container}>
-        <AppHeader
-          title="Preview Item"
-          navigation={navigation}
-          showBack={true}
-        />
         <Content>
           <View padder>
             <LibraryItemCard

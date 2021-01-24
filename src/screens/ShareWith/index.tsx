@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Container, Content, Icon, Text, View } from 'native-base';
 
 import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
+import { AppScreenHeader } from '../../components/layout/AppScreenHeader';
 import { ContactList } from '../../components/layout/ContactList';
 
 import MediaDetail, {
@@ -22,7 +22,6 @@ class ShareWith extends MediaDetail<ShareWithProps, ShareWithState> {
 
     return (
       <Container style={styles.container}>
-        <AppHeader title="Share With" navigation={navigation} showBack={true} />
         <Content>
           <View>
             <ContactList

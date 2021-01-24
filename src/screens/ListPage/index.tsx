@@ -30,7 +30,8 @@ class ListPage extends React.Component<ListPageProps, ListPageState> {
             <Button
               transparent
               onPress={() => {
-                this.props.navigation.openDrawer();
+                // TODO: Fix this!
+                // this.props.navigation.openDrawer();
               }}>
               <Icon name="search-outline" />
             </Button>

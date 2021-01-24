@@ -1,21 +1,14 @@
 import * as React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import {
-  Container,
-  Content,
-  View,
-  Card,
-  Button,
-  Icon,
-  Text,
-} from 'native-base';
-
-import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
-import { LibraryItemCard } from '../../components/layout/LibraryItemCard';
+import { Container, Content, View, Button, Icon, Text } from 'native-base';
 
 import MediaEdit, { MediaDetailProps, MediaDetailState } from '../MediaDetail';
+import { LibraryItemCard } from '../../components/layout/LibraryItemCard';
 import TextField from '../../components/form/TextField';
+
+// import { routeConfig } from '../../routes';
+
+import styles from './styles';
 
 const validate = (values) => {
   const error = {} as any;
@@ -59,6 +52,7 @@ class LibraryItemEdit extends MediaEdit<
   };
 
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { navigation } = this.props;
     const title = 'My Video #1';
     const author = 'Blue Collar Dev';
@@ -70,11 +64,6 @@ class LibraryItemEdit extends MediaEdit<
 
     return (
       <Container style={styles.container}>
-        <AppHeader
-          title="Edit Item"
-          navigation={navigation}
-          showBack={true}
-        />
         <Content>
           <View padder>
             <LibraryItemCard

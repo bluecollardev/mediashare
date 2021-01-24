@@ -18,6 +18,7 @@ export interface MediaListItemProps {
   image?: string;
   selectable?: boolean;
   showActions?: boolean;
+  onViewDetail?: () => void;
 }
 
 export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
@@ -26,7 +27,8 @@ export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
     description,
     image,
     selectable = true,
-    showActions = true
+    showActions = true,
+    onViewDetail = () => {}
   } = props;
   return (
     <ListItem style={{ borderWidth: 0 }}>
@@ -53,7 +55,10 @@ export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
       </Body>
       {showActions === true && (
         <Right style={{ width: '10%', flex: 1 }}>
-          <Button transparent>
+          <Button
+            transparent
+            onPress={onViewDetail}
+          >
             <Icon name="chevron-forward-outline" />
           </Button>
         </Right>

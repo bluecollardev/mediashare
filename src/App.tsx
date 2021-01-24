@@ -10,111 +10,116 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
-import { Dimensions } from 'react-native';
-import { createAppContainer } from 'react-navigation';
+// import { Dimensions } from 'react-native';
+// import { createAppContainer } from 'react-navigation';
 // import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+// import { createDrawerNavigator } from 'react-navigation-drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+// import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Footer, FooterTab, Button, Icon } from 'native-base';
-// import Icon from 'react-native-vector-icons/Ionicons';
+import { Icon } from 'native-base';
 
-import Login from './container/LoginContainer';
-import Home from './container/HomeContainer';
-import Explore from './container/ExploreContainer';
-import AddFromLibrary from './container/AddFromLibraryContainer';
-import AddFromFeed from './container/AddFromFeedContainer';
-import Playlists from './container/PlaylistsContainer';
-import PlaylistDetail from './container/PlaylistDetailContainer';
-import PlaylistEdit from './container/PlaylistEditContainer';
-import Library from './container/LibraryContainer';
-import LibraryItemDetail from './container/LibraryItemDetailContainer';
-import LibraryItemEdit from './container/LibraryItemEditContainer';
-import ShareWith from './container/ShareWithContainer';
-import ListPage from './container/ListPageContainer';
-import BlankPage from './container/BlankPageContainer';
-import Settings from './container/SettingsContainer';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import Sidebar from './container/SidebarContainer';
+import { routeConfig } from './routes';
 
 declare const global: { HermesInternal: null | {} };
 
-const deviceWidth = Dimensions.get('window').width;
+// const deviceWidth = Dimensions.get('window').width;
 
-const DrawerNavigator = createDrawerNavigator(
-  {
-    Login: { screen: Login },
-    Home: { screen: Home },
-    Explore: { screen: Explore },
-    Playlists: { screen: Playlists },
-    PlaylistDetail: { screen: PlaylistDetail },
-    AddFromLibrary: { screen: AddFromLibrary },
-    PlaylistEdit: { screen: PlaylistEdit },
-    Library: { screen: Library },
-    LibraryItemDetail: { screen: LibraryItemDetail },
-    AddFromFeed: { screen: AddFromFeed },
-    LibraryItemEdit: { screen: LibraryItemEdit },
-    ShareWith: { screen: ShareWith },
-    BlankPage: { screen: BlankPage },
-    ListPage: { screen: ListPage },
-    Settings: { screen: Settings }
-  },
-  {
-    initialRouteName: 'Login',
-    // headerMode: 'none',
-    drawerWidth: deviceWidth - 50,
-    drawerPosition: 'left',
-    contentComponent: (props: any) => {
-      return <Sidebar {...props} />;
-    }
-  }
-);
+// const AppContainer = createAppContainer(DrawerNavigator);
+// const DrawerNavigator = createDrawerNavigator();
 
-/* const AppNavigator = createStackNavigator(
-  {
-    Home: { screen: Home },
-    ListPage: { screen: ListPage },
-    Login: { screen: Login },
-    BlankPage: { screen: BlankPage }
-  },
-  {
-    initialRouteName: 'Login',
-    headerMode: 'none'
-  }
-); */
+const ExploreStackNavigator = createStackNavigator();
+const ExploreNavigation = () => {
+  return (
+    <ExploreStackNavigator.Navigator>
+      <ExploreStackNavigator.Screen {...routeConfig.explore} />
+      <ExploreStackNavigator.Screen {...routeConfig.playlistDetail} />
+    </ExploreStackNavigator.Navigator>
+  );
+};
 
-const AppContainer = createAppContainer(DrawerNavigator);
+const PlaylistsStackNavigator = createStackNavigator();
+const PlaylistsNavigation = () => {
+  return (
+    <PlaylistsStackNavigator.Navigator>
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.libraryItemDetail} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />
+    </PlaylistsStackNavigator.Navigator>
+  );
+};
+
+const LibraryStackNavigator = createStackNavigator();
+const LibraryNavigation = () => {
+  return (
+    <LibraryStackNavigator.Navigator>
+      <LibraryStackNavigator.Screen {...routeConfig.library} />
+      <LibraryStackNavigator.Screen {...routeConfig.libraryItemDetail} />
+      <LibraryStackNavigator.Screen {...routeConfig.libraryItemEdit} />
+      <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
+    </LibraryStackNavigator.Navigator>
+  );
+};
+
+const SettingsStackNavigator = createStackNavigator();
+const SettingsNavigation = () => {
+  return (
+    <SettingsStackNavigator.Navigator>
+      <SettingsStackNavigator.Screen {...routeConfig.settings} />
+    </SettingsStackNavigator.Navigator>
+  );
+};
+
+// Map route names to icons
+export const tabNavigationIconsMap = {
+  Explore: 'earth-outline',
+  Playlists: 'play-circle-outline',
+  Library: 'film-outline',
+  Feeds: 'share-social-outline',
+  Settings: 'settings-outline'
+};
+
+const TabNavigator = createBottomTabNavigator();
+
+const TabNavigation = () => {
+  return (
+    <TabNavigator.Navigator
+      initialRouteName="Explore"
+      screenOptions={({ route }) => ({
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        tabBarIcon: ({ focused, color, size }) => {
+          return (
+            <Icon name={tabNavigationIconsMap[route.name]} color={color} />
+          );
+        }
+      })}
+      tabBarOptions={{
+        activeTintColor: 'tomato',
+        inactiveTintColor: 'gray',
+        showLabel: false
+      }}>
+      <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />
+      <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
+      <TabNavigator.Screen name={'Library'} component={LibraryNavigation} />
+      {/* <TabNavigator.Screen name={'Feeds'} component={null} />*/}
+      <TabNavigator.Screen name={'Settings'} component={SettingsNavigation} />
+    </TabNavigator.Navigator>
+  );
+};
 
 export default class App extends React.Component {
   public navigator: any;
 
   render() {
     return (
-      <>
-        <AppContainer
-          ref={(nav) => {
-            this.navigator = nav;
-          }}
-        />
-        <Footer style={{ backgroundColor: '#F8F8F8' }}>
-          <FooterTab>
-            <Button>
-              <Icon name="earth-outline" />
-            </Button>
-            <Button>
-              <Icon name="play-circle-outline" />
-            </Button>
-            <Button>
-              <Icon name="film-outline" />
-            </Button>
-            <Button>
-              <Icon name="share-social-outline" />
-            </Button>
-            <Button>
-              <Icon name="settings-outline" />
-            </Button>
-          </FooterTab>
-        </Footer>
-      </>
+      <NavigationContainer>
+        <TabNavigation />
+      </NavigationContainer>
     );
   }
 }

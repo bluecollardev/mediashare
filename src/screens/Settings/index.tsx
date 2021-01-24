@@ -11,7 +11,7 @@ import {
   Icon,
   Left,
   Right,
-  Body,
+  Body
 } from 'native-base';
 
 import styles from './styles';
@@ -73,7 +73,12 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 
   // <Icon name="ios-arrow-back" />
   render() {
-    const param = this.props.navigation.state.params;
+    // TODO: Fix this!
+    const param = {
+      name: {
+        item: 'Settings'
+      }
+    }; // this.props.navigation.state.params;
     return (
       <Container style={styles.container}>
         <Header>
@@ -81,7 +86,8 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
             <Button
               transparent
               onPress={() => {
-                this.props.navigation.openDrawer();
+                // TODO: Fix this!
+                // this.props.navigation.openDrawer();
               }}>
               <Icon name="search-outline" />
             </Button>

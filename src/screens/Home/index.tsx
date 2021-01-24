@@ -1,13 +1,7 @@
 import * as React from 'react';
-import {
-  Container,
-  Content,
-  View
-} from 'native-base';
+import { Container, Content, View } from 'native-base';
 
 import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
-import { MediaCard } from '../../components/layout/MediaCard';
 
 export interface HomeProps {
   navigation: any;
@@ -15,22 +9,14 @@ export interface HomeProps {
 }
 export interface HomeState {}
 
-const dataArray = [
-  { title: 'First Element', content: 'Lorem ipsum dolor sit amet' },
-  { title: 'Second Element', content: 'Lorem ipsum dolor sit amet' },
-  { title: 'Third Element', content: 'Lorem ipsum dolor sit amet' }
-];
-
 class Home extends React.Component<HomeProps, HomeState> {
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { navigation } = this.props;
     return (
       <Container style={styles.container}>
-        <AppHeader title="Home" navigation={navigation} showSearch={true} />
         <Content>
-          <View padder>
-            {/* <MediaCard /> */}
-          </View>
+          <View padder>{/* <MediaCard /> */}</View>
         </Content>
       </Container>
     );

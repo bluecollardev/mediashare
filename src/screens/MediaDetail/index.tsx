@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Container, Content, View } from 'native-base';
 
-import styles from './styles';
-import { AppHeader } from '../../components/layout/AppHeader';
 import { MediaCard } from '../../components/layout/MediaCard';
+
+import styles from './styles';
 
 export interface MediaDetailProps {
   navigation: any;
@@ -16,10 +16,10 @@ class MediaDetail<P, S> extends React.Component<
   MediaDetailState & S
 > {
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { navigation } = this.props;
     return (
       <Container style={styles.container}>
-        <AppHeader title="Home" navigation={navigation} />
         <Content>
           <View padder>
             <MediaCard />
