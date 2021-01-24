@@ -16,11 +16,14 @@ import {
 } from 'native-base';
 
 import styles from './styles';
+
 export interface ListPageProps {
   navigation: any;
   list: any;
 }
+
 export interface ListPageState {}
+
 class ListPage extends React.Component<ListPageProps, ListPageState> {
   render() {
     return (

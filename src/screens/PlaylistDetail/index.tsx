@@ -14,16 +14,16 @@ import MediaDetail, {
   MediaDetailState
 } from '../MediaDetail';
 import { MediaListItem } from '../../components/layout/MediaListItem';
+import { PlaylistCard } from '../../components/layout/PlaylistCard';
 
 import { routeConfig } from '../../routes';
 import styles from './styles';
-
-import { PlaylistCard } from '../../components/layout/PlaylistCard';
 
 export interface PlaylistDetailProps extends MediaDetailProps {
   navigation: any;
   list: any;
 }
+
 export interface PlaylistDetailState extends MediaDetailState {}
 
 class PlaylistDetail extends MediaDetail<

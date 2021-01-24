@@ -3,7 +3,7 @@ import {
   Container,
   Content,
   View,
-  List,
+  List
 } from 'native-base';
 
 import { MediaListItem } from '../../components/layout/MediaListItem';
@@ -16,6 +16,7 @@ export interface ExploreProps {
   navigation: any;
   list: any;
 }
+
 export interface ExploreState {}
 
 class Explore extends React.Component<ExploreProps, ExploreState> {

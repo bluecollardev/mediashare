@@ -2,12 +2,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import PlaylistEdit from '../../screens/PlaylistEdit';
 import { fetchList } from './actions';
+
 export interface PlaylistEditContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
 export interface PlaylistEditContainerState {}
+
 class PlaylistEditContainer extends React.Component<
   PlaylistEditContainerProps,
   PlaylistEditContainerState

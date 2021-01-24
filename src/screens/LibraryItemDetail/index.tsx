@@ -6,15 +6,15 @@ import MediaDetail, {
   MediaDetailState
 } from '../MediaDetail';
 import { LibraryItemCard } from '../../components/layout/LibraryItemCard';
-// import { routeConfig } from '../../routes';
-
-import styles from './styles';
 
 export interface LibraryItemDetailProps extends MediaDetailProps {
   navigation: any;
   list: any;
 }
+
 export interface LibraryItemDetailState extends MediaDetailState {}
+
+import styles from './styles';
 
 class LibraryItemDetail extends MediaDetail<
   LibraryItemDetailProps,

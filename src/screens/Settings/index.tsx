@@ -21,6 +21,7 @@ import Account from '../../container/AccountContainer';
 export interface SettingsProps {
   navigation: any;
 }
+
 export interface SettingsState {}
 
 class Settings extends React.Component<SettingsProps, SettingsState> {

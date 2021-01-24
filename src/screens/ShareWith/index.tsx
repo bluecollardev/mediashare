@@ -1,23 +1,20 @@
 import * as React from 'react';
 import { Button, Container, Content, Icon, Text, View } from 'native-base';
 
-import styles from './styles';
-import { AppScreenHeader } from '../../components/layout/AppScreenHeader';
 import { ContactList } from '../../components/layout/ContactList';
 
-import MediaDetail, {
-  MediaDetailProps,
-  MediaDetailState
-} from '../MediaDetail';
+import styles from './styles';
 
-export interface ShareWithProps extends MediaDetailProps {
+export interface ShareWithProps {
   navigation: any;
   list: any;
 }
-export interface ShareWithState extends MediaDetailState {}
 
-class ShareWith extends MediaDetail<ShareWithProps, ShareWithState> {
+export interface ShareWithState {}
+
+class ShareWith extends React.Component<ShareWithProps, ShareWithState> {
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { navigation } = this.props;
 
     return (

@@ -18,6 +18,7 @@ export interface PlaylistsProps {
   navigation: any;
   list: any;
 }
+
 export interface PlaylistsState {}
 
 class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {

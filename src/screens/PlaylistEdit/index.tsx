@@ -6,8 +6,6 @@ import MediaEdit, { MediaDetailProps, MediaDetailState } from '../MediaDetail';
 import { PlaylistCard } from '../../components/layout/PlaylistCard';
 import TextField from '../../components/form/TextField';
 
-// import { routeConfig } from '../../routes';
-
 import styles from './styles';
 
 const validate = (values) => {
@@ -38,6 +36,7 @@ export interface PlaylistEditProps extends MediaDetailProps {
   navigation: any;
   list: any;
 }
+
 export interface PlaylistEditState extends MediaDetailState {}
 
 class PlaylistEdit extends MediaEdit<PlaylistEditProps, PlaylistEditState> {

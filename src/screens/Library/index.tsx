@@ -18,6 +18,7 @@ export interface LibraryProps {
   navigation: any;
   list: any;
 }
+
 export interface LibraryState {}
 
 class Library extends React.Component<LibraryProps, LibraryState> {
@@ -56,7 +57,9 @@ class Library extends React.Component<LibraryProps, LibraryState> {
               bordered
               dark
               style={{ flex: 1 }}
-              onPress={() => navigation.navigate('')}>
+              onPress={() => {
+                navigation.navigate(routeConfig.addToPlaylist.name);
+              }}>
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Add to Playlist</Text>
             </Button>
@@ -100,7 +103,10 @@ class Library extends React.Component<LibraryProps, LibraryState> {
               iconLeft
               bordered
               dark
-              style={{ flex: 1, justifyContent: 'center' }}>
+              style={{ flex: 1, justifyContent: 'center' }}
+              onPress={() => {
+                navigation.navigate(routeConfig.addToPlaylist.name);
+              }}>
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Add to Playlist</Text>
             </Button>

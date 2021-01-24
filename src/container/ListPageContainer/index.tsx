@@ -2,13 +2,15 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import ListPage from '../../screens/ListPage';
 import { fetchList } from './actions';
-export interface Props {
+
+export interface ListPageProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
-export interface State {}
-class ListPageContainer extends React.Component<Props, State> {
+export interface ListPageState {}
+
+class ListPageContainer extends React.Component<ListPageProps, ListPageState> {
   componentDidMount() {
     this.props.fetchList();
   }

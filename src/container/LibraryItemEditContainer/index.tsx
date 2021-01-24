@@ -2,12 +2,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import LibraryItemEdit from '../../screens/LibraryItemEdit';
 import { fetchList } from './actions';
+
 export interface LibraryItemEditContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
 export interface LibraryItemEditContainerState {}
+
 class LibraryItemEditContainer extends React.Component<
   LibraryItemEditContainerProps,
   LibraryItemEditContainerState

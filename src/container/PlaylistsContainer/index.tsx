@@ -2,12 +2,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Playlists from '../../screens/Playlists';
 import { fetchList } from './actions';
+
 export interface PlaylistsContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
 export interface PlaylistsContainerState {}
+
 class PlaylistsContainer extends React.Component<
   PlaylistsContainerProps,
   PlaylistsContainerState

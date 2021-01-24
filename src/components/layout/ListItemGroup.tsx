@@ -13,9 +13,9 @@ export const ListItemGroup = ({ text }: ListItemGroupProps) => {
         <Text>{text}</Text>
       </Left>
       <Right style={{ width: '15%', flex: 1 }}>
-        <Button transparent>
+        {/*<Button transparent>
           <Icon name="chevron-forward-outline" />
-        </Button>
+        </Button>*/}
       </Right>
     </ListItem>
   );

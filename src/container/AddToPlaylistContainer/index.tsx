@@ -1,25 +1,28 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import AddFromFeed from '../../screens/AddFrom';
+import AddToPlaylist from '../../screens/AddToPlaylist';
 import { fetchList } from './actions';
 
-export interface AddFromFeedContainerProps {
+export interface AddToPlaylistContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
-export interface AddFromFeedContainerState {}
+export interface AddToPlaylistContainerState {}
 
-class AddFromFeedContainer extends React.Component<
-  AddFromFeedContainerProps,
-  AddFromFeedContainerState
+class AddToPlaylistContainer extends React.Component<
+  AddToPlaylistContainerProps,
+  AddToPlaylistContainerState
 > {
   componentDidMount() {
     this.props.fetchList();
   }
   render() {
     return (
-      <AddFromFeed navigation={this.props.navigation} list={this.props.data} />
+      <AddToPlaylist
+        navigation={this.props.navigation}
+        list={this.props.data}
+      />
     );
   }
 }
@@ -31,10 +34,10 @@ function mapDispatchToProps(dispatch: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.playlistDetail.list,
-  isLoading: state.playlistDetail.isLoading
+  data: state.playlists.list,
+  isLoading: state.playlists.isLoading
 });
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddFromFeedContainer);
+)(AddToPlaylistContainer);

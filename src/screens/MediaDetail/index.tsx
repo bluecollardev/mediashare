@@ -9,6 +9,7 @@ export interface MediaDetailProps {
   navigation: any;
   list: any;
 }
+
 export interface MediaDetailState {}
 
 class MediaDetail<P, S> extends React.Component<

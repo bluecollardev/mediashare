@@ -13,10 +13,13 @@ import {
 } from 'native-base';
 
 import styles from './styles';
+
 export interface BlankPageProps {
   navigation: any;
 }
+
 export interface BlankPageState {}
+
 class BlankPage extends React.Component<BlankPageProps, BlankPageState> {
   // <Icon name="ios-arrow-back" />
   render() {

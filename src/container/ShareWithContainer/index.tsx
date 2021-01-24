@@ -2,12 +2,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import ShareWith from '../../screens/ShareWith';
 import { fetchList } from './actions';
+
 export interface ShareWithContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
 export interface ShareWithContainerState {}
+
 class ShareWithContainer extends React.Component<
   ShareWithContainerProps,
   ShareWithContainerState

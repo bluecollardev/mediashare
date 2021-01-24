@@ -7,6 +7,7 @@ export interface HomeProps {
   navigation: any;
   list: any;
 }
+
 export interface HomeState {}
 
 class Home extends React.Component<HomeProps, HomeState> {

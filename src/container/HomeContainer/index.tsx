@@ -1,14 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import Home from '../../screens/Home';
-import datas from './data';
 import { fetchList } from './actions';
+import datas from './data';
+
 export interface HomeContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
+
 export interface HomeContainerState {}
+
 class HomeContainer extends React.Component<
   HomeContainerProps,
   HomeContainerState

@@ -11,9 +11,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 // import { Dimensions } from 'react-native';
-// import { createAppContainer } from 'react-navigation';
-// import { createStackNavigator } from 'react-navigation-stack';
-// import { createDrawerNavigator } from 'react-navigation-drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -26,8 +23,6 @@ import { routeConfig } from './routes';
 declare const global: { HermesInternal: null | {} };
 
 // const deviceWidth = Dimensions.get('window').width;
-
-// const AppContainer = createAppContainer(DrawerNavigator);
 // const DrawerNavigator = createDrawerNavigator();
 
 const ExploreStackNavigator = createStackNavigator();
@@ -36,6 +31,8 @@ const ExploreNavigation = () => {
     <ExploreStackNavigator.Navigator>
       <ExploreStackNavigator.Screen {...routeConfig.explore} />
       <ExploreStackNavigator.Screen {...routeConfig.playlistDetail} />
+      <ExploreStackNavigator.Screen {...routeConfig.libraryItemDetail} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />
     </ExploreStackNavigator.Navigator>
   );
 };
@@ -62,6 +59,8 @@ const LibraryNavigation = () => {
       <LibraryStackNavigator.Screen {...routeConfig.libraryItemDetail} />
       <LibraryStackNavigator.Screen {...routeConfig.libraryItemEdit} />
       <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
+      {/* TODO: Add to playlist! */}
+      <LibraryStackNavigator.Screen {...routeConfig.addToPlaylist} />
     </LibraryStackNavigator.Navigator>
   );
 };
@@ -89,7 +88,7 @@ const TabNavigator = createBottomTabNavigator();
 const TabNavigation = () => {
   return (
     <TabNavigator.Navigator
-      initialRouteName="Explore"
+      initialRouteName={'Explore'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {

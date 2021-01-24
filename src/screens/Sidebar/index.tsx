@@ -68,7 +68,9 @@ const routes = [
 export interface SidebarProps {
   navigation: any;
 }
+
 export interface SidebarState {}
+
 const resetAction = StackActions.reset({
   index: 0,
   actions: [NavigationActions.navigate({ routeName: 'Login' })]

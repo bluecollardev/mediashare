@@ -15,7 +15,9 @@ export interface LoginProps {
   loginForm: any;
   onLogin: Function;
 }
+
 export interface LoginState {}
+
 class Login extends React.Component<LoginProps, LoginState> {
   // <Icon name="flash" style={{ fontSize: 104 }} />
   render() {

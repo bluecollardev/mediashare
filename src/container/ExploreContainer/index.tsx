@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import Explore from '../../screens/Explore';
-import datas from './data';
 import { fetchList } from './actions';
+import datas from './data';
+
 export interface ExploreContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
 export interface ExploreContainerState {}
+
 class ExploreContainer extends React.Component<
   ExploreContainerProps,
   ExploreContainerState

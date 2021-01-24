@@ -2,12 +2,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { AccountForm as Account } from '../../components/layout/AccountForm';
 import { fetchList } from './actions';
+
 export interface AccountContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
 export interface AccountContainerState {}
+
 class AccountContainer extends React.Component<
   AccountContainerProps,
   AccountContainerState
