@@ -15,6 +15,8 @@ export interface LibraryItemDetailProps extends MediaDetailProps {
 export interface LibraryItemDetailState extends MediaDetailState {}
 
 import styles from './styles';
+import { PlaylistCard } from '../../components/layout/PlaylistCard';
+import { routeConfig } from '../../routes';
 
 class LibraryItemDetail extends MediaDetail<
   LibraryItemDetailProps,
@@ -31,6 +33,11 @@ class LibraryItemDetail extends MediaDetail<
     const image =
       'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
+    const onEditClicked = () => {
+      navigation.navigate(routeConfig.libraryItemEdit.name);
+    };
+    const onDeleteClicked = () => {};
+
     return (
       <Container style={styles.container}>
         <Content>
@@ -40,6 +47,8 @@ class LibraryItemDetail extends MediaDetail<
               author={author}
               description={description}
               image={image}
+              onEditClicked={onEditClicked}
+              onDeleteClicked={onDeleteClicked}
             />
           </View>
         </Content>

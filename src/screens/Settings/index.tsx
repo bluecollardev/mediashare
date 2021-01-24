@@ -82,30 +82,6 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
     }; // this.props.navigation.state.params;
     return (
       <Container style={styles.container}>
-        <Header>
-          <Left>
-            <Button
-              transparent
-              onPress={() => {
-                // TODO: Fix this!
-                // this.props.navigation.openDrawer();
-              }}>
-              <Icon name="search-outline" />
-            </Button>
-          </Left>
-          <Body style={{ flex: 3 }}>
-            <Title>{param ? param.name.item : 'Settings'}</Title>
-          </Body>
-          <Right>
-            <Button
-              transparent
-              onPress={() => {
-                this.props.navigation.navigate('Home');
-              }}>
-              <Text>Back</Text>
-            </Button>
-          </Right>
-        </Header>
         <Content padder>
           <Accordion
             dataArray={this.sections}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { MediaCard } from './MediaCard';
-import { Button, Icon, Text } from 'native-base';
+import { ActionSheet } from 'native-base';
 
 export interface LibraryItemCardProps {
   navigation?: any;
@@ -11,7 +11,13 @@ export interface LibraryItemCardProps {
   description?: string;
   image?: string;
   content?: any;
+  onEditClicked?: () => void;
+  onDeleteClicked?: () => void;
 }
+
+const mediaCardButtons = ['Edit', 'Delete', 'Cancel'];
+const destructive_idx = 1;
+const cancel_idx = 2;
 
 export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
   const {
@@ -23,7 +29,29 @@ export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
     buttons,
     content,
     children,
+    onEditClicked = () => {},
+    onDeleteClicked = () => {}
   } = props;
+
+  const showCardMenu = () => {
+    ActionSheet.show(
+      {
+        options: mediaCardButtons,
+        cancelButtonIndex: cancel_idx,
+        destructiveButtonIndex: destructive_idx
+      },
+      (buttonIdx) => {
+        switch (buttonIdx) {
+          case 0:
+            onEditClicked();
+            break;
+          case 1:
+            onDeleteClicked();
+            break;
+        }
+      }
+    );
+  };
 
   return (
     <MediaCard
@@ -35,6 +63,7 @@ export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
       buttons={buttons}
       content={content}
       children={children}
+      onActionsClicked={showCardMenu}
     />
   );
 };

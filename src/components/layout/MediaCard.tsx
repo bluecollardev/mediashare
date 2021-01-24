@@ -7,8 +7,10 @@ import {
   Body,
   Right,
   CardItem,
-  Card, View,
-} from "native-base";
+  Card,
+  View,
+  ActionSheet
+} from 'native-base';
 import { Image } from 'react-native';
 
 export interface MediaListItemProps {
@@ -17,8 +19,10 @@ export interface MediaListItemProps {
   title?: string;
   author?: string;
   description?: string;
+  showSocial?: any | boolean;
   buttons?: any | boolean;
   content?: any;
+  onActionsClicked?: () => void;
 }
 
 export const MediaCard: React.FC<MediaListItemProps> = (props) => {
@@ -27,7 +31,9 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     author = '',
     description = '',
     mediaSrc = null,
+    showSocial = false,
     buttons = false,
+    onActionsClicked = () => {},
     children
   } = props;
 
@@ -44,10 +50,15 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
       <CardItem>
         <Body>
           <Text>{title}</Text>
-          <Text note>{author}</Text>
+          <Text style={{ fontSize: 12, color: 'grey' }}>
+            {author} @bluecollardev
+          </Text>
+          <Text style={{ fontSize: 12, color: 'grey' }}>5 items - 1h 20m</Text>
         </Body>
         <Right>
-          <Text style={{ fontSize: 12, color: 'grey' }}>1h 20m</Text>
+          <Button transparent onPress={onActionsClicked}>
+            <Icon name="ellipsis-vertical" />
+          </Button>
         </Right>
       </CardItem>
       <CardItem>
@@ -55,7 +66,13 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           {description}
         </Text>
       </CardItem>
-      {buttons === true && (
+      {buttons && typeof buttons === 'function' && (
+        <View padder style={{ flexDirection: 'row' }}>
+          {buttons()}
+        </View>
+      )}
+      {children}
+      {showSocial === true && (
         <CardItem>
           <Left>
             <Button transparent>
@@ -77,12 +94,6 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           </Right>
         </CardItem>
       )}
-      {buttons && typeof buttons === 'function' && (
-        <View padder style={{ flexDirection: 'row' }}>
-          {buttons()}
-        </View>
-      )}
-      {children}
     </Card>
   );
 };

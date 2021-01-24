@@ -49,6 +49,11 @@ class PlaylistDetail extends MediaDetail<
       { title: 'Video 5', description: 'Ipsum lorem dolor', image: imageSrc }
     ];
 
+    const onEditClicked = () => {
+      navigation.navigate(routeConfig.playlistEdit.name);
+    };
+    const onDeleteClicked = () => {};
+
     return (
       <Container style={styles.container}>
         <Content>
@@ -57,6 +62,9 @@ class PlaylistDetail extends MediaDetail<
               title={title}
               author={author}
               description={description}
+              showSocial={true}
+              onEditClicked={onEditClicked}
+              onDeleteClicked={onDeleteClicked}
             />
           </View>
           <View padder style={{ flexDirection: 'row' }}>
