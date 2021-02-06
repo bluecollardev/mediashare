@@ -1,0 +1,142 @@
+{
+  "version": 2,
+  "cli": {
+    "defaultCollection": "@nrwl/nest"
+  },
+  "defaultProject": "media-api",
+  "projects": {
+    "media-api": {
+      "root": "apps/media-api",
+      "sourceRoot": "apps/media-api/src",
+      "projectType": "application",
+      "prefix": "media-api",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/media-api",
+            "main": "apps/media-api/src/main.ts",
+            "tsConfig": "apps/media-api/tsconfig.app.json",
+            "assets": [
+              "apps/media-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/media-api/src/environments/environment.ts",
+                  "with": "apps/media-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "media-api:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/media-api/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/media-api"
+          ],
+          "options": {
+            "jestConfig": "apps/media-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "mediashare": {
+      "root": "apps/mediashare",
+      "sourceRoot": "apps/mediashare/src",
+      "projectType": "application",
+      "generators": {},
+      "targets": {
+        "start": {
+          "executor": "@nrwl/react-native:start",
+          "options": {
+            "port": 8081
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "nx start mediashare"
+          }
+        },
+        "run-ios": {
+          "executor": "@nrwl/react-native:run-ios",
+          "options": {}
+        },
+        "bundle-ios": {
+          "executor": "@nrwl/react-native:bundle",
+          "outputs": [
+            "apps/mediashare/build"
+          ],
+          "options": {
+            "entryFile": "apps/mediashare/src/main.tsx",
+            "platform": "ios",
+            "bundleOutput": "dist/apps/mediashare/ios/main.bundle"
+          }
+        },
+        "run-android": {
+          "executor": "@nrwl/react-native:run-android",
+          "options": {}
+        },
+        "build-android": {
+          "executor": "@nrwl/react-native:build-android",
+          "outputs": [
+            "apps/mediashare/android/app/build/outputs/bundle",
+            "apps/mediashare/android/app/build/outputs/apk"
+          ],
+          "options": {}
+        },
+        "bundle-android": {
+          "executor": "@nrwl/react-native:bundle",
+          "options": {
+            "entryFile": "apps/mediashare/src/main.tsx",
+            "platform": "android",
+            "bundleOutput": "dist/apps/mediashare/android/main.bundle"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/mediashare/**/*.{js,ts,tsx}"
+            ]
+          }
+        },
+        "sync-deps": {
+          "executor": "@nrwl/react-native:sync-deps",
+          "options": {}
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/mediashare/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  }
+}
