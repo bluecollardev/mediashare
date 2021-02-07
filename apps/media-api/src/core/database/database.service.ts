@@ -11,6 +11,9 @@ export type DocumentType<T> = mongo.OptionalId<T>;
 @Injectable()
 export class DatabaseService extends mongo.MongoClient {
   private prefix: string;
+
+  client: mongo.MongoClient;
+
   constructor(
     @Inject('URI') private uri: string,
     @Inject('DB_NAME') private database: string
@@ -18,6 +21,12 @@ export class DatabaseService extends mongo.MongoClient {
     super(uri, {});
 
     this.prefix = 'database';
+  }
+
+  async start() {
+    const client = await this.connect();
+
+    this.client = client;
   }
 
   insertRecord<T>(opts: {
