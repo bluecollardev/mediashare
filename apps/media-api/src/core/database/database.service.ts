@@ -8,14 +8,18 @@ export type DatabaseCollectionType = Partial<
 >;
 
 export type DocumentType<T> = mongo.OptionalId<T>;
+
 @Injectable()
 export class DatabaseService extends mongo.MongoClient {
+  get dbName() {
+    return this.database;
+  }
   private prefix: string;
 
-  client: mongo.MongoClient;
+  private client: mongo.MongoClient;
 
   constructor(
-    @Inject('URI') private uri: string,
+    @Inject('URI') uri: string,
     @Inject('DB_NAME') private database: string
   ) {
     super(uri, {});
@@ -42,7 +46,7 @@ export class DatabaseService extends mongo.MongoClient {
     query: { [key: string]: string | Date | boolean };
     id: string;
   }): Promise<mongo.UpdateWriteOpResult> {
-    const { collection, query, id } = opts;
+    const { collection, query, id: _id } = opts;
 
     return (
       this.db(this.database)
@@ -80,4 +84,6 @@ export class DatabaseService extends mongo.MongoClient {
       .collection(collection)
       .findOne({ ...query });
   }
+
+  deleteRecord(opts: { collection: DatabaseCollectionType; id: string }) {}
 }
