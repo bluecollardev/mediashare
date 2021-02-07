@@ -12,7 +12,7 @@ export class MsLoggerService implements LoggerService {
     console.log(trace);
   }
 
-  constructor(private isProduction: string) {}
+  constructor(private isProduction: boolean) {}
 
   log(message: any, context?: string) {
     this.writeMessage(message, { context });
