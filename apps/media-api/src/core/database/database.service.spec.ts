@@ -6,7 +6,18 @@ describe('DatabaseService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [DatabaseService],
+      providers: [
+        DatabaseService,
+        {
+          provide: 'URI',
+          useValue:
+            'mongodb://localhost:27017/?readPreference=primary&ssl=false',
+        },
+        {
+          provide: 'DB_NAME',
+          useValue: 'test',
+        },
+      ],
     }).compile();
 
     service = module.get<DatabaseService>(DatabaseService);

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+
 import { CoreModule } from '../core/core.module';
 
 import { AppController } from './app.controller';
@@ -11,7 +11,7 @@ const envFilePath = '.env.development';
 
 const mongoPath =
   process.env.DATABASE ||
-  'mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false';
+  'mongodb://localhost:27017/?readPreference=primary&ssl=false';
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: envFilePath, isGlobal: true }),
