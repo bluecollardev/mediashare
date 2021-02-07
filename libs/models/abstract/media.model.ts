@@ -1,6 +1,6 @@
-import { Metadata } from './metadata';
-import { Stats } from '../stats';
-import { Tag } from '../tag';
+import { Metadata } from './metadata.model';
+import { Stats } from '../stats.model';
+import { Tag } from '../tag.model';
 
 export interface Media extends Metadata {
   id?: string;

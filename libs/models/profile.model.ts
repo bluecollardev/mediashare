@@ -1,7 +1,7 @@
 export interface Profile {
-  firstName?: string;
+  firstName: string;
   middleName?: string;
-  lastName?: string;
+  lastName: string;
   // Property will be computed
-  fullName?: string;
+  fullName: () => string;
 }

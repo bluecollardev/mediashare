@@ -1,4 +1,3 @@
-import { Media } from '../abstract/media';
+import { Media } from '../abstract/media.model';
 
-export interface Document extends Media {
-}
+export interface Document extends Media {}
