@@ -1,8 +1,11 @@
-enum ContactTypes {
-  Email,
-  PhoneNumber,
-  Address
-}
+import { ConfigEnum } from './configEnum';
+
+export const CONTACT_TYPES = [
+  'Email',
+  'PhoneNumber',
+  'Address'
+] as const;
+export type ContactTypes = ConfigEnum<typeof CONTACT_TYPES>
 
 export interface Address {
   id?: string;
