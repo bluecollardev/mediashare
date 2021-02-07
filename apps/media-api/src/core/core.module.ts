@@ -6,13 +6,17 @@ import { DatabaseService } from './database/database.service';
 @Module({
   imports: [],
   providers: [],
-  exports: [DatabaseService],
 })
 export class CoreModule {
-  static forRoot(options: { mongoPath: string }): DynamicModule {
-    const { mongoPath = '' } = options;
+  static forRoot(options: {
+    mongoPath: string;
+    database?: string;
+  }): DynamicModule {
+    const { mongoPath = '', database = 'mediashare' } = options;
     const providers = [
-      { provide: 'CONNECTION', useValue: mongoPath },
+      { provide: 'URI', useValue: mongoPath },
+      { provide: 'DB_NAME', useValue: database },
+
       DatabaseService,
     ];
 
