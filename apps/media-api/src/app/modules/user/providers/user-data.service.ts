@@ -1,14 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { User, Account } from '@core-lib';
-import { DatabaseService } from '../../../../core/providers/database/database.service';
-import { MsDataProvider } from 'apps/media-api/src/core/models/data-provider.model';
+import {
+  DatabaseCollectionType,
+  DatabaseService,
+} from '../../../../core/providers/database/database.service';
+import { MsDataProvider } from '../../../../core/models/data-provider.model';
 
 @Injectable()
-export class UserData implements MsDataProvider<User> {
-  constructor(private dbService: DatabaseService) {}
+export class UserDataService implements MsDataProvider<User> {
+  constructor(
+    @Inject('USER_COLLECTION') private collection: DatabaseCollectionType,
+    private dbSvc: DatabaseService
+  ) {
+    if (!collection)
+      throw new Error(
+        `${this.constructor.name} is missing collection in implementation`
+      );
+  }
 
-  create(account: Account) {
-    const { uid } = account;
+  create(user: Partial<User>) {
+    const { accounts = [] } = user;
+
+    const collection = this.collection;
+
+    if (!accounts || accounts.length < 1)
+      throw new Error(`no accounts added to ${this.constructor.name}.create`);
+
+    return this.dbSvc.insertRecord({ collection, record: { accounts } });
   }
 }
