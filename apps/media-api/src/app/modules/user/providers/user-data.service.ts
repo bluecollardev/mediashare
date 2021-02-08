@@ -29,4 +29,21 @@ export class UserDataService implements MsDataProvider<User> {
 
     return this.dbSvc.insertRecord({ collection, record: { accounts } });
   }
+
+  get(id: string) {
+    const collection = this.collection;
+
+    return this.dbSvc.getRecord({ collection, id });
+  }
+
+  update(args: { uid: string; id: string }) {
+    const { id, uid } = args;
+    const collection = this.collection;
+
+    return this.dbSvc.updateRecord<User>({
+      collection,
+      id,
+      query: { uid },
+    });
+  }
 }
