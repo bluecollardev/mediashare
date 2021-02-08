@@ -11,5 +11,6 @@ export type AccountType = ConfigEnum<typeof ACCOUNT_TYPES>;
 export interface Account {
   id?: string;
   accountType?: AccountType;
+  uid: string;
   // TODO: Other stuff here...
 }

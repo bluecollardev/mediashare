@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@core-lib": ["libs/core/src/index.ts"]
+      "@core-lib": ["libs/core/src/index.ts"],
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,13 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import * as mongo from 'mongodb';
+import { MsDocumentType } from '../../models/data-provider.model';
 
-export const DATABASE_COLLECTIONS = ['likes', 'users', 'media'] as const;
+export const DATABASE_COLLECTIONS = [
+  'likes',
+  'users',
+  'media',
+  'accounts',
+] as const;
 export type DatabaseCollectionType = Partial<
   typeof DATABASE_COLLECTIONS[number]
 >;
-
-export type DocumentType<T> = mongo.OptionalId<T>;
 
 @Injectable()
 export class DatabaseService extends mongo.MongoClient {
@@ -35,7 +39,7 @@ export class DatabaseService extends mongo.MongoClient {
 
   insertRecord<T>(opts: {
     collection: DatabaseCollectionType;
-    record: DocumentType<T>;
+    record: MsDocumentType<T>;
   }) {
     const { collection, record } = opts;
     return this.db(this.database).collection<T>(collection).insertOne(record);
@@ -72,6 +76,7 @@ export class DatabaseService extends mongo.MongoClient {
     const { collection, id } = opts;
     if (!id) throw new Error(this.prefix + 'no id entered');
     const _id = new mongo.ObjectId(id);
+
     return this.db(this.database).collection(collection).findOne({ _id });
   }
 
