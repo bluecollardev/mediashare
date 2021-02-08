@@ -47,7 +47,7 @@ export class DatabaseService extends mongo.MongoClient {
 
   updateRecord<T>(opts: {
     collection: DatabaseCollectionType;
-    query: { [key: string]: string | Date | boolean };
+    query: { [key: string]: string | Date | boolean | any };
     id: string;
   }): Promise<mongo.UpdateWriteOpResult> {
     const { collection, query, id: _id } = opts;

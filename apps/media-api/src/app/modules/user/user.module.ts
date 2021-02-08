@@ -11,5 +11,6 @@ import { UserDataService } from './providers/user-data.service';
     AccountDataService,
     UserDataService,
   ],
+  exports: [AccountDataService, UserDataService],
 })
 export class UserModule {}

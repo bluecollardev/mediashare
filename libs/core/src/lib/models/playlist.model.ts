@@ -9,4 +9,5 @@ export interface Playlist {
   itemCount?: () => number; // Computed
   tags?: Tag[];
   stats?: Partial<Stats>[];
+  userId: string;
 }
