@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@core-lib": ["libs/core/src/index.ts"],
+      "@util-lib": ["libs/utility/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -10,6 +10,7 @@ import {
 export interface User {
   id?: string;
   profile?: Profile;
+  userName: string;
   accounts?: Account[];
   readonly primaryContact?:
     | typeof PhoneNumberContact

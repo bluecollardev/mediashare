@@ -31,15 +31,21 @@
     "@nestjs/common": "^7.0.0",
     "@nestjs/config": "^0.6.3",
     "@nestjs/core": "^7.0.0",
+    "@nestjs/mapped-types": "^0.3.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/typeorm": "^7.1.5",
     "express-session": "^1.17.1",
+    "joi": "^17.4.0",
     "mongodb": "^3.6.4",
     "react": "16.13.1",
     "react-native": "0.63.4",
     "reflect-metadata": "^0.1.13",
     "remeda": "0.0.27",
     "rxjs": "~6.6.3",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "tsutils": "^3.20.0",
+    "typeorm": "^0.2.31",
+    "typeorm-factories": "^1.0.1"
   },
   "devDependencies": {
     "@nestjs/schematics": "^7.0.0",
@@ -76,6 +82,8 @@
     "react-test-renderer": "17.0.1",
     "ts-jest": "26.4.0",
     "ts-node": "~9.1.1",
+    "ts-toolbelt": "^9.3.10",
+    "typeorm-fixtures-cli": "^1.9.1",
     "typescript": "~4.0.3"
   }
 }
