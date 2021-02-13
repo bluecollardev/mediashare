@@ -1,27 +1,20 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { CoreModule } from '../core/core.module';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import databaseConfig from './config/database.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './controllers/user/user.module';
+import { LoggerModule } from 'nestjs-pino';
 
 /* TODO: custom variable for loading this from */
 const envFilePath = '.env.development';
-
-const mongoPath =
-  process.env.DATABASE ||
-  'mongodb://localhost:27017/?readPreference=primary&ssl=false';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: envFilePath, isGlobal: true }),
     // CoreModule.forRoot({ mongoPath }),
-    ConfigModule.forRoot({
-      load: [databaseConfig],
-    }),
+
     TypeOrmModule.forRoot({
       synchronize: !process.env.production,
       autoLoadEntities: true,
@@ -33,6 +26,8 @@ const mongoPath =
       useUnifiedTopology: true,
       useNewUrlParser: true,
     }),
+    UserModule,
+    LoggerModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,26 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MongoRepository } from 'typeorm';
+import { User } from './entities/user.entity';
+import { DataService } from 'apps/media-api/src/core/models/data-provider.model';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 @Injectable()
-export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
-
-  findAll() {
-    return `This action returns all user`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+export class UserService extends DataService<User, MongoRepository<User>> {
+  constructor(
+    @InjectRepository(User)
+    userRepository: MongoRepository<User>,
+    @InjectPinoLogger(UserService.name)
+    private readonly injectedLogger: PinoLogger // logger: PinoLogger
+  ) {
+    super(userRepository, new User(), injectedLogger);
   }
 }
+
+// async validateUserExists(createUserDTto: CreateUserDto) {
+//   const { username } = createUserDTto;
+//   const exists = await this.findOne(username);
+// }

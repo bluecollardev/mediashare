@@ -3,21 +3,35 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Logger } from 'nestjs-pino';
 
 import { AppModule } from './app/app.module';
-import { MsLoggerService } from './core/providers/ms-logger/ms-logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: new MsLoggerService(false),
-  });
+  const app = await NestFactory.create(AppModule);
+  app.useLogger(app.get(Logger));
+
+  app.useGlobalPipes(new ValidationPipe());
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
+  /* TODO: abstract this out */
+  const config = new DocumentBuilder()
+    .setTitle('Media Share API')
+    .setDescription('The cats API description')
+    .setVersion('1.0')
+    .addTag('cats')
+    .build();
   const port = process.env.PORT || 3333;
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(port, () => {
-    Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
+    console.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });
 }
 
