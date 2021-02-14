@@ -63,7 +63,19 @@ find all the +id in the service, and delete the +.
 
 Go to: `resource-name.module.ts`
 
-add the imports line:
+add the module imports line:
+
+```js
+
+@Module[{
+  ...
+  imports: [..., ResourceNameModule],
+  ...
+}]
+
+```
+
+If you get an error when nest starts one of the above steps was missed.
 
 ```
 @Module({
