@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { OptionalId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
@@ -14,6 +15,7 @@ export type MsDocumentType<T> = OptionalId<T>;
  * @template E - Model extends MsBaseEntity
  * @template R - repository extends MongoRepository<Model>
  */
+@Injectable()
 export abstract class DataService<
   E extends BcBaseEntity<E>,
   R extends MongoRepository<E>

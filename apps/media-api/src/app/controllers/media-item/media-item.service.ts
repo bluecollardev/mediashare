@@ -1,5 +1,6 @@
 import { DataService } from '@api';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
@@ -12,7 +13,7 @@ export class MediaItemService extends DataService<
   MongoRepository<MediaItem>
 > {
   constructor(
-    @InjectRepository(User)
+    @InjectRepository(MediaItem)
     mediaRepository: MongoRepository<MediaItem>,
     logger: PinoLogger
   ) {

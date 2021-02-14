@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './controllers/user/user.module';
 import { LoggerModule } from 'nestjs-pino';
+import { MediaItemModule } from './controllers/media-item/media-item.module';
 
 /* TODO: custom variable for loading this from */
 const envFilePath = '.env.development';
@@ -30,6 +31,7 @@ const typeOrmConfig = {
     TypeOrmModule.forRoot(typeOrmConfig),
     UserModule,
     LoggerModule.forRoot(),
+    MediaItemModule,
   ],
   controllers: [AppController],
   providers: [AppService],
