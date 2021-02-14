@@ -1,16 +1,15 @@
+import { ObjectID } from 'bson';
 import * as Faker from 'faker';
-import { define } from 'typeorm-factories';
 import { User } from '../controllers/user/entities/user.entity';
 
-define(User, (faker: typeof Faker) => {
-  const user = new User();
+export function userFactory() {
+  const username = Faker.internet.email();
+  const _id = new ObjectID();
 
-  user.id = faker.random.uuid();
-  user.username = faker.lorem.email;
+  return new User({ _id, username });
+}
 
-  return user;
-});
-
-export function userFactory(faker: Faker) {
-  return new User({ id: faker.random.uuid(), username: faker.lorem.email });
+export function userPropsFactory() {
+  const username = Faker.internet.email();
+  return { username };
 }

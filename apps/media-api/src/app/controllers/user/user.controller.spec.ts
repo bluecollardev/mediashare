@@ -3,7 +3,7 @@ import { User } from './entities/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { mockRepositoryFactory } from '../../factories/mock-repository.factory';
+import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -14,10 +14,9 @@ describe('UserController', () => {
 
       providers: [
         {
-          provide: getRepositoryToken(User),
-          useFactory: () => mockRepositoryFactory(),
+          provide: UserService,
+          useValue: mockDataServiceFactory(),
         },
-        { provide: UserService, useValue: {} },
       ],
     }).compile();
 

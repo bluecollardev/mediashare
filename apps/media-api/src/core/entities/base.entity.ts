@@ -1,4 +1,5 @@
-import { ObjectID, ObjectIdColumn } from 'typeorm';
+import { ObjectId } from 'bson';
+import { Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
@@ -8,15 +9,19 @@ export type DeepPartial<T> = {
     : DeepPartial<T[P]> | T[P];
 };
 
-export abstract class MSBaseEntity<T> {
+export abstract class BcBaseEntity<M> {
   @ObjectIdColumn()
-  id: ObjectID;
+  _id: ObjectId;
 
-  constructor(model: Partial<T>) {
+  constructor(model?: Partial<M>) {
     Object.assign(this, model);
   }
 
-  factory(props: Partial<T>): DeepPartial<T> {
-    return Object.create(this, props);
+  factory(props: Partial<M>): DeepPartial<M> {
+    const model = Object.create(this);
+
+    Object.assign(model, props);
+
+    return model;
   }
 }

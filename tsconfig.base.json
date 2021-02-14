@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@core-lib": ["libs/core/src/index.ts"],
-      "@util-lib": ["libs/utility/src/index.ts"]
+      "@util-lib": ["libs/utility/src/index.ts"],
+      "@api": ["apps/media-api/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

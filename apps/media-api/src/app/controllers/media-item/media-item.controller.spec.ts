@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
 import { MediaItemController } from './media-item.controller';
 import { MediaItemService } from './media-item.service';
 
@@ -8,7 +9,10 @@ describe('MediaItemController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MediaItemController],
-      providers: [MediaItemService],
+      providers: [
+        MediaItemService,
+        { provide: MediaItemService, useValue: mockDataServiceFactory() },
+      ],
     }).compile();
 
     controller = module.get<MediaItemController>(MediaItemController);

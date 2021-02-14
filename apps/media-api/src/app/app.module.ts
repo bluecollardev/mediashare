@@ -10,26 +10,33 @@ import { LoggerModule } from 'nestjs-pino';
 /* TODO: custom variable for loading this from */
 const envFilePath = '.env.development';
 
+const typeOrmConfig = {
+  synchronize: !process.env.production,
+  autoLoadEntities: true,
+  type: (process.env.DATABASE_TYPE as any) || 'mongodb',
+  url: process.env.DB_URL,
+  database: process.env.DATABASE,
+  entities: [__dirname + '/**/*.entity{.ts,.js}'],
+  ssl: process.env.DATABASE_SSL,
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+};
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: envFilePath, isGlobal: true }),
     // CoreModule.forRoot({ mongoPath }),
 
-    TypeOrmModule.forRoot({
-      synchronize: !process.env.production,
-      autoLoadEntities: true,
-      type: (process.env.DATABASE_TYPE as any) || 'mongodb',
-      url: process.env.DB_URL,
-      database: process.env.DATABASE,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      ssl: process.env.DATABASE_SSL,
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-    }),
+    /* TODO: @bcdevlucas change this to the PostGres settings */
+    TypeOrmModule.forRoot(typeOrmConfig),
     UserModule,
     LoggerModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    console.log('started');
+    console.log(typeOrmConfig);
+  }
+}
