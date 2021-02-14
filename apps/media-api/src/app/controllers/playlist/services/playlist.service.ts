@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { Playlist } from './entities/playlist.entity';
+import { Playlist } from '../entities/playlist.entity';
 
 @Injectable()
 export class PlaylistService extends DataService<

@@ -1,16 +1,17 @@
 import { BcBaseEntity } from '@api';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
-import { PlaylistItem } from '../../playlist-item/entities/playlist-item.entity';
-import { User } from '../../user/entities/user.entity';
+import { ObjectId } from 'mongodb';
+import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { PlaylistItem } from './playlist-item.entity';
 
 @Entity()
 export class Playlist extends BcBaseEntity<Playlist> {
   @Column()
   title: string;
 
-  @ManyToOne(() => User, (user) => user.playlists) user: User;
+  @ObjectIdColumn()
+  user: ObjectId;
 
-  @OneToMany(() => PlaylistItem, (playlistItem) => playlistItem.playlist)
+  @Column((type) => PlaylistItem)
   items: Playlist[];
   // items;
 

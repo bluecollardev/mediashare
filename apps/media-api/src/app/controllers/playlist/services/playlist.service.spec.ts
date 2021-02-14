@@ -2,8 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository, getMongoRepository } from 'typeorm';
-import { mockLoggerFactory } from '../../factories/mock-logger.factory';
-import { Playlist } from './entities/playlist.entity';
+import { mockLoggerFactory } from '../../../factories/mock-logger.factory';
+import { PlaylistItem } from '../entities/playlist-item.entity';
+import { Playlist } from '../entities/playlist.entity';
 import { PlaylistService } from './playlist.service';
 
 describe('PlaylistService', () => {
@@ -21,7 +22,7 @@ describe('PlaylistService', () => {
           host: 'localhost',
           port: 27017,
           database: 'test',
-          entities: [Playlist],
+          entities: [Playlist, PlaylistItem],
           ssl: false,
           useUnifiedTopology: true,
           useNewUrlParser: true,
@@ -38,20 +39,11 @@ describe('PlaylistService', () => {
     }).compile();
 
     repository = getMongoRepository(Playlist);
+
     await repository.deleteMany({});
 
     const logger = module.get(PinoLogger);
     service = new PlaylistService(repository, logger);
-  });
-  afterEach(async () => {
-    await repository.deleteMany({});
-  });
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [PlaylistService],
-    }).compile();
-
-    service = module.get<PlaylistService>(PlaylistService);
   });
 
   it('should be defined', () => {

@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
+import { Profile } from './entities/profile.entity';
 import { ProfileController } from './profile.controller';
 import { ProfileService } from './profile.service';
 
@@ -8,7 +10,12 @@ describe('ProfileController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProfileController],
-      providers: [ProfileService],
+      providers: [
+        {
+          provide: ProfileService,
+          useValue: mockDataServiceFactory(new Profile()),
+        },
+      ],
     }).compile();
 
     controller = module.get<ProfileController>(ProfileController);

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { OptionalId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
@@ -35,14 +35,14 @@ export abstract class DataService<
    * @return {*}
    * @memberof DataService
    */
-  async create(dto: Partial<E>) {
-    this.logger.info('create props', dto);
+  async create(dto: Partial<E>): Promise<E> {
+    this.logger.info(`${this.constructor.name}.create props`, dto);
 
     try {
       const object = this.entity.factory(dto);
       const created = await this.repository.save(object);
 
-      this.logger.info('create result', created);
+      this.logger.info(`${this.constructor.name}.create result`, created);
 
       return created;
     } catch (error) {
@@ -57,12 +57,12 @@ export abstract class DataService<
    * @return {*}
    * @memberof DataService
    */
-  async findOne(id: string) {
-    this.logger.info('findOne props', id);
+  async findOne(id: string): Promise<E> {
+    this.logger.info(`${this.constructor.name}findOne props`, id);
 
     try {
       const document = await this.repository.findOne(id);
-      this.logger.info('findOne result', document);
+      this.logger.info('${this.constructor.name}findOne result', document);
       return document;
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findOne ${error}`);
@@ -89,7 +89,7 @@ export abstract class DataService<
   async update(id: string, dto: Partial<E>) {
     this.logger.info('update props', id, dto);
     try {
-      const update = await this.repository.updateOne({ id }, dto);
+      const update = await this.repository.findOneAndUpdate({ _id: id }, dto);
       this.logger.info('update result', update);
       return update;
     } catch (error) {
@@ -120,13 +120,36 @@ export abstract class DataService<
    * @return {*}
    * @memberof DataService
    */
-  async findAll() {
-    this.logger.info('findAll');
+  async findAll(): Promise<E[]> {
+    this.logger.info(`${this.constructor.name}.findAll`);
 
     try {
       const findAll = await this.repository.find();
       this.logger.info('findAll result', findAll);
       return findAll;
+    } catch (error) {
+      this.logger.error(`${this.constructor.name}.findAll ${error}`);
+      throw new HttpException(
+        'InternalServerErrorException',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  /**
+   * Find document by any partial query of the entity.
+   *
+   * @param {Partial<E>} query
+   * @return {*}
+   * @memberof DataService
+   */
+  async findByQuery(query: Partial<E>): Promise<E> {
+    this.logger.info(`${this.constructor.name}.findByQuery`);
+
+    try {
+      const findByQuery = await this.repository.findOne(query);
+
+      return findByQuery;
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findAll ${error}`);
     }

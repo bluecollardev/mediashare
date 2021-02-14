@@ -82,9 +82,19 @@ describe('UserService', () => {
     });
   });
 
-  // describe('update', () => {});
+  describe('checkIfUserExists', () => {
+    it('should have a user with the same username', async () => {
+      const expected = await service.create(userPropsFactory());
+      const result = await service.checkIfUserExists(expected.username);
+      expect(result).toBeDefined();
 
-  // describe('remove', () => {});
-
-  // it('');
+      expect(result.username).toBe(expected.username);
+    });
+    it('should throw if the user does not exist', async () => {
+      const email = 'fake@example.com';
+      const spy = jest.fn(service.checkIfUserExists);
+      const result = await service.checkIfUserExists(email);
+      expect(spy).toThrowError();
+    });
+  });
 });

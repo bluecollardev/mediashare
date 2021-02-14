@@ -1,14 +1,15 @@
-import { ObjectID } from 'mongodb';
+import { BcBaseEntity, DeepPartial } from '@api';
 
-class MockDataService<T> {
-  modelFactory: (dto: Partial<T>) => T;
-
+class MockDataService<T extends BcBaseEntity<T>> {
   mockDocuments = new Map<string, T>();
 
   updatedDocument: T;
-
-  public create(dto: Partial<T>): T {
-    return this.modelFactory(dto);
+  factory: (props: Partial<T>) => DeepPartial<T>;
+  constructor(entity: T) {
+    this.factory = entity.factory;
+  }
+  public create(dto: Partial<T>): DeepPartial<T> {
+    return this.factory(dto);
   }
 
   public async remove(id: string): Promise<void> {
@@ -26,6 +27,6 @@ class MockDataService<T> {
   }
 }
 
-export function mockDataServiceFactory() {
-  return new MockDataService();
+export function mockDataServiceFactory<T extends BcBaseEntity<T>>(entity: T) {
+  return new MockDataService(entity);
 }

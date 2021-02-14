@@ -14,4 +14,10 @@ export class UserService extends DataService<User, MongoRepository<User>> {
   ) {
     super(userRepository, new User(), logger);
   }
+
+  async checkIfUserExists(username: string) {
+    const user = await super.findByQuery({ username });
+
+    return user;
+  }
 }

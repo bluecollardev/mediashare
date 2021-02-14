@@ -6,7 +6,5 @@ import { PlaylistItem } from '../entities/playlist-item.entity';
 
 export class CreatePlaylistItemDto
   implements Omit<PlaylistItem, '_id' | 'factory'> {
-  playlist: Playlist;
-  mediaItems: MediaItem[];
-  _id: ObjectId;
+  mediaId: ObjectId;
 }
