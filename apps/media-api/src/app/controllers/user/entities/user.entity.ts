@@ -1,8 +1,8 @@
-import { MSBaseEntity } from 'apps/media-api/src/core/entities/base.entity';
+import { BcBaseEntity } from 'apps/media-api/src/core/entities/base.entity';
 import { Entity, Column } from 'typeorm';
 
-@Entity('users')
-export class User extends MSBaseEntity<User> {
+@Entity('user')
+export class User extends BcBaseEntity<User> {
   @Column() username: string;
 
   constructor(user?: Partial<User>) {

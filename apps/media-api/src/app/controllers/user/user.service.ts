@@ -11,13 +11,8 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     @InjectRepository(User)
     userRepository: MongoRepository<User>,
     @InjectPinoLogger(UserService.name)
-    private readonly injectedLogger: PinoLogger // logger: PinoLogger
+    private readonly injectedLogger: PinoLogger
   ) {
     super(userRepository, new User(), injectedLogger);
   }
 }
-
-// async validateUserExists(createUserDTto: CreateUserDto) {
-//   const { username } = createUserDTto;
-//   const exists = await this.findOne(username);
-// }
