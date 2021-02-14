@@ -1,10 +1,8 @@
 import { DataService } from '@api';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { User } from '../user/entities/user.entity';
 import { MediaItem } from './entities/media-item.entity';
 
 @Injectable()

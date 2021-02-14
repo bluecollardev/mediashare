@@ -1,5 +1,6 @@
 import { Media } from 'apps/media-api/src/core/entities/media.entity';
 import { Tag } from 'apps/media-api/src/core/entities/tag.entity';
+import { ObjectId } from 'mongodb';
 import { Column, Entity } from 'typeorm';
 
 @Entity()
@@ -9,4 +10,5 @@ export class MediaItem extends Media {
   @Column() summary: string;
   @Column() description: string;
   @Column() tags: Tag[];
+  @Column() userId: ObjectId;
 }

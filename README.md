@@ -6,6 +6,83 @@ This project was generated using [Nx](https://nx.dev).
 
 🔎 **Nx is a set of Extensible Dev Tools for Monorepos.**
 
+## Creating a new module
+
+### command
+
+Run `nest g resource resource-name` in the folder you want to insert it
+
+choose `REST API` from the available options.
+
+To extend the modules:
+
+### Entity
+
+Go to `entity/resource-name.entity.ts`
+
+add teh @Entity() class decorator to the entity.
+
+extend `BcBaseEntity<T>` with the current class type:
+
+```js
+import { Entity } from 'typeorm';
+import { BcBaseEntity } from '@api';
+
+@Entity()
+export class Profile extends BcBaseEntity<Profile> {}
+```
+
+### Service
+
+Go to to: `resource-name.service.ts`
+
+Delete all the existing methods.
+
+Extend the service to DataService. There are two generic types to add, the base Entity (ResourceName) and MongoRepository<UserName>:
+`extends DataService<Profile, MongoRepository<Profile>>`
+
+implement the constructor from with the appropriate injected service (see user.service.ts)
+
+```js
+ constructor(
+  @InjectRepository(ResourceName)
+  userRepository: MongoRepository<ResourceName>,
+  logger: PinoLogger
+) {
+  super(userRepository, new ResourceBane(), logger);
+}
+```
+
+### Controller
+
+go to: `resource-name.controller.ts`
+
+find all the +id in the service, and delete the +.
+
+### Module
+
+Go to: `resource-name.module.ts`
+
+add the imports line:
+
+```
+@Module({
+// this is the entity
+imports: [TypeOrmModule.forFeature([ResourceName)]],
+controllers: [ResourceNameController],
+providers: [ResourceNameService],
+})
+export class ProfileModule {}
+
+
+```
+
+## App Module
+
+go too `app.module` (located in the src root of the project)`
+
+add the module to the list of imports there.
+
 ## Adding capabilities to your workspace
 
 Nx supports many plugins which add capabilities for developing different types of applications and different tools.

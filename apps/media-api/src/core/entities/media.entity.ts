@@ -1,14 +1,11 @@
 import { BcBaseEntity } from '@api';
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, ObjectID } from 'typeorm';
 import { Stat } from './stat.entity';
 import { Tag } from './tag.entity';
 
-@Entity('playListitem')
+@Entity()
 export class Media extends BcBaseEntity<Media> {
   @Column() displayFileName: string;
-
-  @ObjectIdColumn()
-  userId: ObjectID;
 
   @Column()
   imageUri: string;

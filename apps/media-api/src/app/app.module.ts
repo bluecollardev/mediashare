@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './controllers/user/user.module';
 import { LoggerModule } from 'nestjs-pino';
 import { MediaItemModule } from './controllers/media-item/media-item.module';
+import { ProfileModule } from './controllers/profile/profile.module';
 
 /* TODO: custom variable for loading this from */
 const envFilePath = '.env.development';
@@ -32,6 +33,7 @@ const typeOrmConfig = {
     UserModule,
     LoggerModule.forRoot(),
     MediaItemModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
