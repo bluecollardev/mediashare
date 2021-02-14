@@ -84,7 +84,6 @@
     "jest": "26.2.2",
     "jest-react-native": "18.0.0",
     "metro-react-native-babel-preset": "0.63.0",
-    "mongodb-memory-server": "^6.9.3",
     "prettier": "2.2.1",
     "react-test-renderer": "17.0.1",
     "ts-jest": "26.4.0",

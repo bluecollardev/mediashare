@@ -57,12 +57,12 @@ implement the constructor from with the appropriate injected service (see user.s
 
 go to: `resource-name.controller.ts`
 
-find all the +id in the service, and delete the +.
+find all the +id in the service, and delete the `+`
 
 ### Module
 
 Go to: `resource-name.module.ts`
-
+s
 add the module imports line:
 
 ```js
@@ -73,6 +73,9 @@ add the module imports line:
   ...
 }]
 
+### Tests
+
+follow the example in the user packages
 ```
 
 If you get an error when nest starts one of the above steps was missed.

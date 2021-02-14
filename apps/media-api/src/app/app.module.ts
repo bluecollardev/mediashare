@@ -26,7 +26,6 @@ const typeOrmConfig = {
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: envFilePath, isGlobal: true }),
-    // CoreModule.forRoot({ mongoPath }),
 
     /* TODO: @bcdevlucas change this to the PostGres settings */
     TypeOrmModule.forRoot(typeOrmConfig),
