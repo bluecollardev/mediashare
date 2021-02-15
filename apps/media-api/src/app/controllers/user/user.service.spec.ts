@@ -17,7 +17,7 @@ describe('UserService', () => {
       imports: [
         TypeOrmModule.forRoot({
           synchronize: false,
-          autoLoadEntities: true,
+          autoLoadEntities: false,
           type: 'mongodb',
           url: 'mongodb://localhost:27017/',
           host: 'localhost',
@@ -56,10 +56,9 @@ describe('UserService', () => {
   describe('create', () => {
     it('should create a new user ', async () => {
       const objectToTest = userPropsFactory();
-      const expected = new User(objectToTest);
       const received = await service.create(objectToTest);
 
-      expect(received.username).toEqual(expected.username);
+      expect(received.username).toEqual(objectToTest.username);
       expect(received).toHaveProperty('_id');
     });
   });
@@ -83,18 +82,12 @@ describe('UserService', () => {
   });
 
   describe('checkIfUserExists', () => {
-    it('should have a user with the same username', async () => {
-      const expected = await service.create(userPropsFactory());
-      const result = await service.checkIfUserExists(expected.username);
-      expect(result).toBeDefined();
+    it('should be undefined when a user does not exist', async () => {
+      const expected = userPropsFactory();
+      const { username } = expected;
+      const result = await service.checkIfUserExists(username);
 
-      expect(result.username).toBe(expected.username);
-    });
-    it('should throw if the user does not exist', async () => {
-      const email = 'fake@example.com';
-      const spy = jest.fn(service.checkIfUserExists);
-      const result = await service.checkIfUserExists(email);
-      expect(spy).toThrowError();
+      expect(result).toBeUndefined();
     });
   });
 });

@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
-import { Profile } from './entities/profile.entity';
 import { ProfileController } from './profile.controller';
 import { ProfileService } from './profile.service';
 
@@ -13,7 +12,7 @@ describe('ProfileController', () => {
       providers: [
         {
           provide: ProfileService,
-          useValue: mockDataServiceFactory(new Profile()),
+          useValue: mockDataServiceFactory(),
         },
       ],
     }).compile();

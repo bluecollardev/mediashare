@@ -3,7 +3,7 @@ import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository, getMongoRepository } from 'typeorm';
 import { mockLoggerFactory } from '../../../factories/mock-logger.factory';
-import { PlaylistItem } from '../entities/playlist-item.entity';
+import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
 import { Playlist } from '../entities/playlist.entity';
 import { PlaylistService } from './playlist.service';
 

@@ -5,11 +5,10 @@ class MockDataService<T extends BcBaseEntity<T>> {
 
   updatedDocument: T;
   factory: (props: Partial<T>) => DeepPartial<T>;
-  constructor(entity: T) {
-    this.factory = entity.factory;
-  }
-  public create(dto: Partial<T>): DeepPartial<T> {
-    return this.factory(dto);
+  entity: T;
+  constructor() {}
+  public create(dto: Partial<T>): Partial<T> {
+    return dto;
   }
 
   public async remove(id: string): Promise<void> {
@@ -27,6 +26,6 @@ class MockDataService<T extends BcBaseEntity<T>> {
   }
 }
 
-export function mockDataServiceFactory<T extends BcBaseEntity<T>>(entity: T) {
-  return new MockDataService(entity);
+export function mockDataServiceFactory<T extends BcBaseEntity<T>>() {
+  return new MockDataService();
 }

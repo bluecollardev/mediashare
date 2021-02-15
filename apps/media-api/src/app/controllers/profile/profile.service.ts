@@ -15,6 +15,6 @@ export class ProfileService extends DataService<
     userRepository: MongoRepository<Profile>,
     logger: PinoLogger
   ) {
-    super(userRepository, new Profile(), logger);
+    super(userRepository, logger);
   }
 }

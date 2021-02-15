@@ -14,7 +14,7 @@ describe('MediaItemController', () => {
         MediaItemService,
         {
           provide: MediaItemService,
-          useValue: mockDataServiceFactory(new MediaItem()),
+          useValue: mockDataServiceFactory(),
         },
       ],
     }).compile();

@@ -4,7 +4,7 @@ import { Stat } from './stat.entity';
 import { Tag } from './tag.entity';
 
 @Entity()
-export class Media extends BcBaseEntity<Media> {
+export class Media<T> extends BcBaseEntity<T> {
   @Column() displayFileName: string;
 
   @Column()

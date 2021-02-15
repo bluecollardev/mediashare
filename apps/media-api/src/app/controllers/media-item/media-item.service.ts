@@ -15,6 +15,6 @@ export class MediaItemService extends DataService<
     mediaRepository: MongoRepository<MediaItem>,
     logger: PinoLogger
   ) {
-    super(mediaRepository, new MediaItem(), logger);
+    super(mediaRepository, logger);
   }
 }

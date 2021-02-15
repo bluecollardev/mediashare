@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { OptionalId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
-import { MongoRepository } from 'typeorm';
+import { DeepPartial, MongoRepository } from 'typeorm';
 import { BcBaseEntity } from '../entities/base.entity';
 
 /* TODO: @bcdevlucas - let's work together to change these */
@@ -20,11 +20,7 @@ export abstract class DataService<
   E extends BcBaseEntity<E>,
   R extends MongoRepository<E>
 > {
-  constructor(
-    protected repository: R,
-    private entity: E,
-    private readonly logger: PinoLogger
-  ) {
+  constructor(protected repository: R, private readonly logger: PinoLogger) {
     logger.setContext(this.constructor.name);
   }
 
@@ -35,12 +31,11 @@ export abstract class DataService<
    * @return {*}
    * @memberof DataService
    */
-  async create(dto: Partial<E>): Promise<E> {
+  async create(dto: DeepPartial<E>): Promise<E> {
     this.logger.info(`${this.constructor.name}.create props`, dto);
 
     try {
-      const object = this.entity.factory(dto);
-      const created = await this.repository.save(object);
+      const created = await this.repository.save(dto);
 
       this.logger.info(`${this.constructor.name}.create result`, created);
 

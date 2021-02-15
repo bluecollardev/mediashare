@@ -14,7 +14,7 @@ describe('UserController', () => {
       providers: [
         {
           provide: UserService,
-          useValue: mockDataServiceFactory(new User()),
+          useValue: mockDataServiceFactory(),
         },
       ],
     }).compile();

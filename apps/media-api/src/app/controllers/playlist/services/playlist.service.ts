@@ -15,6 +15,6 @@ export class PlaylistService extends DataService<
     userRepository: MongoRepository<Playlist>,
     logger: PinoLogger
   ) {
-    super(userRepository, new Playlist(), logger);
+    super(userRepository, logger);
   }
 }
