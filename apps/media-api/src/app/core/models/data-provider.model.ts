@@ -16,10 +16,7 @@ export type MsDocumentType<T> = OptionalId<T>;
  * @template R - repository extends MongoRepository<Model>
  */
 @Injectable()
-export abstract class DataService<
-  E extends BcBaseEntity<E>,
-  R extends MongoRepository<E>
-> {
+export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepository<E>> {
   constructor(protected repository: R, private readonly logger: PinoLogger) {
     logger.setContext(this.constructor.name);
   }
@@ -81,12 +78,12 @@ export abstract class DataService<
    * @return {*}
    * @memberof DataService
    */
-  async update(id: string, dto: Partial<E>) {
+  async update(id: string, dto: Partial<E>): Promise<Partial<E>> {
     this.logger.info('update props', id, dto);
     try {
-      const update = await this.repository.findOneAndUpdate({ _id: id }, dto);
+      const update = await this.repository.findOneAndUpdate({ _id: id }, dto, { returnOriginal: false });
       this.logger.info('update result', update);
-      return update;
+      return update.value;
     } catch (error) {
       this.logger.error(`${this.constructor.name}.update ${error}`);
     }
@@ -124,10 +121,7 @@ export abstract class DataService<
       return findAll;
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findAll ${error}`);
-      throw new HttpException(
-        'InternalServerErrorException',
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new HttpException('InternalServerErrorException', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

@@ -1,7 +1,7 @@
-import { ConcreteUser, userDataFactory } from './mock-data.factory';
+import { UserFactory, userDataFactory } from './mock-data.factory';
 describe('make user', () => {
   it('should create userData', () => {
-    const user = userDataFactory(new ConcreteUser());
+    const user = userDataFactory(new UserFactory());
     console.log(
       '🚀 ---------------------------------------------------------------'
     );

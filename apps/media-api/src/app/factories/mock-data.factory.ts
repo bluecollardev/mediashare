@@ -1,6 +1,5 @@
 import * as Faker from 'faker';
 import { ObjectId } from 'mongodb';
-import { ObjectID } from 'typeorm';
 import { CreateMediaItemDto } from '../controllers/media-item/dto/create-media-item.dto';
 import { MediaItem } from '../controllers/media-item/entities/media-item.entity';
 import { CreateUserDto } from '../controllers/user/dto/create-user.dto';
@@ -35,7 +34,7 @@ interface ConcretePlaylistFactory {
   createUserDto(): CreateUserDto;
 }
 
-export class ConcreteUser extends DataFn implements ConcretePlaylistFactory {
+export class UserFactory extends DataFn implements ConcretePlaylistFactory {
   createUserDto() {
     return {
       username: Faker.internet.email(),
@@ -61,7 +60,7 @@ export class ConcreteUser extends DataFn implements ConcretePlaylistFactory {
   }
 }
 
-export function userDataFactory(userFactory: ConcreteUser) {
+export function userDataFactory(userFactory: UserFactory) {
   const userMixin = baseEntityMixin(User);
   const playlistMixin = baseEntityMixin(Playlist);
   const mediaItemMixin = baseEntityMixin(MediaItem);
@@ -80,8 +79,10 @@ export function userDataFactory(userFactory: ConcreteUser) {
 
   return { playlistDto, user, media };
 }
+``;
 
-class ConcreteMedia extends DataFn {}
+class ConcreteMedia extends DataFn { }
+
 export function playlistMediaFactory() {}
 
 interface ConcretePlaylists {

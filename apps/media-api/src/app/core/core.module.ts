@@ -2,18 +2,16 @@ import { DynamicModule, Global, Module } from '@nestjs/common';
 
 @Module({
   imports: [],
-  providers: [],
+
 })
 export class CoreModule {
-  static forRoot(options: {
-    mongoPath: string;
-    database?: string;
-  }): DynamicModule {
-    const { mongoPath = '', database = 'mediashare' } = options;
+  static forRoot(): DynamicModule {
     const providers = [
-      { provide: 'URI', useValue: mongoPath },
-      { provide: 'DB_NAME', useValue: database },
+      { provide: 'LONG_STRING', useValue: 255 },
+      { provide: 'STRING', useValue: 50 },
     ];
+
+
 
     return { module: CoreModule, providers, exports: providers };
   }
