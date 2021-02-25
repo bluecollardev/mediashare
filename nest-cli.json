@@ -6,7 +6,10 @@
       "entryFile": "index",
       "sourceRoot": "libs/utility/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/utility/tsconfig.lib.json"
+        "tsConfigPath": "libs/utility/tsconfig.lib.json",
+        "plugins": [
+          "@nestjs/swagger"
+        ]
       }
     }
   },

@@ -1,26 +1,30 @@
 import { ObjectId } from 'mongodb';
-import { Tag } from '../../../core/entities/tag.entity';
 import { MediaItem } from '../entities/media-item.entity';
-import { IsBoolean, IsString, Max, Min } from 'class-validator';
+import { IsBoolean, IsString, MaxLength, MinLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { ApiDefaults } from '@core-lib';
 
-export class CreateMediaItemDto
-  implements
-    Pick<MediaItem, 'summary' | 'isPlayable' | 'description' | 'userId'> {
+export class CreateMediaItemDto implements Pick<MediaItem, 'summary' | 'isPlayable' | 'description' | 'userId'> {
   @IsBoolean()
+  @ApiProperty({ required: true })
   isPlayable: boolean;
 
   @IsString()
+  @ApiProperty({ required: true })
   summary: string;
 
   @IsString()
-  @Min(50)
-  @Max(255)
+  @MinLength(ApiDefaults.longString.min)
+  @MaxLength(ApiDefaults.longString.max)
+  @ApiProperty({ required: true })
   description: string;
 
+  @ApiProperty({ required: true })
   userId: ObjectId;
 
   @IsString()
-  @Min(10)
-  @Max(50)
+  @MinLength(ApiDefaults.longString.min)
+  @MaxLength(ApiDefaults.longString.max)
+  @ApiProperty({ required: true })
   title: string;
 }

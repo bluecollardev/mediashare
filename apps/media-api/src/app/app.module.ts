@@ -17,7 +17,7 @@ const typeOrmConfig = {
   autoLoadEntities: true,
   type: (process.env.DATABASE_TYPE as any) || 'mongodb',
   url: process.env.DB_URL,
-  database: process.env.DATABASE,
+  database: process.env.DATABASE || 'mediashare',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   ssl: process.env.DATABASE_SSL,
   useUnifiedTopology: true,

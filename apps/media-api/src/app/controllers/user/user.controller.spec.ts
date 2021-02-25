@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { User } from './entities/user.entity';
+import {} from './entities/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';

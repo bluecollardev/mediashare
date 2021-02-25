@@ -116,9 +116,7 @@ describe('MediaItemController', () => {
     it('should remove an existing item', async () => {
       const id = new ObjectId();
 
-      reveal(mockMediaService).remove.mockReturnValue(
-        new Promise((resolve) => resolve({ raw: 'abcdef', generatedMaps: [] }))
-      );
+      reveal(mockMediaService).remove.mockReturnValue(new Promise((resolve) => resolve({ raw: 'abcdef' })));
 
       const deleted = await mockMediaService.remove(id.toHexString());
 

@@ -4,7 +4,9 @@ import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 
 import { badRequest, notFoundRequest } from '../../core/functors/http-errors.functor';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('media-items')
 @Controller('media-item')
 export class MediaItemController {
   constructor(private readonly mediaItemService: MediaItemService) {}

@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { OptionalId } from 'mongodb';
+import { ObjectId, OptionalId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { DeepPartial, MongoRepository } from 'typeorm';
 import { BcBaseEntity } from '../entities/base.entity';
@@ -81,8 +81,10 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
   async update(id: string, dto: Partial<E>): Promise<Partial<E>> {
     this.logger.info('update props', id, dto);
     try {
-      const update = await this.repository.findOneAndUpdate({ _id: id }, dto, { returnOriginal: false });
+      const update = await this.repository.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: dto });
       this.logger.info('update result', update);
+
+      console.log(update);
       return update.value;
     } catch (error) {
       this.logger.error(`${this.constructor.name}.update ${error}`);
@@ -99,7 +101,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
   async remove(id: string) {
     try {
       this.logger.info('remove props', id);
-      const removed = await this.repository.softDelete(id);
+      const removed = await this.repository.delete(id);
       return removed;
     } catch (error) {
       this.logger.error(`${this.constructor.name}.remove ${error}`);
@@ -140,7 +142,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
 
       return findByQuery;
     } catch (error) {
-      this.logger.error(`${this.constructor.name}.findAll ${error}`);
+      this.logger.error(`${this.constructor.name}.findOne ${error}`);
     }
   }
 }

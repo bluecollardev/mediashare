@@ -13,3 +13,5 @@ export * from './lib/models/user.model';
 export * from './lib/models/media/audio.model';
 export * from './lib/models/media/document.model';
 export * from './lib/models/media/video.model';
+
+export * from './lib/models/api-defaults.model';
