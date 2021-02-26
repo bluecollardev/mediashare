@@ -1,17 +1,23 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-function badRequest(error: string) {
+/**
+ * Return a new exception when the request is a bad request.
+ *
+ * @param {string} error
+ * @return Http Exception with status of 400
+ */
+function badRequestResponse(error: string) {
   return new HttpException({ status: HttpStatus.BAD_REQUEST, error }, HttpStatus.BAD_REQUEST);
 }
 
 /**
- * return a new exception when resource not found
+ * Return a new exception when resource not found
  *
  * @param {string} entity
  * @param {{ args?: any }} [opts]
- * @return {*}
+ * @return Http Exception with status of 404
  */
-function notFoundRequest(entity: string, opts?: { args?: any }) {
+function notFoundResponse(entity: string, opts?: { args?: any }) {
   const { args = null } = opts;
   return new HttpException(
     { status: HttpStatus.NOT_FOUND, error: `${entity} was not found`, ...(args ?? args) },
@@ -19,4 +25,4 @@ function notFoundRequest(entity: string, opts?: { args?: any }) {
   );
 }
 
-export { badRequest, notFoundRequest };
+export { badRequestResponse, notFoundResponse };

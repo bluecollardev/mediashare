@@ -4,7 +4,7 @@ import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 
-import { badRequest, notFoundRequest } from '../../core/functors/http-errors.functor';
+import { badRequestResponse, notFoundResponse } from '../../core/functors/http-errors.functor';
 import { ApiTags } from '@nestjs/swagger';
 
 import { Response } from 'express';
@@ -27,11 +27,11 @@ export class MediaItemController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    if (typeof id !== 'string') throw badRequest(`${id} must be of type string`);
+    if (typeof id !== 'string') throw badRequestResponse(`${id} must be of type string`);
 
     const mediaItem = await this.mediaItemService.findOne(id);
 
-    if (!mediaItem) throw notFoundRequest('mediaItem', { args: { id } });
+    if (!mediaItem) throw notFoundResponse('mediaItem', { args: { id } });
     return mediaItem;
   }
 
@@ -44,7 +44,7 @@ export class MediaItemController {
   async remove(@Param('id') id: string) {
     const deleted = await this.mediaItemService.remove(id);
 
-    if (!deleted) throw notFoundRequest(id);
+    if (!deleted) throw notFoundResponse(id);
 
     return deleted;
   }
