@@ -6,13 +6,13 @@ class MockLogger {
     // console.log(args);
   }
   info(...args: any) {
-    // console.log(args);
+    console.log(args);
   }
   warn(...args: any) {
     // console.log(args);
   }
   error(...args: any) {
-    // console.log(args);
+    console.log(args);
   }
   fatal(...args: any) {}
   setContext(...args: any) {

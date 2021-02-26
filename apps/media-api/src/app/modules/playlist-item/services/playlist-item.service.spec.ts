@@ -15,12 +15,12 @@ describe('PlaylistItemService', () => {
 
   const testData = userDataFactory(userFactory);
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
           synchronize: false,
-          autoLoadEntities: true,
+          autoLoadEntities: false,
           type: 'mongodb',
           url: 'mongodb://localhost:27017/',
           host: 'localhost',

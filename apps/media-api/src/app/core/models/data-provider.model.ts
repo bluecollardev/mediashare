@@ -137,14 +137,16 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
     }
   }
 
-  async insertMany(items: Partial<E>[]) {
+  async insertMany(items: DeepPartial<E>[]) {
     this.logger.info(`${this.constructor.name}.insertMany`);
 
     try {
-      const inserted = await this.repository.bulkWrite(items);
+      const inserted = await this.repository.create(items);
+      this.logger.info(`${this.constructor.name}.insertMany result`, inserted);
+
       return R.clone(inserted);
     } catch (error) {
-      this.logger.error(`${this.constructor.name}.findOne ${error}`);
+      this.logger.error(`${this.constructor.name}.insertMany failed with: ${error}`);
     }
   }
 }
