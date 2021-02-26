@@ -70,7 +70,6 @@ describe('PlaylistService', () => {
       const inserted = await service.createPlaylist(userId);
 
       expect(inserted).toBeDefined();
-
       expect(inserted.userId).toBe(userId);
     });
 
@@ -83,9 +82,7 @@ describe('PlaylistService', () => {
       const result = await service.createPlaylist(user._id, { mediaIds });
 
       expect(result).toBeDefined();
-
       expect(result.items).toHaveLength(5);
-
       expect(result.items[0].toHexString()).toEqual(mediaIds[0]);
     });
 
@@ -95,7 +92,6 @@ describe('PlaylistService', () => {
       const result = await service.createPlaylist(user._id, { title });
 
       expect(result).toBeDefined();
-
       expect(result.title).toEqual(title);
       expect(result.items).toHaveLength(0);
     });

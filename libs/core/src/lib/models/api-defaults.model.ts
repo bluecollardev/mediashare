@@ -8,7 +8,7 @@ export class ApiDefaults {
 
   static get string() {
     return {
-      min: 10,
+      min: 2,
       max: 100,
     };
   }
