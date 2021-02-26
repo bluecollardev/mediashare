@@ -35,6 +35,10 @@ interface ConcretePlaylistFactory {
 }
 
 export class UserFactory extends DataFn implements ConcretePlaylistFactory {
+  user: User;
+  get userId() {
+    return this.user._id.toHexString();
+  }
   createUserDto() {
     return {
       username: Faker.internet.email(),
@@ -43,39 +47,51 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
     };
   }
 
-  createPlaylistDto(userId: ObjectId) {
+  constructor() {
+    super();
+    const userMixin = baseEntityMixin(User);
+    this.user = new userMixin(this.createUserDto());
+  }
+
+  createPlaylistDto() {
     return {
-      userId,
+      userId: this.userId,
       title: DataFn.title(),
     };
   }
-  createMediaDto(userId: ObjectId): CreateMediaItemDto {
+  createPlaylist() {
+    const playlistMixin = baseEntityMixin(Playlist);
+    return new playlistMixin({ userId: this.user._id, title: DataFn.title(), items: [] });
+  }
+
+  createMediaDto(): CreateMediaItemDto {
     return {
-      userId,
+      userId: new ObjectId(this.userId),
       summary: Faker.lorem.lines(),
       title: Faker.lorem.sentence(),
       isPlayable: Faker.random.boolean(),
       description: Faker.lorem.lines(),
     };
   }
+
+  createMediaItem() {
+    const mediaItemMixin = baseEntityMixin(MediaItem);
+
+    return new mediaItemMixin(this.createMediaDto());
+  }
 }
 
 export function userDataFactory(userFactory: UserFactory) {
   const userMixin = baseEntityMixin(User);
   const playlistMixin = baseEntityMixin(Playlist);
-  const mediaItemMixin = baseEntityMixin(MediaItem);
 
   const userDto = userFactory.createUserDto();
 
   const user = new userMixin(userDto);
 
-  const playlistDto = R.range(1, DataFn.number(4)).map(
-    () => new playlistMixin(userFactory.createPlaylistDto(user._id))
-  );
+  const playlistDto = R.range(1, DataFn.number(4)).map(() => new playlistMixin());
 
-  const media = R.range(1, DataFn.number(10)).map(() =>
-    userFactory.createMediaDto(new ObjectId(user._id.toHexString()))
-  );
+  const media = R.range(1, DataFn.number(10)).map(() => userFactory.createMediaDto());
 
   return { playlistDto, user, media };
 }

@@ -1,6 +1,5 @@
 import { Entity, Column } from 'typeorm';
 import { BcBaseEntity } from '../../../core';
-import { baseEntityMixin } from '../../../factories/with-entity.factory';
 import { CreateUserDto } from '../dto/create-user.dto';
 export class BaseUser {}
 @Entity()

@@ -12,7 +12,7 @@ describe('MediaItemController', () => {
   let controller: MediaItemController;
   const userFactory = new UserFactory();
   const user = new User(userFactory.createUserDto());
-  const createMediaItemDto = () => userFactory.createMediaDto(user._id);
+  const createMediaItemDto = () => userFactory.createMediaDto();
   const createMediaItem = (dto?: CreateMediaItemDto) => new MediaItem(dto || createMediaItemDto());
 
   const mockMediaService = stub<MediaItemService>();

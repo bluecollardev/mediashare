@@ -59,7 +59,7 @@ describe('MediaItemService', () => {
 
       const inserted = await service.insertMany(mediaItemDtos);
 
-      const result = await service.findMediaItemsByUserId(testData.user._id.toHexString());
+      const result = await service.findMediaItemsByUserId(userFactory.userId);
 
       expect(result).toBeDefined();
       expect(result).toHaveLength(inserted.length);

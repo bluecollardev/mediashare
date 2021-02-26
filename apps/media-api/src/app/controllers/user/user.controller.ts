@@ -64,8 +64,6 @@ export class UserController {
     );
 
     const mediaIds = R.reduce(mediaIdsTuple, (prev, curr) => [...prev, ...curr], []);
-    // R.map((playlistItem) => playlistItem),
-    // R.uniqBy((item) => item.toHexString())
 
     const mediaItems = await this.mediaItemService.findPlaylistMedia(mediaIds);
 
