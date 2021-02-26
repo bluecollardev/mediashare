@@ -26,4 +26,10 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
       },
     });
   }
+
+  findMediaItemsByUserId(id: string) {
+    const userId = new ObjectId(id);
+
+    return this.repository.find({ userId });
+  }
 }

@@ -11,6 +11,7 @@ import { PlaylistItemService } from '../../modules/playlist-item/services/playli
 import { MediaItemService } from '../media-item/media-item.service';
 
 import * as R from 'remeda';
+import { ObjectId } from 'mongodb';
 @ApiTags('users')
 @Controller('user')
 export class UserController {
@@ -53,7 +54,7 @@ export class UserController {
   @Get(':id/playlists')
   async getPlaylists(@Param('id') id: string, @Res() res: Response) {
     const playlistItems = await this.playlistItemService.findByUserId(id);
-    if (!playlistItems) return res.status(HttpStatus.NOT_FOUND).send([]);
+    if (!playlistItems || playlistItems.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
 
     const playlists = await this.playlistService.findByUserId(id);
 
@@ -66,14 +67,20 @@ export class UserController {
     const mediaItems = await this.mediaItemService.findPlaylistMedia(uniqIds);
 
     const indexedMediaItems = R.indexBy(mediaItems, (item) => item._id);
-    // const mediaItems = await Promise.all(mediaItemQueries);
     const mapped = R.map(playlists, (playlist) => ({
       ...playlist,
       items: playlist?.items.map((item) => indexedMediaItems[item.toHexString()]) || [],
-      // mediaItems,
-      // items: R.map(playlist.items, (item) => mediaItems.find((mediaItem) => mediaItem._id === item)),
     }));
 
     return res.status(HttpStatus.OK).send(mapped);
+  }
+
+  @Get(':id/media-items')
+  async getMedia(@Param('id') id: string, @Res() res: Response) {
+    const mediaItems = await this.mediaItemService.findMediaItemsByUserId(id);
+
+    if (!mediaItems || mediaItems.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
+
+    return res.status(HttpStatus.OK).send(mediaItems);
   }
 }

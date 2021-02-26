@@ -21,7 +21,6 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
     const userId = new ObjectId(userIdStr);
 
     const playlistItems = await this.repository.find({ userId });
-    // const mappedPlaylistItems = R.groupBy(playlistItems, (item) => item.playlistId);
 
     return playlistItems;
   }

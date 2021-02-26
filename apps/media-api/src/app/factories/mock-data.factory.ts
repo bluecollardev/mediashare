@@ -39,7 +39,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
     return {
       username: Faker.internet.email(),
       firstName: Faker.name.firstName(),
-      lastName: Faker.name.firstName(),
+      lastName: Faker.name.lastName(),
     };
   }
 
@@ -52,10 +52,10 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
   createMediaDto(userId: ObjectId): CreateMediaItemDto {
     return {
       userId,
-      summary: DataFn.shortString(),
-      title: DataFn.title(),
-      isPlayable: DataFn.bool(),
-      description: DataFn.longString(),
+      summary: Faker.lorem.lines(),
+      title: Faker.lorem.sentence(),
+      isPlayable: Faker.random.boolean(),
+      description: Faker.lorem.lines(),
     };
   }
 }
@@ -73,32 +73,24 @@ export function userDataFactory(userFactory: UserFactory) {
     () => new playlistMixin(userFactory.createPlaylistDto(user._id))
   );
 
-  const media = R.range(1, DataFn.number(10))
-    .map(() => userFactory.createMediaDto(user._id))
-    .map((mediaItemDto) => new mediaItemMixin(mediaItemDto));
+  const media = R.range(1, DataFn.number(10)).map(() =>
+    userFactory.createMediaDto(new ObjectId(user._id.toHexString()))
+  );
 
   return { playlistDto, user, media };
 }
 ``;
 
-class ConcreteMedia extends DataFn { }
+class ConcreteMedia extends DataFn {}
 
 export function playlistMediaFactory() {}
 
 interface ConcretePlaylists {
-  CreatePlaylistItem(
-    playlistId: ObjectId,
-    mediaId: ObjectId,
-    userId: ObjectId
-  ): CreatePlaylistItemDto;
+  CreatePlaylistItem(playlistId: ObjectId, mediaId: ObjectId, userId: ObjectId): CreatePlaylistItemDto;
 }
 
 class ConcreteMediaItems extends DataFn {
-  createPlayListItem(
-    mediaId: ObjectId,
-    userId: ObjectId,
-    playlistId: ObjectId
-  ): CreatePlaylistItemDto {
+  createPlayListItem(mediaId: ObjectId, userId: ObjectId, playlistId: ObjectId): CreatePlaylistItemDto {
     return {
       userId,
       playlistId,

@@ -141,7 +141,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
     this.logger.info(`${this.constructor.name}.insertMany`);
 
     try {
-      const inserted = await this.repository.create(items);
+      const inserted = await this.repository.save(items);
       this.logger.info(`${this.constructor.name}.insertMany result`, inserted);
 
       return R.clone(inserted);
