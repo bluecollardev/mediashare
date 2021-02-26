@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
+import { notFoundRequest } from '../../core/functors/http-errors.functor';
 
 @ApiTags('users')
 @Controller('user')
@@ -16,6 +17,7 @@ export class UserController {
     const { username } = createUserDto;
     const existingUser = await this.userService.checkIfUserExists(username);
     console.log(existingUser);
+    if (existingUser) return existingUser;
     return await this.userService.create(createUserDto);
   }
 
@@ -37,5 +39,14 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.userService.remove(id);
+  }
+
+  @Get('username/:username')
+  async findByUserName(@Body('username') username: string): Promise<User> {
+    const user = await this.userService.getUserByUsername(username);
+
+    if (!user) throw notFoundRequest('user');
+
+    return user;
   }
 }

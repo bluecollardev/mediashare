@@ -17,9 +17,11 @@ export class UserService extends DataService<User, MongoRepository<User>> {
 
   async checkIfUserExists(username: string) {
     const user = await super.findByQuery({ username });
-    if (user) {
-      throw new HttpException('User already exists', HttpStatus.CONFLICT);
-    }
+
     return user;
+  }
+
+  getUserByUsername(username: string) {
+    return super.findByQuery({ username });
   }
 }

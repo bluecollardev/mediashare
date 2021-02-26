@@ -56,7 +56,7 @@ describe('PlaylistItemService', () => {
 
   describe('insertMany', () => {
     it('should insert many playlistItems', async () => {
-      const { playlistDto, media } = testData;
+      const { playlistDto } = testData;
 
       const result = await service.insertMany(playlistDto);
 
