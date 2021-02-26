@@ -25,6 +25,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       userId: new ObjectId(userIdStr),
       mediaId: new ObjectId(mediaIdStr),
       createdBy: new ObjectId(createdByStr),
+      read: false,
     });
   }
 
@@ -35,6 +36,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       userId: new ObjectId(userIdStr),
       playlistId: new ObjectId(playlistIdStr),
       createdBy: new ObjectId(createdByStr),
+      read: false,
     });
   }
 }

@@ -1,21 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Request } from 'express';
+
 import { UserFactory } from '../../factories/mock-data.factory';
-import { User } from '../user/entities/user.entity';
 import { MediaItem } from './entities/media-item.entity';
 import { MediaItemController } from './media-item.controller';
 import { MediaItemService } from './media-item.service';
 import { reveal, stub } from 'jest-auto-stub';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { ObjectId } from 'mongodb';
+import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 
 describe('MediaItemController', () => {
   let controller: MediaItemController;
+
+  const mockShareItemService = stub<ShareItemService>();
+  const mockMediaService = stub<MediaItemService>();
+  const response: any = stub<Response>();
+
   const userFactory = new UserFactory();
-  const user = new User(userFactory.createUserDto());
+
   const createMediaItemDto = () => userFactory.createMediaDto();
   const createMediaItem = (dto?: CreateMediaItemDto) => new MediaItem(dto || createMediaItemDto());
-
-  const mockMediaService = stub<MediaItemService>();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -26,6 +31,7 @@ describe('MediaItemController', () => {
           provide: MediaItemService,
           useValue: mockMediaService,
         },
+        { provide: ShareItemService, useValue: mockShareItemService },
       ],
     }).compile();
 
@@ -121,6 +127,28 @@ describe('MediaItemController', () => {
       const deleted = await mockMediaService.remove(id.toHexString());
 
       expect(deleted).toBeDefined();
+    });
+  });
+
+  describe('share', () => {
+    it('should create a new share item', async () => {
+      const userId = new ObjectId();
+      const mediaId = new ObjectId();
+      const createdBy = new ObjectId();
+
+      reveal(mockMediaService).findOne.mockReturnValueOnce(
+        new Promise((resolve) => resolve({ userId: userId } as any))
+      );
+
+      reveal(mockShareItemService).createMediaShareItem.mockReturnValueOnce(
+        new Promise((resolve) => resolve({ _id: new ObjectId(), userId, mediaId, read: false, createdBy }))
+      );
+
+      const result = await controller.share(mediaId.toHexString(), userId.toHexString(), response);
+
+      expect(result).toBeDefined();
+      expect(result).toHaveProperty('userId');
+      expect(result).toHaveProperty('mediaId');
     });
   });
 });
