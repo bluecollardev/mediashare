@@ -73,7 +73,11 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
   async update(id: string, dto: Partial<E>): Promise<Partial<E>> {
     this.logger.info('update props', id, dto);
     try {
-      const update = await this.repository.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: dto });
+      const update = await this.repository.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: dto },
+        { returnOriginal: false }
+      );
       this.logger.info('update result', update);
 
       return R.clone(update.value);

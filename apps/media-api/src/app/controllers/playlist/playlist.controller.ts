@@ -38,7 +38,8 @@ export class PlaylistController {
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
-    // return this.playlistService.update(id, updatePlaylistDto);
+    const { userId, ...rest } = updatePlaylistDto;
+    return this.playlistService.update(id, { ...rest, userId: new ObjectId(userId) });
   }
 
   @Delete(':id')
