@@ -8,7 +8,7 @@ import { PlaylistItem } from '../../modules/playlist-item/entities/playlist-item
 import { PlaylistItemService } from '../../modules/playlist-item/services/playlist-item.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Playlist, MediaItem, PlaylistItem]), PlaylistModule],
+  imports: [TypeOrmModule.forFeature([Playlist, MediaItem, PlaylistItem])],
   controllers: [PlaylistController],
   providers: [PlaylistService, PlaylistItemService],
 })

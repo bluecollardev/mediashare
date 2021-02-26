@@ -70,6 +70,7 @@
     "@react-native-community/cli-platform-ios": "4.13.0",
     "@testing-library/jest-native": "3.4.3",
     "@testing-library/react-native": "7.1.0",
+    "@types/express": "^4.17.11",
     "@types/express-session": "^1.17.3",
     "@types/jest": "^26.0.8",
     "@types/mongodb": "^3.6.6",

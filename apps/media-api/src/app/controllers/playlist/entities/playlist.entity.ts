@@ -10,6 +10,6 @@ export class Playlist extends BcBaseEntity<Playlist> {
   @ObjectIdColumn()
   userId: ObjectId;
 
-  @ObjectIdColumn({ array: true })
+  @Column({ array: true })
   items: ObjectId[];
 }

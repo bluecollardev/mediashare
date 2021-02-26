@@ -34,4 +34,18 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
 
     return this.create({ userId, items, title });
   }
+
+  /**
+   * Find a playlist by the user's Id
+   *
+   * @param {string} userIdStr
+   * @return {*}
+   * @memberof PlaylistService
+   */
+  async findByUserId(userIdStr: string) {
+    const userId = new ObjectId(userIdStr);
+    const playlists = await this.repository.find({ userId });
+
+    return playlists;
+  }
 }
