@@ -61,15 +61,6 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
     }
   }
 
-  // async findByQuery( query: ) {
-
-  //   try {
-  //       const document = await this.repository.query
-  //   } catch (error) {
-
-  //   }
-  // }
-
   /**
    * update a document by Id with deep  partial
    *
@@ -141,6 +132,17 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
       const findByQuery = await this.repository.findOne(query);
 
       return findByQuery;
+    } catch (error) {
+      this.logger.error(`${this.constructor.name}.findOne ${error}`);
+    }
+  }
+
+  async insertMany(items: Partial<E>[]) {
+    this.logger.info(`${this.constructor.name}.insertMany`);
+
+    try {
+      const inserted = await this.repository.bulkWrite(items);
+      return inserted;
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findOne ${error}`);
     }

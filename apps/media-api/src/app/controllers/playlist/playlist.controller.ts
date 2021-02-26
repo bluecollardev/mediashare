@@ -1,10 +1,13 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
+import { mapPlaylistItems } from '../../modules/playlist-item/functors/map-playlist-item.functor';
 import { PlaylistItemService } from '../../modules/playlist-item/services/playlist-item.service';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { PlaylistService } from './services/playlist.service';
 
+@ApiTags('playlists')
 @Controller('playlist')
 export class PlaylistController {
   constructor(
@@ -13,14 +16,18 @@ export class PlaylistController {
   ) {}
 
   @Post()
-  create(@Body() createPlaylistDto: CreatePlaylistDto) {
-    const { userId: dtoUserId, items: dtoItems } = createPlaylistDto;
+  async create(@Body() createPlaylistDto: CreatePlaylistDto) {
+    const { userId: dtoUserId, items: dtoItems, title = 'untitled' } = createPlaylistDto;
 
     const userId = new ObjectId(dtoUserId);
 
-    const items = dtoItems.map((dtoItem) => new ObjectId(dtoItem));
+    const playlist = await this.playlistService.createPlaylist(userId, { mediaIds: dtoItems, title });
 
-    return this.playlistService.create({ userId, items });
+    const { _id: playlistId } = playlist;
+
+    const playlistItems = await this.playlistItemService.insertMany(mapPlaylistItems(dtoItems, { playlistId, userId }));
+
+    return playlistItems;
   }
 
   @Get()

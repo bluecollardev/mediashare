@@ -11,5 +11,5 @@ export class PlaylistItem extends BcBaseEntity<PlaylistItem> {
   userId: ObjectId;
 
   @ObjectIdColumn()
-  playlistId: ObjectId[];
+  playlistId: ObjectId;
 }
