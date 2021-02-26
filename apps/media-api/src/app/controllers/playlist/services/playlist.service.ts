@@ -30,7 +30,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
   createPlaylist(userId: ObjectId, opts: { mediaIds?: string[]; title?: string } = { title: '' }) {
     const { mediaIds = [], title } = opts;
 
-    const items = R.map(mapPlaylistItem(mediaIds), (mediaId) => mediaId.mediaId);
+    const items = mapPlaylistItems(mediaIds, { userId: userId });
 
     return this.create({ userId, items, title });
   }

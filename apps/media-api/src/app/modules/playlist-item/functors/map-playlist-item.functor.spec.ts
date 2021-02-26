@@ -51,19 +51,16 @@ describe('mapPlaylistItems', () => {
     const ids = R.range(0, 5).map(() => createId());
 
     const userId = new ObjectId();
-    const playlistId = new ObjectId();
 
     const mediaIds = ids;
 
-    const mappedPlaylistItems = mapPlaylistItems(mediaIds, { userId, playlistId });
+    const mappedPlaylistItems = mapPlaylistItems(mediaIds, { userId });
 
     expect(mappedPlaylistItems).toHaveLength(5);
     expect(mappedPlaylistItems[0]).toHaveProperty('mediaId');
     expect(mappedPlaylistItems[0]).toHaveProperty('userId');
-    expect(mappedPlaylistItems[0]).toHaveProperty('playlistId');
 
     expect(mappedPlaylistItems[0].mediaId.toHexString()).toEqual(ids[0]);
     expect(mappedPlaylistItems[0].userId).toEqual(userId);
-    expect(mappedPlaylistItems[0].playlistId).toEqual(playlistId);
   });
 });

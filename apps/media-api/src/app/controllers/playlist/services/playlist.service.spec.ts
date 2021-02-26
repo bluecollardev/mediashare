@@ -83,7 +83,7 @@ describe('PlaylistService', () => {
 
       expect(result).toBeDefined();
       expect(result.items).toHaveLength(5);
-      expect(result.items[0].toHexString()).toEqual(mediaIds[0]);
+      expect(result.items[0].mediaId.toHexString()).toEqual(mediaIds[0]);
     });
 
     it('should create a new playlist item with a title', async () => {

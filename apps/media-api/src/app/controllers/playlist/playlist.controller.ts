@@ -23,11 +23,7 @@ export class PlaylistController {
 
     const playlist = await this.playlistService.createPlaylist(userId, { mediaIds: dtoItems, title });
 
-    const { _id: playlistId } = playlist;
-
-    const playlistItems = await this.playlistItemService.insertMany(mapPlaylistItems(dtoItems, { playlistId, userId }));
-
-    return playlistItems;
+    return playlist;
   }
 
   @Get()

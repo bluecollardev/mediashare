@@ -53,23 +53,27 @@ export class UserController {
 
   @Get(':id/playlists')
   async getPlaylists(@Param('id') id: string, @Res() res: Response) {
-    const playlistItems = await this.playlistItemService.findByUserId(id);
-    if (!playlistItems || playlistItems.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
-
     const playlists = await this.playlistService.findByUserId(id);
 
-    const mediaIds = R.reduce(
-      R.map(playlists, (item) => item.items),
-      (prev, curr) => [...prev, ...curr],
-      []
+    if (!playlists || playlists.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
+
+    const mediaIdsTuple = R.pipe(
+      playlists,
+      R.map((playlist) => playlist.items),
+      R.map((playlistItems) => R.map(playlistItems, (item) => item.mediaId))
     );
-    const uniqIds: string[] = R.uniqBy(mediaIds, (item) => item.toHexString());
-    const mediaItems = await this.mediaItemService.findPlaylistMedia(uniqIds);
+
+    const mediaIds = R.reduce(mediaIdsTuple, (prev, curr) => [...prev, ...curr], []);
+    // R.map((playlistItem) => playlistItem),
+    // R.uniqBy((item) => item.toHexString())
+
+    const mediaItems = await this.mediaItemService.findPlaylistMedia(mediaIds);
 
     const indexedMediaItems = R.indexBy(mediaItems, (item) => item._id);
+
     const mapped = R.map(playlists, (playlist) => ({
       ...playlist,
-      items: playlist?.items.map((item) => indexedMediaItems[item.toHexString()]) || [],
+      mediaItems: playlist?.items.map((item) => indexedMediaItems[item.mediaId.toHexString()]) || [],
     }));
 
     return res.status(HttpStatus.OK).send(mapped);
