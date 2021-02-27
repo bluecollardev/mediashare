@@ -19,23 +19,25 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   }
 
   async createMediaShareItem(params: CreateMediaShareItemDto) {
-    const { userId: userIdStr, mediaId: mediaIdStr, createdBy: createdByStr, ...rest } = params;
-    return this.create({
-      ...rest,
+    const { userId: userIdStr, mediaId: mediaIdStr, createdBy: createdByStr, title } = params;
+    const item = await this.create({
       userId: new ObjectId(userIdStr),
       mediaId: new ObjectId(mediaIdStr),
       createdBy: new ObjectId(createdByStr),
+      title,
       read: false,
     });
+
+    return item;
   }
 
-  async createPlaylistShareItem(params: CreatePlaylistShareItemDto) {
-    const { userId: userIdStr, playlistId: playlistIdStr, createdBy: createdByStr, ...rest } = params;
+  createPlaylistShareItem(params: CreatePlaylistShareItemDto) {
+    const { userId: userIdStr, playlistId: playlistIdStr, createdBy: createdByStr, title } = params;
     return this.create({
-      ...rest,
       userId: new ObjectId(userIdStr),
       playlistId: new ObjectId(playlistIdStr),
       createdBy: new ObjectId(createdByStr),
+      title,
       read: false,
     });
   }

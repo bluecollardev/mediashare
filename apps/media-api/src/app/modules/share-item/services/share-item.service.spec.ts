@@ -62,7 +62,7 @@ describe('PlaylistItemService', () => {
       const mediaId = mediaItem._id.toHexString();
       const createdBy = userFactory.userId;
 
-      const result = await service.createMediaShareItem({ createdBy, mediaId, userId });
+      const result = await service.createMediaShareItem({ createdBy, mediaId, userId, title: 'blah' });
 
       expect(result).toHaveProperty('mediaId');
       expect(result.mediaId.toHexString()).toBe(mediaId);
@@ -80,6 +80,7 @@ describe('PlaylistItemService', () => {
         createdBy: userFactory.userId,
         playlistId: playlist._id.toHexString(),
         userId,
+        title: 'blah',
       });
 
       expect(result).toBeDefined();

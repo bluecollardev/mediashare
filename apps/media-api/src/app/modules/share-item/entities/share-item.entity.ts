@@ -18,4 +18,7 @@ export class ShareItem extends BcBaseEntity<ShareItem> {
 
   @Column()
   read: boolean;
+
+  @Column()
+  title: string;
 }

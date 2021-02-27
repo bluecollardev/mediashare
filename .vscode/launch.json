@@ -5,16 +5,8 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "pwa-node",
-      "request": "attach",
-      "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/apps/media-api/src/app/controllers/user/user.service.spec.ts",
-      "outFiles": ["${workspaceFolder}/**/*.js"]
-    },
-    {
       "name": "Attach",
-      "port": 63535,
+      "port": 9229,
       "request": "attach",
       "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"

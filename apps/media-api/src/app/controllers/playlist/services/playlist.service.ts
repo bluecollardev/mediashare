@@ -4,8 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { mapPlaylistItem, mapPlaylistItems } from '../../../modules/playlist-item/functors/map-playlist-item.functor';
-import { MediaItem } from '../../media-item/entities/media-item.entity';
+import { mapPlaylistItems } from '../../../modules/playlist-item/functors/map-playlist-item.functor';
 import { Playlist } from '../entities/playlist.entity';
 
 import * as R from 'remeda';

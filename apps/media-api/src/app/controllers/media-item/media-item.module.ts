@@ -7,7 +7,7 @@ import { ShareItemModule } from '../../modules/share-item/share-item.module';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MediaItem, ShareItem]), ShareItemModule],
+  imports: [TypeOrmModule.forFeature([MediaItem]), ShareItemModule],
   controllers: [MediaItemController],
   providers: [MediaItemService],
 })

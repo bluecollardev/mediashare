@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus } from '@nestjs/common';
+import { Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
 import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 
 import { badRequestResponse, notFoundResponse } from '../../core/functors/http-errors.functor';
-import { ApiTags } from '@nestjs/swagger';
 
-import { Response } from 'express';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 
 @ApiTags('media-items')
@@ -51,17 +51,18 @@ export class MediaItemController {
 
   @Post(':id/share/:userId')
   async share(@Param('id') id: string, @Param('userId') userId: string, @Res() response: Response) {
-    const playlistItem = await this.mediaItemService.findOne(id);
-    if (!playlistItem) return response.status(HttpStatus.NOT_FOUND);
+    const mediaItem = await this.mediaItemService.findOne(id);
+    if (!mediaItem) return response.status(HttpStatus.NOT_FOUND);
 
-    const { userId: createdById } = playlistItem;
+    const { userId: createdById, title } = mediaItem as any;
 
-    const shareItem = this.shareItemService.createMediaShareItem({
-      createdBy: createdById.toHexString(),
+    const shareItem = await this.shareItemService.createMediaShareItem({
+      createdBy: createdById,
       userId,
       mediaId: id,
+      title,
     });
 
-    return shareItem;
+    return response.status(HttpStatus.CREATED).send(shareItem);
   }
 }

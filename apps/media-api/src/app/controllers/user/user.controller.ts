@@ -9,9 +9,11 @@ import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/services/playlist.service';
 import { PlaylistItemService } from '../../modules/playlist-item/services/playlist-item.service';
 import { MediaItemService } from '../media-item/media-item.service';
+import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 
 import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
+import { notFoundResponse } from '../../core/functors/http-errors.functor';
 @ApiTags('users')
 @Controller('user')
 export class UserController {
@@ -19,7 +21,8 @@ export class UserController {
     private readonly userService: UserService,
     private playlistService: PlaylistService,
     private playlistItemService: PlaylistItemService,
-    private mediaItemService: MediaItemService
+    private mediaItemService: MediaItemService,
+    private shareItemService: ShareItemService
   ) {}
 
   @Post()
@@ -84,5 +87,33 @@ export class UserController {
     if (!mediaItems || mediaItems.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
 
     return res.status(HttpStatus.OK).send(mediaItems);
+  }
+
+  @Get(':id/share-items')
+  async getShareItems(@Param('id') id: string) {
+    const shareItems = this.shareItemService.findByQuery({ userId: new ObjectId(id) });
+
+    return shareItems;
+  }
+
+  @Put(':id/share-item/:shareId')
+  async readSharedItem(@Param('id') id: string, @Param('shareId') shareId: string) {
+    const sharedItem = await this.shareItemService.update(shareId, { read: true });
+
+    const { mediaId = null, playlistId = null } = sharedItem;
+
+    const user = await this.userService.findOne(id);
+
+    if (mediaId) {
+      const { sharedMediaItems = [] } = user;
+      const updatedUser = await this.userService.update(id, { sharedMediaItems: [...sharedMediaItems, mediaId] });
+      return updatedUser;
+    }
+    if (playlistId) {
+      const { sharedPlaylists = [] } = user;
+      const updatedUser = await this.userService.update(id, { sharedPlaylists: [...sharedPlaylists, playlistId] });
+      return updatedUser;
+    }
+    throw notFoundResponse('no content Id on shared Item');
   }
 }

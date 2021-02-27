@@ -13,6 +13,7 @@ export class CreateMediaShareItemDto {
   @ApiProperty({ required: true })
   @IsString()
   createdBy: string;
+  title: string;
 }
 
 export class CreatePlaylistShareItemDto {
@@ -27,4 +28,6 @@ export class CreatePlaylistShareItemDto {
   @ApiProperty({ required: true })
   @IsString()
   createdBy: string;
+
+  title: string;
 }
