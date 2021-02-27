@@ -17,7 +17,7 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
     super(mediaRepository, logger);
   }
 
-  findPlaylistMedia(idStrings: string[]) {
+  findPlaylistMedia(idStrings: ObjectId[]) {
     return this.repository.find({
       where: {
         $or: R.map(idStrings, (id) => ({

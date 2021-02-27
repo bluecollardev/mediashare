@@ -15,7 +15,7 @@ import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
 import { notFoundResponse } from '../../core/functors/http-errors.functor';
 @ApiTags('users')
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -87,6 +87,28 @@ export class UserController {
     if (!mediaItems || mediaItems.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
 
     return res.status(HttpStatus.OK).send(mediaItems);
+  }
+
+  @Get(':id/shared-media-items')
+  async getSharedMediaItems(@Param('id') id: string) {
+    const user = await this.userService.findOne(id);
+
+    const { sharedMediaItems = [] } = user;
+
+    const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedMediaItems);
+
+    return mediaItems;
+  }
+
+  @Get(':id/shared-playlists')
+  async getSharedPlaylists(@Param('id') id: string) {
+    const user = await this.userService.findOne(id);
+
+    const { sharedPlaylists = [] } = user;
+
+    const playlists = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
+
+    return playlists;
   }
 
   @Get(':id/share-items')

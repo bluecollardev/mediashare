@@ -11,7 +11,7 @@ import { badRequestResponse, notFoundResponse } from '../../core/functors/http-e
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 
 @ApiTags('media-items')
-@Controller('media-item')
+@Controller('media-items')
 export class MediaItemController {
   constructor(private readonly mediaItemService: MediaItemService, private shareItemService: ShareItemService) {}
 
