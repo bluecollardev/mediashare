@@ -1,3 +1,4 @@
+import { BcBaseInterface } from '@core-lib';
 import { ObjectId } from 'bson';
 import { ObjectIdColumn } from 'typeorm';
 
@@ -9,7 +10,7 @@ export type DeepPartial<T> = {
     : DeepPartial<T[P]> | T[P];
 };
 
-export abstract class BcBaseEntity<M> {
+export abstract class BcBaseEntity<M> implements BcBaseInterface {
   @ObjectIdColumn()
   _id: ObjectId;
 
