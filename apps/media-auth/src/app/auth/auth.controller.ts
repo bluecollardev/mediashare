@@ -26,7 +26,7 @@ export class AuthController {
   }
 
   @MessagePattern({ role: 'auth', cmd: 'login' })
-  async loginUser(data: { username: any; password: string }) {
+  async loginUser(data: { username: string; password: string }) {
     const { username, password } = data;
     const user = await this.authService.validateUser({ username, password });
     Logger.log(user);
@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @MessagePattern({ role: 'auth', cmd: 'create' })
-  createUser(data: { username: string; password: string }) {
+  createUser(data: { username: string; password: string; _id: string }) {
     return this.authService.createUser(data);
   }
 }

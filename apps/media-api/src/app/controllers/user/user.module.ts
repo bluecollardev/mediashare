@@ -1,6 +1,7 @@
+import { UserController } from './user.controller';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserController } from './user.controller';
+import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PlaylistService } from '../playlist/services/playlist.service';
@@ -31,7 +32,7 @@ import { JwtStrategy } from '../../core/providers/jwt.strategy';
       },
     ]),
   ],
-  controllers: [UserController],
+  controllers: [UserController, UsersController],
   providers: [
     UserService,
     PlaylistService,
@@ -45,6 +46,6 @@ import { JwtStrategy } from '../../core/providers/jwt.strategy';
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtDecodeMiddleware).forRoutes(UserController);
+    consumer.apply(JwtDecodeMiddleware).forRoutes(UsersController);
   }
 }

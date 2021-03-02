@@ -31,7 +31,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return super.findByQuery({ username });
   }
 
-  createUser(user: { username: string; password: string }) {
+  createUser(user: { username: string; password: string; _id: string }) {
     return this.client
       .send({ role: 'auth', cmd: 'create' }, user)
       .pipe(

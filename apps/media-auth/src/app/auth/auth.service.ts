@@ -29,8 +29,8 @@ export class AuthService {
     return null;
   }
 
-  async createUser(user: { username: string; password: string }): Promise<InsertResult> {
-    const { username, password } = user;
+  async createUser(user: { username: string; password: string; _id: string }): Promise<InsertResult> {
+    const { username, password, _id } = user;
     const createdAt = new Date();
     const email = username;
     try {
@@ -43,6 +43,7 @@ export class AuthService {
         password,
         createdAt,
         username,
+        _id,
       });
 
       const res = await this.userRepository.insert(userEntity);

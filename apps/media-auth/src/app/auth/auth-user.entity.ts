@@ -5,6 +5,7 @@ import { Entity, Unique, PrimaryGeneratedColumn, Column, CreateDateColumn, Befor
 @Entity()
 @Unique(['username'])
 @Unique(['email'])
+// @Unique(['_id'])
 export class AuthUser {
   @PrimaryGeneratedColumn('uuid')
   authId: string;
@@ -22,6 +23,9 @@ export class AuthUser {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @Column()
+  _id?: string;
 
   @BeforeInsert()
   async hashPassword() {
