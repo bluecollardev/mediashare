@@ -1,4 +1,6 @@
-export interface Tag {
-  id?: string;
-  tagText?: string;
+import { IdType } from '../types/id.type';
+
+export interface TagInterface {
+  mediaId?: IdType;
+  userId?: IdType;
 }
