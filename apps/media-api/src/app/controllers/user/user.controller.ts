@@ -118,7 +118,7 @@ export class UserController {
     return shareItems;
   }
 
-  @Put(':id/share-item/:shareId')
+  @Put(':id/share-items/:shareId')
   async readSharedItem(@Param('id') id: string, @Param('shareId') shareId: string) {
     const sharedItem = await this.shareItemService.update(shareId, { read: true });
 
