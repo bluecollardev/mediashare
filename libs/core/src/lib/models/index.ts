@@ -14,3 +14,4 @@ export * from './abstract/media.interface';
 export * from './abstract/model';
 export * from './playlist.interface';
 export * from './auth-user.interface';
+export * from './categories.model';

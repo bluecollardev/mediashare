@@ -1,8 +1,8 @@
 import { ObjectId } from 'mongodb';
 import { MediaItem } from '../entities/media-item.entity';
-import { IsBoolean, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsBoolean, IsIn, IsString, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { ApiDefaults } from '@core-lib';
+import { ApiDefaults, MediaCategoryType, MEDIA_CATEGORY } from '@core-lib';
 
 export class CreateMediaItemDto implements Pick<MediaItem, 'summary' | 'isPlayable' | 'description' | 'userId'> {
   @IsBoolean()
@@ -27,4 +27,8 @@ export class CreateMediaItemDto implements Pick<MediaItem, 'summary' | 'isPlayab
   @MaxLength(ApiDefaults.longString.max)
   @ApiProperty({ required: true })
   title: string;
+
+  @ApiProperty({ required: true, enum: MEDIA_CATEGORY })
+  @IsIn(MEDIA_CATEGORY)
+  category: MediaCategoryType;
 }

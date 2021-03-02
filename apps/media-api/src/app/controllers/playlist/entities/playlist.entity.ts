@@ -1,5 +1,5 @@
 import { BcBaseEntity } from '@api';
-import { PlaylistInterface } from '@core-lib';
+import { PlaylistCategoryType, PlaylistInterface } from '@core-lib';
 import { ObjectId } from 'mongodb';
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
 import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
@@ -14,4 +14,7 @@ export class Playlist extends BcBaseEntity<Playlist> implements PlaylistInterfac
 
   @Column(() => PlaylistItem)
   items: PlaylistItem[];
+
+  @Column()
+  category: PlaylistCategoryType;
 }
