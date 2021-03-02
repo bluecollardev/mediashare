@@ -166,6 +166,9 @@ export class UsersController {
   }
 
   /* shared with others */
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @Post(':id/shared-items/:shareId')
   async readSharedItem(@Param('id') id: string, @Param('shareId') shareId: string) {
     const sharedItem = await this.shareItemService.update(shareId, { read: true });
 

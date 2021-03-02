@@ -24,7 +24,7 @@ import { User } from './entities/user.entity';
 import { badRequestResponse } from '../../core/functors/http-errors.functor';
 import { AuthUserInterface } from '@core-lib';
 
-@ApiTags('users')
+@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(
