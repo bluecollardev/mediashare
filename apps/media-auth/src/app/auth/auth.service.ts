@@ -21,9 +21,6 @@ export class AuthService {
     const { username, password } = userToCheck;
 
     const user = await this.userRepository.findOne({ username });
-    console.log('🚀 ------------------------------------------------------------------------------');
-    console.log('🚀 ~ file: auth.service.ts ~ line 24 ~ AuthService ~ validateUser ~ user', user);
-    console.log('🚀 ------------------------------------------------------------------------------');
 
     if (compareSync(password, user?.password)) {
       return user;

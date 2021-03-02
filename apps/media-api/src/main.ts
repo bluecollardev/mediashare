@@ -14,6 +14,9 @@ import { writeFileSync } from 'fs';
 
 import * as session from 'express-session';
 
+import {} from 'typeorm/';
+import * as passport from 'passport';
+
 const isDev = process.env.NODE_ENV !== 'production';
 
 async function bootstrap() {
@@ -31,11 +34,15 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
 
-  session({
-    secret: 'my-secret',
-    resave: false,
-    saveUninitialized: false,
-  });
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(
+    session({
+      secret: 'this-is-my-secret-key',
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
   const document = SwaggerModule.createDocument(app, config);
 
   const port = process.env.PORT || 3333;

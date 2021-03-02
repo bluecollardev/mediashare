@@ -12,6 +12,8 @@ import {
   UnauthorizedException,
   HttpCode,
   Session,
+  Logger,
+  Request,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
@@ -29,6 +31,9 @@ import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
 import { notFoundResponse } from '../../core/functors/http-errors.functor';
 import { UserGuard } from '../../core/guards/user.guard';
+import { GetUser } from '../../core/decorators/user.decorator';
+import { LocalGuard } from './local.guard';
+import { JwtAuthGuard } from '../../core/guards/jwt-auth.guard';
 @ApiTags('users')
 @Controller('users')
 export class UserController {
@@ -59,11 +64,13 @@ export class UserController {
   //   return this.authService.login(req.user);
   // }
   @HttpCode(HttpStatus.OK)
+  @UseGuards(LocalGuard)
   @Post('login')
-  async login(@Body() login: { username: string; password: string }) {
-    const token = await this.userService.loginUser(login);
-    if (!token) throw new UnauthorizedException();
-    return token;
+  async login(@Request() req) {
+    // const token = await this.userService.loginUser(login);
+    // if (!token) throw new UnauthorizedException();
+    // return token;
+    return req.user;
   }
 
   @UseGuards(UserGuard)
@@ -72,11 +79,12 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @UseGuards(UserGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('share-items')
-  async getMyShareItems(@Session() session: Record<string, any>) {
-    console.log(session);
-    return session;
+  async getMyShareItems(@Request() req) {
+    const { _id, username } = req.user;
+    Logger.warn('user', username);
+    return username;
   }
 
   @HttpCode(HttpStatus.OK)

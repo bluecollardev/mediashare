@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,6 +11,10 @@ import { MediaItemService } from '../media-item/media-item.service';
 import { MediaItem } from '../media-item/entities/media-item.entity';
 import { ShareItemModule } from '../../modules/share-item/share-item.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { JwtDecodeMiddleware } from '../../core/middleware/jwt-decode.middleware';
+import { LocalStrategy } from './local.strategy';
+import { SessionSerializer } from './session.serializer';
+import { JwtStrategy } from '../../core/providers/jwt.strategy';
 
 @Module({
   imports: [
@@ -28,7 +32,19 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ]),
   ],
   controllers: [UserController],
-  providers: [UserService, PlaylistService, PlaylistItemService, MediaItemService],
+  providers: [
+    UserService,
+    PlaylistService,
+    PlaylistItemService,
+    MediaItemService,
+    LocalStrategy,
+    SessionSerializer,
+    JwtStrategy,
+  ],
   exports: [],
 })
-export class UserModule {}
+export class UserModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(JwtDecodeMiddleware).forRoutes(UserController);
+  }
+}

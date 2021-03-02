@@ -9,6 +9,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { MediaItemModule } from './controllers/media-item/media-item.module';
 import { ProfileModule } from './controllers/profile/profile.module';
 import { PlaylistModule } from './controllers/playlist/playlist.module';
+import { PassportModule } from '@nestjs/passport';
 
 /* TODO: custom variable for loading this from */
 const envFilePath = '.env.development';
@@ -35,6 +36,7 @@ const typeOrmConfig = {
     MediaItemModule,
     ProfileModule,
     PlaylistModule,
+    PassportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,7 +1,7 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { createParamDecorator, Logger } from '@nestjs/common';
 
-export const User = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
-  const request = ctx.switchToHttp().getRequest();
-
-  return request.user;
+export const GetUser = createParamDecorator((data, req) => {
+  // req.session.user = jwt
+  Logger.warn(data);
+  return req.session;
 });
