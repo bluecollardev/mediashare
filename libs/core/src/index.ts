@@ -11,3 +11,5 @@ export * from './lib/models/api-defaults.model';
 export * from './lib/tokens/auth-tokens.constant';
 
 export * from './lib/models';
+
+export * from './lib/api';
