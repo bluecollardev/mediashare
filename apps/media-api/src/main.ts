@@ -21,13 +21,13 @@ async function bootstrap() {
   /* TODO: abstract this out */
   const config = new DocumentBuilder()
     .setTitle('Media Share API')
-    .setDescription('The cats API description')
+    .setDescription('Media Share API')
     .setVersion('1.0')
-    .addTag('cats')
     .build();
-  const port = process.env.PORT || 3333;
+
   const document = SwaggerModule.createDocument(app, config);
 
+  const port = process.env.PORT || 3333;
   SwaggerModule.setup('api', app, document);
 
   await app.listen(port, () => {

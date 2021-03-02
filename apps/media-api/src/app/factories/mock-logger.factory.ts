@@ -12,7 +12,7 @@ class MockLogger {
     // console.log(args);
   }
   error(...args: any) {
-    // console.log(args);
+    console.log(args);
   }
   fatal(...args: any) {}
   setContext(...args: any) {

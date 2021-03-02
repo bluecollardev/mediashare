@@ -1,5 +1,5 @@
 import { ObjectId } from 'bson';
-import { Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { ObjectIdColumn } from 'typeorm';
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
@@ -15,13 +15,5 @@ export abstract class BcBaseEntity<M> {
 
   constructor(model?: Partial<M>) {
     Object.assign(this, model);
-  }
-
-  factory(props: Partial<M>): DeepPartial<M> {
-    const model = Object.create(this);
-
-    Object.assign(model, props);
-
-    return model;
   }
 }

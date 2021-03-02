@@ -1,7 +1,7 @@
 import { BcBaseEntity } from '@api';
 import { ObjectId } from 'mongodb';
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
-import { PlaylistItem } from './playlist-item.entity';
+import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
 
 @Entity()
 export class Playlist extends BcBaseEntity<Playlist> {
@@ -9,14 +9,8 @@ export class Playlist extends BcBaseEntity<Playlist> {
   title: string;
 
   @ObjectIdColumn()
-  user: ObjectId;
+  userId: ObjectId;
 
-  @Column((type) => PlaylistItem)
-  items: Playlist[];
-  // items;
-
-  // itemCount;
-  // tags;
-  // stats;
-  // userId;
+  @Column(() => PlaylistItem)
+  items: PlaylistItem[];
 }

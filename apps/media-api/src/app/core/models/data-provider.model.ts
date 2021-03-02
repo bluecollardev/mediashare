@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { OptionalId } from 'mongodb';
+import { ObjectId, OptionalId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
-import { MongoRepository } from 'typeorm';
+import { DeepPartial, MongoRepository } from 'typeorm';
 import { BcBaseEntity } from '../entities/base.entity';
 
-/* TODO: @bcdevlucas - let's work together to change these */
+import * as R from 'remeda';
+
 export type MsDocumentType<T> = OptionalId<T>;
 /**
  * Base class to extend for interacting with the database through a repository pattern.
@@ -16,15 +17,8 @@ export type MsDocumentType<T> = OptionalId<T>;
  * @template R - repository extends MongoRepository<Model>
  */
 @Injectable()
-export abstract class DataService<
-  E extends BcBaseEntity<E>,
-  R extends MongoRepository<E>
-> {
-  constructor(
-    protected repository: R,
-    private entity: E,
-    private readonly logger: PinoLogger
-  ) {
+export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepository<E>> {
+  constructor(protected repository: R, private readonly logger: PinoLogger) {
     logger.setContext(this.constructor.name);
   }
 
@@ -35,16 +29,15 @@ export abstract class DataService<
    * @return {*}
    * @memberof DataService
    */
-  async create(dto: Partial<E>): Promise<E> {
+  async create(dto: DeepPartial<E>): Promise<E> {
     this.logger.info(`${this.constructor.name}.create props`, dto);
 
     try {
-      const object = this.entity.factory(dto);
-      const created = await this.repository.save(object);
+      const created = await this.repository.save(dto);
 
       this.logger.info(`${this.constructor.name}.create result`, created);
 
-      return created;
+      return R.clone(created);
     } catch (error) {
       this.logger.error(`${this.constructor.name}.create ${error}`);
     }
@@ -63,20 +56,11 @@ export abstract class DataService<
     try {
       const document = await this.repository.findOne(id);
       this.logger.info('${this.constructor.name}findOne result', document);
-      return document;
+      return R.clone(document);
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findOne ${error}`);
     }
   }
-
-  // async findByQuery( query: ) {
-
-  //   try {
-  //       const document = await this.repository.query
-  //   } catch (error) {
-
-  //   }
-  // }
 
   /**
    * update a document by Id with deep  partial
@@ -86,12 +70,17 @@ export abstract class DataService<
    * @return {*}
    * @memberof DataService
    */
-  async update(id: string, dto: Partial<E>) {
+  async update(id: string, dto: Partial<E>): Promise<Partial<E>> {
     this.logger.info('update props', id, dto);
     try {
-      const update = await this.repository.findOneAndUpdate({ _id: id }, dto);
+      const update = await this.repository.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: dto },
+        { returnOriginal: false }
+      );
       this.logger.info('update result', update);
-      return update;
+
+      return R.clone(update.value);
     } catch (error) {
       this.logger.error(`${this.constructor.name}.update ${error}`);
     }
@@ -107,8 +96,8 @@ export abstract class DataService<
   async remove(id: string) {
     try {
       this.logger.info('remove props', id);
-      const removed = await this.repository.softDelete(id);
-      return removed;
+      const removed = await this.repository.delete(id);
+      return R.clone(removed);
     } catch (error) {
       this.logger.error(`${this.constructor.name}.remove ${error}`);
     }
@@ -126,13 +115,10 @@ export abstract class DataService<
     try {
       const findAll = await this.repository.find();
       this.logger.info('findAll result', findAll);
-      return findAll;
+      return R.clone(findAll);
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findAll ${error}`);
-      throw new HttpException(
-        'InternalServerErrorException',
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new HttpException('InternalServerErrorException', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -149,9 +135,22 @@ export abstract class DataService<
     try {
       const findByQuery = await this.repository.findOne(query);
 
-      return findByQuery;
+      return R.clone(findByQuery);
     } catch (error) {
-      this.logger.error(`${this.constructor.name}.findAll ${error}`);
+      this.logger.error(`${this.constructor.name}.findOne ${error}`);
+    }
+  }
+
+  async insertMany(items: DeepPartial<E>[]) {
+    this.logger.info(`${this.constructor.name}.insertMany`);
+
+    try {
+      const inserted = await this.repository.save(items);
+      this.logger.info(`${this.constructor.name}.insertMany result`, inserted);
+
+      return R.clone(inserted);
+    } catch (error) {
+      this.logger.error(`${this.constructor.name}.insertMany failed with: ${error}`);
     }
   }
 }
