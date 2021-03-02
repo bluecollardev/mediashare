@@ -41,6 +41,7 @@ export class UsersController {
     private shareItemService: ShareItemService
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const { username, password, ...rest } = createUserDto;
@@ -54,7 +55,7 @@ export class UsersController {
     return { ...mongoUser, ...postgresUser };
   }
 
-  @UseGuards(UserGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(): Promise<User[]> {
     return this.userService.findAll();
@@ -76,18 +77,19 @@ export class UsersController {
     }
   }
 
-  @UseGuards(UserGuard)
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string): Promise<User> {
     return this.userService.findOne(id);
   }
 
-  @UseGuards(UserGuard)
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
     return this.userService.update(id, updateUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.userService.remove(id);

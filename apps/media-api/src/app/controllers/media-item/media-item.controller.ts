@@ -28,12 +28,14 @@ export class MediaItemController {
     return this.mediaItemService.create({ ...createMediaItemDto, userId: new ObjectId(userId) });
   }
 
+  /* TODO: findout what this needs to be */
   @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@GetUser() user: SessionUserInterface) {
-    const { roles = [], _id } = user;
-    if (roles.includes(bcRoles.admin)) this.mediaItemService.findAll();
-    return this.mediaItemService.findMediaItemsByUserId(_id);
+    // const { roles = [], _id } = user;
+    // if ( roles.includes( bcRoles.admin ) )
+    return this.mediaItemService.findAll();
+    // return this.mediaItemService.findMediaItemsByUserId(_id);
   }
 
   @Get('categories')
@@ -70,16 +72,17 @@ export class MediaItemController {
 
   @UseGuards(JwtAuthGuard)
   @Post(':id/share/:userId')
-  async share(@Param('id') id: string, @Param('userId') userId: string, @Res() response: Response) {
-    const mediaItem = await this.mediaItemService.findOne(id);
-    if (!mediaItem) return response.status(HttpStatus.NOT_FOUND);
+  async share(@Param('id') id: string, @Param('userId') userIdStr: string, @Res() response: Response) {
+    const { userId: createdBy, title } = await this.mediaItemService.findOne(id);
+    if (!title && !createdBy) return response.status(HttpStatus.NOT_FOUND);
+    const userId = new ObjectId(userIdStr);
 
-    const { userId: createdById, title } = mediaItem as any;
+    const mediaId = new ObjectId(id);
 
     const shareItem = await this.shareItemService.createMediaShareItem({
-      createdBy: createdById,
+      createdBy,
       userId,
-      mediaId: id,
+      mediaId,
       title,
     });
 

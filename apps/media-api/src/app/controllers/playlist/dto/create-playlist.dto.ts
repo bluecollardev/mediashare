@@ -8,10 +8,6 @@ export class CreatePlaylistDto {
 
   @ApiProperty({ required: true })
   @IsString()
-  userId: string;
-
-  @ApiProperty({ required: true })
-  @IsString()
   title: string;
 
   @ApiProperty({ required: true, enum: PLAYLIST_CATEGORY })
