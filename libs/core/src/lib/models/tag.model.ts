@@ -1,4 +1,4 @@
 export interface Tag {
-  id?: string;
-  tagText?: string;
+  mediaId?: string;
+  userId?: string;
 }

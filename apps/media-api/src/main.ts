@@ -7,6 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
+import { Transport } from '@nestjs/microservices';
 
 import { AppModule } from './app/app.module';
 
@@ -30,9 +31,11 @@ async function bootstrap() {
   const port = process.env.PORT || 3333;
   SwaggerModule.setup('api', app, document);
 
+  app.connectMicroservice({ transport: Transport.TCP });
+
   await app.listen(port, () => {
     console.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });
 }
-
+console.log('started');
 bootstrap();

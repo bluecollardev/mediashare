@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { User } from './entities/user.entity';
+import { UserEntity } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/services/playlist.service';
 import { PlaylistItemService } from '../../modules/playlist-item/services/playlist-item.service';
@@ -26,26 +26,35 @@ export class UserController {
   ) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  async create(@Body() createUserDto: CreateUserDto) {
     const { username } = createUserDto;
     const existingUser = await this.userService.checkIfUserExists(username);
     console.log(existingUser);
     if (existingUser) return existingUser;
-    return await this.userService.create(createUserDto);
+    const mongoUser = await this.userService.create(createUserDto);
+
+    const postgresUser = await this.userService.createUser(username);
+
+    return mongoUser;
+  }
+
+  @Post('login')
+  async login() {
+    // console.log(login);
   }
 
   @Get()
-  findAll(): Promise<User[]> {
+  findAll(): Promise<UserEntity[]> {
     return this.userService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
+  findOne(@Param('id') id: string): Promise<UserEntity> {
     return this.userService.findOne(id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<Partial<UserEntity>> {
     return this.userService.update(id, updateUserDto);
   }
 
@@ -119,6 +128,7 @@ export class UserController {
   }
 
   @Put(':id/share-items/:shareId')
+  /* shared with others */
   async readSharedItem(@Param('id') id: string, @Param('shareId') shareId: string) {
     const sharedItem = await this.shareItemService.update(shareId, { read: true });
 

@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import { CreateMediaItemDto } from '../controllers/media-item/dto/create-media-item.dto';
 import { MediaItem } from '../controllers/media-item/entities/media-item.entity';
 import { CreateUserDto } from '../controllers/user/dto/create-user.dto';
-import { User } from '../controllers/user/entities/user.entity';
+import { UserEntity } from '../controllers/user/entities/user.entity';
 import { CreatePlaylistItemDto } from '../modules/playlist-item/dto/create-playlist-item.dto';
 
 import * as R from 'remeda';
@@ -35,7 +35,7 @@ interface ConcretePlaylistFactory {
 }
 
 export class UserFactory extends DataFn implements ConcretePlaylistFactory {
-  user: User;
+  user: UserEntity;
   get userId() {
     return this.user._id.toHexString();
   }
@@ -49,7 +49,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
 
   constructor() {
     super();
-    const userMixin = baseEntityMixin(User);
+    const userMixin = baseEntityMixin(UserEntity);
     this.user = new userMixin(this.createUserDto());
   }
 
@@ -82,7 +82,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
 }
 
 export function userDataFactory(userFactory: UserFactory) {
-  const userMixin = baseEntityMixin(User);
+  const userMixin = baseEntityMixin(UserEntity);
   const playlistMixin = baseEntityMixin(Playlist);
 
   const userDto = userFactory.createUserDto();

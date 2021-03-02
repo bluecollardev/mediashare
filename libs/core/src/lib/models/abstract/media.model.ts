@@ -1,21 +1,17 @@
-import { Metadata } from './metadata.model';
 import { Stats } from '../stats.model';
 import { Tag } from '../tag.model';
+import { IdType } from '../../types/id.type';
+import { BcBaseInterface } from '../bc-base.model';
 
-export interface Media extends Metadata {
-  id?: string;
-  displayFileName?: string;
-  userId: string;
-  // filePath?: string;
-  // fileType?: string;
-  // mimeType?: string;
+export interface Media extends BcBaseInterface {
+  displayFileName: string;
+  userId: IdType;
   isPlayable: boolean;
-  previewImagePath?: string;
+  thumbnail?: string;
   uri: string;
-  // feedType?: string; // Not sure if we need this
-  title?: string;
-  summary?: string; // Character limited description
-  description?: string; // Rich text
   tags?: Tag[];
   stats?: Stats;
+  summary: string;
+  description: string;
+  title: string;
 }
