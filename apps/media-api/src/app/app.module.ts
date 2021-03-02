@@ -1,5 +1,5 @@
 import { AuthModule } from './modules/auth/auth.module';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
@@ -12,28 +12,31 @@ import { ProfileModule } from './controllers/profile/profile.module';
 import { PlaylistModule } from './controllers/playlist/playlist.module';
 import { PassportModule } from '@nestjs/passport';
 import { ShareItemsModule } from './controllers/share-items/share-items.module';
+import { AppConfigModule } from './modules/app-config.module.ts/app-config.module';
+import { AppConfigService } from './modules/app-config.module.ts/app-config.provider';
 
-/* TODO: custom variable for loading this from */
-const envFilePath = '.env.development';
-
-const typeOrmConfig = {
-  synchronize: !process.env.production,
-  autoLoadEntities: true,
-  type: (process.env.DATABASE_TYPE as any) || 'mongodb',
-  url: process.env.DB_URL,
-  database: process.env.DATABASE || 'mediashare',
-  entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  ssl: process.env.DATABASE_SSL,
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-};
 @Module({
   imports: [
     AuthModule,
-    ConfigModule.forRoot({ envFilePath: envFilePath, isGlobal: true }),
+    AppConfigModule,
 
-    /* TODO: @bcdevlucas change this to the PostGres settings */
-    TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forRootAsync({
+      imports: [AppConfigModule],
+      useFactory: (configService: AppConfigService) => ({
+        autoLoadEntities: true,
+        type: configService.db('type'),
+        url: configService.db('url'),
+        username: configService.db('username'),
+        password: configService.db('password'),
+        database: configService.db('database'),
+        entities: configService.db('entities'),
+        synchronize: configService.db('synchronize'),
+        ssl: configService.db('ssl'),
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+      }),
+      inject: [AppConfigService],
+    }),
     UserModule,
     LoggerModule.forRoot(),
     MediaItemModule,
@@ -46,8 +49,5 @@ const typeOrmConfig = {
   providers: [AppService],
 })
 export class AppModule {
-  constructor() {
-    console.log('started');
-    console.log(typeOrmConfig);
-  }
+  constructor(private appConfigService: AppConfigService) {}
 }

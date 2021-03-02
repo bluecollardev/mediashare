@@ -16,8 +16,7 @@ import * as session from 'express-session';
 
 import {} from 'typeorm/';
 import * as passport from 'passport';
-
-const isDev = process.env.NODE_ENV !== 'production';
+import { AppConfigService } from './app/modules/app-config.module.ts/app-config.provider';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,38 +24,46 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
-  /* TODO: abstract this out */
-  const config = new DocumentBuilder()
-    .setTitle('Media Share API')
-    .setDescription('Media Share API')
-    .setVersion('1.0')
-    .build();
+  const appConfig: AppConfigService = app.get('AppConfigService');
 
+  const globalPrefix = appConfig.get('globalPrefix');
+
+  app.setGlobalPrefix(globalPrefix);
+
+  /* PASSPORT & SESSION */
   app.use(passport.initialize());
   app.use(passport.session());
+
   app.use(
     session({
       store: MongoStore.default.create({
-        mongoUrl: typeof process.env.DB_URL === 'string' ? process.env.DB_URL : 'mongodb://localhost:27017/',
-        dbName: 'api-session',
-        collectionName: 'session',
+        mongoUrl: appConfig.get('sessionDb'),
+        dbName: appConfig.get('sessionDbName'),
+        collectionName: appConfig.get('sessionCollection'),
       }),
-      secret: 'this-is-my-secret-key',
+      secret: appConfig.get('sessionSecret'),
       resave: false,
       saveUninitialized: false,
     })
   );
+
+  /* SWAGGER */
+  const config = new DocumentBuilder()
+    .setTitle(appConfig.get('title'))
+    .setDescription('Media Share API')
+    .setVersion('1.0')
+    .build();
+
   const document = SwaggerModule.createDocument(app, config);
 
-  const port = process.env.PORT || 3333;
-  SwaggerModule.setup('api', app, document);
+  const port = appConfig.get('port');
 
-  if (isDev) writeFileSync('./swagger-spec.json', JSON.stringify(document));
+  SwaggerModule.setup(globalPrefix, app, document);
+
+  if (appConfig.isDev) writeFileSync('./swagger-spec.json', JSON.stringify(document));
 
   await app.listen(port, () => {
-    console.log('Listening at http://localhost:' + port + '/' + globalPrefix);
+    console.log(`Listening at ${appConfig.get('host')}:${port}/${globalPrefix}`);
   });
 }
 

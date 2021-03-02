@@ -5,6 +5,8 @@ import { MediaItem } from '../../controllers/media-item/entities/media-item.enti
 import { MediaItemService } from '../../controllers/media-item/media-item.service';
 import { Playlist } from '../../controllers/playlist/entities/playlist.entity';
 import { User } from '../../controllers/user/entities/user.entity';
+import { AppConfigModule } from '../app-config.module.ts/app-config.module';
+import { AppConfigService } from '../app-config.module.ts/app-config.provider';
 import { PlaylistItem } from '../playlist-item/entities/playlist-item.entity';
 import { ShareItemModule } from '../share-item/share-item.module';
 import { JwtStrategy } from './jwt.strategy';
@@ -14,14 +16,20 @@ import { UserService } from './user.service';
 
 @Module({
   imports: [
-    ClientsModule.register([
+    AppConfigModule,
+    ClientsModule.registerAsync([
       {
+        imports: [AppConfigModule],
         name: 'AUTH_CLIENT',
-        transport: Transport.TCP,
-        options: {
-          host: 'localhost',
-          port: 4000,
-        },
+
+        useFactory: (configService: AppConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('host') || 'localhost',
+            port: configService.get('msAuthPort'),
+          },
+        }),
+        inject: [AppConfigService],
       },
     ]),
     TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
@@ -32,6 +40,7 @@ import { UserService } from './user.service';
   exports: [
     ClientsModule,
     SessionSerializer,
+
     LocalStrategy,
     SessionSerializer,
     JwtStrategy,
