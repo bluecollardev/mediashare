@@ -70,7 +70,7 @@ export class UserController {
   async authorize(@Param() _id: string, @Body() body: { token: string }) {
     const { token = null } = body;
     const valid = await this.userService.validateUser({ token, _id });
-
+    if (!valid) throw new UnauthorizedException();
     return valid;
   }
 

@@ -44,6 +44,8 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
       username: Faker.internet.email(),
       firstName: Faker.name.firstName(),
       lastName: Faker.name.lastName(),
+      authId: Faker.random.uuid(),
+      password: 'welcome1',
     };
   }
 
