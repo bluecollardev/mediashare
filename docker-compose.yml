@@ -1,0 +1,14 @@
+version: '3'
+services:
+  db-postgres:
+    image: postgres
+    container_name: ms-user
+    restart: always
+    environment:
+      - POSTGRES_USER=ms-user
+      - POSTGRES_PASSWORD=ms-user-pass
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=ms-user
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432

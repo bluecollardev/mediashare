@@ -3,5 +3,6 @@ module.exports = {
     '<rootDir>/apps/media-api',
     '<rootDir>/apps/mediashare',
     '<rootDir>/libs/core',
+    '<rootDir>/apps/media-auth',
   ],
 };

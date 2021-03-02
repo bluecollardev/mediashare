@@ -1,6 +1,8 @@
 {
   "version": 2,
-  "cli": { "defaultCollection": "@nrwl/nest" },
+  "cli": {
+    "defaultCollection": "@nrwl/nest"
+  },
   "defaultProject": "media-api",
   "projects": {
     "media-api": {
@@ -11,12 +13,16 @@
       "targets": {
         "build": {
           "executor": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/apps/media-api",
             "main": "apps/media-api/src/main.ts",
             "tsConfig": "apps/media-api/tsconfig.app.json",
-            "assets": ["apps/media-api/src/assets"]
+            "assets": [
+              "apps/media-api/src/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -34,15 +40,23 @@
         },
         "serve": {
           "executor": "@nrwl/node:execute",
-          "options": { "buildTarget": "media-api:build" }
+          "options": {
+            "buildTarget": "media-api:build"
+          }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["apps/media-api/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": [
+              "apps/media-api/**/*.ts"
+            ]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/media-api"],
+          "outputs": [
+            "coverage/apps/media-api"
+          ],
           "options": {
             "jestConfig": "apps/media-api/jest.config.js",
             "passWithNoTests": true
@@ -58,16 +72,25 @@
       "targets": {
         "start": {
           "executor": "@nrwl/react-native:start",
-          "options": { "port": 8081 }
+          "options": {
+            "port": 8081
+          }
         },
         "serve": {
           "executor": "@nrwl/workspace:run-commands",
-          "options": { "command": "nx start mediashare" }
+          "options": {
+            "command": "nx start mediashare"
+          }
         },
-        "run-ios": { "executor": "@nrwl/react-native:run-ios", "options": {} },
+        "run-ios": {
+          "executor": "@nrwl/react-native:run-ios",
+          "options": {}
+        },
         "bundle-ios": {
           "executor": "@nrwl/react-native:bundle",
-          "outputs": ["apps/mediashare/build"],
+          "outputs": [
+            "apps/mediashare/build"
+          ],
           "options": {
             "entryFile": "apps/mediashare/src/main.tsx",
             "platform": "ios",
@@ -97,7 +120,9 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/mediashare/**/*.{js,ts,tsx}"]
+            "lintFilePatterns": [
+              "apps/mediashare/**/*.{js,ts,tsx}"
+            ]
           }
         },
         "sync-deps": {
@@ -120,13 +145,78 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/core/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": [
+              "libs/core/**/*.ts"
+            ]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/core"],
+          "outputs": [
+            "coverage/libs/core"
+          ],
           "options": {
             "jestConfig": "libs/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "media-auth": {
+      "root": "apps/media-auth",
+      "sourceRoot": "apps/media-auth/src",
+      "projectType": "application",
+      "prefix": "media-auth",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/media-auth",
+            "main": "apps/media-auth/src/main.ts",
+            "tsConfig": "apps/media-auth/tsconfig.app.json",
+            "assets": [
+              "apps/media-auth/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/media-auth/src/environments/environment.ts",
+                  "with": "apps/media-auth/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "media-auth:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/media-auth/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/media-auth"
+          ],
+          "options": {
+            "jestConfig": "apps/media-auth/jest.config.js",
             "passWithNoTests": true
           }
         }

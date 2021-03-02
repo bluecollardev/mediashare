@@ -18,6 +18,7 @@
   "projects": {
     "media-api": { "tags": [] },
     "mediashare": { "tags": [] },
-    "core": { "tags": [] }
+    "core": { "tags": [] },
+    "media-auth": { "tags": [] }
   }
 }

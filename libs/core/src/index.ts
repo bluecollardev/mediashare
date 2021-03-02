@@ -15,3 +15,5 @@ export * from './lib/models/media/document.model';
 export * from './lib/models/media/video.model';
 
 export * from './lib/models/api-defaults.model';
+
+export * from './lib/tokens/auth-tokens.constant';
