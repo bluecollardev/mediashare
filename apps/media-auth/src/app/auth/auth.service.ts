@@ -3,9 +3,7 @@ import { Injectable, Logger, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync } from 'bcrypt';
-import { throwError, TimeoutError } from 'rxjs';
 
-import { catchError, timeout } from 'rxjs/operators';
 import { InsertResult } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 

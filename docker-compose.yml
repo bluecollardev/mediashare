@@ -12,3 +12,19 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - 5432:5432
+    volumes:
+      - ms-postgres-data/var/lib/postgres/data
+
+  db-mongo:
+    image: mongo:4.0.4
+    container_name: api-mongo
+    environment:
+      - MONGODB_DATABASE='mediashare'
+    volumes:
+      - ms-mongo-data:/var/lib/mongodb/data
+    ports:
+      - 27017:27017
+
+volumes:
+  ms-mongo-data:
+  ms-postgres-data:
