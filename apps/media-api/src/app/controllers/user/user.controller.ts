@@ -18,14 +18,16 @@ import { AuthUserInterface } from '@core-lib';
 import { ObjectId } from 'mongodb';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
-
+import { PlaylistService } from '../playlist/services/playlist.service';
+import * as R from 'remeda';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(
     private userService: UserService,
     private mediaItemService: MediaItemService,
-    private shareItemService: ShareItemService
+    private shareItemService: ShareItemService,
+    private playlistService: PlaylistService
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -52,11 +54,8 @@ export class UserController {
   @Get('shared-media-items')
   async getSharedMediaItems(@GetUser() user: AuthUserInterface = null) {
     const { _id = null } = user;
-    const userId = typeof _id === 'string' ? new ObjectId(_id) : _id;
-    const { sharedMediaItems } = await this.userService.findByQuery({ _id: userId });
-
+    const { sharedMediaItems = [] } = await this.userService.findAllSharedMediaItemsByUserId(_id);
     const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedMediaItems);
-
     return mediaItems;
   }
 
@@ -71,9 +70,11 @@ export class UserController {
 
     const { sharedPlaylists } = await this.userService.findOne(userId);
 
-    const playlists = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
+    const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
 
-    return playlists;
+    const playlists = await this.playlistService.findPlaylistsByList(sharedPlaylists);
+
+    return this.playlistService.mapPlaylists(playlists, mediaItems);
   }
 
   @HttpCode(HttpStatus.NOT_IMPLEMENTED)

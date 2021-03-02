@@ -16,7 +16,7 @@ import { AuthModule } from '../../modules/auth/auth.module';
 @Module({
   imports: [AuthModule, TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]), ShareItemModule],
   controllers: [UserController, UsersController],
-  providers: [PlaylistService, PlaylistItemService],
+  providers: [PlaylistService, PlaylistItemService, MediaItemService],
   exports: [],
 })
 export class UserModule implements NestModule {

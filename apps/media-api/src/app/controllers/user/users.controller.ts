@@ -142,14 +142,14 @@ export class UsersController {
   }
 
   @Get(':id/shared-playlists')
-  async getSharedPlaylists(@Param('id') id: string) {
-    const user = await this.userService.findOne(id);
+  async getSharedPlaylists(@Param('id') userId: string) {
+    const { sharedPlaylists } = await this.userService.findOne(userId);
 
-    const { sharedPlaylists = [] } = user;
+    const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
 
-    const playlists = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
+    const playlists = await this.playlistService.findPlaylistsByList(sharedPlaylists);
 
-    return playlists;
+    return this.playlistService.mapPlaylists(playlists, mediaItems);
   }
 
   @UseGuards(UserGuard)

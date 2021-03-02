@@ -8,6 +8,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { catchError, timeout } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
 import { User } from '../../controllers/user/entities/user.entity';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UserService extends DataService<User, MongoRepository<User>> {
@@ -52,5 +53,10 @@ export class UserService extends DataService<User, MongoRepository<User>> {
 
   validateUser(params: { _id: string; token: string }) {
     return this.client.send({ role: 'auth', cmd: 'validate' }, params);
+  }
+
+  findAllSharedMediaItemsByUserId(_id: string | ObjectId) {
+    const userId = typeof _id === 'string' ? new ObjectId(_id) : _id;
+    return this.findByQuery({ _id: userId });
   }
 }

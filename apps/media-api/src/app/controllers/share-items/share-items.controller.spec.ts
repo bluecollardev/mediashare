@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ShareItemsController } from './share-items.controller';
-import { ShareItemsService } from './share-items.service';
 
 describe('ShareItemsController', () => {
   let controller: ShareItemsController;
@@ -8,7 +7,7 @@ describe('ShareItemsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ShareItemsController],
-      providers: [ShareItemsService],
+      providers: [],
     }).compile();
 
     controller = module.get<ShareItemsController>(ShareItemsController);
