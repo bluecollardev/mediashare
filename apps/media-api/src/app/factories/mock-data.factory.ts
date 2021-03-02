@@ -68,7 +68,6 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
 
   createMediaDto(): CreateMediaItemDto {
     return {
-      userId: new ObjectId(this.userId),
       summary: Faker.lorem.lines(),
       title: Faker.lorem.sentence(),
       isPlayable: Faker.random.boolean(),

@@ -1,4 +1,5 @@
 import { IdType } from '../types/id.type';
+import { BcRolesType } from './roles.enum';
 
 export interface AuthUserInterface {
   authId: string;
@@ -7,4 +8,5 @@ export interface AuthUserInterface {
   email: string;
   createdAt: Date;
   _id: IdType;
+  roles: BcRolesType[];
 }

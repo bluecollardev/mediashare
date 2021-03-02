@@ -11,6 +11,10 @@ import { badRequestResponse, notFoundResponse } from '../../core/functors/http-e
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { MEDIA_CATEGORY } from '@core-lib';
+import { GetUser } from '../../core/decorators/user.decorator';
+import { SessionUserInterface } from '../../core/models/auth-user.model';
+import { ObjectId } from 'mongodb';
+import { bcRoles } from 'libs/core/src/lib/models/roles.enum';
 
 @ApiTags('media-items')
 @Controller('media-items')
@@ -19,14 +23,17 @@ export class MediaItemController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createMediaItemDto: CreateMediaItemDto) {
-    return this.mediaItemService.create(createMediaItemDto);
+  create(@Body() createMediaItemDto: CreateMediaItemDto, @GetUser() user: SessionUserInterface) {
+    const { _id: userId } = user;
+    return this.mediaItemService.create({ ...createMediaItemDto, userId: new ObjectId(userId) });
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.mediaItemService.findAll();
+  findAll(@GetUser() user: SessionUserInterface) {
+    const { roles = [], _id } = user;
+    if (roles.includes(bcRoles.admin)) this.mediaItemService.findAll();
+    return this.mediaItemService.findMediaItemsByUserId(_id);
   }
 
   @Get('categories')
