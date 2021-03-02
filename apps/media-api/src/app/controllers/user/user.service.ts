@@ -34,9 +34,9 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return super.findByQuery({ username });
   }
 
-  createUser(user: string, password: string) {
+  createUser(user: { username: string; password: string }) {
     return this.client
-      .send({ role: 'auth', cmd: 'create' }, { user })
+      .send({ role: 'auth', cmd: 'create' }, user)
       .pipe(
         timeout(5000),
         catchError((err) => {
@@ -47,5 +47,13 @@ export class UserService extends DataService<User, MongoRepository<User>> {
         })
       )
       .toPromise();
+  }
+
+  loginUser(login: { username: string; password: string }) {
+    return this.client.send({ role: 'auth', cmd: 'login' }, login).toPromise();
+  }
+
+  validateUser(params: { _id: string; token: string }) {
+    return this.client.send({ role: 'auth', cmd: 'validate' }, params);
   }
 }

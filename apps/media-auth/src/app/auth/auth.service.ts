@@ -17,8 +17,13 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async validateUser(username: string, password: string) {
-    const user = await this.userRepository.findOne({ username, password });
+  async validateUser(userToCheck: { username: string; password: string }) {
+    const { username, password } = userToCheck;
+
+    const user = await this.userRepository.findOne({ username });
+    console.log('🚀 ------------------------------------------------------------------------------');
+    console.log('🚀 ~ file: auth.service.ts ~ line 24 ~ AuthService ~ validateUser ~ user', user);
+    console.log('🚀 ------------------------------------------------------------------------------');
 
     if (compareSync(password, user?.password)) {
       return user;
@@ -27,18 +32,20 @@ export class AuthService {
     return null;
   }
 
-  async createUser(user: any): Promise<InsertResult> {
+  async createUser(user: { username: string; password: string }): Promise<InsertResult> {
+    const { username, password } = user;
+    const createdAt = new Date();
+    const email = username;
     try {
       /**
        * Perform all needed checks
        */
 
       const userEntity = this.userRepository.create({
-        email: user.user,
-
-        password: 'welcome1',
-        createdAt: new Date(),
-        username: user.user,
+        email,
+        password,
+        createdAt,
+        username,
       });
 
       const res = await this.userRepository.insert(userEntity);
@@ -52,8 +59,8 @@ export class AuthService {
     }
   }
 
-  async login(user) {
-    const payload = { user, sub: user.id };
+  async login(user, _id) {
+    const payload = { user, sub: _id };
 
     return {
       userId: user.id,
@@ -62,6 +69,14 @@ export class AuthService {
   }
 
   validateToken(jwt: string) {
-    return this.jwtService.verify(jwt);
+    const jwtResult = this.jwtService.verify(jwt);
+
+    const {
+      user: { username = null, _id = null },
+    } = jwtResult;
+
+    const hasUser = !!jwtResult;
+
+    return hasUser ? { username, _id } : null;
   }
 }

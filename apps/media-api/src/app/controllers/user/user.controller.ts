@@ -1,4 +1,17 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  Res,
+  HttpStatus,
+  UseGuards,
+  UnauthorizedException,
+  HttpCode,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,6 +27,7 @@ import { ShareItemService } from '../../modules/share-item/services/share-item.s
 import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
 import { notFoundResponse } from '../../core/functors/http-errors.functor';
+import { UserGuard } from '../../core/guards/user.guard';
 @ApiTags('users')
 @Controller('users')
 export class UserController {
@@ -27,22 +41,40 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    const { username } = createUserDto;
+    const { username, password, ...rest } = createUserDto;
     const existingUser = await this.userService.checkIfUserExists(username);
-    console.log(existingUser);
     if (existingUser) return existingUser;
-    const mongoUser = await this.userService.create(createUserDto);
 
-    const postgresUser = await this.userService.createUser(username);
+    const postgresUser = await this.userService.createUser({ username, password });
+
+    const mongoUser = await this.userService.create({ ...rest, username, authId: postgresUser._id });
 
     return mongoUser;
   }
 
+  // @UseGuards(LocalAuthGuard)
+  // @Post('auth')
+  // async login(@Request() req) {
+  //   return this.authService.login(req.user);
+  // }
+  @HttpCode(HttpStatus.OK)
   @Post('login')
-  async login() {
-    // console.log(login);
+  async login(@Body() login: { username: string; password: string }) {
+    const token = await this.userService.loginUser(login);
+    if (!token) throw new UnauthorizedException();
+    return token;
   }
 
+  @HttpCode(HttpStatus.OK)
+  @Post('authorize/:id')
+  async authorize(@Param() _id: string, @Body() body: { token: string }) {
+    const { token = null } = body;
+    const valid = await this.userService.validateUser({ token, _id });
+
+    return valid;
+  }
+
+  @UseGuards(UserGuard)
   @Get()
   findAll(): Promise<User[]> {
     return this.userService.findAll();
