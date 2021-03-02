@@ -3,7 +3,7 @@ import { ShareItemsController } from './share-items.controller';
 import { ShareItemModule } from '../../modules/share-item/share-item.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ShareItem } from './entities/share-item.entity';
-import { JwtStrategy } from '../../core/providers/jwt.strategy';
+import { JwtStrategy } from '../../modules/auth/jwt.strategy';
 
 @Module({
   imports: [ShareItemModule, TypeOrmModule.forFeature([ShareItem])],

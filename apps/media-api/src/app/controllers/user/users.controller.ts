@@ -9,31 +9,26 @@ import {
   Res,
   HttpStatus,
   UseGuards,
-  UnauthorizedException,
   HttpCode,
-  Session,
-  Logger,
   Request,
 } from '@nestjs/common';
 import { Response, Request as Req } from 'express';
-import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/services/playlist.service';
-import { PlaylistItemService } from '../../modules/playlist-item/services/playlist-item.service';
 import { MediaItemService } from '../media-item/media-item.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 
 import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
-import { badRequestResponse, notFoundResponse } from '../../core/functors/http-errors.functor';
-import { UserGuard } from '../../core/guards/user.guard';
-import { GetUser } from '../../core/decorators/user.decorator';
-import { LocalGuard } from './local.guard';
-import { JwtAuthGuard } from '../../core/guards/jwt-auth.guard';
+import { notFoundResponse } from '../../core/functors/http-errors.functor';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
+import { LocalGuard } from '../../modules/auth/guards/local.guard';
+import { UserGuard } from '../../modules/auth/guards/user.guard';
+import { UserService } from '../../modules/auth/user.service';
 
 @ApiTags('users')
 @Controller('users')

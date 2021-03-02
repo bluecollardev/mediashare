@@ -1,3 +1,4 @@
+import { AuthModule } from './modules/auth/auth.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
@@ -28,6 +29,7 @@ const typeOrmConfig = {
 };
 @Module({
   imports: [
+    AuthModule,
     ConfigModule.forRoot({ envFilePath: envFilePath, isGlobal: true }),
 
     /* TODO: @bcdevlucas change this to the PostGres settings */

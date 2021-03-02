@@ -1,13 +1,13 @@
 import { Inject, Injectable, RequestTimeoutException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
-import { User } from './entities/user.entity';
 import { PinoLogger } from 'nestjs-pino';
 import { DataService } from '@api';
 import { ClientProxy } from '@nestjs/microservices';
 
 import { catchError, timeout } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
+import { User } from '../../controllers/user/entities/user.entity';
 
 @Injectable()
 export class UserService extends DataService<User, MongoRepository<User>> {
@@ -16,7 +16,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     repository: MongoRepository<User>,
     logger: PinoLogger,
     @Inject('AUTH_CLIENT')
-    private readonly client: ClientProxy // private readonly jwtService: JwtService
+    private readonly client: ClientProxy
   ) {
     super(repository, logger);
   }
