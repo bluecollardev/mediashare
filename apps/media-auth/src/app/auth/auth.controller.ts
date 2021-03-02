@@ -10,6 +10,7 @@ export class AuthController {
   @MessagePattern({ role: 'auth', cmd: 'check' })
   async loggedIn(data) {
     try {
+      console.log(data.jwt);
       const res = this.authService.validateToken(data.jwt);
 
       return res;

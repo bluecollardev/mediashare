@@ -11,6 +11,7 @@ import {
   UseGuards,
   UnauthorizedException,
   HttpCode,
+  Session,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
@@ -65,6 +66,19 @@ export class UserController {
     return token;
   }
 
+  @UseGuards(UserGuard)
+  @Get()
+  findAll(): Promise<User[]> {
+    return this.userService.findAll();
+  }
+
+  @UseGuards(UserGuard)
+  @Get('share-items')
+  async getMyShareItems(@Session() session: Record<string, any>) {
+    console.log(session);
+    return session;
+  }
+
   @HttpCode(HttpStatus.OK)
   @Post('authorize/:id')
   async authorize(@Param() id: string, @Body() body: { token: string }) {
@@ -72,12 +86,6 @@ export class UserController {
     const valid = await this.userService.validateUser({ token, _id: id });
     if (!valid) throw new UnauthorizedException();
     return valid;
-  }
-
-  @UseGuards(UserGuard)
-  @Get()
-  findAll(): Promise<User[]> {
-    return this.userService.findAll();
   }
 
   @Get(':id')
@@ -159,7 +167,6 @@ export class UserController {
     return shareItems;
   }
 
-  @Put(':id/share-items/:shareId')
   /* shared with others */
   async readSharedItem(@Param('id') id: string, @Param('shareId') shareId: string) {
     const sharedItem = await this.shareItemService.update(shareId, { read: true });

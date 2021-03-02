@@ -12,6 +12,8 @@ import { AppModule } from './app/app.module';
 
 import { writeFileSync } from 'fs';
 
+import * as session from 'express-session';
+
 const isDev = process.env.NODE_ENV !== 'production';
 
 async function bootstrap() {
@@ -29,6 +31,11 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
 
+  session({
+    secret: 'my-secret',
+    resave: false,
+    saveUninitialized: false,
+  });
   const document = SwaggerModule.createDocument(app, config);
 
   const port = process.env.PORT || 3333;
