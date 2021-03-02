@@ -31,6 +31,17 @@ export class UserController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
+  @Get()
+  async getUser(@GetUser() user: AuthUserInterface) {
+    const { _id = null } = user;
+
+    const mongoUser = await this.userService.findOne(_id as string);
+
+    const authUser = await this.userService.getAuthUser({ _id: _id as string });
+    return { ...authUser, ...mongoUser };
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('share-items')
   async getMyShareItems(@GetUser() user: User = null) {
     const { _id: userId } = user;
@@ -80,7 +91,9 @@ export class UserController {
   @HttpCode(HttpStatus.NOT_IMPLEMENTED)
   @UseGuards(JwtAuthGuard)
   @Get('share-items')
-  async getShareItems(@GetUser() user: User = null) {
+  getShareItems() {
     // return shareItems;
+
+    return;
   }
 }

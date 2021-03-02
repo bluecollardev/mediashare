@@ -43,4 +43,11 @@ export class AuthController {
   setRoles(data: { _id: string; roles: any }) {
     return this.authService.updateRoles(data);
   }
+
+  @MessagePattern({ role: 'auth', cmd: 'get' })
+  async getUser(data: { _id: string }) {
+    const { password, ...user } = await this.authService.getUser(data);
+
+    return user;
+  }
 }
