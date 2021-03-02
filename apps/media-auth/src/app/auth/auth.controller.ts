@@ -39,4 +39,9 @@ export class AuthController {
   createUser(data: { username: string; password: string; _id: string }) {
     return this.authService.createUser(data);
   }
+
+  @MessagePattern({ role: 'auth', cmd: 'create' })
+  setRoles(data: { authId: string }) {
+    return this.authService.createUser(data);
+  }
 }

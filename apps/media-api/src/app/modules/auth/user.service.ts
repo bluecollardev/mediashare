@@ -9,6 +9,7 @@ import { catchError, timeout } from 'rxjs/operators';
 import { TimeoutError, throwError } from 'rxjs';
 import { User } from '../../controllers/user/entities/user.entity';
 import { ObjectId } from 'mongodb';
+import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
 
 @Injectable()
 export class UserService extends DataService<User, MongoRepository<User>> {
@@ -58,5 +59,9 @@ export class UserService extends DataService<User, MongoRepository<User>> {
   findAllSharedMediaItemsByUserId(_id: string | ObjectId) {
     const userId = typeof _id === 'string' ? new ObjectId(_id) : _id;
     return this.findByQuery({ _id: userId });
+  }
+
+  setRoles(_id: string, roles: BcRolesType[]) {
+    this.client.send({ role: 'auth', cmd: 'setRoles' }, { _id, roles });
   }
 }

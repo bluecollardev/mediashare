@@ -73,6 +73,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
       title: Faker.lorem.sentence(),
       isPlayable: Faker.random.boolean(),
       description: Faker.lorem.lines(),
+      category: 'flexibility',
     };
   }
 

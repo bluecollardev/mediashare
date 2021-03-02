@@ -29,6 +29,7 @@ import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { UserGuard } from '../../modules/auth/guards/user.guard';
 import { UserService } from '../../modules/auth/user.service';
+import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
 
 @ApiTags('users')
 @Controller('users')
@@ -146,7 +147,6 @@ export class UsersController {
     const { sharedPlaylists } = await this.userService.findOne(userId);
 
     const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
-
     const playlists = await this.playlistService.findPlaylistsByList(sharedPlaylists);
 
     return this.playlistService.mapPlaylists(playlists, mediaItems);
@@ -158,6 +158,13 @@ export class UsersController {
     const shareItems = this.shareItemService.findByQuery({ userId: new ObjectId(id) });
 
     return shareItems;
+  }
+
+  @UseGuards(UserGuard)
+  @Put(':id/roles')
+  async setRoles(@Param('id') id: string, @Body() params: { roles: BcRolesType[] }) {
+    const { roles = [] } = params;
+    this.userService.setRoles(id, roles);
   }
 
   /* shared with others */

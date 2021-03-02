@@ -9,12 +9,13 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+import { AuthUserInterface } from '@core-lib';
+
 import { ApiTags } from '@nestjs/swagger';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { MediaItemService } from '../media-item/media-item.service';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { User } from './entities/user.entity';
-import { AuthUserInterface } from '@core-lib';
 import { ObjectId } from 'mongodb';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';

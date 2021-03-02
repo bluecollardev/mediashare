@@ -3,6 +3,7 @@ import { Min, IsEmail } from 'class-validator';
 import { Entity, Unique, PrimaryGeneratedColumn, Column, CreateDateColumn, BeforeInsert } from 'typeorm';
 
 import { AuthUserInterface } from '@core-lib';
+import { bcRoles, BcRolesType, BC_ROLES } from 'libs/core/src/lib/models/roles.enum';
 
 @Entity()
 @Unique(['username'])
@@ -33,4 +34,7 @@ export class AuthUser implements AuthUserInterface {
   async hashPassword() {
     this.password = await hash(this.password, 10);
   }
+
+  @Column({ type: 'array', default: [bcRoles.guest] })
+  roles: BcRolesType[];
 }

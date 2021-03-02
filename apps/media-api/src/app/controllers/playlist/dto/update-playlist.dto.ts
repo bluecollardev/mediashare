@@ -18,6 +18,6 @@ export class UpdatePlaylistDto extends PartialType(OmitType(CreatePlaylistDto, [
   @IsString()
   title?: string;
 
-  @ApiProperty({ required: true, enum: PLAYLIST_CATEGORY })
+  @ApiProperty({ required: false, enum: PLAYLIST_CATEGORY })
   category: PlaylistCategoryType;
 }

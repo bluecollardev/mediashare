@@ -7,6 +7,7 @@ import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { PlaylistService } from './services/playlist.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import { PLAYLIST_CATEGORY } from '@core-lib';
 
 @ApiTags('playlists')
 @Controller('playlists')
@@ -27,6 +28,11 @@ export class PlaylistController {
   @Get()
   findAll() {
     return this.playlistService.findAll();
+  }
+
+  @Get('categories')
+  getCategories() {
+    return PLAYLIST_CATEGORY;
   }
 
   @Get(':id')

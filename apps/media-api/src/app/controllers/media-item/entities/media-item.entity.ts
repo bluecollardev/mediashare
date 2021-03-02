@@ -1,5 +1,5 @@
 import { BcBaseEntity } from '@api';
-import { Media, PlaylistCategoryType, Stats } from '@core-lib';
+import { Media, MediaCategoryType, PlaylistCategoryType, Stats } from '@core-lib';
 import { ObjectId } from 'mongodb';
 import { Column, Entity } from 'typeorm';
 import { Tag } from '../../../core/entities/tag.entity';
@@ -27,5 +27,5 @@ export class MediaItem extends BcBaseEntity<MediaItem> implements Media {
   stats?: Stats;
 
   @Column({ type: 'array' })
-  category: PlaylistCategoryType;
+  category: MediaCategoryType;
 }

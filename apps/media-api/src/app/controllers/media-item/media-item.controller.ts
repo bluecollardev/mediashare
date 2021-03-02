@@ -10,6 +10,7 @@ import { badRequestResponse, notFoundResponse } from '../../core/functors/http-e
 
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
+import { MEDIA_CATEGORY } from '@core-lib';
 
 @ApiTags('media-items')
 @Controller('media-items')
@@ -26,6 +27,11 @@ export class MediaItemController {
   @Get()
   findAll() {
     return this.mediaItemService.findAll();
+  }
+
+  @Get('categories')
+  getCategories() {
+    return MEDIA_CATEGORY;
   }
 
   @UseGuards(JwtAuthGuard)
