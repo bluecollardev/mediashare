@@ -9,17 +9,26 @@ import { Transport } from '@nestjs/microservices';
 
 import { AppModule } from './app/app.module';
 
-Logger.log('running now');
-
 async function bootstrap() {
-  Logger.log('running now');
+  const app = await NestFactory.create(AppModule);
+  const globalPrefix = 'auth';
 
-  const app = await NestFactory.createMicroservice(AppModule, {
+  app.connectMicroservice({
     transport: Transport.TCP,
-    port: 4000,
+    options: {
+      host: 'localhost',
+      port: 4000,
+    },
   });
-  Logger.log('running now');
-  app.listen(() => console.log('Microservice is listening'));
+
+  await app.startAllMicroservicesAsync();
+  Logger.log('Auth microservice running');
+
+  app.setGlobalPrefix(globalPrefix);
+  const port = process.env.PORT || 4444;
+  await app.listen(port, () => {
+    Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
+  });
 }
 
 bootstrap();

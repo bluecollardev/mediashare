@@ -1,8 +1,8 @@
 import * as Faker from 'faker';
-import { UserEntity } from '../controllers/user/entities/user.entity';
+import { User } from '../controllers/user/entities/user.entity';
 
 export function userFactory() {
-  return new UserEntity({
+  return new User({
     username: Faker.internet.email(),
     firstName: Faker.name.firstName(),
     lastName: Faker.name.lastName(),

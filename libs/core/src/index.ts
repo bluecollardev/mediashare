@@ -1,6 +1,7 @@
 export * from './lib/core';
 
 export * from './lib/models/account.model';
+export * from './lib/models/contact.model';
 export * from './lib/models/feed.model';
 export * from './lib/models/playlist.model';
 export * from './lib/models/playlistItem.model';

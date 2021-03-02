@@ -3,10 +3,11 @@ import { MessagePattern } from '@nestjs/microservices';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UseGuards(LocalAuthGuard)
   @Post('auth')
   async login(@Request() req) {
     return this.authService.login(req.user);
@@ -22,20 +23,5 @@ export class AuthController {
       Logger.log(e);
       return false;
     }
-  }
-
-  @MessagePattern({ role: 'auth', cmd: 'validate' })
-  validateUser(data: any) {
-    return this.authService.validateToken(data);
-  }
-
-  @MessagePattern({ role: 'auth', cmd: 'login' })
-  loginUser(data: any) {
-    return this.authService.createUser(data);
-  }
-
-  @MessagePattern({ role: 'auth', cmd: 'create' })
-  createUser(data: any) {
-    return this.authService.createUser(data);
   }
 }

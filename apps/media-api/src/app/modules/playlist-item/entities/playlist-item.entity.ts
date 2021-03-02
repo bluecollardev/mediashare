@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import { Column, Entity } from 'typeorm';
 
 @Entity()
-export class PlaylistItem extends BcBaseEntity<PlaylistItem> implements PlaylistItem {
+export class PlaylistItem extends BcBaseEntity<PlaylistItem> {
   @Column()
   mediaId: ObjectId;
 

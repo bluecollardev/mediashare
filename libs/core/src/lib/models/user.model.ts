@@ -1,11 +1,23 @@
-import { ObjectId } from 'mongodb';
+import { Profile } from './profile.model';
+import {
+  Address,
+  AddressContact,
+  Contact,
+  EmailContact,
+  PhoneNumberContact,
+} from './contact.model';
 
 export interface User {
-  _id?: string | ObjectId;
-  username?: string;
-  firstName?: string;
-  lastName?: string;
-  sharedPlaylists?: string[] | ObjectId[];
-  sharedMediaItems?: string[] | ObjectId[];
-  /* TODO: add roles */
+  id?: string;
+  profile?: Profile;
+  userName: string;
+  accounts?: Account[];
+  readonly primaryContact?:
+    | typeof PhoneNumberContact
+    | typeof AddressContact
+    | typeof EmailContact; // Read-only, update via API only
+  readonly primaryContactId?: string; // Read-only, update via API only
+
+  /* FIXME: @bcdevlucas consider splitting these out.. */
+  contacts?: Contact<string | Address>[];
 }

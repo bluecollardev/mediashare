@@ -5,5 +5,3 @@ export interface Feed {
   displayName?: string; // Friendly name
   type?: string; // This is the internal name
 }
-
-/* Use users/id/shared to get the shared items */
