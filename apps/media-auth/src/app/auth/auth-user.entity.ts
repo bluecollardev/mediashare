@@ -6,8 +6,8 @@ import { Entity, Unique, PrimaryGeneratedColumn, Column, CreateDateColumn, Befor
 @Unique(['username'])
 @Unique(['email'])
 export class AuthUser {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   username: string;
@@ -15,9 +15,6 @@ export class AuthUser {
   @Column()
   @Min(8)
   password: string;
-
-  @Column()
-  name: string;
 
   @Column()
   @IsEmail()
