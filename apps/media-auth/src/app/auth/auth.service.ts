@@ -70,7 +70,6 @@ export class AuthService {
 
   validateToken(jwt: string) {
     const jwtResult = this.jwtService.verify(jwt);
-    Logger.warn(jwtResult);
     const {
       user: { username = null, _id = null },
     } = jwtResult;
