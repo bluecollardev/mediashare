@@ -2,11 +2,13 @@ import { hash } from 'bcrypt';
 import { Min, IsEmail } from 'class-validator';
 import { Entity, Unique, PrimaryGeneratedColumn, Column, CreateDateColumn, BeforeInsert } from 'typeorm';
 
+import { AuthUserInterface } from '@core-lib';
+
 @Entity()
 @Unique(['username'])
 @Unique(['email'])
 // @Unique(['_id'])
-export class AuthUser {
+export class AuthUser implements AuthUserInterface {
   @PrimaryGeneratedColumn('uuid')
   authId: string;
 
@@ -25,7 +27,7 @@ export class AuthUser {
   createdAt: Date;
 
   @Column()
-  _id?: string;
+  _id: string;
 
   @BeforeInsert()
   async hashPassword() {

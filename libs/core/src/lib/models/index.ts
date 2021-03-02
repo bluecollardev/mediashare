@@ -13,3 +13,4 @@ export * from './abstract/metadata.model';
 export * from './abstract/media.interface';
 export * from './abstract/model';
 export * from './playlist.interface';
+export * from './auth-user.interface';

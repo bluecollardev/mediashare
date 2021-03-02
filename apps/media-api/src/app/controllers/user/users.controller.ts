@@ -64,6 +64,22 @@ export class UsersController {
     return this.userService.findAll();
   }
 
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(LocalGuard)
+  @Post('login')
+  async login(@Request() req: Req) {
+    return req.user;
+  }
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  async logout(@Request() req: Req, @Res() res: Response) {
+    try {
+      req.logout();
+    } catch {
+      return res.status(HttpStatus.OK).send();
+    }
+  }
+
   @UseGuards(UserGuard)
   @Get(':id')
   findOne(@Param('id') id: string): Promise<User> {

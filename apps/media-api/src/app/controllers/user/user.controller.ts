@@ -22,6 +22,7 @@ import { JwtAuthGuard } from '../../core/guards/jwt-auth.guard';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { User } from './entities/user.entity';
 import { badRequestResponse } from '../../core/functors/http-errors.functor';
+import { AuthUserInterface } from '@core-lib';
 
 @ApiTags('users')
 @Controller('user')
@@ -33,29 +34,14 @@ export class UserController {
     private shareItemService: ShareItemService
   ) {}
 
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(LocalGuard)
-  @Post('login')
-  async login(@Req() req: Request) {
-    return req.user;
-  }
-  @UseGuards(JwtAuthGuard)
-  @Post('logout')
-  async logout(@Req() req: Request, @Res() res: Response) {
-    try {
-      req.logout();
-    } catch {
-      return res.status(HttpStatus.OK).send();
-    }
-  }
-
   @UseGuards(JwtAuthGuard)
   @Get('share-items')
   async getMyShareItems(@GetUser() user: User = null) {
-    const { authId = null } = user;
-    if (!authId) throw badRequestResponse('user not found');
-    const { _id: userId = null } = await this.userService.findByQuery({ authId });
-    return await this.shareItemService.findByQuery({ userId });
+    const { _id: userId } = user;
+
+    const items = await this.shareItemService.findOne(typeof userId === 'string' ? userId : userId.toHexString());
+
+    return items ?? [];
   }
 
   @UseGuards(JwtAuthGuard)
@@ -70,10 +56,8 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get('shared-media-items')
-  async getSharedMediaItems(@GetUser() user: User = null) {
-    // const user = await this.userService.findOne(id);
-
-    const { sharedMediaItems = [] } = user;
+  async getSharedMediaItems(@GetUser() user: AuthUserInterface = null) {
+    const { sharedMediaItems } = await this.userService.findOne(user._id as string);
 
     const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedMediaItems);
 

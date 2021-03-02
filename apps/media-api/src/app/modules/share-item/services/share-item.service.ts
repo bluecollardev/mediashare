@@ -18,6 +18,10 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     super(repository, logger);
   }
 
+  findShareItemsByUserId(userId: string) {
+    return this.repository.find({ userId: new ObjectId(userId) });
+  }
+
   async createMediaShareItem(params: CreateMediaShareItemDto) {
     const { userId: userIdStr, mediaId: mediaIdStr, createdBy: createdByStr, title } = params;
     const item = await this.create({
