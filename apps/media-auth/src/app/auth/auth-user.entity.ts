@@ -35,6 +35,6 @@ export class AuthUser implements AuthUserInterface {
     this.password = await hash(this.password, 10);
   }
 
-  @Column({ type: 'array', default: [bcRoles.guest] })
+  @Column('enum', { default: [bcRoles.guest], array: true, enum: BC_ROLES })
   roles: BcRolesType[];
 }

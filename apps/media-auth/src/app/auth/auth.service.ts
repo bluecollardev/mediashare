@@ -78,8 +78,8 @@ export class AuthService {
     return hasUser ? { username, _id } : null;
   }
 
-  updateRoles(user: { roles: any; _id: string }) {
+  async updateRoles(user: { roles: any; _id: string }) {
     const { _id, roles } = user;
-    this.userRepository.update(_id, { roles });
+    await this.userRepository.update({ _id }, { roles });
   }
 }

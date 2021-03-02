@@ -1,7 +1,6 @@
-import { Controller, Logger, Post, UseGuards, Request } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller()
 export class AuthController {
@@ -40,8 +39,8 @@ export class AuthController {
     return this.authService.createUser(data);
   }
 
-  @MessagePattern({ role: 'auth', cmd: 'create' })
-  setRoles(data: { authId: string }) {
-    return this.authService.createUser(data);
+  @MessagePattern({ role: 'auth', cmd: 'setRoles' })
+  setRoles(data: { _id: string; roles: any }) {
+    return this.authService.updateRoles(data);
   }
 }

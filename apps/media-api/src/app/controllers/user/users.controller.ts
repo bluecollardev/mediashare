@@ -162,9 +162,9 @@ export class UsersController {
 
   @UseGuards(UserGuard)
   @Put(':id/roles')
-  async setRoles(@Param('id') id: string, @Body() params: { roles: BcRolesType[] }) {
+  setRoles(@Param('id') id: string, @Body() params: { roles: BcRolesType[] }) {
     const { roles = [] } = params;
-    this.userService.setRoles(id, roles);
+    return this.userService.setRoles(id, roles);
   }
 
   /* shared with others */
