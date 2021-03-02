@@ -1,4 +1,4 @@
-import { Injectable, Logger, RequestTimeoutException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';

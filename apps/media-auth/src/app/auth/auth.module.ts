@@ -3,13 +3,13 @@ import { AuthService } from './auth.service';
 import { Module } from '@nestjs/common';
 import { AuthUser } from './auth-user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AuthUser]),
     JwtModule.register({
-      secret: 'this-is-my-secret-key',
+      secret: process.env.SESSION_SECRET || 'this-is-my-secret-key',
       signOptions: { expiresIn: '10h' },
     }),
   ],
