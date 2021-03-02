@@ -33,7 +33,13 @@ export class AuthService {
        * Perform all needed checks
        */
 
-      const userEntity = this.userRepository.create({ ...user, password: 'welcome1', user: user.email });
+      const userEntity = this.userRepository.create({
+        email: user.user,
+
+        password: 'welcome1',
+        createdAt: new Date(),
+        username: user.user,
+      });
 
       const res = await this.userRepository.insert(userEntity);
 

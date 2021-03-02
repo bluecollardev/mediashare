@@ -37,7 +37,6 @@ export class AuthController {
 
   @MessagePattern({ role: 'auth', cmd: 'create' })
   createUser(data: any) {
-    console.log(data);
     return this.authService.createUser(data);
   }
 }
