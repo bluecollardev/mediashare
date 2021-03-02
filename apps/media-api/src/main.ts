@@ -10,6 +10,10 @@ import { Logger } from 'nestjs-pino';
 
 import { AppModule } from './app/app.module';
 
+import { writeFileSync } from 'fs';
+
+const isDev = process.env.NODE_ENV !== 'production';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useLogger(app.get(Logger));
@@ -29,6 +33,8 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3333;
   SwaggerModule.setup('api', app, document);
+
+  if (isDev) writeFileSync('./swagger-spec.json', JSON.stringify(document));
 
   await app.listen(port, () => {
     console.log('Listening at http://localhost:' + port + '/' + globalPrefix);

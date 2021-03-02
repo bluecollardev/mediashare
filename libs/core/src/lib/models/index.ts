@@ -1,6 +1,3 @@
-export * from './media/audio.model';
-export * from './media/document.model';
-export * from './media/video.model';
 export * from './playlistItem.interface';
 export * from './bc-base.interface';
 export * from './feed.model';
