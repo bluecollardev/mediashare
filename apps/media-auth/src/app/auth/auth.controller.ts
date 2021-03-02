@@ -24,4 +24,20 @@ export class AuthController {
       return false;
     }
   }
+
+  @MessagePattern({ role: 'auth', cmd: 'validate' })
+  validateUser(data: any) {
+    return this.authService.validateToken(data);
+  }
+
+  @MessagePattern({ role: 'auth', cmd: 'login' })
+  loginUser(data: any) {
+    return this.authService.login(data);
+  }
+
+  @MessagePattern({ role: 'auth', cmd: 'create' })
+  createUser(data: any) {
+    console.log(data);
+    return this.authService.createUser(data);
+  }
 }

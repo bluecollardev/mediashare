@@ -10,9 +10,23 @@ import { PlaylistItem } from '../../modules/playlist-item/entities/playlist-item
 import { MediaItemService } from '../media-item/media-item.service';
 import { MediaItem } from '../media-item/entities/media-item.entity';
 import { ShareItemModule } from '../../modules/share-item/share-item.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]), ShareItemModule],
+  imports: [
+    TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
+    ShareItemModule,
+    ClientsModule.register([
+      {
+        name: 'AUTH_CLIENT',
+        transport: Transport.TCP,
+        options: {
+          host: 'localhost',
+          port: 4000,
+        },
+      },
+    ]),
+  ],
   controllers: [UserController],
   providers: [UserService, PlaylistService, PlaylistItemService, MediaItemService],
   exports: [],

@@ -26,12 +26,21 @@ export class UserController {
   ) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  async create(@Body() createUserDto: CreateUserDto) {
     const { username } = createUserDto;
     const existingUser = await this.userService.checkIfUserExists(username);
     console.log(existingUser);
     if (existingUser) return existingUser;
-    return await this.userService.create(createUserDto);
+    const mongoUser = await this.userService.create(createUserDto);
+
+    const postgresUser = await this.userService.createUser(username);
+
+    return mongoUser;
+  }
+
+  @Post('login')
+  async login() {
+    // console.log(login);
   }
 
   @Get()
@@ -119,6 +128,7 @@ export class UserController {
   }
 
   @Put(':id/share-items/:shareId')
+  /* shared with others */
   async readSharedItem(@Param('id') id: string, @Param('shareId') shareId: string) {
     const sharedItem = await this.shareItemService.update(shareId, { read: true });
 
