@@ -7,7 +7,7 @@ import { Entity, Unique, PrimaryGeneratedColumn, Column, CreateDateColumn, Befor
 @Unique(['email'])
 export class AuthUser {
   @PrimaryGeneratedColumn('uuid')
-  _id: string;
+  authId: string;
 
   @Column()
   username: string;

@@ -32,7 +32,7 @@ export class AuthController {
     Logger.log(user);
     if (!user) return null;
 
-    return await this.authService.login(user, user._id);
+    return await this.authService.login(user, user.authId);
   }
 
   @MessagePattern({ role: 'auth', cmd: 'create' })

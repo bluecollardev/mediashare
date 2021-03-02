@@ -7,7 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
-
+import * as MongoStore from 'connect-mongo';
 import { AppModule } from './app/app.module';
 
 import { writeFileSync } from 'fs';
@@ -38,6 +38,11 @@ async function bootstrap() {
   app.use(passport.session());
   app.use(
     session({
+      store: MongoStore.default.create({
+        mongoUrl: typeof process.env.DB_URL === 'string' ? process.env.DB_URL : 'mongodb://localhost:27017/',
+        dbName: 'api-session',
+        collectionName: 'session',
+      }),
       secret: 'this-is-my-secret-key',
       resave: false,
       saveUninitialized: false,

@@ -29,7 +29,7 @@ import { ShareItemService } from '../../modules/share-item/services/share-item.s
 
 import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
-import { notFoundResponse } from '../../core/functors/http-errors.functor';
+import { badRequestResponse, notFoundResponse } from '../../core/functors/http-errors.functor';
 import { UserGuard } from '../../core/guards/user.guard';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { LocalGuard } from './local.guard';
@@ -67,9 +67,6 @@ export class UserController {
   @UseGuards(LocalGuard)
   @Post('login')
   async login(@Request() req) {
-    // const token = await this.userService.loginUser(login);
-    // if (!token) throw new UnauthorizedException();
-    // return token;
     return req.user;
   }
 
@@ -81,10 +78,12 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get('share-items')
-  async getMyShareItems(@Request() req) {
-    const { _id, username } = req.user;
-    Logger.warn('user', username);
-    return username;
+  async getMyShareItems(@GetUser() user: User = null) {
+    console.log(user);
+    const { authId = null } = user;
+    if (!authId) throw badRequestResponse('user not found');
+    const userProfile = await this.userService.findByQuery({ authId });
+    return { user, userProfile };
   }
 
   @HttpCode(HttpStatus.OK)
