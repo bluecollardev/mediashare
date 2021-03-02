@@ -2,12 +2,16 @@ import { hash } from 'bcrypt';
 import { Min, IsEmail } from 'class-validator';
 import { Entity, Unique, PrimaryGeneratedColumn, Column, CreateDateColumn, BeforeInsert } from 'typeorm';
 
+import { AuthUserInterface } from '@core-lib';
+import { bcRoles, BcRolesType, BC_ROLES } from 'libs/core/src/lib/models/roles.enum';
+
 @Entity()
 @Unique(['username'])
 @Unique(['email'])
-export class AuthUser {
-  @PrimaryGeneratedColumn()
-  id: number;
+// @Unique(['_id'])
+export class AuthUser implements AuthUserInterface {
+  @PrimaryGeneratedColumn('uuid')
+  authId: string;
 
   @Column()
   username: string;
@@ -17,17 +21,20 @@ export class AuthUser {
   password: string;
 
   @Column()
-  name: string;
-
-  @Column()
   @IsEmail()
   email: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column()
+  _id: string;
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await hash(this.password, 10);
   }
+
+  @Column('enum', { default: [bcRoles.guest], array: true, enum: BC_ROLES })
+  roles: BcRolesType[];
 }

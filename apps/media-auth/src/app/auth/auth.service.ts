@@ -17,8 +17,10 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async validateUser(username: string, password: string) {
-    const user = await this.userRepository.findOne({ username, password });
+  async validateUser(userToCheck: { username: string; password: string }) {
+    const { username, password } = userToCheck;
+
+    const user = await this.userRepository.findOne({ username });
 
     if (compareSync(password, user?.password)) {
       return user;
@@ -27,13 +29,22 @@ export class AuthService {
     return null;
   }
 
-  async createUser(user: any): Promise<InsertResult> {
+  async createUser(user: { username: string; password: string; _id: string }): Promise<InsertResult> {
+    const { username, password, _id } = user;
+    const createdAt = new Date();
+    const email = username;
     try {
       /**
        * Perform all needed checks
        */
 
-      const userEntity = this.userRepository.create(user);
+      const userEntity = this.userRepository.create({
+        email,
+        password,
+        createdAt,
+        username,
+        _id,
+      });
 
       const res = await this.userRepository.insert(userEntity);
 
@@ -46,16 +57,34 @@ export class AuthService {
     }
   }
 
-  async login(user) {
-    const payload = { user, sub: user.id };
+  async login(user, _id) {
+    const payload = { user, sub: _id };
+    const { password, ...userFields } = user;
 
     return {
-      userId: user.id,
+      ...userFields,
       accessToken: this.jwtService.sign(payload),
     };
   }
 
   validateToken(jwt: string) {
-    return this.jwtService.verify(jwt);
+    const jwtResult = this.jwtService.verify(jwt);
+    const {
+      user: { username = null, _id = null },
+    } = jwtResult;
+
+    const hasUser = !!jwtResult;
+
+    return hasUser ? { username, _id } : null;
+  }
+
+  async updateRoles(user: { roles: any; _id: string }) {
+    const { _id, roles } = user;
+    return await this.userRepository.update({ _id }, { roles });
+  }
+
+  getUser(user: { _id }) {
+    const { _id } = user;
+    return this.userRepository.findOne({ _id });
   }
 }

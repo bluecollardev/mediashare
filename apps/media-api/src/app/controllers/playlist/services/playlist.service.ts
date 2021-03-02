@@ -8,6 +8,7 @@ import { mapPlaylistItems } from '../../../modules/playlist-item/functors/map-pl
 import { Playlist } from '../entities/playlist.entity';
 
 import * as R from 'remeda';
+import { MediaItem } from '../../media-item/entities/media-item.entity';
 @Injectable()
 export class PlaylistService extends DataService<Playlist, MongoRepository<Playlist>> {
   constructor(
@@ -46,5 +47,47 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     const playlists = await this.repository.find({ userId });
 
     return playlists;
+  }
+
+  findPlaylistsByList(idStrings: ObjectId[]) {
+    return this.repository.find({
+      where: {
+        $or: R.map(idStrings, (id) => ({
+          _id: id,
+        })),
+      },
+    });
+  }
+
+  async reducePlaylistsToId(playlists: Playlist[]) {
+    const mediaIdsTuple = R.pipe(
+      playlists,
+      R.map((playlist) => playlist.items),
+      R.map((playlistItems) => R.map(playlistItems, (item) => item.mediaId))
+    );
+    const mediaIds = R.reduce(mediaIdsTuple, (prev, curr) => [...prev, ...curr], []);
+
+    return mediaIds;
+  }
+
+  async queryPlaylistsById(playlistIds: ObjectId[]) {
+    return this.repository.find({
+      where: {
+        $or: R.map(playlistIds, (id) => ({
+          _id: id,
+        })),
+      },
+    });
+  }
+
+  mapPlaylists(playlists: Playlist[], mediaItems: MediaItem[]) {
+    const indexedMediaItems = R.indexBy(mediaItems, (item) => item._id);
+
+    const mapped = R.map(playlists, (playlist) => ({
+      ...playlist,
+      mediaItems: playlist?.items.map((item) => indexedMediaItems[item.mediaId.toHexString()]) || [],
+    }));
+
+    return mapped;
   }
 }

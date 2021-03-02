@@ -1,3 +1,4 @@
+import { AuthModule } from './modules/auth/auth.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
@@ -9,6 +10,8 @@ import { LoggerModule } from 'nestjs-pino';
 import { MediaItemModule } from './controllers/media-item/media-item.module';
 import { ProfileModule } from './controllers/profile/profile.module';
 import { PlaylistModule } from './controllers/playlist/playlist.module';
+import { PassportModule } from '@nestjs/passport';
+import { ShareItemsModule } from './controllers/share-items/share-items.module';
 
 /* TODO: custom variable for loading this from */
 const envFilePath = '.env.development';
@@ -26,6 +29,7 @@ const typeOrmConfig = {
 };
 @Module({
   imports: [
+    AuthModule,
     ConfigModule.forRoot({ envFilePath: envFilePath, isGlobal: true }),
 
     /* TODO: @bcdevlucas change this to the PostGres settings */
@@ -35,6 +39,8 @@ const typeOrmConfig = {
     MediaItemModule,
     ProfileModule,
     PlaylistModule,
+    PassportModule,
+    ShareItemsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

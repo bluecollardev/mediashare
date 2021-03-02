@@ -7,6 +7,9 @@ import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { PlaylistService } from './services/playlist.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import { PLAYLIST_CATEGORY } from '@core-lib';
+import { SessionUserInterface } from '../../core/models/auth-user.model';
+import { GetUser } from '../../core/decorators/user.decorator';
 
 @ApiTags('playlists')
 @Controller('playlists')
@@ -14,10 +17,10 @@ export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
   @Post()
-  async create(@Body() createPlaylistDto: CreatePlaylistDto) {
-    const { userId: dtoUserId, items: dtoItems, title = 'untitled' } = createPlaylistDto;
+  async create(@Body() createPlaylistDto: CreatePlaylistDto, @GetUser() user: SessionUserInterface) {
+    const { items: dtoItems, title = 'untitled' } = createPlaylistDto;
 
-    const userId = new ObjectId(dtoUserId);
+    const userId = new ObjectId(user._id);
 
     const playlist = await this.playlistService.createPlaylist(userId, { mediaIds: dtoItems, title });
 
@@ -27,6 +30,11 @@ export class PlaylistController {
   @Get()
   findAll() {
     return this.playlistService.findAll();
+  }
+
+  @Get('categories')
+  getCategories() {
+    return PLAYLIST_CATEGORY;
   }
 
   @Get(':id')

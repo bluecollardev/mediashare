@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -9,22 +9,41 @@ import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 import { badRequestResponse, notFoundResponse } from '../../core/functors/http-errors.functor';
 
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
+import { MEDIA_CATEGORY } from '@core-lib';
+import { GetUser } from '../../core/decorators/user.decorator';
+import { SessionUserInterface } from '../../core/models/auth-user.model';
+import { ObjectId } from 'mongodb';
+import { bcRoles } from 'libs/core/src/lib/models/roles.enum';
 
 @ApiTags('media-items')
 @Controller('media-items')
 export class MediaItemController {
   constructor(private readonly mediaItemService: MediaItemService, private shareItemService: ShareItemService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createMediaItemDto: CreateMediaItemDto) {
-    return this.mediaItemService.create(createMediaItemDto);
+  create(@Body() createMediaItemDto: CreateMediaItemDto, @GetUser() user: SessionUserInterface) {
+    const { _id: userId } = user;
+    return this.mediaItemService.create({ ...createMediaItemDto, userId: new ObjectId(userId) });
   }
 
+  /* TODO: findout what this needs to be */
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
+  findAll(@GetUser() user: SessionUserInterface) {
+    // const { roles = [], _id } = user;
+    // if ( roles.includes( bcRoles.admin ) )
     return this.mediaItemService.findAll();
+    // return this.mediaItemService.findMediaItemsByUserId(_id);
   }
 
+  @Get('categories')
+  getCategories() {
+    return MEDIA_CATEGORY;
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     if (typeof id !== 'string') throw badRequestResponse(`${id} must be of type string`);
@@ -35,11 +54,13 @@ export class MediaItemController {
     return mediaItem;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateMediaItemDto: UpdateMediaItemDto) {
     return this.mediaItemService.update(id, updateMediaItemDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const deleted = await this.mediaItemService.remove(id);
@@ -49,17 +70,19 @@ export class MediaItemController {
     return deleted;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post(':id/share/:userId')
-  async share(@Param('id') id: string, @Param('userId') userId: string, @Res() response: Response) {
-    const mediaItem = await this.mediaItemService.findOne(id);
-    if (!mediaItem) return response.status(HttpStatus.NOT_FOUND);
+  async share(@Param('id') id: string, @Param('userId') userIdStr: string, @Res() response: Response) {
+    const { userId: createdBy, title } = await this.mediaItemService.findOne(id);
+    if (!title && !createdBy) return response.status(HttpStatus.NOT_FOUND);
+    const userId = new ObjectId(userIdStr);
 
-    const { userId: createdById, title } = mediaItem as any;
+    const mediaId = new ObjectId(id);
 
     const shareItem = await this.shareItemService.createMediaShareItem({
-      createdBy: createdById,
+      createdBy,
       userId,
-      mediaId: id,
+      mediaId,
       title,
     });
 

@@ -4,10 +4,10 @@ import { MediaItemController } from './media-item.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MediaItem } from './entities/media-item.entity';
 import { ShareItemModule } from '../../modules/share-item/share-item.module';
-import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { AuthModule } from '../../modules/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MediaItem]), ShareItemModule],
+  imports: [TypeOrmModule.forFeature([MediaItem]), ShareItemModule, AuthModule],
   controllers: [MediaItemController],
   providers: [MediaItemService],
 })

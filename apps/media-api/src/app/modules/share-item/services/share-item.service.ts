@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { CreateMediaShareItemDto, CreatePlaylistShareItemDto } from '../dto/create-share-item.dto';
+import { CreateMediaShareItemInput, CreatePlaylistShareItemDto } from '../dto/create-share-item.dto';
 
 import { ShareItem } from '../entities/share-item.entity';
 
@@ -18,7 +18,11 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     super(repository, logger);
   }
 
-  async createMediaShareItem(params: CreateMediaShareItemDto) {
+  findShareItemsByUserId(userId: string) {
+    return this.repository.find({ userId: new ObjectId(userId) });
+  }
+
+  async createMediaShareItem(params: CreateMediaShareItemInput) {
     const { userId: userIdStr, mediaId: mediaIdStr, createdBy: createdByStr, title } = params;
     const item = await this.create({
       userId: new ObjectId(userIdStr),

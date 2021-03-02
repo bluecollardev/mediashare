@@ -19,4 +19,10 @@ export class CreateUserDto {
   @MinLength(ApiDefaults.nameString.min)
   @MaxLength(ApiDefaults.nameString.max)
   lastName: string;
+
+  @ApiProperty({ required: true })
+  @IsString()
+  @MinLength(8)
+  @MaxLength(20)
+  password: string;
 }

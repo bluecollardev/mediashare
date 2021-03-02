@@ -1,141 +1,99 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus } from '@nestjs/common';
-import { Response } from 'express';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
-import { User } from './entities/user.entity';
-import { DeleteResult } from 'typeorm';
-import { PlaylistService } from '../playlist/services/playlist.service';
-import { PlaylistItemService } from '../../modules/playlist-item/services/playlist-item.service';
-import { MediaItemService } from '../media-item/media-item.service';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthUserInterface } from '@core-lib';
 
+import { ApiTags } from '@nestjs/swagger';
+import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import { MediaItemService } from '../media-item/media-item.service';
+import { GetUser } from '../../core/decorators/user.decorator';
+import { User } from './entities/user.entity';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
+import { UserService } from '../../modules/auth/user.service';
+import { PlaylistService } from '../playlist/services/playlist.service';
 import * as R from 'remeda';
-import { ObjectId } from 'mongodb';
-import { notFoundResponse } from '../../core/functors/http-errors.functor';
-@ApiTags('users')
-@Controller('users')
+@ApiTags('user')
+@Controller('user')
 export class UserController {
   constructor(
-    private readonly userService: UserService,
-    private playlistService: PlaylistService,
-    private playlistItemService: PlaylistItemService,
+    private userService: UserService,
     private mediaItemService: MediaItemService,
-    private shareItemService: ShareItemService
+    private shareItemService: ShareItemService,
+    private playlistService: PlaylistService
   ) {}
 
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    const { username } = createUserDto;
-    const existingUser = await this.userService.checkIfUserExists(username);
-    console.log(existingUser);
-    if (existingUser) return existingUser;
-    return await this.userService.create(createUserDto);
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(): Promise<User[]> {
-    return this.userService.findAll();
+  async getUser(@GetUser() user: AuthUserInterface) {
+    const { _id = null } = user;
+
+    const mongoUser = await this.userService.findOne(_id as string);
+
+    const authUser = await this.userService.getAuthUser({ _id: _id as string });
+    return { ...authUser, ...mongoUser };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(id);
+  @UseGuards(JwtAuthGuard)
+  @Get('share-items')
+  async getMyShareItems(@GetUser() user: User = null) {
+    const { _id: userId } = user;
+
+    const items = await this.shareItemService.findOne(typeof userId === 'string' ? userId : userId.toHexString());
+
+    return items ?? [];
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
-    return this.userService.update(id, updateUserDto);
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Post('authorize/:id')
+  async authorize(@Param() id: string, @Body() body: { token: string }) {
+    const { token = null } = body;
+    const valid = await this.userService.validateUser({ token, _id: id });
+    if (!valid) throw new UnauthorizedException();
+    return valid;
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string): Promise<DeleteResult> {
-    return this.userService.remove(id);
-  }
-
-  @Get(':id/playlists')
-  async getPlaylists(@Param('id') id: string, @Res() res: Response) {
-    const playlists = await this.playlistService.findByUserId(id);
-
-    if (!playlists || playlists.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
-
-    const mediaIdsTuple = R.pipe(
-      playlists,
-      R.map((playlist) => playlist.items),
-      R.map((playlistItems) => R.map(playlistItems, (item) => item.mediaId))
-    );
-
-    const mediaIds = R.reduce(mediaIdsTuple, (prev, curr) => [...prev, ...curr], []);
-
-    const mediaItems = await this.mediaItemService.findPlaylistMedia(mediaIds);
-
-    const indexedMediaItems = R.indexBy(mediaItems, (item) => item._id);
-
-    const mapped = R.map(playlists, (playlist) => ({
-      ...playlist,
-      mediaItems: playlist?.items.map((item) => indexedMediaItems[item.mediaId.toHexString()]) || [],
-    }));
-
-    return res.status(HttpStatus.OK).send(mapped);
-  }
-
-  @Get(':id/media-items')
-  async getMedia(@Param('id') id: string, @Res() res: Response) {
-    const mediaItems = await this.mediaItemService.findMediaItemsByUserId(id);
-
-    if (!mediaItems || mediaItems.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
-
-    return res.status(HttpStatus.OK).send(mediaItems);
-  }
-
-  @Get(':id/shared-media-items')
-  async getSharedMediaItems(@Param('id') id: string) {
-    const user = await this.userService.findOne(id);
-
-    const { sharedMediaItems = [] } = user;
-
+  @UseGuards(JwtAuthGuard)
+  @Get('shared-media-items')
+  async getSharedMediaItems(@GetUser() user: AuthUserInterface = null) {
+    const { _id = null } = user;
+    const { sharedMediaItems = [] } = await this.userService.findAllSharedMediaItemsByUserId(_id);
     const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedMediaItems);
-
     return mediaItems;
   }
 
-  @Get(':id/shared-playlists')
-  async getSharedPlaylists(@Param('id') id: string) {
-    const user = await this.userService.findOne(id);
+  @UseGuards(JwtAuthGuard)
+  @Get('shared-playlists')
+  async getSharedPlaylists(
+    @GetUser()
+    user: AuthUserInterface
+  ) {
+    const { _id } = user;
+    const userId = typeof _id === 'string' ? _id : _id.toHexString();
 
-    const { sharedPlaylists = [] } = user;
+    const { sharedPlaylists } = await this.userService.findOne(userId);
 
-    const playlists = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
+    const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
 
-    return playlists;
+    const playlists = await this.playlistService.findPlaylistsByList(sharedPlaylists);
+
+    return this.playlistService.mapPlaylists(playlists, mediaItems);
   }
 
-  @Get(':id/share-items')
-  async getShareItems(@Param('id') id: string) {
-    const shareItems = this.shareItemService.findByQuery({ userId: new ObjectId(id) });
+  @HttpCode(HttpStatus.NOT_IMPLEMENTED)
+  @UseGuards(JwtAuthGuard)
+  @Get('share-items')
+  getShareItems() {
+    // return shareItems;
 
-    return shareItems;
-  }
-
-  @Put(':id/share-items/:shareId')
-  async readSharedItem(@Param('id') id: string, @Param('shareId') shareId: string) {
-    const sharedItem = await this.shareItemService.update(shareId, { read: true });
-
-    const { mediaId = null, playlistId = null } = sharedItem;
-
-    const user = await this.userService.findOne(id);
-
-    if (mediaId) {
-      const { sharedMediaItems = [] } = user;
-      const updatedUser = await this.userService.update(id, { sharedMediaItems: [...sharedMediaItems, mediaId] });
-      return updatedUser;
-    }
-    if (playlistId) {
-      const { sharedPlaylists = [] } = user;
-      const updatedUser = await this.userService.update(id, { sharedPlaylists: [...sharedPlaylists, playlistId] });
-      return updatedUser;
-    }
-    throw notFoundResponse('no content Id on shared Item');
+    return;
   }
 }

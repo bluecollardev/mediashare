@@ -44,6 +44,8 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
       username: Faker.internet.email(),
       firstName: Faker.name.firstName(),
       lastName: Faker.name.lastName(),
+      authId: Faker.random.uuid(),
+      password: 'welcome1',
     };
   }
 
@@ -66,11 +68,11 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
 
   createMediaDto(): CreateMediaItemDto {
     return {
-      userId: new ObjectId(this.userId),
       summary: Faker.lorem.lines(),
       title: Faker.lorem.sentence(),
       isPlayable: Faker.random.boolean(),
       description: Faker.lorem.lines(),
+      category: 'flexibility',
     };
   }
 

@@ -7,11 +7,14 @@ services:
     environment:
       - POSTGRES_USER=ms-user
       - POSTGRES_PASSWORD=ms-user-pass
-      - POSTGRES_PASSWORD=test
       - POSTGRES_DB=ms-user
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - PGADMIN_DEFAULT_EMAIL=user@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=password
     ports:
       - 5432:5432
+      - 443:443
+      - 80:80
     volumes:
       - ms-postgres-data/var/lib/postgres/data
 

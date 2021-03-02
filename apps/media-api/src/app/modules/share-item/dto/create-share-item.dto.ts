@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
 export class CreateMediaShareItemDto {
   @ApiProperty({ required: true })
@@ -13,6 +14,14 @@ export class CreateMediaShareItemDto {
   @ApiProperty({ required: true })
   @IsString()
   createdBy: string;
+  title: string;
+}
+
+export class CreateMediaShareItemInput {
+  userId: ObjectId;
+  mediaId?: ObjectId;
+  playlistId?: ObjectId;
+  createdBy: ObjectId;
   title: string;
 }
 
