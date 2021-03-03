@@ -11,7 +11,7 @@ import databaseConfiguration from './database.configuration';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: './env.development',
+      envFilePath: 'development.env',
       load: [configuration, databaseConfiguration],
       validationSchema: appValidationSchema,
       cache: true,
