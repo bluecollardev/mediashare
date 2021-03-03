@@ -1,8 +1,30 @@
 version: '3.8'
 services:
+  media-api-dev:
+    image: 'node:14-slim'
+    container_name: docker-nest-js
+    build:
+      context: .
+      dockerfile: Dockerfile.slim
+    user: 'node'
+    working_dir: /usr/src/app
+    environment:
+      - NODE_ENV=production
+      - VERSION=1.0
+    volumes:
+      - .:/usr/src/app
+      - /usr/app/node_modules
+    ports:
+      - '3000:3000'
+    tty: true
+    command: 'npm start'
+
   media-api:
-    container_name: MediaApi
-    image: alpine:3.12
+    container_name: media-api
+    image: 'node:14-slim'
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 3333:3333
     environment:
@@ -30,7 +52,7 @@ services:
       - db-mongo
     networks:
       - mediashare
-    command: nx serve --watch
+    command: nx serve
 
   db-postgres:
     image: postgres

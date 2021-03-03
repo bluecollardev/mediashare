@@ -28,7 +28,7 @@ export const appValidationSchema = Joi.object({
 
 export default registerAs('app', () => ({
   host: process.env.APP_HOST,
-  env: process.env.APP_ENV,
+  env: process.env.NODE_ENV,
   name: process.env.APP_NAME,
   port: process.env.APP_PORT,
   globalPrefix: process.env.APP_PREFIX,

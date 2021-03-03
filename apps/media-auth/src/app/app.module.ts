@@ -11,8 +11,8 @@ import configuration from './configuration';
     ConfigModule.forRoot({
       load: [configuration],
       envFilePath: 'development.env',
+      ignoreEnvVars: process.env.NODE_ENV === 'development',
       ignoreEnvFile: process.env.NODE_ENV !== 'development',
-      ignoreEnvVars: true,
     }),
 
     TypeOrmModule.forRoot({

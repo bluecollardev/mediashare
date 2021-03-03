@@ -23,7 +23,7 @@
             "assets": [
               "apps/media-api/src/assets"
             ],
-            "generatePackageJson": true
+            "generatePackageJson": false
           },
           "configurations": {
             "production": {
@@ -182,7 +182,7 @@
             "assets": [
               "apps/media-auth/src/assets"
             ],
-            "generatePackageJson": true
+            "generatePackageJson": false
           },
           "configurations": {
             "production": {

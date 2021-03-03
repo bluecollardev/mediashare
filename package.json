@@ -4,8 +4,6 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "start": "nx serve",
-    "build": "nx build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
@@ -25,7 +23,20 @@
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "start:db": "docker run -d -p 27017-27019:27017-27019 --name mediashare-mongodb mongo:4.0.4"
+    "start": "nx serve --watch",
+    "start:db": "docker run -d -p 27017-27019:27017-27019 --name mediashare-mongodb mongo:4.0.4",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "nx serve",
+    "start:ts": "ts-node -r tsconfig-paths/register src/main.ts",
+    "start:dev": "nodemon",
+    "start:debug": "nodemon --config nodemon-debug.json",
+    "debug": "nodemon -L --config nodemon-docker-debug.json",
+    "prestart:prod": "rimraf dist && npm run build",
+    "build:prod": "rimraf dist && npm run build",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "private": true,
   "dependencies": {
