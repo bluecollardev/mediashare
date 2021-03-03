@@ -15,7 +15,6 @@ export const appValidationSchema = Joi.object({
   SESSION_DB_COLLECTION: Joi.string().default('session'),
   SESSION_SECRET: Joi.string().default('this-is-my-secret-key'),
   APP_HOST: Joi.string().default('localhost'),
-
   DB_TYPE: Joi.string().default('mongodb'),
   DB: Joi.string().default('mediashare'),
   DB_SSL: Joi.boolean().default(false),

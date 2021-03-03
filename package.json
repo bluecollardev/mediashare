@@ -26,7 +26,7 @@
     "start": "nx serve --watch",
     "start:db": "docker run -d -p 27017-27019:27017-27019 --name mediashare-mongodb mongo:4.0.4",
     "build": "tsc -p tsconfig.build.json",
-    "start": "nx serve",
+    "start:auth": "nx serve media-auth --watch",
     "start:ts": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",

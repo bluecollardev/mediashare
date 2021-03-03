@@ -17,11 +17,11 @@ import configuration from './configuration';
 
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'ms-user',
-      password: 'ms-user-pass',
-      database: 'ms-user',
+      host: process.env.POSTGRES_HOST,
+      port: (process.env.POSTGRESS_PORT as any) || 5432,
+      username: process.env.POSTGRES_USERNAME || 'ms-user',
+      password: process.env.POSTGRES_PASSWORD || 'ms-user-pass',
+      database: process.env.POSTGRES_DB || 'ms-user',
       synchronize: true,
       entities: [AuthUser],
     }),

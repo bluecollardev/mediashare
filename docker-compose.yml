@@ -9,32 +9,14 @@ services:
     user: 'node'
     working_dir: /usr/src/app
     environment:
+      - APP_HOST={DOCKER_HOST}
       - NODE_ENV=production
-      - VERSION=1.0
-    volumes:
-      - .:/usr/src/app
-      - /usr/app/node_modules
-    ports:
-      - '3000:3000'
-    tty: true
-    command: 'npm start'
-
-  media-api:
-    container_name: media-api
-    image: 'node:14-slim'
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 3333:3333
-    environment:
-      - APP_HOST=localhost
-      - NODE_ENV=container
       - APP_NAME=MediaApi
       - APP_PORT=3333
       - APP_PREFIX=api
       - APP_TITLE=Mediashare
-      - DB_URL=mongodb://localhost:27017/
+      - DB_HOST=db
+      - DB_URL=mongodb://db:27017/
       - SESSION_DB_NAME=api-session
       - SESSION_SECRET=this-is-my-secret-key
       - SESSION_DB_COLLECTION=session
@@ -45,18 +27,56 @@ services:
       - DB_SYNCHRONIZE=true
       - DB_USERNAME=mongodb
     volumes:
-      - .:/usr/mediashare/apps/media-api
-      - node-cache:/usr/mediashare/node_modules
-    working_dir: /usr/mediashare
+      - .:/usr/src/app
+      - /usr/app/node_modules
+    ports:
+      - '3333:3333'
+    tty: true
+    command: 'npm start'
     depends_on:
-      - db-mongo
+      - db
     networks:
       - mediashare
-    command: nx serve
+    links:
+      - 'db:database'
 
-  db-postgres:
+  media-auth-dev:
+    image: 'node:14-slim'
+    container_name: media-auth
+    build:
+      context: .
+      dockerfile: Dockerfile.slim
+    user: 'node'
+    working_dir: /usr/src/app
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRESS_PORT=5432
+      - POSTGRES_USERNAME=ms-user
+      - POSTGRES_PASSWORD=ms-user-pass
+      - POSTGRES_DB=ms-user
+      - NODE_ENV=production
+      - SESSION_SECRET=this-is-my-secret-key
+      - MS_PORT=4000
+      - MS_HOST={DOCKER_HOST}
+      - MS_API_PORT=4444
+    volumes:
+      - .:/usr/src/app
+      - /usr/app/node_modules
+    ports:
+      - '4444:4444'
+      - '4000:4000'
+    tty: true
+    command: 'nx serve media-auth --watch'
+    networks:
+      - mediashare
+    depends_on:
+      - mediapostgres
+    links:
+      - 'mediapostgres:postgres'
+
+  mediapostgres:
     image: postgres
-    container_name: ms-user
+    container_name: media-postgres
     restart: always
     environment:
       - POSTGRES_USER=ms-user
@@ -66,21 +86,25 @@ services:
       - PGADMIN_DEFAULT_EMAIL=user@admin.com
       - PGADMIN_DEFAULT_PASSWORD=password
     ports:
-      - 5432:5432
-      - 443:443
-      - 80:80
+      - '5432:5432'
+      - '443:443'
+      - '80:80'
     volumes:
-      - ms-postgres-data/var/lib/postgres/data
+      - ms-postgres-data:/var/lib/postgres/data
+    networks:
+      - mediashare
 
-  db-mongo:
+  db:
     image: mongo:4.0.4
-    container_name: api-mongo
+    container_name: media-mongo
     environment:
       - MONGODB_DATABASE='mediashare'
     volumes:
       - ms-mongo-data:/var/lib/mongodb/data
     ports:
-      - 27017:27017
+      - '27017:27017'
+    networks:
+      - mediashare
 
 networks:
   mediashare:
