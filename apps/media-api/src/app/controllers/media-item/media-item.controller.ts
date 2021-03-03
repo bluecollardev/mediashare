@@ -21,6 +21,23 @@ import { bcRoles } from 'libs/core/src/lib/models/roles.enum';
 export class MediaItemController {
   constructor(private readonly mediaItemService: MediaItemService, private shareItemService: ShareItemService) {}
 
+  /**
+   * Create a new user
+   *
+   * SessionUser:
+   * authId: string;
+   * username: string;
+   * password: string;
+   * email: string;
+   * createdAt: Date;
+   * _id: string;
+   * roles: BcRolesType[];
+   *
+   * @param {CreateMediaItemDto} createMediaItemDto
+   * @param {SessionUserInterface} user
+   * @return {*}
+   * @memberof MediaItemController
+   */
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createMediaItemDto: CreateMediaItemDto, @GetUser() user: SessionUserInterface) {
@@ -31,7 +48,7 @@ export class MediaItemController {
   /* TODO: findout what this needs to be */
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@GetUser() user: SessionUserInterface) {
+  findAll() {
     // const { roles = [], _id } = user;
     // if ( roles.includes( bcRoles.admin ) )
     return this.mediaItemService.findAll();
@@ -85,7 +102,8 @@ export class MediaItemController {
       mediaId,
       title,
     });
+    response.status(HttpStatus.CREATED);
 
-    return response.status(HttpStatus.CREATED).send(shareItem);
+    return response.send(shareItem);
   }
 }

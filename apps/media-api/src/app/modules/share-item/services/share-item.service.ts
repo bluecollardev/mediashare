@@ -22,6 +22,13 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     return this.repository.find({ userId: new ObjectId(userId) });
   }
 
+  /**
+   * Create a new share media item. This inserts a record into the mongo database in the shape of the share item.
+   *
+   * @param {CreateMediaShareItemInput} params
+   * @return {ShareItem}
+   * @memberof ShareItemService
+   */
   async createMediaShareItem(params: CreateMediaShareItemInput) {
     const { userId: userIdStr, mediaId: mediaIdStr, createdBy: createdByStr, title } = params;
     const item = await this.create({
@@ -35,7 +42,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     return item;
   }
 
-  createPlaylistShareItem(params: CreatePlaylistShareItemDto) {
+  createPlaylistShareItem(params: CreatePlaylistShareItemDto): Promise<ShareItem> {
     const { userId: userIdStr, playlistId: playlistIdStr, createdBy: createdByStr, title } = params;
     return this.create({
       userId: new ObjectId(userIdStr),

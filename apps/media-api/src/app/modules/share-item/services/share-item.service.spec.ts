@@ -3,18 +3,16 @@ import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository, getMongoRepository } from 'typeorm';
-import { userDataFactory, UserFactory } from '../../../factories/mock-data.factory';
+import { UserFactory } from '../../../factories/mock-data.factory';
 import { mockLoggerFactory } from '../../../factories/mock-logger.factory';
 import { ShareItem } from '../entities/share-item.entity';
 import { ShareItemService } from './share-item.service';
 
-describe('PlaylistItemService', () => {
+describe('ShareItemService', () => {
   let service: ShareItemService;
   let repository: MongoRepository<ShareItem>;
 
   const userFactory = new UserFactory();
-
-  const testData = userDataFactory(userFactory);
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -58,16 +56,16 @@ describe('PlaylistItemService', () => {
     it('should insert a media share item', async () => {
       const mediaItem = userFactory.createMediaItem();
 
-      const userId = new ObjectId().toHexString();
-      const mediaId = mediaItem._id.toHexString();
-      const createdBy = userFactory.userId;
+      const userId = new ObjectId();
+      const mediaId = mediaItem._id;
+      const createdBy = new ObjectId(userFactory.userId);
 
       const result = await service.createMediaShareItem({ createdBy, mediaId, userId, title: 'blah' });
 
       expect(result).toHaveProperty('mediaId');
-      expect(result.mediaId.toHexString()).toBe(mediaId);
-      expect(result.userId.toHexString()).toBe(userId);
-      expect(result.createdBy.toHexString()).toBe(createdBy);
+      expect(result.mediaId.toHexString()).toEqual(mediaId.toHexString());
+      expect(result.userId.toHexString()).toEqual(userId.toHexString());
+      expect(result.createdBy.toHexString()).toEqual(createdBy.toHexString());
     });
   });
   describe('createPlaylistShareItem', () => {

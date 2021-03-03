@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Request } from 'express';
+import { Response } from 'express';
 
 import { UserFactory } from '../../factories/mock-data.factory';
 import { MediaItem } from './entities/media-item.entity';
@@ -15,7 +15,7 @@ describe('MediaItemController', () => {
 
   const mockShareItemService = stub<ShareItemService>();
   const mockMediaService = stub<MediaItemService>();
-  const response: any = stub<Response>();
+  const response = stub<Response>();
 
   const userFactory = new UserFactory();
 
@@ -50,7 +50,7 @@ describe('MediaItemController', () => {
 
       reveal(mockMediaService).create.mockReturnValueOnce(new Promise((resolve) => resolve(expected)));
 
-      const mediaItemResponse = await controller.create(mediaItemDto);
+      const mediaItemResponse = await controller.create(mediaItemDto, userFactory.createSessionUser());
 
       expect(mediaItemResponse).toBeDefined();
       expect(mediaItemResponse).toEqual(expected);
@@ -62,10 +62,11 @@ describe('MediaItemController', () => {
       delete mediaItemDto.summary;
 
       const expected = new MediaItem(mediaItemDto);
+      const sessionUser = userFactory.createSessionUser();
 
       reveal(mockMediaService).create.mockReturnValueOnce(new Promise((resolve) => resolve(expected)));
 
-      const mediaItemResponse = await controller.create(mediaItemDto);
+      const mediaItemResponse = await controller.create(mediaItemDto, sessionUser);
 
       expect(mediaItemResponse).toBeDefined();
       expect(mediaItemResponse).toEqual(expected);
@@ -139,10 +140,14 @@ describe('MediaItemController', () => {
       reveal(mockMediaService).findOne.mockReturnValueOnce(
         new Promise((resolve) => resolve({ userId: userId } as any))
       );
+      const resultMock = { _id: new ObjectId(), userId, mediaId, read: false, createdBy, title: 'sometime' };
 
       reveal(mockShareItemService).createMediaShareItem.mockReturnValueOnce(
-        new Promise((resolve) => resolve({ _id: new ObjectId(), userId, mediaId, read: false, createdBy }))
+        new Promise((resolve) => resolve(resultMock))
       );
+
+      const response = stub<Response>();
+      reveal(response).send.mockReturnValueOnce(resultMock as any);
 
       const result = await controller.share(mediaId.toHexString(), userId.toHexString(), response);
 

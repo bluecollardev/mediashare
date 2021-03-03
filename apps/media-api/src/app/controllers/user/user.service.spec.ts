@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PinoLogger } from 'nestjs-pino';
@@ -7,10 +6,14 @@ import { PinoLogger } from 'nestjs-pino';
 import { getMongoRepository, MongoRepository } from 'typeorm';
 import { userPropsFactory } from '../../factories/user.factory';
 import { mockLoggerFactory } from '../../factories/mock-logger.factory';
+import { UserService } from '../../modules/auth/user.service';
+import { ClientProxy } from '@nestjs/microservices';
+import { stub } from 'jest-auto-stub';
 
 describe('UserService', () => {
   let service: UserService;
   let repository: MongoRepository<User>;
+  const mockClient = stub<ClientProxy>();
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -44,7 +47,7 @@ describe('UserService', () => {
     await repository.deleteMany({});
 
     const logger = module.get(PinoLogger);
-    service = new UserService(repository, logger);
+    service = new UserService(repository, logger, mockClient);
   });
   afterEach(async () => {
     await repository.deleteMany({});

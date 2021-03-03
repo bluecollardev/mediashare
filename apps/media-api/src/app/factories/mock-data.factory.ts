@@ -8,6 +8,7 @@ import { CreatePlaylistItemDto } from '../modules/playlist-item/dto/create-playl
 
 import * as R from 'remeda';
 import { Playlist } from '../controllers/playlist/entities/playlist.entity';
+import { SessionUserInterface } from '../core/models/auth-user.model';
 
 class DataFn {
   static id = () => new ObjectId();
@@ -46,6 +47,21 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
       lastName: Faker.name.lastName(),
       authId: Faker.random.uuid(),
       password: 'welcome1',
+    };
+  }
+
+  createSessionUser(): SessionUserInterface {
+    const { username, _id: idObject, authId } = this.user;
+
+    const _id = idObject.toHexString();
+    const email = username;
+    return {
+      username,
+      _id,
+      createdAt: new Date(),
+      authId,
+      email,
+      roles: ['user'],
     };
   }
 

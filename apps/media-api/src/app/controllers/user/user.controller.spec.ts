@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {} from './entities/user.entity';
 import { UserController } from './user.controller';
-import { UserService } from './user.service';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
 import { MediaItemService } from '../media-item/media-item.service';
 import { PlaylistService } from '../playlist/services/playlist.service';
 import { PlaylistItemService } from '../../modules/playlist-item/services/playlist-item.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import { UserService } from '../../modules/auth/user.service';
 
 describe('UserController', () => {
   let controller: UserController;

@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
+import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { ShareItemsController } from './share-items.controller';
 
 describe('ShareItemsController', () => {
@@ -7,7 +9,12 @@ describe('ShareItemsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ShareItemsController],
-      providers: [],
+      providers: [
+        {
+          provide: ShareItemService,
+          useValue: mockDataServiceFactory(),
+        },
+      ],
     }).compile();
 
     controller = module.get<ShareItemsController>(ShareItemsController);
