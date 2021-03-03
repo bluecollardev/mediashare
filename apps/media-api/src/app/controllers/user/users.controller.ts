@@ -41,7 +41,6 @@ export class UsersController {
     private shareItemService: ShareItemService
   ) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const { username, password, ...rest } = createUserDto;

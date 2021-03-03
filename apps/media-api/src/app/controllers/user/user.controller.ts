@@ -19,7 +19,6 @@ import { User } from './entities/user.entity';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { PlaylistService } from '../playlist/services/playlist.service';
-import * as R from 'remeda';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
