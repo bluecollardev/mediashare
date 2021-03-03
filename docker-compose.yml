@@ -7,26 +7,30 @@ services:
       - 3333:3333
     environment:
       - APP_HOST=localhost
-      - NODE_ENV=
-      - APP_NAME=
+      - NODE_ENV=container
+      - APP_NAME=MediaApi
       - APP_PORT=3333
       - APP_PREFIX=api
       - APP_TITLE=Mediashare
       - DB_URL=mongodb://localhost:27017/
-      - SESSION_DB=
-      - SESSION_SECRET=
-      - SESSION_DB_COLLECTION=
-      - MS_AUTH_PORT=
-      - DB_TYPE=
-      - DB=
-      - DB_SSL=
-      - DB_SYNCHRONIZE=
-      - DB_USERNAME=
-      - DB_PASSWORD=
-      - MS_AUTH_PORT=
-
+      - SESSION_DB_NAME=api-session
+      - SESSION_SECRET=this-is-my-secret-key
+      - SESSION_DB_COLLECTION=session
+      - MS_PORT=4000
+      - DB_TYPE=mongodb
+      - DB=mediashare
+      - DB_SSL=false
+      - DB_SYNCHRONIZE=true
+      - DB_USERNAME=mongodb
     volumes:
-      - .:/src
+      - .:/usr/mediashare/apps/media-api
+      - node-cache:/usr/mediashare/node_modules
+    working_dir: /usr/mediashare
+    depends_on:
+      - db-mongo
+    networks:
+      - mediashare
+    command: nx serve --watch
 
   db-postgres:
     image: postgres
@@ -62,3 +66,4 @@ networks:
 volumes:
   ms-mongo-data:
   ms-postgres-data:
+  node-cache:

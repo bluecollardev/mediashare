@@ -22,7 +22,8 @@
             "tsConfig": "apps/media-api/tsconfig.app.json",
             "assets": [
               "apps/media-api/src/assets"
-            ]
+            ],
+            "generatePackageJson": true
           },
           "configurations": {
             "production": {
@@ -180,7 +181,8 @@
             "tsConfig": "apps/media-auth/tsconfig.app.json",
             "assets": [
               "apps/media-auth/src/assets"
-            ]
+            ],
+            "generatePackageJson": true
           },
           "configurations": {
             "production": {

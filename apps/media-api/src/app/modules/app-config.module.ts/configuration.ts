@@ -34,7 +34,7 @@ export default registerAs('app', () => ({
   globalPrefix: process.env.APP_PREFIX,
   title: process.env.APP_TITLE,
   sessionDb: process.env.DB_URL,
-  sessionDbName: process.env.SESSION_DB,
+  sessionDbName: process.env.SESSION_DB_NAME,
   sessionSecret: process.env.SESSION_SECRET,
   sessionCollection: process.env.SESSION_DB_COLLECTION,
   msAuthPort: process.env.MS_PORT,
