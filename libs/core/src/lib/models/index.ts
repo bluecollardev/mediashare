@@ -15,3 +15,4 @@ export * from './abstract/model';
 export * from './playlist.interface';
 export * from './auth-user.interface';
 export * from './categories.model';
+export * from './roles.enum';
