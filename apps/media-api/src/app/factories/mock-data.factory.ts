@@ -65,19 +65,20 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
     };
   }
 
-  constructor(id?: string) {
+  constructor(id?: string, authId?: string) {
     super();
     const userMixin = baseEntityMixin(User);
     this.user = new userMixin(this.createUserDto());
     if (id) {
       const _id = new ObjectId(id);
       this.user._id = _id;
+      this.user.authId = authId;
     }
   }
 
   createPlaylistDto(items) {
     return {
-      userId: this.userId,
+      userId: this.user._id,
       title: DataFn.title(),
       items,
     };
@@ -94,6 +95,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
       isPlayable: Faker.random.boolean(),
       description: Faker.lorem.lines(),
       category: 'flexibility',
+      userId: this.user._id,
     };
   }
 

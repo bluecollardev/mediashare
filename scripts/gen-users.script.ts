@@ -71,7 +71,7 @@ async function insertUsers(piped: any) {
 }
 
 const createUserData = function (data: AuthUser) {
-  const userFactory = new UserFactory(data._id);
+  const userFactory = new UserFactory(data._id, data.authId);
   return userDataFactory(userFactory);
 };
 
@@ -88,9 +88,6 @@ const insertData = async function (data: ReturnType<typeof createUserData>[]) {
   const users = data.map((data) => data.user);
 
   const playlists = R.flatten(data.map((data) => data.playlistDto));
-  console.log('🚀 ----------------------------------------------------------------------------');
-  console.log('🚀 ~ file: gen-users.script.ts ~ line 93 ~ insertData ~ playlists', playlists);
-  console.log('🚀 ----------------------------------------------------------------------------');
 
   const mediaItems = R.flatten(data.map((data) => data.media));
   const userResults = await userRepo.insert(users);

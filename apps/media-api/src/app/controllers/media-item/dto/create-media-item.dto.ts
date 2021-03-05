@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { MediaItem } from '../entities/media-item.entity';
-import { IsBoolean, IsIn, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsBoolean, IsIn, IsMongoId, IsString, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ApiDefaults, MediaCategoryType, MEDIA_CATEGORY } from '@core-lib';
 
@@ -19,8 +19,9 @@ export class CreateMediaItemDto implements Pick<MediaItem, 'summary' | 'isPlayab
   @ApiProperty({ required: true })
   description: string;
 
-  // @ApiProperty({ required: true })
-  // userId: ObjectId;
+  @IsMongoId()
+  @ApiProperty({ required: false })
+  userId?: ObjectId;
 
   @IsString()
   @MinLength(ApiDefaults.longString.min)
