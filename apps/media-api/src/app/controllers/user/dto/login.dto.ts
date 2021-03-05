@@ -8,7 +8,7 @@ export class LoginDto {
   @ApiEmail({ required: true })
   username: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, writeOnly: true })
   @IsString()
   @MinLength(8)
   @MaxLength(20)
