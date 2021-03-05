@@ -5,8 +5,9 @@ import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsArray, IsBoolean, IsIn } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { Column, Entity, Index } from 'typeorm';
+export const MEDIA_TOKEN = 'media_item' as const;
 
-@Entity()
+@Entity(MEDIA_TOKEN)
 export class MediaItem extends BcEntity {
   constructor(props: Partial<MediaItem> = {}) {
     super();

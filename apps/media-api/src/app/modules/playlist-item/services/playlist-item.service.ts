@@ -11,7 +11,7 @@ import * as R from 'remeda';
 export class PlaylistItemService extends DataService<PlaylistItem, MongoRepository<PlaylistItem>> {
   constructor(
     @InjectRepository(PlaylistItem)
-    repository: MongoRepository<PlaylistItem>,
+    public repository: MongoRepository<PlaylistItem>,
     logger: PinoLogger
   ) {
     super(repository, logger);
@@ -23,5 +23,18 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
     const playlistItems = await this.repository.find({ userId });
 
     return playlistItems;
+  }
+
+  getMediaItemsFromPlaylistId() {
+    return this.repository.aggregate([
+      {
+        $lookup: {
+          from: 'mediaItems',
+          localField: 'mediaId',
+          foreignField: '_id',
+          as: 'mediaItems',
+        },
+      },
+    ]);
   }
 }

@@ -5,8 +5,13 @@ import { ObjectId } from 'mongodb';
 import { ApiDecoratorOptions, apiDecoratorDefaults } from '../models';
 const objectId = new ObjectId();
 
-const ApiArray = function ({ required, type, example = ['item'] }: ApiDecoratorOptions = apiDecoratorDefaults) {
-  return applyDecorators(IsArray(), ApiProperty({ type: type, required, isArray: true, example }));
+const ApiArray = function ({
+  required,
+  type,
+  example = ['item'],
+  readOnly,
+}: ApiDecoratorOptions = apiDecoratorDefaults) {
+  return applyDecorators(IsArray(), ApiProperty({ type: type, required, isArray: true, example, readOnly }));
 };
 
 const ObjectIdArray = function ({ required }: ApiDecoratorOptions = apiDecoratorDefaults) {

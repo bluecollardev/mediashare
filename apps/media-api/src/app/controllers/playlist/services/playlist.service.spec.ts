@@ -12,11 +12,14 @@ import { PlaylistService } from './playlist.service';
 
 import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
+import { PlaylistItemService } from '../../../modules/playlist-item/services/playlist-item.service';
 
 describe('PlaylistService', () => {
   let service: PlaylistService;
   let repository: MongoRepository<Playlist>;
   let mediaRepository: MongoRepository<MediaItem>;
+  let playlistItemRepository: MongoRepository<PlaylistItem>;
+
   const userFactory = new UserFactory();
   const user = new User(userFactory.createUserDto());
 
@@ -47,17 +50,20 @@ describe('PlaylistService', () => {
           provide: getRepositoryToken(MediaItem),
           useValue: mediaRepository,
         },
+        { provide: getRepositoryToken(PlaylistItem), useValue: playlistItemRepository },
         { provide: PinoLogger, useValue: mockLoggerFactory() },
       ],
     }).compile();
 
     mediaRepository = getMongoRepository(MediaItem);
     repository = getMongoRepository(Playlist);
-
+    playlistItemRepository = getMongoRepository(PlaylistItem);
     await repository.deleteMany({});
 
     const logger = module.get(PinoLogger);
-    service = new PlaylistService(repository, logger);
+    const playlistItemService = new PlaylistItemService(playlistItemRepository, logger);
+
+    service = new PlaylistService(repository, logger, playlistItemService);
   });
 
   it('should be defined', () => {
@@ -68,42 +74,39 @@ describe('PlaylistService', () => {
     it("should create a new playlist item with no media Id's", async () => {
       const userId = userFactory.user._id;
 
-      const items = [userFactory.createMediaDto(), userFactory.createMediaDto()];
-      console.log(items);
-      const media = await mediaRepository.insertMany(items);
+      const dto = [userFactory.createMediaDto(), userFactory.createMediaDto()];
+      const media = await mediaRepository.insertMany(dto);
       const mediaIds = [media.insertedIds['0'].toHexString(), media.insertedIds['1'].toHexString()];
-      const inserted = await service.createPlaylist(userId, {
-        mediaIds,
-      });
+      const inserted = await service.createPlaylistWithItems({ userId, mediaIds });
       console.log(userId);
 
       expect(inserted).toBeDefined();
-      expect(inserted.userId.toHexString()).toBe(userId.toHexString());
-      expect(inserted).toHaveProperty('items');
-      expect(inserted.items).toHaveLength(items.length);
+      expect(inserted.playlist.userId.toHexString()).toBe(userId.toHexString());
+      expect(inserted.playlist).toHaveProperty('title');
+      expect(inserted.playlistItems).toHaveLength(dto.length);
+
+      const { playlistItems, playlist, playlistId } = inserted;
+
+      const aggregated = await service.aggregatePlaylists(playlistId);
+      expect(aggregated).toHaveLength(playlistItems.length);
     });
+  });
 
-    it("should create a new playlist item with media Id's", async () => {
-      const mediaIds = R.pipe(
-        R.range(0, 5),
-        R.map(() => new ObjectId().toHexString())
-      );
+  describe('findByUserId', () => {
+    it('should get a user', async () => {
+      const userId = userFactory.user._id;
 
-      const result = await service.createPlaylist(user._id, { mediaIds });
+      const dto = [userFactory.createMediaDto(), userFactory.createMediaDto()];
+      const media = await mediaRepository.insertMany(dto);
+      const mediaIds = [media.insertedIds['0'].toHexString(), media.insertedIds['1'].toHexString()];
+      const items = await service.createPlaylistWithItems({ userId, mediaIds });
+      console.log(userId);
 
-      expect(result).toBeDefined();
-      expect(result.items).toHaveLength(5);
-      expect(result.items[0].mediaId.toHexString()).toEqual(mediaIds[0]);
-    });
+      const findAll = await service.findByUserId(userId.toHexString());
 
-    it('should create a new playlist item with a title', async () => {
-      const title = 'Test Media Item';
-
-      const result = await service.createPlaylist(user._id, { title });
-
-      expect(result).toBeDefined();
-      expect(result.title).toEqual(title);
-      expect(result.items).toHaveLength(0);
+      console.log('🚀 ----------------------------------------------------------------------');
+      console.log('🚀 ~ file: playlist.service.spec.ts ~ line 106 ~ it ~ findAll', findAll);
+      console.log('🚀 ----------------------------------------------------------------------');
     });
   });
 });
