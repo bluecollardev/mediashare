@@ -1,13 +1,13 @@
 import { BcEntity } from '@api';
-import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY } from '@core-lib';
-import { ApiArray, ApiObjectId, ApiString } from '@mediashare/shared';
-import { ApiProperty } from '@nestjs/swagger';
+import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY, PLAYLIST_ENTITY } from '@core-lib';
+import { ApiObjectId, ApiString } from '@mediashare/shared';
+import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 import { IsIn } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
 import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
 
-export const PLAYLIST_TOKEN = 'playlist';
+export const PLAYLIST_TOKEN = PLAYLIST_ENTITY;
 @Entity(PLAYLIST_TOKEN)
 export class Playlist extends BcEntity implements PlaylistInterface {
   @Column()
@@ -23,3 +23,10 @@ export class Playlist extends BcEntity implements PlaylistInterface {
   @IsIn(PLAYLIST_CATEGORY)
   category: PlaylistCategoryType;
 }
+
+class PlaylistResponseFields {
+  @ApiProperty({ type: PlaylistItem, isArray: true })
+  playlistItems: Readonly<PlaylistItem[]>;
+}
+
+export class PlaylistByUserResponseDto extends IntersectionType(PlaylistResponseFields, Playlist) {}

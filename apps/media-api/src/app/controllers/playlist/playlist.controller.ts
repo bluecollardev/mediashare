@@ -28,7 +28,7 @@ export class PlaylistController {
 
     const userId = new ObjectId(user._id);
 
-    const playlist = await this.playlistService.createPlaylist(userId, { mediaIds: dtoItems, title });
+    const playlist = await this.playlistService.createPlaylistWithItems({ userId, mediaIds: dtoItems, title });
 
     return playlist;
   }

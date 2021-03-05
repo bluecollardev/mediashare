@@ -40,6 +40,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
   get userId() {
     return this.user._id.toHexString();
   }
+
   createUserDto() {
     return {
       username: Faker.internet.email(),
@@ -76,16 +77,24 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
     }
   }
 
-  createPlaylistDto(items) {
+  createPlaylistDto(items = []) {
     return {
       userId: this.user._id,
       title: DataFn.title(),
-      items,
     };
   }
+
   createPlaylist() {
     const playlistMixin = baseEntityMixin(Playlist);
     return new playlistMixin();
+  }
+
+  createPlaylistItemDto() {
+    return {};
+  }
+
+  createSharedItem() {
+    return {};
   }
 
   createMediaDto(): CreateMediaItemDto {

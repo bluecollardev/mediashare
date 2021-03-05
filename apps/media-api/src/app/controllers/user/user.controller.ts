@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthUserInterface } from '@core-lib';
 
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { MediaItemService } from '../media-item/media-item.service';
 import { GetUser } from '../../core/decorators/user.decorator';

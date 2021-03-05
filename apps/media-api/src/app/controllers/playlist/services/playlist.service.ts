@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { mapPlaylistItems } from '../../../modules/playlist-item/functors/map-playlist-item.functor';
-import { Playlist, PLAYLIST_TOKEN } from '../entities/playlist.entity';
+import { Playlist, PlaylistByUserResponseDto, PLAYLIST_TOKEN } from '../entities/playlist.entity';
 
 import * as R from 'remeda';
 import { MediaItem, MEDIA_TOKEN } from '../../media-item/entities/media-item.entity';
@@ -39,7 +39,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     title?: string;
   }) {
     if (!userId || typeof userId === 'string') throw new Error('userId is string in createPlaylistWithItems');
-    const playlist = await this.createPlaylist(userId, { title });
+    const playlist = await this.create({ userId, title });
     const { _id: playlistId } = playlist;
 
     const items = mapPlaylistItems(mediaIds, { userId, playlistId });
@@ -47,20 +47,6 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     const playlistItems = await this.createPlaylistItems({ playlistId, items });
 
     return { playlist, playlistId, playlistItems };
-  }
-
-  /**
-   * Create a new playlist - optional media Id's
-   *
-   * @param {ObjectId} userId
-   * @param {{ mediaIds: string[] }} opts
-   * @return {*}
-   * @memberof PlaylistService
-   */
-  createPlaylist(userId: ObjectId, opts: { title?: string } = { title: '' }) {
-    const { title } = opts;
-
-    return this.create({ userId, title });
   }
 
   /**
@@ -84,7 +70,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    * @return {*}
    * @memberof PlaylistService
    */
-  findByUserId(userIdStr: string) {
+  findByUserId(userIdStr: string): Promise<PlaylistByUserResponseDto[]> {
     const userId = new ObjectId(userIdStr);
 
     const aggregationQuery = this.repository.aggregate([
@@ -106,14 +92,28 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return aggregationQuery.toArray();
   }
 
-  findPlaylistsByList(idStrings: ObjectId[]) {
-    return this.repository.find({
-      where: {
-        $or: R.map(idStrings, (id) => ({
-          _id: id,
-        })),
-      },
-    });
+  findPlaylistsByList(idStrings: ObjectId[]): Promise<PlaylistByUserResponseDto[]> {
+    return this.repository
+      .aggregate([
+        {
+          $match: {
+            where: {
+              $or: R.map(idStrings, (id) => ({
+                _id: id,
+              })),
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: 'playlist_item',
+            localField: '_id',
+            foreignField: 'playlistId',
+            as: 'playlistItems',
+          },
+        },
+      ])
+      .toArray();
   }
 
   async reducePlaylistsToId(playlists: Playlist[]) {

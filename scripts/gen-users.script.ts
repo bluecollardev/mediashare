@@ -1,4 +1,4 @@
-import { bcRoles, BcRolesType } from '../libs/core/src';
+import { bcRoles, BcRolesType, MEDIA_ITEM_ENTITY, PLAYLIST_ENTITY } from '../libs/core/src';
 import { createConnection } from 'typeorm';
 import { config } from 'dotenv';
 import { resolve } from 'path';
@@ -78,42 +78,70 @@ const createUserData = function (data: AuthUser) {
 const insertData = async function (data: ReturnType<typeof createUserData>[]) {
   const connection = await createConnection(mongoConnectionCfg);
 
+  // const makePlaylistDto = (playlistId: ObjectId) =>
+  //   mediaResults.map((media) => ({ userId: media.userId, playlistId, mediaId: media._id }));
+
   const getRepos = (key: string) => connection.getRepository(key);
 
-  const repoFns = R.map(['user', 'playlist', 'media-item'], (key) => getRepos(key));
+  const repoFns = R.map(['user', PLAYLIST_ENTITY, MEDIA_ITEM_ENTITY, 'playlist_item'], (key) => getRepos(key));
 
-  const [userRepo, playlistRepo, mediaRepo] = await Promise.all(repoFns);
+  const [userRepo, playlistRepo, mediaRepo, playlistItemRepo] = await Promise.all(repoFns);
 
   // console.log(mediaRepo);
 
   await Promise.all([userRepo.delete({}), playlistRepo.delete({}), mediaRepo.delete({})]);
+
   console.log('got here');
   const users = data.map((data) => data.user);
 
-  const playlists = R.flatten(data.map((data) => data.playlistDto));
+  // const playlists = R.map();
 
-  const mediaItems = R.flatten(data.map((data) => data.media));
-  console.log('🚀 ------------------------------------------------------------------------------');
-  console.log('🚀 ~ file: gen-users.script.ts ~ line 96 ~ insertData ~ mediaItems', mediaItems);
-  console.log('🚀 ------------------------------------------------------------------------------');
+  const userResults = await userRepo.save(users);
 
-  const userResults = await userRepo.create(users);
-  playlistRepo;
+  const playlistAndMediaDto = R.map(userResults, (user) => {
+    const factory = new UserFactory(user._id.toHexString(), user.authId);
 
-  const playlistResults = await playlistRepo.create(playlists);
+    const mediaItems = R.map(R.range(1, 10), () => factory.createMediaDto());
 
-  const mediaResults = await mediaRepo.create(mediaItems);
+    const playlist = R.map(R.range(1, 3), () => factory.createPlaylistDto());
+
+    return [mediaItems, playlist];
+  });
+
+  const mediaItemDtos = R.flatten(playlistAndMediaDto.map((dtoObj) => dtoObj[0]));
+  const playlistDtos = R.flatten(playlistAndMediaDto.map((dtoObj) => dtoObj[1]));
+
+  const mediaItemResults = await mediaRepo.save(mediaItemDtos);
+
+  const playlistResults = await playlistRepo.save(playlistDtos);
+
+  const playlistItemDtos = playlistResults.map((playlist: any) => {
+    const { userId, _id: playlistId } = playlist;
+
+    const playlistItems = mediaItemResults.map((item: any) => ({ playlistId, userId, mediaId: item._id }));
+
+    return playlistItems;
+  });
+
+  const playlistItemResults = await playlistItemRepo.save(R.flatten(playlistItemDtos));
+  console.log('🚀 -------------------------------------------------------------------------------------------------');
+  console.log('🚀 ~ file: gen-users.script.ts ~ line 126 ~ insertData ~ playlistItemResults', playlistItemResults);
+  console.log('🚀 -------------------------------------------------------------------------------------------------');
+
+  // const playlistDto = R.map(playlistIds, (playlistId) => makePlaylistDto(playlistId));
+  // const playlistItems = playlistItemRepo.create(playlistDto);
+
+  // console.log(playlistItems);
 
   await connection.close();
   return {
     userResults,
     playlistResults,
-    mediaResults,
+    mediaItemResults,
+    playlistItemResults,
   };
 };
-insertUsers(piped).then((result) =>
-  insertData(result.map(createUserData)).then((users) => console.log('users', users))
-);
+insertUsers(piped).then((result) => insertData(result.map(createUserData)).then((users) => console.log(users)));
 // .then((result) => console.log('the results', result));
 
 // console.log(piped);

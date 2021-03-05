@@ -103,10 +103,6 @@ describe('PlaylistService', () => {
       console.log(userId);
 
       const findAll = await service.findByUserId(userId.toHexString());
-
-      console.log('🚀 ----------------------------------------------------------------------');
-      console.log('🚀 ~ file: playlist.service.spec.ts ~ line 106 ~ it ~ findAll', findAll);
-      console.log('🚀 ----------------------------------------------------------------------');
     });
   });
 });

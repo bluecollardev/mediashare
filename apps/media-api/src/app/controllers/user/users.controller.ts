@@ -36,6 +36,8 @@ import { Playlist } from '../playlist/entities/playlist.entity';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
 import { LoginDto } from './dto/login.dto';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { SessionUserInterface } from '../../core/models/auth-user.model';
+import { GetUser } from '../../core/decorators/user.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -107,29 +109,8 @@ export class UsersController {
   @UseGuards(UserGuard)
   @Get(':id/playlists')
   @UserGetResponse({ type: Playlist, isArray: true })
-  async getPlaylists(@Param('id') id: string, @Res() res: Response) {
-    const playlists = await this.playlistService.findByUserId(id);
-
-    if (!playlists || playlists.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
-
-    const mediaIdsTuple = R.pipe(
-      playlists,
-      R.map((playlist) => playlist.items),
-      R.map((playlistItems) => R.map(playlistItems, (item) => item.mediaId))
-    );
-
-    const mediaIds = R.reduce(mediaIdsTuple, (prev, curr) => [...prev, ...curr], []);
-
-    const mediaItems = await this.mediaItemService.findPlaylistMedia(mediaIds);
-
-    const indexedMediaItems = R.indexBy(mediaItems, (item) => item._id);
-
-    const mapped = R.map(playlists, (playlist) => ({
-      ...playlist,
-      mediaItems: playlist?.items.map((item) => indexedMediaItems[item.mediaId.toHexString()]) || [],
-    }));
-
-    return res.status(HttpStatus.OK).send(mapped);
+  getPlaylists(@Param('id') id: string) {
+    this.playlistService.findByUserId(id);
   }
 
   @Get(':id/media-items')
@@ -186,23 +167,13 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Post(':id/shared-items/:shareId')
   @ApiResponse({ type: UserDto, status: 200 })
-  async readSharedItem(@Param('id') id: string, @Param('shareId') shareId: string) {
+  async readSharedItem(
+    @Param('id') id: string,
+    @Param('shareId') shareId: string,
+    @GetUser() user: SessionUserInterface
+  ) {
     const sharedItem = await this.shareItemService.update(shareId, { read: true });
 
-    const { mediaId = null, playlistId = null } = sharedItem;
-
-    const user = await this.userService.findOne(id);
-
-    if (mediaId) {
-      const { sharedMediaItems = [] } = user;
-      const updatedUser = await this.userService.update(id, { sharedMediaItems: [...sharedMediaItems, mediaId] });
-      return updatedUser;
-    }
-    if (playlistId) {
-      const { sharedPlaylists = [] } = user;
-      const updatedUser = await this.userService.update(id, { sharedPlaylists: [...sharedPlaylists, playlistId] });
-      return updatedUser;
-    }
-    throw notFoundResponse('no content Id on shared Item');
+    return sharedItem;
   }
 }
