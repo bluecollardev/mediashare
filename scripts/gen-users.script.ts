@@ -1,7 +1,7 @@
 import { bcRoles, BcRolesType } from '../libs/core/src';
-import { createConnection, InsertResult, Connection } from 'typeorm';
+import { createConnection } from 'typeorm';
 import { config } from 'dotenv';
-import { resolve, join } from 'path';
+import { resolve } from 'path';
 import { userDataFactory, UserFactory } from '../apps/media-api/src/app/factories/mock-data.factory';
 const path = resolve('development.env');
 
