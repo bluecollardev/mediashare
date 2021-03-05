@@ -16,9 +16,7 @@
       "sourceRoot": "apps/media-api/src",
       "compilerOptions": {
         "tsConfigPath": "apps/media-api/tsconfig.app.json",
-        "plugins": [
-          "@nestjs/swagger"
-        ]
+        "plugins": ["@nestjs/swagger"]
       }
     }
   },
