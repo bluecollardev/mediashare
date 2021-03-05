@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "media-auth": {
+      "type": "application",
+      "root": "apps/media-auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/media-auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/media-auth/tsconfig.app.json"
+      }
+    }
+  }
+},
+"compilerOptions": {
+  "webpack": true
+}
+}

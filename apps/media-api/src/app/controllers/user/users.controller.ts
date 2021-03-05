@@ -11,6 +11,7 @@ import {
   UseGuards,
   HttpCode,
   Request,
+  ConflictException,
 } from '@nestjs/common';
 import { Response, Request as Req } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,12 +25,13 @@ import { ShareItemService } from '../../modules/share-item/services/share-item.s
 
 import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
-import { notFoundResponse } from '../../core/functors/http-errors.functor';
+import { conflictResponse, notFoundResponse } from '../../core/functors/http-errors.functor';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { UserGuard } from '../../modules/auth/guards/user.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
+import { CreateUserResponseDto } from './dto/create-user-response.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -42,16 +44,16 @@ export class UsersController {
   ) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto): Promise<CreateUserResponseDto> {
     const { username, password, ...rest } = createUserDto;
     const existingUser = await this.userService.checkIfUserExists(username);
-    if (existingUser) return existingUser;
+    if (existingUser) throw conflictResponse(username);
 
     const mongoUser = await this.userService.create({ ...rest, username });
 
     const postgresUser = await this.userService.createUser({ username, password, _id: mongoUser._id.toHexString() });
 
-    return { ...mongoUser, ...postgresUser };
+    return CreateUserResponseDto.create(mongoUser, postgresUser);
   }
 
   @UseGuards(JwtAuthGuard)

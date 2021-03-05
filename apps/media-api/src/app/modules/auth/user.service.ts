@@ -10,6 +10,7 @@ import { TimeoutError, throwError } from 'rxjs';
 import { User } from '../../controllers/user/entities/user.entity';
 import { ObjectId } from 'mongodb';
 import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
+import { AuthUserInterface } from '@core-lib';
 
 @Injectable()
 export class UserService extends DataService<User, MongoRepository<User>> {
@@ -33,7 +34,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return super.findByQuery({ username });
   }
 
-  createUser(user: { username: string; password: string; _id: string }) {
+  createUser(user: { username: string; password: string; _id: string }): Promise<AuthUserInterface> {
     return this.client
       .send({ role: 'auth', cmd: 'create' }, user)
       .pipe(

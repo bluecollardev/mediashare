@@ -41,11 +41,11 @@ services:
       - 'db:database'
 
   media-auth-dev:
-    image: 'node:14-slim'
+    # image is provided by docker build of local app using Dockerfile
     container_name: media-auth
     build:
       context: .
-      dockerfile: Dockerfile.slim
+      target: development
     user: 'node'
     working_dir: /usr/src/app
     environment:
@@ -57,16 +57,17 @@ services:
       - NODE_ENV=production
       - SESSION_SECRET=this-is-my-secret-key
       - MS_PORT=4000
-      - MS_HOST={DOCKER_HOST}
+      - MS_HOST=localhost
       - MS_API_PORT=4444
     volumes:
       - .:/usr/src/app
-      - /usr/app/node_modules
+      - /usr/src/app/dist
+      - /usr/src/app/node_modules
     ports:
       - '4444:4444'
       - '4000:4000'
     tty: true
-    command: 'nx serve media-auth --watch'
+    command: npm run start:auth
     networks:
       - mediashare
     depends_on:

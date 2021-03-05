@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 import { Column, Entity } from 'typeorm';
 import { Tag } from '../../../core/entities/tag.entity';
 
-@Entity()
+@Entity('media-item')
 export class MediaItem extends BcBaseEntity<MediaItem> implements Media {
   @Column()
   isPlayable: boolean;

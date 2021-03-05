@@ -65,16 +65,21 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
     };
   }
 
-  constructor() {
+  constructor(id?: string) {
     super();
     const userMixin = baseEntityMixin(User);
     this.user = new userMixin(this.createUserDto());
+    if (id) {
+      const _id = new ObjectId(id);
+      this.user._id = _id;
+    }
   }
 
-  createPlaylistDto() {
+  createPlaylistDto(items) {
     return {
       userId: this.userId,
       title: DataFn.title(),
+      items,
     };
   }
   createPlaylist() {
@@ -100,16 +105,10 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
 }
 
 export function userDataFactory(userFactory: UserFactory) {
-  const userMixin = baseEntityMixin(User);
-  const playlistMixin = baseEntityMixin(Playlist);
-
-  const userDto = userFactory.createUserDto();
-
-  const user = new userMixin(userDto);
-
-  const playlistDto = R.range(1, DataFn.number(4)).map(() => new playlistMixin());
+  const user = userFactory.user;
 
   const media = R.range(1, DataFn.number(10)).map(() => userFactory.createMediaDto());
+  const playlistDto = R.range(1, DataFn.number(4)).map(() => userFactory.createPlaylistDto(media));
 
   return { playlistDto, user, media };
 }

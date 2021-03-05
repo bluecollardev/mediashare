@@ -2,9 +2,9 @@ import { ApiDefaults } from '@core-lib';
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MaxLength, MinLength } from 'class-validator';
-import { CreateUserDto } from './create-user.dto';
+import { CreateUserResponseDto } from './create-user-response.dto';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
+export class UpdateUserDto extends PartialType(CreateUserResponseDto) {
   @ApiProperty({ required: true })
   @IsString()
   @MinLength(ApiDefaults.nameString.min)

@@ -1,8 +1,8 @@
 import { ObjectId } from 'mongodb';
+import { BcBaseInterface } from './bc-base.interface';
 import { BcRolesType } from './roles.enum';
 
-export interface UserInterface {
-  _id?: string | ObjectId;
+export interface UserInterface extends BcBaseInterface {
   username?: string;
   firstName?: string;
   lastName?: string;

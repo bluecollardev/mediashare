@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { ConflictException, HttpException, HttpStatus } from '@nestjs/common';
 
 /**
  * Return a new exception when the request is a bad request.
@@ -25,4 +25,8 @@ function notFoundResponse(entity: string, opts?: { args?: any }) {
   );
 }
 
-export { badRequestResponse, notFoundResponse };
+function conflictResponse(id: string) {
+  return new ConflictException(id, 'Resource already exists.');
+}
+
+export { badRequestResponse, notFoundResponse, conflictResponse };

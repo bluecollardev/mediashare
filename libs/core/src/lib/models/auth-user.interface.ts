@@ -10,3 +10,5 @@ export interface AuthUserInterface {
   _id: IdType;
   roles: BcRolesType[];
 }
+
+export type AuthUserResponseType = Omit<AuthUserInterface, 'password' | '_id'>;
