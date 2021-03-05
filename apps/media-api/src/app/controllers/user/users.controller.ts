@@ -15,7 +15,7 @@ import {
 import { Response, Request as Req } from 'express';
 import { CreateUserDto, UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiHideProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/services/playlist.service';
@@ -109,6 +109,7 @@ export class UsersController {
   @UseGuards(UserGuard)
   @Get(':id/playlists')
   @UserGetResponse({ type: Playlist, isArray: true })
+  @ApiHideProperty()
   getPlaylists(@Param('id') id: string) {
     this.playlistService.findByUserId(id);
   }

@@ -124,14 +124,6 @@ const insertData = async function (data: ReturnType<typeof createUserData>[]) {
   });
 
   const playlistItemResults = await playlistItemRepo.save(R.flatten(playlistItemDtos));
-  console.log('🚀 -------------------------------------------------------------------------------------------------');
-  console.log('🚀 ~ file: gen-users.script.ts ~ line 126 ~ insertData ~ playlistItemResults', playlistItemResults);
-  console.log('🚀 -------------------------------------------------------------------------------------------------');
-
-  // const playlistDto = R.map(playlistIds, (playlistId) => makePlaylistDto(playlistId));
-  // const playlistItems = playlistItemRepo.create(playlistDto);
-
-  // console.log(playlistItems);
 
   await connection.close();
   return {

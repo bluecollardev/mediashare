@@ -46,7 +46,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
 
     const playlistItems = await this.createPlaylistItems({ playlistId, items });
 
-    return { playlist, playlistId, playlistItems };
+    return { ...playlist, playlistId, playlistItems };
   }
 
   /**

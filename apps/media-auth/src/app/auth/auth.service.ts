@@ -22,6 +22,7 @@ export class AuthService {
 
     const user = await this.userRepository.findOne({ username });
 
+    if (user?.password === password) return user;
     if (compareSync(password, user?.password)) {
       return user;
     }

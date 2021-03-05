@@ -24,6 +24,7 @@ import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { TokenDto } from './dto/login.dto';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
 import { Playlist } from '../playlist/entities/playlist.entity';
+import { SessionUserInterface } from '../../core/models/auth-user.model';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -43,6 +44,11 @@ export class UserController {
 
     const authUser = await this.userService.getAuthUser({ _id: _id as string });
     return { ...authUser, ...mongoUser };
+  }
+
+  @Get('playlists')
+  async getPlaylists(@GetUser() user: SessionUserInterface) {
+    return this.playlistService.findByUserId(user._id);
   }
 
   @Get('share-items')
