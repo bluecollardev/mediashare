@@ -17,7 +17,8 @@
     "paths": {
       "@core-lib": ["libs/core/src/index.ts"],
       "@util-lib": ["libs/utility/src/index.ts"],
-      "@api": ["apps/media-api/src/app/index.ts"]
+      "@api": ["apps/media-api/src/app/index.ts"],
+      "@mediashare/api-lib": ["libs/api-lib/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

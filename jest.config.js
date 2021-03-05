@@ -4,5 +4,6 @@ module.exports = {
     '<rootDir>/apps/mediashare',
     '<rootDir>/libs/core',
     '<rootDir>/apps/media-auth',
+    '<rootDir>/libs/api-lib',
   ],
 };
