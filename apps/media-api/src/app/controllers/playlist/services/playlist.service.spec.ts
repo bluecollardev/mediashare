@@ -16,7 +16,7 @@ import { ObjectId } from 'mongodb';
 describe('PlaylistService', () => {
   let service: PlaylistService;
   let repository: MongoRepository<Playlist>;
-
+  let mediaRepository: MongoRepository<MediaItem>;
   const userFactory = new UserFactory();
   const user = new User(userFactory.createUserDto());
 
@@ -24,7 +24,7 @@ describe('PlaylistService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
-          synchronize: false,
+          synchronize: true,
           autoLoadEntities: true,
           type: 'mongodb',
           url: 'mongodb://localhost:27017/',
@@ -45,12 +45,13 @@ describe('PlaylistService', () => {
         },
         {
           provide: getRepositoryToken(MediaItem),
-          useClass: MongoRepository,
+          useValue: mediaRepository,
         },
         { provide: PinoLogger, useValue: mockLoggerFactory() },
       ],
     }).compile();
 
+    mediaRepository = getMongoRepository(MediaItem);
     repository = getMongoRepository(Playlist);
 
     await repository.deleteMany({});
@@ -65,12 +66,21 @@ describe('PlaylistService', () => {
 
   describe('createPlaylist', () => {
     it("should create a new playlist item with no media Id's", async () => {
-      const userId = user._id;
+      const userId = userFactory.user._id;
 
-      const inserted = await service.createPlaylist(userId);
+      const items = [userFactory.createMediaDto(), userFactory.createMediaDto()];
+      console.log(items);
+      const media = await mediaRepository.insertMany(items);
+      const mediaIds = [media.insertedIds['0'].toHexString(), media.insertedIds['1'].toHexString()];
+      const inserted = await service.createPlaylist(userId, {
+        mediaIds,
+      });
+      console.log(userId);
 
       expect(inserted).toBeDefined();
-      expect(inserted.userId).toBe(userId);
+      expect(inserted.userId.toHexString()).toBe(userId.toHexString());
+      expect(inserted).toHaveProperty('items');
+      expect(inserted.items).toHaveLength(items.length);
     });
 
     it("should create a new playlist item with media Id's", async () => {

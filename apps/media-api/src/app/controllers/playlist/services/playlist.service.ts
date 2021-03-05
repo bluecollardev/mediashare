@@ -32,7 +32,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
 
     const items = mapPlaylistItems(mediaIds, { userId: userId });
 
-    return this.create({ userId, items, title });
+    return this.create({ userId, title, items });
   }
 
   /**

@@ -1,30 +1,30 @@
 import { BcBaseEntity, BcEntity } from '@api';
 import { Media, MediaCategoryType, MEDIA_CATEGORY, PlaylistCategoryType, Stats } from '@core-lib';
 import { ApiLongString, ApiObjectId, ApiString, ApiUriString } from '@mediashare/shared';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsArray, IsBoolean, IsIn } from 'class-validator';
 import { ObjectId } from 'mongodb';
-import { Column, Entity } from 'typeorm';
-import { Tag } from '../../../core/entities/tag.entity';
+import { Column, Entity, Index } from 'typeorm';
 
-@Entity('media-item')
-export class MediaItem extends BcEntity implements Media {
+@Entity()
+export class MediaItem extends BcEntity {
   constructor(props: Partial<MediaItem> = {}) {
     super();
     Object.assign(this, props);
   }
-  @Column('boolean')
+  @Column()
   @IsBoolean()
   @ApiProperty({ required: true })
   isPlayable: boolean;
 
-  @Column('multilinestring')
+  @Column()
   @ApiLongString()
   summary: string;
   @ApiString({ required: true })
   description: string;
 
   @ApiObjectId()
+  @Index()
   @Column({ nullable: false })
   userId: ObjectId;
 
@@ -43,7 +43,7 @@ export class MediaItem extends BcEntity implements Media {
   @ApiUriString()
   uri: string;
 
-  @Column({ enum: MEDIA_CATEGORY })
+  @Column()
   @ApiProperty({ enum: MEDIA_CATEGORY })
   @IsArray()
   @IsIn(MEDIA_CATEGORY)

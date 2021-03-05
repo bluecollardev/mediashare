@@ -5,15 +5,11 @@ import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class PlaylistItem extends BcBaseEntity<PlaylistItem> {
-  @Column()
+  @Column({ unique: true })
   @ApiObjectId()
   mediaId: ObjectId;
 
   @Column()
   @ApiObjectId()
   userId: ObjectId;
-
-  @Column()
-  @ApiObjectId()
-  playlistId: ObjectId;
 }

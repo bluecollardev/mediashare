@@ -93,6 +93,9 @@ const insertData = async function (data: ReturnType<typeof createUserData>[]) {
   const playlists = R.flatten(data.map((data) => data.playlistDto));
 
   const mediaItems = R.flatten(data.map((data) => data.media));
+  console.log('🚀 ------------------------------------------------------------------------------');
+  console.log('🚀 ~ file: gen-users.script.ts ~ line 96 ~ insertData ~ mediaItems', mediaItems);
+  console.log('🚀 ------------------------------------------------------------------------------');
 
   const userResults = await userRepo.create(users);
   playlistRepo;
