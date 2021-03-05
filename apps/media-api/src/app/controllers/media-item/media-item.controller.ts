@@ -10,12 +10,11 @@ import { badRequestResponse, notFoundResponse } from '../../core/functors/http-e
 
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
-import { mediaCategories, MEDIA_CATEGORY, MediaCategoryType } from '@core-lib';
+import { MEDIA_CATEGORY } from '@core-lib';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { ObjectId } from 'mongodb';
 import { MediaGetResponse, MediaPostResponse } from './media-item.decorator';
-import { UseJwtGuard } from '../../modules/auth/auth.decorator';
 
 @ApiTags('media-items')
 @Controller('media-items')
@@ -58,7 +57,6 @@ export class MediaItemController {
   }
 
   @Get('categories')
-  @ApiResponse({ type: () => MEDIA_CATEGORY, isArray: true })
   getCategories() {
     return MEDIA_CATEGORY;
   }

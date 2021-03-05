@@ -11,38 +11,47 @@
  * Do not edit the class manually.
  */
 
+import {
+    PlaylistItem,
+} from './';
+
 /**
  * @export
- * @interface UpdatePlaylistDto
+ * @interface Playlist
  */
-export interface UpdatePlaylistDto {
+export interface Playlist {
     /**
-     * @type {Array<string>}
-     * @memberof UpdatePlaylistDto
+     * @type {object}
+     * @memberof Playlist
      */
-    items?: Array<string>;
-    /**
-     * @type {string}
-     * @memberof UpdatePlaylistDto
-     */
-    userId?: string;
+    _id: object;
     /**
      * @type {string}
-     * @memberof UpdatePlaylistDto
+     * @memberof Playlist
      */
-    title?: string;
+    title: string;
+    /**
+     * @type {object}
+     * @memberof Playlist
+     */
+    userId: object;
+    /**
+     * @type {Array<PlaylistItem>}
+     * @memberof Playlist
+     */
+    items: Array<PlaylistItem>;
     /**
      * @type {string}
-     * @memberof UpdatePlaylistDto
+     * @memberof Playlist
      */
-    category?: UpdatePlaylistDtoCategoryEnum;
+    category: PlaylistCategoryEnum;
 }
 
 /**
  * @export
  * @enum {string}
  */
-export enum UpdatePlaylistDtoCategoryEnum {
+export enum PlaylistCategoryEnum {
     Rehab = 'rehab',
     Builder = 'builder',
     Warmup = 'warmup'

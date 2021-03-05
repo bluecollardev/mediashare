@@ -13,57 +13,57 @@
 
 /**
  * @export
- * @interface UpdateUserDto
+ * @interface UserDto
  */
-export interface UpdateUserDto {
+export interface UserDto {
     /**
      * @type {string}
-     * @memberof UpdateUserDto
+     * @memberof UserDto
      */
-    username?: string;
+    username: string;
     /**
      * @type {string}
-     * @memberof UpdateUserDto
+     * @memberof UserDto
      */
-    firstName?: string;
+    firstName: string;
     /**
      * @type {string}
-     * @memberof UpdateUserDto
+     * @memberof UserDto
      */
-    lastName?: string;
+    lastName: string;
     /**
      * @type {object}
-     * @memberof UpdateUserDto
+     * @memberof UserDto
      */
-    _id?: object;
+    _id: object;
     /**
      * @type {string}
-     * @memberof UpdateUserDto
+     * @memberof UserDto
      */
-    authId?: string;
+    authId: string;
     /**
      * @type {string}
-     * @memberof UpdateUserDto
+     * @memberof UserDto
      */
-    email?: string;
+    email: string;
     /**
      * @type {string}
-     * @memberof UpdateUserDto
+     * @memberof UserDto
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * @type {Array<string>}
-     * @memberof UpdateUserDto
+     * @memberof UserDto
      */
-    roles?: Array<UpdateUserDtoRolesEnum>;
+    roles: Array<UserDtoRolesEnum>;
     /**
      * @type {Array<object>}
-     * @memberof UpdateUserDto
+     * @memberof UserDto
      */
     sharedPlaylists?: Array<object>;
     /**
      * @type {Array<object>}
-     * @memberof UpdateUserDto
+     * @memberof UserDto
      */
     sharedMediaItems?: Array<object>;
 }
@@ -72,7 +72,7 @@ export interface UpdateUserDto {
  * @export
  * @enum {string}
  */
-export enum UpdateUserDtoRolesEnum {
+export enum UserDtoRolesEnum {
     Guest = 'guest',
     User = 'user',
     Admin = 'admin'

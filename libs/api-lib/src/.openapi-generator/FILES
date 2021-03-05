@@ -10,8 +10,17 @@ index.ts
 models/CreateMediaItemDto.ts
 models/CreatePlaylistDto.ts
 models/CreateUserDto.ts
+models/LoginDto.ts
+models/MediaItem.ts
+models/MediaItemDto.ts
+models/Playlist.ts
+models/PlaylistItem.ts
+models/ShareItem.ts
+models/TokenDto.ts
+models/UpdateMediaItemDto.ts
 models/UpdatePlaylistDto.ts
 models/UpdateUserDto.ts
+models/UserDto.ts
 models/index.ts
 runtime.ts
 servers.ts

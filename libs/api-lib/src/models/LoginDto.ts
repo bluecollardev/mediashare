@@ -13,27 +13,17 @@
 
 /**
  * @export
- * @interface CreateUserDto
+ * @interface LoginDto
  */
-export interface CreateUserDto {
+export interface LoginDto {
     /**
      * @type {string}
-     * @memberof CreateUserDto
+     * @memberof LoginDto
      */
     username: string;
     /**
      * @type {string}
-     * @memberof CreateUserDto
+     * @memberof LoginDto
      */
     password: string;
-    /**
-     * @type {string}
-     * @memberof CreateUserDto
-     */
-    firstName: string;
-    /**
-     * @type {string}
-     * @memberof CreateUserDto
-     */
-    lastName: string;
 }

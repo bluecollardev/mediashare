@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Media Share API
+ * Mediashare
  * Media Share API
  *
  * The version of the OpenAPI document: 1.0
@@ -12,7 +12,10 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
+import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
+import {
+    ShareItem,
+} from '../models';
 
 export interface ShareItemsControllerFindOneRequest {
     id: string;
@@ -29,38 +32,53 @@ export class ShareItemsApi extends BaseAPI {
 
     /**
      */
-    shareItemsControllerFindAll(): Observable<void>
-    shareItemsControllerFindAll(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    shareItemsControllerFindAll(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
-        return this.request<void>({
+    shareItemsControllerFindAll(): Observable<Array<ShareItem>>
+    shareItemsControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItem>>>
+    shareItemsControllerFindAll(opts?: OperationOpts): Observable<Array<ShareItem> | RawAjaxResponse<Array<ShareItem>>> {
+        const headers: HttpHeaders = {
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
+        };
+
+        return this.request<Array<ShareItem>>({
             url: '/api/share-items',
             method: 'GET',
+            headers,
         }, opts?.responseOpts);
     };
 
     /**
      */
-    shareItemsControllerFindOne({ id }: ShareItemsControllerFindOneRequest): Observable<void>
-    shareItemsControllerFindOne({ id }: ShareItemsControllerFindOneRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    shareItemsControllerFindOne({ id }: ShareItemsControllerFindOneRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+    shareItemsControllerFindOne({ id }: ShareItemsControllerFindOneRequest): Observable<ShareItem>
+    shareItemsControllerFindOne({ id }: ShareItemsControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>
+    shareItemsControllerFindOne({ id }: ShareItemsControllerFindOneRequest, opts?: OperationOpts): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
         throwIfNullOrUndefined(id, 'id', 'shareItemsControllerFindOne');
 
-        return this.request<void>({
+        const headers: HttpHeaders = {
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
+        };
+
+        return this.request<ShareItem>({
             url: '/api/share-items/{id}'.replace('{id}', encodeURI(id)),
             method: 'GET',
+            headers,
         }, opts?.responseOpts);
     };
 
     /**
      */
-    shareItemsControllerRemove({ id }: ShareItemsControllerRemoveRequest): Observable<void>
-    shareItemsControllerRemove({ id }: ShareItemsControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    shareItemsControllerRemove({ id }: ShareItemsControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+    shareItemsControllerRemove({ id }: ShareItemsControllerRemoveRequest): Observable<ShareItem>
+    shareItemsControllerRemove({ id }: ShareItemsControllerRemoveRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>
+    shareItemsControllerRemove({ id }: ShareItemsControllerRemoveRequest, opts?: OperationOpts): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
         throwIfNullOrUndefined(id, 'id', 'shareItemsControllerRemove');
 
-        return this.request<void>({
+        const headers: HttpHeaders = {
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
+        };
+
+        return this.request<ShareItem>({
             url: '/api/share-items/{id}'.replace('{id}', encodeURI(id)),
             method: 'DELETE',
+            headers,
         }, opts?.responseOpts);
     };
 

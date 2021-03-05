@@ -22,7 +22,7 @@
     "format": "nx format:write",
     "format:write": "nx format:write",
     "format:check": "nx format:check",
-    "gen:models": "npx @openapitools/openapi-generator-cli generate -i swagger-spec.json -g typescript -o ./libs/core/src/lib/api/ --skip-validate-spec",
+    "gen:models": "openapi-generator-cli generate",
     "gen:swagger": "openapi-generator-cli",
     "dev:build": "docker-compose build",
     "start:db": "docker-compose up mediapostgres db",

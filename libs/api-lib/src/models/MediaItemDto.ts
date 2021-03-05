@@ -13,46 +13,66 @@
 
 /**
  * @export
- * @interface CreateMediaItemDto
+ * @interface MediaItemDto
  */
-export interface CreateMediaItemDto {
+export interface MediaItemDto {
     /**
      * @type {boolean}
-     * @memberof CreateMediaItemDto
+     * @memberof MediaItemDto
      */
     isPlayable: boolean;
     /**
      * @type {string}
-     * @memberof CreateMediaItemDto
+     * @memberof MediaItemDto
      */
     summary: string;
     /**
      * @type {string}
-     * @memberof CreateMediaItemDto
+     * @memberof MediaItemDto
      */
     description: string;
     /**
      * @type {object}
-     * @memberof CreateMediaItemDto
+     * @memberof MediaItemDto
      */
     userId: object;
     /**
      * @type {string}
-     * @memberof CreateMediaItemDto
+     * @memberof MediaItemDto
      */
     title: string;
     /**
      * @type {string}
-     * @memberof CreateMediaItemDto
+     * @memberof MediaItemDto
      */
-    category: CreateMediaItemDtoCategoryEnum;
+    category: MediaItemDtoCategoryEnum;
+    /**
+     * @type {string}
+     * @memberof MediaItemDto
+     */
+    displayFileName: string;
+    /**
+     * @type {string}
+     * @memberof MediaItemDto
+     */
+    thumbnail: string;
+    /**
+     * @type {string}
+     * @memberof MediaItemDto
+     */
+    uri: string;
+    /**
+     * @type {object}
+     * @memberof MediaItemDto
+     */
+    _id: object;
 }
 
 /**
  * @export
  * @enum {string}
  */
-export enum CreateMediaItemDtoCategoryEnum {
+export enum MediaItemDtoCategoryEnum {
     Strength = 'strength',
     Flexibility = 'flexibility',
     Endurance = 'endurance'

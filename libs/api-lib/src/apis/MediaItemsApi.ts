@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Media Share API
+ * Mediashare
  * Media Share API
  *
  * The version of the OpenAPI document: 1.0
@@ -15,6 +15,8 @@ import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
 import {
     CreateMediaItemDto,
+    MediaItem,
+    UpdateMediaItemDto,
 } from '../models';
 
 export interface MediaItemControllerCreateRequest {
@@ -36,7 +38,7 @@ export interface MediaItemControllerShareRequest {
 
 export interface MediaItemControllerUpdateRequest {
     id: string;
-    body: object;
+    updateMediaItemDto: UpdateMediaItemDto;
 }
 
 /**
@@ -46,16 +48,17 @@ export class MediaItemsApi extends BaseAPI {
 
     /**
      */
-    mediaItemControllerCreate({ createMediaItemDto }: MediaItemControllerCreateRequest): Observable<void>
-    mediaItemControllerCreate({ createMediaItemDto }: MediaItemControllerCreateRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    mediaItemControllerCreate({ createMediaItemDto }: MediaItemControllerCreateRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+    mediaItemControllerCreate({ createMediaItemDto }: MediaItemControllerCreateRequest): Observable<MediaItem>
+    mediaItemControllerCreate({ createMediaItemDto }: MediaItemControllerCreateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>
+    mediaItemControllerCreate({ createMediaItemDto }: MediaItemControllerCreateRequest, opts?: OperationOpts): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
         throwIfNullOrUndefined(createMediaItemDto, 'createMediaItemDto', 'mediaItemControllerCreate');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
         };
 
-        return this.request<void>({
+        return this.request<MediaItem>({
             url: '/api/media-items',
             method: 'POST',
             headers,
@@ -65,25 +68,35 @@ export class MediaItemsApi extends BaseAPI {
 
     /**
      */
-    mediaItemControllerFindAll(): Observable<void>
-    mediaItemControllerFindAll(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    mediaItemControllerFindAll(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
-        return this.request<void>({
+    mediaItemControllerFindAll(): Observable<Array<MediaItem>>
+    mediaItemControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItem>>>
+    mediaItemControllerFindAll(opts?: OperationOpts): Observable<Array<MediaItem> | RawAjaxResponse<Array<MediaItem>>> {
+        const headers: HttpHeaders = {
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
+        };
+
+        return this.request<Array<MediaItem>>({
             url: '/api/media-items',
             method: 'GET',
+            headers,
         }, opts?.responseOpts);
     };
 
     /**
      */
-    mediaItemControllerFindOne({ id }: MediaItemControllerFindOneRequest): Observable<void>
-    mediaItemControllerFindOne({ id }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    mediaItemControllerFindOne({ id }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+    mediaItemControllerFindOne({ id }: MediaItemControllerFindOneRequest): Observable<MediaItem>
+    mediaItemControllerFindOne({ id }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>
+    mediaItemControllerFindOne({ id }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
         throwIfNullOrUndefined(id, 'id', 'mediaItemControllerFindOne');
 
-        return this.request<void>({
+        const headers: HttpHeaders = {
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
+        };
+
+        return this.request<MediaItem>({
             url: '/api/media-items/{id}'.replace('{id}', encodeURI(id)),
             method: 'GET',
+            headers,
         }, opts?.responseOpts);
     };
 
@@ -113,35 +126,41 @@ export class MediaItemsApi extends BaseAPI {
 
     /**
      */
-    mediaItemControllerShare({ id, userId }: MediaItemControllerShareRequest): Observable<void>
-    mediaItemControllerShare({ id, userId }: MediaItemControllerShareRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    mediaItemControllerShare({ id, userId }: MediaItemControllerShareRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+    mediaItemControllerShare({ id, userId }: MediaItemControllerShareRequest): Observable<MediaItem>
+    mediaItemControllerShare({ id, userId }: MediaItemControllerShareRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>
+    mediaItemControllerShare({ id, userId }: MediaItemControllerShareRequest, opts?: OperationOpts): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
         throwIfNullOrUndefined(id, 'id', 'mediaItemControllerShare');
         throwIfNullOrUndefined(userId, 'userId', 'mediaItemControllerShare');
 
-        return this.request<void>({
+        const headers: HttpHeaders = {
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
+        };
+
+        return this.request<MediaItem>({
             url: '/api/media-items/{id}/share/{userId}'.replace('{id}', encodeURI(id)).replace('{userId}', encodeURI(userId)),
             method: 'POST',
+            headers,
         }, opts?.responseOpts);
     };
 
     /**
      */
-    mediaItemControllerUpdate({ id, body }: MediaItemControllerUpdateRequest): Observable<void>
-    mediaItemControllerUpdate({ id, body }: MediaItemControllerUpdateRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    mediaItemControllerUpdate({ id, body }: MediaItemControllerUpdateRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+    mediaItemControllerUpdate({ id, updateMediaItemDto }: MediaItemControllerUpdateRequest): Observable<MediaItem>
+    mediaItemControllerUpdate({ id, updateMediaItemDto }: MediaItemControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>
+    mediaItemControllerUpdate({ id, updateMediaItemDto }: MediaItemControllerUpdateRequest, opts?: OperationOpts): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
         throwIfNullOrUndefined(id, 'id', 'mediaItemControllerUpdate');
-        throwIfNullOrUndefined(body, 'body', 'mediaItemControllerUpdate');
+        throwIfNullOrUndefined(updateMediaItemDto, 'updateMediaItemDto', 'mediaItemControllerUpdate');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
         };
 
-        return this.request<void>({
+        return this.request<MediaItem>({
             url: '/api/media-items/{id}'.replace('{id}', encodeURI(id)),
             method: 'PUT',
             headers,
-            body: body as any,
+            body: updateMediaItemDto,
         }, opts?.responseOpts);
     };
 

@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Media Share API
+ * Mediashare
  * Media Share API
  *
  * The version of the OpenAPI document: 1.0
@@ -12,7 +12,18 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, OperationOpts, RawAjaxResponse } from '../runtime';
+import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
+import {
+    MediaItemDto,
+    Playlist,
+    TokenDto,
+    UserDto,
+} from '../models';
+
+export interface UserControllerAuthorizeRequest {
+    id: string;
+    tokenDto: TokenDto;
+}
 
 /**
  * no description
@@ -21,12 +32,21 @@ export class UserApi extends BaseAPI {
 
     /**
      */
-    userControllerAuthorize(): Observable<void>
-    userControllerAuthorize(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    userControllerAuthorize(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+    userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest): Observable<void>
+    userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
+    userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+        throwIfNullOrUndefined(id, 'id', 'userControllerAuthorize');
+        throwIfNullOrUndefined(tokenDto, 'tokenDto', 'userControllerAuthorize');
+
+        const headers: HttpHeaders = {
+            'Content-Type': 'application/json',
+        };
+
         return this.request<void>({
-            url: '/api/user/authorize/{id}',
+            url: '/api/user/authorize'.replace('{:id}', encodeURI(id)),
             method: 'POST',
+            headers,
+            body: tokenDto,
         }, opts?.responseOpts);
     };
 
@@ -43,34 +63,49 @@ export class UserApi extends BaseAPI {
 
     /**
      */
-    userControllerGetSharedMediaItems(): Observable<void>
-    userControllerGetSharedMediaItems(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    userControllerGetSharedMediaItems(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
-        return this.request<void>({
+    userControllerGetSharedMediaItems(): Observable<Array<MediaItemDto>>
+    userControllerGetSharedMediaItems(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>
+    userControllerGetSharedMediaItems(opts?: OperationOpts): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
+        const headers: HttpHeaders = {
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
+        };
+
+        return this.request<Array<MediaItemDto>>({
             url: '/api/user/shared-media-items',
             method: 'GET',
+            headers,
         }, opts?.responseOpts);
     };
 
     /**
      */
-    userControllerGetSharedPlaylists(): Observable<void>
-    userControllerGetSharedPlaylists(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    userControllerGetSharedPlaylists(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
-        return this.request<void>({
+    userControllerGetSharedPlaylists(): Observable<Array<Playlist>>
+    userControllerGetSharedPlaylists(opts?: OperationOpts): Observable<RawAjaxResponse<Array<Playlist>>>
+    userControllerGetSharedPlaylists(opts?: OperationOpts): Observable<Array<Playlist> | RawAjaxResponse<Array<Playlist>>> {
+        const headers: HttpHeaders = {
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
+        };
+
+        return this.request<Array<Playlist>>({
             url: '/api/user/shared-playlists',
             method: 'GET',
+            headers,
         }, opts?.responseOpts);
     };
 
     /**
      */
-    userControllerGetUser(): Observable<void>
-    userControllerGetUser(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>
-    userControllerGetUser(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
-        return this.request<void>({
+    userControllerGetUser(): Observable<UserDto>
+    userControllerGetUser(opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>
+    userControllerGetUser(opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+        const headers: HttpHeaders = {
+            ...(this.configuration.username != null && this.configuration.password != null ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` } : undefined),
+        };
+
+        return this.request<UserDto>({
             url: '/api/user',
             method: 'GET',
+            headers,
         }, opts?.responseOpts);
     };
 

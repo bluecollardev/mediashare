@@ -14,6 +14,7 @@ import { PlaylistGetResponse, PlaylistPostResponse } from './playlist.decorator'
 import { UseJwtGuard } from '../../modules/auth/auth.decorator';
 import { ApiPostResponse } from '@mediashare/shared';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { PlaylistCategoryDto } from './dto/playlist-category.dto';
 
 @ApiTags('playlists')
 @Controller('playlists')
@@ -39,9 +40,8 @@ export class PlaylistController {
   }
 
   @Get('categories')
-  @ApiResponse({ type: () => PLAYLIST_CATEGORY, isArray: true })
   getCategories() {
-    return PLAYLIST_CATEGORY;
+    return { categories: PLAYLIST_CATEGORY };
   }
 
   @PlaylistGetResponse()

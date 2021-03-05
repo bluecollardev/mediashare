@@ -8,8 +8,6 @@
         "generatorName": "typescript-rxjs",
         "output": "#{cwd}/libs/api-lib/src",
         "glob": "swagger-spec.{json,yaml}",
-        "skipValidateSpec": true,
-        "modelNameSuffix": ".dto",
         "additionalProperties": {
           "supportsES6": "true",
           "modelPropertyNaming": "original"

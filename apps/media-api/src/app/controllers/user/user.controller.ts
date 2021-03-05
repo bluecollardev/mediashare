@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthUserInterface } from '@core-lib';
 
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { MediaItemService } from '../media-item/media-item.service';
 import { GetUser } from '../../core/decorators/user.decorator';
@@ -56,17 +56,6 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @HttpCode(HttpStatus.OK)
-  @Post('authorize/:id')
-  @ApiResponse({ type: String })
-  async authorize(@Param() id: string, @Body() body: TokenDto) {
-    const { token = null } = body;
-    const valid = await this.userService.validateUser({ token, _id: id });
-    if (!valid) throw new UnauthorizedException();
-    return valid;
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Get('shared-media-items')
   @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getSharedMediaItems(@GetUser() user: AuthUserInterface = null) {
@@ -102,5 +91,15 @@ export class UserController {
     // return shareItems;
 
     return;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Post('authorize')
+  async authorize(@Param(':id') id: string, @Body() body: TokenDto) {
+    const { token = null } = body;
+    const valid = await this.userService.validateUser({ token, _id: id });
+    if (!valid) throw new UnauthorizedException();
+    return valid;
   }
 }
