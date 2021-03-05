@@ -83,19 +83,23 @@ const insertData = async function (data: ReturnType<typeof createUserData>[]) {
   const repoFns = R.map(['user', 'playlist', 'media-item'], (key) => getRepos(key));
 
   const [userRepo, playlistRepo, mediaRepo] = await Promise.all(repoFns);
-  await Promise.all([userRepo.clear(), playlistRepo.clear(), mediaRepo.clear()]);
 
+  // console.log(mediaRepo);
+
+  await Promise.all([userRepo.delete({}), playlistRepo.delete({}), mediaRepo.delete({})]);
+  console.log('got here');
   const users = data.map((data) => data.user);
 
   const playlists = R.flatten(data.map((data) => data.playlistDto));
 
   const mediaItems = R.flatten(data.map((data) => data.media));
-  const userResults = await userRepo.insert(users);
+
+  const userResults = await userRepo.create(users);
   playlistRepo;
 
-  const playlistResults = await playlistRepo.insert(playlists);
+  const playlistResults = await playlistRepo.create(playlists);
 
-  const mediaResults = await mediaRepo.insert(mediaItems);
+  const mediaResults = await mediaRepo.create(mediaItems);
 
   await connection.close();
   return {

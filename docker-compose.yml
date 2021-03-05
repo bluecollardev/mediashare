@@ -1,8 +1,7 @@
 version: '3.8'
 services:
   media-api-dev:
-    image: 'node:14-slim'
-    container_name: docker-nest-js
+    container_name: media-api
     build:
       context: .
       dockerfile: Dockerfile.slim
@@ -32,6 +31,7 @@ services:
     ports:
       - '3333:3333'
     tty: true
+    restart: always
     command: 'npm start'
     depends_on:
       - db

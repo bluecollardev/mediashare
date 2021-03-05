@@ -8,7 +8,7 @@ export class LoginDto {
   @ApiEmail({ required: true })
   username: string;
 
-  @ApiProperty({ required: true, writeOnly: true })
+  @ApiProperty({ required: true, writeOnly: true, minLength: 8, maxLength: 20 })
   @IsString()
   @MinLength(8)
   @MaxLength(20)
@@ -16,7 +16,11 @@ export class LoginDto {
 }
 
 export class TokenDto {
-  @ApiProperty({ type: String, example: exampleToken })
+  @ApiProperty({
+    type: String,
+    example: exampleToken,
+    pattern: '^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$',
+  })
   @IsJWT()
   token: string;
 }
