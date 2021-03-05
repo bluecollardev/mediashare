@@ -52,6 +52,8 @@ async function bootstrap() {
     .setTitle(appConfig.get('title'))
     .setDescription('Media Share API')
     .setVersion('1.0')
+    .addBasicAuth()
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

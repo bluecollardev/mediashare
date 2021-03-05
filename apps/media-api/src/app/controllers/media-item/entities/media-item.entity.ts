@@ -10,7 +10,7 @@ export class MediaItem extends BcBaseEntity<MediaItem> implements Media {
   isPlayable: boolean;
   @Column() summary: string;
   @Column() description: string;
-  @Column() tags: Tag[];
+  @Column() tags?: Tag[];
   @Column() userId: ObjectId;
   @Column() title: string;
   constructor(props: Partial<MediaItem> = {}) {

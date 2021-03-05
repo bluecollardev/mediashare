@@ -20,6 +20,7 @@
     "mediashare": { "tags": [] },
     "core": { "tags": [] },
     "media-auth": { "tags": [] },
-    "api-lib": { "tags": [] }
+    "api-lib": { "tags": [] },
+    "shared": { "tags": [] }
   }
 }

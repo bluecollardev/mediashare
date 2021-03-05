@@ -11,12 +11,11 @@ import {
   UseGuards,
   HttpCode,
   Request,
-  ConflictException,
 } from '@nestjs/common';
 import { Response, Request as Req } from 'express';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/services/playlist.service';
@@ -30,8 +29,13 @@ import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { UserGuard } from '../../modules/auth/guards/user.guard';
 import { UserService } from '../../modules/auth/user.service';
-import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
-import { CreateUserResponseDto } from './dto/create-user-response.dto';
+import { BcRolesType, BC_ROLES } from 'libs/core/src/lib/models/roles.enum';
+import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
+import { createUserResponseDto } from './dto/create-user-response.dto';
+import { Playlist } from '../playlist/entities/playlist.entity';
+import { MediaItemDto } from '../media-item/dto/media-item.dto';
+import { LoginDto } from './dto/login.dto';
+import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 
 @ApiTags('users')
 @Controller('users')
@@ -44,7 +48,8 @@ export class UsersController {
   ) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<CreateUserResponseDto> {
+  @ApiResponse({ type: UserDto, status: 201, isArray: false })
+  async create(@Body() createUserDto: CreateUserDto) {
     const { username, password, ...rest } = createUserDto;
     const existingUser = await this.userService.checkIfUserExists(username);
     if (existingUser) throw conflictResponse(username);
@@ -53,10 +58,10 @@ export class UsersController {
 
     const postgresUser = await this.userService.createUser({ username, password, _id: mongoUser._id.toHexString() });
 
-    return CreateUserResponseDto.create(mongoUser, postgresUser);
+    return createUserResponseDto(mongoUser, postgresUser);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UserGetResponse({ isArray: true })
   @Get()
   findAll(): Promise<User[]> {
     return this.userService.findAll();
@@ -65,9 +70,11 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalGuard)
   @Post('login')
+  @ApiBody({ type: LoginDto, required: true })
   async login(@Request() req: Req) {
     return req.user;
   }
+
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   async logout(@Request() req: Req, @Res() res: Response) {
@@ -78,14 +85,15 @@ export class UsersController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
+  @UserGetResponse()
   findOne(@Param('id') id: string): Promise<User> {
     return this.userService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
+  @UserPostResponse()
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
     return this.userService.update(id, updateUserDto);
   }
@@ -98,6 +106,7 @@ export class UsersController {
 
   @UseGuards(UserGuard)
   @Get(':id/playlists')
+  @UserGetResponse({ type: Playlist, isArray: true })
   async getPlaylists(@Param('id') id: string, @Res() res: Response) {
     const playlists = await this.playlistService.findByUserId(id);
 
@@ -123,8 +132,8 @@ export class UsersController {
     return res.status(HttpStatus.OK).send(mapped);
   }
 
-  @UseGuards(UserGuard)
   @Get(':id/media-items')
+  @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getMedia(@Param('id') id: string, @Res() res: Response) {
     const mediaItems = await this.mediaItemService.findMediaItemsByUserId(id);
 
@@ -133,8 +142,8 @@ export class UsersController {
     return res.status(HttpStatus.OK).send(mediaItems);
   }
 
-  @UseGuards(UserGuard)
   @Get(':id/shared-media-items')
+  @UserGetResponse({ isArray: true, type: MediaItemDto })
   async getSharedMediaItems(@Param('id') id: string) {
     const user = await this.userService.findOne(id);
 
@@ -146,6 +155,7 @@ export class UsersController {
   }
 
   @Get(':id/shared-playlists')
+  @UserGetResponse({ type: Playlist, isArray: true })
   async getSharedPlaylists(@Param('id') userId: string) {
     const { sharedPlaylists } = await this.userService.findOne(userId);
 
@@ -155,16 +165,17 @@ export class UsersController {
     return this.playlistService.mapPlaylists(playlists, mediaItems);
   }
 
-  @UseGuards(UserGuard)
   @Get(':id/share-items')
+  @UserGetResponse({ type: ShareItem, isArray: true })
   async getShareItems(@Param('id') id: string) {
     const shareItems = this.shareItemService.findByQuery({ userId: new ObjectId(id) });
 
     return shareItems;
   }
 
-  @UseGuards(UserGuard)
   @Put(':id/roles')
+  @UserPostResponse()
+  @ApiBody({ enum: BC_ROLES, isArray: true })
   setRoles(@Param('id') id: string, @Body() params: { roles: BcRolesType[] }) {
     const { roles = [] } = params;
     return this.userService.setRoles(id, roles);
@@ -174,6 +185,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   @Post(':id/shared-items/:shareId')
+  @ApiResponse({ type: UserDto, status: 200 })
   async readSharedItem(@Param('id') id: string, @Param('shareId') shareId: string) {
     const sharedItem = await this.shareItemService.update(shareId, { read: true });
 

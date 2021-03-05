@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthUserInterface } from '@core-lib';
 
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { MediaItemService } from '../media-item/media-item.service';
 import { GetUser } from '../../core/decorators/user.decorator';
@@ -19,6 +19,11 @@ import { User } from './entities/user.entity';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { PlaylistService } from '../playlist/services/playlist.service';
+import { UserGetResponse } from './decorators/user-response.decorator';
+import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { TokenDto } from './dto/login.dto';
+import { MediaItemDto } from '../media-item/dto/media-item.dto';
+import { Playlist } from '../playlist/entities/playlist.entity';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -29,8 +34,8 @@ export class UserController {
     private playlistService: PlaylistService
   ) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
+  @UserGetResponse()
   async getUser(@GetUser() user: AuthUserInterface) {
     const { _id = null } = user;
 
@@ -40,8 +45,8 @@ export class UserController {
     return { ...authUser, ...mongoUser };
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('share-items')
+  @UserGetResponse({ isArray: true, type: ShareItem })
   async getMyShareItems(@GetUser() user: User = null) {
     const { _id: userId } = user;
 
@@ -53,7 +58,8 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('authorize/:id')
-  async authorize(@Param() id: string, @Body() body: { token: string }) {
+  @ApiResponse({ type: String })
+  async authorize(@Param() id: string, @Body() body: TokenDto) {
     const { token = null } = body;
     const valid = await this.userService.validateUser({ token, _id: id });
     if (!valid) throw new UnauthorizedException();
@@ -62,6 +68,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get('shared-media-items')
+  @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getSharedMediaItems(@GetUser() user: AuthUserInterface = null) {
     const { _id = null } = user;
     const { sharedMediaItems = [] } = await this.userService.findAllSharedMediaItemsByUserId(_id);
@@ -71,6 +78,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get('shared-playlists')
+  @UserGetResponse({ type: Playlist, isArray: true })
   async getSharedPlaylists(
     @GetUser()
     user: AuthUserInterface

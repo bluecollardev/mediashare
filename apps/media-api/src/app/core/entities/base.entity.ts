@@ -18,3 +18,8 @@ export abstract class BcBaseEntity<M> implements BcBaseInterface {
     Object.assign(this, model);
   }
 }
+
+export class BcEntity implements BcBaseInterface {
+  @ObjectIdColumn()
+  _id: ObjectId;
+}

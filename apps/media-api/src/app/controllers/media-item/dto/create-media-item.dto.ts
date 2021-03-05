@@ -2,9 +2,12 @@ import { ObjectId } from 'mongodb';
 import { MediaItem } from '../entities/media-item.entity';
 import { IsBoolean, IsIn, IsMongoId, IsString, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { ApiDefaults, MediaCategoryType, MEDIA_CATEGORY } from '@core-lib';
+import { ApiDefaults, MediaCategoryType, MEDIA_CATEGORY, Stats } from '@core-lib';
+import { Tag } from '../../../core/entities/tag.entity';
+import { ApiObjectId, ApiString, ApiUriString } from '@mediashare/shared';
 
-export class CreateMediaItemDto implements Pick<MediaItem, 'summary' | 'isPlayable' | 'description'> {
+type CreateKeys = 'summary' | 'isPlayable' | 'description' | 'title' | 'category' | 'userId';
+export class CreateMediaItemDto implements Pick<MediaItem, CreateKeys> {
   @IsBoolean()
   @ApiProperty({ required: true })
   isPlayable: boolean;
@@ -19,9 +22,8 @@ export class CreateMediaItemDto implements Pick<MediaItem, 'summary' | 'isPlayab
   @ApiProperty({ required: true })
   description: string;
 
-  @IsMongoId()
-  @ApiProperty({ required: false })
-  userId?: ObjectId;
+  @ApiObjectId({ required: true })
+  userId: NonNullable<ObjectId>;
 
   @IsString()
   @MinLength(ApiDefaults.longString.min)
@@ -32,4 +34,18 @@ export class CreateMediaItemDto implements Pick<MediaItem, 'summary' | 'isPlayab
   @ApiProperty({ required: true, enum: MEDIA_CATEGORY })
   @IsIn(MEDIA_CATEGORY)
   category: MediaCategoryType;
+}
+
+export class AdditionalMediaItemDto implements Omit<MediaItem, CreateKeys> {
+  @ApiString()
+  displayFileName: string;
+
+  @ApiUriString()
+  thumbnail?: string;
+
+  @ApiUriString()
+  uri: string;
+
+  @ApiObjectId({ required: true })
+  _id: ObjectId;
 }

@@ -85,7 +85,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
   }
   createPlaylist() {
     const playlistMixin = baseEntityMixin(Playlist);
-    return new playlistMixin({ userId: this.user._id, title: DataFn.title(), items: [] });
+    return new playlistMixin();
   }
 
   createMediaDto(): CreateMediaItemDto {

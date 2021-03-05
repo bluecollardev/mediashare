@@ -1,20 +1,28 @@
-import { BcBaseEntity } from '@api';
-import { PlaylistCategoryType, PlaylistInterface } from '@core-lib';
+import { BcEntity } from '@api';
+import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY } from '@core-lib';
+import { ApiArray, ApiObjectId, ApiString } from '@mediashare/shared';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsIn } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
 import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
 
 @Entity()
-export class Playlist extends BcBaseEntity<Playlist> implements PlaylistInterface {
+export class Playlist extends BcEntity implements PlaylistInterface {
   @Column()
+  @ApiString()
   title: string;
 
+  @ApiObjectId()
   @ObjectIdColumn()
   userId: ObjectId;
 
-  @Column(() => PlaylistItem)
+  @Column((type) => PlaylistItem)
+  @ApiArray({ type: PlaylistItem })
   items: PlaylistItem[];
 
-  @Column()
+  @Column({ type: 'enum', enum: PLAYLIST_CATEGORY })
+  @ApiProperty({ required: true, enum: PLAYLIST_CATEGORY })
+  @IsIn(PLAYLIST_CATEGORY)
   category: PlaylistCategoryType;
 }
