@@ -1,4 +1,5 @@
 import { BcBaseInterface } from '@core-lib';
+import { ApiObjectId } from '@mediashare/shared';
 import { ObjectId } from 'bson';
 import { ObjectIdColumn } from 'typeorm';
 
@@ -21,5 +22,6 @@ export abstract class BcBaseEntity<M> implements BcBaseInterface {
 
 export class BcEntity implements BcBaseInterface {
   @ObjectIdColumn()
+  @ApiObjectId()
   _id: ObjectId;
 }

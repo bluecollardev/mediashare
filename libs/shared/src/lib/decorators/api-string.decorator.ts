@@ -34,4 +34,11 @@ const ApiUriString: ApiDecoratorType = function ({ required } = apiDecoratorDefa
   );
 };
 
-export { ApiEmail, ApiUsername, ApiName, ApiString, ApiUriString };
+const ApiLongString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
+  return applyDecorators(
+    ...baseStringValidators(5, 700),
+    ApiProperty({ required, type: String, examples: ['firstName', 'lastName'] })
+  );
+};
+
+export { ApiEmail, ApiUsername, ApiName, ApiString, ApiUriString, ApiLongString };

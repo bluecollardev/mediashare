@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateMediaItemDto } from './create-media-item.dto';
+import { PartialType } from '@nestjs/swagger';
+import { MediaItem } from '../entities/media-item.entity';
 
-export class UpdateMediaItemDto extends PartialType(CreateMediaItemDto) {}
+export class UpdateMediaItemDto extends PartialType(MediaItem) {}
