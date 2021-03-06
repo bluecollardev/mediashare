@@ -29,11 +29,7 @@ import { ObjectId } from 'mongodb';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(
-    private userService: UserService,
-    private shareItemService: ShareItemService,
-    private playlistService: PlaylistService
-  ) {}
+  constructor(private userService: UserService, private playlistService: PlaylistService) {}
 
   @Get()
   @UserGetResponse()
@@ -55,36 +51,6 @@ export class UserController {
 
     console.log(result);
     return result;
-  }
-
-  @Get('share-items')
-  @UserGetResponse({ isArray: true, type: ShareItem })
-  async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
-    const { _id: userId } = user;
-
-    const items = await this.shareItemService.findOne(userId);
-
-    return items ?? [];
-  }
-
-  @Get('shared-media-items')
-  @UserGetResponse({ type: MediaItemDto, isArray: true })
-  async getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
-    const { _id: userId } = user;
-
-    const mediaItems = await this.shareItemService.aggregateSharedMediaItems({ userId });
-
-    return mediaItems;
-  }
-
-  @Get('shared-playlists')
-  @UserGetResponse({ type: Playlist, isArray: true })
-  async getSharedPlaylists(
-    @GetUser()
-    user: AuthUserInterface
-  ) {
-    const { _id } = user;
-    const userId = typeof _id === 'string' ? _id : _id.toHexString();
   }
 
   @HttpCode(HttpStatus.NOT_IMPLEMENTED)

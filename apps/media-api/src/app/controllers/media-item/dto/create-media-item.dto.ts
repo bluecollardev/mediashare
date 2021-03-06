@@ -7,7 +7,7 @@ import { Tag } from '../../../core/entities/tag.entity';
 import { ApiObjectId, ApiString, ApiUriString } from '@mediashare/shared';
 
 // const CreateKeys:  Readonly<keyof MediaItem[]> = [ 'summary', 'isPlayable', 'description', 'title', 'category', 'userId' ] as const;
-const OPTIONAL_MEDIA_DTO_KEYS = ['_id', 'displayFileName', 'thumbnail', 'uri'] as const;
+const OPTIONAL_MEDIA_DTO_KEYS = ['_id', 'displayFileName', 'thumbnail', 'uri', 'updatedDate'] as const;
 export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_DTO_KEYS]) {
   @IsBoolean()
   @ApiProperty({ required: true })

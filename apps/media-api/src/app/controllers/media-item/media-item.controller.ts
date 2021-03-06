@@ -16,6 +16,8 @@ import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { ObjectId } from 'mongodb';
 import { MediaGetResponse, MediaPostResponse } from './media-item.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
+import { MediaItemDto } from './dto/media-item.dto';
+import { CreateDto } from '../../core/decorators/create-dto.decorator';
 
 @ApiTags('media-items')
 @Controller('media-items')
@@ -24,30 +26,20 @@ export class MediaItemController {
 
   /**
    * Create a new user
-   *
-   * SessionUser:
-   * authId: string;
-   * username: string;
-   * password: string;
-   * email: string;
-   * createdAt: Date;
-   * _id: string;
-   * roles: BcRolesType[];
+
    *
    * @param {CreateMediaItemDto} createMediaItemDto
    * @param {SessionUserInterface} user
    * @return {*}
    * @memberof MediaItemController
    */
-  @MediaPostResponse()
   @Post()
-  create(@Body() createMediaItemDto: CreateMediaItemDto, @GetUser() user: SessionUserInterface) {
-    const { _id: userId } = user;
-    return this.mediaItemService.create({ ...createMediaItemDto, userId });
+  @MediaPostResponse()
+  create(@CreateDto() createMediaItemDto: CreateMediaItemDto) {
+    return this.mediaItemService.create(createMediaItemDto);
   }
 
   /* TODO: findout what this needs to be */
-  @UseGuards(JwtAuthGuard)
   @Get()
   @MediaGetResponse({ isArray: true })
   findAll() {
@@ -57,6 +49,15 @@ export class MediaItemController {
   @Get('categories')
   getCategories() {
     return MEDIA_CATEGORY;
+  }
+
+  @Get('shared')
+  @MediaGetResponse({ type: MediaItemDto, isArray: true })
+  getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
+    const { _id: userId } = user;
+    // return userId;
+    console.log(user);
+    return this.shareItemService.aggregateSharedMediaItems({ userId });
   }
 
   @MediaGetResponse()
@@ -72,7 +73,7 @@ export class MediaItemController {
 
   @MediaPostResponse()
   @Put(':id')
-  update(@Param('id', ObjectIdPipe) id: ObjectId, @Body() updateMediaItemDto: UpdateMediaItemDto) {
+  update(@Param('id', ObjectIdPipe) id: ObjectId, @CreateDto() updateMediaItemDto: UpdateMediaItemDto) {
     return this.mediaItemService.update(id, updateMediaItemDto);
   }
 

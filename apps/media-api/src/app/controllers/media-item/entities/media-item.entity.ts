@@ -18,16 +18,16 @@ export class MediaItem extends BcEntity {
   @ApiProperty({ required: true })
   isPlayable: boolean;
 
+  @ApiObjectId()
+  @Index('userId')
+  @Column({ nullable: false, unique: false })
+  userId: ObjectId;
+
   @Column()
   @ApiLongString()
   summary: string;
   @ApiString({ required: true })
   description: string;
-
-  @ApiObjectId()
-  @Index('userId')
-  @Column({ nullable: false, unique: false })
-  userId: ObjectId;
 
   @ApiString()
   @Column({ nullable: true, type: 'text' })

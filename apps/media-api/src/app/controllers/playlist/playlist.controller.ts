@@ -24,29 +24,27 @@ import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse } from './playlist.decorator';
 import { UseJwtGuard } from '../../modules/auth/auth.decorator';
-import { ApiPostResponse, CreatedBy, ObjectIdPipe } from '@mediashare/shared';
+import { ApiPostResponse, ObjectIdPipe } from '@mediashare/shared';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
-import { CreatDto } from '../../core/decorators/create-dto.decorator';
+import { CreateDto } from '../../core/decorators/create-dto.decorator';
 
 @ApiTags('playlists')
 @Controller('playlists')
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
-  @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   @Post()
-  async create(@CreatDto() createPlaylistDto: CreatePlaylistDto, @GetUser() user: SessionUserInterface) {
+  @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
+  async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUser() user: SessionUserInterface) {
     const { _id: userId } = user;
 
-    const playlist = await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId });
-
-    return playlist;
+    return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId });
   }
 
-  @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
   @Get()
+  @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
   findAll() {
     return this.playlistService.findAll();
   }
@@ -54,6 +52,16 @@ export class PlaylistController {
   @Get('categories')
   getCategories() {
     return { categories: PLAYLIST_CATEGORY };
+  }
+
+  @Get('share-playlists')
+  @PlaylistGetResponse({ isArray: true, type: ShareItem })
+  async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
+    const { _id: userId } = user;
+
+    const items = await this.shareItemService.findOne(userId);
+
+    return items ?? [];
   }
 
   @PlaylistGetResponse({ type: PlaylistResponseDto })
@@ -81,8 +89,8 @@ export class PlaylistController {
     return this.playlistService.remove(id);
   }
 
-  @ApiPostResponse({ type: ShareItem, isArray: true })
   @Post(':playlistId/share/:userId')
+  @ApiPostResponse({ type: ShareItem, isArray: true })
   async share(
     @Param('userId', new ObjectIdPipe()) userId: ObjectId,
     @Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId,

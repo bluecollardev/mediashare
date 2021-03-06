@@ -2,16 +2,18 @@ import { hash } from 'bcrypt';
 import { Min, IsEmail } from 'class-validator';
 import { Entity, Unique, PrimaryGeneratedColumn, Column, CreateDateColumn, BeforeInsert } from 'typeorm';
 
-import { AuthUserInterface } from '@core-lib';
-import { bcRoles, BcRolesType, BC_ROLES } from 'libs/core/src/lib/models/roles.enum';
+import { bcRoles, BcRolesType, BC_ROLES } from '@core-lib';
+import { ObjectId } from 'mongodb';
 
 @Entity()
 @Unique(['username'])
 @Unique(['email'])
-// @Unique(['_id'])
-export class AuthUser implements AuthUserInterface {
+export class AuthUser {
   @PrimaryGeneratedColumn('uuid')
   authId: string;
+
+  @Column()
+  _id: string;
 
   @Column()
   username: string;
