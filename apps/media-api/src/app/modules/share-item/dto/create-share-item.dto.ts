@@ -28,13 +28,13 @@ export class CreateMediaShareItemInput {
 export class CreatePlaylistShareItemDto {
   @ApiProperty({ required: true })
   @IsString()
-  userId: string;
+  userId: ObjectId;
 
   @ApiProperty({ required: false })
   @IsString()
-  playlistId: string;
+  playlistId: ObjectId;
 
   @ApiProperty({ required: true })
   @IsString()
-  createdBy: string;
+  createdBy: ObjectId;
 }

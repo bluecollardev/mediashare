@@ -15,6 +15,7 @@ import { GetUser } from '../../core/decorators/user.decorator';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { ObjectId } from 'mongodb';
 import { MediaGetResponse, MediaPostResponse } from './media-item.decorator';
+import { ObjectIdPipe } from '@mediashare/shared';
 
 @ApiTags('media-items')
 @Controller('media-items')
@@ -42,7 +43,7 @@ export class MediaItemController {
   @Post()
   create(@Body() createMediaItemDto: CreateMediaItemDto, @GetUser() user: SessionUserInterface) {
     const { _id: userId } = user;
-    return this.mediaItemService.create({ ...createMediaItemDto, userId: new ObjectId(userId) });
+    return this.mediaItemService.create({ ...createMediaItemDto, userId });
   }
 
   /* TODO: findout what this needs to be */
@@ -50,10 +51,7 @@ export class MediaItemController {
   @Get()
   @MediaGetResponse({ isArray: true })
   findAll() {
-    // const { roles = [], _id } = user;
-    // if ( roles.includes( bcRoles.admin ) )
     return this.mediaItemService.findAll();
-    // return this.mediaItemService.findMediaItemsByUserId(_id);
   }
 
   @Get('categories')
@@ -63,7 +61,7 @@ export class MediaItemController {
 
   @MediaGetResponse()
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', ObjectIdPipe) id: ObjectId) {
     if (typeof id !== 'string') throw badRequestResponse(`${id} must be of type string`);
 
     const mediaItem = await this.mediaItemService.findOne(id);
@@ -74,7 +72,7 @@ export class MediaItemController {
 
   @MediaPostResponse()
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateMediaItemDto: UpdateMediaItemDto) {
+  update(@Param('id', ObjectIdPipe) id: ObjectId, @Body() updateMediaItemDto: UpdateMediaItemDto) {
     return this.mediaItemService.update(id, updateMediaItemDto);
   }
 
@@ -90,7 +88,7 @@ export class MediaItemController {
 
   @Post(':id/share/:userId')
   @MediaPostResponse()
-  async share(@Param('id') id: string, @Param('userId') userIdStr: string, @Res() response: Response) {
+  async share(@Param('id', ObjectIdPipe) id: ObjectId, @Param('userId') userIdStr: string, @Res() response: Response) {
     const { userId: createdBy, title } = await this.mediaItemService.findOne(id);
     if (!title && !createdBy) return response.status(HttpStatus.NOT_FOUND);
     const userId = new ObjectId(userIdStr);

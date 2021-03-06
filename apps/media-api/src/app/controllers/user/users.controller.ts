@@ -24,12 +24,11 @@ import { ShareItemService } from '../../modules/share-item/services/share-item.s
 
 import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
-import { conflictResponse, notFoundResponse } from '../../core/functors/http-errors.functor';
+import { conflictResponse } from '../../core/functors/http-errors.functor';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
-import { UserGuard } from '../../modules/auth/guards/user.guard';
 import { UserService } from '../../modules/auth/user.service';
-import { BcRolesType, BC_ROLES } from 'libs/core/src/lib/models/roles.enum';
+import { BcRolesType, BC_ROLES } from '@core-lib';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
 import { createUserResponseDto } from './dto/create-user-response.dto';
 import { Playlist } from '../playlist/entities/playlist.entity';
@@ -38,6 +37,7 @@ import { LoginDto } from './dto/login.dto';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
+import { ObjectIdPipe } from '@mediashare/shared';
 
 @ApiTags('users')
 @Controller('users')
@@ -87,28 +87,31 @@ export class UsersController {
     }
   }
 
-  @Get(':id')
+  @Get(':userId')
   @UserGetResponse()
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(id);
+  findOne(@Param('userId', ObjectIdPipe) userId: ObjectId): Promise<User> {
+    return this.userService.findOne(userId);
   }
 
-  @Put(':id')
+  @Put(':userId')
   @UserPostResponse()
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
-    return this.userService.update(id, updateUserDto);
+  update(
+    @Param('userId', ObjectIdPipe) userId: ObjectId,
+    @Body() updateUserDto: UpdateUserDto
+  ): Promise<Partial<User>> {
+    return this.userService.update(userId, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string): Promise<DeleteResult> {
-    return this.userService.remove(id);
+  @Delete(':userId')
+  remove(@Param('userId') userId: string): Promise<DeleteResult> {
+    return this.userService.remove(userId);
   }
 
-  @Get(':id/playlists')
+  @Get(':userId/playlists')
   @UserGetResponse({ type: Playlist, isArray: true })
   @ApiHideProperty()
-  getPlaylists(@Param('id') id: string) {
-    return this.playlistService.findByUserId(id);
+  getPlaylists(@Param('userId', ObjectIdPipe) userId: ObjectId) {
+    return this.playlistService.getPlaylistByUserId({ userId });
   }
 
   @Get(':id/media-items')
@@ -123,7 +126,7 @@ export class UsersController {
 
   @Get(':id/shared-media-items')
   @UserGetResponse({ isArray: true, type: MediaItemDto })
-  async getSharedMediaItems(@Param('id') id: string) {
+  async getSharedMediaItems(@Param('id', ObjectIdPipe) id: ObjectId) {
     const user = await this.userService.findOne(id);
 
     const { sharedMediaItems = [] } = user;
@@ -135,7 +138,7 @@ export class UsersController {
 
   @Get(':id/shared-playlists')
   @UserGetResponse({ type: Playlist, isArray: true })
-  async getSharedPlaylists(@Param('id') userId: string) {
+  async getSharedPlaylists(@Param('id', ObjectIdPipe) userId: ObjectId) {
     const { sharedPlaylists } = await this.userService.findOne(userId);
 
     // const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
@@ -144,7 +147,7 @@ export class UsersController {
     // return this.playlistService.mapPlaylists(playlists, mediaItems);
   }
 
-  @Get(':id/share-items')
+  @Get(':userId/share-items')
   @UserGetResponse({ type: ShareItem, isArray: true })
   async getShareItems(@Param('id') id: string) {
     const shareItems = this.shareItemService.findByQuery({ userId: new ObjectId(id) });
@@ -152,10 +155,10 @@ export class UsersController {
     return shareItems;
   }
 
-  @Put(':id/roles')
+  @Put(':userId/roles')
   @UserPostResponse()
   @ApiBody({ enum: BC_ROLES, isArray: true })
-  setRoles(@Param('id') id: string, @Body() params: { roles: BcRolesType[] }) {
+  setRoles(@Param('userId') id: string, @Body() params: { roles: BcRolesType[] }) {
     const { roles = [] } = params;
     return this.userService.setRoles(id, roles);
   }
@@ -163,13 +166,9 @@ export class UsersController {
   /* shared with others */
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
-  @Post(':id/shared-items/:shareId')
+  @Post('shared-items/:shareId')
   @ApiResponse({ type: UserDto, status: 200 })
-  async readSharedItem(
-    @Param('id') id: string,
-    @Param('shareId') shareId: string,
-    @GetUser() user: SessionUserInterface
-  ) {
+  async readSharedItem(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId, @GetUser() user: SessionUserInterface) {
     const sharedItem = await this.shareItemService.update(shareId, { read: true });
 
     return sharedItem;

@@ -69,9 +69,9 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
 
   createPlaylistShareItem({ userId, playlistId, createdBy }: CreatePlaylistShareItemDto): Promise<ShareItem> {
     return this.create({
-      userId: new ObjectId(userId),
-      playlistId: new ObjectId(playlistId),
-      createdBy: new ObjectId(createdBy),
+      userId,
+      playlistId,
+      createdBy,
       read: false,
     });
   }

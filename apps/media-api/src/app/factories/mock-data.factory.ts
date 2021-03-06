@@ -10,6 +10,8 @@ import * as R from 'remeda';
 import { Playlist } from '../controllers/playlist/entities/playlist.entity';
 import { SessionUserInterface } from '../core/models/auth-user.model';
 
+import { ObjectIdGuard } from '@util-lib';
+
 class DataFn {
   static id = () => new ObjectId();
   static shortString = Faker.lorem.sentence;
@@ -58,7 +60,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
     const email = username;
     return {
       username,
-      _id,
+      _id: ObjectIdGuard(_id),
       createdAt: new Date(),
       authId,
       email,

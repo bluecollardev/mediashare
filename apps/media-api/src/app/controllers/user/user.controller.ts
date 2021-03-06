@@ -42,27 +42,30 @@ export class UserController {
 
     const [mongoUser, authUser] = await Promise.all([
       this.userService.findOne(_id),
-      this.userService.getAuthUser({ _id: _id }),
+      this.userService.getAuthUser({ _id }),
     ]);
     return { ...authUser, ...mongoUser };
   }
 
   @Get('playlists')
   async getPlaylists(@GetUser() user: SessionUserInterface) {
-    return this.playlistService.findByUserId(user._id);
+    // return user;
+    const result = await this.playlistService.getPlaylistByUserId({ userId: user._id });
+
+    console.log(result);
+    return result;
   }
 
   @Get('share-items')
   @UserGetResponse({ isArray: true, type: ShareItem })
-  async getMyShareItems(@GetUser() user: User = null) {
+  async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
 
-    const items = await this.shareItemService.findOne(typeof userId === 'string' ? userId : userId.toHexString());
+    const items = await this.shareItemService.findOne(userId);
 
     return items ?? [];
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('shared-media-items')
   @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
@@ -77,7 +80,6 @@ export class UserController {
     return mediaItems;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('shared-playlists')
   @UserGetResponse({ type: Playlist, isArray: true })
   async getSharedPlaylists(

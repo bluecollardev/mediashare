@@ -7,4 +7,6 @@ class ObjectIdParameters {
   playlistItemId: ObjectId;
 }
 
+export type OptionalObjectIdParameters = Partial<ObjectIdParameters>;
+
 export { ObjectIdParameters };

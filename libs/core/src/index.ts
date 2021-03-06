@@ -13,3 +13,4 @@ export * from './lib/tokens/auth-tokens.constant';
 export * from './lib/models';
 
 export * from './lib/tokens';
+export * from './lib/types/';

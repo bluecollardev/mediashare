@@ -25,10 +25,9 @@ export class PlaylistController {
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   @Post()
   async create(@Body() createPlaylistDto: CreatePlaylistDto, @GetUser() user: SessionUserInterface) {
-    const { items: dtoItems, title = 'untitled' } = createPlaylistDto;
-    const userId = new ObjectId(user._id);
+    const { _id: userId } = user;
 
-    const playlist = await this.playlistService.createPlaylistWithItems({ userId, mediaIds: dtoItems, title });
+    const playlist = await this.playlistService.createPlaylistWithItems(createPlaylistDto);
 
     return playlist;
   }
@@ -44,24 +43,23 @@ export class PlaylistController {
     return { categories: PLAYLIST_CATEGORY };
   }
 
-  @PlaylistGetResponse()
+  @PlaylistGetResponse({ type: PlaylistResponseDto })
   @Get(':playlistId')
   findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
-    console.log(playlistId);
     return this.playlistService.getPlaylistById({ playlistId });
   }
 
   @Put(':playlistId')
   @PlaylistPostResponse()
   update(
-    @Param('playlistId') id: string,
+    @Param('playlistId', ObjectIdPipe) playlistId: ObjectId,
     @GetUser() user: SessionUserInterface,
     @Body() updatePlaylistDto: UpdatePlaylistDto
   ) {
     const { ...rest } = updatePlaylistDto;
     const { _id: userId } = user;
 
-    return this.playlistService.update(id, { ...rest, userId: new ObjectId(userId) });
+    return this.playlistService.update(playlistId, { ...rest, userId: new ObjectId(userId) });
   }
 
   @UseJwtGuard()
@@ -73,8 +71,8 @@ export class PlaylistController {
   @ApiPostResponse({ type: ShareItem, isArray: true })
   @Post(':playlistId/share/:userId')
   async share(
-    @Param('userId') userId: string,
-    @Param('playlistId') playlistId: string,
+    @Param('userId', new ObjectIdPipe()) userId: ObjectId,
+    @Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId,
     @GetUser() user: SessionUserInterface,
     @Res() response: Response
   ) {

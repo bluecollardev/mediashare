@@ -11,6 +11,8 @@ import { PlaylistItemService } from '../../../modules/playlist-item/services/pla
 import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
 
 import * as R from 'remeda';
+import { CreatePlaylistDto } from '../dto/create-playlist.dto';
+import { ObjectIdParameters, OptionalObjectIdParameters } from '@mediashare/shared';
 
 @Injectable()
 export class PlaylistService extends DataService<Playlist, MongoRepository<Playlist>> {
@@ -29,15 +31,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    * @param {{ mediaIds: string[]; userId: ObjectId }} { userId, mediaIds }
    * @memberof PlaylistService
    */
-  async createPlaylistWithItems({
-    userId,
-    mediaIds,
-    title = '',
-  }: {
-    mediaIds: string[];
-    userId: ObjectId;
-    title?: string;
-  }) {
+  async createPlaylistWithItems({ userId, mediaIds, title = '' }: CreatePlaylistDto) {
     if (!userId || typeof userId === 'string') throw new Error('userId is string in createPlaylistWithItems');
     const playlist = await this.create({ userId, title });
     const { _id: playlistId } = playlist;
@@ -65,19 +59,6 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     const mappedItems = items.map((item) => ({ ...item, playlistId }));
 
     return this.playlistItemService.insertMany(mappedItems);
-  }
-
-  /**
-   * Find a playlist by the user's Id
-   *
-   * @param {string} userIdStr
-   * @return {*}
-   * @memberof PlaylistService
-   */
-  findByUserId(userIdStr: string): Promise<PlaylistByUserResponseDto[]> {
-    const userId = new ObjectId(userIdStr);
-
-    return this.playlistItemService.aggregatePlaylistAndItemByIdField({ userId }).toArray();
   }
 
   findPlaylistsByList(ObjectIds: ObjectId[]): Promise<PlaylistByUserResponseDto[]> {
@@ -110,7 +91,12 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.playlistItemService.aggregatePlaylistAndItem();
   }
 
-  getPlaylistById({ playlistId }: { playlistId: ObjectId }) {
-    return this.playlistItemService.aggregatePlaylistAndItemByIdField({ playlistId });
+  getPlaylistByUserId({ userId }: OptionalObjectIdParameters) {
+    return this.playlistItemService.aggregatePlaylistAndItemByIdField({ userId });
+  }
+  getPlaylistById({ playlistId }: OptionalObjectIdParameters) {
+    return this.playlistItemService.aggregatePlaylistAndItemByIdField({
+      playlistId,
+    });
   }
 }

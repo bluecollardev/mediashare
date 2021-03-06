@@ -10,6 +10,8 @@ import {
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { ObjectIdPipe } from '@mediashare/shared';
+import { ObjectId } from 'mongodb';
 
 @Controller('profile')
 export class ProfileController {
@@ -26,12 +28,12 @@ export class ProfileController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ObjectIdPipe) id: ObjectId) {
     return this.profileService.findOne(id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
+  update(@Param('id', ObjectIdPipe) id: ObjectId, @Body() updateProfileDto: UpdateProfileDto) {
     return this.profileService.update(id, updateProfileDto);
   }
 

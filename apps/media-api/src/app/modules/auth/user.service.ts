@@ -66,7 +66,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return this.client.send({ role: 'auth', cmd: 'setRoles' }, { _id, roles }).toPromise();
   }
 
-  getAuthUser(user: { _id: string }) {
+  getAuthUser(user: { _id: ObjectId }) {
     return this.client.send({ role: 'auth', cmd: 'get' }, user).toPromise();
   }
 

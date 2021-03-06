@@ -1,10 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ObjectId, OptionalId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
-import { DeepPartial, MongoRepository } from 'typeorm';
+import { DeepPartial, MongoRepository, ObjectID } from 'typeorm';
 import { BcBaseEntity } from '../entities/base.entity';
 
 import * as R from 'remeda';
+import { ObjectIdGuard } from '@util-lib';
+import { IdType } from '@core-lib';
 
 export type MsDocumentType<T> = OptionalId<T>;
 /**
@@ -50,11 +52,11 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
    * @return {*}
    * @memberof DataService
    */
-  async findOne(id: string): Promise<E> {
+  async findOne(id: ObjectId): Promise<E> {
     this.logger.info(`${this.constructor.name}findOne props`, id);
 
     try {
-      const document = await this.repository.findOne(id);
+      const document = await this.repository.findOne(id as ObjectID);
       this.logger.info('${this.constructor.name}findOne result', document);
       return R.clone(document);
     } catch (error) {
@@ -70,14 +72,10 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
    * @return {*}
    * @memberof DataService
    */
-  async update(id: string, dto: Partial<E>): Promise<Partial<E>> {
-    this.logger.info('update props', id, dto);
+  async update(_id: ObjectId, dto: Partial<E>): Promise<Partial<E>> {
+    this.logger.info('update props', _id, dto);
     try {
-      const update = await this.repository.findOneAndUpdate(
-        { _id: new ObjectId(id) },
-        { $set: dto },
-        { returnOriginal: false }
-      );
+      const update = await this.repository.findOneAndUpdate({ _id }, { $set: dto }, { returnOriginal: false });
       this.logger.info('update result', update);
 
       return R.clone(update.value);
@@ -93,10 +91,10 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
    * @return {*}
    * @memberof DataService
    */
-  async remove(id: string) {
+  async remove(id: IdType) {
     try {
       this.logger.info('remove props', id);
-      const removed = await this.repository.delete(id);
+      const removed = await this.repository.delete(ObjectIdGuard(id).toHexString());
       return R.clone(removed);
     } catch (error) {
       this.logger.error(`${this.constructor.name}.remove ${error}`);
