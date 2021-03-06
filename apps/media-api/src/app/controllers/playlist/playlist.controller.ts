@@ -1,32 +1,31 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 
-import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { PlaylistService } from './services/playlist.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-import { PLAYLIST_CATEGORY } from '@core-lib';
+import { PLAYLIST_CATEGORY, PLAYLIST_ID } from '@core-lib';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse } from './playlist.decorator';
 import { UseJwtGuard } from '../../modules/auth/auth.decorator';
 import { ApiPostResponse } from '@mediashare/shared';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
-import { PlaylistCategoryDto } from './dto/playlist-category.dto';
 import { PlaylistResponseDto } from './dto/playlist-response.dto';
+import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 
 @ApiTags('playlists')
 @Controller('playlists')
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
-  @PlaylistPostResponse()
+  @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   @Post()
   async create(@Body() createPlaylistDto: CreatePlaylistDto, @GetUser() user: SessionUserInterface) {
     const { items: dtoItems, title = 'untitled' } = createPlaylistDto;
-
     const userId = new ObjectId(user._id);
 
     const playlist = await this.playlistService.createPlaylistWithItems({ userId, mediaIds: dtoItems, title });
@@ -46,14 +45,21 @@ export class PlaylistController {
   }
 
   @PlaylistGetResponse()
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.playlistService.findOne(id);
+  @Get(`:${PLAYLIST_ID}`)
+  findOne(@Param(PLAYLIST_ID) playlistId: string) {
+    return this.playlistService.getPlaylistById({ playlistId });
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
-    const { userId, ...rest } = updatePlaylistDto;
+  @Put(`:${PLAYLIST_ID}`)
+  @PlaylistPostResponse()
+  update(
+    @Param(PLAYLIST_ID) id: string,
+    @GetUser() user: SessionUserInterface,
+    @Body() updatePlaylistDto: UpdatePlaylistDto
+  ) {
+    const { ...rest } = updatePlaylistDto;
+    const { _id: userId } = user;
+
     return this.playlistService.update(id, { ...rest, userId: new ObjectId(userId) });
   }
 
@@ -64,19 +70,16 @@ export class PlaylistController {
   }
 
   @ApiPostResponse({ type: ShareItem, isArray: true })
-  @Post(':id/share/:userId')
-  async share(@Param('id') id: string, @Param('userId') userId: string, @Res() response: Response) {
-    const playlistItem = await this.playlistService.findOne(id);
-    if (!playlistItem) return response.status(HttpStatus.NOT_FOUND);
+  @Post(':playlistId/share/:userId')
+  async share(
+    @Param('userId') userId: string,
+    @Param('playlistId') playlistId: string,
+    @GetUser() user: SessionUserInterface,
+    @Res() response: Response
+  ) {
+    const { _id: createdBy } = user;
 
-    const { userId: createdById, title } = playlistItem;
-
-    const shareItem = await this.shareItemService.createPlaylistShareItem({
-      createdBy: createdById.toHexString(),
-      userId,
-      playlistId: id,
-      title,
-    });
+    const shareItem = await this.shareItemService.createPlaylistShareItem({ createdBy, userId, playlistId });
 
     return response.status(HttpStatus.CREATED).send(shareItem);
   }

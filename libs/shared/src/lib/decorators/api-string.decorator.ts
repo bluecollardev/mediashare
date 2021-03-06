@@ -6,8 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, IsUrl, Length } from 'class-validator';
 import { apiDecoratorDefaults } from '../models';
 
-const stringExample =
-  'shut against join neighbor original report whale add elephant ourselves nails after mark what shinning handle fifth dawn ordinary mad hour milk him me';
+import * as R from 'remeda';
 
 const baseStringValidators = (min, max) => [IsString(), Length(min, max)];
 const lengthFn = function (minLength: number, maxLength: number) {
@@ -43,7 +42,7 @@ const ApiString: ApiDecoratorType = function ({ required } = apiDecoratorDefault
     ApiProperty({
       required,
       type: String,
-      example: stringExample,
+      example: R.randomString(125),
       ...lengthFn(...length),
     })
   );
@@ -66,7 +65,7 @@ const ApiUriString: ApiDecoratorType = function ({ required } = apiDecoratorDefa
 const ApiLongString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
   return applyDecorators(
     ...baseStringValidators(5, 700),
-    ApiProperty({ required, type: String, example: stringExample })
+    ApiProperty({ required, type: String, example: R.randomString(300) })
   );
 };
 

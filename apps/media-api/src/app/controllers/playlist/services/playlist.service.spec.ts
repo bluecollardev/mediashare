@@ -81,11 +81,11 @@ describe('PlaylistService', () => {
       console.log(userId);
 
       expect(inserted).toBeDefined();
-      expect(inserted.playlist.userId.toHexString()).toBe(userId.toHexString());
-      expect(inserted.playlist).toHaveProperty('title');
+      expect(inserted.userId.toHexString()).toBe(userId.toHexString());
+      expect(inserted).toHaveProperty('title');
       expect(inserted.playlistItems).toHaveLength(dto.length);
 
-      const { playlistItems, playlist, playlistId } = inserted;
+      const { playlistItems, playlistId } = inserted;
 
       const aggregated = await service.aggregatePlaylists(playlistId);
       expect(aggregated).toHaveLength(playlistItems.length);

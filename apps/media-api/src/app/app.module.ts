@@ -37,7 +37,15 @@ import { AppConfigService } from './modules/app-config.module.ts/app-config.prov
       inject: [AppConfigService],
     }),
     UserModule,
-    LoggerModule.forRoot(),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        prettyPrint: {
+          colorize: true,
+          levelFirst: true,
+          translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z',
+        },
+      },
+    }),
     MediaItemModule,
     ProfileModule,
     PlaylistModule,

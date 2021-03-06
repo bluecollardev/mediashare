@@ -9,37 +9,8 @@ import { PlaylistItem } from '../entities/playlist-item.entity';
 import * as R from 'remeda';
 @Injectable()
 export class PlaylistItemService extends DataService<PlaylistItem, MongoRepository<PlaylistItem>> {
-  constructor(
-    @InjectRepository(PlaylistItem)
-    public repository: MongoRepository<PlaylistItem>,
-    logger: PinoLogger
-  ) {
-    super(repository, logger);
-  }
-
-  async findByUserId(userIdStr: string) {
-    const userId = new ObjectId(userIdStr);
-
-    const playlistItems = await this.repository.find({ userId });
-
-    return playlistItems;
-  }
-
-  getMediaItemsFromPlaylistId() {
-    return this.repository.aggregate([
-      {
-        $lookup: {
-          from: 'mediaItems',
-          localField: 'mediaId',
-          foreignField: '_id',
-          as: 'mediaItems',
-        },
-      },
-    ]);
-  }
-
-  aggregatePlaylistAndItem() {
-    const query = this.repository.aggregate([
+  private get playlistAggregationPipeline() {
+    return [
       {
         $lookup: {
           from: 'media_item',
@@ -97,7 +68,30 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
       {
         $group: { _id: '$playlistId', title: { $first: '$playlistTitle' }, mediaItems: { $push: '$$ROOT' } },
       },
+    ];
+  }
+  constructor(
+    @InjectRepository(PlaylistItem)
+    public repository: MongoRepository<PlaylistItem>,
+    logger: PinoLogger
+  ) {
+    super(repository, logger);
+  }
+
+  async findByUserId(userIdStr: string) {
+    return await this.repository.find({ userId: new ObjectId(userIdStr) });
+  }
+
+  aggregatePlaylistAndItemById({ playlistId }: { playlistId: ObjectId }) {
+    return this.repository.aggregate([
+      {
+        $match: { playlistId },
+      },
+      ...this.playlistAggregationPipeline,
     ]);
-    return query.toArray();
+  }
+
+  aggregatePlaylistAndItem() {
+    return this.repository.aggregate(this.playlistAggregationPipeline).toArray();
   }
 }

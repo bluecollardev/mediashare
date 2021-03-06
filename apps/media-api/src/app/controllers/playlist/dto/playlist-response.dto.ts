@@ -2,9 +2,9 @@ import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Playlist } from '../entities/playlist.entity';
 import { PlaylistItemResponseDto } from './playlist-response-item.dto';
 
-export class PlaylistResponseDto extends PickType(Playlist, ['_id', 'title']) {
+class PlaylistResponseDto extends PickType(Playlist, ['_id', 'title']) {
   @ApiProperty({ name: 'Media Items', type: () => PlaylistItemResponseDto, description: 'Playlist response DTO' })
   mediaItems: PlaylistItemResponseDto[];
 }
 
-export { PlaylistItemResponseDto };
+export { PlaylistItemResponseDto, PlaylistResponseDto };

@@ -5,67 +5,55 @@
 
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
-import * as MongoStore from 'connect-mongo';
 import { AppModule } from './app/app.module';
 
 import { writeFileSync } from 'fs';
 
-import * as session from 'express-session';
-
-import {} from 'typeorm/';
 import * as passport from 'passport';
 import { AppConfigService } from './app/modules/app-config.module.ts/app-config.provider';
+import { DocumentBuilderFactory, SessionStoreFactory } from '@mediashare/shared';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const appConfig: AppConfigService = app.get('AppConfigService');
+
   app.useLogger(app.get(Logger));
 
   app.useGlobalPipes(new ValidationPipe());
 
-  const appConfig: AppConfigService = app.get('AppConfigService');
+  const [host, port, globalPrefix, title, mongoUrl, dbName, collectionName, secret, isDev] = [
+    appConfig.get('host'),
+    appConfig.get('port'),
+    appConfig.get('globalPrefix'),
+    appConfig.get('title'),
+    appConfig.get('sessionDb'),
+    appConfig.get('sessionDbName'),
+    appConfig.get('sessionCollection'),
+    appConfig.get('sessionSecret'),
+    appConfig.get('env') === 'development',
+  ] as const;
 
-  const globalPrefix = appConfig.get('globalPrefix');
+  const session = SessionStoreFactory({ mongoUrl, dbName, collectionName, secret });
 
   app.setGlobalPrefix(globalPrefix);
 
   /* PASSPORT & SESSION */
-  app.use(passport.initialize());
-  app.use(passport.session());
-
-  app.use(
-    session({
-      store: MongoStore.default.create({
-        mongoUrl: appConfig.get('sessionDb'),
-        dbName: appConfig.get('sessionDbName'),
-        collectionName: appConfig.get('sessionCollection'),
-      }),
-      secret: appConfig.get('sessionSecret'),
-      resave: false,
-      saveUninitialized: false,
-    })
-  );
+  app.use(passport.session(), passport.initialize(), session());
 
   /* SWAGGER */
-  const config = new DocumentBuilder()
-    .setTitle(appConfig.get('title'))
-    .setDescription('Media Share API')
-    .setVersion('1.0')
-    .addBasicAuth()
-    .addBearerAuth()
-    .build();
+  const config = DocumentBuilderFactory(title).build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  const port = appConfig.get('port');
-
   SwaggerModule.setup(globalPrefix, app, document);
 
-  if (appConfig.get('env') === 'development') writeFileSync('./swagger-spec.json', JSON.stringify(document));
+  if (isDev) writeFileSync('./swagger-spec.json', JSON.stringify(document, null, 2));
 
   await app.listen(port, () => {
-    console.log(`Listening at ${appConfig.get('host')}:${port}/${globalPrefix}`);
+    console.log(`Listening at ${host}:${port}/${globalPrefix}`);
   });
 }
 

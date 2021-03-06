@@ -11,7 +11,7 @@ import * as R from 'remeda';
 import { MediaItem, MEDIA_TOKEN } from '../../media-item/entities/media-item.entity';
 import { PlaylistItemService } from '../../../modules/playlist-item/services/playlist-item.service';
 import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
-import { PlaylistResponseDto } from '../entities/playlist-response.dto';
+import { PlaylistResponseDto } from '../dto/playlist-response.dto';
 @Injectable()
 export class PlaylistService extends DataService<Playlist, MongoRepository<Playlist>> {
   constructor(
@@ -46,7 +46,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
 
     const playlistItems = await this.createPlaylistItems({ playlistId, items });
 
-    return { ...playlist, playlistId, playlistItems };
+    return { playlist, playlistItems };
   }
 
   /**
@@ -58,8 +58,11 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    */
   createPlaylistItems({ playlistId, items }: { playlistId: ObjectId; items: Partial<PlaylistItem>[] }) {
     if (!items && items.length < 1) throw new Error('no items in createPlaylistItems');
+
     if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
+
     const mappedItems = items.map((item) => ({ ...item, playlistId }));
+
     return this.playlistItemService.insertMany(mappedItems);
   }
 
@@ -140,26 +143,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.playlistItemService.aggregatePlaylistAndItem();
   }
 
-  aggregatePlaylists(playlistId: ObjectId): Promise<PlaylistResponseDto[]> {
-    const query = this.playlistItemService.repository.aggregate([
-      {
-        $match: { playlistId },
-      },
-      { $lookup: { from: PLAYLIST_TOKEN, localField: 'playlistId', foreignField: '_id', as: 'playlist' } },
-
-      {
-        $lookup: { from: MEDIA_TOKEN, localField: 'mediaId', foreignField: '_id', as: 'mediaItem' },
-      },
-    ]);
-    return query.toArray();
-  }
-
-  mapPlaylists(playlists: Playlist[], mediaItems: MediaItem[]) {
-    // const indexedMediaItems = R.indexBy(mediaItems, (item) => item._id);
-    // const mapped = R.map(playlists, (playlist) => ({
-    //   ...playlist,
-    //   mediaItems: playlist?.items.map((item) => indexedMediaItems[item.mediaId.toHexString()]) || [],
-    // }));
-    // return mapped;
+  getPlaylistById({ playlistId }: { playlistId: string }) {
+    return this.playlistItemService.aggregatePlaylistAndItemById({ playlistId: new ObjectId(playlistId) });
   }
 }

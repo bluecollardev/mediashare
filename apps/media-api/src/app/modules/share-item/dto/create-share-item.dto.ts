@@ -37,6 +37,4 @@ export class CreatePlaylistShareItemDto {
   @ApiProperty({ required: true })
   @IsString()
   createdBy: string;
-
-  title: string;
 }
