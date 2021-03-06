@@ -56,7 +56,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
     this.logger.info(`${this.constructor.name}findOne props`, id);
 
     try {
-      const document = await this.repository.findOne(id as ObjectID);
+      const document = await this.repository.findOne(id.toHexString());
       this.logger.info('${this.constructor.name}findOne result', document);
       return R.clone(document);
     } catch (error) {
@@ -76,6 +76,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
     this.logger.info('update props', _id, dto);
     try {
       const update = await this.repository.findOneAndUpdate({ _id }, { $set: dto }, { returnOriginal: false });
+
       this.logger.info('update result', update);
 
       return R.clone(update.value);

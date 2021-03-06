@@ -16,6 +16,7 @@ import { AppConfigService } from './app/modules/app-config.module.ts/app-config.
 import { DocumentBuilderFactory } from '@mediashare/shared';
 import * as session from 'express-session';
 import MongoStore from 'connect-mongo';
+import * as compression from 'compression';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -51,6 +52,7 @@ async function bootstrap() {
 
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(compression());
 
   app.use(
     session({

@@ -4,6 +4,8 @@ import { GetUser } from '../../core/decorators/user.decorator';
 import { AuthUserInterface } from '@core-lib';
 import { ApiTags } from '@nestjs/swagger';
 import { ShareItemGetResponse } from './share-items.decorator';
+import { ObjectIdPipe } from '@mediashare/shared';
+import { ObjectId } from 'mongodb';
 
 @ApiTags('share-items')
 @Controller('share-items')
@@ -12,22 +14,24 @@ export class ShareItemsController {
 
   @ShareItemGetResponse({ isArray: true })
   @Get()
-  findAll(@GetUser() user: AuthUserInterface) {
+  async findAll(@GetUser() user: AuthUserInterface) {
     Logger.warn(user);
-    return this.shareItemService.findShareItemsByUserId(
+    const sharedItems = await this.shareItemService.findShareItemsByUserId(
       typeof user._id === 'string' ? user._id : user._id.toHexString()
     );
+
+    return sharedItems;
   }
 
   @ShareItemGetResponse()
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ObjectIdPipe) id: ObjectId) {
     return this.shareItemService.findOne(id);
   }
 
   @ShareItemGetResponse()
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ObjectIdPipe) id: ObjectId) {
     return this.shareItemService.remove(id);
   }
 }

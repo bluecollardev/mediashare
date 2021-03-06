@@ -79,14 +79,6 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
     super(repository, logger);
   }
 
-  // async aggregatePlaylistAndItemByUserIdField(userIdStr: string) {
-  //   const query = this.repository.aggregate([
-  //     {
-  //       $match: { where: { userId: new ObjectId(userIdStr) } },
-  //     },
-  //   ]);
-  // }
-
   aggregatePlaylistAndItemByIdField(params: Partial<ObjectIdParameters>) {
     return this.repository
       .aggregate([

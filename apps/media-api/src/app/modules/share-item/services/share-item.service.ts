@@ -1,4 +1,5 @@
 import { DataService } from '@api';
+import { ObjectIdParameters, OptionalObjectIdParameters } from '@mediashare/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
@@ -8,6 +9,12 @@ import { PLAYLIST_TOKEN } from '../../../controllers/playlist/entities/playlist.
 import { CreateMediaShareItemInput, CreatePlaylistShareItemDto } from '../dto/create-share-item.dto';
 
 import { ShareItem } from '../entities/share-item.entity';
+
+export class QueryBuilder {
+  match({ userId }: OptionalObjectIdParameters) {
+    return { $match: { $and: [{ userId }, { mediaId: { $exists: true } }] } };
+  }
+}
 
 @Injectable()
 export class ShareItemService extends DataService<ShareItem, MongoRepository<ShareItem>> {
@@ -37,13 +44,30 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
 
   aggregateSharedMediaItems({ userId }: { userId: ObjectId }) {
     const query = this.repository.aggregate([
+      { $match: { $and: [{ userId }, { mediaId: { $exists: true } }] } },
+
+      { $lookup: { from: 'media_item', localField: 'mediaId', foreignField: '_id', as: 'mediaItem' } },
+
+      { $unwind: { path: '$mediaItem' } },
+
       {
-        $match: { where: { userId, playlistId: { $exists: true } } },
+        $lookup: {
+          from: 'user',
+          localField: 'createdBy',
+          foreignField: '_id',
+          as: 'createdBy',
+        },
       },
+      { $unwind: { path: '$createdBy' } },
       {
-        $lookup: { from: 'media_item', localField: 'mediaId', foreignField: '_id', as: 'mediaItems' },
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [{ userId: 0, playlistId: 0, mediaId: 0 }, '$mediaItem', { createdBy: '$createdBy' }],
+          },
+        },
       },
     ]);
+
     return query.toArray();
   }
 

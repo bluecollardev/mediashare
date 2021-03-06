@@ -27,7 +27,7 @@ export class PlaylistController {
   async create(@Body() createPlaylistDto: CreatePlaylistDto, @GetUser() user: SessionUserInterface) {
     const { _id: userId } = user;
 
-    const playlist = await this.playlistService.createPlaylistWithItems(createPlaylistDto);
+    const playlist = await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId });
 
     return playlist;
   }

@@ -38,5 +38,3 @@ export class AuthUser implements AuthUserInterface {
   @Column('enum', { default: [bcRoles.guest], array: true, enum: BC_ROLES })
   roles: BcRolesType[];
 }
-
-const user = new AuthUser();

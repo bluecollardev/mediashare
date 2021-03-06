@@ -48,6 +48,7 @@ export class UserController {
   }
 
   @Get('playlists')
+  @UserGetResponse()
   async getPlaylists(@GetUser() user: SessionUserInterface) {
     // return user;
     const result = await this.playlistService.getPlaylistByUserId({ userId: user._id });
@@ -69,12 +70,10 @@ export class UserController {
   @Get('shared-media-items')
   @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
-    // const { _id = null } = user;
-    const userId = new ObjectId();
-    // const { sharedMediaItems = [] } = await this.userService.findAllSharedMediaItemsByUserId(_id);
-    // const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedMediaItems);
-    // return mediaItems;
-
+    const { _id: userId } = user;
+    console.log('🚀 -----------------------------------------------------------------------------------------------');
+    console.log('🚀 ~ file: user.controller.ts ~ line 74 ~ UserController ~ getSharedMediaItems ~ userId', userId);
+    console.log('🚀 -----------------------------------------------------------------------------------------------');
     const mediaItems = await this.shareItemService.aggregateSharedMediaItems({ userId });
 
     return mediaItems;

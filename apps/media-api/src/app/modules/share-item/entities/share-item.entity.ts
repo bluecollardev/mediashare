@@ -1,32 +1,39 @@
 import { BcEntity } from '@api';
 import { ApiObjectId, ApiString } from '@mediashare/shared';
-import { IsBoolean } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, isNotEmpty } from 'class-validator';
 import { ObjectId } from 'mongodb';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, Index, Check } from 'typeorm';
 
 @Entity()
 export class ShareItem extends BcEntity {
-  @Column()
+  @Column({ name: 'userId' })
   @ApiObjectId({ readOnly: true })
+  @Index('userId')
   userId: ObjectId;
 
-  @Column()
+  @Column({ name: 'playlistId' })
   @ApiObjectId({ required: false })
-  playlistId?: ObjectId;
+  @Index('playlistId')
+  playlistId: ObjectId;
 
-  @Column()
+  @Column({ name: 'mediaId' })
   @ApiObjectId({ required: false })
-  mediaId?: ObjectId;
+  @Index('mediaId')
+  mediaId: ObjectId;
 
-  @Column()
+  @Column({ name: 'createdBy' })
   @ApiObjectId({ readOnly: true })
+  @Index('createdBy')
   createdBy: ObjectId;
 
-  @Column()
+  @Column({ name: 'read' })
   @IsBoolean()
+  @Index()
   read: boolean;
 
-  @Column()
+  @Column({ name: 'title' })
   @ApiString()
+  @Index()
   title: string;
 }

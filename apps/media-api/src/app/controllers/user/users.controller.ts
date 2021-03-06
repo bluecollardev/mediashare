@@ -124,29 +124,6 @@ export class UsersController {
     return res.status(HttpStatus.OK).send(mediaItems);
   }
 
-  @Get(':id/shared-media-items')
-  @UserGetResponse({ isArray: true, type: MediaItemDto })
-  async getSharedMediaItems(@Param('id', ObjectIdPipe) id: ObjectId) {
-    const user = await this.userService.findOne(id);
-
-    const { sharedMediaItems = [] } = user;
-
-    const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedMediaItems);
-
-    return mediaItems;
-  }
-
-  @Get(':id/shared-playlists')
-  @UserGetResponse({ type: Playlist, isArray: true })
-  async getSharedPlaylists(@Param('id', ObjectIdPipe) userId: ObjectId) {
-    const { sharedPlaylists } = await this.userService.findOne(userId);
-
-    // const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
-    // const playlists = await this.playlistService.findPlaylistsByList(sharedPlaylists);
-
-    // return this.playlistService.mapPlaylists(playlists, mediaItems);
-  }
-
   @Get(':userId/share-items')
   @UserGetResponse({ type: ShareItem, isArray: true })
   async getShareItems(@Param('id') id: string) {
