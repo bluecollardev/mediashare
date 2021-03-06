@@ -110,8 +110,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.playlistItemService.aggregatePlaylistAndItem();
   }
 
-  getPlaylistById({ playlistId }: { playlistId: string }) {
-    return this.playlistItemService.aggregatePlaylistAndItemByIdField({ playlistId: new ObjectId(playlistId) });
-    console.log(playlistId);
+  getPlaylistById({ playlistId }: { playlistId: ObjectId }) {
+    return this.playlistItemService.aggregatePlaylistAndItemByIdField({ playlistId });
   }
 }

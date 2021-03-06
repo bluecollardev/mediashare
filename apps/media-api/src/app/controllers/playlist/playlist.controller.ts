@@ -12,7 +12,7 @@ import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse } from './playlist.decorator';
 import { UseJwtGuard } from '../../modules/auth/auth.decorator';
-import { ApiPostResponse } from '@mediashare/shared';
+import { ApiPostResponse, ObjectIdPipe } from '@mediashare/shared';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
@@ -46,7 +46,7 @@ export class PlaylistController {
 
   @PlaylistGetResponse()
   @Get(':playlistId')
-  findOne(@Param('playlistId') playlistId: string) {
+  findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
     console.log(playlistId);
     return this.playlistService.getPlaylistById({ playlistId });
   }
@@ -65,8 +65,8 @@ export class PlaylistController {
   }
 
   @UseJwtGuard()
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(':playlistId')
+  remove(@Param('playlistId') id: string) {
     return this.playlistService.remove(id);
   }
 

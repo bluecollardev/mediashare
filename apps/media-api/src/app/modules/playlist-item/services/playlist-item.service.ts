@@ -79,13 +79,13 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
     super(repository, logger);
   }
 
-  async aggregatePlaylistAndItemByUserIdField(userIdStr: string) {
-    const query = this.repository.aggregate([
-      {
-        $match: { where: { userId: new ObjectId(userIdStr) } },
-      },
-    ]);
-  }
+  // async aggregatePlaylistAndItemByUserIdField(userIdStr: string) {
+  //   const query = this.repository.aggregate([
+  //     {
+  //       $match: { where: { userId: new ObjectId(userIdStr) } },
+  //     },
+  //   ]);
+  // }
 
   aggregatePlaylistAndItemByIdField({ playlistId, userId }: Partial<ObjectIdParameters>) {
     return this.repository.aggregate([
@@ -122,7 +122,6 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
       },
       { $unwind: { path: '$mediaItems' } },
       { $unwind: { path: '$user' } },
-
       {
         $group: {
           _id: '$playlist._id',

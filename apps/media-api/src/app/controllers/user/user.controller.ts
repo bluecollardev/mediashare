@@ -86,16 +86,6 @@ export class UserController {
   ) {
     const { _id } = user;
     const userId = typeof _id === 'string' ? _id : _id.toHexString();
-
-    // const { sharedPlaylists } = await this.userService.findOne(userId);
-
-    // const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
-
-    // const playlists = await this.playlistService.findPlaylistsByList(sharedPlaylists);
-
-    // const sharedPlaylists = await this.playlistService.get
-
-    // return this.playlistService.mapPlaylists(playlists, mediaItems);
   }
 
   @HttpCode(HttpStatus.NOT_IMPLEMENTED)

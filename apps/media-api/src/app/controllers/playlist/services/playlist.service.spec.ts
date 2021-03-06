@@ -78,16 +78,18 @@ describe('PlaylistService', () => {
       const media = await mediaRepository.insertMany(dto);
       const mediaIds = [media.insertedIds['0'].toHexString(), media.insertedIds['1'].toHexString()];
       const inserted = await service.createPlaylistWithItems({ userId, mediaIds });
-      console.log(userId);
 
       expect(inserted).toBeDefined();
-      expect(inserted.userId.toHexString()).toBe(userId.toHexString());
+
       expect(inserted).toHaveProperty('title');
       expect(inserted.playlistItems).toHaveLength(dto.length);
 
-      const { playlistItems, playlistId } = inserted;
+      const {
+        playlistItems,
+        playlist: { _id: playlistId },
+      } = inserted;
 
-      const aggregated = await service.aggregatePlaylists(playlistId);
+      const aggregated = await service.getPlaylistById({ playlistId });
       expect(aggregated).toHaveLength(playlistItems.length);
     });
   });
