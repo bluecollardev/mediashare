@@ -136,6 +136,10 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     });
   }
 
+  findAll() {
+    return this.playlistItemService.aggregatePlaylistAndItem();
+  }
+
   aggregatePlaylists(playlistId: ObjectId): Promise<PlaylistResponseDto[]> {
     const query = this.playlistItemService.repository.aggregate([
       {

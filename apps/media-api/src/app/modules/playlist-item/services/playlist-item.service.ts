@@ -81,7 +81,6 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
       {
         $replaceRoot: {
           newRoot: {
-            mediaTitle: '$title',
             _id: '$mediaId',
             playlistId: '$playlistId',
             userId: '$userId',
@@ -89,7 +88,7 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
             summary: '$summary',
             isPlayable: '$isPlayable',
             description: '$description',
-            mediaCategory: '$category',
+            category: '$category',
             title: '$title',
             playlistTitle: '$playlist.title',
           },
@@ -99,6 +98,6 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
         $group: { _id: '$playlistId', title: { $first: '$playlistTitle' }, mediaItems: { $push: '$$ROOT' } },
       },
     ]);
-    return;
+    return query.toArray();
   }
 }

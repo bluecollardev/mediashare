@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
@@ -15,6 +15,7 @@ import { UseJwtGuard } from '../../modules/auth/auth.decorator';
 import { ApiPostResponse } from '@mediashare/shared';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { PlaylistCategoryDto } from './dto/playlist-category.dto';
+import { PlaylistResponseDto } from './dto/playlist-response.dto';
 
 @ApiTags('playlists')
 @Controller('playlists')
@@ -33,7 +34,7 @@ export class PlaylistController {
     return playlist;
   }
 
-  @PlaylistGetResponse({ isArray: true })
+  @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
   @Get()
   findAll() {
     return this.playlistService.findAll();
