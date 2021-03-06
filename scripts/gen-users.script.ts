@@ -71,7 +71,9 @@ async function insertUsers(piped: any) {
 }
 
 const createUserData = function (data: AuthUser) {
+  const { username, authId } = data;
   const userFactory = new UserFactory(data._id, data.authId);
+  userFactory.user = { ...userFactory.user, username, authId };
   return userDataFactory(userFactory);
 };
 
@@ -89,7 +91,7 @@ const insertData = async function (data: ReturnType<typeof createUserData>[]) {
 
   // console.log(mediaRepo);
 
-  await Promise.all([userRepo.delete({}), playlistRepo.delete({}), mediaRepo.delete({})]);
+  await Promise.all([userRepo.clear(), playlistRepo.clear(), mediaRepo.clear(), playlistItemRepo.clear()]);
 
   console.log('got here');
   const users = data.map((data) => data.user);
@@ -134,6 +136,3 @@ const insertData = async function (data: ReturnType<typeof createUserData>[]) {
   };
 };
 insertUsers(piped).then((result) => insertData(result.map(createUserData)).then((users) => console.log(users)));
-// .then((result) => console.log('the results', result));
-
-// console.log(piped);

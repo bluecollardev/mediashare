@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
+import { PLAYLIST_TOKEN } from '../../../controllers/playlist/entities/playlist.entity';
 import { CreateMediaShareItemInput, CreatePlaylistShareItemDto } from '../dto/create-share-item.dto';
 
 import { ShareItem } from '../entities/share-item.entity';
@@ -20,6 +21,30 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
 
   findShareItemsByUserId(userId: string) {
     return this.repository.find({ userId: new ObjectId(userId) });
+  }
+
+  aggregateSharedPlaylistItems({ userId }: { userId: ObjectId }) {
+    const query = this.repository.aggregate([
+      {
+        $match: { where: { userId, playlistId: { $exists: true } } },
+      },
+      {
+        $lookup: { from: PLAYLIST_TOKEN, localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' },
+      },
+    ]);
+    return query.toArray();
+  }
+
+  aggregateSharedMediaItems({ userId }: { userId: ObjectId }) {
+    const query = this.repository.aggregate([
+      {
+        $match: { where: { userId, playlistId: { $exists: true } } },
+      },
+      {
+        $lookup: { from: 'media_item', localField: 'mediaId', foreignField: '_id', as: 'mediaItems' },
+      },
+    ]);
+    return query.toArray();
   }
 
   /**

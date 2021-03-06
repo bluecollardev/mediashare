@@ -37,4 +37,74 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
       },
     ]);
   }
+
+  aggregatePlaylistAndItem() {
+    const query = this.repository.aggregate([
+      {
+        $lookup: {
+          from: 'media_item',
+          localField: 'mediaId',
+          foreignField: '_id',
+          as: 'mediaItems',
+        },
+      },
+      {
+        $unwind: {
+          path: '$mediaItems',
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              {
+                playlistItemId: '$playlistItemId',
+                mediaId: '$mediaId',
+                playlistId: '$playlistId',
+                userId: 0,
+              },
+              '$mediaItems',
+            ],
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'playlist',
+          localField: 'playlistId',
+          foreignField: '_id',
+          as: 'playlist',
+        },
+      },
+      {
+        $unwind: {
+          path: '$playlist',
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              {
+                mediaTitle: '$title',
+                _id: '$mediaId',
+                playlistId: '$playlistId',
+                userId: '$userId',
+                summary: '$summary',
+                isPlayable: '$isPlayable',
+                description: '$description',
+                mediaCategory: '$category',
+              },
+              '$playlist',
+            ],
+          },
+        },
+      },
+      {
+        $group: { _id: '$playlistId', mediaItems: { $push: '$$ROOT' } },
+      },
+    ]);
+  }
 }

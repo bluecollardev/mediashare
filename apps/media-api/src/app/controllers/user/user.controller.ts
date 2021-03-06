@@ -25,6 +25,7 @@ import { TokenDto } from './dto/login.dto';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
 import { Playlist } from '../playlist/entities/playlist.entity';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
+import { ObjectId } from 'mongodb';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -64,10 +65,15 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get('shared-media-items')
   @UserGetResponse({ type: MediaItemDto, isArray: true })
-  async getSharedMediaItems(@GetUser() user: AuthUserInterface = null) {
-    const { _id = null } = user;
-    const { sharedMediaItems = [] } = await this.userService.findAllSharedMediaItemsByUserId(_id);
-    const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedMediaItems);
+  async getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
+    // const { _id = null } = user;
+    const userId = new ObjectId();
+    // const { sharedMediaItems = [] } = await this.userService.findAllSharedMediaItemsByUserId(_id);
+    // const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedMediaItems);
+    // return mediaItems;
+
+    const mediaItems = await this.shareItemService.aggregateSharedMediaItems({ userId });
+
     return mediaItems;
   }
 
