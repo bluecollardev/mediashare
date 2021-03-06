@@ -38,6 +38,7 @@ import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
+import { CreateDto } from '../../core/decorators/create-dto.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -51,7 +52,7 @@ export class UsersController {
 
   @Post()
   @ApiResponse({ type: UserDto, status: 201, isArray: false })
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@CreateDto() createUserDto: CreateUserDto) {
     const { username, password, ...rest } = createUserDto;
     const existingUser = await this.userService.checkIfUserExists(username);
     if (existingUser) throw conflictResponse(username);
