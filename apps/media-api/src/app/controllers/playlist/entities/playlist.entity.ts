@@ -4,18 +4,18 @@ import { ApiObjectId, ApiString } from '@mediashare/shared';
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 import { IsIn } from 'class-validator';
 import { ObjectId } from 'mongodb';
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, ObjectIdColumn, Index } from 'typeorm';
 import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
 
-export const PLAYLIST_TOKEN = PLAYLIST_ENTITY;
-@Entity(PLAYLIST_TOKEN)
+@Entity('playlist')
 export class Playlist extends BcEntity implements PlaylistInterface {
-  @Column()
+  @Column('title')
   @ApiString()
   title: string;
 
   @ApiObjectId()
-  @ObjectIdColumn()
+  @Column('userId')
+  @Index('userId', { unique: false })
   userId: ObjectId;
 
   @Column({ type: 'enum', enum: PLAYLIST_CATEGORY })

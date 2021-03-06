@@ -1,5 +1,5 @@
 import { ApiEmail } from '@mediashare/shared';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { IsString, MinLength, MaxLength, IsJWT } from 'class-validator';
 const exampleToken =
@@ -9,11 +9,11 @@ export class LoginDto {
   @ApiEmail({ required: true })
   username: string;
 
-  @ApiProperty({ required: true, writeOnly: true, minLength: 8, maxLength: 20 })
+  @ApiProperty({ required: true })
   @IsString()
   @MinLength(8)
   @MaxLength(20)
-  @Exclude()
+  @ApiHideProperty()
   password: string;
 }
 

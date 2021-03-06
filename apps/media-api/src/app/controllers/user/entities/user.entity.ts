@@ -10,5 +10,4 @@ export class User extends BcBaseEntity<User> implements UserInterface {
   @Column() lastName: string;
   @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
   @Column({ array: true, nullable: true }) sharedMediaItems?: ObjectId[];
-  @Column() authId: string;
 }

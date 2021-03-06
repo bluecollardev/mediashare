@@ -1,9 +1,16 @@
 import { hash } from 'bcrypt';
 import { Min, IsEmail } from 'class-validator';
-import { Entity, Unique, PrimaryGeneratedColumn, Column, CreateDateColumn, BeforeInsert } from 'typeorm';
+import {
+  Entity,
+  Unique,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  BeforeInsert,
+} from 'typeorm';
 
 import { bcRoles, BcRolesType, BC_ROLES } from '@core-lib';
-import { ObjectId } from 'mongodb';
 
 @Entity()
 @Unique(['username'])
@@ -28,6 +35,9 @@ export class AuthUser {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @BeforeInsert()
   async hashPassword() {

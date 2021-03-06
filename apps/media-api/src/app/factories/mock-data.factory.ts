@@ -54,7 +54,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
   }
 
   createSessionUser(): SessionUserInterface {
-    const { username, _id: idObject, authId } = this.user;
+    const { username, _id: idObject } = this.user;
 
     const _id = idObject.toHexString();
     const email = username;
@@ -62,20 +62,18 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
       username,
       _id: ObjectIdGuard(_id),
       createdAt: new Date(),
-      authId,
       email,
       roles: ['user'],
     };
   }
 
-  constructor(id?: string, authId?: string) {
+  constructor(id?: string) {
     super();
     const userMixin = baseEntityMixin(User);
     this.user = new userMixin(this.createUserDto());
     if (id) {
       const _id = new ObjectId(id);
       this.user._id = _id;
-      this.user.authId = authId;
     }
   }
 
@@ -127,32 +125,3 @@ export function userDataFactory(userFactory: UserFactory) {
   return { playlistDto, user, media };
 }
 ``;
-
-class ConcreteMedia extends DataFn {}
-
-export function playlistMediaFactory() {}
-
-interface ConcretePlaylists {
-  CreatePlaylistItem(playlistId: ObjectId, mediaId: ObjectId, userId: ObjectId): CreatePlaylistItemDto;
-}
-
-class ConcreteMediaItems extends DataFn {
-  createPlayListItem(mediaId: ObjectId, userId: ObjectId, playlistId: ObjectId): CreatePlaylistItemDto {
-    return {
-      userId,
-      playlistId,
-      mediaId,
-    };
-  }
-}
-
-class createTags extends DataFn {
-  createTag(userId: ObjectId, mediaId: ObjectId) {
-    return {
-      key: DataFn.key(),
-      value: DataFn.value(),
-      userId,
-      mediaId,
-    };
-  }
-}

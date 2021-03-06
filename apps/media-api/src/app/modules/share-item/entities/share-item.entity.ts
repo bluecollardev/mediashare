@@ -9,31 +9,24 @@ import { Column, Entity, Index, Check } from 'typeorm';
 export class ShareItem extends BcEntity {
   @Column({ name: 'userId' })
   @ApiObjectId({ readOnly: true })
-  @Index('userId')
+  @Index('userId', { unique: false })
   userId: ObjectId;
 
-  @Column({ name: 'playlistId' })
+  @Column('playlistId')
   @ApiObjectId({ required: false })
-  @Index('playlistId')
+  @Index('playlistId', { unique: false })
   playlistId: ObjectId;
 
-  @Column({ name: 'mediaId' })
+  @Column({ name: 'mediaId', unique: false })
   @ApiObjectId({ required: false })
   @Index('mediaId')
   mediaId: ObjectId;
 
-  // @Column({ name: 'createdBy' })
-  // @ApiObjectId({ readOnly: true })
-  // @Index('createdBy')
-  // createdBy: ObjectId;
-
-  @Column({ name: 'read' })
+  @Column({ name: 'read', unique: false })
   @IsBoolean()
-  @Index()
   read: boolean;
 
-  @Column({ name: 'title' })
+  @Column({ name: 'title', unique: false })
   @ApiString()
-  @Index()
   title: string;
 }

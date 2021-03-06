@@ -7,14 +7,15 @@ import { Column, Entity, Index } from 'typeorm';
 export class PlaylistItem extends BcBaseEntity<PlaylistItem> {
   @Column()
   @ApiObjectId()
+  @Index('mediaId')
   mediaId: ObjectId;
 
   @Column()
   @ApiObjectId()
-  @Index('userId')
+  @Index('userId', { unique: false })
   userId: ObjectId;
 
   @Column()
-  @Index('playlistId')
+  @Index('playlistId', { unique: false })
   playlistId: ObjectId;
 }

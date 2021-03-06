@@ -7,8 +7,6 @@ const path = resolve('development.env');
 
 config({ path });
 
-import { AuthUser } from '../apps/media-auth/src/app/auth/auth-user.entity';
-
 import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
 
@@ -16,7 +14,7 @@ const userArray = [bcRoles.guest, bcRoles.user, bcRoles.admin];
 
 const userFunctor = (facet: string) => (user: BcRolesType) => [user, makeEmailFunctor([user, facet])] as const;
 
-const makeFieldFunctor = (key: keyof AuthUser) => <T>(value: T) => ({ [key]: value });
+const makeFieldFunctor = (key: keyof any) => <T>(value: T) => ({ [key]: value });
 
 const makeEmailFunctor = (user: [BcRolesType, string]) => `${user[0]}@${user[1]}`;
 
@@ -39,6 +37,7 @@ const connectionCfg = {
   username: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
+  entities: [resolve('apps') + '/media-auth/src/app/**/*.entity{.ts,.js}'],
 };
 
 const mongoConnectionCfg = {
@@ -54,34 +53,43 @@ const mongoConnectionCfg = {
   entities: [resolve('apps') + '/**/*.entity{.ts,.js}'],
 };
 
-async function insertUsers(piped: any) {
+async function insertUsers(piped: any, users: any) {
   try {
-    const connection = await createConnection({ ...connectionCfg, synchronize: true, entities: [AuthUser] });
+    const connection = await createConnection({
+      ...connectionCfg,
+      synchronize: true,
+    });
+    const inputData = R.zipWith(piped, users, (dto: any, user: any) => ({
+      ...dto,
+      ...user,
+      _id: user._id.toHexString().replace(/^"|"$/g, ''),
+    }));
 
-    const repo = connection.getRepository(AuthUser);
+    const repo = connection.getRepository('auth_user');
     await repo.clear();
-    await connection.createQueryBuilder().insert().into(AuthUser).values(piped).execute();
-    const user = await repo.find();
-    await connection.close();
 
+    await connection.createQueryBuilder().insert().into('auth_user').values(inputData).execute();
+
+    const user = await repo.find();
+
+    await connection.close();
+    console.log(user);
     return user;
   } catch (e) {
     console.log(e);
   }
 }
 
-const createUserData = function (data: AuthUser) {
-  const { username, authId } = data;
-  const userFactory = new UserFactory(data._id, data.authId);
-  userFactory.user = { ...userFactory.user, username, authId };
+const createUserData = function (data) {
+  const { username } = data;
+  const userFactory = new UserFactory();
+  userFactory.user = { ...userFactory.user, username };
   return userDataFactory(userFactory);
 };
 
-const insertData = async function (data: ReturnType<typeof createUserData>[]) {
+const insertData = async function (data) {
   const connection = await createConnection(mongoConnectionCfg);
-
-  // const makePlaylistDto = (playlistId: ObjectId) =>
-  //   mediaResults.map((media) => ({ userId: media.userId, playlistId, mediaId: media._id }));
+  await connection.dropDatabase();
 
   const getRepos = (key: string) => connection.getRepository(key);
 
@@ -89,17 +97,12 @@ const insertData = async function (data: ReturnType<typeof createUserData>[]) {
 
   const [userRepo, playlistRepo, mediaRepo, playlistItemRepo] = await Promise.all(repoFns);
 
-  await Promise.all([userRepo.clear(), playlistRepo.clear(), mediaRepo.clear(), playlistItemRepo.clear()]);
-
-  console.log('got here');
   const users = data.map((data) => data.user);
-
-  // const playlists = R.map();
 
   const userResults = await userRepo.save(users);
 
-  const playlistAndMediaDto = R.map(userResults, (user) => {
-    const factory = new UserFactory(user._id.toHexString(), user.authId);
+  const playlistAndMediaDto = R.map(userResults, (user: any) => {
+    const factory = new UserFactory(user._id.toHexString().trim());
 
     const mediaItems = R.map(R.range(1, 10), () => factory.createMediaDto());
 
@@ -126,11 +129,6 @@ const insertData = async function (data: ReturnType<typeof createUserData>[]) {
   const playlistItemResults = await playlistItemRepo.save(R.flatten(playlistItemDtos));
 
   await connection.close();
-  return {
-    userResults,
-    playlistResults,
-    mediaItemResults,
-    playlistItemResults,
-  };
+  return userResults;
 };
-insertUsers(piped).then((result) => insertData(result.map(createUserData)).then((users) => console.log(users)));
+insertData(R.map(piped, (user) => createUserData(user))).then((users) => insertUsers(piped, users));

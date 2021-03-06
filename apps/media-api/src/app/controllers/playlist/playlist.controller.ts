@@ -54,10 +54,11 @@ export class PlaylistController {
     return { categories: PLAYLIST_CATEGORY };
   }
 
-  @Get('share-playlists')
+  @Get('shared')
   @PlaylistGetResponse({ isArray: true, type: ShareItem })
   async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
+    return user;
 
     const items = await this.shareItemService.findOne(userId);
 
@@ -79,7 +80,6 @@ export class PlaylistController {
   ) {
     const { ...rest } = updatePlaylistDto;
     const { _id: userId } = user;
-
     return this.playlistService.update(playlistId, { ...rest, userId: new ObjectId(userId) });
   }
 

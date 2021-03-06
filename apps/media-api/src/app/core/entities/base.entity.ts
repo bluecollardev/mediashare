@@ -24,8 +24,8 @@ export abstract class BcBaseEntity<M> implements BcBaseInterface {
 @Entity()
 export class BcEntity implements BcBaseInterface {
   @ObjectIdColumn()
-  @ApiObjectId()
-  readonly _id: ObjectId;
+  @ApiObjectId({ type: 'uuid' })
+  _id: ObjectId;
 
   @CreateDateColumn()
   @ApiProperty({ readOnly: true, type: Date })
