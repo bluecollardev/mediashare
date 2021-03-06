@@ -13,3 +13,5 @@ class PlaylistResponseFields {
 }
 
 export class PlaylistResponseDto extends IntersectionType(PlaylistItem, PlaylistResponseFields) {}
+
+export class PlaylistResponseItemDto {}

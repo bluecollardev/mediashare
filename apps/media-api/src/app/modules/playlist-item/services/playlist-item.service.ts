@@ -58,12 +58,7 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
         $replaceRoot: {
           newRoot: {
             $mergeObjects: [
-              {
-                playlistItemId: '$playlistItemId',
-                mediaId: '$mediaId',
-                playlistId: '$playlistId',
-                userId: 0,
-              },
+              { playlistItemId: '$_id', mediaId: '$mediaId', playlistId: '$playlistId', userId: 0 },
               '$mediaItems',
             ],
           },
@@ -86,25 +81,24 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
       {
         $replaceRoot: {
           newRoot: {
-            $mergeObjects: [
-              {
-                mediaTitle: '$title',
-                _id: '$mediaId',
-                playlistId: '$playlistId',
-                userId: '$userId',
-                summary: '$summary',
-                isPlayable: '$isPlayable',
-                description: '$description',
-                mediaCategory: '$category',
-              },
-              '$playlist',
-            ],
+            mediaTitle: '$title',
+            _id: '$mediaId',
+            playlistId: '$playlistId',
+            userId: '$userId',
+            playlistItemId: '$playlistItemId',
+            summary: '$summary',
+            isPlayable: '$isPlayable',
+            description: '$description',
+            mediaCategory: '$category',
+            title: '$title',
+            playlistTitle: '$playlist.title',
           },
         },
       },
       {
-        $group: { _id: '$playlistId', mediaItems: { $push: '$$ROOT' } },
+        $group: { _id: '$playlistId', title: { $first: '$playlistTitle' }, mediaItems: { $push: '$$ROOT' } },
       },
     ]);
+    return;
   }
 }

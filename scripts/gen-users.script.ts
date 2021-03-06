@@ -89,8 +89,6 @@ const insertData = async function (data: ReturnType<typeof createUserData>[]) {
 
   const [userRepo, playlistRepo, mediaRepo, playlistItemRepo] = await Promise.all(repoFns);
 
-  // console.log(mediaRepo);
-
   await Promise.all([userRepo.clear(), playlistRepo.clear(), mediaRepo.clear(), playlistItemRepo.clear()]);
 
   console.log('got here');
