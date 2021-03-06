@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  Res,
+  HttpStatus,
+  Logger,
+  UseInterceptors,
+} from '@nestjs/common';
 import { Response } from 'express';
 
 import { ApiTags } from '@nestjs/swagger';
@@ -12,10 +24,11 @@ import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse } from './playlist.decorator';
 import { UseJwtGuard } from '../../modules/auth/auth.decorator';
-import { ApiPostResponse, ObjectIdPipe } from '@mediashare/shared';
+import { ApiPostResponse, CreatedBy, ObjectIdPipe } from '@mediashare/shared';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
+import { CreatDto } from '../../core/decorators/create-dto.decorator';
 
 @ApiTags('playlists')
 @Controller('playlists')
@@ -24,7 +37,7 @@ export class PlaylistController {
 
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   @Post()
-  async create(@Body() createPlaylistDto: CreatePlaylistDto, @GetUser() user: SessionUserInterface) {
+  async create(@CreatDto() createPlaylistDto: CreatePlaylistDto, @GetUser() user: SessionUserInterface) {
     const { _id: userId } = user;
 
     const playlist = await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId });
@@ -77,6 +90,7 @@ export class PlaylistController {
     @Res() response: Response
   ) {
     const { _id: createdBy } = user;
+    Logger.log(playlistId);
 
     const shareItem = await this.shareItemService.createPlaylistShareItem({ createdBy, userId, playlistId });
 

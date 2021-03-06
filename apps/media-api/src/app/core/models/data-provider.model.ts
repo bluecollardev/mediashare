@@ -1,12 +1,14 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Optional, Scope } from '@nestjs/common';
 import { ObjectId, OptionalId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { DeepPartial, MongoRepository, ObjectID } from 'typeorm';
 import { BcBaseEntity } from '../entities/base.entity';
-
+import { Request } from 'express';
 import * as R from 'remeda';
 import { ObjectIdGuard } from '@util-lib';
 import { IdType } from '@core-lib';
+import { REQUEST } from '@nestjs/core';
+import { SessionUserInterface } from './auth-user.model';
 
 export type MsDocumentType<T> = OptionalId<T>;
 /**
@@ -20,9 +22,7 @@ export type MsDocumentType<T> = OptionalId<T>;
  */
 @Injectable()
 export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepository<E>> {
-  constructor(protected repository: R, private readonly logger: PinoLogger) {
-    logger.setContext(this.constructor.name);
-  }
+  constructor(protected repository: R, private readonly logger: PinoLogger) {}
 
   /**
    * Create a repository item
@@ -35,7 +35,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
     this.logger.info(`${this.constructor.name}.create props`, dto);
 
     try {
-      const created = await this.repository.save(dto);
+      const created = await this.repository.save({ ...dto });
 
       this.logger.info(`${this.constructor.name}.create result`, created);
 
@@ -142,7 +142,6 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
 
   async insertMany(items: DeepPartial<E>[]) {
     this.logger.info(`${this.constructor.name}.insertMany`);
-
     try {
       const inserted = await this.repository.save(items);
       this.logger.info(`${this.constructor.name}.insertMany result`, inserted);

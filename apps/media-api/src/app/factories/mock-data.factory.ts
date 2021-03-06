@@ -107,6 +107,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
       description: Faker.lorem.lines(),
       category: 'flexibility',
       userId: this.user._id,
+      createdAt: new Date(),
     };
   }
 

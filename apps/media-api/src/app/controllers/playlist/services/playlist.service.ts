@@ -12,8 +12,14 @@ import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-i
 
 import * as R from 'remeda';
 import { CreatePlaylistDto } from '../dto/create-playlist.dto';
+
 import { ObjectIdParameters, OptionalObjectIdParameters } from '@mediashare/shared';
 
+type CreatePlaylistParameters = {
+  playlistId: ObjectId;
+  items: Partial<PlaylistItem>[];
+  createdBy: ObjectId;
+};
 @Injectable()
 export class PlaylistService extends DataService<Playlist, MongoRepository<Playlist>> {
   constructor(
@@ -31,13 +37,14 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    * @param {{ mediaIds: string[]; userId: ObjectId }} { userId, mediaIds }
    * @memberof PlaylistService
    */
-  async createPlaylistWithItems({ userId, mediaIds, title = '' }: CreatePlaylistDto) {
+  async createPlaylistWithItems({ createdBy, userId, mediaIds, title = '' }: CreatePlaylistDto) {
     if (!userId || typeof userId === 'string') throw new Error('userId is string in createPlaylistWithItems');
-    const playlist = await this.create({ userId, title });
+    const playlist = await this.create({ userId, title, createdBy });
     const { _id: playlistId } = playlist;
 
     const playlistItems = await this.createPlaylistItems({
       playlistId,
+      createdBy,
       items: mapPlaylistItems(mediaIds, { userId, playlistId }),
     });
 
@@ -51,12 +58,12 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    * @return {*}
    * @memberof PlaylistService
    */
-  createPlaylistItems({ playlistId, items }: { playlistId: ObjectId; items: Partial<PlaylistItem>[] }) {
+  createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
     if (!items && items.length < 1) throw new Error('no items in createPlaylistItems');
 
     if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
 
-    const mappedItems = items.map((item) => ({ ...item, playlistId }));
+    const mappedItems = items.map((item) => ({ ...item, playlistId, createdBy }));
 
     return this.playlistItemService.insertMany(mappedItems);
   }

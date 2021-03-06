@@ -71,9 +71,7 @@ export class UserController {
   @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
-    console.log('🚀 -----------------------------------------------------------------------------------------------');
-    console.log('🚀 ~ file: user.controller.ts ~ line 74 ~ UserController ~ getSharedMediaItems ~ userId', userId);
-    console.log('🚀 -----------------------------------------------------------------------------------------------');
+
     const mediaItems = await this.shareItemService.aggregateSharedMediaItems({ userId });
 
     return mediaItems;

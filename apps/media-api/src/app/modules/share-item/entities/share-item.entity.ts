@@ -22,10 +22,10 @@ export class ShareItem extends BcEntity {
   @Index('mediaId')
   mediaId: ObjectId;
 
-  @Column({ name: 'createdBy' })
-  @ApiObjectId({ readOnly: true })
-  @Index('createdBy')
-  createdBy: ObjectId;
+  // @Column({ name: 'createdBy' })
+  // @ApiObjectId({ readOnly: true })
+  // @Index('createdBy')
+  // createdBy: ObjectId;
 
   @Column({ name: 'read' })
   @IsBoolean()

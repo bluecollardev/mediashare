@@ -71,6 +71,22 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     return query.toArray();
   }
 
+  getCreatedByUser(userId: ObjectId) {
+    return this.repository
+      .aggregate([
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'createdBy',
+            foreignField: '_id',
+            as: 'createdBy',
+          },
+        },
+        { $unwind: { path: '$createdBy' } },
+      ])
+      .toArray();
+  }
+
   /**
    * Create a new share media item. This inserts a record into the mongo database in the shape of the share item.
    *

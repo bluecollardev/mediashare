@@ -1,13 +1,14 @@
 import { ObjectId } from 'mongodb';
 import { MediaItem } from '../entities/media-item.entity';
 import { IsBoolean, IsIn, IsMongoId, IsString, MaxLength, MinLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PickType } from '@nestjs/swagger';
 import { ApiDefaults, MediaCategoryType, MEDIA_CATEGORY, Stats } from '@core-lib';
 import { Tag } from '../../../core/entities/tag.entity';
 import { ApiObjectId, ApiString, ApiUriString } from '@mediashare/shared';
 
-type CreateKeys = 'summary' | 'isPlayable' | 'description' | 'title' | 'category' | 'userId';
-export class CreateMediaItemDto implements Pick<MediaItem, CreateKeys> {
+// const CreateKeys:  Readonly<keyof MediaItem[]> = [ 'summary', 'isPlayable', 'description', 'title', 'category', 'userId' ] as const;
+const OPTIONAL_MEDIA_DTO_KEYS = ['_id', 'displayFileName', 'thumbnail', 'uri'] as const;
+export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_DTO_KEYS]) {
   @IsBoolean()
   @ApiProperty({ required: true })
   isPlayable: boolean;
@@ -36,7 +37,7 @@ export class CreateMediaItemDto implements Pick<MediaItem, CreateKeys> {
   category: MediaCategoryType;
 }
 
-export class AdditionalMediaItemDto implements Omit<MediaItem, CreateKeys> {
+export class AdditionalMediaItemDto extends CreateMediaItemDto {
   @ApiString()
   displayFileName: string;
 
@@ -45,7 +46,4 @@ export class AdditionalMediaItemDto implements Omit<MediaItem, CreateKeys> {
 
   @ApiUriString()
   uri: string;
-
-  @ApiObjectId({ required: true })
-  _id: ObjectId;
 }

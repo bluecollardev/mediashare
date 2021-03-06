@@ -27,9 +27,6 @@ export class AuthUser implements AuthUserInterface {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  _id: string;
-
   @BeforeInsert()
   async hashPassword() {
     this.password = await hash(this.password, 10);
