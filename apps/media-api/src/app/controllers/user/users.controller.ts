@@ -93,25 +93,22 @@ export class UsersController {
     return this.userService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Put(':id')
   @UserPostResponse()
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
     return this.userService.update(id, updateUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.userService.remove(id);
   }
 
-  @UseGuards(UserGuard)
   @Get(':id/playlists')
   @UserGetResponse({ type: Playlist, isArray: true })
   @ApiHideProperty()
   getPlaylists(@Param('id') id: string) {
-    this.playlistService.findByUserId(id);
+    return this.playlistService.findByUserId(id);
   }
 
   @Get(':id/media-items')
@@ -141,10 +138,10 @@ export class UsersController {
   async getSharedPlaylists(@Param('id') userId: string) {
     const { sharedPlaylists } = await this.userService.findOne(userId);
 
-    const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
-    const playlists = await this.playlistService.findPlaylistsByList(sharedPlaylists);
+    // const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
+    // const playlists = await this.playlistService.findPlaylistsByList(sharedPlaylists);
 
-    return this.playlistService.mapPlaylists(playlists, mediaItems);
+    // return this.playlistService.mapPlaylists(playlists, mediaItems);
   }
 
   @Get(':id/share-items')

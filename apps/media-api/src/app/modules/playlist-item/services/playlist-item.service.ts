@@ -5,6 +5,7 @@ import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { PlaylistItem } from '../entities/playlist-item.entity';
+import { ObjectIdParameters } from '@mediashare/shared';
 
 import * as R from 'remeda';
 @Injectable()
@@ -78,16 +79,60 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
     super(repository, logger);
   }
 
-  async findByUserId(userIdStr: string) {
-    return await this.repository.find({ userId: new ObjectId(userIdStr) });
+  async aggregatePlaylistAndItemByUserIdField(userIdStr: string) {
+    const query = this.repository.aggregate([
+      {
+        $match: { where: { userId: new ObjectId(userIdStr) } },
+      },
+    ]);
   }
 
-  aggregatePlaylistAndItemById({ playlistId }: { playlistId: ObjectId }) {
+  aggregatePlaylistAndItemByIdField({ playlistId, userId }: Partial<ObjectIdParameters>) {
     return this.repository.aggregate([
       {
-        $match: { playlistId },
+        $match: { playlistId, userId },
       },
-      ...this.playlistAggregationPipeline,
+      {
+        $lookup: {
+          from: 'playlist',
+          localField: 'playlistId',
+          foreignField: '_id',
+          as: 'playlist',
+        },
+      },
+      {
+        $unwind: { path: '$playlist' },
+      },
+
+      {
+        $lookup: {
+          from: 'media_item',
+          localField: 'mediaId',
+          foreignField: '_id',
+          as: 'mediaItems',
+        },
+      },
+      {
+        $lookup: {
+          from: 'user',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      { $unwind: { path: '$mediaItems' } },
+      { $unwind: { path: '$user' } },
+
+      {
+        $group: {
+          _id: '$playlist._id',
+          title: { $first: '$playlist.title' },
+          userId: { $first: '$playlist.userId' },
+          mediaItems: {
+            $push: { $mergeObjects: ['$mediaItems', { playlistItemId: '$_id' }] },
+          },
+        },
+      },
     ]);
   }
 

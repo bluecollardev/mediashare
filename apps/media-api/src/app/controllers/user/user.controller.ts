@@ -31,19 +31,19 @@ import { ObjectId } from 'mongodb';
 export class UserController {
   constructor(
     private userService: UserService,
-    private mediaItemService: MediaItemService,
     private shareItemService: ShareItemService,
     private playlistService: PlaylistService
   ) {}
 
   @Get()
   @UserGetResponse()
-  async getUser(@GetUser() user: AuthUserInterface) {
+  async getUser(@GetUser() user: SessionUserInterface) {
     const { _id = null } = user;
 
-    const mongoUser = await this.userService.findOne(_id as string);
-
-    const authUser = await this.userService.getAuthUser({ _id: _id as string });
+    const [mongoUser, authUser] = await Promise.all([
+      this.userService.findOne(_id),
+      this.userService.getAuthUser({ _id: _id }),
+    ]);
     return { ...authUser, ...mongoUser };
   }
 
@@ -87,13 +87,15 @@ export class UserController {
     const { _id } = user;
     const userId = typeof _id === 'string' ? _id : _id.toHexString();
 
-    const { sharedPlaylists } = await this.userService.findOne(userId);
+    // const { sharedPlaylists } = await this.userService.findOne(userId);
 
-    const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
+    // const mediaItems = await this.mediaItemService.findPlaylistMedia(sharedPlaylists);
 
-    const playlists = await this.playlistService.findPlaylistsByList(sharedPlaylists);
+    // const playlists = await this.playlistService.findPlaylistsByList(sharedPlaylists);
 
-    return this.playlistService.mapPlaylists(playlists, mediaItems);
+    // const sharedPlaylists = await this.playlistService.get
+
+    // return this.playlistService.mapPlaylists(playlists, mediaItems);
   }
 
   @HttpCode(HttpStatus.NOT_IMPLEMENTED)

@@ -7,7 +7,7 @@ import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { PlaylistService } from './services/playlist.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-import { PLAYLIST_CATEGORY, PLAYLIST_ID } from '@core-lib';
+import { PLAYLIST_CATEGORY } from '@core-lib';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse } from './playlist.decorator';
@@ -45,15 +45,16 @@ export class PlaylistController {
   }
 
   @PlaylistGetResponse()
-  @Get(`:${PLAYLIST_ID}`)
-  findOne(@Param(PLAYLIST_ID) playlistId: string) {
+  @Get(':playlistId')
+  findOne(@Param('playlistId') playlistId: string) {
+    console.log(playlistId);
     return this.playlistService.getPlaylistById({ playlistId });
   }
 
-  @Put(`:${PLAYLIST_ID}`)
+  @Put(':playlistId')
   @PlaylistPostResponse()
   update(
-    @Param(PLAYLIST_ID) id: string,
+    @Param('playlistId') id: string,
     @GetUser() user: SessionUserInterface,
     @Body() updatePlaylistDto: UpdatePlaylistDto
   ) {

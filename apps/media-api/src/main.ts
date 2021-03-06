@@ -13,7 +13,9 @@ import { writeFileSync } from 'fs';
 
 import * as passport from 'passport';
 import { AppConfigService } from './app/modules/app-config.module.ts/app-config.provider';
-import { DocumentBuilderFactory, SessionStoreFactory } from '@mediashare/shared';
+import { DocumentBuilderFactory } from '@mediashare/shared';
+import * as session from 'express-session';
+import MongoStore from 'connect-mongo';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -36,12 +38,9 @@ async function bootstrap() {
     appConfig.get('env') === 'development',
   ] as const;
 
-  const session = SessionStoreFactory({ mongoUrl, dbName, collectionName, secret });
-
   app.setGlobalPrefix(globalPrefix);
 
   /* PASSPORT & SESSION */
-  app.use(passport.session(), passport.initialize(), session());
 
   /* SWAGGER */
   const config = DocumentBuilderFactory(title).build();
@@ -49,6 +48,18 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup(globalPrefix, app, document);
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  app.use(
+    session({
+      store: MongoStore.create({ mongoUrl, dbName, collectionName }),
+
+      secret,
+      resave: false,
+    })
+  );
 
   if (isDev) writeFileSync('./swagger-spec.json', JSON.stringify(document, null, 2));
 
