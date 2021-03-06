@@ -1,23 +1,10 @@
-import { PLAYLIST_CATEGORY, PlaylistCategoryType } from '@core-lib';
-import { PartialType } from '@nestjs/mapped-types';
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsArray, IsString } from 'class-validator';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { IsArray } from 'class-validator';
 import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
-import { CreatePlaylistDto } from './create-playlist.dto';
+import { Playlist } from '../entities/playlist.entity';
 
-export class UpdatePlaylistDto extends PartialType(OmitType(CreatePlaylistDto, ['items'])) {
+export class UpdatePlaylistDto extends PickType(Playlist, ['title', 'category']) {
   @ApiProperty({ required: false })
   @IsArray()
   items?: PlaylistItem[];
-
-  @ApiProperty({ required: false })
-  @IsString()
-  userId?: string;
-
-  @ApiProperty({ required: false })
-  @IsString()
-  title?: string;
-
-  @ApiProperty({ required: false, enum: PLAYLIST_CATEGORY })
-  category: PlaylistCategoryType;
 }

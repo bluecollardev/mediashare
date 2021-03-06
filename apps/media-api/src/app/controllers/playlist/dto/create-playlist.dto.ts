@@ -1,15 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsString } from 'class-validator';
-import { PlaylistCategoryType, PLAYLIST_CATEGORY } from '@core-lib';
-export class CreatePlaylistDto {
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { IsArray } from 'class-validator';
+import { Playlist } from '../entities/playlist.entity';
+export class CreatePlaylistDto extends PickType(Playlist, ['category', 'title']) {
   @ApiProperty({ required: true })
   @IsArray()
   items: string[];
-
-  @ApiProperty({ required: true })
-  @IsString()
-  title: string;
-
-  @ApiProperty({ required: true, enum: PLAYLIST_CATEGORY })
-  category: PlaylistCategoryType;
 }

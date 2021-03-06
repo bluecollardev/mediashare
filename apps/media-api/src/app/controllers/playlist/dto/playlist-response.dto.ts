@@ -1,6 +1,4 @@
-import { ApiArray } from '@mediashare/shared';
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { BcEntity } from '../../../core';
 import { Playlist } from '../entities/playlist.entity';
 import { PlaylistItemResponseDto } from './playlist-response-item.dto';
 
