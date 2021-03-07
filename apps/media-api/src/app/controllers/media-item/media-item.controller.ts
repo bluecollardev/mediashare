@@ -6,17 +6,14 @@ import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 
-import { badRequestResponse, notFoundResponse } from '../../core/functors/http-errors.functor';
+import { notFoundResponse } from '../../core/functors/http-errors.functor';
 
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { MEDIA_CATEGORY } from '@core-lib';
-import { GetUser } from '../../core/decorators/user.decorator';
-import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { ObjectId } from 'mongodb';
 import { MediaGetResponse, MediaPostResponse } from './media-item.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
-import { MediaItemDto } from './dto/media-item.dto';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
 
 @ApiTags('media-items')
@@ -51,15 +48,6 @@ export class MediaItemController {
     return MEDIA_CATEGORY;
   }
 
-  @Get('shared')
-  @MediaGetResponse({ type: MediaItemDto, isArray: true })
-  getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
-    const { _id: userId } = user;
-    // return userId;
-    console.log(user);
-    return this.shareItemService.aggregateSharedMediaItems({ userId });
-  }
-
   @MediaGetResponse()
   @Get(':id')
   async findOne(@Param('id', new ObjectIdPipe()) id: ObjectId) {
@@ -85,18 +73,16 @@ export class MediaItemController {
     return deleted;
   }
 
-  @Post(':id/share/:userId')
+  @Post(':mediaId/share/:userId')
   @MediaPostResponse()
   async share(
-    @Param('id', new ObjectIdPipe()) id: ObjectId,
+    @Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId,
     @Param('userId', new ObjectIdPipe()) userId: ObjectId,
     @Res() response: Response
   ) {
-    console.log('the id', id);
-    const { userId: createdBy, title } = await this.mediaItemService.findOne(id);
+    console.log('the id', mediaId);
+    const { userId: createdBy, title } = await this.mediaItemService.findOne(mediaId);
     if (!title && !createdBy) return response.status(HttpStatus.NOT_FOUND);
-
-    const mediaId = new ObjectId(id);
 
     const shareItem = await this.shareItemService.createMediaShareItem({
       createdBy,

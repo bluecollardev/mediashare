@@ -9,27 +9,29 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { AuthUserInterface } from '@core-lib';
 
 import { ApiTags } from '@nestjs/swagger';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-import { MediaItemService } from '../media-item/media-item.service';
-import { GetUser } from '../../core/decorators/user.decorator';
-import { User } from './entities/user.entity';
+import { GetUser, GetUserId } from '../../core/decorators/user.decorator';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { PlaylistService } from '../playlist/services/playlist.service';
 import { UserGetResponse } from './decorators/user-response.decorator';
-import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { TokenDto } from './dto/login.dto';
-import { MediaItemDto } from '../media-item/dto/media-item.dto';
-import { Playlist } from '../playlist/entities/playlist.entity';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
+import { MediaItemDto } from '../media-item/dto/media-item.dto';
+import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService, private playlistService: PlaylistService) {}
+  constructor(
+    private userService: UserService,
+    private playlistService: PlaylistService,
+    private shareItemService: ShareItemService,
+    private mediaItemService: MediaItemService
+  ) {}
 
   @Get()
   @UserGetResponse()
@@ -46,20 +48,36 @@ export class UserController {
   @Get('playlists')
   @UserGetResponse()
   async getPlaylists(@GetUser() user: SessionUserInterface) {
-    // return user;
     const result = await this.playlistService.getPlaylistByUserId({ userId: user._id });
 
     console.log(result);
     return result;
   }
 
-  @HttpCode(HttpStatus.NOT_IMPLEMENTED)
-  @UseGuards(JwtAuthGuard)
-  @Get('share-items')
-  getShareItems() {
-    // return shareItems;
+  @Get('media-items')
+  @UserGetResponse()
+  async getMediaItems(@GetUserId() userId: ObjectId) {
+    const result = await this.mediaItemService.findMediaItemsByUserId(userId);
 
-    return;
+    console.log(result);
+    return result;
+  }
+
+  @Get('media-items/shared')
+  @UserGetResponse({ type: MediaItemDto, isArray: true })
+  getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
+    const { _id: userId } = user;
+
+    return this.shareItemService.aggregateSharedMediaItems({ userId });
+  }
+  @Get('playlist/shared')
+  @UserGetResponse({ isArray: true, type: ShareItem })
+  async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
+    const { _id: userId } = user;
+
+    const items = await this.shareItemService.aggregateSharedPlaylists({ userId });
+
+    return items;
   }
 
   @UseGuards(JwtAuthGuard)

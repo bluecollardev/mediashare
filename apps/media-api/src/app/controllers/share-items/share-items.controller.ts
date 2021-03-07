@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Delete, Logger } from '@nestjs/common';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-import { GetUser } from '../../core/decorators/user.decorator';
+import { GetUser, GetUserId } from '../../core/decorators/user.decorator';
 import { AuthUserInterface } from '@core-lib';
 import { ApiTags } from '@nestjs/swagger';
 import { ShareItemGetResponse } from './share-items.decorator';
@@ -14,13 +14,10 @@ export class ShareItemsController {
 
   @ShareItemGetResponse({ isArray: true })
   @Get()
-  async findAll(@GetUser() user: AuthUserInterface) {
-    Logger.warn(user);
-    const sharedItems = await this.shareItemService.findShareItemsByUserId(
-      typeof user._id === 'string' ? user._id : user._id.toHexString()
-    );
+  async findAll(@GetUserId() userId: ObjectId) {
+    const [sharedMedia, sharedPlaylists] = await Promise.all(this.shareItemService.findShareItemsByUserId(userId));
 
-    return sharedItems;
+    return { sharedMedia, sharedPlaylists };
   }
 
   @ShareItemGetResponse()

@@ -42,16 +42,6 @@ export class PlaylistController {
     return { categories: PLAYLIST_CATEGORY };
   }
 
-  @Get('shared')
-  @PlaylistGetResponse({ isArray: true, type: ShareItem })
-  async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
-    const { _id: userId } = user;
-
-    const items = await this.shareItemService.aggregateSharedPlaylists({ userId });
-
-    return items ?? [];
-  }
-
   @PlaylistGetResponse({ type: PlaylistResponseDto })
   @Get(':playlistId')
   findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {

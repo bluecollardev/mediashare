@@ -25,8 +25,8 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     super(repository, logger);
   }
 
-  findShareItemsByUserId(userId: string) {
-    return this.repository.find({ userId: new ObjectId(userId) });
+  findShareItemsByUserId(userId: ObjectId) {
+    return [this.aggregateSharedMediaItems({ userId }), this.aggregateSharedPlaylists({ userId })];
   }
 
   aggregateSharedPlaylistItems({ userId }: { userId: ObjectId }) {

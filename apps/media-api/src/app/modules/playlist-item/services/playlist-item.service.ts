@@ -1,13 +1,11 @@
 import { DataService } from '@api';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { PlaylistItem } from '../entities/playlist-item.entity';
-import { ObjectIdParameters, OptionalObjectIdParameters } from '@mediashare/shared';
+import { ObjectIdParameters } from '@mediashare/shared';
 
-import * as R from 'remeda';
 @Injectable()
 export class PlaylistItemService extends DataService<PlaylistItem, MongoRepository<PlaylistItem>> {
   private get playlistAggregationPipeline() {
