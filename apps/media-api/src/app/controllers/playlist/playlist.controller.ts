@@ -1,16 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Put,
-  Param,
-  Delete,
-  Res,
-  HttpStatus,
-  Logger,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, Logger } from '@nestjs/common';
 import { Response } from 'express';
 
 import { ApiTags } from '@nestjs/swagger';
@@ -58,9 +46,8 @@ export class PlaylistController {
   @PlaylistGetResponse({ isArray: true, type: ShareItem })
   async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
-    return user;
 
-    const items = await this.shareItemService.findOne(userId);
+    const items = await this.shareItemService.aggregateSharedPlaylists({ userId });
 
     return items ?? [];
   }

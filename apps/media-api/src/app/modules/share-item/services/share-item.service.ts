@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { PLAYLIST_TOKEN } from '../../../controllers/playlist/entities/playlist.entity';
 import { CreateMediaShareItemInput, CreatePlaylistShareItemDto } from '../dto/create-share-item.dto';
 
 import { ShareItem } from '../entities/share-item.entity';
@@ -36,7 +35,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
         $match: { where: { userId, playlistId: { $exists: true } } },
       },
       {
-        $lookup: { from: PLAYLIST_TOKEN, localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' },
+        $lookup: { from: 'playlist_item', localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' },
       },
     ]);
     return query.toArray();
@@ -72,39 +71,48 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   }
 
   aggregateSharedPlaylists({ userId }: OptionalObjectIdParameters) {
-    return this.repository.aggregate([
-      { $match: { $and: [{ userId }, { playlistId: { $exists: true } }] } },
-      { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'createdByUser' } },
+    return this.repository
+      .aggregate([
+        { $match: { $and: [{ userId }, { playlistId: { $exists: true } }] } },
+        { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'createdByUser' } },
 
-      { $lookup: { from: 'playlist_item', localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' } },
-      { $unwind: '$playlistItems' },
-      { $unwind: '$createdByUser' },
-      {
-        $replaceRoot: {
-          newRoot: {
-            $mergeObjects: [
-              { shareItem: { _id: '$_id', createdBy: '$createdByUser', userId: '$userId' } },
-              '$playlistItems',
-            ],
+        {
+          $lookup: {
+            from: 'playlist_item',
+            localField: 'playlistId',
+            foreignField: 'playlistId',
+            as: 'playlistItems',
           },
         },
-      },
-      { $lookup: { from: 'media_item', localField: 'mediaId', foreignField: '_id', as: 'mediaItems' } },
-      { $unwind: '$mediaItems' },
-      { $unwind: '$shareItem' },
-      { $lookup: { from: 'playlist', localField: 'playlistId', foreignField: '_id', as: 'playlist' } },
-      { $unwind: '$playlist' },
-      {
-        $group: {
-          _id: '$playlistId',
-          shareId: { $first: '$shareItem._id' },
-          title: { $first: '$playlist.title' },
-          category: { $first: '$playlist.category' },
-          createdBy: { $first: '$shareItem.createdBy' },
-          mediaItems: { $push: { $mergeObjects: ['$mediaItems', { playlistItemId: 'playlistItem._id' }] } },
+        { $unwind: '$playlistItems' },
+        { $unwind: '$createdByUser' },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: [
+                { shareItem: { _id: '$_id', createdBy: '$createdByUser', userId: '$userId' } },
+                '$playlistItems',
+              ],
+            },
+          },
         },
-      },
-    ]);
+        { $lookup: { from: 'media_item', localField: 'mediaId', foreignField: '_id', as: 'mediaItems' } },
+        { $unwind: '$mediaItems' },
+        { $unwind: '$shareItem' },
+        { $lookup: { from: 'playlist', localField: 'playlistId', foreignField: '_id', as: 'playlist' } },
+        { $unwind: '$playlist' },
+        {
+          $group: {
+            _id: '$playlistId',
+            shareId: { $first: '$shareItem._id' },
+            title: { $first: '$playlist.title' },
+            category: { $first: '$playlist.category' },
+            createdBy: { $first: '$shareItem.createdBy' },
+            mediaItems: { $push: { $mergeObjects: ['$mediaItems', { playlistItemId: 'playlistItem._id' }] } },
+          },
+        },
+      ])
+      .toArray();
   }
 
   getCreatedByUser(userId: ObjectId) {
