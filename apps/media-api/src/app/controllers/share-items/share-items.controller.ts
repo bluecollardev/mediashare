@@ -1,11 +1,11 @@
-import { Controller, Get, Param, Delete, Logger } from '@nestjs/common';
+import { Controller, Get, Param, Delete } from '@nestjs/common';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-import { GetUser, GetUserId } from '../../core/decorators/user.decorator';
-import { AuthUserInterface } from '@core-lib';
-import { ApiTags } from '@nestjs/swagger';
+import { GetUserId } from '../../core/decorators/user.decorator';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { ShareItemGetResponse } from './share-items.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
+import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.constants';
 
 @ApiTags('share-items')
 @Controller('share-items')
@@ -21,14 +21,16 @@ export class ShareItemsController {
   }
 
   @ShareItemGetResponse()
-  @Get(':id')
-  findOne(@Param('id', ObjectIdPipe) id: ObjectId) {
-    return this.shareItemService.findOne(id);
+  @Get(RouteTokens.SHARE_ID)
+  @ApiParam({ name: 'shareId', type: String, required: true })
+  findOne(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {
+    return this.shareItemService.findOne(shareId);
   }
 
   @ShareItemGetResponse()
-  @Delete(':id')
-  remove(@Param('id', ObjectIdPipe) id: ObjectId) {
-    return this.shareItemService.remove(id);
+  @Delete(':shareId')
+  @ApiParam({ name: 'shareId', type: String, required: true })
+  remove(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {
+    return this.shareItemService.remove(shareId);
   }
 }

@@ -15,7 +15,7 @@ import {
 import { Response } from 'express';
 import { CreateUserDto, UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBody, ApiHideProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiHideProperty, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/services/playlist.service';
@@ -36,6 +36,7 @@ import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
+import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.constants';
 
 @ApiTags('users')
 @Controller('users')
@@ -67,13 +68,15 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @Get(':userId')
+  @Get(RouteTokens.USER_ID)
+  @ApiParam({ name: 'userId', type: String, required: true })
   @UserGetResponse()
   findOne(@Param('userId', ObjectIdPipe) userId: ObjectId): Promise<User> {
     return this.userService.findOne(userId);
   }
 
-  @Put(':userId')
+  @Put(RouteTokens.USER_ID)
+  @ApiParam({ name: 'userId', type: String, required: true })
   @UserPostResponse()
   update(
     @Param('userId', ObjectIdPipe) userId: ObjectId,
@@ -82,7 +85,8 @@ export class UsersController {
     return this.userService.update(userId, updateUserDto);
   }
 
-  @Delete(':userId')
+  @Delete(RouteTokens.USER_ID)
+  @ApiParam({ name: 'userId', type: String, required: true })
   @UseGuards(JwtAuthGuard)
   remove(@Param('userId') userId: string): Promise<DeleteResult> {
     return this.userService.remove(userId);
@@ -90,27 +94,10 @@ export class UsersController {
 
   @Get(':userId/playlists')
   @UserGetResponse({ type: Playlist, isArray: true })
+  @ApiParam({ name: 'userId', type: String, required: true })
   @ApiHideProperty()
   getPlaylists(@Param('userId', ObjectIdPipe) userId: ObjectId) {
     return this.playlistService.getPlaylistByUserId({ userId });
-  }
-
-  @Get(':id/media-items')
-  @UserGetResponse({ type: MediaItemDto, isArray: true })
-  async getMedia(@Param('id', new ObjectIdPipe()) userId: ObjectId, @Res() res: Response) {
-    const mediaItems = await this.mediaItemService.findMediaItemsByUserId(userId);
-
-    if (!mediaItems || mediaItems.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
-
-    return res.status(HttpStatus.OK).send(mediaItems);
-  }
-
-  @Get(':userId/share-items')
-  @UserGetResponse({ type: ShareItem, isArray: true })
-  async getShareItems(@Param('id') id: string) {
-    const shareItems = this.shareItemService.findByQuery({ userId: new ObjectId(id) });
-
-    return shareItems;
   }
 
   @Put(':userId/roles')
@@ -125,6 +112,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   @Post('shared-items/:shareId')
+  @ApiParam({ name: 'shareId', type: String, required: true })
   @ApiResponse({ type: UserDto, status: 200 })
   async readSharedItem(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId, @GetUser() user: SessionUserInterface) {
     const sharedItem = await this.shareItemService.update(shareId, { read: true });

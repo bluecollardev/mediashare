@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- *
+ * Mediashare
  * Media Share API
  *
  * The version of the OpenAPI document: 1.0
@@ -13,10 +13,18 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { MediaItemDto, Playlist, ShareItem, UpdateUserDto, UserDto } from '../models';
+import { Playlist, UpdateUserDto, UserDto } from '../models';
 
-export interface UsersControllerGetShareItemsRequest {
-  id: string;
+export interface UsersControllerFindOneRequest {
+  userId: string;
+}
+
+export interface UsersControllerGetPlaylistsRequest {
+  userId: string;
+}
+
+export interface UsersControllerReadSharedItemRequest {
+  shareId: string;
 }
 
 export interface UsersControllerRemoveRequest {
@@ -29,6 +37,7 @@ export interface UsersControllerSetRolesRequest {
 }
 
 export interface UsersControllerUpdateRequest {
+  userId: string;
   updateUserDto: UpdateUserDto;
 }
 
@@ -73,9 +82,17 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerFindOne(): Observable<UserDto>;
-  usersControllerFindOne(opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerFindOne(opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  usersControllerFindOne({ userId }: UsersControllerFindOneRequest): Observable<UserDto>;
+  usersControllerFindOne(
+    { userId }: UsersControllerFindOneRequest,
+    opts?: OperationOpts
+  ): Observable<RawAjaxResponse<UserDto>>;
+  usersControllerFindOne(
+    { userId }: UsersControllerFindOneRequest,
+    opts?: OperationOpts
+  ): Observable<UserDto | RawAjaxResponse<UserDto>> {
+    throwIfNullOrUndefined(userId, 'userId', 'usersControllerFindOne');
+
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -84,7 +101,7 @@ export class UsersApi extends BaseAPI {
 
     return this.request<UserDto>(
       {
-        url: '/api/users/{userId}',
+        url: '/api/users/{userId}'.replace('{userId}', encodeURI(userId)),
         method: 'GET',
         headers,
       },
@@ -94,32 +111,17 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerGetMedia(): Observable<Array<MediaItemDto>>;
-  usersControllerGetMedia(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
-  usersControllerGetMedia(
+  usersControllerGetPlaylists({ userId }: UsersControllerGetPlaylistsRequest): Observable<Array<Playlist>>;
+  usersControllerGetPlaylists(
+    { userId }: UsersControllerGetPlaylistsRequest,
     opts?: OperationOpts
-  ): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
-    const headers: HttpHeaders = {
-      ...(this.configuration.username != null && this.configuration.password != null
-        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
-        : undefined),
-    };
+  ): Observable<RawAjaxResponse<Array<Playlist>>>;
+  usersControllerGetPlaylists(
+    { userId }: UsersControllerGetPlaylistsRequest,
+    opts?: OperationOpts
+  ): Observable<Array<Playlist> | RawAjaxResponse<Array<Playlist>>> {
+    throwIfNullOrUndefined(userId, 'userId', 'usersControllerGetPlaylists');
 
-    return this.request<Array<MediaItemDto>>(
-      {
-        url: '/api/users/{id}/media-items',
-        method: 'GET',
-        headers,
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  usersControllerGetPlaylists(): Observable<Array<Playlist>>;
-  usersControllerGetPlaylists(opts?: OperationOpts): Observable<RawAjaxResponse<Array<Playlist>>>;
-  usersControllerGetPlaylists(opts?: OperationOpts): Observable<Array<Playlist> | RawAjaxResponse<Array<Playlist>>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -128,7 +130,7 @@ export class UsersApi extends BaseAPI {
 
     return this.request<Array<Playlist>>(
       {
-        url: '/api/users/{userId}/playlists',
+        url: '/api/users/{userId}/playlists'.replace('{userId}', encodeURI(userId)),
         method: 'GET',
         headers,
       },
@@ -138,41 +140,20 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerGetShareItems({ id }: UsersControllerGetShareItemsRequest): Observable<Array<ShareItem>>;
-  usersControllerGetShareItems(
-    { id }: UsersControllerGetShareItemsRequest,
+  usersControllerReadSharedItem({ shareId }: UsersControllerReadSharedItemRequest): Observable<UserDto>;
+  usersControllerReadSharedItem(
+    { shareId }: UsersControllerReadSharedItemRequest,
     opts?: OperationOpts
-  ): Observable<RawAjaxResponse<Array<ShareItem>>>;
-  usersControllerGetShareItems(
-    { id }: UsersControllerGetShareItemsRequest,
+  ): Observable<RawAjaxResponse<UserDto>>;
+  usersControllerReadSharedItem(
+    { shareId }: UsersControllerReadSharedItemRequest,
     opts?: OperationOpts
-  ): Observable<Array<ShareItem> | RawAjaxResponse<Array<ShareItem>>> {
-    throwIfNullOrUndefined(id, 'id', 'usersControllerGetShareItems');
+  ): Observable<UserDto | RawAjaxResponse<UserDto>> {
+    throwIfNullOrUndefined(shareId, 'shareId', 'usersControllerReadSharedItem');
 
-    const headers: HttpHeaders = {
-      ...(this.configuration.username != null && this.configuration.password != null
-        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
-        : undefined),
-    };
-
-    return this.request<Array<ShareItem>>(
-      {
-        url: '/api/users/{userId}/share-items'.replace('{id}', encodeURI(id)),
-        method: 'GET',
-        headers,
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  usersControllerReadSharedItem(): Observable<UserDto>;
-  usersControllerReadSharedItem(opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerReadSharedItem(opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     return this.request<UserDto>(
       {
-        url: '/api/users/shared-items/{shareId}',
+        url: '/api/users/shared-items/{shareId}'.replace('{shareId}', encodeURI(shareId)),
         method: 'POST',
       },
       opts?.responseOpts
@@ -235,15 +216,16 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerUpdate({ updateUserDto }: UsersControllerUpdateRequest): Observable<UserDto>;
+  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest): Observable<UserDto>;
   usersControllerUpdate(
-    { updateUserDto }: UsersControllerUpdateRequest,
+    { userId, updateUserDto }: UsersControllerUpdateRequest,
     opts?: OperationOpts
   ): Observable<RawAjaxResponse<UserDto>>;
   usersControllerUpdate(
-    { updateUserDto }: UsersControllerUpdateRequest,
+    { userId, updateUserDto }: UsersControllerUpdateRequest,
     opts?: OperationOpts
   ): Observable<UserDto | RawAjaxResponse<UserDto>> {
+    throwIfNullOrUndefined(userId, 'userId', 'usersControllerUpdate');
     throwIfNullOrUndefined(updateUserDto, 'updateUserDto', 'usersControllerUpdate');
 
     const headers: HttpHeaders = {
@@ -255,7 +237,7 @@ export class UsersApi extends BaseAPI {
 
     return this.request<UserDto>(
       {
-        url: '/api/users/{userId}',
+        url: '/api/users/{userId}'.replace('{userId}', encodeURI(userId)),
         method: 'PUT',
         headers,
         body: updateUserDto,

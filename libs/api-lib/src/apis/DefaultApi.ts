@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- *
+ * Mediashare
  * Media Share API
  *
  * The version of the OpenAPI document: 1.0
@@ -12,19 +12,7 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-
-export interface ProfileControllerCreateRequest {
-  body: object;
-}
-
-export interface ProfileControllerRemoveRequest {
-  id: string;
-}
-
-export interface ProfileControllerUpdateRequest {
-  body: object;
-}
+import { BaseAPI, OperationOpts, RawAjaxResponse } from '../runtime';
 
 /**
  * no description
@@ -37,114 +25,8 @@ export class DefaultApi extends BaseAPI {
   appControllerGetData(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     return this.request<void>(
       {
-        url: '/api',
+        url: '/api/api',
         method: 'GET',
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  profileControllerCreate({ body }: ProfileControllerCreateRequest): Observable<void>;
-  profileControllerCreate(
-    { body }: ProfileControllerCreateRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>>;
-  profileControllerCreate(
-    { body }: ProfileControllerCreateRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>> {
-    throwIfNullOrUndefined(body, 'body', 'profileControllerCreate');
-
-    const headers: HttpHeaders = {
-      'Content-Type': 'application/json',
-    };
-
-    return this.request<void>(
-      {
-        url: '/api/profile',
-        method: 'POST',
-        headers,
-        body: body as any,
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  profileControllerFindAll(): Observable<void>;
-  profileControllerFindAll(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
-  profileControllerFindAll(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
-    return this.request<void>(
-      {
-        url: '/api/profile',
-        method: 'GET',
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  profileControllerFindOne(): Observable<void>;
-  profileControllerFindOne(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
-  profileControllerFindOne(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
-    return this.request<void>(
-      {
-        url: '/api/profile/{id}',
-        method: 'GET',
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  profileControllerRemove({ id }: ProfileControllerRemoveRequest): Observable<void>;
-  profileControllerRemove(
-    { id }: ProfileControllerRemoveRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>>;
-  profileControllerRemove(
-    { id }: ProfileControllerRemoveRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>> {
-    throwIfNullOrUndefined(id, 'id', 'profileControllerRemove');
-
-    return this.request<void>(
-      {
-        url: '/api/profile/{id}'.replace('{id}', encodeURI(id)),
-        method: 'DELETE',
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  profileControllerUpdate({ body }: ProfileControllerUpdateRequest): Observable<void>;
-  profileControllerUpdate(
-    { body }: ProfileControllerUpdateRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>>;
-  profileControllerUpdate(
-    { body }: ProfileControllerUpdateRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>> {
-    throwIfNullOrUndefined(body, 'body', 'profileControllerUpdate');
-
-    const headers: HttpHeaders = {
-      'Content-Type': 'application/json',
-    };
-
-    return this.request<void>(
-      {
-        url: '/api/profile/{id}',
-        method: 'PUT',
-        headers,
-        body: body as any,
       },
       opts?.responseOpts
     );

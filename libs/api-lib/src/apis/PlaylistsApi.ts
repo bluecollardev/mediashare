@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- *
+ * Mediashare
  * Media Share API
  *
  * The version of the OpenAPI document: 1.0
@@ -13,13 +13,23 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { CreatePlaylistResponseDto, Playlist, PlaylistResponseDto, ShareItem, UpdatePlaylistDto } from '../models';
+import { PlaylistResponseDto, ShareItem, UpdatePlaylistDto } from '../models';
+
+export interface PlaylistControllerFindOneRequest {
+  playlistId: string;
+}
 
 export interface PlaylistControllerRemoveRequest {
   playlistId: string;
 }
 
+export interface PlaylistControllerShareRequest {
+  playlistId: string;
+  userId: string;
+}
+
 export interface PlaylistControllerUpdateRequest {
+  playlistId: string;
   updatePlaylistDto: UpdatePlaylistDto;
 }
 
@@ -29,57 +39,17 @@ export interface PlaylistControllerUpdateRequest {
 export class PlaylistsApi extends BaseAPI {
   /**
    */
-  playlistControllerCreate(): Observable<CreatePlaylistResponseDto>;
-  playlistControllerCreate(opts?: OperationOpts): Observable<RawAjaxResponse<CreatePlaylistResponseDto>>;
-  playlistControllerCreate(
-    opts?: OperationOpts
-  ): Observable<CreatePlaylistResponseDto | RawAjaxResponse<CreatePlaylistResponseDto>> {
-    const headers: HttpHeaders = {
-      ...(this.configuration.username != null && this.configuration.password != null
-        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
-        : undefined),
-    };
-
-    return this.request<CreatePlaylistResponseDto>(
-      {
-        url: '/api/playlists',
-        method: 'POST',
-        headers,
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  playlistControllerFindAll(): Observable<Array<PlaylistResponseDto>>;
-  playlistControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistResponseDto>>>;
-  playlistControllerFindAll(
-    opts?: OperationOpts
-  ): Observable<Array<PlaylistResponseDto> | RawAjaxResponse<Array<PlaylistResponseDto>>> {
-    const headers: HttpHeaders = {
-      ...(this.configuration.username != null && this.configuration.password != null
-        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
-        : undefined),
-    };
-
-    return this.request<Array<PlaylistResponseDto>>(
-      {
-        url: '/api/playlists',
-        method: 'GET',
-        headers,
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  playlistControllerFindOne(): Observable<PlaylistResponseDto>;
-  playlistControllerFindOne(opts?: OperationOpts): Observable<RawAjaxResponse<PlaylistResponseDto>>;
+  playlistControllerFindOne({ playlistId }: PlaylistControllerFindOneRequest): Observable<PlaylistResponseDto>;
   playlistControllerFindOne(
+    { playlistId }: PlaylistControllerFindOneRequest,
+    opts?: OperationOpts
+  ): Observable<RawAjaxResponse<PlaylistResponseDto>>;
+  playlistControllerFindOne(
+    { playlistId }: PlaylistControllerFindOneRequest,
     opts?: OperationOpts
   ): Observable<PlaylistResponseDto | RawAjaxResponse<PlaylistResponseDto>> {
+    throwIfNullOrUndefined(playlistId, 'playlistId', 'playlistControllerFindOne');
+
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -88,7 +58,7 @@ export class PlaylistsApi extends BaseAPI {
 
     return this.request<PlaylistResponseDto>(
       {
-        url: '/api/playlists/{playlistId}',
+        url: '/api/playlists'.replace('{playlistId}', encodeURI(playlistId)),
         method: 'GET',
         headers,
       },
@@ -141,9 +111,18 @@ export class PlaylistsApi extends BaseAPI {
 
   /**
    */
-  playlistControllerShare(): Observable<Array<ShareItem>>;
-  playlistControllerShare(opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItem>>>;
-  playlistControllerShare(opts?: OperationOpts): Observable<Array<ShareItem> | RawAjaxResponse<Array<ShareItem>>> {
+  playlistControllerShare({ playlistId, userId }: PlaylistControllerShareRequest): Observable<Array<ShareItem>>;
+  playlistControllerShare(
+    { playlistId, userId }: PlaylistControllerShareRequest,
+    opts?: OperationOpts
+  ): Observable<RawAjaxResponse<Array<ShareItem>>>;
+  playlistControllerShare(
+    { playlistId, userId }: PlaylistControllerShareRequest,
+    opts?: OperationOpts
+  ): Observable<Array<ShareItem> | RawAjaxResponse<Array<ShareItem>>> {
+    throwIfNullOrUndefined(playlistId, 'playlistId', 'playlistControllerShare');
+    throwIfNullOrUndefined(userId, 'userId', 'playlistControllerShare');
+
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -152,7 +131,9 @@ export class PlaylistsApi extends BaseAPI {
 
     return this.request<Array<ShareItem>>(
       {
-        url: '/api/playlists/{playlistId}/share/{sharedUserId}',
+        url: '/api/playlists/{playlistId}'
+          .replace('{playlistId}', encodeURI(playlistId))
+          .replace('{userId}', encodeURI(userId)),
         method: 'POST',
         headers,
       },
@@ -162,27 +143,25 @@ export class PlaylistsApi extends BaseAPI {
 
   /**
    */
-  playlistControllerUpdate({ updatePlaylistDto }: PlaylistControllerUpdateRequest): Observable<Playlist>;
+  playlistControllerUpdate({ playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest): Observable<void>;
   playlistControllerUpdate(
-    { updatePlaylistDto }: PlaylistControllerUpdateRequest,
+    { playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest,
     opts?: OperationOpts
-  ): Observable<RawAjaxResponse<Playlist>>;
+  ): Observable<void | RawAjaxResponse<void>>;
   playlistControllerUpdate(
-    { updatePlaylistDto }: PlaylistControllerUpdateRequest,
+    { playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest,
     opts?: OperationOpts
-  ): Observable<Playlist | RawAjaxResponse<Playlist>> {
+  ): Observable<void | RawAjaxResponse<void>> {
+    throwIfNullOrUndefined(playlistId, 'playlistId', 'playlistControllerUpdate');
     throwIfNullOrUndefined(updatePlaylistDto, 'updatePlaylistDto', 'playlistControllerUpdate');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
-      ...(this.configuration.username != null && this.configuration.password != null
-        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
-        : undefined),
     };
 
-    return this.request<Playlist>(
+    return this.request<void>(
       {
-        url: '/api/playlists/{playlistId}',
+        url: '/api/playlists/{playlistId}'.replace('{playlistId}', encodeURI(playlistId)),
         method: 'PUT',
         headers,
         body: updatePlaylistDto,

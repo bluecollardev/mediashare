@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- *
+ * Mediashare
  * Media Share API
  *
  * The version of the OpenAPI document: 1.0
@@ -12,8 +12,16 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, HttpHeaders, OperationOpts, RawAjaxResponse } from '../runtime';
+import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
 import { ShareItem } from '../models';
+
+export interface ShareItemsControllerFindOneRequest {
+  shareId: string;
+}
+
+export interface ShareItemsControllerRemoveRequest {
+  shareId: string;
+}
 
 /**
  * no description
@@ -42,9 +50,17 @@ export class ShareItemsApi extends BaseAPI {
 
   /**
    */
-  shareItemsControllerFindOne(): Observable<ShareItem>;
-  shareItemsControllerFindOne(opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
-  shareItemsControllerFindOne(opts?: OperationOpts): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
+  shareItemsControllerFindOne({ shareId }: ShareItemsControllerFindOneRequest): Observable<ShareItem>;
+  shareItemsControllerFindOne(
+    { shareId }: ShareItemsControllerFindOneRequest,
+    opts?: OperationOpts
+  ): Observable<RawAjaxResponse<ShareItem>>;
+  shareItemsControllerFindOne(
+    { shareId }: ShareItemsControllerFindOneRequest,
+    opts?: OperationOpts
+  ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
+    throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerFindOne');
+
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -53,7 +69,7 @@ export class ShareItemsApi extends BaseAPI {
 
     return this.request<ShareItem>(
       {
-        url: '/api/share-items/{id}',
+        url: '/api/share-items/{shareId}'.replace('{shareId}', encodeURI(shareId)),
         method: 'GET',
         headers,
       },
@@ -63,9 +79,17 @@ export class ShareItemsApi extends BaseAPI {
 
   /**
    */
-  shareItemsControllerRemove(): Observable<ShareItem>;
-  shareItemsControllerRemove(opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
-  shareItemsControllerRemove(opts?: OperationOpts): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
+  shareItemsControllerRemove({ shareId }: ShareItemsControllerRemoveRequest): Observable<ShareItem>;
+  shareItemsControllerRemove(
+    { shareId }: ShareItemsControllerRemoveRequest,
+    opts?: OperationOpts
+  ): Observable<RawAjaxResponse<ShareItem>>;
+  shareItemsControllerRemove(
+    { shareId }: ShareItemsControllerRemoveRequest,
+    opts?: OperationOpts
+  ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
+    throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerRemove');
+
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -74,7 +98,7 @@ export class ShareItemsApi extends BaseAPI {
 
     return this.request<ShareItem>(
       {
-        url: '/api/share-items/{id}',
+        url: '/api/share-items/{shareId}'.replace('{shareId}', encodeURI(shareId)),
         method: 'DELETE',
         headers,
       },

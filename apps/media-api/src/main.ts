@@ -44,11 +44,11 @@ async function bootstrap() {
   /* PASSPORT & SESSION */
 
   /* SWAGGER */
-  const config = DocumentBuilderFactory(title).build();
+  const config = DocumentBuilderFactory({ title }).build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup(globalPrefix, app, document);
+  SwaggerModule.setup(globalPrefix, app, document, { explorer: isDev });
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -56,7 +56,11 @@ async function bootstrap() {
 
   app.use(
     session({
-      store: MongoStore.create({ mongoUrl, dbName, collectionName }),
+      store: MongoStore.create({
+        mongoUrl,
+        dbName,
+        collectionName,
+      }),
 
       secret,
       resave: false,

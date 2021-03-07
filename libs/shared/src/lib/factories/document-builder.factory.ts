@@ -10,7 +10,8 @@ const DocumentBuilderFactory = function ({ title }: DocumentBuilderFactory) {
     .setDescription('Media Share API')
     .setVersion('1.0')
     .addBasicAuth()
-    .addBearerAuth();
+    .addBearerAuth()
+    .addTag('{userId}');
 };
 
 export { DocumentBuilderFactory };

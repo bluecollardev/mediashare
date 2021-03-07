@@ -27,8 +27,7 @@ import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
 @ApiTags('user')
-@ApiTags('playlist')
-@Controller('user')
+@Controller({ path: ['user', 'share', 'media-items', 'playlists'] })
 export class UserController {
   constructor(
     private userService: UserService,

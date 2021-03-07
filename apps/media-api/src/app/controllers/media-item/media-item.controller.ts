@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
@@ -15,9 +15,11 @@ import { ObjectId } from 'mongodb';
 import { MediaGetResponse, MediaPostResponse } from './media-item.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
+import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.constants';
+import { GetUserId } from '../../core/decorators/user.decorator';
 
 @ApiTags('media-items')
-@Controller('media-items')
+@Controller({ path: ['media-items', ':mediaId', 'share'] })
 export class MediaItemController {
   constructor(private readonly mediaItemService: MediaItemService, private shareItemService: ShareItemService) {}
 
@@ -49,39 +51,45 @@ export class MediaItemController {
   }
 
   @MediaGetResponse()
-  @Get(':id')
-  async findOne(@Param('id', new ObjectIdPipe()) id: ObjectId) {
-    const mediaItem = await this.mediaItemService.findOne(id);
+  @Get(RouteTokens.MEDIA_ITEM_ID)
+  @ApiParam({ name: 'mediaId', type: String, required: true })
+  async findOne(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId) {
+    const mediaItem = await this.mediaItemService.findOne(mediaId);
 
-    if (!mediaItem) throw notFoundResponse('mediaItem', { args: { id } });
+    if (!mediaItem) throw notFoundResponse('mediaItem', { args: { mediaId } });
     return mediaItem;
   }
 
   @MediaPostResponse()
-  @Put(':id')
-  update(@Param('id', ObjectIdPipe) id: ObjectId, @CreateDto() updateMediaItemDto: UpdateMediaItemDto) {
-    return this.mediaItemService.update(id, updateMediaItemDto);
+  @Put(RouteTokens.MEDIA_ITEM_ID)
+  @ApiParam({ name: 'mediaId', type: String, required: true })
+  update(@Param('mediaId', ObjectIdPipe) mediaId: ObjectId, @CreateDto() updateMediaItemDto: UpdateMediaItemDto) {
+    return this.mediaItemService.update(mediaId, updateMediaItemDto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    const deleted = await this.mediaItemService.remove(id);
+  @Delete(RouteTokens.MEDIA_ITEM_ID)
+  @ApiParam({ name: 'mediaId', type: String, required: true })
+  async remove(@Param('mediaId') mediaId: string) {
+    const deleted = await this.mediaItemService.remove(mediaId);
 
-    if (!deleted) throw notFoundResponse(id);
+    if (!deleted) throw notFoundResponse(mediaId);
 
     return deleted;
   }
 
   @Post(':mediaId/share/:userId')
   @MediaPostResponse()
+  @ApiParam({ name: 'mediaId', type: String, required: true })
+  @ApiParam({ name: 'userId', type: String, required: true })
   async share(
     @Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId,
     @Param('userId', new ObjectIdPipe()) userId: ObjectId,
+    @GetUserId() createdBy: ObjectId,
     @Res() response: Response
   ) {
     console.log('the id', mediaId);
-    const { userId: createdBy, title } = await this.mediaItemService.findOne(mediaId);
+    const { title } = await this.mediaItemService.findOne(mediaId);
     if (!title && !createdBy) return response.status(HttpStatus.NOT_FOUND);
 
     const shareItem = await this.shareItemService.createMediaShareItem({

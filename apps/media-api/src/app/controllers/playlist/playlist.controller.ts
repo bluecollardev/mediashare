@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, Logger } from '@nestjs/common';
 import { Response } from 'express';
 
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
@@ -16,12 +16,14 @@ import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
+const id = new ObjectId();
 
-@Controller({ path: ['/api/playlists/{playlistId}'] })
+const PLAYLIST_ID_TOKEN = ':playlistId';
+@ApiTags('playlists')
+@Controller('playlists')
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
-  @Post()
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() userId: ObjectId) {
     console.log('dto', createPlaylistDto);
@@ -40,15 +42,21 @@ export class PlaylistController {
   }
 
   @PlaylistGetResponse({ type: PlaylistResponseDto })
-  @Get(':playlistId')
+  @ApiParam({
+    name: 'playlistId',
+    required: true,
+    type: 'string',
+    example: ObjectId.toString(),
+  })
+  @Get()
   findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
     return this.playlistService.getPlaylistById({ playlistId });
   }
 
-  @Put(':playlistId')
-  @PlaylistPostResponse()
+  @Put(PLAYLIST_ID_TOKEN)
+  @ApiParam({ name: 'playlistId', type: String, required: true })
   update(
-    @Param('playlistId', ObjectIdPipe) playlistId: ObjectId,
+    @Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId,
     @GetUserId() userId: ObjectId,
     @Body() updatePlaylistDto: UpdatePlaylistDto
   ) {
@@ -56,17 +64,21 @@ export class PlaylistController {
     return this.playlistService.update(playlistId, { ...rest, userId });
   }
 
+  @Delete(PLAYLIST_ID_TOKEN)
   @UseJwtGuard()
-  @Delete(':playlistId')
-  remove(@Param('playlistId') id: string) {
-    return this.playlistService.remove(id);
+  @ApiParam({ name: 'playlistId', type: String, required: true })
+  remove(@Param('playlistId') playlistId: string) {
+    return this.playlistService.remove(playlistId);
   }
 
-  @Post(':playlistId/share/:sharedUserId')
+  @Post([':playlistId', ' share', ':userId'])
+  @ApiParam({ name: 'playlistId', type: String, required: true })
+  @ApiParam({ name: 'userId', type: String, required: true })
   @PlaylistPostResponse({ type: ShareItem, isArray: true })
   async share(
-    @Param('userId', new ObjectIdPipe()) userId: ObjectId,
     @Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId,
+    @Param('userId', new ObjectIdPipe()) userId: ObjectId,
+
     @GetUserId() createdBy: ObjectId,
     @Res() response: Response
   ) {

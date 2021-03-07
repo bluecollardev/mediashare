@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- *
+ * Mediashare
  * Media Share API
  *
  * The version of the OpenAPI document: 1.0
@@ -93,7 +93,7 @@ export class UserApi extends BaseAPI {
 
     return this.request<Array<ShareItem>>(
       {
-        url: '/api/user/playlist/shared',
+        url: '/api/user/playlists/shared',
         method: 'GET',
         headers,
       },
