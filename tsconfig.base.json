@@ -22,5 +22,5 @@
       "@mediashare/shared": ["libs/shared/src/index.ts"]
     }
   },
-  "exclude": ["node_modules", "tmp", "scripts"]
+  "exclude": ["node_modules", "tmp", "scripts", "**/*.script.ts"]
 }

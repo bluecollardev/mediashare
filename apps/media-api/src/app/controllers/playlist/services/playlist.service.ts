@@ -13,7 +13,7 @@ import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-i
 import * as R from 'remeda';
 import { CreatePlaylistDto } from '../dto/create-playlist.dto';
 
-import { ObjectIdParameters, OptionalObjectIdParameters } from '@mediashare/shared';
+import { OptionalObjectIdParameters } from '@mediashare/shared';
 
 type CreatePlaylistParameters = {
   playlistId: ObjectId;
@@ -39,7 +39,9 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    */
   async createPlaylistWithItems({ createdBy, userId, mediaIds, title = '' }: CreatePlaylistDto) {
     if (!userId || typeof userId === 'string') throw new Error('userId is string in createPlaylistWithItems');
+
     const playlist = await this.create({ userId, title, createdBy });
+
     const { _id: playlistId } = playlist;
 
     const playlistItems = await this.createPlaylistItems({
@@ -59,7 +61,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    * @memberof PlaylistService
    */
   createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
-    if (!items && items.length < 1) throw new Error('no items in createPlaylistItems');
+    if (!items || items.length < 1) throw new Error('no items in createPlaylistItems');
 
     if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
 

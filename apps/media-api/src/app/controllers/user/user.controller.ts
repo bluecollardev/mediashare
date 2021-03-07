@@ -8,21 +8,24 @@ import {
   Post,
   UnauthorizedException,
   UseGuards,
+  Req,
+  Res,
 } from '@nestjs/common';
-
-import { ApiTags } from '@nestjs/swagger';
+import { Response, Request } from 'express';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { GetUser, GetUserId } from '../../core/decorators/user.decorator';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { PlaylistService } from '../playlist/services/playlist.service';
 import { UserGetResponse } from './decorators/user-response.decorator';
-import { TokenDto } from './dto/login.dto';
+import { LoginDto, TokenDto } from './dto/login.dto';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';
+import { LocalGuard } from '../../modules/auth/guards/local.guard';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -45,6 +48,24 @@ export class UserController {
     return { ...authUser, ...mongoUser };
   }
 
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(LocalGuard)
+  @Post('login')
+  @ApiBody({ type: LoginDto, required: true })
+  async login(@Req() req: Request) {
+    return req.user;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  async logout(@Req() req: Request, @Res() res: Response) {
+    try {
+      req.logout();
+    } catch {
+      return res.status(HttpStatus.OK).send();
+    }
+  }
+
   @Get('playlists')
   @UserGetResponse()
   async getPlaylists(@GetUser() user: SessionUserInterface) {
@@ -59,7 +80,6 @@ export class UserController {
   async getMediaItems(@GetUserId() userId: ObjectId) {
     const result = await this.mediaItemService.findMediaItemsByUserId(userId);
 
-    console.log(result);
     return result;
   }
 
@@ -75,9 +95,7 @@ export class UserController {
   async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
 
-    const items = await this.shareItemService.aggregateSharedPlaylists({ userId });
-
-    return items;
+    return await this.shareItemService.aggregateSharedPlaylists({ userId });
   }
 
   @UseGuards(JwtAuthGuard)

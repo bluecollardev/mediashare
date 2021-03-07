@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
-import { PlaylistItemService } from '../../modules/playlist-item/services/playlist-item.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { PlaylistController } from './playlist.controller';
 import { PlaylistService } from './services/playlist.service';

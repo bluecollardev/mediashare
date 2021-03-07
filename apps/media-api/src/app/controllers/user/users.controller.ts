@@ -70,24 +70,6 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(LocalGuard)
-  @Post('login')
-  @ApiBody({ type: LoginDto, required: true })
-  async login(@Request() req: Req) {
-    return req.user;
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('logout')
-  async logout(@Request() req: Req, @Res() res: Response) {
-    try {
-      req.logout();
-    } catch {
-      return res.status(HttpStatus.OK).send();
-    }
-  }
-
   @Get(':userId')
   @UserGetResponse()
   findOne(@Param('userId', ObjectIdPipe) userId: ObjectId): Promise<User> {
@@ -104,6 +86,7 @@ export class UsersController {
   }
 
   @Delete(':userId')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('userId') userId: string): Promise<DeleteResult> {
     return this.userService.remove(userId);
   }
@@ -117,8 +100,8 @@ export class UsersController {
 
   @Get(':id/media-items')
   @UserGetResponse({ type: MediaItemDto, isArray: true })
-  async getMedia(@Param('id') id: string, @Res() res: Response) {
-    const mediaItems = await this.mediaItemService.findMediaItemsByUserId(id);
+  async getMedia(@Param('id', new ObjectIdPipe()) userId: ObjectId, @Res() res: Response) {
+    const mediaItems = await this.mediaItemService.findMediaItemsByUserId(userId);
 
     if (!mediaItems || mediaItems.length < 1) return res.status(HttpStatus.NOT_FOUND).send([]);
 

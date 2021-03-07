@@ -18,4 +18,7 @@ export class PlaylistItem extends BcBaseEntity<PlaylistItem> {
   @Column()
   @Index('playlistId', { unique: false })
   playlistId: ObjectId;
+
+  @Column()
+  sortIndex: number;
 }
