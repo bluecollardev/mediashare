@@ -62,9 +62,7 @@ export class MediaItemController {
 
   @MediaGetResponse()
   @Get(':id')
-  async findOne(@Param('id', ObjectIdPipe) id: ObjectId) {
-    if (typeof id !== 'string') throw badRequestResponse(`${id} must be of type string`);
-
+  async findOne(@Param('id', new ObjectIdPipe()) id: ObjectId) {
     const mediaItem = await this.mediaItemService.findOne(id);
 
     if (!mediaItem) throw notFoundResponse('mediaItem', { args: { id } });
@@ -89,10 +87,14 @@ export class MediaItemController {
 
   @Post(':id/share/:userId')
   @MediaPostResponse()
-  async share(@Param('id', ObjectIdPipe) id: ObjectId, @Param('userId') userIdStr: string, @Res() response: Response) {
+  async share(
+    @Param('id', new ObjectIdPipe()) id: ObjectId,
+    @Param('userId', new ObjectIdPipe()) userId: ObjectId,
+    @Res() response: Response
+  ) {
+    console.log('the id', id);
     const { userId: createdBy, title } = await this.mediaItemService.findOne(id);
     if (!title && !createdBy) return response.status(HttpStatus.NOT_FOUND);
-    const userId = new ObjectId(userIdStr);
 
     const mediaId = new ObjectId(id);
 

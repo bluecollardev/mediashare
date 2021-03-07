@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
+import { PLAYLIST_TOKEN } from '../../../controllers/playlist/entities/playlist.entity';
 import { CreateMediaShareItemInput, CreatePlaylistShareItemDto } from '../dto/create-share-item.dto';
 
 import { ShareItem } from '../entities/share-item.entity';
@@ -35,7 +36,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
         $match: { where: { userId, playlistId: { $exists: true } } },
       },
       {
-        $lookup: { from: 'playlist_item', localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' },
+        $lookup: { from: PLAYLIST_TOKEN, localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' },
       },
     ]);
     return query.toArray();
@@ -43,37 +44,26 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
 
   aggregateSharedMediaItems({ userId }: { userId: ObjectId }) {
     const query = this.repository.aggregate([
-      { $match: { $and: [{ userId }, { playlistId: { $exists: true } }] } },
-      { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'createdByUser' } },
+      { $match: { $and: [{ userId: userId }, { mediaId: { $exists: true } }] } },
+
+      { $lookup: { from: 'media_item', localField: 'mediaId', foreignField: '_id', as: 'mediaItem' } },
+
+      { $unwind: { path: '$mediaItem' } },
 
       {
-        $lookup: { from: 'playlist_item', localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' },
+        $lookup: {
+          from: 'user',
+          localField: 'createdBy',
+          foreignField: '_id',
+          as: 'createdBy',
+        },
       },
-      { $unwind: '$playlistItems' },
-      { $unwind: '$createdByUser' },
+      { $unwind: { path: '$createdBy' } },
       {
         $replaceRoot: {
           newRoot: {
-            $mergeObjects: [
-              { shareItem: { _id: '$_id', createdBy: '$createdByUser', userId: '$userId' } },
-              '$playlistItems',
-            ],
+            $mergeObjects: [{ userId: 0, playlistId: 0, mediaId: 0 }, '$mediaItem', { createdBy: '$createdBy' }],
           },
-        },
-      },
-      { $lookup: { from: 'media_item', localField: 'mediaId', foreignField: '_id', as: 'mediaItems' } },
-      { $unwind: '$mediaItems' },
-      { $unwind: '$shareItem' },
-      { $lookup: { from: 'playlist', localField: 'playlistId', foreignField: '_id', as: 'playlist' } },
-      { $unwind: '$playlist' },
-      {
-        $group: {
-          _id: '$playlistId',
-          shareId: { $first: '$shareItem._id' },
-          title: { $first: '$playlist.title' },
-          category: { $first: '$playlist.category' },
-          createdBy: { $first: '$shareItem.createdBy' },
-          mediaItems: { $push: { $mergeObjects: ['$mediaItems', { playlistItemId: 'playlistItem._id' }] } },
         },
       },
     ]);

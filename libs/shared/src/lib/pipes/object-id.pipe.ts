@@ -4,13 +4,13 @@ import { ObjectId } from 'mongodb';
 @Injectable()
 export class ObjectIdPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
-    typeof value === 'string' ? new ObjectId(value) : value;
+    return typeof value === 'string' ? new ObjectId(value) : value;
   }
 }
 
 @Injectable()
 export class ObjectIdToStringPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
-    typeof value !== 'string' ? value.toHexString() : value;
+    return typeof value !== 'string' ? value.toHexString() : value;
   }
 }

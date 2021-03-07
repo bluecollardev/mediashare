@@ -5,7 +5,7 @@ import { DeepPartial, MongoRepository, ObjectID } from 'typeorm';
 import { BcBaseEntity } from '../entities/base.entity';
 import { Request } from 'express';
 import * as R from 'remeda';
-import { ObjectIdGuard } from '@util-lib';
+import { ObjectIdGuard, StringIdGuard } from '@util-lib';
 import { IdType } from '@core-lib';
 import { REQUEST } from '@nestjs/core';
 import { SessionUserInterface } from './auth-user.model';
@@ -52,11 +52,11 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
    * @return {*}
    * @memberof DataService
    */
-  async findOne(id: ObjectId): Promise<E> {
+  async findOne(id: IdType): Promise<E> {
     this.logger.info(`${this.constructor.name}findOne props`, id);
-
+    const _id = StringIdGuard(id);
     try {
-      const document = await this.repository.findOne(id.toHexString());
+      const document = await this.repository.findOne(_id);
       this.logger.info('${this.constructor.name}findOne result', document);
       return R.clone(document);
     } catch (error) {
