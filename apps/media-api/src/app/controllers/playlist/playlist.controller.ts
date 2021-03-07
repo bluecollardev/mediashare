@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, Logger } from '@nestjs/common';
 import { Response } from 'express';
 
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
@@ -17,8 +17,7 @@ import { PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
 
-@ApiTags('playlists')
-@Controller('playlists')
+@Controller({ path: ['/api/playlists/{playlistId}'] })
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 

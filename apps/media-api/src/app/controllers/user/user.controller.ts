@@ -27,6 +27,7 @@ import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
 @ApiTags('user')
+@ApiTags('playlist')
 @Controller('user')
 export class UserController {
   constructor(
@@ -90,7 +91,7 @@ export class UserController {
 
     return this.shareItemService.aggregateSharedMediaItems({ userId });
   }
-  @Get('playlist/shared')
+  @Get('playlists/shared')
   @UserGetResponse({ isArray: true, type: ShareItem })
   async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;

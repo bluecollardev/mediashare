@@ -8,9 +8,13 @@
         "generatorName": "typescript-rxjs",
         "output": "#{cwd}/libs/api-lib/src",
         "glob": "swagger-spec.{json,yaml}",
+        "skipValidateSpec": true,
         "additionalProperties": {
           "supportsES6": "true",
-          "modelPropertyNaming": "original"
+          "modelPropertyNaming": "original",
+          "useSingleRequestParameter": true,
+          "withInterfaces": true,
+          "withSeparateModelsAndApi": true
         }
       }
     }

@@ -12,7 +12,7 @@ import {
   HttpCode,
   Request,
 } from '@nestjs/common';
-import { Response, Request as Req } from 'express';
+import { Response } from 'express';
 import { CreateUserDto, UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBody, ApiHideProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -22,18 +22,15 @@ import { PlaylistService } from '../playlist/services/playlist.service';
 import { MediaItemService } from '../media-item/media-item.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 
-import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
 import { conflictResponse } from '../../core/functors/http-errors.functor';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
-import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { BcRolesType, BC_ROLES } from '@core-lib';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
 import { createUserResponseDto } from './dto/create-user-response.dto';
 import { Playlist } from '../playlist/entities/playlist.entity';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
-import { LoginDto } from './dto/login.dto';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
