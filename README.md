@@ -6,7 +6,21 @@ This project was generated using [Nx](https://nx.dev).
 
 The API is composed of a core API with routes on it, an Authentication microservice, a postgres Auth database and a mongodb database for core data.
 
-To run the back-end components from the root enter `docker-compose build && docker-compose up`. To stop them run `docker-compose down`.
+To run the back-end components from the root enter `npm run init:dev`, to bring them down run `npm stop:dev`. It is also possible to run the services separately, for example running just hte auth microservice or databases using docker-compose.
+
+It's important to restart with npm run init:dev so the docker volumes will be restored.
+
+## Code-generation
+
+To seed the database make sure you have docker databases running. Then run `npm start seed:users`
+
+This will seed with a small set of data, and 3 users. admin@example.com, user@example.com, guest@example.com each in their appropriate role.
+
+The password is 'welcome1' but you can change that and the email config there.
+
+## Generate client models
+
+Run `npm run gen:api-client`
 
 ## Creating a new module
 
