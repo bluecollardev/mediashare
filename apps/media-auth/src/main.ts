@@ -28,10 +28,7 @@ async function bootstrap() {
   Logger.log('Auth microservice running');
 
   app.setGlobalPrefix(globalPrefix);
-  const port = config.get('auth.msApiPort') || 4444;
-  await app.listen(port, () => {
-    Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
-  });
+  // const port = config.get('auth.msApiPort') || 4444;
 }
 
 bootstrap();

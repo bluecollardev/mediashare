@@ -25,6 +25,7 @@ services:
       - DB_SSL=false
       - DB_SYNCHRONIZE=true
       - DB_USERNAME=mongodb
+      - AUTH_HOST=media-auth-dev
     volumes:
       - .:/usr/src/app
       - /usr/app/node_modules

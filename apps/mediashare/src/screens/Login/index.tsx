@@ -1,18 +1,10 @@
 import * as React from 'react';
 import { Platform } from 'react-native';
-import {
-  Container,
-  Content,
-  Header,
-  Body,
-  Title,
-  Button,
-  Text,
-  View
-} from 'native-base';
+import { Container, Content, Header, Body, Title, Button, Text, View } from 'native-base';
 
 export interface LoginProps {
   loginForm: any;
+  1;
   onLogin: Function;
 }
 
@@ -27,9 +19,7 @@ class Login extends React.Component<LoginProps, LoginState> {
           <Body style={{ alignItems: 'center' }}>
             <Title>Blue Collar Software</Title>
             <View padder>
-              <Text
-                style={{ color: Platform.OS === 'ios' ? '#000' : '#FFF' }}
-              />
+              <Text style={{ color: Platform.OS === 'ios' ? '#000' : '#FFF' }} />
             </View>
           </Body>
         </Header>
