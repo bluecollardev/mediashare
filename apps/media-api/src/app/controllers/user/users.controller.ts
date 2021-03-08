@@ -1,25 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Put,
-  Param,
-  Delete,
-  Res,
-  HttpStatus,
-  UseGuards,
-  HttpCode,
-  Request,
-} from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards, HttpCode } from '@nestjs/common';
 import { CreateUserDto, UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBody, ApiHideProperty, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/services/playlist.service';
-import { MediaItemService } from '../media-item/media-item.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 
 import { ObjectId } from 'mongodb';
@@ -30,8 +15,6 @@ import { BcRolesType, BC_ROLES } from '@core-lib';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
 import { createUserResponseDto } from './dto/create-user-response.dto';
 import { Playlist } from '../playlist/entities/playlist.entity';
-import { MediaItemDto } from '../media-item/dto/media-item.dto';
-import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
@@ -44,7 +27,6 @@ export class UsersController {
   constructor(
     private readonly userService: UserService,
     private playlistService: PlaylistService,
-    private mediaItemService: MediaItemService,
     private shareItemService: ShareItemService
   ) {}
 
