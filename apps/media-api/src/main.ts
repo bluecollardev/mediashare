@@ -67,7 +67,10 @@ async function bootstrap() {
     })
   );
 
-  if (isDev) writeFileSync('./swagger-spec.json', JSON.stringify(document, null, 2));
+  if (isDev) {
+    console.log('writing swagger definitions');
+    writeFileSync('./swagger-spec.json', JSON.stringify(document, null, 2));
+  }
 
   await app.listen(port, () => {
     console.log(`Listening at ${host}:${port}/${globalPrefix}`);

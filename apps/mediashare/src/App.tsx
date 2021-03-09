@@ -19,6 +19,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'native-base';
 
 import { routeConfig } from './routes';
+import Login from './screens/Login';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -80,7 +81,7 @@ export const tabNavigationIconsMap = {
   Playlists: 'play-circle-outline',
   Library: 'film-outline',
   Feeds: 'share-social-outline',
-  Settings: 'settings-outline'
+  Settings: 'settings-outline',
 };
 
 const TabNavigator = createBottomTabNavigator();
@@ -88,20 +89,19 @@ const TabNavigator = createBottomTabNavigator();
 const TabNavigation = () => {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Explore'}
+      initialRouteName={'login'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {
-          return (
-            <Icon name={tabNavigationIconsMap[route.name]} color={color} />
-          );
-        }
+          return <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
+        },
       })}
       tabBarOptions={{
         activeTintColor: 'tomato',
         inactiveTintColor: 'gray',
-        showLabel: false
-      }}>
+        showLabel: false,
+      }}
+    >
       <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />
       <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
       <TabNavigator.Screen name={'Library'} component={LibraryNavigation} />
@@ -113,12 +113,16 @@ const TabNavigation = () => {
 
 export default class App extends React.Component {
   public navigator: any;
-
+  isLoggedIn = false;
   render() {
+    // if (this.isLoggedIn)
     return (
       <NavigationContainer>
         <TabNavigation />
       </NavigationContainer>
     );
+    // else {
+    //   return <Login></Login>;
+    // }
   }
 }

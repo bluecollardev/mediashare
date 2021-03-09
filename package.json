@@ -98,6 +98,7 @@
     "@openapitools/openapi-generator-cli": "^2.1.26",
     "@react-native-community/cli-platform-android": "4.13.0",
     "@react-native-community/cli-platform-ios": "4.13.0",
+    "@react-native-community/eslint-config": "^2.0.0",
     "@testing-library/jest-native": "3.4.3",
     "@testing-library/react-native": "7.1.0",
     "@types/bcrypt": "^3.0.0",

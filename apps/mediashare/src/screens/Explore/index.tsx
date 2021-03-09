@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  Container,
-  Content,
-  View,
-  List
-} from 'native-base';
+import { Container, Content, View, List } from 'native-base';
 
 import { MediaListItem } from '../../components/layout/MediaListItem';
 import { ListItemGroup } from '../../components/layout/ListItemGroup';
@@ -22,16 +17,15 @@ export interface ExploreState {}
 class Explore extends React.Component<ExploreProps, ExploreState> {
   render() {
     const { navigation } = this.props;
-    const imageSrc =
-      'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+    const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
     const items1 = [
       { title: 'Playlist 1', description: '9 Videos', image: imageSrc },
-      { title: 'Playlist 2', description: '2 Videos', image: imageSrc }
+      { title: 'Playlist 2', description: '2 Videos', image: imageSrc },
     ];
     const items2 = [
       { title: 'Playlist 3', description: '3 Videos', image: imageSrc },
-      { title: 'Playlist 4', description: '6 Videos', image: imageSrc }
+      { title: 'Playlist 4', description: '6 Videos', image: imageSrc },
     ];
 
     return (
@@ -52,9 +46,7 @@ class Explore extends React.Component<ExploreProps, ExploreState> {
                     title={title}
                     description={description}
                     image={image}
-                    onViewDetail={() =>
-                      navigation.navigate(routeConfig.playlistDetail.name)
-                    }
+                    onViewDetail={() => navigation.navigate(routeConfig.playlistDetail.name)}
                   />
                 );
               })}
@@ -67,9 +59,7 @@ class Explore extends React.Component<ExploreProps, ExploreState> {
                     title={title}
                     description={description}
                     image={image}
-                    onViewDetail={() =>
-                      navigation.navigate(routeConfig.playlistDetail.name)
-                    }
+                    onViewDetail={() => navigation.navigate(routeConfig.playlistDetail.name)}
                   />
                 );
               })}

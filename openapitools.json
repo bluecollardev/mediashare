@@ -6,7 +6,7 @@
     "generators": {
       "v3.0": {
         "generatorName": "typescript-rxjs",
-        "output": "#{cwd}/libs/api-lib/src",
+        "output": "#{cwd}/apps/mediashare/src/api",
         "glob": "swagger-spec.{json,yaml}",
         "additionalProperties": {
           "supportsES6": "true",

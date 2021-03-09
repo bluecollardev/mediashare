@@ -4,7 +4,7 @@ import { Container, Content, Header, Body, Title, Button, Text, View } from 'nat
 
 export interface LoginProps {
   loginForm: any;
-  1;
+
   onLogin: Function;
 }
 
@@ -12,6 +12,7 @@ export interface LoginState {}
 
 class Login extends React.Component<LoginProps, LoginState> {
   // <Icon name="flash" style={{ fontSize: 104 }} />
+
   render() {
     return (
       <Container>

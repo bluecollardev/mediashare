@@ -38,6 +38,6 @@ export class ServerConfiguration<T extends { [key: string]: string }> {
   }
 }
 
-const server1 = new ServerConfiguration<{}>('', {}, '');
+const server1 = new ServerConfiguration<{}>('http://localhost:3333/api', {}, 'development server');
 
 export const servers = [server1];

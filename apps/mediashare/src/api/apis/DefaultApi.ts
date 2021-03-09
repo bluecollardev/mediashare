@@ -25,7 +25,7 @@ export class DefaultApi extends BaseAPI {
   appControllerGetData(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     return this.request<void>(
       {
-        url: '/api/api',
+        url: '/api',
         method: 'GET',
       },
       opts?.responseOpts

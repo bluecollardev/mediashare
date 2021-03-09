@@ -1,18 +1,9 @@
 import * as React from 'react';
-import {
-  Container,
-  Content,
-  View,
-  Text,
-  Button,
-  Icon,
-  List
-} from 'native-base';
-
+import { Container, Content, View, Text, Button, Icon, List } from 'native-base';
 import { MediaListItem } from '../../components/layout/MediaListItem';
-
 import { routeConfig } from '../../routes';
 import styles from './styles';
+import { MediaItemsApi } from '../../api';
 
 export interface LibraryProps {
   navigation: any;
@@ -20,24 +11,29 @@ export interface LibraryProps {
 }
 
 export interface LibraryState {}
-
 class Library extends React.Component<LibraryProps, LibraryState> {
+  mediaItemsApi = new MediaItemsApi();
+  baseUrl = 'localhost';
+  fetchImages() {
+    return this.mediaItemsApi.mediaItemControllerFindAll();
+  }
   render() {
     const { navigation } = this.props;
     const descriptionText =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
       'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-    const imageSrc =
-      'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+    const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
     const items1 = [
       { title: 'Video 1', description: descriptionText, image: imageSrc },
-      { title: 'Video 2', description: descriptionText, image: imageSrc }
+      { title: 'Video 2', description: descriptionText, image: imageSrc },
     ];
     const items2 = [
       { title: 'Video 3', description: descriptionText, image: imageSrc },
-      { title: 'Video 4', description: descriptionText, image: imageSrc }
+      { title: 'Video 4', description: descriptionText, image: imageSrc },
     ];
+
+    this.fetchImages().subscribe((obs) => console.log(obs));
 
     return (
       <Container style={styles.container}>
@@ -48,7 +44,8 @@ class Library extends React.Component<LibraryProps, LibraryState> {
               bordered
               dark
               style={{ flex: 1, marginRight: 10 }}
-              onPress={() => navigation.navigate(routeConfig.addFromFeed.name)}>
+              onPress={() => navigation.navigate(routeConfig.addFromFeed.name)}
+            >
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Add From Feed</Text>
             </Button>
@@ -59,7 +56,8 @@ class Library extends React.Component<LibraryProps, LibraryState> {
               style={{ flex: 1 }}
               onPress={() => {
                 navigation.navigate(routeConfig.addToPlaylist.name);
-              }}>
+              }}
+            >
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Add to Playlist</Text>
             </Button>
@@ -75,9 +73,7 @@ class Library extends React.Component<LibraryProps, LibraryState> {
                     title={title}
                     description={description}
                     image={image}
-                    onViewDetail={() =>
-                      navigation.navigate(routeConfig.libraryItemDetail.name)
-                    }
+                    onViewDetail={() => navigation.navigate(routeConfig.libraryItemDetail.name)}
                   />
                 );
               })}
@@ -90,9 +86,7 @@ class Library extends React.Component<LibraryProps, LibraryState> {
                     title={title}
                     description={description}
                     image={image}
-                    onViewDetail={() =>
-                      navigation.navigate(routeConfig.libraryItemDetail.name)
-                    }
+                    onViewDetail={() => navigation.navigate(routeConfig.libraryItemDetail.name)}
                   />
                 );
               })}
@@ -106,7 +100,8 @@ class Library extends React.Component<LibraryProps, LibraryState> {
               style={{ flex: 1, justifyContent: 'center' }}
               onPress={() => {
                 navigation.navigate(routeConfig.addToPlaylist.name);
-              }}>
+              }}
+            >
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Add to Playlist</Text>
             </Button>

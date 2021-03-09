@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Item, Input, Icon, Form, Toast } from 'native-base';
+import { Item, Input, Form } from 'native-base';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import Login from '../../screens/Login';
+import { UserApi } from '../../api';
 
 const required = (value: any) => (value ? undefined : 'Required');
 const maxLength = (max: any) => (value: any) =>
@@ -11,13 +12,9 @@ const minLength = (min: any) => (value: any) =>
   value && value.length < min ? `Must be ${min} characters or more` : undefined;
 const minLength8 = minLength(8);
 const email = (value: any) =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
-    ? 'Invalid email address'
-    : undefined;
+  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined;
 const alphaNumeric = (value: any) =>
-  value && /[^a-zA-Z0-9 ]/i.test(value)
-    ? 'Only alphanumeric characters'
-    : undefined;
+  value && /[^a-zA-Z0-9 ]/i.test(value) ? 'Only alphanumeric characters' : undefined;
 
 export interface LoginFormProps extends InjectedFormProps {
   navigation?: any;
@@ -27,6 +24,7 @@ export interface LoginFormState {}
 class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
   navigation: any;
   textInput: any;
+  userApi = new UserApi();
 
   renderInput({ input, meta: { touched, error } }) {
     // <Icon active name={input.name === 'email' ? 'person' : 'unlock'} />
@@ -43,26 +41,13 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
   }
 
   login() {
-    //if (this.props.valid) {
     this.props.navigation.navigate('Explore');
-    /* } else {
-      Toast.show({
-        text: 'Enter Valid Username & password!',
-        duration: 2000,
-        position: 'top',
-        textStyle: { textAlign: 'center' }
-      });
-    } */
   }
 
   render() {
     const form = (
       <Form>
-        <Field
-          name="email"
-          component={this.renderInput}
-          validate={[email, required]}
-        />
+        <Field name="email" component={this.renderInput} validate={[email, required]} />
         <Field
           name="password"
           component={this.renderInput}
@@ -74,6 +59,6 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
   }
 }
 const LoginContainer = reduxForm({
-  form: 'login'
+  form: 'login',
 })(LoginForm);
 export default LoginContainer;
