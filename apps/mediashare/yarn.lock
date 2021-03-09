@@ -6631,6 +6631,11 @@ regjsparser@^0.6.4:
   dependencies:
     jsesc "~0.5.0"
 
+remeda@^0.0.27:
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/remeda/-/remeda-0.0.27.tgz#5924d656c5f8e9c7c692324cd7f4c43ce8552997"
+  integrity sha512-nkQnPLMXtSirvF8OxjuvbZhwBawDD6ZQAvg7hiq4/nZEFIgB4u80fS/NUm6PMJgSUfwfzQ6ZwVyVn8DTJcmkCw==
+
 remote-redux-devtools-on-debugger@0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/remote-redux-devtools-on-debugger/-/remote-redux-devtools-on-debugger-0.8.3.tgz#7c3b4675a5d7f109a6333aecbc8336e595ad845b"

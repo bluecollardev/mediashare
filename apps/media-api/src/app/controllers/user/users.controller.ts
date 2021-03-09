@@ -14,7 +14,6 @@ import { UserService } from '../../modules/auth/user.service';
 import { BcRolesType, BC_ROLES } from '@core-lib';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
 import { createUserResponseDto } from './dto/create-user-response.dto';
-import { Playlist } from '../playlist/entities/playlist.entity';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { GetUser } from '../../core/decorators/user.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
