@@ -7,14 +7,16 @@ import reducer from '../../src/reducers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function configureStore(onCompletion: () => void): any {
-  const middleware = [thunk];
+  const middleware = [thunk.withExtraArgument({})];
+  // @ts-ignore
   const composeEnhancers = composeWithDevTools({
     name: 'nativestarterkit',
-    realtime: true
+    realtime: true,
   });
 
   const store = createStore(
     reducer,
+    // @ts-ignore
     composeEnhancers(applyMiddleware(...middleware))
   );
   // persistStore(store, onCompletion);
