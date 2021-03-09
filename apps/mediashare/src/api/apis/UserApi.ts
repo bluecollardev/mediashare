@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { MediaItemDto, Playlist, ShareItem, TokenDto, UserDto } from '../models';
+import { LoginDto, LoginResponseDto, MediaItemDto, Playlist, ShareItem, TokenDto, UserDto } from '../models';
 
 export interface UserControllerAuthorizeRequest {
   id: string;
@@ -21,7 +21,7 @@ export interface UserControllerAuthorizeRequest {
 }
 
 export interface UserControllerLoginRequest {
-  userDto: UserDto;
+  loginDto: LoginDto;
 }
 
 /**
@@ -168,27 +168,27 @@ export class UserApi extends BaseAPI {
 
   /**
    */
-  userControllerLogin({ userDto }: UserControllerLoginRequest): Observable<void>;
+  userControllerLogin({ loginDto }: UserControllerLoginRequest): Observable<LoginResponseDto>;
   userControllerLogin(
-    { userDto }: UserControllerLoginRequest,
+    { loginDto }: UserControllerLoginRequest,
     opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>>;
+  ): Observable<RawAjaxResponse<LoginResponseDto>>;
   userControllerLogin(
-    { userDto }: UserControllerLoginRequest,
+    { loginDto }: UserControllerLoginRequest,
     opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>> {
-    throwIfNullOrUndefined(userDto, 'userDto', 'userControllerLogin');
+  ): Observable<LoginResponseDto | RawAjaxResponse<LoginResponseDto>> {
+    throwIfNullOrUndefined(loginDto, 'loginDto', 'userControllerLogin');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
     };
 
-    return this.request<void>(
+    return this.request<LoginResponseDto>(
       {
         url: '/api/user/login',
         method: 'POST',
         headers,
-        body: userDto,
+        body: loginDto,
       },
       opts?.responseOpts
     );
@@ -199,10 +199,17 @@ export class UserApi extends BaseAPI {
   userControllerLogout(): Observable<void>;
   userControllerLogout(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
   userControllerLogout(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<void>(
       {
         url: '/api/user/logout',
         method: 'POST',
+        headers,
       },
       opts?.responseOpts
     );

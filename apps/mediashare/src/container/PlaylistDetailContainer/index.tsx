@@ -10,31 +10,23 @@ export interface PlaylistDetailContainerProps {
 }
 export interface PlaylistDetailContainerState {}
 
-class PlaylistDetailContainer extends React.Component<
-  PlaylistDetailContainerProps,
-  PlaylistDetailContainerState
-> {
+class PlaylistDetailContainer extends React.Component<PlaylistDetailContainerProps, PlaylistDetailContainerState> {
   componentDidMount() {
     this.props.fetchList();
   }
   render() {
-    return (
-      <PlaylistDetail
-        navigation={this.props.navigation}
-        list={this.props.data}
-      />
-    );
+    return <PlaylistDetail navigation={this.props.navigation} list={this.props.data} />;
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    fetchList: (url: any) => dispatch(fetchList(url))
+    fetchList: (url: any) => dispatch(fetchList(url)),
   };
 }
 
 const mapStateToProps = (state: any) => ({
   data: state.playlistDetail.list,
-  isLoading: state.playlistDetail.isLoading
+  isLoading: state.playlistDetail.isLoading,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistDetailContainer);

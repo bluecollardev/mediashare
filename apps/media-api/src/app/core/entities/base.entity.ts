@@ -1,4 +1,4 @@
-import { BcBaseInterface } from '@core-lib';
+import { BcBaseInterface, IdType } from '@core-lib';
 import { ApiObjectId, ApiPastDate } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import { ObjectId } from 'bson';

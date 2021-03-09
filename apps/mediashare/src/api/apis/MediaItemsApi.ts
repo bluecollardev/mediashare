@@ -30,6 +30,7 @@ export interface MediaItemControllerRemoveRequest {
 export interface MediaItemControllerShareRequest {
   mediaId: string;
   userId: string;
+  createMediaItemDto: CreateMediaItemDto;
 }
 
 export interface MediaItemControllerUpdateRequest {
@@ -160,19 +161,25 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerShare({ mediaId, userId }: MediaItemControllerShareRequest): Observable<ShareItem>;
+  mediaItemControllerShare({
+    mediaId,
+    userId,
+    createMediaItemDto,
+  }: MediaItemControllerShareRequest): Observable<ShareItem>;
   mediaItemControllerShare(
-    { mediaId, userId }: MediaItemControllerShareRequest,
+    { mediaId, userId, createMediaItemDto }: MediaItemControllerShareRequest,
     opts?: OperationOpts
   ): Observable<RawAjaxResponse<ShareItem>>;
   mediaItemControllerShare(
-    { mediaId, userId }: MediaItemControllerShareRequest,
+    { mediaId, userId, createMediaItemDto }: MediaItemControllerShareRequest,
     opts?: OperationOpts
   ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerShare');
     throwIfNullOrUndefined(userId, 'userId', 'mediaItemControllerShare');
+    throwIfNullOrUndefined(createMediaItemDto, 'createMediaItemDto', 'mediaItemControllerShare');
 
     const headers: HttpHeaders = {
+      'Content-Type': 'application/json',
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
@@ -185,6 +192,7 @@ export class MediaItemsApi extends BaseAPI {
           .replace('{userId}', encodeURI(userId)),
         method: 'POST',
         headers,
+        body: createMediaItemDto,
       },
       opts?.responseOpts
     );

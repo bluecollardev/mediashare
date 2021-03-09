@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { Playlist, UpdateUserDto, UserDto } from '../models';
+import { PlaylistResponseDto, UpdateUserDto, UserDto } from '../models';
 
 export interface UsersControllerFindOneRequest {
   userId: string;
@@ -111,15 +111,15 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerGetPlaylists({ userId }: UsersControllerGetPlaylistsRequest): Observable<Array<Playlist>>;
+  usersControllerGetPlaylists({ userId }: UsersControllerGetPlaylistsRequest): Observable<Array<PlaylistResponseDto>>;
   usersControllerGetPlaylists(
     { userId }: UsersControllerGetPlaylistsRequest,
     opts?: OperationOpts
-  ): Observable<RawAjaxResponse<Array<Playlist>>>;
+  ): Observable<RawAjaxResponse<Array<PlaylistResponseDto>>>;
   usersControllerGetPlaylists(
     { userId }: UsersControllerGetPlaylistsRequest,
     opts?: OperationOpts
-  ): Observable<Array<Playlist> | RawAjaxResponse<Array<Playlist>>> {
+  ): Observable<Array<PlaylistResponseDto> | RawAjaxResponse<Array<PlaylistResponseDto>>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerGetPlaylists');
 
     const headers: HttpHeaders = {
@@ -128,7 +128,7 @@ export class UsersApi extends BaseAPI {
         : undefined),
     };
 
-    return this.request<Array<Playlist>>(
+    return this.request<Array<PlaylistResponseDto>>(
       {
         url: '/api/users/{userId}/playlists'.replace('{userId}', encodeURI(userId)),
         method: 'GET',

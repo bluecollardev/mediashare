@@ -48,7 +48,7 @@ export class PlaylistController {
     name: 'playlistId',
     required: true,
     type: 'string',
-    example: ObjectId.toString(),
+    example: new ObjectId().toHexString(),
   })
   @Get()
   findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {

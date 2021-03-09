@@ -19,4 +19,5 @@ export interface RootState {
   sharedPlaylists: ApiResponse<models.PlaylistResponseDto[]>;
   sharedPlaylistItems: ApiResponse<models.PlaylistItemResponseDto[]>;
   forms: { [key: string]: AppForm };
+  isLoggedIn: boolean;
 }

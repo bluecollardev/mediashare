@@ -1,10 +1,11 @@
 import { ApiHideProperty, ApiProperty, IntersectionType, OmitType } from '@nestjs/swagger';
 import { IsArray, IsUUID } from 'class-validator';
 
-import { ApiEmail, ApiName, ApiObjectId, ApiPastDate, ObjectIdArray } from '@mediashare/shared';
+import { ApiEmail, ApiName, ApiObjectId, ApiPastDate, ApiString, ObjectIdArray } from '@mediashare/shared';
 import { BC_ROLES, BcRolesType } from '@core-lib';
 import { ObjectId } from 'mongodb';
 import { LoginDto } from './login.dto';
+import { User } from '../entities/user.entity';
 
 const uuidExample = '1731ee8a-8f27-53af-805d-2ee2e705f0e2';
 export class CreateUserDto extends LoginDto {
@@ -35,18 +36,12 @@ export class UserAuthFieldsDto {
   @ApiPastDate({ readOnly: false })
   createdAt: Readonly<Date>;
 
-  @ApiProperty({ enum: BC_ROLES, isArray: true, type: 'enum' })
+  @ApiProperty({ enum: BC_ROLES })
   @IsArray()
   roles: BcRolesType[];
-
-  @ObjectIdArray({ required: false })
-  sharedPlaylists?: ObjectId[];
-
-  @ObjectIdArray({ required: false })
-  sharedMediaItems?: ObjectId[];
 }
 
-export class UserDto extends IntersectionType(OmitType(CreateUserDto, ['password']), UserAuthFieldsDto) {
+export class UserDto extends IntersectionType(OmitType(User, ['_id', 'userId']), OmitType(UserAuthFieldsDto, ['_id'])) {
   @ApiHideProperty()
   password: string;
 }

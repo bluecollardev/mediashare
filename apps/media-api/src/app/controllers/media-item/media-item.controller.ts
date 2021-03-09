@@ -64,6 +64,7 @@ export class MediaItemController {
   @MediaPostResponse()
   @Put(RouteTokens.MEDIA_ITEM_ID)
   @ApiParam({ name: 'mediaId', type: String, required: true })
+  @ApiBody({ type: UpdateMediaItemDto })
   update(@Param('mediaId', ObjectIdPipe) mediaId: ObjectId, @Body() updateMediaItemDto: UpdateMediaItemDto) {
     return this.mediaItemService.update(mediaId, updateMediaItemDto);
   }

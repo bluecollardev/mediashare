@@ -67,6 +67,7 @@ async function bootstrap() {
     })
   );
 
+  console.log('is dev? ', isDev);
   if (isDev) {
     console.log('writing swagger definitions');
     writeFileSync('./swagger-spec.json', JSON.stringify(document, null, 2));

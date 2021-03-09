@@ -20,6 +20,7 @@ import { Icon } from 'native-base';
 
 import { routeConfig } from './routes';
 import Login from './screens/Login';
+import LoginContainer from './container/LoginContainer';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -89,7 +90,7 @@ const TabNavigator = createBottomTabNavigator();
 const TabNavigation = () => {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'login'}
+      initialRouteName={'explore'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {
@@ -115,14 +116,14 @@ export default class App extends React.Component {
   public navigator: any;
   isLoggedIn = false;
   render() {
-    // if (this.isLoggedIn)
-    return (
-      <NavigationContainer>
-        <TabNavigation />
-      </NavigationContainer>
-    );
-    // else {
-    //   return <Login></Login>;
-    // }
+    if (this.isLoggedIn) {
+      return (
+        <NavigationContainer>
+          <TabNavigation />
+        </NavigationContainer>
+      );
+    } else {
+      return <Login loginForm={LoginContainer} onLogin="() => " />;
+    }
   }
 }

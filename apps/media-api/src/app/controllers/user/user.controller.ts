@@ -12,13 +12,13 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser, GetUserId } from '../../core/decorators/user.decorator';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { PlaylistService } from '../playlist/services/playlist.service';
 import { UserGetResponse } from './decorators/user-response.decorator';
-import { LoginDto, TokenDto } from './dto/login.dto';
+import { LoginDto, LoginResponseDto, TokenDto } from './dto/login.dto';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
@@ -27,7 +27,6 @@ import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { Playlist } from '../playlist/entities/playlist.entity';
-import { UserDto } from './dto/create-user.dto';
 @ApiTags('user')
 @Controller({ path: ['user', 'share', 'media-items', 'playlists'] })
 export class UserController {
@@ -53,13 +52,18 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalGuard)
   @Post('login')
-  @ApiBody({ type: UserDto, required: true })
+  @ApiBody({ type: LoginDto, required: true })
+  @ApiResponse({ type: LoginResponseDto, status: 200 })
   async login(@Req() req: Request) {
-    return req.user;
+    const expressUser = req.user;
+
+    const user = await this.userService.findByQuery({ username: req.body.username });
+    return { ...expressUser, ...user };
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('logout')
+  @ApiBearerAuth()
   async logout(@Req() req: Request, @Res() res: Response) {
     try {
       req.logout();
@@ -69,7 +73,7 @@ export class UserController {
   }
 
   @Get('playlists')
-  @UserGetResponse({ type: Playlist })
+  @UserGetResponse({ type: Playlist, status: 200 })
   async getPlaylists(@GetUser() user: SessionUserInterface) {
     const result = await this.playlistService.getPlaylistByUserId({ userId: user._id });
 

@@ -19,10 +19,10 @@ import { PlaylistItemResponseDto } from './';
  */
 export interface PlaylistResponseDto {
   /**
-   * @type {object}
+   * @type {string}
    * @memberof PlaylistResponseDto
    */
-  _id: object;
+  _id: string;
   /**
    * @type {string}
    * @memberof PlaylistResponseDto

@@ -1,6 +1,6 @@
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
 import { applyDecorators } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { UseJwtGuard } from '../../../modules/auth/auth.decorator';
 import { UserDto } from '../dto/create-user.dto';
 

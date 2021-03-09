@@ -1,10 +1,10 @@
 import { UserInterface } from '@core-lib';
 import { ObjectId } from 'mongodb';
 import { Entity, Column } from 'typeorm';
-import { BcBaseEntity } from '../../../core';
+import { BcBaseEntity, BcEntity } from '../../../core';
 export class BaseUser {}
 @Entity()
-export class User extends BcBaseEntity<User> implements UserInterface {
+export class User extends BcEntity {
   @Column() username: string;
   @Column() firstName: string;
   @Column() lastName: string;
