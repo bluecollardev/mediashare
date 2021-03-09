@@ -15,6 +15,18 @@
           "withInterfaces": true,
           "withSeparateModelsAndApi": true
         }
+      },
+      "v3.5": {
+        "generatorName": "typescript-redux-query",
+        "output": "#{cwd}/apps/mediashare/src/redux",
+        "glob": "swagger-spec.{json,yaml}",
+        "additionalProperties": {
+          "supportsES6": "true",
+          "modelPropertyNaming": "original",
+          "useSingleRequestParameter": true,
+          "withInterfaces": true,
+          "withSeparateModelsAndApi": true
+        }
       }
     }
   }
