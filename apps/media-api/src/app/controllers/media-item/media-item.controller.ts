@@ -20,7 +20,7 @@ import { GetUserId } from '../../core/decorators/user.decorator';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 
 @ApiTags('media-items')
-@Controller({ path: ['media-items', ':mediaId', 'share'] })
+@Controller('media-items')
 export class MediaItemController {
   constructor(private readonly mediaItemService: MediaItemService, private shareItemService: ShareItemService) {}
 
@@ -35,7 +35,6 @@ export class MediaItemController {
    */
   @Post()
   @MediaPostResponse()
-  @ApiBody({ type: CreateMediaItemDto })
   create(@CreateDto() createMediaItemDto: CreateMediaItemDto) {
     return this.mediaItemService.create(createMediaItemDto);
   }

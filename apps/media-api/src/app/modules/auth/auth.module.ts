@@ -25,8 +25,8 @@ import { UserService } from './user.service';
         useFactory: (configService: AppConfigService) => ({
           transport: Transport.TCP,
           options: {
-            host: configService.get('host') || 'localhost',
-            port: configService.get('msAuthPort'),
+            host: configService.get('authHost'),
+            port: configService.get('authPort'),
           },
         }),
         inject: [AppConfigService],

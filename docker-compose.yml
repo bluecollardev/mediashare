@@ -26,6 +26,7 @@ services:
       - DB_SYNCHRONIZE=true
       - DB_USERNAME=mongodb
       - AUTH_HOST=media-auth-dev
+      - AUTH_PORT=4000
     volumes:
       - .:/usr/src/app
       - /usr/app/node_modules
@@ -47,10 +48,9 @@ services:
     build:
       context: .
       target: development
-    user: 'node'
     working_dir: /usr/src/app
     environment:
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST=mediapostgres
       - POSTGRESS_PORT=5432
       - POSTGRES_USERNAME=ms-user
       - POSTGRES_PASSWORD=ms-user-pass
@@ -58,7 +58,7 @@ services:
       - NODE_ENV=production
       - SESSION_SECRET=this-is-my-secret-key
       - MS_PORT=4000
-      - MS_HOST=localhost
+      - MS_HOST=mediapostgres
       - MS_API_PORT=4444
     volumes:
       - .:/usr/src/app

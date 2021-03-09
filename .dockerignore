@@ -18,3 +18,7 @@ npm-debug.log.*
 # Source files
 src
 test
+
+.dist
+.vscode
+scripts
