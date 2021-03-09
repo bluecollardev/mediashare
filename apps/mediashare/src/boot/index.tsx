@@ -8,13 +8,14 @@ import { Root } from 'native-base';
 
 import configureStore from './configureStore';
 import App from '../../src/App';
+
 export interface SetupProps {}
 export interface SetupState {
   isLoading: boolean;
 }
 
 const onCompletion = () => {};
-const store = configureStore(onCompletion);
+export const store = configureStore(onCompletion);
 
 export default class Setup extends React.Component<SetupProps, SetupState> {
   constructor(props) {
