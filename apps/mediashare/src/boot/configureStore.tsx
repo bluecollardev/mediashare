@@ -24,7 +24,6 @@ const apis: Apis = {
   shareItems: new ShareItemsApi(),
   user: new UserApi(),
   users: new UsersApi(),
-  GET_ITEMS: playlistsApi.playlistsControllerFindAll(),
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

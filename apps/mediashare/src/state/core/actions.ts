@@ -1,4 +1,6 @@
+/* eslint-disable no-undef */
 import { RootState } from '..';
+import { SnakeCaseToCamelCase, snakeCaseToCamelCase } from './types';
 
 const CreateActionFactory = (type: string) => <T>(payload: T = null) => ({
   type,
@@ -12,8 +14,9 @@ const payloadFactory = <T>(payload: T) => ({
 function makeActions<T extends string>(actionKeys: readonly T[]) {
   const baseActionsFactory = CreateActionFactory;
 
-  const actions: Record<T, ReturnType<typeof CreateActionFactory>> = actionKeys.reduce(
-    (prev, curr) => ({ ...prev, [curr]: baseActionsFactory(curr) }),
+  // eslint-disable-next-line no-undef
+  const actions: Record<SnakeCaseToCamelCase<T>, ReturnType<typeof CreateActionFactory>> = actionKeys.reduce(
+    (prev, curr) => ({ ...prev, [snakeCaseToCamelCase(curr)]: baseActionsFactory(curr) }),
     Object.create({})
   );
 
