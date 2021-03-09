@@ -24,8 +24,6 @@ import login from './container/LoginContainer/reducer';
 import { bindActionCreators, createStore } from 'redux';
 import { Provider } from 'react-redux';
 
-const store = createStore(login);
-
 declare const global: { HermesInternal: null | {} };
 
 // const deviceWidth = Dimensions.get('window').width;
@@ -121,19 +119,9 @@ export default class App extends React.Component {
   isLoggedIn = false;
   render() {
     return (
-      <Provider store={store}>
-        <NavigationContainer>
-          <TabNavigation />
-        </NavigationContainer>
-      </Provider>
+      <NavigationContainer>
+        <TabNavigation />
+      </NavigationContainer>
     );
   }
 }
-
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      login,
-    },
-    dispatch
-  );

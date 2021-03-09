@@ -1,20 +1,13 @@
-const initialState = {
-  list: [],
-  isLoading: true
+import { PlaylistActionKeysType } from '.';
+import { Playlist } from '../../../api';
+import { getItems } from '../../core/actions';
+import { ReducerFactory } from '../../core/reducer';
+
+const reducersDict = {
+  GET_ITEMS: (state, items) => getItems<Playlist[]>(state, items),
+  SOME_ACTION: (state) => state,
 };
 
-export default function (state = initialState, action: any) {
-  if (action.type === 'FETCH_LIST_SUCCESS') {
-    return {
-      ...state,
-      list: action.list
-    };
-  }
-  if (action.type === 'LIST_IS_LOADING') {
-    return {
-      ...state,
-      isLoading: action.isLoading
-    };
-  }
-  return state;
-}
+const playlistReducer = ReducerFactory<PlaylistActionKeysType>(reducersDict);
+
+export default playlistReducer;
