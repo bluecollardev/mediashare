@@ -45,7 +45,6 @@ const INITIAL_STATE: RootState = {
   },
   isLoggedIn: false,
   loginResponseDto: null,
-
   loginDto: null,
 } as const;
 

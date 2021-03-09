@@ -4,6 +4,9 @@ import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import Login from '../../screens/Login';
 import { UserApi } from '../../api';
 
+const userApi = new UserApi();
+
+
 const required = (value: any) => (value ? undefined : 'Required');
 const maxLength = (max: any) => (value: any) =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
