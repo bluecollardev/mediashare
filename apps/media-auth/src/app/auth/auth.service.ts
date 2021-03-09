@@ -4,8 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync } from 'bcrypt';
 
-import { InsertResult } from 'typeorm';
-import { Repository } from 'typeorm/repository/Repository';
+import { InsertResult, Repository } from 'typeorm';
 
 import { AuthUser } from './auth-user.entity';
 

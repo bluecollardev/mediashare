@@ -9,17 +9,18 @@ import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 
 import { AppModule } from './app/app.module';
+import { createConnection } from 'typeorm';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const config: ConfigService = app.get('ConfigService');
+  const config: ConfigService = await app.get('ConfigService');
   const globalPrefix = 'auth';
 
-  console.log(config);
+  console.log('the config', config);
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
-      host: config.get('auth.msHost'),
+      host: config.get('auth'),
       port: config.get('auth.msPort'),
     },
   });

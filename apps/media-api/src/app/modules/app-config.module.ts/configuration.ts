@@ -37,6 +37,6 @@ export default registerAs('app', () => ({
   sessionDbName: process.env.SESSION_DB_NAME,
   sessionSecret: process.env.SESSION_SECRET,
   sessionCollection: process.env.SESSION_DB_COLLECTION,
-  authPort: process.env.MS_PORT,
-  authHost: process.env.MS_HOST,
+  authPort: process.env.AUTH_PORT,
+  authHost: process.env.AUTH_HOST,
 }));

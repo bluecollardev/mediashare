@@ -1,7 +1,22 @@
 version: '3.8'
 services:
-  media-api-dev:
-    container_name: media-api
+  mediapostgres:
+    image: postgres
+    container_name: mediapostgres
+    environment:
+      - POSTGRES_USER=msuser
+      - POSTGRES_PASSWORD=msuserpass
+      - POSTGRES_DB=msuser
+    volumes:
+      - ms-postgres-data:/var/lib/postgres/data
+    ports:
+      - 5432:5432
+    networks:
+      - mediashare
+    command: ['postgres']
+
+  api:
+    container_name: api
     build:
       context: .
       dockerfile: Dockerfile.slim
@@ -25,93 +40,74 @@ services:
       - DB_SSL=false
       - DB_SYNCHRONIZE=true
       - DB_USERNAME=mongodb
-      - AUTH_HOST=media-auth-dev
+      - AUTH_HOST=auth
       - AUTH_PORT=4000
     volumes:
       - .:/usr/src/app
       - /usr/app/node_modules
-    ports:
-      - '3333:3333'
     tty: true
     restart: always
     command: 'npm start'
+    links:
+      - db
     depends_on:
       - db
+    ports:
+      - 3333:3333
     networks:
-      - mediashare
-    links:
-      - 'db:database'
+      - mediashareapi
 
-  media-auth-dev:
+  auth:
     # image is provided by docker build of local app using Dockerfile
-    container_name: media-auth
+    container_name: auth
     build:
       context: .
       target: development
     working_dir: /usr/src/app
     environment:
+      - POSTGRES_PORT=5432
+      - POSTGRES_USERNAME=msuser
+      - POSTGRES_PASSWORD=msuserpass
+      - POSTGRES_DB=msuser
       - POSTGRES_HOST=mediapostgres
-      - POSTGRESS_PORT=5432
-      - POSTGRES_USERNAME=ms-user
-      - POSTGRES_PASSWORD=ms-user-pass
-      - POSTGRES_DB=ms-user
-      - NODE_ENV=production
+      - NODE_ENV=docker
       - SESSION_SECRET=this-is-my-secret-key
       - MS_PORT=4000
-      - MS_HOST=mediapostgres
+      - MS_HOST=auth
       - MS_API_PORT=4444
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/dist
       - /usr/src/app/node_modules
-    ports:
-      - '4444:4444'
-      - '4000:4000'
+      - /usr/src/dist
     tty: true
     command: npm run start:auth
-    networks:
-      - mediashare
     depends_on:
       - mediapostgres
     links:
-      - 'mediapostgres:postgres'
-
-  mediapostgres:
-    image: postgres
-    container_name: media-postgres
-    restart: always
-    environment:
-      - POSTGRES_USER=ms-user
-      - POSTGRES_PASSWORD=ms-user-pass
-      - POSTGRES_DB=ms-user
-      - POSTGRES_HOST_AUTH_METHOD=trust
-      - PGADMIN_DEFAULT_EMAIL=user@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=password
-    ports:
-      - '5432:5432'
-      - '443:443'
-      - '80:80'
-    volumes:
-      - ms-postgres-data:/var/lib/postgres/data
+      - mediapostgres:db
     networks:
       - mediashare
+      - mediashareapi
+    ports:
+      - 4000
 
   db:
     image: mongo:4.0.4
-    container_name: media-mongo
+    container_name: db
     environment:
       - MONGODB_DATABASE='mediashare'
     volumes:
       - ms-mongo-data:/var/lib/mongodb/data
     ports:
-      - '27017:27017'
+      - 27017:27017
     networks:
-      - mediashare
-
-networks:
-  mediashare:
+      - mediashareapi
 
 volumes:
   ms-mongo-data:
   ms-postgres-data:
   node-cache:
+
+networks:
+  mediashare:
+  mediashareapi:

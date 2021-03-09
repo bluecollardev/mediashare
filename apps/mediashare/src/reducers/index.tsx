@@ -17,5 +17,5 @@ export default combineReducers({
   libraryItemDetail,
   playlistDetail,
   playlistEdit,
-  playlists
+  playlists,
 });

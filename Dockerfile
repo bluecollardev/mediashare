@@ -5,13 +5,13 @@ ENV NODE_ENV=development
 
 WORKDIR /usr/src/app
 
-COPY package.json ./
+COPY package*.json ./
 
-RUN npm install --only=development
+RUN npm ci
 
-COPY . .
+COPY ./apps/media-auth .
 
-CMD ["npm" "start"]
+CMD ["npm" "start:auth"]
 
 # seperate build for production
 FROM node:12.13-alpine as production
