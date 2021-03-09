@@ -13,7 +13,17 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { PlaylistResponseDto, ShareItem, UpdatePlaylistDto } from '../models';
+import {
+  CreatePlaylistDto,
+  CreatePlaylistResponseDto,
+  PlaylistResponseDto,
+  ShareItem,
+  UpdatePlaylistDto,
+} from '../models';
+
+export interface PlaylistControllerCreateRequest {
+  createPlaylistDto: CreatePlaylistDto;
+}
 
 export interface PlaylistControllerFindOneRequest {
   playlistId: string;
@@ -37,6 +47,39 @@ export interface PlaylistControllerUpdateRequest {
  * no description
  */
 export class PlaylistsApi extends BaseAPI {
+  /**
+   */
+  playlistControllerCreate({
+    createPlaylistDto,
+  }: PlaylistControllerCreateRequest): Observable<CreatePlaylistResponseDto>;
+  playlistControllerCreate(
+    { createPlaylistDto }: PlaylistControllerCreateRequest,
+    opts?: OperationOpts
+  ): Observable<RawAjaxResponse<CreatePlaylistResponseDto>>;
+  playlistControllerCreate(
+    { createPlaylistDto }: PlaylistControllerCreateRequest,
+    opts?: OperationOpts
+  ): Observable<CreatePlaylistResponseDto | RawAjaxResponse<CreatePlaylistResponseDto>> {
+    throwIfNullOrUndefined(createPlaylistDto, 'createPlaylistDto', 'playlistControllerCreate');
+
+    const headers: HttpHeaders = {
+      'Content-Type': 'application/json',
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
+    return this.request<CreatePlaylistResponseDto>(
+      {
+        url: '/api/playlists',
+        method: 'POST',
+        headers,
+        body: createPlaylistDto,
+      },
+      opts?.responseOpts
+    );
+  }
+
   /**
    */
   playlistControllerFindOne({ playlistId }: PlaylistControllerFindOneRequest): Observable<PlaylistResponseDto>;

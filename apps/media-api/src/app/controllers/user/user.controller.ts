@@ -26,6 +26,8 @@ import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
+import { Playlist } from '../playlist/entities/playlist.entity';
+import { UserDto } from './dto/create-user.dto';
 @ApiTags('user')
 @Controller({ path: ['user', 'share', 'media-items', 'playlists'] })
 export class UserController {
@@ -51,7 +53,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalGuard)
   @Post('login')
-  @ApiBody({ type: LoginDto, required: true })
+  @ApiBody({ type: UserDto, required: true })
   async login(@Req() req: Request) {
     return req.user;
   }
@@ -67,7 +69,7 @@ export class UserController {
   }
 
   @Get('playlists')
-  @UserGetResponse()
+  @UserGetResponse({ type: Playlist })
   async getPlaylists(@GetUser() user: SessionUserInterface) {
     const result = await this.playlistService.getPlaylistByUserId({ userId: user._id });
 

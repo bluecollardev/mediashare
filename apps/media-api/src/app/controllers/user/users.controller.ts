@@ -83,7 +83,7 @@ export class UsersController {
   }
 
   @Put(':userId/roles')
-  @UserPostResponse()
+  @UserPostResponse({ type: UserDto })
   @ApiBody({ enum: BC_ROLES, isArray: true })
   setRoles(@Param('userId') id: string, @Body() params: { roles: BcRolesType[] }) {
     const { roles = [] } = params;

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
@@ -17,6 +17,7 @@ import { ObjectIdPipe } from '@mediashare/shared';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.constants';
 import { GetUserId } from '../../core/decorators/user.decorator';
+import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 
 @ApiTags('media-items')
 @Controller({ path: ['media-items', ':mediaId', 'share'] })
@@ -34,6 +35,7 @@ export class MediaItemController {
    */
   @Post()
   @MediaPostResponse()
+  @ApiBody({ type: CreateMediaItemDto })
   create(@CreateDto() createMediaItemDto: CreateMediaItemDto) {
     return this.mediaItemService.create(createMediaItemDto);
   }
@@ -63,7 +65,7 @@ export class MediaItemController {
   @MediaPostResponse()
   @Put(RouteTokens.MEDIA_ITEM_ID)
   @ApiParam({ name: 'mediaId', type: String, required: true })
-  update(@Param('mediaId', ObjectIdPipe) mediaId: ObjectId, @CreateDto() updateMediaItemDto: UpdateMediaItemDto) {
+  update(@Param('mediaId', ObjectIdPipe) mediaId: ObjectId, @Body() updateMediaItemDto: UpdateMediaItemDto) {
     return this.mediaItemService.update(mediaId, updateMediaItemDto);
   }
 
@@ -79,7 +81,7 @@ export class MediaItemController {
   }
 
   @Post(':mediaId/share/:userId')
-  @MediaPostResponse()
+  @MediaPostResponse({ type: ShareItem })
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
   async share(

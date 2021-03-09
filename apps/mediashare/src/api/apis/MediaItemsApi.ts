@@ -13,7 +13,11 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { MediaItem } from '../models';
+import { CreateMediaItemDto, MediaItem, ShareItem, UpdateMediaItemDto } from '../models';
+
+export interface MediaItemControllerCreateRequest {
+  createMediaItemDto: CreateMediaItemDto;
+}
 
 export interface MediaItemControllerFindOneRequest {
   mediaId: string;
@@ -30,6 +34,7 @@ export interface MediaItemControllerShareRequest {
 
 export interface MediaItemControllerUpdateRequest {
   mediaId: string;
+  updateMediaItemDto: UpdateMediaItemDto;
 }
 
 /**
@@ -38,10 +43,19 @@ export interface MediaItemControllerUpdateRequest {
 export class MediaItemsApi extends BaseAPI {
   /**
    */
-  mediaItemControllerCreate(): Observable<MediaItem>;
-  mediaItemControllerCreate(opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>;
-  mediaItemControllerCreate(opts?: OperationOpts): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
+  mediaItemControllerCreate({ createMediaItemDto }: MediaItemControllerCreateRequest): Observable<MediaItem>;
+  mediaItemControllerCreate(
+    { createMediaItemDto }: MediaItemControllerCreateRequest,
+    opts?: OperationOpts
+  ): Observable<RawAjaxResponse<MediaItem>>;
+  mediaItemControllerCreate(
+    { createMediaItemDto }: MediaItemControllerCreateRequest,
+    opts?: OperationOpts
+  ): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
+    throwIfNullOrUndefined(createMediaItemDto, 'createMediaItemDto', 'mediaItemControllerCreate');
+
     const headers: HttpHeaders = {
+      'Content-Type': 'application/json',
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
@@ -52,6 +66,7 @@ export class MediaItemsApi extends BaseAPI {
         url: '/api/media-items',
         method: 'POST',
         headers,
+        body: createMediaItemDto,
       },
       opts?.responseOpts
     );
@@ -145,15 +160,15 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerShare({ mediaId, userId }: MediaItemControllerShareRequest): Observable<MediaItem>;
+  mediaItemControllerShare({ mediaId, userId }: MediaItemControllerShareRequest): Observable<ShareItem>;
   mediaItemControllerShare(
     { mediaId, userId }: MediaItemControllerShareRequest,
     opts?: OperationOpts
-  ): Observable<RawAjaxResponse<MediaItem>>;
+  ): Observable<RawAjaxResponse<ShareItem>>;
   mediaItemControllerShare(
     { mediaId, userId }: MediaItemControllerShareRequest,
     opts?: OperationOpts
-  ): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
+  ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerShare');
     throwIfNullOrUndefined(userId, 'userId', 'mediaItemControllerShare');
 
@@ -163,7 +178,7 @@ export class MediaItemsApi extends BaseAPI {
         : undefined),
     };
 
-    return this.request<MediaItem>(
+    return this.request<ShareItem>(
       {
         url: '/api/media-items/{mediaId}/share/{userId}'
           .replace('{mediaId}', encodeURI(mediaId))
@@ -177,18 +192,20 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerUpdate({ mediaId }: MediaItemControllerUpdateRequest): Observable<MediaItem>;
+  mediaItemControllerUpdate({ mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest): Observable<MediaItem>;
   mediaItemControllerUpdate(
-    { mediaId }: MediaItemControllerUpdateRequest,
+    { mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest,
     opts?: OperationOpts
   ): Observable<RawAjaxResponse<MediaItem>>;
   mediaItemControllerUpdate(
-    { mediaId }: MediaItemControllerUpdateRequest,
+    { mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest,
     opts?: OperationOpts
   ): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerUpdate');
+    throwIfNullOrUndefined(updateMediaItemDto, 'updateMediaItemDto', 'mediaItemControllerUpdate');
 
     const headers: HttpHeaders = {
+      'Content-Type': 'application/json',
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
@@ -199,6 +216,7 @@ export class MediaItemsApi extends BaseAPI {
         url: '/api/media-items/{mediaId}'.replace('{mediaId}', encodeURI(mediaId)),
         method: 'PUT',
         headers,
+        body: updateMediaItemDto,
       },
       opts?.responseOpts
     );

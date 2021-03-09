@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { LoginDto, MediaItemDto, ShareItem, TokenDto, UserDto } from '../models';
+import { MediaItemDto, Playlist, ShareItem, TokenDto, UserDto } from '../models';
 
 export interface UserControllerAuthorizeRequest {
   id: string;
@@ -21,7 +21,7 @@ export interface UserControllerAuthorizeRequest {
 }
 
 export interface UserControllerLoginRequest {
-  loginDto: LoginDto;
+  userDto: UserDto;
 }
 
 /**
@@ -103,16 +103,16 @@ export class UserApi extends BaseAPI {
 
   /**
    */
-  userControllerGetPlaylists(): Observable<UserDto>;
-  userControllerGetPlaylists(opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  userControllerGetPlaylists(opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  userControllerGetPlaylists(): Observable<Playlist>;
+  userControllerGetPlaylists(opts?: OperationOpts): Observable<RawAjaxResponse<Playlist>>;
+  userControllerGetPlaylists(opts?: OperationOpts): Observable<Playlist | RawAjaxResponse<Playlist>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
     };
 
-    return this.request<UserDto>(
+    return this.request<Playlist>(
       {
         url: '/api/user/playlists',
         method: 'GET',
@@ -168,16 +168,16 @@ export class UserApi extends BaseAPI {
 
   /**
    */
-  userControllerLogin({ loginDto }: UserControllerLoginRequest): Observable<void>;
+  userControllerLogin({ userDto }: UserControllerLoginRequest): Observable<void>;
   userControllerLogin(
-    { loginDto }: UserControllerLoginRequest,
+    { userDto }: UserControllerLoginRequest,
     opts?: OperationOpts
   ): Observable<void | RawAjaxResponse<void>>;
   userControllerLogin(
-    { loginDto }: UserControllerLoginRequest,
+    { userDto }: UserControllerLoginRequest,
     opts?: OperationOpts
   ): Observable<void | RawAjaxResponse<void>> {
-    throwIfNullOrUndefined(loginDto, 'loginDto', 'userControllerLogin');
+    throwIfNullOrUndefined(userDto, 'userDto', 'userControllerLogin');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
@@ -188,7 +188,7 @@ export class UserApi extends BaseAPI {
         url: '/api/user/login',
         method: 'POST',
         headers,
-        body: loginDto,
+        body: userDto,
       },
       opts?.responseOpts
     );

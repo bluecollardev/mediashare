@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, Logger } from '@nestjs/common';
 import { Response } from 'express';
 
-import { ApiOperation, ApiParam, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
@@ -25,6 +25,8 @@ export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
+  @Post()
+  @ApiBody({ type: CreatePlaylistDto })
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() userId: ObjectId) {
     console.log('dto', createPlaylistDto);
     return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId });
