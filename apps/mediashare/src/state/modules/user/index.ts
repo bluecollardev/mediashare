@@ -11,7 +11,8 @@ export interface UserState {
   userMediaItems: MediaItemDto[];
 }
 
-const USER_ACTIONS = ['REMOVE_USER', 'UPDATE_USER'] as const;
+// We don't define any 'get' actions as they don't update state - use redux selectors instead
+const USER_ACTIONS = ['UPDATE_USER', 'REMOVE_USER'] as const;
 const USERS_ACTIONS = ['ADD_USERS', 'REMOVE_USERS'] as const;
 const USER_MEDIA_ITEMS_ACTIONS = [
   'ADD_USER_MEDIA_ITEMS',
