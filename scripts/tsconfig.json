@@ -6,5 +6,6 @@
     "emitDecoratorMetadata": true,
     "target": "es2015",
     "module": "commonjs"
-  }
+  },
+  "exclude": ["**/*.spec.ts", "node_modules"]
 }
