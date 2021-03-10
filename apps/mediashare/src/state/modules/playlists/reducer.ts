@@ -1,13 +1,14 @@
-import { PlaylistActionKeysType } from '.';
-import { Playlist } from '../../../api';
-import { getItems } from '../../core/actions';
-import { ReducerDictionary, ReducerFactory } from '../../core/reducer';
+import { makeActions, makeEnum } from '../../core/types';
 
-const reducersDict: ReducerDictionary<PlaylistActionKeysType> = {
-  getItems: (state, items) => getItems<Playlist[]>(state, items),
-  someAction: (state) => state,
-};
+const PLAYLIST_ACTIONS = [
+  'ADD_USER_PLAYLIST',
+  'REMOVE_USER_PLAYLIST',
+  'GET_USER_PLAYLIST',
+  'FIND_USER_PLAYLIST',
+] as const;
 
-const playlistReducer = ReducerFactory<PlaylistActionKeysType>(reducersDict);
+const playlistActionTypes = makeEnum(PLAYLIST_ACTIONS);
 
-export default playlistReducer;
+const playlistItemActions = makeActions(PLAYLIST_ACTIONS);
+
+export { playlistActionTypes, playlistItemActions };
