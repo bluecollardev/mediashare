@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { RootState } from '..';
-import { SnakeCaseToCamelCase, snakeCaseToCamelCase } from './types';
+import { SnakeCaseToCamelCase, snakeCaseToCamelCase } from './utils';
 
 export const ACTION_TYPES = ['ADD', 'REMOVE', 'GET', 'FIND'] as const;
 

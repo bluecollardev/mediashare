@@ -1,4 +1,4 @@
-import { LoginDto, LoginResponseDto } from '../api';
+// import { LoginDto, LoginResponseDto } from '../api';
 import * as models from '../api/models';
 
 export interface ErrorType {
@@ -39,8 +39,8 @@ const INITIAL_STATE: RootState = {
     login: { email: '', password: '' },
   },
   isLoggedIn: false,
-  loginResponseDto: null,
-  loginDto: null,
+  // loginResponseDto: null,
+  // loginDto: null,
   isLoading: false,
   errors: null,
   page: null,

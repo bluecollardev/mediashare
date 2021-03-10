@@ -1,4 +1,4 @@
-import { makeActions, makeEnum } from '../../core/types';
+import { makeActions, makeEnum } from '../../core/factory';
 
 const SHARE_ITEM_ACTIONS = [
   'ADD_SHARE_ITEMS',

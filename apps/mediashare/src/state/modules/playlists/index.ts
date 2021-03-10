@@ -1,5 +1,14 @@
-const PlaylistActions = ['GET_ITEMS', 'SOME_ACTION'] as const;
+import { makeActions, makeEnum } from '../../core/factory';
 
-export type PlaylistActionKeysType = typeof PlaylistActions[number];
+const PLAYLIST_ACTIONS = [
+  'ADD_USER_PLAYLIST',
+  'REMOVE_USER_PLAYLIST',
+  'GET_USER_PLAYLIST',
+  'FIND_USER_PLAYLIST',
+] as const;
 
-export { PlaylistActions };
+const playlistActionTypes = makeEnum(PLAYLIST_ACTIONS);
+
+const playlistItemActions = makeActions(PLAYLIST_ACTIONS);
+
+export { playlistActionTypes, playlistItemActions };
