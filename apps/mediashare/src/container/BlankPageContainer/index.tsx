@@ -6,10 +6,7 @@ export interface BlankPageProps {
 }
 export interface BlankPageState {}
 
-export default class BlankPageContainer extends React.Component<
-  BlankPageProps,
-  BlankPageState
-> {
+export default class BlankPageContainer extends React.Component<BlankPageProps, BlankPageState> {
   render() {
     return <BlankPage navigation={this.props.navigation} />;
   }

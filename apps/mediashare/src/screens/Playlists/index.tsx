@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-  Container,
-  Content,
-  View,
-  Text,
-  Button,
-  Icon,
-  List
-} from 'native-base';
+import { Container, Content, View, Text, Button, Icon, List } from 'native-base';
 
 import { MediaListItem } from '../../components/layout/MediaListItem';
 
@@ -24,16 +16,15 @@ export interface PlaylistsState {}
 class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
   render() {
     const { navigation } = this.props;
-    const imageSrc =
-      'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+    const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
     const items1 = [
       { title: 'Playlist 1', description: '9 Videos', image: imageSrc },
-      { title: 'Playlist 2', description: '2 Videos', image: imageSrc }
+      { title: 'Playlist 2', description: '2 Videos', image: imageSrc },
     ];
     const items2 = [
       { title: 'Playlist 3', description: '3 Videos', image: imageSrc },
-      { title: 'Playlist 4', description: '6 Videos', image: imageSrc }
+      { title: 'Playlist 4', description: '6 Videos', image: imageSrc },
     ];
 
     return (
@@ -45,9 +36,8 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
               bordered
               dark
               style={{ flex: 1, marginRight: 10 }}
-              onPress={() =>
-                navigation.navigate(routeConfig.playlistEdit.name)
-              }>
+              onPress={() => navigation.navigate(routeConfig.playlistEdit.name)}
+            >
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Create Playlist</Text>
             </Button>
@@ -56,7 +46,8 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
               bordered
               dark
               style={{ flex: 1 }}
-              onPress={() => navigation.navigate(routeConfig.shareWith.name)}>
+              onPress={() => navigation.navigate(routeConfig.shareWith.name)}
+            >
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Share Playlists</Text>
             </Button>
@@ -72,9 +63,7 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
                     title={title}
                     description={description}
                     image={image}
-                    onViewDetail={() =>
-                      navigation.navigate(routeConfig.playlistDetail.name)
-                    }
+                    onViewDetail={() => navigation.navigate(routeConfig.playlistDetail.name)}
                   />
                 );
               })}
@@ -87,9 +76,7 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
                     title={title}
                     description={description}
                     image={image}
-                    onViewDetail={() =>
-                      navigation.navigate(routeConfig.playlistDetail.name)
-                    }
+                    onViewDetail={() => navigation.navigate(routeConfig.playlistDetail.name)}
                   />
                 );
               })}
@@ -101,7 +88,8 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
               bordered
               dark
               style={{ flex: 1, justifyContent: 'center' }}
-              onPress={() => navigation.navigate(routeConfig.shareWith.name)}>
+              onPress={() => navigation.navigate(routeConfig.shareWith.name)}
+            >
               <Icon name="share-outline" />
               <Text style={{ paddingRight: 30 }}>Share with User</Text>
             </Button>

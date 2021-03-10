@@ -3,8 +3,10 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { persistStore } from 'redux-persist';
-import reducers from '../state/reducers';
 import { DefaultApi, MediaItemsApi, PlaylistsApi, ShareItemsApi, UserApi, UsersApi } from '../api';
+import INITIAL_STATE from '../state';
+import rootReducer from '../state/root-reducer';
+import { ReducerFactory } from '../state/core/reducer';
 
 export interface Apis {
   default: DefaultApi;
@@ -16,9 +18,8 @@ export interface Apis {
 }
 
 export interface ThunkExtra extends Apis {}
-const playlistsApi = new PlaylistsApi();
 
-const apis: Apis = {
+const apis = {
   default: new DefaultApi(),
   mediaItems: new MediaItemsApi(),
   shareItems: new ShareItemsApi(),
@@ -36,10 +37,12 @@ export default function configureStore(onCompletion: () => void): any {
   });
 
   const store = createStore(
-    reducers,
+    ReducerFactory(rootReducer),
+    INITIAL_STATE
     // @ts-ignore
-    composeEnhancers(applyMiddleware(...middleware))
+    // composeEnhancers(applyMiddleware(...middleware))
   );
+
   // persistStore(store, onCompletion);
   return store;
 }

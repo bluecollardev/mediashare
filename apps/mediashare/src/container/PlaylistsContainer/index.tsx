@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import Playlists from '../../screens/Playlists';
-import { fetchList } from './actions';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -21,7 +20,7 @@ class PlaylistsContainer extends React.Component<PlaylistsContainerProps, Playli
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    fetchList: (url: any) => dispatch(fetchList(url)),
+    // fetchList: (url: any) => dispatch(fetchList(url)),
   };
 }
 

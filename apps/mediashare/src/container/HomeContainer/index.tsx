@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import Home from '../../screens/Home';
-import { fetchList } from './actions';
 import datas from './data';
 
 export interface HomeContainerProps {
@@ -12,10 +11,7 @@ export interface HomeContainerProps {
 
 export interface HomeContainerState {}
 
-class HomeContainer extends React.Component<
-  HomeContainerProps,
-  HomeContainerState
-> {
+class HomeContainer extends React.Component<HomeContainerProps, HomeContainerState> {
   componentDidMount() {
     this.props.fetchList(datas);
   }
@@ -26,12 +22,12 @@ class HomeContainer extends React.Component<
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    fetchList: (url: any) => dispatch(fetchList(url)),
+    // fetchList: (url: any) => dispatch(fetchList(url)),
   };
 }
 
 const mapStateToProps = (state: any) => ({
   data: state.home.list,
-  isLoading: state.home.isLoading
+  isLoading: state.home.isLoading,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

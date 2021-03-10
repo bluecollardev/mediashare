@@ -1,18 +1,5 @@
 import * as React from 'react';
-import {
-  Container,
-  View,
-  Header,
-  Title,
-  Content,
-  Accordion,
-  Text,
-  Button,
-  Icon,
-  Left,
-  Right,
-  Body
-} from 'native-base';
+import { Container, View, Header, Title, Content, Accordion, Text, Button, Icon, Left, Right, Body } from 'native-base';
 
 import styles from './styles';
 import { ContactList } from '../../components/layout/ContactList';
@@ -33,17 +20,15 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
     this.sections = [
       {
         title: 'My Account',
-        content: (props: SettingsProps) => (
-          <Account navigation={props.navigation} />
-        )
+        // content: (props: SettingsProps) => <Account navigation={props.navigation} />,
       },
       {
         title: 'Manage Clients',
-        content: () => <ContactList />
+        content: () => <ContactList />,
       },
       {
         title: 'Manage Groups',
-        content: () => <ContactList />
+        content: () => <ContactList />,
       },
     ];
   }
@@ -56,13 +41,10 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-        }}>
+        }}
+      >
         <Text>{item.title}</Text>
-        {expanded ? (
-          <Icon name="caret-up-outline" />
-        ) : (
-          <Icon name="caret-down-outline" />
-        )}
+        {expanded ? <Icon name="caret-up-outline" /> : <Icon name="caret-down-outline" />}
       </View>
     );
   };
@@ -77,17 +59,13 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
     // TODO: Fix this!
     const param = {
       name: {
-        item: 'Settings'
-      }
+        item: 'Settings',
+      },
     }; // this.props.navigation.state.params;
     return (
       <Container style={styles.container}>
         <Content padder>
-          <Accordion
-            dataArray={this.sections}
-            renderHeader={this.renderHeader}
-            renderContent={this.renderContent}
-          />
+          <Accordion dataArray={this.sections} renderHeader={this.renderHeader} renderContent={this.renderContent} />
         </Content>
       </Container>
     );

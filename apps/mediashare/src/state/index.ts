@@ -1,15 +1,12 @@
-import { LoginDto, LoginResponseDto, UserApi } from '../api';
+import { LoginDto, LoginResponseDto } from '../api';
 import * as models from '../api/models';
-import { ApiActionDictType } from './models';
 
-const userApi = new UserApi();
-export interface ApiResponse<T> {
-  isLoading: boolean;
-  hasErrors: boolean;
-  data: T[];
-  errors: any;
+export interface ErrorType {
+  description: string;
+  message: string;
 }
 
+export type ApiResponse<T> = T;
 export interface AppForm {}
 
 export interface RootState {
@@ -25,11 +22,11 @@ export interface RootState {
   isLoggedIn: boolean;
   loginResponseDto: LoginResponseDto;
   loginDto: LoginDto;
+  isLoading: boolean;
+  errors: ErrorType[];
+  page: string;
+  lastPage: string;
 }
-
-export const apiActionsMap: ApiActionDictType = {
-  LOGIN: 'userControllerLogin',
-};
 
 const INITIAL_STATE: RootState = {
   users: null,
@@ -41,11 +38,15 @@ const INITIAL_STATE: RootState = {
   sharedPlaylists: null,
   sharedPlaylistItems: null,
   forms: {
-    login: { email: null, password: null },
+    login: { email: '', password: '' },
   },
   isLoggedIn: false,
   loginResponseDto: null,
   loginDto: null,
+  isLoading: false,
+  errors: null,
+  page: null,
+  lastPage: null,
 } as const;
 
 export default INITIAL_STATE;

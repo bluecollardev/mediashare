@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { Platform } from 'react-native';
 import { Container, Content, Header, Body, Title, Button, Text, View } from 'native-base';
-import { Observable } from 'rxjs';
-import { LoginDto, LoginResponseDto } from '../../api';
+import { RootState } from '../../state';
 
 export interface LoginProps {
   loginForm: any;
 
-  onLogin: (loginDto: LoginDto) => Observable<LoginResponseDto>;
+  onLogin: any;
 }
 
-export interface LoginState {}
+export interface LoginState extends Pick<RootState, 'loginDto' | 'forms'> {}
 
 class Login extends React.Component<LoginProps, LoginState> {
   // <Icon name="flash" style={{ fontSize: 104 }} />
@@ -29,10 +28,7 @@ class Login extends React.Component<LoginProps, LoginState> {
         <Content>
           {this.props.loginForm}
           <View padder>
-            <Button
-              block
-              onPress={() => this.props.onLogin(this.props.loginForm).subscribe((obs) => console.log('obs', obs))}
-            >
+            <Button block onPress={() => this.props.onLogin()}>
               <Text>Login</Text>
             </Button>
           </View>

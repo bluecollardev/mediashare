@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import Explore from '../../screens/Explore';
-import { fetchList } from './actions';
 import datas from './data';
 
 export interface ExploreContainerProps {
@@ -22,7 +21,8 @@ class ExploreContainer extends React.Component<ExploreContainerProps, ExploreCon
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    fetchList: (url: any) => dispatch(fetchList(url)),
+    // fetchList: (url: any) => dispatch(fetchList(url)),
+    fetchList: (url) => console.log(url),
   };
 }
 

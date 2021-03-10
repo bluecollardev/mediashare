@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import ListPage from '../../screens/ListPage';
-import { fetchList } from './actions';
 
 export interface ListPageProps {
   navigation: any;
@@ -15,9 +14,7 @@ class ListPageContainer extends React.Component<ListPageProps, ListPageState> {
     this.props.fetchList();
   }
   render() {
-    return (
-      <ListPage navigation={this.props.navigation} list={this.props.data} />
-    );
+    return <ListPage navigation={this.props.navigation} list={this.props.data} />;
   }
 }
 

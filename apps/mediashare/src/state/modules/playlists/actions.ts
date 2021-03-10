@@ -1,5 +1,5 @@
 import { PlaylistActionKeysType, PlaylistActions } from '.';
-import { PlaylistResponseDto } from '../../../redux/src';
+import { PlaylistResponseDto } from '../../../api';
 import { makeActions } from '../../core/actions';
 
 const { getItems } = makeActions<PlaylistActionKeysType>(PlaylistActions);

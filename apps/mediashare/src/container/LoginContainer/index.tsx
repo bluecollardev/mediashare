@@ -2,7 +2,10 @@ import * as React from 'react';
 import { Item, Input, Form } from 'native-base';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import Login from '../../screens/Login';
-import { UserApi } from '../../api';
+import { LoginDto, UserApi } from '../../api';
+import { RootState } from '../../state';
+import { RootActions, RootActionsType } from '../../state/root-actions';
+import { connect } from 'react-redux';
 
 const required = (value: any) => (value ? undefined : 'Required');
 const maxLength = (max: any) => (value: any) =>
@@ -19,12 +22,18 @@ const alphaNumeric = (value: any) =>
 export interface LoginFormProps extends InjectedFormProps {
   navigation?: any;
   valid: boolean;
+  loginForm: LoginDto;
+  isLoading: boolean;
+  login: (dto: LoginDto) => void;
 }
-export interface LoginFormState {}
+export interface LoginFormState extends Pick<RootState, 'loginDto' | 'forms'> {}
 class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
   navigation: any;
   textInput: any;
-  userApi = new UserApi();
+
+  componentDidMount() {
+    console.log('did mount', this.props);
+  }
 
   renderInput({ input, meta: { touched, error } }) {
     // <Icon active name={input.name === 'email' ? 'person' : 'unlock'} />
@@ -40,14 +49,10 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
     );
   }
 
-  login() {
-    this.props.navigation.navigate('Explore');
-  }
-
   render() {
     const form = (
       <Form>
-        <Field name="email" component={this.renderInput} validate={[email, required]} />
+        <Field name="username" component={this.renderInput} validate={[email, required]} />
         <Field
           name="password"
           component={this.renderInput}
@@ -55,10 +60,29 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
         />
       </Form>
     );
-    return <Login loginForm={form} onLogin={() => } />;
+    return <Login loginForm={form} onLogin={this.props.login} />;
   }
 }
+
+const mapStateToProps = (state: RootState) => {
+  console.log('map state props', state);
+  return {
+    loginForm: state?.loginDto,
+    isLoading: state?.isLoading,
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    login: (loginDto: LoginDto) => dispatch({ type: RootActions.LOGIN_DTO, loginDto }),
+    dtoChange: (loginDto: LoginDto) => dispatch({ type: RootActions.LOGIN_DTO, loginDto }),
+    // fetchList: (url) => console.log(url),
+  };
+}
+
 const LoginContainer = reduxForm({
   form: 'login',
+  initialValues: {},
 })(LoginForm);
-export default LoginContainer;
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
