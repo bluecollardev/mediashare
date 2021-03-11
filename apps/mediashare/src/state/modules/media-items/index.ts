@@ -28,8 +28,8 @@ const initialState = {};
 export const MEDIA_ITEMS_STATE_KEY = 'mediaItems';
 
 const mediaItemReducer = createReducer(initialState, (builder) => builder
-  .addCase(mediaItemsActions.addMediaItem, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
-  .addCase(mediaItemsActions.updateMediaItem, reducers.updateItem(MEDIA_ITEMS_STATE_KEY))
+  .addCase(mediaItemActions.addMediaItem, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
+  .addCase(mediaItemActions.updateMediaItem, reducers.updateItem(MEDIA_ITEMS_STATE_KEY))
   // .addCase(mediaItemActions.removeMediaItems, reducers.removeItem(MEDIA_ITEMS_STATE_KEY))
 );
 const mediaItemsReducer = createReducer(initialState, (builder) => builder
