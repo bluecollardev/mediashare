@@ -1,4 +1,4 @@
-import { ErrorType } from '.';
+/* import { ErrorType } from '.';
 import { LoginResponseDto } from '../api';
 import { makeActions } from './core/actions';
 export const ROOT_ACTIONS = ['LOGIN_RESPONSE_DTO', 'TOGGLE_LOADING', 'UPDATE_ERRORS', 'NAVIGATE', 'LOGIN_DTO'] as const;
@@ -18,4 +18,6 @@ const rootActions = {
   navigateAction: (payload) => navigate<string>(payload),
 };
 
-export default rootActions;
+export default rootActions; */
+
+export {};

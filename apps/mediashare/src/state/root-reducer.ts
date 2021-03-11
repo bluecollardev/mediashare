@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import * as R from 'remeda';
+/* import * as R from 'remeda';
 import INITIAL_STATE, { RootState } from '.';
 import { LoginResponseDto } from '../api';
 import { ReducerDictionary, mergeState } from './core/reducer';
@@ -31,4 +30,6 @@ const rootReducerDict: ReducerDictionary<RootActionsType> = {
   },
 };
 
-export default rootReducerDict;
+export default rootReducerDict; */
+
+export {};

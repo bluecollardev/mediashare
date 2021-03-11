@@ -19,7 +19,7 @@ const USER_MEDIA_ITEMS_ACTIONS = [
   'REMOVE_USER_MEDIA_ITEMS'
 ];
 
-const ActionTypes = makeEnum(USER_ACTIONS);
+export const ActionTypes = makeEnum(USER_ACTIONS);
 
 const [userActions, usersActions, userMediaActions] = [
   makeActions(USER_ACTIONS),
