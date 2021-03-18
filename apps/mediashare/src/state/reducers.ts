@@ -17,7 +17,7 @@ const reducers = combineReducers({
   playlistReducer,
   playlistsReducer,
   playlistItemsReducer,
-  shareItemsReducer
+  shareItemsReducer,
 });
 
 export { reducers };

@@ -14,31 +14,21 @@ export interface UserState {
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
 const USER_ACTIONS = ['UPDATE_USER', 'REMOVE_USER'] as const;
 const USERS_ACTIONS = ['ADD_USERS', 'REMOVE_USERS'] as const;
-const USER_MEDIA_ITEMS_ACTIONS = [
-  'ADD_USER_MEDIA_ITEMS',
-  'REMOVE_USER_MEDIA_ITEMS'
-];
+const USER_MEDIA_ITEMS_ACTIONS = ['ADD_USER_MEDIA_ITEMS', 'REMOVE_USER_MEDIA_ITEMS'] as const;
 
 export const ActionTypes = makeEnum(USER_ACTIONS);
 
-const [userActions, usersActions, userMediaActions] = [
-  makeActions(USER_ACTIONS),
-  makeActions(USERS_ACTIONS),
-  makeActions(USER_MEDIA_ITEMS_ACTIONS),
-];
+const [userActions, usersActions, userMediaActions] = [makeActions(USER_ACTIONS), makeActions(USERS_ACTIONS), makeActions(USER_MEDIA_ITEMS_ACTIONS)];
 
 const initialState = {};
 
 export const USER_STATE_KEY = 'user';
 export const USERS_STATE_KEY = 'users';
 
-const userReducer = createReducer(initialState, (builder) => builder
-  .addCase(userActions.updateUser, reducers.updateItem(USER_STATE_KEY))
-  .addCase(userActions.removeUser, reducers.removeItem(USER_STATE_KEY))
+const userReducer = createReducer(initialState, (builder) =>
+  builder.addCase(userActions.updateUser, reducers.updateItem(USER_STATE_KEY)).addCase(userActions.removeUser, reducers.removeItem(USER_STATE_KEY))
 );
 
-const usersReducer = createReducer(initialState, (builder) => builder
-  .addCase(usersActions.addUsers, reducers.addItems(USERS_STATE_KEY))
-);
+const usersReducer = createReducer(initialState, (builder) => builder.addCase(usersActions.addUsers, reducers.addItems(USERS_STATE_KEY)));
 
-export { userActions, usersActions, userMediaActions, userReducer, usersReducer }
+export { userActions, usersActions, userMediaActions, userReducer, usersReducer };
