@@ -24,9 +24,11 @@ export interface RootState {
   errors: ErrorType[];
   page: string;
   lastPage: string;
+  login: any;
+  loginResponse: any;
 }
 
-const INITIAL_STATE: RootState = {
+export const INITIAL_STATE: RootState = {
   users: null,
   user: null,
   userMediaItems: null,
@@ -45,6 +47,8 @@ const INITIAL_STATE: RootState = {
   errors: null,
   page: null,
   lastPage: null,
+  login: null,
+  loginResponse: null
 } as const;
 
 export default INITIAL_STATE;
