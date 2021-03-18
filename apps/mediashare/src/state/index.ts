@@ -24,6 +24,7 @@ export interface RootState {
   errors: ErrorType[];
   page: string;
   lastPage: string;
+  offlineMode: boolean;
 }
 
 const INITIAL_STATE: RootState = {
@@ -45,6 +46,7 @@ const INITIAL_STATE: RootState = {
   errors: null,
   page: null,
   lastPage: null,
+  offlineMode: null,
 } as const;
 
 export default INITIAL_STATE;

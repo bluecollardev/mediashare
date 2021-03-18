@@ -8,16 +8,12 @@ import { RootActions, RootActionsType } from '../../state/root-actions';
 import { connect } from 'react-redux';
 
 const required = (value: any) => (value ? undefined : 'Required');
-const maxLength = (max: any) => (value: any) =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined;
+const maxLength = (max: any) => (value: any) => (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 const maxLength15 = maxLength(15);
-const minLength = (min: any) => (value: any) =>
-  value && value.length < min ? `Must be ${min} characters or more` : undefined;
+const minLength = (min: any) => (value: any) => (value && value.length < min ? `Must be ${min} characters or more` : undefined);
 const minLength8 = minLength(8);
-const email = (value: any) =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined;
-const alphaNumeric = (value: any) =>
-  value && /[^a-zA-Z0-9 ]/i.test(value) ? 'Only alphanumeric characters' : undefined;
+const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined);
+const alphaNumeric = (value: any) => (value && /[^a-zA-Z0-9 ]/i.test(value) ? 'Only alphanumeric characters' : undefined);
 
 export interface LoginFormProps extends InjectedFormProps {
   navigation?: any;
@@ -53,11 +49,7 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
     const form = (
       <Form>
         <Field name="username" component={this.renderInput} validate={[email, required]} />
-        <Field
-          name="password"
-          component={this.renderInput}
-          validate={[alphaNumeric, minLength8, maxLength15, required]}
-        />
+        <Field name="password" component={this.renderInput} validate={[alphaNumeric, minLength8, maxLength15, required]} />
       </Form>
     );
     return <Login loginForm={form} onLogin={this.props.login} />;
@@ -67,7 +59,7 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
 const mapStateToProps = (state: RootState) => {
   console.log('map state props', state);
   return {
-    loginForm: state?.loginDto,
+    loginForm: state?.forms.loginForm,
     isLoading: state?.isLoading,
   };
 };
