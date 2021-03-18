@@ -27,7 +27,7 @@ export interface RootState {
   offlineMode: boolean;
 }
 
-const INITIAL_STATE: RootState = {
+export const INITIAL_STATE: RootState = {
   users: null,
   user: null,
   userMediaItems: null,
