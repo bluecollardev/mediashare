@@ -70,7 +70,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
   constructor(id?: string) {
     super();
     const userMixin = baseEntityMixin(User);
-    this.user = new userMixin(this.createUserDto());
+    this.user = new userMixin();
     if (id) {
       const _id = new ObjectId(id);
       this.user._id = _id;
