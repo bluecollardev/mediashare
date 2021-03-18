@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
 
@@ -8,8 +8,9 @@ ApiTags('Main');
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getData() {
-    return this.appService.getData();
+  @Get('online-status')
+  @ApiResponse({ description: 'Used to validate that the app is online and connectivity is enabled', type: 'boolean' })
+  isOnline() {
+    return true;
   }
 }

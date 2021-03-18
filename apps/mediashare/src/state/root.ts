@@ -1,10 +1,11 @@
 import { createAction, createReducer, PayloadAction } from '@reduxjs/toolkit';
 
-const loginAction = createAction('login');
+import INITIAL_STATE, { RootState } from '.';
+import { LoginDto } from '../api';
+
+const loginAction = createAction<LoginDto>('login');
 const logoutAction = createAction('logout');
 const toggleLoadingAction = createAction('toggleLoading');
-
-import INITIAL_STATE, { RootState } from '.';
 
 const initialState = INITIAL_STATE;
 

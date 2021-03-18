@@ -26,6 +26,7 @@ export interface RootState {
   lastPage: string;
   login: any;
   loginResponse: any;
+  offlineMode: boolean;
 }
 
 export const INITIAL_STATE: RootState = {
@@ -48,7 +49,8 @@ export const INITIAL_STATE: RootState = {
   page: null,
   lastPage: null,
   login: null,
-  loginResponse: null
+  loginResponse: null,
+  offlineMode: null
 } as const;
 
 export default INITIAL_STATE;

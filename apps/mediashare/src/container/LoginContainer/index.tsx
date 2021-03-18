@@ -2,22 +2,18 @@ import * as React from 'react';
 import { Item, Input, Form } from 'native-base';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import Login from '../../screens/Login';
-import { LoginDto, UserApi } from '../../api';
+import { LoginDto } from '../../api';
 import { RootState } from '../../state';
-import { RootActions, RootActionsType } from '../../state/root-actions';
+import { login } from '../../state/root';
 import { connect } from 'react-redux';
 
 const required = (value: any) => (value ? undefined : 'Required');
-const maxLength = (max: any) => (value: any) =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined;
+const maxLength = (max: any) => (value: any) => (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 const maxLength15 = maxLength(15);
-const minLength = (min: any) => (value: any) =>
-  value && value.length < min ? `Must be ${min} characters or more` : undefined;
+const minLength = (min: any) => (value: any) => (value && value.length < min ? `Must be ${min} characters or more` : undefined);
 const minLength8 = minLength(8);
-const email = (value: any) =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined;
-const alphaNumeric = (value: any) =>
-  value && /[^a-zA-Z0-9 ]/i.test(value) ? 'Only alphanumeric characters' : undefined;
+const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined);
+const alphaNumeric = (value: any) => (value && /[^a-zA-Z0-9 ]/i.test(value) ? 'Only alphanumeric characters' : undefined);
 
 export interface LoginFormProps extends InjectedFormProps {
   navigation?: any;
@@ -26,7 +22,7 @@ export interface LoginFormProps extends InjectedFormProps {
   isLoading: boolean;
   login: (dto: LoginDto) => void;
 }
-export interface LoginFormState extends Pick<RootState, 'loginDto' | 'forms'> {}
+export interface LoginFormState {}
 class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
   navigation: any;
   textInput: any;
@@ -53,11 +49,7 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
     const form = (
       <Form>
         <Field name="username" component={this.renderInput} validate={[email, required]} />
-        <Field
-          name="password"
-          component={this.renderInput}
-          validate={[alphaNumeric, minLength8, maxLength15, required]}
-        />
+        <Field name="password" component={this.renderInput} validate={[alphaNumeric, minLength8, maxLength15, required]} />
       </Form>
     );
     return <Login loginForm={form} onLogin={this.props.login} />;
@@ -67,18 +59,16 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
 const mapStateToProps = (state: RootState) => {
   console.log('map state props', state);
   return {
-    loginForm: state?.loginDto,
+    loginForm: state?.forms.loginForm,
     isLoading: state?.isLoading,
   };
 };
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
-    login: (loginDto: LoginDto) => dispatch({ type: RootActions.LOGIN_DTO, loginDto }),
-    dtoChange: (loginDto: LoginDto) => dispatch({ type: RootActions.LOGIN_DTO, loginDto }),
-    // fetchList: (url) => console.log(url),
+    login: (loginDto: LoginDto) => dispatch(login(loginDto)),
   };
-}
+};
 
 const LoginContainer = reduxForm({
   form: 'login',

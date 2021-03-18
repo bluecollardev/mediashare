@@ -14,7 +14,7 @@ export interface UserState {
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
 const USER_ACTIONS = ['UPDATE_USER', 'REMOVE_USER'] as const;
 const USERS_ACTIONS = ['ADD_USERS', 'REMOVE_USERS'] as const;
-const USER_MEDIA_ITEMS_ACTIONS = ['ADD_USER_MEDIA_ITEMS', 'REMOVE_USER_MEDIA_ITEMS'];
+const USER_MEDIA_ITEMS_ACTIONS = ['ADD_USER_MEDIA_ITEMS', 'REMOVE_USER_MEDIA_ITEMS'] as const;
 
 export const ActionTypes = makeEnum(USER_ACTIONS);
 
