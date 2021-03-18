@@ -5,8 +5,7 @@ import thunk from 'redux-thunk';
 import { persistStore } from 'redux-persist';
 import { DefaultApi, MediaItemsApi, PlaylistsApi, ShareItemsApi, UserApi, UsersApi } from '../api';
 import INITIAL_STATE from '../state';
-import rootReducer from '../state/root-reducer';
-import { ReducerFactory } from '../state/core/reducer';
+import { rootReducer } from '../state/reducers';
 
 export interface Apis {
   default: DefaultApi;
@@ -37,10 +36,9 @@ export default function configureStore(onCompletion: () => void): any {
   });
 
   const store = createStore(
-    ReducerFactory(rootReducer),
-    INITIAL_STATE
+    rootReducer,
     // @ts-ignore
-    // composeEnhancers(applyMiddleware(...middleware))
+    composeEnhancers(applyMiddleware(...middleware))
   );
 
   // persistStore(store, onCompletion);

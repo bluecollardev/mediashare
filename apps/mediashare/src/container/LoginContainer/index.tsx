@@ -4,7 +4,7 @@ import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import Login from '../../screens/Login';
 import { LoginDto } from '../../api';
 import { RootState } from '../../state';
-import { login } from '../../state/root';
+import { login } from '../../state/modules/login';
 import { connect } from 'react-redux';
 
 const required = (value: any) => (value ? undefined : 'Required');
@@ -57,9 +57,9 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
 }
 
 const mapStateToProps = (state: RootState) => {
-  console.log('map state props', state);
+  console.log('map state props', JSON.stringify(state));
   return {
-    loginForm: state?.forms.loginForm,
+    loginForm: state?.forms?.loginForm,
     isLoading: state?.isLoading,
   };
 };
