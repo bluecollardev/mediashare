@@ -2,8 +2,8 @@
 import { combineReducers } from 'redux';
 
 import { userReducer, usersReducer } from './modules/user';
-import { playlistReducer, playlistsReducer, playlistItemsReducer } from './modules/playlists';
 import { mediaItemReducer, mediaItemsReducer } from './modules/media-items';
+import { playlistReducer, playlistsReducer, playlistItemsReducer } from './modules/playlists';
 import { shareItemsReducer } from './modules/share-items';
 import { rootReducer } from './root';
 
