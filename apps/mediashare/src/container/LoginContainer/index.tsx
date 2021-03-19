@@ -4,7 +4,7 @@ import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import Login from '../../screens/Login';
 import { LoginDto } from '../../api';
 import { RootState } from '../../state';
-import { login } from '../../state/modules/login';
+import { login } from '../../state/modules/system';
 import { connect } from 'react-redux';
 
 const required = (value: any) => (value ? undefined : 'Required');
