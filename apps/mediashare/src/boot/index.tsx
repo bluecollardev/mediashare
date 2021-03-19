@@ -6,7 +6,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Root } from 'native-base';
 
-import configureStore from './configureStore';
+import { store } from './configureStore';
 import App from '../../src/App';
 
 export interface SetupProps {}
@@ -15,7 +15,7 @@ export interface SetupState {
 }
 
 const onCompletion = () => {};
-export const store = configureStore(onCompletion);
+// export const store = configureStore(onCompletion);
 
 export default class Setup extends React.Component<SetupProps, SetupState> {
   constructor(props) {
