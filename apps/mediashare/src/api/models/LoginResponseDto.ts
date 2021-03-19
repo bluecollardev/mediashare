@@ -11,6 +11,8 @@
  * Do not edit the class manually.
  */
 
+import { MediaItem, Playlist } from './';
+
 /**
  * @export
  * @interface LoginResponseDto
@@ -47,4 +49,24 @@ export interface LoginResponseDto {
    * @memberof LoginResponseDto
    */
   _id: string;
+  /**
+   * @type {Array<MediaItem>}
+   * @memberof LoginResponseDto
+   */
+  sharedMediaItems: Array<MediaItem>;
+  /**
+   * @type {Array<Playlist>}
+   * @memberof LoginResponseDto
+   */
+  sharedPlaylists: Array<Playlist>;
+  /**
+   * @type {Array<MediaItem>}
+   * @memberof LoginResponseDto
+   */
+  mediaItems: Array<MediaItem>;
+  /**
+   * @type {Array<Playlist>}
+   * @memberof LoginResponseDto
+   */
+  playlists: Array<Playlist>;
 }

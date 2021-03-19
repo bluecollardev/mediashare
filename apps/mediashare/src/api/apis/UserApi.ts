@@ -31,14 +31,8 @@ export class UserApi extends BaseAPI {
   /**
    */
   userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest): Observable<void>;
-  userControllerAuthorize(
-    { id, tokenDto }: UserControllerAuthorizeRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>>;
-  userControllerAuthorize(
-    { id, tokenDto }: UserControllerAuthorizeRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>> {
+  userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
+  userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     throwIfNullOrUndefined(id, 'id', 'userControllerAuthorize');
     throwIfNullOrUndefined(tokenDto, 'tokenDto', 'userControllerAuthorize');
 
@@ -82,9 +76,7 @@ export class UserApi extends BaseAPI {
    */
   userControllerGetMyShareItems(): Observable<Array<ShareItem>>;
   userControllerGetMyShareItems(opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItem>>>;
-  userControllerGetMyShareItems(
-    opts?: OperationOpts
-  ): Observable<Array<ShareItem> | RawAjaxResponse<Array<ShareItem>>> {
+  userControllerGetMyShareItems(opts?: OperationOpts): Observable<Array<ShareItem> | RawAjaxResponse<Array<ShareItem>>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -126,9 +118,7 @@ export class UserApi extends BaseAPI {
    */
   userControllerGetSharedMediaItems(): Observable<Array<MediaItemDto>>;
   userControllerGetSharedMediaItems(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
-  userControllerGetSharedMediaItems(
-    opts?: OperationOpts
-  ): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
+  userControllerGetSharedMediaItems(opts?: OperationOpts): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -169,14 +159,8 @@ export class UserApi extends BaseAPI {
   /**
    */
   userControllerLogin({ loginDto }: UserControllerLoginRequest): Observable<LoginResponseDto>;
-  userControllerLogin(
-    { loginDto }: UserControllerLoginRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<LoginResponseDto>>;
-  userControllerLogin(
-    { loginDto }: UserControllerLoginRequest,
-    opts?: OperationOpts
-  ): Observable<LoginResponseDto | RawAjaxResponse<LoginResponseDto>> {
+  userControllerLogin({ loginDto }: UserControllerLoginRequest, opts?: OperationOpts): Observable<RawAjaxResponse<LoginResponseDto>>;
+  userControllerLogin({ loginDto }: UserControllerLoginRequest, opts?: OperationOpts): Observable<LoginResponseDto | RawAjaxResponse<LoginResponseDto>> {
     throwIfNullOrUndefined(loginDto, 'loginDto', 'userControllerLogin');
 
     const headers: HttpHeaders = {

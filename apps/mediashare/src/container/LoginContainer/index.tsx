@@ -2,9 +2,8 @@ import * as React from 'react';
 import { Item, Input, Form } from 'native-base';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import Login from '../../screens/Login';
-import { LoginDto, UserApi } from '../../api';
+import { LoginDto } from '../../api';
 import { RootState } from '../../state';
-import { RootActions, RootActionsType } from '../../state/root-actions';
 import { connect } from 'react-redux';
 
 const required = (value: any) => (value ? undefined : 'Required');

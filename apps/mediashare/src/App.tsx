@@ -20,6 +20,8 @@ import { Icon } from 'native-base';
 
 import { routeConfig } from './routes';
 import LoginContainer from './container/LoginContainer';
+import { RootState } from './state';
+import { connect } from 'react-redux';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -111,11 +113,12 @@ const TabNavigation = () => {
   );
 };
 
-export default class App extends React.Component {
+class App extends React.Component {
   public navigator: any;
   isLoggedIn = false;
 
   render() {
+    console.log(this);
     if (!this.isLoggedIn) return <LoginContainer />;
     return (
       <NavigationContainer>
@@ -124,3 +127,13 @@ export default class App extends React.Component {
     );
   }
 }
+
+function mapDispatchToProps(dispatch: any) {
+  return {};
+}
+
+const mapStateToProps = (state: RootState) => ({
+  ...state,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

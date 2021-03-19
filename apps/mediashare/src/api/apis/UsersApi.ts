@@ -83,14 +83,8 @@ export class UsersApi extends BaseAPI {
   /**
    */
   usersControllerFindOne({ userId }: UsersControllerFindOneRequest): Observable<UserDto>;
-  usersControllerFindOne(
-    { userId }: UsersControllerFindOneRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerFindOne(
-    { userId }: UsersControllerFindOneRequest,
-    opts?: OperationOpts
-  ): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerFindOne');
 
     const headers: HttpHeaders = {
@@ -112,10 +106,7 @@ export class UsersApi extends BaseAPI {
   /**
    */
   usersControllerGetPlaylists({ userId }: UsersControllerGetPlaylistsRequest): Observable<Array<PlaylistResponseDto>>;
-  usersControllerGetPlaylists(
-    { userId }: UsersControllerGetPlaylistsRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<Array<PlaylistResponseDto>>>;
+  usersControllerGetPlaylists({ userId }: UsersControllerGetPlaylistsRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistResponseDto>>>;
   usersControllerGetPlaylists(
     { userId }: UsersControllerGetPlaylistsRequest,
     opts?: OperationOpts
@@ -141,14 +132,8 @@ export class UsersApi extends BaseAPI {
   /**
    */
   usersControllerReadSharedItem({ shareId }: UsersControllerReadSharedItemRequest): Observable<UserDto>;
-  usersControllerReadSharedItem(
-    { shareId }: UsersControllerReadSharedItemRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerReadSharedItem(
-    { shareId }: UsersControllerReadSharedItemRequest,
-    opts?: OperationOpts
-  ): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  usersControllerReadSharedItem({ shareId }: UsersControllerReadSharedItemRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  usersControllerReadSharedItem({ shareId }: UsersControllerReadSharedItemRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     throwIfNullOrUndefined(shareId, 'shareId', 'usersControllerReadSharedItem');
 
     return this.request<UserDto>(
@@ -163,14 +148,8 @@ export class UsersApi extends BaseAPI {
   /**
    */
   usersControllerRemove({ userId }: UsersControllerRemoveRequest): Observable<void>;
-  usersControllerRemove(
-    { userId }: UsersControllerRemoveRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>>;
-  usersControllerRemove(
-    { userId }: UsersControllerRemoveRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>> {
+  usersControllerRemove({ userId }: UsersControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
+  usersControllerRemove({ userId }: UsersControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerRemove');
 
     return this.request<void>(
@@ -185,14 +164,8 @@ export class UsersApi extends BaseAPI {
   /**
    */
   usersControllerSetRoles({ userId, requestBody }: UsersControllerSetRolesRequest): Observable<UserDto>;
-  usersControllerSetRoles(
-    { userId, requestBody }: UsersControllerSetRolesRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerSetRoles(
-    { userId, requestBody }: UsersControllerSetRolesRequest,
-    opts?: OperationOpts
-  ): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  usersControllerSetRoles({ userId, requestBody }: UsersControllerSetRolesRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  usersControllerSetRoles({ userId, requestBody }: UsersControllerSetRolesRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerSetRoles');
     throwIfNullOrUndefined(requestBody, 'requestBody', 'usersControllerSetRoles');
 
@@ -217,14 +190,8 @@ export class UsersApi extends BaseAPI {
   /**
    */
   usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest): Observable<UserDto>;
-  usersControllerUpdate(
-    { userId, updateUserDto }: UsersControllerUpdateRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerUpdate(
-    { userId, updateUserDto }: UsersControllerUpdateRequest,
-    opts?: OperationOpts
-  ): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerUpdate');
     throwIfNullOrUndefined(updateUserDto, 'updateUserDto', 'usersControllerUpdate');
 

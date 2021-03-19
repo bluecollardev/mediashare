@@ -1,6 +1,6 @@
 // import { LoginDto, LoginResponseDto } from '../api';
 import * as models from '../api/models';
-
+export * from './middlewares';
 export interface ErrorType {
   description: string;
   message: string;

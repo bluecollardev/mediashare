@@ -73,11 +73,9 @@ export class BaseAPI {
     return next;
   };
 
-  withPreMiddleware = (preMiddlewares: Array<Middleware['pre']>) =>
-    this.withMiddleware(preMiddlewares.map((pre) => ({ pre })));
+  withPreMiddleware = (preMiddlewares: Array<Middleware['pre']>) => this.withMiddleware(preMiddlewares.map((pre) => ({ pre })));
 
-  withPostMiddleware = (postMiddlewares: Array<Middleware['post']>) =>
-    this.withMiddleware(postMiddlewares.map((post) => ({ post })));
+  withPostMiddleware = (postMiddlewares: Array<Middleware['post']>) => this.withMiddleware(postMiddlewares.map((post) => ({ post })));
 
   protected request<T>(requestOpts: RequestOpts): Observable<T>;
   protected request<T>(requestOpts: RequestOpts, responseOpts?: ResponseOpts): Observable<RawAjaxResponse<T>>;
@@ -93,20 +91,11 @@ export class BaseAPI {
     );
   }
 
-  private createRequestArgs = ({
-    url: baseUrl,
-    query,
-    method,
-    headers,
-    body,
-    responseType,
-  }: RequestOpts): RequestArgs => {
+  private createRequestArgs = ({ url: baseUrl, query, method, headers, body, responseType }: RequestOpts): RequestArgs => {
     // only add the queryString to the URL if there are query parameters.
     // this is done to avoid urls ending with a '?' character which buggy webservers
     // do not handle correctly sometimes.
-    const url = `${this.configuration.basePath}${baseUrl}${
-      query && Object.keys(query).length ? `?${queryString(query)}` : ''
-    }`;
+    const url = `${this.configuration.basePath}${baseUrl}${query && Object.keys(query).length ? `?${queryString(query)}` : ''}`;
 
     return {
       url,
@@ -158,9 +147,7 @@ export const COLLECTION_FORMATS = {
 export type Json = any;
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS' | 'HEAD';
 export type HttpHeaders = { [key: string]: string };
-export type HttpQuery = Partial<{
-  [key: string]: string | number | null | boolean | Array<string | number | null | boolean>;
-}>; // partial is needed for strict mode
+export type HttpQuery = Partial<{ [key: string]: string | number | null | boolean | Array<string | number | null | boolean> }>; // partial is needed for strict mode
 export type HttpBody = Json | FormData;
 
 export interface RequestOpts extends AjaxRequest {
@@ -190,9 +177,7 @@ export const encodeURI = (value: any) => encodeURIComponent(`${value}`);
 const queryString = (params: HttpQuery): string =>
   Object.entries(params)
     .map(([key, value]) =>
-      value instanceof Array
-        ? value.map((val) => `${encodeURI(key)}=${encodeURI(val)}`).join('&')
-        : `${encodeURI(key)}=${encodeURI(value)}`
+      value instanceof Array ? value.map((val) => `${encodeURI(key)}=${encodeURI(val)}`).join('&') : `${encodeURI(key)}=${encodeURI(value)}`
     )
     .join('&');
 

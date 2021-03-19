@@ -45,10 +45,7 @@ export class MediaItemsApi extends BaseAPI {
   /**
    */
   mediaItemControllerCreate({ createMediaItemDto }: MediaItemControllerCreateRequest): Observable<MediaItem>;
-  mediaItemControllerCreate(
-    { createMediaItemDto }: MediaItemControllerCreateRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<MediaItem>>;
+  mediaItemControllerCreate({ createMediaItemDto }: MediaItemControllerCreateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>;
   mediaItemControllerCreate(
     { createMediaItemDto }: MediaItemControllerCreateRequest,
     opts?: OperationOpts
@@ -97,14 +94,8 @@ export class MediaItemsApi extends BaseAPI {
   /**
    */
   mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest): Observable<MediaItem>;
-  mediaItemControllerFindOne(
-    { mediaId }: MediaItemControllerFindOneRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<MediaItem>>;
-  mediaItemControllerFindOne(
-    { mediaId }: MediaItemControllerFindOneRequest,
-    opts?: OperationOpts
-  ): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
+  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>;
+  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerFindOne');
 
     const headers: HttpHeaders = {
@@ -140,14 +131,8 @@ export class MediaItemsApi extends BaseAPI {
   /**
    */
   mediaItemControllerRemove({ mediaId }: MediaItemControllerRemoveRequest): Observable<void>;
-  mediaItemControllerRemove(
-    { mediaId }: MediaItemControllerRemoveRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>>;
-  mediaItemControllerRemove(
-    { mediaId }: MediaItemControllerRemoveRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>> {
+  mediaItemControllerRemove({ mediaId }: MediaItemControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
+  mediaItemControllerRemove({ mediaId }: MediaItemControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerRemove');
 
     return this.request<void>(
@@ -161,11 +146,7 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerShare({
-    mediaId,
-    userId,
-    createMediaItemDto,
-  }: MediaItemControllerShareRequest): Observable<ShareItem>;
+  mediaItemControllerShare({ mediaId, userId, createMediaItemDto }: MediaItemControllerShareRequest): Observable<ShareItem>;
   mediaItemControllerShare(
     { mediaId, userId, createMediaItemDto }: MediaItemControllerShareRequest,
     opts?: OperationOpts
@@ -187,9 +168,7 @@ export class MediaItemsApi extends BaseAPI {
 
     return this.request<ShareItem>(
       {
-        url: '/api/media-items/{mediaId}/share/{userId}'
-          .replace('{mediaId}', encodeURI(mediaId))
-          .replace('{userId}', encodeURI(userId)),
+        url: '/api/media-items/{mediaId}/share/{userId}'.replace('{mediaId}', encodeURI(mediaId)).replace('{userId}', encodeURI(userId)),
         method: 'POST',
         headers,
         body: createMediaItemDto,
@@ -201,10 +180,7 @@ export class MediaItemsApi extends BaseAPI {
   /**
    */
   mediaItemControllerUpdate({ mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest): Observable<MediaItem>;
-  mediaItemControllerUpdate(
-    { mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<MediaItem>>;
+  mediaItemControllerUpdate({ mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>;
   mediaItemControllerUpdate(
     { mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest,
     opts?: OperationOpts

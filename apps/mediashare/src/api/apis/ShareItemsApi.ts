@@ -51,14 +51,8 @@ export class ShareItemsApi extends BaseAPI {
   /**
    */
   shareItemsControllerFindOne({ shareId }: ShareItemsControllerFindOneRequest): Observable<ShareItem>;
-  shareItemsControllerFindOne(
-    { shareId }: ShareItemsControllerFindOneRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<ShareItem>>;
-  shareItemsControllerFindOne(
-    { shareId }: ShareItemsControllerFindOneRequest,
-    opts?: OperationOpts
-  ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
+  shareItemsControllerFindOne({ shareId }: ShareItemsControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
+  shareItemsControllerFindOne({ shareId }: ShareItemsControllerFindOneRequest, opts?: OperationOpts): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
     throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerFindOne');
 
     const headers: HttpHeaders = {
@@ -80,14 +74,8 @@ export class ShareItemsApi extends BaseAPI {
   /**
    */
   shareItemsControllerRemove({ shareId }: ShareItemsControllerRemoveRequest): Observable<ShareItem>;
-  shareItemsControllerRemove(
-    { shareId }: ShareItemsControllerRemoveRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<ShareItem>>;
-  shareItemsControllerRemove(
-    { shareId }: ShareItemsControllerRemoveRequest,
-    opts?: OperationOpts
-  ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
+  shareItemsControllerRemove({ shareId }: ShareItemsControllerRemoveRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
+  shareItemsControllerRemove({ shareId }: ShareItemsControllerRemoveRequest, opts?: OperationOpts): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
     throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerRemove');
 
     const headers: HttpHeaders = {

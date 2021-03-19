@@ -1,6 +1,8 @@
 import { ApiEmail } from '@mediashare/shared';
 import { ApiHideProperty, ApiProperty, OmitType, PickType } from '@nestjs/swagger';
 import { IsString, MinLength, MaxLength, IsJWT } from 'class-validator';
+import { MediaItem } from '../../media-item/entities/media-item.entity';
+import { Playlist } from '../../playlist/entities/playlist.entity';
 import { User } from '../entities/user.entity';
 const exampleToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.yJ1c2VyIjp7ImF1dGhJZCI6ImEwMWM4ZDhjLWExYTMtNDdjMS05MGVjLTY0ZmRkOTFiYjYxMSIsInVzZXJuYW1lIjoiTmFkaWExMkBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRRQy9KYXlWeDhYOHZYVUhjUmpSSWZPLmdXaGQ1U0FEYmFNbC9CeXgvUjdvVGJYSzRnQ1IyLiIsImVtYWlsIjoiTmFkaWExMkBnbWFpbC5jb20iLCJjcmVhdGVkQXQiOiIyMDIxLTAzLTA1VDEyOjA2OjMzLjgzMVoiLCJfaWQiOiI2MDQyMWVjOTdiYmVlYTA2ZGZiZjI2ZGEiLCJyb2xlcyI6WyJndWVzdCJdfSwic3ViIjoiYTAxYzhkOGMtYTFhMy00N2MxLTkwZWMtNjRmZGQ5MWJiNjExIiwiaWF0IjoxNjE0OTQ2MDI4LCJleHAiOjE2MTQ5ODIwMjh9.ZK5s6OFB8zQ0yL3SgzYZXpjTMJyptXv5FouDyqQVlg';
@@ -20,7 +22,7 @@ export class LoginDto {
 export class LoginResponseDto extends OmitType(
   User,
 
-  ['_id', 'userId']
+  ['_id', 'userId', 'sharedMediaItems', 'sharedPlaylists']
 ) {
   @ApiProperty({
     type: String,
@@ -34,6 +36,18 @@ export class LoginResponseDto extends OmitType(
 
   @ApiProperty({ type: String })
   _id: string;
+
+  @ApiProperty({ type: MediaItem, isArray: true })
+  sharedMediaItems: MediaItem[];
+
+  @ApiProperty({ type: Playlist, isArray: true })
+  sharedPlaylists: Playlist[];
+
+  @ApiProperty({ type: MediaItem, isArray: true })
+  mediaItems: MediaItem[];
+
+  @ApiProperty({ type: Playlist, isArray: true })
+  playlists: Playlist[];
 }
 
 export class TokenDto {

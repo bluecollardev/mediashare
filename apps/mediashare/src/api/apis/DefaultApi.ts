@@ -20,12 +20,12 @@ import { BaseAPI, OperationOpts, RawAjaxResponse } from '../runtime';
 export class DefaultApi extends BaseAPI {
   /**
    */
-  appControllerGetData(): Observable<void>;
-  appControllerGetData(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
-  appControllerGetData(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+  appControllerIsOnline(): Observable<void>;
+  appControllerIsOnline(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
+  appControllerIsOnline(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     return this.request<void>(
       {
-        url: '/api',
+        url: '/api/online-status',
         method: 'GET',
       },
       opts?.responseOpts

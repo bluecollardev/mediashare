@@ -6,10 +6,10 @@ import { AppService } from './app.service';
 ApiTags('Main');
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() {}
 
+  @ApiResponse({ description: 'Used to validate that the app is online and connectivity is enabled', status: 200 })
   @Get('online-status')
-  @ApiResponse({ description: 'Used to validate that the app is online and connectivity is enabled', type: 'boolean' })
   isOnline() {
     return true;
   }

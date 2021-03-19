@@ -1,8 +1,7 @@
 import { ApiObjectId } from '@mediashare/shared';
-import { OmitType } from '@nestjs/swagger';
 import { UserDto } from './create-user.dto';
 
-export class UserResponseDto extends OmitType(UserDto, ['_id']) {
+export class UserResponseDto extends UserDto {
   @ApiObjectId()
   _id: string;
 }

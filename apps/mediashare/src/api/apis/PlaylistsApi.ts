@@ -13,13 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import {
-  CreatePlaylistDto,
-  CreatePlaylistResponseDto,
-  PlaylistResponseDto,
-  ShareItem,
-  UpdatePlaylistDto,
-} from '../models';
+import { CreatePlaylistDto, CreatePlaylistResponseDto, PlaylistResponseDto, ShareItem, UpdatePlaylistDto } from '../models';
 
 export interface PlaylistControllerCreateRequest {
   createPlaylistDto: CreatePlaylistDto;
@@ -49,9 +43,7 @@ export interface PlaylistControllerUpdateRequest {
 export class PlaylistsApi extends BaseAPI {
   /**
    */
-  playlistControllerCreate({
-    createPlaylistDto,
-  }: PlaylistControllerCreateRequest): Observable<CreatePlaylistResponseDto>;
+  playlistControllerCreate({ createPlaylistDto }: PlaylistControllerCreateRequest): Observable<CreatePlaylistResponseDto>;
   playlistControllerCreate(
     { createPlaylistDto }: PlaylistControllerCreateRequest,
     opts?: OperationOpts
@@ -83,10 +75,7 @@ export class PlaylistsApi extends BaseAPI {
   /**
    */
   playlistControllerFindOne({ playlistId }: PlaylistControllerFindOneRequest): Observable<PlaylistResponseDto>;
-  playlistControllerFindOne(
-    { playlistId }: PlaylistControllerFindOneRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<PlaylistResponseDto>>;
+  playlistControllerFindOne({ playlistId }: PlaylistControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<PlaylistResponseDto>>;
   playlistControllerFindOne(
     { playlistId }: PlaylistControllerFindOneRequest,
     opts?: OperationOpts
@@ -126,14 +115,8 @@ export class PlaylistsApi extends BaseAPI {
   /**
    */
   playlistControllerRemove({ playlistId }: PlaylistControllerRemoveRequest): Observable<void>;
-  playlistControllerRemove(
-    { playlistId }: PlaylistControllerRemoveRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>>;
-  playlistControllerRemove(
-    { playlistId }: PlaylistControllerRemoveRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>> {
+  playlistControllerRemove({ playlistId }: PlaylistControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
+  playlistControllerRemove({ playlistId }: PlaylistControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     throwIfNullOrUndefined(playlistId, 'playlistId', 'playlistControllerRemove');
 
     const headers: HttpHeaders = {
@@ -155,10 +138,7 @@ export class PlaylistsApi extends BaseAPI {
   /**
    */
   playlistControllerShare({ playlistId, userId }: PlaylistControllerShareRequest): Observable<Array<ShareItem>>;
-  playlistControllerShare(
-    { playlistId, userId }: PlaylistControllerShareRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<Array<ShareItem>>>;
+  playlistControllerShare({ playlistId, userId }: PlaylistControllerShareRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItem>>>;
   playlistControllerShare(
     { playlistId, userId }: PlaylistControllerShareRequest,
     opts?: OperationOpts
@@ -174,9 +154,7 @@ export class PlaylistsApi extends BaseAPI {
 
     return this.request<Array<ShareItem>>(
       {
-        url: '/api/playlists/{playlistId}'
-          .replace('{playlistId}', encodeURI(playlistId))
-          .replace('{userId}', encodeURI(userId)),
+        url: '/api/playlists/{playlistId}'.replace('{playlistId}', encodeURI(playlistId)).replace('{userId}', encodeURI(userId)),
         method: 'POST',
         headers,
       },
@@ -187,14 +165,8 @@ export class PlaylistsApi extends BaseAPI {
   /**
    */
   playlistControllerUpdate({ playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest): Observable<void>;
-  playlistControllerUpdate(
-    { playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>>;
-  playlistControllerUpdate(
-    { playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest,
-    opts?: OperationOpts
-  ): Observable<void | RawAjaxResponse<void>> {
+  playlistControllerUpdate({ playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
+  playlistControllerUpdate({ playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     throwIfNullOrUndefined(playlistId, 'playlistId', 'playlistControllerUpdate');
     throwIfNullOrUndefined(updatePlaylistDto, 'updatePlaylistDto', 'playlistControllerUpdate');
 
