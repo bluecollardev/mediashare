@@ -24,6 +24,8 @@ export interface RootState {
   errors: ErrorType[];
   page: string;
   lastPage: string;
+  login: any;
+  loginResponse: any;
   offlineMode: boolean;
 }
 
@@ -46,7 +48,9 @@ export const INITIAL_STATE: RootState = {
   errors: null,
   page: null,
   lastPage: null,
-  offlineMode: null,
+  login: null,
+  loginResponse: null,
+  offlineMode: null
 } as const;
 
 export default INITIAL_STATE;

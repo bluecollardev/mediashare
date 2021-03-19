@@ -4,6 +4,7 @@ import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import Login from '../../screens/Login';
 import { LoginDto } from '../../api';
 import { RootState } from '../../state';
+import { login } from '../../state/modules/login';
 import { connect } from 'react-redux';
 
 const required = (value: any) => (value ? undefined : 'Required');
@@ -21,7 +22,7 @@ export interface LoginFormProps extends InjectedFormProps {
   isLoading: boolean;
   login: (dto: LoginDto) => void;
 }
-export interface LoginFormState extends Pick<RootState, 'loginDto' | 'forms'> {}
+export interface LoginFormState {}
 class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
   navigation: any;
   textInput: any;
@@ -56,20 +57,18 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
 }
 
 const mapStateToProps = (state: RootState) => {
-  console.log('map state props', state);
+  console.log('map state props', JSON.stringify(state));
   return {
-    loginForm: state?.forms.loginForm,
+    loginForm: state?.forms?.loginForm,
     isLoading: state?.isLoading,
   };
 };
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
-    login: (loginDto: LoginDto) => dispatch({ type: RootActions.LOGIN_DTO, loginDto }),
-    dtoChange: (loginDto: LoginDto) => dispatch({ type: RootActions.LOGIN_DTO, loginDto }),
-    // fetchList: (url) => console.log(url),
+    login: (loginDto: LoginDto) => dispatch(login(loginDto)),
   };
-}
+};
 
 const LoginContainer = reduxForm({
   form: 'login',

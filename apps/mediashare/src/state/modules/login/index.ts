@@ -1,10 +1,11 @@
 import { createAction, createReducer, PayloadAction } from '@reduxjs/toolkit';
 
-const loginAction = createAction('login');
+import INITIAL_STATE, { RootState } from '../../index';
+import { LoginDto } from '../../../api';
+
+const loginAction = createAction<LoginDto>('login');
 const logoutAction = createAction('logout');
 const toggleLoadingAction = createAction('toggleLoading');
-
-import INITIAL_STATE, { RootState } from '.';
 
 const initialState = INITIAL_STATE;
 
@@ -14,7 +15,7 @@ const toggleLoadingReducer = (state: RootState, action: PayloadAction<RootState>
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const loginReducer = (state: RootState, action: PayloadAction<any>): RootState => {
+const index = (state: RootState, action: PayloadAction<any>): RootState => {
   return state;
 };
 
@@ -23,8 +24,8 @@ const logoutReducer = (state: RootState, action: PayloadAction<any>): RootState 
   return state;
 };
 
-export const rootReducer = createReducer(initialState, (builder) =>
-  builder.addCase(loginAction, loginReducer).addCase(logoutAction, logoutReducer).addCase(toggleLoadingAction, toggleLoadingReducer)
+export const loginReducer = createReducer(initialState, (builder) =>
+  builder.addCase(loginAction, index).addCase(logoutAction, logoutReducer).addCase(toggleLoadingAction, toggleLoadingReducer)
 );
 
 export { loginAction as login, logoutAction as logout, toggleLoadingAction as toggleLoading };

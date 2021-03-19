@@ -5,18 +5,19 @@ import { userReducer, usersReducer } from './modules/user';
 import { mediaItemReducer, mediaItemsReducer } from './modules/media-items';
 import { playlistReducer, playlistsReducer, playlistItemsReducer } from './modules/playlists';
 import { shareItemsReducer } from './modules/share-items';
-import { rootReducer } from './root';
+import { loginReducer } from './modules/login';
+import { RootState } from './index';
 
-const reducers = combineReducers({
-  rootReducer,
-  userReducer,
-  usersReducer,
-  mediaItemReducer,
-  mediaItemsReducer,
-  playlistReducer,
-  playlistsReducer,
-  playlistItemsReducer,
-  shareItemsReducer,
+const rootReducer = combineReducers({
+  loginReducer,
+  user: userReducer,
+  users: usersReducer,
+  mediaItem: mediaItemReducer,
+  mediaItems: mediaItemsReducer,
+  playlist: playlistReducer,
+  playlists: playlistsReducer,
+  playlistItems: playlistItemsReducer,
+  shareItems: shareItemsReducer,
 });
 
-export { reducers };
+export { rootReducer };
