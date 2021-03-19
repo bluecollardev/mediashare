@@ -1,17 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { combineReducers } from 'redux';
 
-import { userReducer, usersReducer } from './modules/user';
-import { mediaItemReducer, mediaItemsReducer } from './modules/media-items';
-import { playlistReducer, playlistsReducer, playlistItemsReducer } from './modules/playlists';
-import { shareItemsReducer } from './modules/share-items';
-import { loginReducer } from './modules/system';
-import { RootState } from './index';
+import { userReducer } from './modules/user';
+import { usersReducer } from './modules/users';
+import { mediaItemsReducer } from './modules/media-items';
+import { playlistsReducer, playlistItemsReducer } from './modules/playlists';
 
 // Global app flags and data
 const systemReducers = {
-  isLoggedIn: authReducer,
-  isOffline: loginReducer,
+  // isOffline: 'test',
 };
 
 // User profile data

@@ -4,7 +4,7 @@ import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import Login from '../../screens/Login';
 import { LoginDto } from '../../api';
 import { RootState } from '../../state';
-import { login } from '../../state/modules/system';
+import { UserActions } from '../../state/modules/user';
 import { connect } from 'react-redux';
 
 const required = (value: any) => (value ? undefined : 'Required');
@@ -66,7 +66,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (loginDto: LoginDto) => dispatch(login(loginDto)),
+    // login: (loginDto: LoginDto) => dispatch(UserActions.login(loginDto)),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    login: (loginDto: LoginDto) => dispatch(UserActions.login()),
   };
 };
 
