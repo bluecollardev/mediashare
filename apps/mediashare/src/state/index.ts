@@ -11,7 +11,7 @@ export interface AppForm {}
 
 export interface RootState {
   users: ApiResponse<models.UserDto[]>;
-  user: ApiResponse<models.UserDto>;
+  user: ApiResponse<models.LoginResponseDto>;
   userMediaItems: ApiResponse<models.MediaItemDto[]>;
   userPlaylists: ApiResponse<models.PlaylistResponseDto[]>;
   userPlaylistItems: ApiResponse<models.PlaylistItemResponseDto[]>;
@@ -24,8 +24,6 @@ export interface RootState {
   errors: ErrorType[];
   page: string;
   lastPage: string;
-  login: any;
-  loginResponse: any;
   offlineMode: boolean;
 }
 
@@ -48,9 +46,7 @@ export const INITIAL_STATE: RootState = {
   errors: null,
   page: null,
   lastPage: null,
-  login: null,
-  loginResponse: null,
-  offlineMode: null
+  offlineMode: null,
 } as const;
 
 export default INITIAL_STATE;

@@ -113,7 +113,7 @@ const TabNavigation = () => {
   );
 };
 
-class App extends React.Component {
+export default class extends React.Component {
   public navigator: any;
   isLoggedIn = false;
 
@@ -136,4 +136,5 @@ const mapStateToProps = (state: RootState) => ({
   ...state,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+// export default connect(mapStateToProps, mapDispatchToProps)(App);
+// export default App;

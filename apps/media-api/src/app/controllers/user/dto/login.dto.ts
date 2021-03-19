@@ -1,5 +1,5 @@
 import { ApiEmail } from '@mediashare/shared';
-import { ApiHideProperty, ApiProperty, OmitType, PickType } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsString, MinLength, MaxLength, IsJWT } from 'class-validator';
 import { MediaItem } from '../../media-item/entities/media-item.entity';
 import { Playlist } from '../../playlist/entities/playlist.entity';

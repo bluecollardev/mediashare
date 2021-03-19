@@ -11,25 +11,25 @@ export interface ApiService {
   users: UsersApi;
 }
 
-export class ApiService {
-  constructor(config: Configuration) {
-    this.default = new DefaultApi(config);
-    this.mediaItems = new MediaItemsApi(config);
-    this.playlists = new PlaylistsApi(config);
-    this.shareItems = new ShareItemsApi(config);
-    this.user = new UserApi(config);
-    this.users = new UsersApi(config);
-  }
-}
+// export class ApiService {
+//   constructor(config: Configuration) {
+//     this.default = new DefaultApi(config);
+//     this.mediaItems = new MediaItemsApi(config);
+//     this.playlists = new PlaylistsApi(config);
+//     this.shareItems = new ShareItemsApi(config);
+//     this.user = new UserApi(config);
+//     this.users = new UsersApi(config);
+//   }
+// }
 
 export interface ThunkExtra extends ApiService {}
 
-function middlewareFactory() {
-  const apiService = new ApiService(null);
+// function middlewareFactory() {
+//   const apiService = new ApiService(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return (store) => (next) => (action) => thunk.withExtraArgument({ api: apiService });
-}
+//   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//   return (store) => (next) => (action) => thunk.withExtraArgument({ api: apiService });
+// }
 
 const loggerMiddleware = (store) => (next) => (action) => {
   console.group(action.type);
@@ -40,6 +40,6 @@ const loggerMiddleware = (store) => (next) => (action) => {
   return result;
 };
 
-const apiMiddleware = middlewareFactory();
+// const apiMiddleware = middlewareFactory();
 
-export { apiMiddleware, loggerMiddleware };
+export { loggerMiddleware };
