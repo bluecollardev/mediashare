@@ -11,7 +11,7 @@ export interface LibraryItemEditContainerState {}
 
 class LibraryItemEditContainer extends React.Component<LibraryItemEditContainerProps, LibraryItemEditContainerState> {
   componentDidMount() {
-    this.props.fetchList();
+    // this.props.fetchList();
   }
   render() {
     return <LibraryItemEdit navigation={this.props.navigation} list={this.props.data} />;
@@ -25,7 +25,7 @@ function mapDispatchToProps(dispatch: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.libraryItemDetail.list,
-  isLoading: state.libraryItemDetail.isLoading,
+  data: state && state.libraryItemDetail ? state.libraryItemDetail.list : [],
+  isLoading: state && state.isLoading ? state.libraryItemDetail.isLoading : false,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(LibraryItemEditContainer);

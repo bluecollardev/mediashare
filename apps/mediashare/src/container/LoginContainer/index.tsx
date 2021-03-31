@@ -59,8 +59,8 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
 const mapStateToProps = (state: RootState) => {
   console.log('map state props', JSON.stringify(state));
   return {
-    loginForm: state?.forms?.loginForm,
-    isLoading: state?.isLoading,
+    // loginForm: state?.forms?.loginForm,
+    // isLoading: state?.isLoading,
   };
 };
 

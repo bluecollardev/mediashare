@@ -11,7 +11,7 @@ export interface LibraryContainerState {}
 
 class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerState> {
   componentDidMount() {
-    this.props.fetchList();
+    // this.props.fetchList();
   }
   render() {
     return <Library navigation={this.props.navigation} list={this.props.data} />;
@@ -25,7 +25,7 @@ function mapDispatchToProps(dispatch: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.library.list,
-  isLoading: state.library.isLoading,
+  data: state && state.library ? state.library.list : [],
+  isLoading: state && state.library ? state.library.isLoading : false,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(LibraryContainer);

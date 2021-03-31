@@ -11,7 +11,7 @@ export interface AddFromFeedContainerState {}
 
 class AddFromFeedContainer extends React.Component<AddFromFeedContainerProps, AddFromFeedContainerState> {
   componentDidMount() {
-    this.props.fetchList();
+    // this.props.fetchList();
   }
   render() {
     return <AddFromFeed navigation={this.props.navigation} list={this.props.data} />;
@@ -25,7 +25,7 @@ function mapDispatchToProps(dispatch: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.playlistDetail.list,
-  isLoading: state.playlistDetail.isLoading,
+  data: state && state.ex ? state.playlistDetail.list : [],
+  isLoading: state && state.playlistDetail ? state.playlistDetail.isLoading : false,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AddFromFeedContainer);

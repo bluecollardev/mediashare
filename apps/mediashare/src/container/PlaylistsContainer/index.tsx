@@ -11,7 +11,7 @@ export interface PlaylistsContainerState {}
 
 class PlaylistsContainer extends React.Component<PlaylistsContainerProps, PlaylistsContainerState> {
   componentDidMount() {
-    this.props.fetchList();
+    // this.props.fetchList();
   }
   render() {
     return <Playlists navigation={this.props.navigation} list={this.props.data} />;
@@ -25,7 +25,7 @@ function mapDispatchToProps(dispatch: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.playlists.list,
-  isLoading: state.playlists.isLoading,
+  data: state && state.playlists ? state.playlists.list :[],
+  isLoading: state && state.isLoading ? state.playlists.isLoading : false,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistsContainer);

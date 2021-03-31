@@ -119,7 +119,7 @@ export default class extends React.Component {
 
   render() {
     console.log(this);
-    if (!this.isLoggedIn) return <LoginContainer />;
+    // if (!this.isLoggedIn) return <LoginContainer />;
     return (
       <NavigationContainer>
         <TabNavigation />

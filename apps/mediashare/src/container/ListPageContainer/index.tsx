@@ -11,7 +11,7 @@ export interface ListPageState {}
 
 class ListPageContainer extends React.Component<ListPageProps, ListPageState> {
   componentDidMount() {
-    this.props.fetchList();
+    // this.props.fetchList();
   }
   render() {
     return <ListPage navigation={this.props.navigation} list={this.props.data} />;
@@ -20,7 +20,7 @@ class ListPageContainer extends React.Component<ListPageProps, ListPageState> {
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    fetchList: (url: any) => dispatch(fetchList(url)),
+    // fetchList: (url: any) => dispatch(fetchList(url)),
   };
 }
 

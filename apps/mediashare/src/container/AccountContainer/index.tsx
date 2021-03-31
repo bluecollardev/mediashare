@@ -11,7 +11,7 @@ export interface AccountContainerState {}
 
 class AccountContainer extends React.Component<AccountContainerProps, AccountContainerState> {
   componentDidMount() {
-    this.props.fetchList();
+    // this.props.fetchList();
   }
   render() {
     return <Account navigation={this.props.navigation} />;
@@ -25,7 +25,7 @@ function mapDispatchToProps(dispatch: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.playlists.list,
-  isLoading: state.playlists.isLoading,
+  data: state && state.playlists ? state.playlists.list : [],
+  isLoading: state && state.playlists ? state.playlists.isLoading : false,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AccountContainer);

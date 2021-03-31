@@ -13,7 +13,7 @@ export interface HomeContainerState {}
 
 class HomeContainer extends React.Component<HomeContainerProps, HomeContainerState> {
   componentDidMount() {
-    this.props.fetchList(datas);
+    // this.props.fetchList(datas);
   }
   render() {
     return <Home navigation={this.props.navigation} list={this.props.data} />;
@@ -27,7 +27,7 @@ function mapDispatchToProps(dispatch: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state.home.list,
-  isLoading: state.home.isLoading,
+  data: state && state.home ? state.home.list : [],
+  isLoading: state && state.home ? state.home.isLoading : false,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
