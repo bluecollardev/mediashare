@@ -59,18 +59,17 @@ const initialState = {};
 
 export const MEDIA_ITEMS_STATE_KEY = 'mediaItems';
 
-const mediaItemReducer = createReducer(initialState, (builder) =>
-  builder
-    .addCase(getMediaItemById.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
-    .addCase(addMediaItem.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
-    .addCase(updateMediaItem.fulfilled, reducers.updateItem(MEDIA_ITEMS_STATE_KEY))
-    .addCase(shareMediaItem.fulfilled, reducers.updateItem(MEDIA_ITEMS_STATE_KEY))
-    .addCase(removeMediaItem.fulfilled, reducers.removeItem(MEDIA_ITEMS_STATE_KEY))
+const mediaItemReducer = createReducer(
+  initialState,
+  (builder) =>
+    builder
+      .addCase(getMediaItemById.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
+      .addCase(addMediaItem.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
+      .addCase(updateMediaItem.fulfilled, reducers.updateItem(MEDIA_ITEMS_STATE_KEY))
+      .addCase(shareMediaItem.fulfilled, reducers.updateItem(MEDIA_ITEMS_STATE_KEY))
+  // .addCase(removeMediaItem.fulfilled, reducers.removeItem(MEDIA_ITEMS_STATE_KEY))
 );
 
-const mediaItemsReducer = createReducer(initialState, (builder) =>
-  builder
-    .addCase(findMediaItems.fulfilled, reducers.loadItems(MEDIA_ITEMS_STATE_KEY))
-);
+const mediaItemsReducer = createReducer(initialState, (builder) => builder.addCase(findMediaItems.fulfilled, reducers.loadItems(MEDIA_ITEMS_STATE_KEY)));
 
 export { mediaItemReducer, mediaItemsReducer };

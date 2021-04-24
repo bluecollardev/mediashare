@@ -39,10 +39,10 @@ export const SHARE_ITEMS_STATE_KEY = 'shareItems';
 const shareItemsReducer = createReducer(
   initialState,
   (builder) =>
-  builder
-    .addCase(getShareItemById.fulfilled, reducers.addItem(SHARE_ITEMS_STATE_KEY))
-    .addCase(findShareItems.fulfilled, reducers.loadItems(SHARE_ITEMS_STATE_KEY))
-    .addCase(removeShareItem.fulfilled, reducers.removeItem(SHARE_ITEMS_STATE_KEY))
+    builder
+      .addCase(getShareItemById.fulfilled, reducers.addItem(SHARE_ITEMS_STATE_KEY))
+      .addCase(findShareItems.fulfilled, reducers.loadItems(SHARE_ITEMS_STATE_KEY))
+  // .addCase(removeShareItem.fulfilled, reducers.removeItem(SHARE_ITEMS_STATE_KEY))
 );
 
 export { shareItemsReducer };

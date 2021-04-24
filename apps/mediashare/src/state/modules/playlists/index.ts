@@ -59,21 +59,21 @@ export const findUserPlaylists = createAsyncThunk(playlistsActionTypes.findUserP
   return response;
 });
 
-export const addUserPlaylistItem = createAsyncThunk(playlistActionTypes.addUserPlaylist, async (playlist: CreatePlaylistDto, { extra }) => {
+export const addUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.addUserPlaylistItem, async (playlist: CreatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Add playlistControllerCreateItem to API service!
   const response = api.playlists.playlistControllerCreateItem({ createPlaylistDto: playlist }).toPromise();
   return response;
 });
 
-export const updateUserPlaylistItem = createAsyncThunk(playlistActionTypes.updateUserPlaylist, async (playlist: UpdatePlaylistDto, { extra }) => {
+export const updateUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.updateUserPlaylistItem, async (playlist: UpdatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Fix _id property on DTO! | TODO: Add playlistControllerUpdateItem to API service!
   const response = api.playlists.playlistControllerUpdateItem({ playlistId: playlist._id, updatePlaylistDto: playlist }).toPromise();
   return response;
 });
 
-export const removeUserPlaylistItem = createAsyncThunk(playlistActionTypes.removeUserPlaylist, async (id: string, { extra }) => {
+export const removeUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.removeUserPlaylistItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Add playlistControllerRemoveItem to API service!
   const response = api.playlists.playlistControllerRemoveItem({ playlistId: id }).toPromise();
@@ -84,27 +84,29 @@ const initialState = {};
 
 export const USER_PLAYLISTS_STATE_KEY = 'userPlaylists';
 
-const playlistReducer = createReducer(initialState, (builder) =>
-  builder
-    .addCase(getUserPlaylistById.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
-    .addCase(addUserPlaylist.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
-    .addCase(updateUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
-    .addCase(shareUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
-    .addCase(removeUserPlaylist.fulfilled, reducers.removeItem(USER_PLAYLISTS_STATE_KEY))
+const playlistReducer = createReducer(
+  initialState,
+  (builder) =>
+    builder
+      .addCase(getUserPlaylistById.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
+      .addCase(addUserPlaylist.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
+      .addCase(updateUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
+  // .addCase(shareUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
+  // .addCase(removeUserPlaylist.fulfilled, reducers.removeItem(USER_PLAYLISTS_STATE_KEY))
 );
 
 const playlistsReducer = createReducer(
+  initialState, (builder) =>
+    builder
+      .addCase(findUserPlaylists.fulfilled, reducers.loadItems(USER_PLAYLISTS_STATE_KEY)));
+
+const playlistItemsReducer = createReducer(
   initialState,
   (builder) =>
-  builder
-    .addCase(findUserPlaylists.fulfilled, reducers.loadItems(USER_PLAYLISTS_STATE_KEY))
-);
-
-const playlistItemsReducer = createReducer(initialState, (builder) =>
-  builder
-    .addCase(addUserPlaylistItem.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
-    .addCase(updateUserPlaylistItem.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
-    .addCase(removeUserPlaylistItem.fulfilled, reducers.removeItem(USER_PLAYLISTS_STATE_KEY))
+    builder
+      .addCase(addUserPlaylistItem.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
+      .addCase(updateUserPlaylistItem.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
+  // .addCase(removeUserPlaylistItem.fulfilled, reducers.removeItem(USER_PLAYLISTS_STATE_KEY))
 );
 
 export { playlistReducer, playlistsReducer, playlistItemsReducer };
