@@ -1,5 +1,4 @@
-import { MediaItemsApi, ShareItemsApi, PlaylistsApi, UserApi, UsersApi } from '../api';
-import { DefaultApi } from '../api/apis/DefaultApi';
+import { DefaultApi, MediaItemsApi, ShareItemsApi, PlaylistsApi, UserApi, UsersApi } from '../api';
 
 export interface ApiService {
   default: DefaultApi;
