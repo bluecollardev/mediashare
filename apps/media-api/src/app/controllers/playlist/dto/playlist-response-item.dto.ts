@@ -1,10 +1,17 @@
-import { ApiObjectId } from '@mediashare/shared';
-import { IntersectionType } from '@nestjs/swagger';
+import { BcEntity } from '@api';
+import { ApiObjectId, ApiString } from '@mediashare/shared';
+import { ApiProperty, IntersectionType, OmitType } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
 import { MediaItem } from '../../media-item/entities/media-item.entity';
 
-export class PlaylistItemResponseDto extends IntersectionType(PlaylistItem, MediaItem) {
+class PlaylistItemCreatedBy extends BcEntity {
+  @ApiString()
+  username: string;
+}
+export class PlaylistItemResponseDto extends IntersectionType(OmitType(MediaItem, ['createdBy']), PlaylistItem) {
   @ApiObjectId()
   playlistItemId: ObjectId;
+  // @ApiProperty({ type: () => PlaylistItemCreatedBy })
+  // createdBy: PlaylistItemCreatedBy;
 }

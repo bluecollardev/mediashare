@@ -27,10 +27,7 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
       {
         $replaceRoot: {
           newRoot: {
-            $mergeObjects: [
-              { playlistItemId: '$_id', mediaId: '$mediaId', playlistId: '$playlistId', userId: 0 },
-              '$mediaItems',
-            ],
+            $mergeObjects: [{ playlistItemId: '$_id', mediaId: '$mediaId', playlistId: '$playlistId', userId: 0 }, '$mediaItems'],
           },
         },
       },
@@ -128,6 +125,6 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
   }
 
   aggregatePlaylistAndItem() {
-    return this.repository.aggregate(this.playlistAggregationPipeline).toArray();
+    return this.repository.find();
   }
 }

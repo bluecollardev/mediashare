@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 
-import { ApiBody, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
@@ -16,7 +16,7 @@ import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
-const id = new ObjectId();
+import { PlaylistItem } from '../../modules/playlist-item/entities/playlist-item.entity';
 
 const PLAYLIST_ID_TOKEN = ':playlistId';
 @ApiTags('playlists')
@@ -32,7 +32,7 @@ export class PlaylistController {
     return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId });
   }
 
-  @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
+  @PlaylistGetResponse({ isArray: true, type: PlaylistItem })
   @Get()
   findAll() {
     return this.playlistService.findAll();
@@ -50,18 +50,15 @@ export class PlaylistController {
     type: 'string',
     example: new ObjectId().toHexString(),
   })
-  @Get()
+  @Get(PLAYLIST_ID_TOKEN)
+  @ApiParam({ name: 'playlistId', type: String, required: true })
   findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
     return this.playlistService.getPlaylistById({ playlistId });
   }
 
   @Put(PLAYLIST_ID_TOKEN)
   @ApiParam({ name: 'playlistId', type: String, required: true })
-  update(
-    @Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId,
-    @GetUserId() userId: ObjectId,
-    @Body() updatePlaylistDto: UpdatePlaylistDto
-  ) {
+  update(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() userId: ObjectId, @Body() updatePlaylistDto: UpdatePlaylistDto) {
     const { ...rest } = updatePlaylistDto;
     return this.playlistService.update(playlistId, { ...rest, userId });
   }

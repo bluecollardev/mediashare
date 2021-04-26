@@ -96,10 +96,6 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     });
   }
 
-  findAll() {
-    return this.playlistItemService.aggregatePlaylistAndItem();
-  }
-
   getPlaylistByUserId({ userId }: OptionalObjectIdParameters) {
     return this.playlistItemService.aggregatePlaylistAndItemByIdField({ userId });
   }
@@ -107,5 +103,9 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.playlistItemService.aggregatePlaylistAndItemByIdField({
       playlistId,
     });
+  }
+
+  findall() {
+    return this.playlistItemService.findAll();
   }
 }
