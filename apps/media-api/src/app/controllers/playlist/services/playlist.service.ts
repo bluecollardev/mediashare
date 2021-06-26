@@ -14,6 +14,7 @@ import * as R from 'remeda';
 import { CreatePlaylistDto } from '../dto/create-playlist.dto';
 
 import { OptionalObjectIdParameters } from '@mediashare/shared';
+import { UserService } from '../../../modules/auth/user.service';
 
 type CreatePlaylistParameters = {
   playlistId: ObjectId;
@@ -26,6 +27,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     @InjectRepository(Playlist)
     repository: MongoRepository<Playlist>,
     logger: PinoLogger,
+    private userService: UserService,
     private playlistItemService: PlaylistItemService
   ) {
     super(repository, logger);
@@ -96,8 +98,14 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     });
   }
 
-  getPlaylistByUserId({ userId }: OptionalObjectIdParameters) {
-    return this.playlistItemService.aggregatePlaylistAndItemByIdField({ userId });
+  /* FIXME: hack-around for getting a user when one doesn't exist */
+  async getPlaylistByUserId({ userId }: OptionalObjectIdParameters = { userId: null }) {
+    if (userId === null || !userId) {
+      const defaultUsername = 'admin@example.com';
+      const user = await this.userService.findByQuery({ username: defaultUsername });
+      return await this.playlistItemService.aggregatePlaylistAndItemByIdField({ userId: user._id });
+    }
+    return await this.playlistItemService.aggregatePlaylistAndItemByIdField({ userId });
   }
   getPlaylistById({ playlistId }: OptionalObjectIdParameters) {
     return this.playlistItemService.aggregatePlaylistAndItemByIdField({

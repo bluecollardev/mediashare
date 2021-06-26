@@ -10,7 +10,6 @@ import { ShareItemService } from '../../modules/share-item/services/share-item.s
 import { PLAYLIST_CATEGORY } from '@core-lib';
 import { GetUserId } from '../../core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse } from './playlist.decorator';
-import { UseJwtGuard } from '../../modules/auth/auth.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { PlaylistResponseDto } from './dto/playlist-response.dto';
@@ -64,7 +63,6 @@ export class PlaylistController {
   }
 
   @Delete(PLAYLIST_ID_TOKEN)
-  // @UseJwtGuard()
   @ApiParam({ name: 'playlistId', type: String, required: true })
   remove(@Param('playlistId') playlistId: string) {
     return this.playlistService.remove(playlistId);

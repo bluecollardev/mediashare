@@ -9,7 +9,7 @@ const DocumentBuilderFactory = function ({ title }: DocumentBuilderFactory) {
     .setTitle(title)
     .setDescription('Media Share API')
     .setVersion('1.0')
-    .addServer('http://localhost:3333/api', 'development server')
+    .addServer('http://localhost:3333', 'development server')
     .addBearerAuth();
 };
 

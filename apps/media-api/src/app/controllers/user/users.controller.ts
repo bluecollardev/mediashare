@@ -24,11 +24,7 @@ import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(
-    private readonly userService: UserService,
-    private playlistService: PlaylistService,
-    private shareItemService: ShareItemService
-  ) {}
+  constructor(private readonly userService: UserService, private playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
   @Post()
   @ApiResponse({ type: UserDto, status: 201, isArray: false })
@@ -60,10 +56,7 @@ export class UsersController {
   @Put(RouteTokens.USER_ID)
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserPostResponse()
-  update(
-    @Param('userId', ObjectIdPipe) userId: ObjectId,
-    @Body() updateUserDto: UpdateUserDto
-  ): Promise<Partial<User>> {
+  update(@Param('userId', ObjectIdPipe) userId: ObjectId, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
     return this.userService.update(userId, updateUserDto);
   }
 
