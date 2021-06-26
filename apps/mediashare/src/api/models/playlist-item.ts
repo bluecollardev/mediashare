@@ -12,6 +12,22 @@
  * Do not edit the class manually.
  */
 
-export * from './api';
-export * from './configuration';
-export * from './models';
+/**
+ *
+ * @export
+ * @interface PlaylistItem
+ */
+export interface PlaylistItem {
+  /**
+   *
+   * @type {string}
+   * @memberof PlaylistItem
+   */
+  mediaId: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PlaylistItem
+   */
+  userId: string;
+}

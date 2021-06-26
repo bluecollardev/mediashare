@@ -85,6 +85,7 @@ export class AuthService {
 
   getUser(user: { _id }) {
     const { _id } = user;
-    return this.userRepository.findOne({ _id });
+    // TODO: Switch this back or make the hardcoded user configurable
+    return this.userRepository.findOne({ email: 'admin@example.com' });
   }
 }

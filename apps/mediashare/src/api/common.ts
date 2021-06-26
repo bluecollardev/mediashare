@@ -107,7 +107,7 @@ export const serializeDataIfNeeded = function (value: any, requestOptions: any, 
  * @export
  */
 export const toPathString = function (url: URL) {
-  return url.pathname + url.search + url.hash;
+  // return url.pathname + url.search + url.hash;
 };
 
 /**

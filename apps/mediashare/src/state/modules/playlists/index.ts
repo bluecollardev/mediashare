@@ -52,11 +52,11 @@ export const removeUserPlaylist = createAsyncThunk(playlistActionTypes.removeUse
   return response;
 });
 
-export const findUserPlaylists = createAsyncThunk(playlistsActionTypes.findUserPlaylists, async (opts: OperationOpts | undefined, { extra }) => {
+export const findUserPlaylists = createAsyncThunk(playlistsActionTypes.findUserPlaylists, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Add playlistControllerFindAll to API service!
-  api.playlists
-    .playlistControllerFindAll({ query: 'test' })
+  api.user
+    .userControllerGetPlaylists({ query: {}, headers: {} })
     .then((response) => {
       return response;
     })

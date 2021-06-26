@@ -4,28 +4,17 @@
   "generator-cli": {
     "version": "5.0.1",
     "generators": {
-      "v3.0": {
-        "generatorName": "typescript-rxjs",
+      "v1.0": {
+        "generatorName": "typescript-axios",
         "output": "#{cwd}/apps/mediashare/src/api",
         "glob": "swagger-spec.{json,yaml}",
         "additionalProperties": {
           "supportsES6": "true",
           "modelPropertyNaming": "original",
           "useSingleRequestParameter": true,
-          "withInterfaces": true,
-          "withSeparateModelsAndApi": true
-        }
-      },
-      "v3.5": {
-        "generatorName": "typescript-redux-query",
-        "output": "#{cwd}/apps/mediashare/src/redux",
-        "glob": "swagger-spec.{json,yaml}",
-        "additionalProperties": {
-          "supportsES6": "true",
-          "modelPropertyNaming": "original",
-          "useSingleRequestParameter": true,
-          "withInterfaces": true,
-          "withSeparateModelsAndApi": true
+          "withSeparateModelsAndApi": true,
+          "apiPackage": "services",
+          "modelPackage": "models"
         }
       }
     }
