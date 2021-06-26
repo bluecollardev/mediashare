@@ -1,7 +1,6 @@
 import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { makeActions, makeEnum } from '../../core/factory';
+import { makeEnum } from '../../core/factory';
 
 import * as reducers from '../../core/reducers';
 
@@ -13,8 +12,6 @@ const MEDIA_ITEMS_ACTIONS = ['FIND_MEDIA_ITEMS'] as const;
 
 export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
 export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
-
-// const [mediaItemActions, mediaItemsActions] = [makeActions(MEDIA_ITEM_ACTIONS), makeActions(MEDIA_ITEMS_ACTIONS)];
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
@@ -51,8 +48,15 @@ export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMedia
 
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = await api.mediaItems.mediaItemControllerFindAll(opts);
-  return response;
+  // @ts-ignore - TODO: Add playlistControllerFindAll to API service!
+  api.mediaItems
+    .mediaItemControllerFindAll({ query: {}, headers: {} })
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      throw err;
+    });
 });
 
 const initialState = {};

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Playlists from '../../screens/Playlists';
 
-import { findUserPlaylists, playlistsActionTypes } from '../../state/modules/playlists';
+import { findUserPlaylists } from '../../state/modules/playlists';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -32,7 +32,7 @@ function mapDispatchToProps(dispatch: any) {
 
 const mapStateToProps = (state: any) => ({
   state: state,
-  data: state && state.playlists ? state.playlists.list : [],
-  isLoading: state && state.isLoading ? state.playlists.isLoading : false,
+  data: state?.userPlaylists?.userPlaylists ? state.userPlaylists.userPlaylists : [],
+  isLoading: state && state?.isLoading ? state?.userPlaylists.isLoading : false,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistsContainer);

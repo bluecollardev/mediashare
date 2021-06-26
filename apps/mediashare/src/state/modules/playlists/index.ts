@@ -55,14 +55,8 @@ export const removeUserPlaylist = createAsyncThunk(playlistActionTypes.removeUse
 export const findUserPlaylists = createAsyncThunk(playlistsActionTypes.findUserPlaylists, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Add playlistControllerFindAll to API service!
-  api.user
-    .userControllerGetPlaylists({ query: {}, headers: {} })
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      throw err;
-    });
+  const response = await api.user.userControllerGetPlaylists({ query: {}, headers: {} });
+  return response && response.status === 200 ? response.data : [];
 });
 
 export const addUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.addUserPlaylistItem, async (playlist: CreatePlaylistDto, { extra }) => {
