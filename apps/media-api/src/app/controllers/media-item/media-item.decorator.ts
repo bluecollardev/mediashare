@@ -9,12 +9,15 @@ function MediaPostResponse({ isArray = false, type = MediaItem, description }: A
   return applyDecorators(
     ApiResponse({ description, type, status: 201, isArray }),
     ApiBody({ type: CreateMediaItemDto }),
-    UseJwtGuard()
+    // UseJwtGuard()
   );
 }
 
 const MediaGetResponse = function ({ isArray = false, type = MediaItem }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ type, isArray, status: 200 }), UseJwtGuard());
+  return applyDecorators(
+    ApiResponse({ type, isArray, status: 200 }),
+    // UseJwtGuard()
+  );
 };
 
 export { MediaGetResponse, MediaPostResponse };

@@ -64,7 +64,7 @@ export class PlaylistController {
   }
 
   @Delete(PLAYLIST_ID_TOKEN)
-  @UseJwtGuard()
+  // @UseJwtGuard()
   @ApiParam({ name: 'playlistId', type: String, required: true })
   remove(@Param('playlistId') playlistId: string) {
     return this.playlistService.remove(playlistId);
