@@ -11,7 +11,7 @@ RUN npm ci
 
 COPY ./apps/media-auth .
 
-CMD ["npm" "start:auth"]
+CMD ["npm", "start:auth"]
 
 # seperate build for production
 FROM node:12.13-alpine as production

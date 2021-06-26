@@ -8,18 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* bluecollar_mediashareTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* bluecollar_mediashareTests.m */; };
+		0C229F83C6F7BF9972053AEE /* libPods-bluecollar_mediashare-bluecollar_mediashareTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF9766C8D0B1B74E3B04BCBE /* libPods-bluecollar_mediashare-bluecollar_mediashareTests.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1D32910A34FF60B65939019A /* libPods-bluecollar_mediashare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A00A411C3F748A01497395A /* libPods-bluecollar_mediashare.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* bluecollar_mediashareTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* bluecollar_mediashareTests.m */; };
-		38AC03CFEB95869B576A4FE1 /* libPods-bluecollar_mediashare-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 17B9F63BA147AFB754ECE31F /* libPods-bluecollar_mediashare-tvOS.a */; };
+		6BE8A31ECE61CCD4571F1915 /* libPods-bluecollar_mediashare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 070D0E2348FADF91A5618DB2 /* libPods-bluecollar_mediashare.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		C16BA5BF9AC927405A76B82A /* libPods-bluecollar_mediashare-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 041DAB1E0B326750C1683EF1 /* libPods-bluecollar_mediashare-tvOSTests.a */; };
-		DC2BC2A281DF1B660CAC4D4D /* libPods-bluecollar_mediashare-bluecollar_mediashareTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F90D077CA1B78D37924D6EB5 /* libPods-bluecollar_mediashare-bluecollar_mediashareTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,8 +41,7 @@
 		00E356EE1AD99517003FC87E /* bluecollar_mediashareTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bluecollar_mediashareTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* bluecollar_mediashareTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bluecollar_mediashareTests.m; sourceTree = "<group>"; };
-		041DAB1E0B326750C1683EF1 /* libPods-bluecollar_mediashare-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bluecollar_mediashare-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		0A22EEB5EA49618A34F92581 /* Pods-bluecollar_mediashare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare.release.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare/Pods-bluecollar_mediashare.release.xcconfig"; sourceTree = "<group>"; };
+		070D0E2348FADF91A5618DB2 /* libPods-bluecollar_mediashare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bluecollar_mediashare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F8A9A2D74C04D8289644446 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* bluecollar_mediashare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bluecollar_mediashare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = bluecollar_mediashare/AppDelegate.h; sourceTree = "<group>"; };
@@ -52,36 +49,31 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = bluecollar_mediashare/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = bluecollar_mediashare/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = bluecollar_mediashare/main.m; sourceTree = "<group>"; };
-		17B9F63BA147AFB754ECE31F /* libPods-bluecollar_mediashare-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bluecollar_mediashare-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A68868877FA760BBB7AA6B9 /* Pods-bluecollar_mediashare-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare-tvOS.release.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare-tvOS/Pods-bluecollar_mediashare-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		17F012ECE62A22FF6483FD24 /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare-bluecollar_mediashareTests.release.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare-bluecollar_mediashareTests/Pods-bluecollar_mediashare-bluecollar_mediashareTests.release.xcconfig"; sourceTree = "<group>"; };
 		1E8272C8C9D64B52B115206B /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* bluecollar_mediashare-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bluecollar_mediashare-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* bluecollar_mediashare-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "bluecollar_mediashare-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		30DD1EA88FEE4570B2EA17F8 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
-		3A00A411C3F748A01497395A /* libPods-bluecollar_mediashare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bluecollar_mediashare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		349A0205A3CD5FB39AC9E843 /* Pods-bluecollar_mediashare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare.debug.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare/Pods-bluecollar_mediashare.debug.xcconfig"; sourceTree = "<group>"; };
 		3EE0B43086B141889853753D /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		480F0E99C8904648A1C467CC /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		4885D7ED5673451C89876AE7 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		610153A94495903734743B68 /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare-bluecollar_mediashareTests.debug.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare-bluecollar_mediashareTests/Pods-bluecollar_mediashare-bluecollar_mediashareTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6131D82FB82C4A5BA3AC93A2 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		6901916C778C4EBCB3AEA882 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		70FDC7A3772040281D225AC3 /* Pods-bluecollar_mediashare-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare-tvOSTests/Pods-bluecollar_mediashare-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		78AFD076B1EC33D26ABC82C8 /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare-bluecollar_mediashareTests.release.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare-bluecollar_mediashareTests/Pods-bluecollar_mediashare-bluecollar_mediashareTests.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = bluecollar_mediashare/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B8CDA7863A842729B5E5EDA /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		995E632ED880469CABAFC936 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		9F0FC4C587AB4C9A8990322A /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		9F23977C6F6A4D3C9C2F8A5C /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		9F32B06BAAF14A4780D9A3D6 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
-		A6EED2E3ECA47EBF23F3743B /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare-bluecollar_mediashareTests.debug.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare-bluecollar_mediashareTests/Pods-bluecollar_mediashare-bluecollar_mediashareTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AA311050790D487284AF7E7A /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
-		CEBB25A5D73CB706DCC3E732 /* Pods-bluecollar_mediashare-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare-tvOSTests/Pods-bluecollar_mediashare-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		BF9766C8D0B1B74E3B04BCBE /* libPods-bluecollar_mediashare-bluecollar_mediashareTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bluecollar_mediashare-bluecollar_mediashareTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE10FF6718948FB92E8855F /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		D1CA35F83C366C7FF8395540 /* Pods-bluecollar_mediashare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare.release.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare/Pods-bluecollar_mediashare.release.xcconfig"; sourceTree = "<group>"; };
 		EC96CE9469AC491AA5B23B67 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F4B9BB1CEAC420A6CEB64231 /* Pods-bluecollar_mediashare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare.debug.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare/Pods-bluecollar_mediashare.debug.xcconfig"; sourceTree = "<group>"; };
-		F90D077CA1B78D37924D6EB5 /* libPods-bluecollar_mediashare-bluecollar_mediashareTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bluecollar_mediashare-bluecollar_mediashareTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC57CE078EBD53B5F33CB710 /* Pods-bluecollar_mediashare-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bluecollar_mediashare-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-bluecollar_mediashare-tvOS/Pods-bluecollar_mediashare-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC2BC2A281DF1B660CAC4D4D /* libPods-bluecollar_mediashare-bluecollar_mediashareTests.a in Frameworks */,
+				0C229F83C6F7BF9972053AEE /* libPods-bluecollar_mediashare-bluecollar_mediashareTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,7 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1D32910A34FF60B65939019A /* libPods-bluecollar_mediashare.a in Frameworks */,
+				6BE8A31ECE61CCD4571F1915 /* libPods-bluecollar_mediashare.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,7 +97,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38AC03CFEB95869B576A4FE1 /* libPods-bluecollar_mediashare-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,7 +104,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C16BA5BF9AC927405A76B82A /* libPods-bluecollar_mediashare-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,10 +145,8 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				3A00A411C3F748A01497395A /* libPods-bluecollar_mediashare.a */,
-				F90D077CA1B78D37924D6EB5 /* libPods-bluecollar_mediashare-bluecollar_mediashareTests.a */,
-				17B9F63BA147AFB754ECE31F /* libPods-bluecollar_mediashare-tvOS.a */,
-				041DAB1E0B326750C1683EF1 /* libPods-bluecollar_mediashare-tvOSTests.a */,
+				070D0E2348FADF91A5618DB2 /* libPods-bluecollar_mediashare.a */,
+				BF9766C8D0B1B74E3B04BCBE /* libPods-bluecollar_mediashare-bluecollar_mediashareTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -223,14 +211,10 @@
 		A978FE09CA8889EA35D14DAF /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F4B9BB1CEAC420A6CEB64231 /* Pods-bluecollar_mediashare.debug.xcconfig */,
-				0A22EEB5EA49618A34F92581 /* Pods-bluecollar_mediashare.release.xcconfig */,
-				A6EED2E3ECA47EBF23F3743B /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.debug.xcconfig */,
-				78AFD076B1EC33D26ABC82C8 /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.release.xcconfig */,
-				FC57CE078EBD53B5F33CB710 /* Pods-bluecollar_mediashare-tvOS.debug.xcconfig */,
-				1A68868877FA760BBB7AA6B9 /* Pods-bluecollar_mediashare-tvOS.release.xcconfig */,
-				70FDC7A3772040281D225AC3 /* Pods-bluecollar_mediashare-tvOSTests.debug.xcconfig */,
-				CEBB25A5D73CB706DCC3E732 /* Pods-bluecollar_mediashare-tvOSTests.release.xcconfig */,
+				349A0205A3CD5FB39AC9E843 /* Pods-bluecollar_mediashare.debug.xcconfig */,
+				D1CA35F83C366C7FF8395540 /* Pods-bluecollar_mediashare.release.xcconfig */,
+				610153A94495903734743B68 /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.debug.xcconfig */,
+				17F012ECE62A22FF6483FD24 /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -242,11 +226,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "bluecollar_mediashareTests" */;
 			buildPhases = (
-				D448433BB5CB77CADDDFE314 /* [CP] Check Pods Manifest.lock */,
+				C82611EF4018FB72F1FD575A /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				01DDE36E4026B07B0869C0C0 /* [CP] Copy Pods Resources */,
+				BE1608DD764133EE5B7E49AA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -262,13 +246,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "bluecollar_mediashare" */;
 			buildPhases = (
-				5F640B17B520299B7C7A8D21 /* [CP] Check Pods Manifest.lock */,
+				0F356668BEF096F8E2944470 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				CB43C59BDB062ABD3642FFE5 /* [CP] Copy Pods Resources */,
+				CB91C778A18B58A2D2C9F85A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -283,7 +267,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "bluecollar_mediashare-tvOS" */;
 			buildPhases = (
-				69C54D3C1F3A2BDD2CFD36CA /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -303,7 +286,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "bluecollar_mediashare-tvOSTests" */;
 			buildPhases = (
-				A793CF5108C0601A6369D590 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -331,14 +313,17 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 626625Z88G;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 626625Z88G;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E48F1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 626625Z88G;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
 					};
@@ -414,7 +399,43 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		01DDE36E4026B07B0869C0C0 /* [CP] Copy Pods Resources */ = {
+		0F356668BEF096F8E2944470 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-bluecollar_mediashare-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native Code And Images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		BE1608DD764133EE5B7E49AA /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -464,21 +485,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-bluecollar_mediashare-bluecollar_mediashareTests/Pods-bluecollar_mediashare-bluecollar_mediashareTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		5F640B17B520299B7C7A8D21 /* [CP] Check Pods Manifest.lock */ = {
+		C82611EF4018FB72F1FD575A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -493,58 +500,14 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-bluecollar_mediashare-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-bluecollar_mediashare-bluecollar_mediashareTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		69C54D3C1F3A2BDD2CFD36CA /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-bluecollar_mediashare-tvOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A793CF5108C0601A6369D590 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-bluecollar_mediashare-tvOSTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CB43C59BDB062ABD3642FFE5 /* [CP] Copy Pods Resources */ = {
+		CB91C778A18B58A2D2C9F85A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -592,28 +555,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-bluecollar_mediashare/Pods-bluecollar_mediashare-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D448433BB5CB77CADDDFE314 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-bluecollar_mediashare-bluecollar_mediashareTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -709,7 +650,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A6EED2E3ECA47EBF23F3743B /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.debug.xcconfig */;
+			baseConfigurationReference = 610153A94495903734743B68 /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -732,7 +673,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 78AFD076B1EC33D26ABC82C8 /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.release.xcconfig */;
+			baseConfigurationReference = 17F012ECE62A22FF6483FD24 /* Pods-bluecollar_mediashare-bluecollar_mediashareTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -752,11 +693,12 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F4B9BB1CEAC420A6CEB64231 /* Pods-bluecollar_mediashare.debug.xcconfig */;
+			baseConfigurationReference = 349A0205A3CD5FB39AC9E843 /* Pods-bluecollar_mediashare.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 626625Z88G;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = bluecollar_mediashare/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -775,11 +717,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A22EEB5EA49618A34F92581 /* Pods-bluecollar_mediashare.release.xcconfig */;
+			baseConfigurationReference = D1CA35F83C366C7FF8395540 /* Pods-bluecollar_mediashare.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 626625Z88G;
 				INFOPLIST_FILE = bluecollar_mediashare/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -796,7 +739,6 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FC57CE078EBD53B5F33CB710 /* Pods-bluecollar_mediashare-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -805,6 +747,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 626625Z88G;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "bluecollar_mediashare-tvOS/Info.plist";
@@ -824,7 +767,6 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1A68868877FA760BBB7AA6B9 /* Pods-bluecollar_mediashare-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -834,6 +776,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 626625Z88G;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "bluecollar_mediashare-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -852,7 +795,6 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 70FDC7A3772040281D225AC3 /* Pods-bluecollar_mediashare-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -860,6 +802,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 626625Z88G;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "bluecollar_mediashare-tvOSTests/Info.plist";
@@ -879,7 +822,6 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CEBB25A5D73CB706DCC3E732 /* Pods-bluecollar_mediashare-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -888,6 +830,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 626625Z88G;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "bluecollar_mediashare-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
