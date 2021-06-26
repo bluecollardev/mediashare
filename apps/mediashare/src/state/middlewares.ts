@@ -6,7 +6,9 @@ export interface ThunkExtra extends ApiService {}
 
 function middlewareFactory(api: ApiService) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return (store) => (next) => (action) => thunk.withExtraArgument({ api });
+  return (store) => (next) => (action) => {
+    return thunk.withExtraArgument({ api });
+  };
 }
 
 const loggerMiddleware = (store) => (next) => (action) => {

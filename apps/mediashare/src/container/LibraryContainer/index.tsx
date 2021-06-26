@@ -2,6 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Library from '../../screens/Library';
 
+import { mediaItemsActionTypes } from '../../state/modules/media-items';
+
 export interface LibraryContainerProps {
   navigation: any;
   fetchList: Function;
@@ -11,7 +13,8 @@ export interface LibraryContainerState {}
 
 class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerState> {
   componentDidMount() {
-    // this.props.fetchList();
+    const { fetchList } = this.props;
+    fetchList();
   }
   render() {
     return <Library navigation={this.props.navigation} list={this.props.data} />;
@@ -20,7 +23,7 @@ class LibraryContainer extends React.Component<LibraryContainerProps, LibraryCon
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    // fetchList: (url: any) => dispatch(fetchList(url)),
+    fetchList: () => dispatch(),
   };
 }
 

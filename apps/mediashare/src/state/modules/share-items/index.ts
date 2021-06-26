@@ -6,8 +6,6 @@ import { makeActions, makeEnum } from '../../core/factory';
 import * as reducers from '../../core/reducers';
 import { ApiService } from '../../apis';
 
-import { OperationOpts } from '../../../api';
-
 const SHARE_ITEM_ACTIONS = ['GET_SHARE_ITEM', 'REMOVE_SHARE_ITEM', 'FIND_SHARE_ITEMS'] as const;
 
 export const shareItemsActionTypes = makeEnum(SHARE_ITEM_ACTIONS);
@@ -16,19 +14,19 @@ export const shareItemsActionTypes = makeEnum(SHARE_ITEM_ACTIONS);
 
 export const getShareItemById = createAsyncThunk(shareItemsActionTypes.getShareItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = api.shareItems.shareItemsControllerFindOne({ shareId: id }).toPromise();
+  const response = await api.shareItems.shareItemsControllerFindOne({ shareId: id });
   return response;
 });
 
-export const findShareItems = createAsyncThunk(shareItemsActionTypes.findShareItems, async (opts: OperationOpts | undefined, { extra }) => {
+export const findShareItems = createAsyncThunk(shareItemsActionTypes.findShareItems, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = api.shareItems.shareItemsControllerFindAll(opts).toPromise();
+  const response = await api.shareItems.shareItemsControllerFindAll(opts);
   return response;
 });
 
 export const removeShareItem = createAsyncThunk(shareItemsActionTypes.removeShareItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = api.shareItems.shareItemsControllerRemove({ shareId: id }).toPromise();
+  const response = await api.shareItems.shareItemsControllerRemove({ shareId: id });
   return response;
 });
 

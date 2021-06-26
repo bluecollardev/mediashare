@@ -6,7 +6,7 @@ import { makeActions, makeEnum } from '../../core/factory';
 import * as reducers from '../../core/reducers';
 
 import { ApiService } from '../../apis';
-import { CreateMediaItemDto, OperationOpts, UpdateMediaItemDto } from '../../../api';
+import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
 
 const MEDIA_ITEM_ACTIONS = ['GET_MEDIA_ITEM', 'ADD_MEDIA_ITEM', 'UPDATE_MEDIA_ITEM', 'SHARE_MEDIA_ITEM', 'REMOVE_MEDIA_ITEM'] as const;
 const MEDIA_ITEMS_ACTIONS = ['FIND_MEDIA_ITEMS'] as const;
@@ -18,19 +18,19 @@ export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = api.mediaItems.mediaItemControllerFindOne({ mediaId: id }).toPromise();
+  const response = await api.mediaItems.mediaItemControllerFindOne({ mediaId: id });
   return response;
 });
 
 export const addMediaItem = createAsyncThunk(mediaItemActionTypes.addMediaItem, async (item: CreateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = api.mediaItems.mediaItemControllerCreate({ createMediaItemDto: item }).toPromise();
+  const response = await api.mediaItems.mediaItemControllerCreate({ createMediaItemDto: item });
   return response;
 });
 
 export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (item: UpdateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = api.mediaItems.mediaItemControllerUpdate({ mediaId: item._id, updateMediaItemDto: item }).toPromise();
+  const response = await api.mediaItems.mediaItemControllerUpdate({ mediaId: item._id, updateMediaItemDto: item });
   return response;
 });
 
@@ -38,20 +38,20 @@ export const shareMediaItem = createAsyncThunk(
   mediaItemActionTypes.shareMediaItem,
   async (args: { id: string; userId: string; item: CreateMediaItemDto }, { extra }) => {
     const { api } = extra as { api: ApiService };
-    const response = api.mediaItems.mediaItemControllerShare({ mediaId: args.id, userId: args.userId, createMediaItemDto: args.item }).toPromise();
+    const response = await api.mediaItems.mediaItemControllerShare({ mediaId: args.id, userId: args.userId, createMediaItemDto: args.item });
     return response;
   }
 );
 
 export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = api.mediaItems.mediaItemControllerRemove({ mediaId: id }).toPromise();
+  const response = await api.mediaItems.mediaItemControllerRemove({ mediaId: id });
   return response;
 });
 
-export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async (opts: OperationOpts | undefined, { extra }) => {
+export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = api.mediaItems.mediaItemControllerFindAll(opts).toPromise();
+  const response = await api.mediaItems.mediaItemControllerFindAll(opts);
   return response;
 });
 
