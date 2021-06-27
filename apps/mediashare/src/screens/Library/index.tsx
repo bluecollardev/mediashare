@@ -18,22 +18,19 @@ class Library extends React.Component<LibraryProps, LibraryState> {
     return this.mediaItemsApi.mediaItemControllerFindAll();
   }
   render() {
-    const { navigation } = this.props;
+    const { navigation, list } = this.props;
     const descriptionText =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
       'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
     const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
-    const items1 = [
-      { title: 'Video 1', description: descriptionText, image: imageSrc },
-      { title: 'Video 2', description: descriptionText, image: imageSrc },
-    ];
-    const items2 = [
-      { title: 'Video 3', description: descriptionText, image: imageSrc },
-      { title: 'Video 4', description: descriptionText, image: imageSrc },
-    ];
+    const items = list.map((item) => ({
+      title: item.title,
+      description: `${item?.mediaItems?.length || 0} Videos`,
+      image: imageSrc,
+    }));
 
-    this.fetchImages().subscribe((obs) => console.log(obs));
+    // this.fetchImages().subscribe((obs) => console.log(obs));
 
     return (
       <Container style={styles.container}>
@@ -65,7 +62,7 @@ class Library extends React.Component<LibraryProps, LibraryState> {
           <View>
             <List>
               {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
-              {items1.map((item, idx) => {
+              {items.map((item, idx) => {
                 const { title, description, image } = item;
                 return (
                   <MediaListItem
@@ -78,18 +75,6 @@ class Library extends React.Component<LibraryProps, LibraryState> {
                 );
               })}
               {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
-              {items2.map((item, idx) => {
-                const { title, description, image } = item;
-                return (
-                  <MediaListItem
-                    key={`item-${idx}`}
-                    title={title}
-                    description={description}
-                    image={image}
-                    onViewDetail={() => navigation.navigate(routeConfig.libraryItemDetail.name)}
-                  />
-                );
-              })}
             </List>
           </View>
           <View padder style={{ flexDirection: 'row' }}>

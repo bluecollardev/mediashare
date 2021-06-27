@@ -12,7 +12,7 @@ export const shareItemsActionTypes = makeEnum(SHARE_ITEM_ACTIONS);
 export const findShareItems = createAsyncThunk(shareItemsActionTypes.findShareItems, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.shareItems.shareItemsControllerFindAll(opts);
-  return response;
+  return response && response.status === 200 ? response.data : undefined;
 });
 
 const initialState = {};

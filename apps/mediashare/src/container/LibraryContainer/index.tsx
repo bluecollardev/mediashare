@@ -2,12 +2,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Library from '../../screens/Library';
 
-import { mediaItemsActionTypes } from '../../state/modules/media-items';
+import { findMediaItems } from '../../state/modules/media-items';
 
 export interface LibraryContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
+  state: Object;
 }
 export interface LibraryContainerState {}
 
@@ -17,18 +18,20 @@ class LibraryContainer extends React.Component<LibraryContainerProps, LibraryCon
     fetchList();
   }
   render() {
+    const { state } = this.props;
     return <Library navigation={this.props.navigation} list={this.props.data} />;
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    fetchList: () => dispatch(),
+    fetchList: () => dispatch(findMediaItems()),
   };
 }
 
 const mapStateToProps = (state: any) => ({
-  data: state && state.library ? state.library.list : [],
-  isLoading: state && state.library ? state.library.isLoading : false,
+  state: state,
+  data: state?.userMediaItems?.userMediaItems ? state.userMediaItems.userMediaItems : [],
+  isLoading: state && state.userMediaItems ? state.userMediaItems.isLoading : false,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(LibraryContainer);

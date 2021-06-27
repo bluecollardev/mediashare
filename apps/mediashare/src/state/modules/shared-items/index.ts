@@ -13,25 +13,25 @@ export const shareItemsActionTypes = makeEnum(SHARE_ITEM_ACTIONS);
 export const getShareItemById = createAsyncThunk(shareItemsActionTypes.getShareItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.shareItems.shareItemsControllerFindOne({ shareId: id });
-  return response;
+  return response && response.status === 200 ? response.data : undefined;
 });
 
 export const findItemsIAmSharing = createAsyncThunk(shareItemsActionTypes.findItemsIAmSharing, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.shareItems.shareItemsControllerFindAll(opts);
-  return response;
+  return response && response.status === 200 ? response.data : undefined;
 });
 
 export const findItemsSharedWithMe = createAsyncThunk(shareItemsActionTypes.findItemsSharedWithMe, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.shareItems.shareItemsControllerFindAll(opts);
-  return response;
+  return response && response.status === 200 ? response.data : undefined;
 });
 
 export const removeShareItem = createAsyncThunk(shareItemsActionTypes.removeShareItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.shareItems.shareItemsControllerRemove({ shareId: id });
-  return response;
+  return response && response.status === 200 ? response.data : undefined;
 });
 
 const initialState = {};

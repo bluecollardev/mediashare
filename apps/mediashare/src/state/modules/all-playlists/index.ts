@@ -15,7 +15,7 @@ export const findAllPlaylists = createAsyncThunk(playlistsActionTypes.findAllPla
   api.playlists
     .playlistControllerFindAll({ query: {}, headers: {} })
     .then((response) => {
-      return response;
+      return response && response.status === 200 ? response.data : undefined;
     })
     .catch((err) => {
       throw err;

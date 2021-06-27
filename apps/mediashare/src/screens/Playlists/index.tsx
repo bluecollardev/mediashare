@@ -9,16 +9,22 @@ import styles from './styles';
 export interface PlaylistsProps {
   navigation: any;
   list: any;
+  onViewDetailClicked: Function;
 }
 
 export interface PlaylistsState {}
 
 class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
+  onViewDetailClicked(id) {
+    this.props?.onViewDetailClicked(id);
+  }
+
   render() {
     const { navigation, list } = this.props;
     const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
     const items = list.map((item) => ({
+      id: item._id,
       title: item.title,
       description: `${item?.mediaItems?.length || 0} Videos`,
       image: imageSrc,
@@ -28,23 +34,11 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
       <Container style={styles.container}>
         <Content>
           <View padder style={{ flexDirection: 'row' }}>
-            <Button
-              iconLeft
-              bordered
-              dark
-              style={{ flex: 1, marginRight: 10 }}
-              onPress={() => navigation.navigate(routeConfig.playlistEdit.name)}
-            >
+            <Button iconLeft bordered dark style={{ flex: 1, marginRight: 10 }} onPress={() => navigation.navigate(routeConfig.playlistEdit.name)}>
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Create Playlist</Text>
             </Button>
-            <Button
-              iconLeft
-              bordered
-              dark
-              style={{ flex: 1 }}
-              onPress={() => navigation.navigate(routeConfig.shareWith.name)}
-            >
+            <Button iconLeft bordered dark style={{ flex: 1 }} onPress={() => navigation.navigate(routeConfig.shareWith.name)}>
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Share Playlists</Text>
             </Button>
@@ -60,7 +54,9 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
                     title={title}
                     description={description}
                     image={image}
-                    onViewDetail={() => navigation.navigate(routeConfig.playlistDetail.name)}
+                    onViewDetail={() => {
+                      this.onViewDetailClicked(item.id);
+                    }}
                   />
                 );
               })}
@@ -68,13 +64,7 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
             </List>
           </View>
           <View padder style={{ flexDirection: 'row' }}>
-            <Button
-              iconLeft
-              bordered
-              dark
-              style={{ flex: 1, justifyContent: 'center' }}
-              onPress={() => navigation.navigate(routeConfig.shareWith.name)}
-            >
+            <Button iconLeft bordered dark style={{ flex: 1, justifyContent: 'center' }} onPress={() => navigation.navigate(routeConfig.shareWith.name)}>
               <Icon name="share-outline" />
               <Text style={{ paddingRight: 30 }}>Share with User</Text>
             </Button>

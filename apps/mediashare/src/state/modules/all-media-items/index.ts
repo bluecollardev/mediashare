@@ -48,9 +48,15 @@ export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMedia
 
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
-  // @ts-ignore
-  const response = await api.user.userControllerGetMediaItems({ query: {}, headers: {} });
-  return response && response.status === 200 ? response.data : [];
+  // @ts-ignore - TODO: Add playlistControllerFindAll to API service!
+  api.mediaItems
+    .mediaItemControllerFindAll({ query: {}, headers: {} })
+    .then((response) => {
+      return response && response.status === 200 ? response.data : undefined;
+    })
+    .catch((err) => {
+      throw err;
+    });
 });
 
 const initialState = {};

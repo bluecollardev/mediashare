@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Playlists from '../../screens/Playlists';
 
 import { findUserPlaylists } from '../../state/modules/playlists';
+import { routeConfig } from '../../routes';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -13,13 +14,26 @@ export interface PlaylistsContainerProps {
 export interface PlaylistsContainerState {}
 
 class PlaylistsContainer extends React.Component<PlaylistsContainerProps, PlaylistsContainerState> {
+  constructor(props) {
+    super(props);
+    this.onViewDetailClicked = this.onViewDetailClicked.bind(this);
+  }
+
   componentDidMount() {
     const { fetchList } = this.props;
     fetchList();
   }
+
+  onViewDetailClicked(id) {
+    const { navigation } = this.props;
+    navigation.navigate(routeConfig.playlistDetail.name, {
+      playlistId: id,
+    });
+  }
+
   render() {
-    const { state } = this.props;
-    return <Playlists navigation={this.props.navigation} list={this.props.data} />;
+    const { navigation, data } = this.props;
+    return <Playlists navigation={navigation} list={data} onViewDetailClicked={this.onViewDetailClicked} />;
   }
 }
 

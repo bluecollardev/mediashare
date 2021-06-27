@@ -13,7 +13,9 @@ export const configuration = {
   username: '',
   password: '',
   accessToken: '',
-  baseOptions: {},
+  baseOptions: {
+    headers: {},
+  },
 } as Configuration;
 
 export const basePath = 'http://localhost:3333';
