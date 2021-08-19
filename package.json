@@ -2,6 +2,9 @@
   "name": "mediashare",
   "version": "0.0.0",
   "license": "MIT",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "affected:apps": "nx affected:apps",
     "affected:build": "nx affected:build",
@@ -36,7 +39,7 @@
     "start:debug": "nodemon --config nodemon-debug.json",
     "start:dev": "docker-compose up -V",
     "start:ts": "ts-node -r tsconfig-paths/register --project tsconfig.base.json apps/media-api/src/main.ts",
-    "start": "npm run start:api",
+    "start": "npm run serve:prod",
     "stop:db": "docker-compose down mediapostgres db",
     "stop:dev": "docker-compose -p mediashare down",
     "stop:services": "docker-compose down",
