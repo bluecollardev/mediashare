@@ -18,6 +18,8 @@ import * as session from 'express-session';
 import MongoStore from 'connect-mongo';
 import * as compression from 'compression';
 
+const port = process.env.PORT || 3456;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -27,16 +29,15 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
-  const [host, port, globalPrefix, title, mongoUrl, dbName, collectionName, secret, isDev] = [
+  const [host, globalPrefix, title, mongoUrl, dbName, collectionName, secret, isDev] = [
     appConfig.get('host'),
-    appConfig.get('port'),
     appConfig.get('globalPrefix'),
     appConfig.get('title'),
     appConfig.get('sessionDb'),
     appConfig.get('sessionDbName'),
     appConfig.get('sessionCollection'),
     appConfig.get('sessionSecret'),
-    appConfig.get('env') === 'development',
+    appConfig.get('env') === 'development'
   ] as const;
 
   app.setGlobalPrefix(globalPrefix);
@@ -59,11 +60,11 @@ async function bootstrap() {
       store: MongoStore.create({
         mongoUrl,
         dbName,
-        collectionName,
+        collectionName
       }),
 
       secret,
-      resave: false,
+      resave: false
     })
   );
 
