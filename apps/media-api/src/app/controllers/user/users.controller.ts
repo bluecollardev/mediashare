@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, HttpStatus, UseGuards, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, HttpStatus, UseGuards, HttpCode, Request } from '@nestjs/common';
 import { CreateUserDto, UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBody, ApiHideProperty, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -27,17 +27,19 @@ export class UsersController {
   constructor(private readonly userService: UserService, private playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
   @Post()
-  @ApiResponse({ type: UserDto, status: 201, isArray: false })
+  @ApiResponse({ type: UserDto, status: 200, isArray: false })
+  @ApiBody({ type: CreateUserDto, required: true })
   async create(@CreateDto() createUserDto: CreateUserDto) {
-    const { username, password, ...rest } = createUserDto;
+    const { username } = createUserDto;
     const existingUser = await this.userService.checkIfUserExists(username);
-    if (existingUser) throw conflictResponse(username);
+    if (existingUser) {
+      console.log(existingUser, 'exists already');
+      throw conflictResponse(username);
+    }
 
-    const mongoUser = await this.userService.create({ ...rest, username });
+    const mongoUser = await this.userService.createUser(createUserDto);
 
-    const postgresUser = await this.userService.createUser({ username, password, _id: mongoUser._id.toHexString() });
-
-    return createUserResponseDto(mongoUser, postgresUser);
+    return mongoUser;
   }
 
   @UserGetResponse({ isArray: true })
@@ -89,7 +91,7 @@ export class UsersController {
   @Post('shared-items/:shareId')
   @ApiParam({ name: 'shareId', type: String, required: true })
   @ApiResponse({ type: UserDto, status: 200 })
-  async readSharedItem(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId, @GetUser() user: SessionUserInterface) {
+  async readSharedItem(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {
     const sharedItem = await this.shareItemService.update(shareId, { read: true });
 
     return sharedItem;

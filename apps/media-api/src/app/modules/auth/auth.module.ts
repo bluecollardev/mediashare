@@ -9,10 +9,12 @@ import { AppConfigModule } from '../app-config.module.ts/app-config.module';
 import { AppConfigService } from '../app-config.module.ts/app-config.provider';
 import { PlaylistItem } from '../playlist-item/entities/playlist-item.entity';
 import { ShareItemModule } from '../share-item/share-item.module';
+import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 import { SessionSerializer } from './session.serializer';
 import { UserService } from './user.service';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -26,27 +28,21 @@ import { UserService } from './user.service';
           transport: Transport.TCP,
           options: {
             host: configService.get('authHost'),
-            port: configService.get('authPort'),
-          },
+            port: configService.get('authPort')
+          }
         }),
-        inject: [AppConfigService],
-      },
+        inject: [AppConfigService]
+      }
     ]),
     TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
     ShareItemModule,
+    JwtModule.register({
+      secret: process.env.SESSION_SECRET || 'this-is-my-secret-key',
+      signOptions: { expiresIn: '10h' }
+    })
   ],
   controllers: [],
-  providers: [LocalStrategy, SessionSerializer, JwtStrategy, MediaItemService, UserService, UserService],
-  exports: [
-    ClientsModule,
-    SessionSerializer,
-
-    LocalStrategy,
-    SessionSerializer,
-    JwtStrategy,
-    MediaItemService,
-    UserService,
-    UserService,
-  ],
+  providers: [LocalStrategy, SessionSerializer, JwtStrategy, AuthService, UserService],
+  exports: [ClientsModule, SessionSerializer, LocalStrategy, AuthService, UserService]
 })
 export class AuthModule {}

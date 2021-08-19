@@ -5,7 +5,7 @@
 
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app/app.module';
 
@@ -45,7 +45,13 @@ async function bootstrap() {
   /* PASSPORT & SESSION */
 
   /* SWAGGER */
-  const config = DocumentBuilderFactory({ title }).build();
+  const config = new DocumentBuilder()
+    .setTitle(title)
+    .setDescription('Media Share API')
+    .setVersion('1.0')
+    .addServer(isDev ? `http://localhost:${port}` : `https://bcdevmediashare.herokuapp.com`, 'development server')
+    .addBearerAuth()
+    .build();
 
   const document = SwaggerModule.createDocument(app, config);
 

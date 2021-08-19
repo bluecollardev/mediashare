@@ -1,16 +1,16 @@
 import { Inject, Injectable, RequestTimeoutException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
-import { PinoLogger } from 'nestjs-pino';
+import { PinoLogger, Logger } from 'nestjs-pino';
 import { DataService } from '@api';
 import { ClientProxy } from '@nestjs/microservices';
 
-import { catchError, timeout } from 'rxjs/operators';
-import { TimeoutError, throwError } from 'rxjs';
 import { User } from '../../controllers/user/entities/user.entity';
 import { ObjectId } from 'mongodb';
 import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
-import { AuthUserInterface } from '@core-lib';
+import { CreateUserDto } from '../../controllers/user/dto/create-user.dto';
+import { compareSync } from 'bcrypt';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class UserService extends DataService<User, MongoRepository<User>> {
@@ -19,47 +19,40 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     repository: MongoRepository<User>,
     logger: PinoLogger,
     @Inject('AUTH_CLIENT')
-    private readonly client: ClientProxy
+    private readonly client: ClientProxy,
+    private authSvc: AuthService
   ) {
     super(repository, logger);
   }
 
   async checkIfUserExists(username: string) {
-    const user = await super.findByQuery({ username });
+    const user = await this.findByQuery({ username });
 
-    return user;
+    return !!user;
   }
 
-  getUserByUsername(username: string) {
-    return super.findByQuery({ username });
+  async loginUser(login: { username: string; password: string }) {
+    const { username, password } = login;
+    const user = await this.validateUser({ username, password });
+
+    if (!user) return null;
+
+    return await this.login(user, user._id);
   }
 
-  createUser(user: { username: string; password: string; _id: string }): Promise<AuthUserInterface> {
-    return this.client
-      .send({ role: 'auth', cmd: 'create' }, user)
-      .pipe(
-        timeout(5000),
-        catchError((err) => {
-          if (err instanceof TimeoutError) {
-            return throwError(new RequestTimeoutException());
-          }
-          return throwError(err);
-        })
-      )
-      .toPromise();
+  async validateUser({ username, password }: { username: string; password: string }) {
+    const user = await this.findByQuery({ username });
+
+    if (user?.password === password) return user;
+    if (compareSync(password, user?.password)) {
+      return user;
+    }
+
+    return null;
   }
 
-  loginUser(login: { username: string; password: string }) {
-    return this.client.send({ role: 'auth', cmd: 'login' }, login).toPromise();
-  }
-
-  validateUser(params: { _id: string; token: string }) {
-    return this.client.send({ role: 'auth', cmd: 'validate' }, params);
-  }
-
-  findAllSharedMediaItemsByUserId(_id: string | ObjectId) {
-    const userId = typeof _id === 'string' ? new ObjectId(_id) : _id;
-    return this.findByQuery({ _id: userId });
+  async validateToken({ token, _id }: { token: string; _id: string }) {
+    return this.authSvc.validateToken(token);
   }
 
   setRoles(_id: string, roles: BcRolesType[]) {
@@ -70,5 +63,19 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return this.client.send({ role: 'auth', cmd: 'get' }, user).toPromise();
   }
 
-  aggregatePlaylistsByUser({ userId }: { userId: ObjectId }) {}
+  async createUser(user: CreateUserDto): Promise<User> {
+    const userEntity = await this.create(user);
+
+    return userEntity;
+  }
+
+  async login(user, _id) {
+    const payload = { user, sub: _id };
+    const { password, ...userFields } = user;
+
+    return {
+      ...userFields,
+      accessToken: this.authSvc.sign(payload, _id)
+    };
+  }
 }

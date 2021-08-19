@@ -27,7 +27,7 @@ export class LoginResponseDto extends OmitType(
   @ApiProperty({
     type: String,
     pattern: '^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$',
-    example: exampleToken,
+    example: exampleToken
   })
   accessToken;
 
@@ -54,7 +54,7 @@ export class TokenDto {
   @ApiProperty({
     type: String,
     example: exampleToken,
-    pattern: '^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$',
+    pattern: '^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$'
   })
   @IsJWT()
   token: string;

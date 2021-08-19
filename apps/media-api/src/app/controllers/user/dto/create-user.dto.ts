@@ -25,7 +25,7 @@ export class UserAuthFieldsDto {
     readOnly: true,
     example: uuidExample,
     maxLength: uuidExample.length,
-    minLength: uuidExample.length,
+    minLength: uuidExample.length
   })
   @IsUUID()
   authId: Readonly<string>;
@@ -44,4 +44,8 @@ export class UserAuthFieldsDto {
 export class UserDto extends IntersectionType(OmitType(User, ['_id', 'userId']), OmitType(UserAuthFieldsDto, ['_id'])) {
   @ApiHideProperty()
   password: string;
+  constructor(user: Partial<User>) {
+    super();
+    Object.assign(this, user);
+  }
 }
