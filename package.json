@@ -38,7 +38,7 @@
     "start:dev": "docker-compose up -V",
     "start:ts": "ts-node -r tsconfig-paths/register --project tsconfig.base.json apps/media-api/src/main.ts",
     "start:prod": "npm run build:prod && node dist/apps/media-api/main.js",
-    "start": "npm run serve:prod",
+    "start": "nx run-many --all --target=serve",
     "stop:db": "docker-compose down mediapostgres db",
     "stop:dev": "docker-compose -p mediashare down",
     "stop:services": "docker-compose down",

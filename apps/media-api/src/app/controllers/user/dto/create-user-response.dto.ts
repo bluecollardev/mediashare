@@ -10,6 +10,6 @@ export function createUserResponseDto(profile: User): UserDto {
   // const merged = R.merge(profile, user);
 
   const pickedFields = R.pick(profile, pickFields);
-  const userDto = new UserDto(pickedFields);
+  const userDto = new UserDto({ ...pickedFields });
   return userDto;
 }
