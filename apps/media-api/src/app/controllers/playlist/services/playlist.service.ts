@@ -40,16 +40,16 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    * @memberof PlaylistService
    */
   async createPlaylistWithItems({ createdBy, userId, mediaIds, title = '' }: CreatePlaylistDto) {
-    if (!userId || typeof userId === 'string') throw new Error('userId is string in createPlaylistWithItems');
+    const userIdAsObjectId = new ObjectId(userId);
 
-    const playlist = await this.create({ userId, title, createdBy });
+    const playlist = await this.create({ userId: userIdAsObjectId, title, createdBy });
 
     const { _id: playlistId } = playlist;
 
     const playlistItems = await this.createPlaylistItems({
       playlistId,
       createdBy,
-      items: mapPlaylistItems(mediaIds, { userId, playlistId }),
+      items: mapPlaylistItems(mediaIds, { userId: userIdAsObjectId, playlistId })
     });
 
     return { playlist, playlistItems };
@@ -79,11 +79,11 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
           $match: {
             where: {
               $or: R.map(ObjectIds, (id) => ({
-                _id: id,
-              })),
-            },
-          },
-        },
+                _id: id
+              }))
+            }
+          }
+        }
       ])
       .toArray();
   }
@@ -92,9 +92,9 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.repository.find({
       where: {
         $or: R.map(playlistIds, (id) => ({
-          _id: id,
-        })),
-      },
+          _id: id
+        }))
+      }
     });
   }
 
@@ -109,7 +109,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
   }
   getPlaylistById({ playlistId }: OptionalObjectIdParameters) {
     return this.playlistItemService.aggregatePlaylistAndItemByIdField({
-      playlistId,
+      playlistId
     });
   }
 

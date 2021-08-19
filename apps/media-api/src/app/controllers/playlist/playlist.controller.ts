@@ -13,7 +13,7 @@ import { PlaylistGetResponse, PlaylistPostResponse } from './playlist.decorator'
 import { UseJwtGuard } from '../../modules/auth/auth.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
-import { PlaylistResponseDto } from './dto/playlist-response.dto';
+import { PlaylistItemResponseDto, PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import { PlaylistItem } from '../../modules/playlist-item/entities/playlist-item.entity';
@@ -27,12 +27,12 @@ export class PlaylistController {
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   @Post()
   @ApiBody({ type: CreatePlaylistDto })
-  async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() userId: ObjectId) {
+  async create(@CreateDto() createPlaylistDto: CreatePlaylistDto) {
     console.log('dto', createPlaylistDto);
-    return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId });
+    return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId: createPlaylistDto.userId });
   }
 
-  @PlaylistGetResponse({ isArray: true, type: PlaylistItem })
+  @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   @Get()
   findAll() {
     console.log('running get');
