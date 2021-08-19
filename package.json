@@ -29,6 +29,8 @@
     "prestart:prod": "rimraf dist && npm run build",
     "seed:users": "ts-node --project scripts/tsconfig.json -r tsconfig-paths/register scripts/gen-users.script.ts",
     "start:api": "nest start --path apps/media-api/tsconfig.json --watch",
+    "build:api": "nest build --path apps/media-api/tsconfig.json --watch",
+    "build:auth": "nest build --path apps/media-auth/tsconfig.json --watch",
     "start:auth": "nest start --path apps/media-auth/tsconfig.json --watch",
     "start:db": "docker-compose up mediapostgres db",
     "start:debug": "nodemon --config nodemon-debug.json",
@@ -44,7 +46,8 @@
     "test:watch": "jest --watch",
     "test": "nx test",
     "update": "nx migrate latest",
-    "workspace-generator": "nx workspace-generator"
+    "workspace-generator": "nx workspace-generator",
+    "serve:prod": "nx run-many --all --target=serve"
   },
   "private": true,
   "dependencies": {
