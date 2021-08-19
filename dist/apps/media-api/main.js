@@ -4082,22 +4082,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const port = process.env.PORT || 3456;
 function bootstrap() {
     return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
         const app = yield _nestjs_core__WEBPACK_IMPORTED_MODULE_2__["NestFactory"].create(_app_app_module__WEBPACK_IMPORTED_MODULE_5__["AppModule"]);
         const appConfig = app.get('AppConfigService');
         app.useLogger(app.get(nestjs_pino__WEBPACK_IMPORTED_MODULE_4__["Logger"]));
         app.useGlobalPipes(new _nestjs_common__WEBPACK_IMPORTED_MODULE_1__["ValidationPipe"]());
-        const [host, port, globalPrefix, title, mongoUrl, dbName, collectionName, secret, isDev] = [
+        const [host, globalPrefix, title, mongoUrl, dbName, collectionName, secret, isDev] = [
             appConfig.get('host'),
-            appConfig.get('port'),
             appConfig.get('globalPrefix'),
             appConfig.get('title'),
             appConfig.get('sessionDb'),
             appConfig.get('sessionDbName'),
             appConfig.get('sessionCollection'),
             appConfig.get('sessionSecret'),
-            appConfig.get('env') === 'development',
+            appConfig.get('env') === 'development'
         ];
         app.setGlobalPrefix(globalPrefix);
         /* PASSPORT & SESSION */
@@ -4112,10 +4112,10 @@ function bootstrap() {
             store: connect_mongo__WEBPACK_IMPORTED_MODULE_10___default.a.create({
                 mongoUrl,
                 dbName,
-                collectionName,
+                collectionName
             }),
             secret,
-            resave: false,
+            resave: false
         }));
         console.log('is dev? ', isDev);
         if (isDev) {
