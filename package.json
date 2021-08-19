@@ -50,7 +50,7 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "serve:prod": "nx run-many --all --target=serve",
-    "build:prod": "rm -rf dist && nx run-many --all --target=build && git add -A . && git add dist",
+    "build:prod": "rm -rf dist && nx run-many --all --target=build && git add -A . && git add dist/*",
     "prepare": "husky install"
   },
   "private": true,
