@@ -17,5 +17,6 @@ steps:
 
 - script: |
     npm install
-    npm run serve:prod
+    npm run build:api
+    npm run build:auth
   displayName: 'npm install and build'
