@@ -76,13 +76,13 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
       localVarRequestOptions.data = serializeDataIfNeeded(tokenDto, localVarRequestOptions, configuration);
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -104,12 +104,12 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -131,12 +131,12 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -158,12 +158,12 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -185,12 +185,12 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -212,12 +212,12 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -244,13 +244,13 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
       localVarRequestOptions.data = serializeDataIfNeeded(loginDto, localVarRequestOptions, configuration);
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -276,12 +276,12 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },

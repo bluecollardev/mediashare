@@ -54,12 +54,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },

@@ -1,6 +1,5 @@
 .gitignore
 .npmignore
-.openapi-generator-ignore
 api.ts
 base.ts
 common.ts
@@ -10,6 +9,7 @@ index.ts
 models/create-media-item-dto.ts
 models/create-playlist-dto.ts
 models/create-playlist-response-dto.ts
+models/create-user-dto.ts
 models/index.ts
 models/login-dto.ts
 models/login-response-dto.ts

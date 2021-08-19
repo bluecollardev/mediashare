@@ -67,13 +67,13 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
       localVarRequestOptions.data = serializeDataIfNeeded(createMediaItemDto, localVarRequestOptions, configuration);
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -95,12 +95,12 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -125,12 +125,12 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -152,12 +152,12 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -182,12 +182,12 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -222,13 +222,13 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
       localVarRequestOptions.data = serializeDataIfNeeded(createMediaItemDto, localVarRequestOptions, configuration);
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -258,13 +258,13 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
       localVarRequestOptions.data = serializeDataIfNeeded(updateMediaItemDto, localVarRequestOptions, configuration);
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },

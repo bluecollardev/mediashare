@@ -71,13 +71,13 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
       localVarRequestOptions.data = serializeDataIfNeeded(createPlaylistDto, localVarRequestOptions, configuration);
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -99,12 +99,12 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -129,12 +129,12 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -156,12 +156,12 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -186,12 +186,12 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -221,12 +221,12 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -256,13 +256,13 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
       localVarRequestOptions.data = serializeDataIfNeeded(updatePlaylistDto, localVarRequestOptions, configuration);
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },

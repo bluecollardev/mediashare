@@ -23,7 +23,7 @@ export const appValidationSchema = Joi.object({
   DB_USERNAME: Joi.string().default('mongodb'),
   DB_PASSWORD: Joi.string().default(''),
   AUTH_PORT: Joi.number().default(4000),
-  AUTH_HOST: Joi.string().default('localhost'),
+  AUTH_HOST: Joi.string().default('localhost')
 });
 
 export default registerAs('app', () => ({
@@ -38,5 +38,5 @@ export default registerAs('app', () => ({
   sessionSecret: process.env.SESSION_SECRET,
   sessionCollection: process.env.SESSION_DB_COLLECTION,
   authPort: process.env.AUTH_PORT,
-  authHost: process.env.AUTH_HOST,
+  authHost: process.env.AUTH_HOST
 }));

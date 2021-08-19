@@ -31,6 +31,8 @@ import {
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { CreateUserDto } from '../models';
+// @ts-ignore
 import { PlaylistResponseDto } from '../models';
 // @ts-ignore
 import { UpdateUserDto } from '../models';
@@ -44,10 +46,13 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
   return {
     /**
      *
+     * @param {CreateUserDto} createUserDto
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    usersControllerCreate: async (options: any = {}): Promise<RequestArgs> => {
+    usersControllerCreate: async (createUserDto: CreateUserDto, options: any = {}): Promise<RequestArgs> => {
+      // verify required parameter 'createUserDto' is not null or undefined
+      assertParamExists('usersControllerCreate', 'createUserDto', createUserDto);
       const localVarPath = `/api/users`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -60,12 +65,15 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(createUserDto, localVarRequestOptions, configuration);
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -87,12 +95,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -117,12 +125,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -147,12 +155,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -177,12 +185,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -207,12 +215,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -242,13 +250,13 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
       localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration);
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -278,13 +286,13 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
 
       localVarHeaderParameter['Content-Type'] = 'application/json';
 
-      // setSearchParams(localVarUrlObj, localVarQueryParameter, options.query); // TODO: Undo this!
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
       localVarRequestOptions.data = serializeDataIfNeeded(updateUserDto, localVarRequestOptions, configuration);
 
       return {
-        url: localVarPath,
+        url: toPathString(localVarUrlObj),
         options: localVarRequestOptions,
       };
     },
@@ -300,11 +308,12 @@ export const UsersApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @param {CreateUserDto} createUserDto
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async usersControllerCreate(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.usersControllerCreate(options);
+    async usersControllerCreate(createUserDto: CreateUserDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.usersControllerCreate(createUserDto, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -401,11 +410,12 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
   return {
     /**
      *
+     * @param {CreateUserDto} createUserDto
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    usersControllerCreate(options?: any): AxiosPromise<UserDto> {
-      return localVarFp.usersControllerCreate(options).then((request) => request(axios, basePath));
+    usersControllerCreate(createUserDto: CreateUserDto, options?: any): AxiosPromise<UserDto> {
+      return localVarFp.usersControllerCreate(createUserDto, options).then((request) => request(axios, basePath));
     },
     /**
      *
@@ -473,6 +483,20 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
     },
   };
 };
+
+/**
+ * Request parameters for usersControllerCreate operation in UsersApi.
+ * @export
+ * @interface UsersApiUsersControllerCreateRequest
+ */
+export interface UsersApiUsersControllerCreateRequest {
+  /**
+   *
+   * @type {CreateUserDto}
+   * @memberof UsersApiUsersControllerCreate
+   */
+  readonly createUserDto: CreateUserDto;
+}
 
 /**
  * Request parameters for usersControllerFindOne operation in UsersApi.
@@ -581,13 +605,14 @@ export interface UsersApiUsersControllerUpdateRequest {
 export class UsersApi extends BaseAPI {
   /**
    *
+   * @param {UsersApiUsersControllerCreateRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof UsersApi
    */
-  public usersControllerCreate(options?: any) {
+  public usersControllerCreate(requestParameters: UsersApiUsersControllerCreateRequest, options?: any) {
     return UsersApiFp(this.configuration)
-      .usersControllerCreate(options)
+      .usersControllerCreate(requestParameters.createUserDto, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

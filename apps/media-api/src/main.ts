@@ -49,7 +49,8 @@ async function bootstrap() {
     .setTitle(title)
     .setDescription('Media Share API')
     .setVersion('1.0')
-    .addServer(isDev ? `http://localhost:${port}` : `https://bcdevmediashare.herokuapp.com`, 'development server')
+    .addServer(`http://localhost:${port}`, 'development server')
+    .addServer(`https://bcdevmediashare.herokuapp.com`, `production`)
     .addBearerAuth()
     .build();
 
