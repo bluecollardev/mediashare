@@ -1831,7 +1831,7 @@ Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(class_validator__WEBPACK_IMPORTED_MODULE_2__["IsArray"])(),
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Array)
 ], UserAuthFieldsDto.prototype, "roles", void 0);
-class UserDto extends Object(_nestjs_swagger__WEBPACK_IMPORTED_MODULE_1__["IntersectionType"])(Object(_nestjs_swagger__WEBPACK_IMPORTED_MODULE_1__["OmitType"])(_entities_user_entity__WEBPACK_IMPORTED_MODULE_6__["User"], ['_id', 'userId']), Object(_nestjs_swagger__WEBPACK_IMPORTED_MODULE_1__["OmitType"])(UserAuthFieldsDto, ['_id'])) {
+class UserDto extends Object(_nestjs_swagger__WEBPACK_IMPORTED_MODULE_1__["OmitType"])(_entities_user_entity__WEBPACK_IMPORTED_MODULE_6__["User"], ['_id']) {
     constructor(user) {
         super();
         Object.assign(this, user);
@@ -2382,7 +2382,7 @@ let UsersController = class UsersController {
 };
 Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_nestjs_common__WEBPACK_IMPORTED_MODULE_1__["Post"])(),
-    Object(_nestjs_swagger__WEBPACK_IMPORTED_MODULE_4__["ApiResponse"])({ type: _dto_create_user_dto__WEBPACK_IMPORTED_MODULE_2__["UserDto"], status: 200, isArray: false }),
+    Object(_nestjs_swagger__WEBPACK_IMPORTED_MODULE_4__["ApiResponse"])({ type: _dto_create_user_dto__WEBPACK_IMPORTED_MODULE_2__["UserDto"], status: 201, isArray: false }),
     Object(_nestjs_swagger__WEBPACK_IMPORTED_MODULE_4__["ApiBody"])({ type: _dto_create_user_dto__WEBPACK_IMPORTED_MODULE_2__["CreateUserDto"], required: true }),
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__param"])(0, Object(_core_decorators_create_dto_decorator__WEBPACK_IMPORTED_MODULE_14__["CreateDto"])()),
     Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Function),

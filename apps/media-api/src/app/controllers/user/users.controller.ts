@@ -27,7 +27,7 @@ export class UsersController {
   constructor(private readonly userService: UserService, private playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
   @Post()
-  @ApiResponse({ type: UserDto, status: 200, isArray: false })
+  @ApiResponse({ type: UserDto, status: 201, isArray: false })
   @ApiBody({ type: CreateUserDto, required: true })
   async create(@CreateDto() createUserDto: CreateUserDto) {
     const { username } = createUserDto;

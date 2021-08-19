@@ -41,11 +41,34 @@ export class UserAuthFieldsDto {
   roles: BcRolesType[];
 }
 
-export class UserDto extends IntersectionType(OmitType(User, ['_id', 'userId']), OmitType(UserAuthFieldsDto, ['_id'])) {
+export class UserDto implements User {
   @ApiHideProperty()
   password: string;
   constructor(user: Partial<User>) {
-    super();
     Object.assign(this, user);
   }
+
+  @ApiString()
+  username: string;
+  @ApiString()
+  firstName: string;
+  @ApiString()
+  lastName: string;
+
+  @ApiProperty()
+  sharedPlaylists?: ObjectId[];
+  @ApiProperty()
+  sharedMediaItems?: ObjectId[];
+  hashPassword(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  @ApiObjectId()
+  _id: ObjectId;
+
+  @ApiPastDate()
+  createdAt?: Date;
+
+  @ApiPastDate()
+  updatedDate?: Date;
 }
