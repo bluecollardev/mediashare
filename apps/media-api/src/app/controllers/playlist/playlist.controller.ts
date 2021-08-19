@@ -35,6 +35,7 @@ export class PlaylistController {
   @PlaylistGetResponse({ isArray: true, type: PlaylistItem })
   @Get()
   findAll() {
+    console.log('running get');
     return this.playlistService.findAll();
   }
 
@@ -48,7 +49,7 @@ export class PlaylistController {
     name: 'playlistId',
     required: true,
     type: 'string',
-    example: new ObjectId().toHexString(),
+    example: new ObjectId().toHexString()
   })
   @Get(PLAYLIST_ID_TOKEN)
   @ApiParam({ name: 'playlistId', type: String, required: true })

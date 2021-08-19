@@ -8,14 +8,14 @@ import { MediaItem } from './entities/media-item.entity';
 function MediaPostResponse({ isArray = false, type = MediaItem, description }: ApiControllerDecoratorParams = {}) {
   return applyDecorators(
     ApiResponse({ description, type, status: 201, isArray }),
-    ApiBody({ type: CreateMediaItemDto }),
+    ApiBody({ type: CreateMediaItemDto })
     // UseJwtGuard()
   );
 }
 
 const MediaGetResponse = function ({ isArray = false, type = MediaItem }: ApiControllerDecoratorParams = {}) {
   return applyDecorators(
-    ApiResponse({ type, isArray, status: 200 }),
+    ApiResponse({ type, isArray, status: 200 })
     // UseJwtGuard()
   );
 };

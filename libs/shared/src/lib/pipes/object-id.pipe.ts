@@ -11,6 +11,6 @@ export class ObjectIdPipe implements PipeTransform {
 @Injectable()
 export class ObjectIdToStringPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
-    return typeof value !== 'string' ? value.toHexString() : value;
+    return value && typeof value !== 'string' ? value.toHexString() : value;
   }
 }

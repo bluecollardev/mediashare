@@ -52,7 +52,7 @@ export class MediaItemController {
   }
 
   @MediaGetResponse()
-  @Get(RouteTokens.MEDIA_ITEM_ID)
+  @Get(':mediaId')
   @ApiParam({ name: 'mediaId', type: String, required: true })
   async findOne(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId) {
     const mediaItem = await this.mediaItemService.findOne(mediaId);
@@ -98,7 +98,7 @@ export class MediaItemController {
       createdBy,
       userId,
       mediaId,
-      title,
+      title
     });
     response.status(HttpStatus.CREATED);
 

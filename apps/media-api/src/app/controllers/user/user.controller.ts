@@ -16,7 +16,7 @@ import { ObjectId } from 'mongodb';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { Playlist } from '../playlist/entities/playlist.entity';
 @ApiTags('user')
-@Controller({ path: ['user', 'share', 'media-items', 'playlists'] })
+@Controller({ path: ['user'] })
 export class UserController {
   constructor(
     private userService: UserService,
