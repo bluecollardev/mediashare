@@ -39,7 +39,7 @@
     "start:debug": "nodemon --config nodemon-debug.json",
     "start:dev": "docker-compose up -V",
     "start:ts": "ts-node -r tsconfig-paths/register --project tsconfig.base.json apps/media-api/src/main.ts",
-    "start": "npm run serve:prod",
+    "start": "node dist/apps/media-api/main.js",
     "stop:db": "docker-compose down mediapostgres db",
     "stop:dev": "docker-compose -p mediashare down",
     "stop:services": "docker-compose down",
