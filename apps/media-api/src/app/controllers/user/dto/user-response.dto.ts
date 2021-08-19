@@ -3,5 +3,5 @@ import { UserDto } from './create-user.dto';
 
 export class UserResponseDto extends UserDto {
   @ApiObjectId()
-  _id: string;
+  _id: any;
 }

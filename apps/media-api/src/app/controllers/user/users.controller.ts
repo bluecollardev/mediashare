@@ -51,14 +51,15 @@ export class UsersController {
   @Get(RouteTokens.USER_ID)
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserGetResponse()
-  findOne(@Param('userId', ObjectIdPipe) userId: ObjectId): Promise<User> {
+  findOne(@Param('userId', new ObjectIdPipe()) userId: ObjectId): Promise<User> {
+    console.log(userId.toHexString());
     return this.userService.findOne(userId);
   }
 
   @Put(RouteTokens.USER_ID)
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserPostResponse()
-  update(@Param('userId', ObjectIdPipe) userId: ObjectId, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
+  update(@Param('userId', new ObjectIdPipe()) userId: ObjectId, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
     return this.userService.update(userId, updateUserDto);
   }
 
@@ -73,7 +74,7 @@ export class UsersController {
   @UserGetResponse({ type: PlaylistResponseDto, isArray: true })
   @ApiParam({ name: 'userId', type: String, required: true })
   @ApiHideProperty()
-  getPlaylists(@Param('userId', ObjectIdPipe) userId: ObjectId) {
+  getPlaylists(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
     return this.playlistService.getPlaylistByUserId({ userId });
   }
 

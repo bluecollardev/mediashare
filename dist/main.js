@@ -3984,6 +3984,7 @@ let UsersController = class UsersController {
         return this.userService.findAll();
     }
     findOne(userId) {
+        console.log(userId.toHexString());
         return this.userService.findOne(userId);
     }
     update(userId, updateUserDto) {
@@ -4027,7 +4028,7 @@ let UsersController = class UsersController {
     (0,_nestjs_common__WEBPACK_IMPORTED_MODULE_1__.Get)(_modules_app_config_module_ts_constants_open_api_constants__WEBPACK_IMPORTED_MODULE_15__.default.USER_ID),
     (0,_nestjs_swagger__WEBPACK_IMPORTED_MODULE_4__.ApiParam)({ name: 'userId', type: String, required: true }),
     (0,_decorators_user_response_decorator__WEBPACK_IMPORTED_MODULE_12__.UserGetResponse)(),
-    (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__param)(0, (0,_nestjs_common__WEBPACK_IMPORTED_MODULE_1__.Param)('userId', _mediashare_shared__WEBPACK_IMPORTED_MODULE_13__.ObjectIdPipe)),
+    (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__param)(0, (0,_nestjs_common__WEBPACK_IMPORTED_MODULE_1__.Param)('userId', new _mediashare_shared__WEBPACK_IMPORTED_MODULE_13__.ObjectIdPipe())),
     (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__metadata)("design:type", Function),
     (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__metadata)("design:paramtypes", [typeof (_c = typeof mongodb__WEBPACK_IMPORTED_MODULE_7__.ObjectId !== "undefined" && mongodb__WEBPACK_IMPORTED_MODULE_7__.ObjectId) === "function" ? _c : Object]),
     (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__metadata)("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
@@ -4036,7 +4037,7 @@ let UsersController = class UsersController {
     (0,_nestjs_common__WEBPACK_IMPORTED_MODULE_1__.Put)(_modules_app_config_module_ts_constants_open_api_constants__WEBPACK_IMPORTED_MODULE_15__.default.USER_ID),
     (0,_nestjs_swagger__WEBPACK_IMPORTED_MODULE_4__.ApiParam)({ name: 'userId', type: String, required: true }),
     (0,_decorators_user_response_decorator__WEBPACK_IMPORTED_MODULE_12__.UserPostResponse)(),
-    (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__param)(0, (0,_nestjs_common__WEBPACK_IMPORTED_MODULE_1__.Param)('userId', _mediashare_shared__WEBPACK_IMPORTED_MODULE_13__.ObjectIdPipe)), (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__param)(1, (0,_nestjs_common__WEBPACK_IMPORTED_MODULE_1__.Body)()),
+    (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__param)(0, (0,_nestjs_common__WEBPACK_IMPORTED_MODULE_1__.Param)('userId', new _mediashare_shared__WEBPACK_IMPORTED_MODULE_13__.ObjectIdPipe())), (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__param)(1, (0,_nestjs_common__WEBPACK_IMPORTED_MODULE_1__.Body)()),
     (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__metadata)("design:type", Function),
     (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__metadata)("design:paramtypes", [typeof (_e = typeof mongodb__WEBPACK_IMPORTED_MODULE_7__.ObjectId !== "undefined" && mongodb__WEBPACK_IMPORTED_MODULE_7__.ObjectId) === "function" ? _e : Object, typeof (_f = typeof _dto_update_user_dto__WEBPACK_IMPORTED_MODULE_3__.UpdateUserDto !== "undefined" && _dto_update_user_dto__WEBPACK_IMPORTED_MODULE_3__.UpdateUserDto) === "function" ? _f : Object]),
     (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__metadata)("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
@@ -4055,7 +4056,7 @@ let UsersController = class UsersController {
     (0,_decorators_user_response_decorator__WEBPACK_IMPORTED_MODULE_12__.UserGetResponse)({ type: _playlist_dto_playlist_response_dto__WEBPACK_IMPORTED_MODULE_16__.PlaylistResponseDto, isArray: true }),
     (0,_nestjs_swagger__WEBPACK_IMPORTED_MODULE_4__.ApiParam)({ name: 'userId', type: String, required: true }),
     (0,_nestjs_swagger__WEBPACK_IMPORTED_MODULE_4__.ApiHideProperty)(),
-    (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__param)(0, (0,_nestjs_common__WEBPACK_IMPORTED_MODULE_1__.Param)('userId', _mediashare_shared__WEBPACK_IMPORTED_MODULE_13__.ObjectIdPipe)),
+    (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__param)(0, (0,_nestjs_common__WEBPACK_IMPORTED_MODULE_1__.Param)('userId', new _mediashare_shared__WEBPACK_IMPORTED_MODULE_13__.ObjectIdPipe())),
     (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__metadata)("design:type", Function),
     (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__metadata)("design:paramtypes", [typeof (_j = typeof mongodb__WEBPACK_IMPORTED_MODULE_7__.ObjectId !== "undefined" && mongodb__WEBPACK_IMPORTED_MODULE_7__.ObjectId) === "function" ? _j : Object]),
     (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__metadata)("design:returntype", void 0)
