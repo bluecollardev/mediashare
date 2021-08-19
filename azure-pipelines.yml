@@ -28,12 +28,12 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-    - task: Docker@2
-      displayName: Build and push an image to container registry
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+      - task: DockerCompose@0
+        inputs:
+          containerregistrytype: 'Azure Container Registry'
+          azureSubscription: 'Pay-As-You-Go(49762f68-bfa4-48cd-8b3c-2d3ebe4735d5)'
+          azureContainerRegistry: '{"loginServer":"mediashare.azurecr.io", "id" : "/subscriptions/49762f68-bfa4-48cd-8b3c-2d3ebe4735d5/resourceGroups/mediashare/providers/Microsoft.ContainerRegistry/registries/mediashare"}'
+          dockerComposeFile: '**/docker-compose.yml'
+          action: 'Run a Docker Compose command'
+          dockerComposeCommand: 'up'
+          arguments: '-p --build -V -d' 
