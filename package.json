@@ -14,7 +14,6 @@
     "affected:lint": "nx affected:lint",
     "affected:test": "nx affected:test",
     "affected": "nx affected",
-    "build:prod": "rimraf dist && npm run build",
     "build": "nest build",
     "debug": "nodemon -L --config nodemon-docker-debug.json",
     "dep-graph": "nx dep-graph",
@@ -51,7 +50,8 @@
     "test": "nx test",
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
-    "serve:prod": "nx run-many --all --target=serve"
+    "serve:prod": "nx run-many --all --target=serve",
+    "build:prod": "nx run-many --all --target=build"
   },
   "private": true,
   "dependencies": {
