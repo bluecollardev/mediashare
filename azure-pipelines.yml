@@ -13,8 +13,8 @@ variables:
   dockerRegistryServiceConnection: '85837b34-63db-4c1d-89b4-57def530aeb5'
   imageRepository: 'bluecollardevmediashare'
   containerRegistry: 'mediashare.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  tag: '$(Build.BuildId)'
+  dockerfilePath: 'Dockerfile'
+  tag: 'latest'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
