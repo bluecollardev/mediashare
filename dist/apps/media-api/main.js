@@ -3123,7 +3123,7 @@ __webpack_require__.r(__webpack_exports__);
     url: process.env.DB_URL,
     type: process.env.DB_TYPE,
     database: process.env.DB,
-    ssl: process.env.DB_SSL,
+    ssl: process.env.DB_SSL === 'true',
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
 })));

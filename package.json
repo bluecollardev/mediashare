@@ -28,7 +28,6 @@
     "init:dev": "docker-compose -p mediashare up --build -V -d",
     "lint": "nx workspace-lint && nx lint",
     "nx": "nx",
-    "prestart:prod": "rimraf dist && npm run build",
     "seed:users": "ts-node --project scripts/tsconfig.json -r tsconfig-paths/register scripts/gen-users.script.ts",
     "start:api": "nest start --path apps/media-api/tsconfig.json --watch",
     "build:api": "nest build --path apps/media-api/tsconfig.json --watch",
@@ -51,7 +50,7 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "serve:prod": "nx run-many --all --target=serve",
-    "build:prod": "nx run-many --all --target=build"
+    "build:prod": "rm -rf dist && nx run-many --all --target=build"
   },
   "private": true,
   "dependencies": {
