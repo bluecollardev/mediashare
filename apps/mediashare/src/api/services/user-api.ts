@@ -37,7 +37,7 @@ import { LoginResponseDto } from '../models';
 // @ts-ignore
 import { MediaItemDto } from '../models';
 // @ts-ignore
-import { Playlist } from '../models';
+import { PlaylistItemResponseDto } from '../models';
 // @ts-ignore
 import { ShareItem } from '../models';
 // @ts-ignore
@@ -311,7 +311,7 @@ export const UserApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userControllerGetMediaItems(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+    async userControllerGetMediaItems(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MediaItemDto>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetMediaItems(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -329,7 +329,7 @@ export const UserApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userControllerGetPlaylists(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Playlist>> {
+    async userControllerGetPlaylists(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PlaylistItemResponseDto>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetPlaylists(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -395,7 +395,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerGetMediaItems(options?: any): AxiosPromise<UserDto> {
+    userControllerGetMediaItems(options?: any): AxiosPromise<Array<MediaItemDto>> {
       return localVarFp.userControllerGetMediaItems(options).then((request) => request(axios, basePath));
     },
     /**
@@ -411,7 +411,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerGetPlaylists(options?: any): AxiosPromise<Playlist> {
+    userControllerGetPlaylists(options?: any): AxiosPromise<Array<PlaylistItemResponseDto>> {
       return localVarFp.userControllerGetPlaylists(options).then((request) => request(axios, basePath));
     },
     /**

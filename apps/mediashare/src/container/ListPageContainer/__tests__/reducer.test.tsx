@@ -17,25 +17,11 @@ describe('list reducer', () => {
         },
         {
           type: 'FETCH_LIST_SUCCESS',
-          list: [
-            'React Native Starter Kit',
-            'React Navigation',
-            'NativeBase Easy Grid',
-            'NativeBase',
-            'CodePush',
-            'Redux',
-          ],
+          list: ['React Native Starter Kit', 'React Navigation', 'NativeBase Easy Grid', 'NativeBase', 'CodePush', 'Redux'],
         }
       )
     ).toEqual({
-      list: [
-        'React Native Starter Kit',
-        'React Navigation',
-        'NativeBase Easy Grid',
-        'NativeBase',
-        'CodePush',
-        'Redux',
-      ],
+      list: ['React Native Starter Kit', 'React Navigation', 'NativeBase Easy Grid', 'NativeBase', 'CodePush', 'Redux'],
       isLoading: true,
     });
   });

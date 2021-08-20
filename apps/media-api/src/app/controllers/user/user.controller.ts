@@ -15,6 +15,8 @@ import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { Playlist } from '../playlist/entities/playlist.entity';
+import { PlaylistGetResponse } from '../playlist/playlist.decorator';
+import { PlaylistItemResponseDto } from '../playlist/dto/playlist-response.dto';
 @ApiTags('user')
 @Controller({ path: ['user'] })
 export class UserController {
@@ -58,7 +60,7 @@ export class UserController {
   }
 
   @Get('playlists')
-  @UserGetResponse({ type: Playlist, status: 200 })
+  @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   async getPlaylists(@GetUser() user: SessionUserInterface) {
     const result = await this.playlistService.getPlaylistByUserId({ userId: user._id });
 
@@ -67,7 +69,7 @@ export class UserController {
   }
 
   @Get('media-items')
-  @UserGetResponse()
+  @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getMediaItems(@GetUserId() userId: ObjectId) {
     const result = await this.mediaItemService.findMediaItemsByUserId(userId);
 

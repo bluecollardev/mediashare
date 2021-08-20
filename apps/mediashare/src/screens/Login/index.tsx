@@ -9,7 +9,7 @@ export interface LoginProps {
   onLogin: any;
 }
 
-export interface LoginState extends Pick<RootState, 'user' | 'forms'> {}
+export interface LoginState extends Pick<RootState, never> {}
 
 class Login extends React.Component<LoginProps, LoginState> {
   // <Icon name="flash" style={{ fontSize: 104 }} />

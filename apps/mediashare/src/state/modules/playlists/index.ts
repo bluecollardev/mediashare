@@ -50,7 +50,7 @@ export const findUserPlaylists = createAsyncThunk(playlistsActionTypes.findUserP
   const { api } = extra as { api: ApiService };
   // @ts-ignore
   const response = await api.user.userControllerGetPlaylists({ query: {}, headers: {} });
-  return response && response.status === 200 ? response.data : [];
+  return response && response.status === 200 ? [response.data] : [];
 });
 
 export const addUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.addUserPlaylistItem, async (playlist: CreatePlaylistDto, { extra }) => {
