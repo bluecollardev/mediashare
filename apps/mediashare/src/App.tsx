@@ -19,9 +19,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'native-base';
 
 import { routeConfig } from './routes';
-import LoginContainer from './container/LoginContainer';
 import { RootState } from './state';
-import { connect } from 'react-redux';
+import LoginContainer from './container/LoginContainer';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -120,10 +119,12 @@ export default class extends React.Component {
   render() {
     console.log(this);
     // if (!this.isLoggedIn) return <LoginContainer />;
-    return (
+    return this.isLoggedIn ? (
       <NavigationContainer>
         <TabNavigation />
       </NavigationContainer>
+    ) : (
+      <LoginContainer />
     );
   }
 }

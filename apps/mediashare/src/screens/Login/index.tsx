@@ -11,31 +11,22 @@ export interface LoginProps {
 
 export interface LoginState extends Pick<RootState, never> {}
 
-class Login extends React.Component<LoginProps, LoginState> {
+const Login = ({ children }) => {
   // <Icon name="flash" style={{ fontSize: 104 }} />
 
-  render() {
-    return (
-      <Container>
-        <Header style={{ height: 200 }}>
-          <Body style={{ alignItems: 'center' }}>
-            <Title>Blue Collar Software</Title>
-            <View padder>
-              <Text style={{ color: Platform.OS === 'ios' ? '#000' : '#FFF' }} />
-            </View>
-          </Body>
-        </Header>
-        <Content>
-          {this.props.loginForm}
+  return (
+    <Container>
+      <Header style={{ height: 200 }}>
+        <Body style={{ alignItems: 'center' }}>
+          <Title>Blue Collar Software</Title>
           <View padder>
-            <Button block onPress={() => this.props.onLogin()}>
-              <Text>Login</Text>
-            </Button>
+            <Text style={{ color: Platform.OS === 'ios' ? '#000' : '#FFF' }} />
           </View>
-        </Content>
-      </Container>
-    );
-  }
-}
+        </Body>
+      </Header>
+      <Content>{children}</Content>
+    </Container>
+  );
+};
 
 export default Login;
