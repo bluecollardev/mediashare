@@ -18,10 +18,10 @@ export class User extends BcEntity {
   @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
   @Column({ array: true, nullable: true }) sharedMediaItems?: ObjectId[];
 
-  @BeforeInsert()
-  async hashPassword() {
-    this.password = await hash(this.password, 10);
-  }
+  // @BeforeInsert()
+  // async hashPassword() {
+  //   this.password = await hash(this.password, 10);
+  // }
 
   // @Column('enum', { default: [bcRoles.guest], array: true, enum: BC_ROLES })
   // roles: BcRolesType[];

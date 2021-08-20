@@ -1,11 +1,13 @@
 import { CanActivate, Inject, ExecutionContext, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { timeout } from 'rxjs/operators';
+import { AuthService } from '../../../../../../media-auth/src/app/auth/auth.service';
 
 export class UserGuard implements CanActivate {
   constructor(
     @Inject('AUTH_CLIENT')
-    private readonly client: ClientProxy
+    private readonly client: ClientProxy,
+    private AuthSvc: AuthService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

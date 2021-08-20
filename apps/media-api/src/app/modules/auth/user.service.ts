@@ -41,8 +41,9 @@ export class UserService extends DataService<User, MongoRepository<User>> {
   }
 
   async validateUser({ username, password }: { username: string; password: string }) {
-    const user = await this.findByQuery({ username });
-
+    console.log(username);
+    const user = await this.findByQuery({ username: username.toLowerCase() });
+    if (!user) throw new Error('No user found');
     if (user?.password === password) return user;
     if (compareSync(password, user?.password)) {
       return user;
@@ -64,7 +65,8 @@ export class UserService extends DataService<User, MongoRepository<User>> {
   }
 
   async createUser(user: CreateUserDto): Promise<User> {
-    const userEntity = await this.create(user);
+    const { username, ...rest } = user;
+    const userEntity = await this.create({ username: username.toLowerCase(), ...rest });
 
     return userEntity;
   }

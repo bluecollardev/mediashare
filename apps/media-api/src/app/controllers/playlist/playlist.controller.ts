@@ -10,13 +10,12 @@ import { ShareItemService } from '../../modules/share-item/services/share-item.s
 import { PLAYLIST_CATEGORY } from '@core-lib';
 import { GetUserId } from '../../core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse } from './playlist.decorator';
-import { UseJwtGuard } from '../../modules/auth/auth.decorator';
+
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { PlaylistItemResponseDto, PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
-import { PlaylistItem } from '../../modules/playlist-item/entities/playlist-item.entity';
 
 const PLAYLIST_ID_TOKEN = ':playlistId';
 @ApiTags('playlists')
@@ -35,7 +34,6 @@ export class PlaylistController {
   @Get()
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   findAll() {
-    console.log('running get');
     return this.playlistService.findAll();
   }
 

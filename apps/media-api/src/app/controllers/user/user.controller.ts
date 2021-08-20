@@ -42,9 +42,17 @@ export class UserController {
   @ApiBody({ type: LoginDto, required: true })
   @ApiResponse({ type: LoginResponseDto, status: 200 })
   async login(@Req() req: Request) {
-    const expressUser = req.user;
+    console.log(req.body.username);
+    console.log(req.body.username);
+    console.log(req.body.username);
+    console.log(req.body.username);
+    console.log(req.body.username);
+    console.log(req.body.username);
 
-    const user = await this.userService.findByQuery({ username: req.body.username });
+    const expressUser = req.user;
+    console.log(expressUser);
+
+    const user = await this.userService.findByQuery({ username: req.body.username.toLowerCase() });
     return { ...expressUser, ...user };
   }
 

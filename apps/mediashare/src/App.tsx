@@ -9,7 +9,7 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React from 'react';
+import React, { useState } from 'react';
 // import { Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -21,6 +21,8 @@ import { Icon } from 'native-base';
 import { routeConfig } from './routes';
 import { RootState } from './state';
 import LoginContainer from './container/LoginContainer';
+import { LoginContext, UserContext } from './state/user-context';
+import { LoginResponseDto } from './api';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -112,22 +114,24 @@ const TabNavigation = () => {
   );
 };
 
-export default class extends React.Component {
-  public navigator: any;
-  isLoggedIn = false;
+const App = () => {
+  const [user, setUser] = useState<LoginResponseDto>(null);
 
-  render() {
-    console.log(this);
-    // if (!this.isLoggedIn) return <LoginContainer />;
-    return this.isLoggedIn ? (
-      <NavigationContainer>
-        <TabNavigation />
-      </NavigationContainer>
-    ) : (
-      <LoginContainer />
-    );
-  }
-}
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {user ? (
+        <NavigationContainer>
+          <TabNavigation />
+        </NavigationContainer>
+      ) : (
+        <LoginContainer />
+
+        // </UserContext.Provider>
+      )}
+    </UserContext.Provider>
+  );
+};
+export default App;
 
 function mapDispatchToProps(dispatch: any) {
   return {};

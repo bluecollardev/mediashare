@@ -16,6 +16,18 @@
           "apiPackage": "services",
           "modelPackage": "models"
         }
+      },
+      "v3.0": {
+        "generatorName": "typescript-rxjs",
+        "output": "#{cwd}/apps/mediashare/src/rxjs-api",
+        "glob": "swagger-spec.{json,yaml}",
+        "additionalProperties": {
+          "supportsES6": "true",
+          "modelPropertyNaming": "original",
+          "useSingleRequestParameter": true,
+          "withInterfaces": true,
+          "withSeparateModelsAndApi": true
+        }
       }
     }
   }
