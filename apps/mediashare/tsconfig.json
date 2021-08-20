@@ -11,7 +11,6 @@
     // "sourceMap": true,                     /* Generates corresponding '.map' file. */
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
     // "outDir": "./",                        /* Redirect output structure to the directory. */
-    "rootDir": "./",
     // "removeComments": true,                /* Do not emit comments to output. */
     "noEmit": true,
 
@@ -23,5 +22,5 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
   },
-  "exclude": ["./node_modules", "babel.config.js", "metro.config.js", "jest.config.js"]
+  "exclude": ["./node_modules", "babel.config.js", "metro.config.js", "jest.config.js", "**/*.test.ts", "**/*.test.tsx"]
 }

@@ -25,7 +25,7 @@ class LibraryContainer extends React.Component<LibraryContainerProps, LibraryCon
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    fetchList: () => dispatch(findMediaItems()),
+    fetchList: () => dispatch(findMediaItems(null)),
   };
 }
 
