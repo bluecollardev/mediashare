@@ -24,16 +24,16 @@ const PLAYLIST_ID_TOKEN = ':playlistId';
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
-  @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   @Post()
+  @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   @ApiBody({ type: CreatePlaylistDto })
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto) {
     console.log('dto', createPlaylistDto);
     return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId: createPlaylistDto.userId });
   }
 
-  @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   @Get()
+  @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   findAll() {
     console.log('running get');
     return this.playlistService.findAll();
@@ -49,15 +49,15 @@ export class PlaylistController {
     name: 'playlistId',
     required: true,
     type: 'string',
-    example: new ObjectId().toHexString()
+    example: new ObjectId().toHexString(),
   })
-  @Get(PLAYLIST_ID_TOKEN)
+  @Get(':playlistId')
   @ApiParam({ name: 'playlistId', type: String, required: true })
   findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
     return this.playlistService.getPlaylistById({ playlistId });
   }
 
-  @Put(PLAYLIST_ID_TOKEN)
+  @Put(':playlistId')
   @ApiParam({ name: 'playlistId', type: String, required: true })
   update(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() userId: ObjectId, @Body() updatePlaylistDto: UpdatePlaylistDto) {
     const { ...rest } = updatePlaylistDto;
@@ -65,16 +65,15 @@ export class PlaylistController {
   }
 
   @Delete(PLAYLIST_ID_TOKEN)
-  // @UseJwtGuard()
   @ApiParam({ name: 'playlistId', type: String, required: true })
   remove(@Param('playlistId') playlistId: string) {
     return this.playlistService.remove(playlistId);
   }
 
-  @Post([':playlistId', ' share', ':userId'])
+  @Post(':playlistId/share/:userId')
+  @PlaylistPostResponse({ type: ShareItem, isArray: true })
   @ApiParam({ name: 'playlistId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
-  @PlaylistPostResponse({ type: ShareItem, isArray: true })
   async share(
     @Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId,
     @Param('userId', new ObjectIdPipe()) userId: ObjectId,

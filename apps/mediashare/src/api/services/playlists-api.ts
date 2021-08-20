@@ -35,7 +35,7 @@ import { CreatePlaylistDto } from '../models';
 // @ts-ignore
 import { CreatePlaylistResponseDto } from '../models';
 // @ts-ignore
-import { PlaylistItem } from '../models';
+import { PlaylistItemResponseDto } from '../models';
 // @ts-ignore
 import { PlaylistResponseDto } from '../models';
 // @ts-ignore
@@ -207,7 +207,7 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
       assertParamExists('playlistControllerShare', 'playlistId', playlistId);
       // verify required parameter 'userId' is not null or undefined
       assertParamExists('playlistControllerShare', 'userId', userId);
-      const localVarPath = `/api/playlists/{playlistId}`
+      const localVarPath = `/api/playlists/{playlistId}/share/{userId}`
         .replace(`{${'playlistId'}}`, encodeURIComponent(String(playlistId)))
         .replace(`{${'userId'}}`, encodeURIComponent(String(userId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -294,7 +294,7 @@ export const PlaylistsApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async playlistControllerFindAll(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PlaylistItem>>> {
+    async playlistControllerFindAll(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PlaylistItemResponseDto>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.playlistControllerFindAll(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -384,7 +384,7 @@ export const PlaylistsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    playlistControllerFindAll(options?: any): AxiosPromise<Array<PlaylistItem>> {
+    playlistControllerFindAll(options?: any): AxiosPromise<Array<PlaylistItemResponseDto>> {
       return localVarFp.playlistControllerFindAll(options).then((request) => request(axios, basePath));
     },
     /**

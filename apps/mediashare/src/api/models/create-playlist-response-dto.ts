@@ -12,6 +12,7 @@
  * Do not edit the class manually.
  */
 
+import { CreatePlaylistItemResponseDto } from './create-playlist-item-response-dto';
 import { Playlist } from './playlist';
 
 /**
@@ -28,8 +29,8 @@ export interface CreatePlaylistResponseDto {
   playlist: Playlist;
   /**
    *
-   * @type {Array<string>}
+   * @type {CreatePlaylistItemResponseDto}
    * @memberof CreatePlaylistResponseDto
    */
-  playlistItems: Array<string>;
+  playlistItems: CreatePlaylistItemResponseDto;
 }

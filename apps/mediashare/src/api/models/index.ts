@@ -1,5 +1,6 @@
 export * from './create-media-item-dto';
 export * from './create-playlist-dto';
+export * from './create-playlist-item-response-dto';
 export * from './create-playlist-response-dto';
 export * from './create-user-dto';
 export * from './login-dto';
@@ -7,7 +8,6 @@ export * from './login-response-dto';
 export * from './media-item';
 export * from './media-item-dto';
 export * from './playlist';
-export * from './playlist-item';
 export * from './playlist-item-response-dto';
 export * from './playlist-response-dto';
 export * from './share-item';
