@@ -30,7 +30,7 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
     children,
     showActions = false,
     onEditClicked = () => {},
-    onDeleteClicked = () => {}
+    onDeleteClicked = () => {},
   } = props;
 
   const showCardMenu = () => {
@@ -38,7 +38,7 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
       {
         options: mediaCardButtons,
         cancelButtonIndex: cancel_idx,
-        destructiveButtonIndex: destructive_idx
+        destructiveButtonIndex: destructive_idx,
       },
       (buttonIdx) => {
         switch (buttonIdx) {

@@ -1,5 +1,5 @@
-import { DefaultApi, MediaItemsApi, ShareItemsApi, Configuration, UserApiFactory } from '../api';
-import { UserApi, UsersApi, PlaylistsApi } from '../rxjs-api';
+import { Configuration, UserApiFactory } from '../api';
+import { UserApi, UsersApi, PlaylistsApi, DefaultApi, MediaItemsApi, ShareItemsApi } from '../rxjs-api';
 import axios from 'axios';
 export interface ApiService {
   default: DefaultApi;
@@ -24,9 +24,9 @@ export const basePath = 'http://localhost:5000';
 const userService = UserApiFactory(configuration, basePath, axios);
 
 const apis: ApiService = {
-  default: new DefaultApi(configuration, basePath),
-  mediaItems: new MediaItemsApi(configuration, basePath),
-  shareItems: new ShareItemsApi(configuration, basePath),
+  default: new DefaultApi(),
+  mediaItems: new MediaItemsApi(),
+  shareItems: new ShareItemsApi(),
   playlists: new PlaylistsApi(),
   user: new UserApi(),
   users: new UsersApi(),

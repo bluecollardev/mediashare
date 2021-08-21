@@ -19,9 +19,7 @@ class Library extends React.Component<LibraryProps, LibraryState> {
   }
   render() {
     const { navigation, list } = this.props;
-    const descriptionText =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
-      'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+    const descriptionText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' + 'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
     const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
     const items = list.map((item) => ({
@@ -36,13 +34,7 @@ class Library extends React.Component<LibraryProps, LibraryState> {
       <Container style={styles.container}>
         <Content>
           <View padder style={{ flexDirection: 'row' }}>
-            <Button
-              iconLeft
-              bordered
-              dark
-              style={{ flex: 1, marginRight: 10 }}
-              onPress={() => navigation.navigate(routeConfig.addFromFeed.name)}
-            >
+            <Button iconLeft bordered dark style={{ flex: 1, marginRight: 10 }} onPress={() => navigation.navigate(routeConfig.addFromFeed.name)}>
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Add From Feed</Text>
             </Button>
@@ -56,7 +48,7 @@ class Library extends React.Component<LibraryProps, LibraryState> {
               }}
             >
               <Icon name="add-outline" />
-              <Text style={{ paddingRight: 30 }}>Add to Playlist</Text>
+              <Text style={{ paddingRight: 30 }}>Add Media</Text>
             </Button>
           </View>
           <View>

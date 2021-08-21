@@ -36,7 +36,7 @@ const LoginComponent = () => {
   return (
     <Login>
       <Item error={validateUsername(username) && username.length > 0}>
-        <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" variant="outline" />
+        <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" />
       </Item>
       <Item error={validatePassword(password)}>
         <Input onChange={(e) => setPassword(e.nativeEvent.text)} value={password} placeholder="Password" secureTextEntry={true} />

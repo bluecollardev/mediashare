@@ -14,6 +14,7 @@ import ShareWith from './container/ShareWithContainer';
 import Settings from './container/SettingsContainer';
 
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
+import { AddMediaContainer } from './container/AddMediaContainer/index';
 
 export const routeConfig = {
   login: {
@@ -73,8 +74,8 @@ export const routeConfig = {
   },
   addToPlaylist: {
     name: 'addToPlaylist',
-    component: AddToPlaylist,
-    options: { title: 'Add To Playlist', header: AppScreenHeader },
+    component: AddMediaContainer,
+    options: { title: 'Upload Media', header: AppScreenHeader },
   },
   shareWith: {
     name: 'shareWith',
@@ -85,5 +86,5 @@ export const routeConfig = {
     name: 'settings',
     component: Settings,
     options: { title: 'Settings', header: AppScreenHeader },
-  }
+  },
 };
