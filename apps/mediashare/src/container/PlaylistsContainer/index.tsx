@@ -7,6 +7,7 @@ import { routeConfig } from '../../routes';
 import { useContext, useEffect, useState } from 'react';
 import { apis } from '../../state/apis';
 import { UserContext } from '../../state/user-context';
+import { ApiContext } from '../../state/api-context';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -18,9 +19,10 @@ export interface PlaylistsContainerProps {
 export const PlaylistsContainer = (props) => {
   const [data, setData] = useState([]);
   const user = useContext(UserContext);
+  const apis = useContext(ApiContext);
   const { navigation } = props;
   async function getAllPlaylists() {
-    const res = await apis.user.userControllerGetPlaylists().toPromise();
+    const res = await apis.api.user.userControllerGetPlaylists({ hea }).toPromise();
     setData(res);
   }
 

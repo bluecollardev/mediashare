@@ -17,6 +17,7 @@ import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { Playlist } from '../playlist/entities/playlist.entity';
 import { PlaylistGetResponse } from '../playlist/playlist.decorator';
 import { PlaylistItemResponseDto } from '../playlist/dto/playlist-response.dto';
+import { UserGuard } from '../../modules/auth/guards/user.guard';
 @ApiTags('user')
 @Controller({ path: ['user'] })
 export class UserController {
@@ -42,18 +43,10 @@ export class UserController {
   @ApiBody({ type: LoginDto, required: true })
   @ApiResponse({ type: LoginResponseDto, status: 200 })
   async login(@Req() req: Request) {
-    console.log(req.body.username);
-    console.log(req.body.username);
-    console.log(req.body.username);
-    console.log(req.body.username);
-    console.log(req.body.username);
-    console.log(req.body.username);
-
-    const expressUser = req.user;
-    console.log(expressUser);
+    const expressUser = req.user as any;
 
     const user = await this.userService.findByQuery({ username: req.body.username.toLowerCase() });
-    return { ...expressUser, ...user };
+    return { accessToken: expressUser.accessToken.accessToken, ...user };
   }
 
   @UseGuards(JwtAuthGuard)
@@ -68,7 +61,7 @@ export class UserController {
   }
 
   @Get('playlists')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(UserGuard)
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   async getPlaylists(@GetUser() user: SessionUserInterface) {
     console.log(user);

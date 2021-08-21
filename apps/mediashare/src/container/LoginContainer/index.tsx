@@ -4,8 +4,11 @@ import Login from '../../screens/Login';
 
 import { Dispatch, useContext, useState } from 'react';
 import { UserContext } from '../../state/user-context';
-import { Configuration, LoginDto, UserApi } from '../../api';
-import { apis, userService } from '../../state/apis';
+import { LoginDto } from '../../api';
+import { apis, ApiService } from '../../state/apis';
+import { DefaultApi, MediaItemsApi, PlaylistsApi, servers, ShareItemsApi, UserApi, UsersApi } from '../../rxjs-api';
+import { Configuration } from '../../rxjs-api/runtime';
+import { ApiContext } from '../../state/api-context';
 
 const required = (value: any) => (value ? undefined : 'Required');
 const maxLength = (max: any) => (value: any) => value && value.length > max ? `Must be ${max} characters or less` : undefined;
@@ -28,10 +31,25 @@ const LoginComponent = () => {
   const [username, setUsername] = useState('test@example.com');
   const [password, setPassword] = useState('string12345');
   const user = useContext(UserContext);
+  const api = useContext(ApiContext);
   const onLogin = async (loginDto: LoginDto) => {
-    const api = apis.user.userControllerLogin({ loginDto }).toPromise();
+    const login = await apis.user.userControllerLogin({ loginDto }).toPromise();
 
-    api.then((res) => user.setUser(res));
+    const config: Configuration = { basePath: servers[0].getUrl(), accessToken: login.accessToken as any } as any;
+    console.log('🚀 ---------------------------------------------------------');
+    console.log('🚀 ~ file: index.tsx ~ line 37 ~ onLogin ~ config', config);
+    console.log('🚀 ---------------------------------------------------------');
+
+    const updatedApi: ApiService = {
+      default: new DefaultApi(config),
+      mediaItems: new MediaItemsApi(config),
+      shareItems: new ShareItemsApi(config),
+      playlists: new PlaylistsApi(config),
+      user: new UserApi(config),
+      users: new UsersApi(config),
+    };
+    api.setApi(updatedApi);
+    user.setUser(login);
   };
   return (
     <Login>

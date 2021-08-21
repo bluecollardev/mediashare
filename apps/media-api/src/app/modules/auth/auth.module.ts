@@ -42,7 +42,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
     })
   ],
   controllers: [],
-  providers: [LocalStrategy, SessionSerializer, JwtStrategy, AuthService, UserService],
+  providers: [LocalStrategy, SessionSerializer, AuthService, UserService],
   exports: [ClientsModule, SessionSerializer, LocalStrategy, AuthService, UserService]
 })
 export class AuthModule {}

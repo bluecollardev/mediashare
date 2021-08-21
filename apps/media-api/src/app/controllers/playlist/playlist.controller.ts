@@ -26,9 +26,9 @@ export class PlaylistController {
   @Post()
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   @ApiBody({ type: CreatePlaylistDto })
-  async create(@CreateDto() createPlaylistDto: CreatePlaylistDto) {
+  async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() getUserId: ObjectId) {
     console.log('dto', createPlaylistDto);
-    return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId: createPlaylistDto.userId });
+    return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId: getUserId.toHexString() });
   }
 
   @Get()
@@ -47,7 +47,7 @@ export class PlaylistController {
     name: 'playlistId',
     required: true,
     type: 'string',
-    example: new ObjectId().toHexString(),
+    example: new ObjectId().toHexString()
   })
   @Get(':playlistId')
   @ApiParam({ name: 'playlistId', type: String, required: true })
