@@ -22,9 +22,7 @@ class PlaylistDetail extends MediaDetail<PlaylistDetailProps, PlaylistDetailStat
 
     const title = 'My First Playlist';
     const author = 'Blue Collar Dev';
-    const description =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
-      'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+    const description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' + 'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
     const items = [
       { title: 'Video 1', description: 'Ipsum lorem dolor', image: imageSrc },

@@ -26,6 +26,8 @@ import Amplify, { Auth, Storage } from 'aws-amplify';
 import awsmobile from './aws-exports';
 import { ApiService } from './state/apis';
 import { ApiContext } from './state/api-context';
+import { Provider } from 'react-redux';
+import { store } from './boot/configureStore';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -130,9 +132,11 @@ const App = () => {
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {user ? (
-        <NavigationContainer>
-          <TabNavigation />
-        </NavigationContainer>
+        <Provider store={store}>
+          <NavigationContainer>
+            <TabNavigation />
+          </NavigationContainer>
+        </Provider>
       ) : (
         <LoginContainer />
 

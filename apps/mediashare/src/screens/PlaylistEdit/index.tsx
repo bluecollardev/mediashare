@@ -7,10 +7,16 @@ import { PlaylistCard } from '../../components/layout/PlaylistCard';
 import TextField from '../../components/form/TextField';
 
 import styles from './styles';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../state/user-context';
 import { apis } from '../../state/apis';
 import { routeConfig } from '../../routes';
+import { CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
+import { Storage } from 'aws-amplify';
+import { of } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { MediaListItem } from '../../components/layout/MediaListItem';
+import { MediaListItemCheckBox } from '../../components/layout/MediaListItemCheckBox';
 
 const validate = (values) => {
   const error = {} as any;
@@ -46,19 +52,42 @@ export interface PlaylistEditState extends MediaDetailState {}
 const PlaylistEdit = ({ navigation }: { navigation: any }) => {
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
+  const [mediaItems, setMediaItems] = useState([]);
   const user = useContext(UserContext) as any;
 
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleSubmit = (values: any) => {
-    const created = apis.playlists.playlistControllerCreate(values).subscribe((_) => routeConfig.playlistDetail);
-    // console.log(created);
-    // navigation.navigate(routeConfig.playlistDetail);
+  const handleSubmit = (values: { description: string; title: string; mediaIds: any[] }) => {
+    const { description, title, mediaIds } = values;
+
+    apis.playlists
+      .playlistControllerCreate({ createPlaylistDto: { title, mediaIds, createdBy: '', category: CreatePlaylistDtoCategoryEnum.Rehab } })
+      .pipe(take(1))
+      .subscribe((res) => {
+        routeConfig.playlistDetail;
+      });
   };
   const author = 'Blue Collar Dev';
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.log(user);
+
+  async function processAction(items: typeof mediaItems) {
+    if (items.length < 1) {
+      const res = await Storage.list('');
+      setMediaItems(res.map((itm) => ({ ...itm, checked: false })));
+    }
+
+    if (items.some((item) => item.checked)) {
+      console.log(mediaItems);
+      const mediaIds = items.filter((item) => item.checked).map((item) => item.key);
+      console.log(mediaIds);
+
+      const results = await handleSubmit({ description, title, mediaIds });
+    }
+  }
+
+  // useEffect(() => {
+  //   getMediaItems();
+  // });
   return (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -70,28 +99,37 @@ const PlaylistEdit = ({ navigation }: { navigation: any }) => {
             author={user.user.firstname}
             // description={description}
           >
-            <View padder>
-              <Item stackedLabel>
-                <Label>Title</Label>
+            {mediaItems.length < 1 ? (
+              <View padder>
+                <Item stackedLabel>
+                  <Label>Title</Label>
 
-                <Input label="Title" onChange={(e) => setTitle(e.nativeEvent.text)} value={title} />
-              </Item>
-              <Item stackedLabel>
-                <Label>Description</Label>
-                <Textarea rowSpan={5} style={{ width: '100%' }} bordered onChange={(e) => setDescription(e.nativeEvent.text)} value={description} />
-              </Item>
-            </View>
+                  <Input label="Title" onChange={(e) => setTitle(e.nativeEvent.text)} value={title} />
+                </Item>
+                <Item stackedLabel>
+                  <Label>Description</Label>
+                  <Textarea rowSpan={5} style={{ width: '100%' }} bordered onChange={(e) => setDescription(e.nativeEvent.text)} value={description} />
+                </Item>
+              </View>
+            ) : (
+              mediaItems.map((item) => (
+                <MediaListItemCheckBox
+                  key={`item-${item.key}`}
+                  title={item.key}
+                  description={''}
+                  checked={item.checked}
+                  // image={image}
+                  changeChecked={(bool) => (item.checked = bool)}
+                  onViewDetail={() => {
+                    navigation.navigate(routeConfig.libraryItemDetail.name);
+                  }}
+                />
+              ))
+            )}
           </PlaylistCard>
-          <Button
-            block
-            onPress={() =>
-              handleSubmit({
-                description,
-                title,
-              })
-            }
-          >
-            <Text>Create</Text>
+
+          <Button block onPress={() => processAction(mediaItems)}>
+            <Text>{mediaItems.length > 0 ? 'Create' : 'Next'}</Text>
           </Button>
         </View>
       </Content>

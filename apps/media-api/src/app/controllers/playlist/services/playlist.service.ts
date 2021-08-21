@@ -18,7 +18,7 @@ import { UserService } from '../../../modules/auth/user.service';
 
 type CreatePlaylistParameters = {
   playlistId: ObjectId;
-  items: Partial<PlaylistItem>[];
+  items: string[];
   createdBy: ObjectId;
 };
 @Injectable()
@@ -42,17 +42,17 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
   async createPlaylistWithItems({ createdBy, userId, mediaIds, title = '' }: CreatePlaylistDto) {
     const userIdAsObjectId = new ObjectId(userId);
 
-    const playlist = await this.create({ userId: userIdAsObjectId, title, createdBy });
+    const playlist = await this.create({ userId: userIdAsObjectId, title, createdBy, mediaIds });
 
     const { _id: playlistId } = playlist;
 
-    const playlistItems = await this.createPlaylistItems({
-      playlistId,
-      createdBy,
-      items: mapPlaylistItems(mediaIds, { userId: userIdAsObjectId, playlistId })
-    });
+    // const playlistItems = await this.createPlaylistItems({
+    //   playlistId,
+    //   createdBy,
+    //   items: [...mediaIds]
+    // });
 
-    return { playlist, playlistItems };
+    return { playlist };
   }
 
   /**
@@ -63,11 +63,9 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    * @memberof PlaylistService
    */
   createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
-    if (!items || items.length < 1) throw new Error('no items in createPlaylistItems');
-
     if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
 
-    const mappedItems = items.map((item) => ({ ...item, playlistId, createdBy }));
+    const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
 
     return this.playlistItemService.insertMany(mappedItems);
   }

@@ -5,6 +5,7 @@ import Library from '../../screens/Library';
 
 import { findMediaItems } from '../../state/modules/media-items';
 import { useState, useEffect } from 'react';
+import { RootState } from '../../state/store';
 
 export interface LibraryContainerProps {
   navigation: any;
@@ -13,7 +14,7 @@ export interface LibraryContainerProps {
   state: Object;
 }
 export interface LibraryContainerState {}
-const LibraryContainer = ({ navigation }: { navigation: any }) => {
+const LibraryContainer = (props: { navigation: any }) => {
   // componentDidMount() {
   //   const { fetchList } = this.props;
   //   fetchList();
@@ -23,17 +24,15 @@ const LibraryContainer = ({ navigation }: { navigation: any }) => {
   const [data, setData] = useState([]);
   const loginAndStorage = async function () {
     const list = await Storage.list('');
-    console.log('🚀 -------------------------------------------------------------');
-    console.log('🚀 ~ file: index.tsx ~ line 26 ~ loginAndStorage ~ list', list);
-    console.log('🚀 -------------------------------------------------------------');
-
     setData(list.map((itm) => ({ title: itm.key })));
   };
+
+  console.log(props);
 
   useEffect(() => {
     loginAndStorage();
   }, []);
-  return <Library navigation={navigation} list={data} />;
+  return <Library navigation={props.navigation} list={data} />;
 };
 
 function mapDispatchToProps(dispatch: any) {
@@ -42,7 +41,7 @@ function mapDispatchToProps(dispatch: any) {
   };
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: RootState) => ({
   state: state,
   data: state?.userMediaItems?.userMediaItems ? state.userMediaItems.userMediaItems : [],
   isLoading: state && state.userMediaItems ? state.userMediaItems.isLoading : false,

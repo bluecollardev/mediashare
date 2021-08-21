@@ -4,9 +4,12 @@ export interface ErrorType {
   message: string;
 }
 
-export type ApiResponse<T> = T;
+export type RootStateType = {
 
+  userPlaylists: null,
 
+  // offlineMode: null,
+}
 export const INITIAL_STATE = {
   users: null,
   user: null,
@@ -19,6 +22,13 @@ export const INITIAL_STATE = {
   // offlineMode: null,
 } as const;
 
+const mapState = (state: RootState) => ({
+  userPlaylists: state.isOn
+})
+
+const mapDispatch = {
+  toggleOn: () => ({ type: 'TOGGLE_IS_ON' })
+}
 export type RootState = typeof INITIAL_STATE
 
 

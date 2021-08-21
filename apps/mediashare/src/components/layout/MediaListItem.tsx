@@ -1,15 +1,5 @@
 import * as React from 'react';
-import {
-  Text,
-  Button,
-  Icon,
-  Left,
-  Body,
-  Right,
-  ListItem,
-  CheckBox,
-  Thumbnail
-} from 'native-base';
+import { Text, Button, Icon, Left, Body, Right, ListItem, CheckBox, Thumbnail } from 'native-base';
 
 export interface MediaListItemProps {
   navigation?: any;
@@ -22,14 +12,7 @@ export interface MediaListItemProps {
 }
 
 export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
-  const {
-    title,
-    description,
-    image,
-    selectable = true,
-    showActions = true,
-    onViewDetail = () => {}
-  } = props;
+  const { title, description, image, selectable = true, showActions = true, onViewDetail = () => {} } = props;
   return (
     <ListItem style={{ borderWidth: 0 }}>
       {selectable && (
@@ -46,8 +29,9 @@ export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
           width: '60%',
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
-          borderWidth: 0
-        }}>
+          borderWidth: 0,
+        }}
+      >
         <Text style={{ borderWidth: 0 }}>{title}</Text>
         <Text note numberOfLines={2} style={{ color: 'black' }}>
           {description}
@@ -55,10 +39,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
       </Body>
       {showActions === true && (
         <Right style={{ width: '10%', flex: 1 }}>
-          <Button
-            transparent
-            onPress={onViewDetail}
-          >
+          <Button transparent onPress={onViewDetail}>
             <Icon name="chevron-forward-outline" />
           </Button>
         </Right>

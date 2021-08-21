@@ -28,7 +28,6 @@ const Library = ({ navigation, list }: { navigation: any; list: any }) => {
 
   const fetchImage = async function (key: string) {
     const res = await Storage.get(key);
-    console.log('set item', res);
     setItem(res);
   };
   const clearItem = () => {

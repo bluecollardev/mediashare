@@ -18,10 +18,10 @@ class Playlists extends React.Component<PlaylistsProps, PlaylistsState> {
   onViewDetailClicked(id) {
     this.props?.onViewDetailClicked(id);
   }
-
   render() {
     const { navigation, list } = this.props;
     const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+    console.log(this.props);
 
     const items = list.map((item) => ({
       id: item._id,

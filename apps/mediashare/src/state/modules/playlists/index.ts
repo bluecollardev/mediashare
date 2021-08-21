@@ -1,11 +1,11 @@
-import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { makeActions, makeEnum } from '../../core/factory';
 
 import * as reducers from '../../core/reducers';
 import { ApiService } from '../../apis';
-import { CreatePlaylistDto, UpdatePlaylistDto } from '../../../api';
+import { CreatePlaylistDto, PlaylistItemResponseDto, UpdatePlaylistDto } from '../../../api';
 
 const PLAYLIST_ACTIONS = ['GET_USER_PLAYLIST', 'ADD_USER_PLAYLIST', 'UPDATE_USER_PLAYLIST', 'SHARE_USER_PLAYLIST', 'REMOVE_USER_PLAYLIST'] as const;
 const PLAYLISTS_ACTIONS = ['FIND_USER_PLAYLISTS'] as const;

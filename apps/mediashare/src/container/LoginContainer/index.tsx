@@ -33,12 +33,6 @@ const LoginComponent = () => {
   const user = useContext(UserContext);
   const onLogin = async (loginDto: LoginDto) => {
     const login = await apis.user.userControllerLogin({ loginDto }).toPromise();
-
-    const config: Configuration = { basePath: servers[0].getUrl(), accessToken: login.accessToken as any } as any;
-    console.log('🚀 ---------------------------------------------------------');
-    console.log('🚀 ~ file: index.tsx ~ line 37 ~ onLogin ~ config', config);
-    console.log('🚀 ---------------------------------------------------------');
-
     user.setUser(login);
   };
   return (
