@@ -80,6 +80,7 @@ export class BaseAPI {
   protected request<T>(requestOpts: RequestOpts): Observable<T>;
   protected request<T>(requestOpts: RequestOpts, responseOpts?: ResponseOpts): Observable<RawAjaxResponse<T>>;
   protected request<T>(requestOpts: RequestOpts, responseOpts?: ResponseOpts): Observable<T | RawAjaxResponse<T>> {
+    console.log(requestOpts);
     return this.rxjsRequest(this.createRequestArgs(requestOpts)).pipe(
       map((res) => {
         const { status, response } = res;

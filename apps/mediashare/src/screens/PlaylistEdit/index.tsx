@@ -9,6 +9,8 @@ import TextField from '../../components/form/TextField';
 import styles from './styles';
 import { useContext, useState } from 'react';
 import { UserContext } from '../../state/user-context';
+import { apis } from '../../state/apis';
+import { routeConfig } from '../../routes';
 
 const validate = (values) => {
   const error = {} as any;
@@ -41,7 +43,7 @@ export interface PlaylistEditProps extends MediaDetailProps {
 
 export interface PlaylistEditState extends MediaDetailState {}
 
-const PlaylistEdit = ({ children, navigation }: { children: any; navigation: any }) => {
+const PlaylistEdit = ({ navigation }: { navigation: any }) => {
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
   const user = useContext(UserContext) as any;
@@ -49,8 +51,10 @@ const PlaylistEdit = ({ children, navigation }: { children: any; navigation: any
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleSubmit = async (values: any) => {
-    await sleep(300);
+  const handleSubmit = (values: any) => {
+    const created = apis.playlists.playlistControllerCreate(values).subscribe((_) => routeConfig.playlistDetail);
+    // console.log(created);
+    // navigation.navigate(routeConfig.playlistDetail);
   };
   const author = 'Blue Collar Dev';
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -77,8 +81,18 @@ const PlaylistEdit = ({ children, navigation }: { children: any; navigation: any
                 <Textarea rowSpan={5} style={{ width: '100%' }} bordered onChange={(e) => setDescription(e.nativeEvent.text)} value={description} />
               </Item>
             </View>
-            {children}
           </PlaylistCard>
+          <Button
+            block
+            onPress={() =>
+              handleSubmit({
+                description,
+                title,
+              })
+            }
+          >
+            <Text>Create</Text>
+          </Button>
         </View>
       </Content>
     </Container>

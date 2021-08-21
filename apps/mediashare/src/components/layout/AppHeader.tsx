@@ -15,15 +15,13 @@ export const AppHeader = (props: AppHeaderProps) => {
     title = '',
     showBack = false,
     // showSearch = false,
-    showSort = false
+    showSort = false,
   } = props;
   return (
     <Header>
       <Left>
         {showBack && (
-          <Button
-            transparent
-            onPress={navigation.goBack}>
+          <Button transparent onPress={navigation.goBack}>
             <Icon name="chevron-back-outline" />
           </Button>
         )}
@@ -33,7 +31,8 @@ export const AppHeader = (props: AppHeaderProps) => {
             onPress={() => {
               // TODO: Fix this!
               // navigation.openDrawer();
-            }}>
+            }}
+          >
             <Icon name="search-outline" />
           </Button>
         )}

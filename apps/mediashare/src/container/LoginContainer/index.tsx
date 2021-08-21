@@ -31,7 +31,6 @@ const LoginComponent = () => {
   const [username, setUsername] = useState('test@example.com');
   const [password, setPassword] = useState('string12345');
   const user = useContext(UserContext);
-  const api = useContext(ApiContext);
   const onLogin = async (loginDto: LoginDto) => {
     const login = await apis.user.userControllerLogin({ loginDto }).toPromise();
 
@@ -40,15 +39,6 @@ const LoginComponent = () => {
     console.log('🚀 ~ file: index.tsx ~ line 37 ~ onLogin ~ config', config);
     console.log('🚀 ---------------------------------------------------------');
 
-    const updatedApi: ApiService = {
-      default: new DefaultApi(config),
-      mediaItems: new MediaItemsApi(config),
-      shareItems: new ShareItemsApi(config),
-      playlists: new PlaylistsApi(config),
-      user: new UserApi(config),
-      users: new UsersApi(config),
-    };
-    api.setApi(updatedApi);
     user.setUser(login);
   };
   return (

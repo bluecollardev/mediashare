@@ -5,9 +5,7 @@ export interface ErrorType {
 }
 
 export type ApiResponse<T> = T;
-export interface AppForm {}
 
-export interface RootState {}
 
 export const INITIAL_STATE = {
   users: null,
@@ -21,4 +19,7 @@ export const INITIAL_STATE = {
   // offlineMode: null,
 } as const;
 
-export default INITIAL_STATE;
+export type RootState = typeof INITIAL_STATE
+
+
+export  INITIAL_STATE;

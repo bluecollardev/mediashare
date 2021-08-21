@@ -19,10 +19,9 @@ export interface PlaylistsContainerProps {
 export const PlaylistsContainer = (props) => {
   const [data, setData] = useState([]);
   const user = useContext(UserContext);
-  const apis = useContext(ApiContext);
   const { navigation } = props;
   async function getAllPlaylists() {
-    const res = await apis.api.user.userControllerGetPlaylists({ hea }).toPromise();
+    const res = await apis.user.userControllerGetPlaylists().toPromise();
     setData(res);
   }
 
@@ -37,25 +36,6 @@ export const PlaylistsContainer = (props) => {
   }
   return <Playlists navigation={navigation} list={data} onViewDetailClicked={onViewDetailClicked} />;
 };
-
-class PlaylistsContainerClass extends React.Component<PlaylistsContainerProps, null> {
-  constructor(props) {
-    super(props);
-    this.onViewDetailClicked = this.onViewDetailClicked.bind(this);
-  }
-
-  componentDidMount() {
-    const { fetchList } = this.props;
-    fetchList();
-  }
-
-  onViewDetailClicked(id) {
-    const { navigation } = this.props;
-    navigation.navigate(routeConfig.playlistDetail.name, {
-      playlistId: id,
-    });
-  }
-}
 
 function mapDispatchToProps(dispatch: any) {
   return {

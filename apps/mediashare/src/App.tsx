@@ -122,32 +122,22 @@ async function fakeLogin() {
 }
 
 const App = () => {
-  const [user, setUser] = useState<LoginResponseDto>(null);
-  const [api, setApi] = useState<ApiService>({
-    default: new DefaultApi(),
-    mediaItems: new MediaItemsApi(),
-    shareItems: new ShareItemsApi(),
-    playlists: new PlaylistsApi(),
-    user: new UserApi(),
-    users: new UsersApi(),
-  });
+  const [user, setUser] = useState<LoginResponseDto>();
 
   Amplify.configure(awsmobile);
   fakeLogin();
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <ApiContext.Provider value={{ api, setApi }}>
-        {user ? (
-          <NavigationContainer>
-            <TabNavigation />
-          </NavigationContainer>
-        ) : (
-          <LoginContainer />
+      {user ? (
+        <NavigationContainer>
+          <TabNavigation />
+        </NavigationContainer>
+      ) : (
+        <LoginContainer />
 
-          // </UserContext.Provider>
-        )}
-      </ApiContext.Provider>
+        // </UserContext.Provider>
+      )}
     </UserContext.Provider>
   );
 };

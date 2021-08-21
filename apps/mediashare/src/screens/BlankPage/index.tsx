@@ -1,16 +1,5 @@
 import * as React from 'react';
-import {
-  Container,
-  Header,
-  Title,
-  Content,
-  Text,
-  Button,
-  Icon,
-  Left,
-  Right,
-  Body
-} from 'native-base';
+import { Container, Header, Title, Content, Text, Button, Icon, Left, Right, Body } from 'native-base';
 
 import styles from './styles';
 
@@ -33,7 +22,8 @@ class BlankPage extends React.Component<BlankPageProps, BlankPageState> {
               onPress={() => {
                 // TODO: Fix this!
                 // this.props.navigation.openDrawer();
-              }}>
+              }}
+            >
               <Icon name="search-outline" />
             </Button>
           </Left>
@@ -45,17 +35,14 @@ class BlankPage extends React.Component<BlankPageProps, BlankPageState> {
               transparent
               onPress={() => {
                 this.props.navigation.navigate('Home');
-              }}>
+              }}
+            >
               <Text>Back</Text>
             </Button>
           </Right>
         </Header>
         <Content padder>
-          <Text>
-            {param !== undefined
-              ? param.name.item
-              : 'Create Something Awesome . . .'}
-          </Text>
+          <Text>{param !== undefined ? param.name.item : 'Create Something Awesome . . .'}</Text>
         </Content>
       </Container>
     );
