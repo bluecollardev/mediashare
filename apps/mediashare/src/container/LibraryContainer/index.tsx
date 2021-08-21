@@ -1,8 +1,10 @@
+import { Storage } from 'aws-amplify';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import Library from '../../screens/Library';
 
 import { findMediaItems } from '../../state/modules/media-items';
+import { useState, useEffect } from 'react';
 
 export interface LibraryContainerProps {
   navigation: any;
@@ -11,17 +13,28 @@ export interface LibraryContainerProps {
   state: Object;
 }
 export interface LibraryContainerState {}
+const LibraryContainer = ({ navigation }: { navigation: any }) => {
+  // componentDidMount() {
+  //   const { fetchList } = this.props;
+  //   fetchList();
+  // }
 
-class LibraryContainer extends React.Component<LibraryContainerProps, LibraryContainerState> {
-  componentDidMount() {
-    const { fetchList } = this.props;
-    fetchList();
-  }
-  render() {
-    const { state } = this.props;
-    return <Library navigation={this.props.navigation} list={this.props.data} />;
-  }
-}
+  // const { state } = .props;
+  const [data, setData] = useState([]);
+  const loginAndStorage = async function () {
+    const list = await Storage.list('');
+    console.log('🚀 -------------------------------------------------------------');
+    console.log('🚀 ~ file: index.tsx ~ line 26 ~ loginAndStorage ~ list', list);
+    console.log('🚀 -------------------------------------------------------------');
+
+    setData(list.map((itm) => ({ title: itm.key })));
+  };
+
+  useEffect(() => {
+    loginAndStorage();
+  }, []);
+  return <Library navigation={navigation} list={data} />;
+};
 
 function mapDispatchToProps(dispatch: any) {
   return {

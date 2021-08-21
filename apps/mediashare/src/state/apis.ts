@@ -22,7 +22,6 @@ export const configuration = {
 export const basePath = 'http://localhost:5000';
 
 const userService = UserApiFactory(configuration, basePath, axios);
-
 const apis: ApiService = {
   default: new DefaultApi(),
   mediaItems: new MediaItemsApi(),

@@ -41,7 +41,7 @@ export interface PlaylistEditProps extends MediaDetailProps {
 
 export interface PlaylistEditState extends MediaDetailState {}
 
-const PlaylistEdit = (props) => {
+const PlaylistEdit = ({ children, navigation }: { children: any; navigation: any }) => {
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
   const user = useContext(UserContext) as any;
@@ -52,7 +52,6 @@ const PlaylistEdit = (props) => {
   const handleSubmit = async (values: any) => {
     await sleep(300);
   };
-  const { navigation } = props;
   const author = 'Blue Collar Dev';
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.log(user);
@@ -78,34 +77,7 @@ const PlaylistEdit = (props) => {
                 <Textarea rowSpan={5} style={{ width: '100%' }} bordered onChange={(e) => setDescription(e.nativeEvent.text)} value={description} />
               </Item>
             </View>
-            <View padder style={{ flexDirection: 'row' }}>
-              <Button
-                iconLeft
-                bordered
-                danger
-                style={{
-                  flex: 1,
-                  marginRight: 10,
-                  justifyContent: 'center',
-                }}
-              >
-                <Icon name="close-outline" />
-                <Text style={{ paddingRight: 30 }}>Cancel</Text>
-              </Button>
-              <Button
-                iconLeft
-                bordered
-                success
-                style={{
-                  flex: 1,
-                  marginRight: 10,
-                  justifyContent: 'center',
-                }}
-              >
-                <Icon name="checkmark" />
-                <Text style={{ paddingRight: 30 }}>Save</Text>
-              </Button>
-            </View>
+            {children}
           </PlaylistCard>
         </View>
       </Content>

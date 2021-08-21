@@ -8,6 +8,7 @@ import { mediaFormConfig } from '../../container/AddMediaContainer/formConfig';
 import { useState } from 'react';
 import { apis } from '../../state/apis';
 import { CreateMediaItemDto } from '../../api';
+import Amplify, { Auth, Storage } from 'aws-amplify';
 
 export interface MediaDetailProps {
   navigation: any;
@@ -32,6 +33,7 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { navigation } = props;
+
   return (
     <Container style={styles.container}>
       <Content>

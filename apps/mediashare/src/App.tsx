@@ -21,7 +21,11 @@ import { routeConfig } from './routes';
 import { RootState } from './state';
 import LoginContainer from './container/LoginContainer';
 import { LoginContext, UserContext } from './state/user-context';
-import { LoginResponseDto } from './api';
+import { DefaultApi, LoginResponseDto, MediaItemsApi, PlaylistsApi, ShareItemsApi, UserApi, UsersApi } from './rxjs-api';
+import Amplify, { Auth, Storage } from 'aws-amplify';
+import awsmobile from './aws-exports';
+import { ApiService } from './state/apis';
+import { ApiContext } from './state/api-context';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -91,7 +95,7 @@ const TabNavigator = createBottomTabNavigator();
 const TabNavigation = () => {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Library'}
+      initialRouteName={'Playlists'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {
@@ -113,20 +117,37 @@ const TabNavigation = () => {
   );
 };
 
+async function fakeLogin() {
+  await Auth.currentCredentials();
+}
+
 const App = () => {
   const [user, setUser] = useState<LoginResponseDto>(null);
+  const [api, setApi] = useState<ApiService>({
+    default: new DefaultApi(),
+    mediaItems: new MediaItemsApi(),
+    shareItems: new ShareItemsApi(),
+    playlists: new PlaylistsApi(),
+    user: new UserApi(),
+    users: new UsersApi(),
+  });
+
+  Amplify.configure(awsmobile);
+  fakeLogin();
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      {user ? (
-        <NavigationContainer>
-          <TabNavigation />
-        </NavigationContainer>
-      ) : (
-        <LoginContainer />
+      <ApiContext.Provider value={{ api, setApi }}>
+        {user ? (
+          <NavigationContainer>
+            <TabNavigation />
+          </NavigationContainer>
+        ) : (
+          <LoginContainer />
 
-        // </UserContext.Provider>
-      )}
+          // </UserContext.Provider>
+        )}
+      </ApiContext.Provider>
     </UserContext.Provider>
   );
 };

@@ -68,7 +68,7 @@ export class UserController {
   }
 
   @Get('playlists')
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   async getPlaylists(@GetUser() user: SessionUserInterface) {
     console.log(user);
