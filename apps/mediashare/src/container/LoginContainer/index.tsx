@@ -25,25 +25,18 @@ function validatePassword(password: string) {
 }
 
 const LoginComponent = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('test@example.com');
+  const [password, setPassword] = useState('string12345');
   const user = useContext(UserContext);
   const onLogin = async (loginDto: LoginDto) => {
-    console.log(username, password);
-
-    // const res = await apis.user.userControllerLogin({ loginDto });
-    console.log('🚀 ---------------------------------------------------');
-    console.log('🚀 ~ file: index.tsx ~ line 36 ~ onLogin ~ res', loginDto);
-    console.log('🚀 ---------------------------------------------------');
     const api = apis.user.userControllerLogin({ loginDto }).toPromise();
-    // const api = apis.users.usersControllerFindAll().toPromise();
 
-    api.then((res) => console.log(res));
+    api.then((res) => user.setUser(res));
   };
   return (
     <Login>
       <Item error={validateUsername(username) && username.length > 0}>
-        <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" />
+        <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" variant="outline" />
       </Item>
       <Item error={validatePassword(password)}>
         <Input onChange={(e) => setPassword(e.nativeEvent.text)} value={password} placeholder="Password" secureTextEntry={true} />

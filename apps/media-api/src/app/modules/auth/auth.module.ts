@@ -37,7 +37,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
     TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
     ShareItemModule,
     JwtModule.register({
-      secret: process.env.SESSION_SECRET || 'this-is-my-secret-key',
+      secret: 'this-is-my-secret-key',
       signOptions: { expiresIn: '10h' }
     })
   ],

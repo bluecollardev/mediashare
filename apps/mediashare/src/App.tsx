@@ -15,7 +15,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import { Icon } from 'native-base';
 
 import { routeConfig } from './routes';
@@ -92,7 +91,7 @@ const TabNavigator = createBottomTabNavigator();
 const TabNavigation = () => {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'explore'}
+      initialRouteName={'Playlists'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {

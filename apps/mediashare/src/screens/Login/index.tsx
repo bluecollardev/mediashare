@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform } from 'react-native';
+import { Image, Platform } from 'react-native';
 import { Container, Content, Header, Body, Title, Button, Text, View } from 'native-base';
 import { RootState } from '../../state';
 
@@ -18,7 +18,15 @@ const Login = ({ children }) => {
     <Container>
       <Header style={{ height: 200 }}>
         <Body style={{ alignItems: 'center' }}>
-          <Title>Blue Collar Software</Title>
+          <Image
+            source={require('./logo.png')}
+            style={{
+              width: '100%',
+              height: 100,
+              resizeMode: 'cover',
+            }}
+          />
+
           <View padder>
             <Text style={{ color: Platform.OS === 'ios' ? '#000' : '#FFF' }} />
           </View>

@@ -4,6 +4,8 @@ import Playlists from '../../screens/Playlists';
 
 import { findUserPlaylists } from '../../state/modules/playlists';
 import { routeConfig } from '../../routes';
+import { useEffect, useState } from 'react';
+import { apis } from '../../state/apis';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -11,9 +13,28 @@ export interface PlaylistsContainerProps {
   data: Object;
   state: Object;
 }
-export interface PlaylistsContainerState {}
 
-class PlaylistsContainer extends React.Component<PlaylistsContainerProps, PlaylistsContainerState> {
+export const PlaylistsContainer = (props) => {
+  const [data, setData] = useState([]);
+  const { navigation } = props;
+  async function getAllPlaylists() {
+    const res = await apis.user.userControllerGetPlaylists().toPromise();
+    setData(res);
+  }
+
+  useEffect(() => {
+    getAllPlaylists();
+  }, []);
+  function onViewDetailClicked(id) {
+    const { navigation } = this.props;
+    navigation.navigate(routeConfig.playlistDetail.name, {
+      playlistId: id,
+    });
+  }
+  return <Playlists navigation={navigation} list={data} onViewDetailClicked={onViewDetailClicked} />;
+};
+
+class PlaylistsContainerClass extends React.Component<PlaylistsContainerProps, null> {
   constructor(props) {
     super(props);
     this.onViewDetailClicked = this.onViewDetailClicked.bind(this);
@@ -29,11 +50,6 @@ class PlaylistsContainer extends React.Component<PlaylistsContainerProps, Playli
     navigation.navigate(routeConfig.playlistDetail.name, {
       playlistId: id,
     });
-  }
-
-  render() {
-    const { navigation, data } = this.props;
-    return <Playlists navigation={navigation} list={data} onViewDetailClicked={this.onViewDetailClicked} />;
   }
 }
 

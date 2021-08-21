@@ -68,8 +68,10 @@ export class UserController {
   }
 
   @Get('playlists')
+  // @UseGuards(JwtAuthGuard)
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   async getPlaylists(@GetUser() user: SessionUserInterface) {
+    console.log(user);
     const result = await this.playlistService.getPlaylistByUserId({ userId: user._id });
 
     console.log(result);

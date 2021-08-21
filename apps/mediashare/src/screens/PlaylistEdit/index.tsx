@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Container, Content, View, Button, Icon, Text } from 'native-base';
+import { Container, Content, View, Button, Icon, Text, Input, Item, Label, Textarea } from 'native-base';
 
 import MediaEdit, { MediaDetailProps, MediaDetailState } from '../MediaDetail';
 import { PlaylistCard } from '../../components/layout/PlaylistCard';
 import TextField from '../../components/form/TextField';
 
 import styles from './styles';
+import { useContext, useState } from 'react';
+import { UserContext } from '../../state/user-context';
 
 const validate = (values) => {
   const error = {} as any;
@@ -39,75 +41,79 @@ export interface PlaylistEditProps extends MediaDetailProps {
 
 export interface PlaylistEditState extends MediaDetailState {}
 
-class PlaylistEdit extends MediaEdit<PlaylistEditProps, PlaylistEditState> {
-  sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const PlaylistEdit = (props) => {
+  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState('');
+  const user = useContext(UserContext) as any;
+
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  handleSubmit = async (values: any) => {
-    await this.sleep(300);
+  const handleSubmit = async (values: any) => {
+    await sleep(300);
   };
+  const { navigation } = props;
+  const author = 'Blue Collar Dev';
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  console.log(user);
+  return (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-  render() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { navigation } = this.props;
-    const title = 'My First Playlist';
-    const author = 'Blue Collar Dev';
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const description =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' +
-      'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-    return (
-      <Container style={styles.container}>
-        <Content>
-          <View padder>
-            <PlaylistCard
-              title={title}
-              author={author}
-              // description={description}
-            >
-              <View padder>
-                <Field name="title" label="Title" component={TextField} />
-                <Field
-                  name="description"
-                  label="Description"
-                  component={TextField}
-                />
-              </View>
-              <View padder style={{ flexDirection: 'row' }}>
-                <Button
-                  iconLeft
-                  bordered
-                  danger
-                  style={{
-                    flex: 1,
-                    marginRight: 10,
-                    justifyContent: 'center',
-                  }}>
-                  <Icon name="close-outline" />
-                  <Text style={{ paddingRight: 30 }}>Cancel</Text>
-                </Button>
-                <Button
-                  iconLeft
-                  bordered
-                  success
-                  style={{
-                    flex: 1,
-                    marginRight: 10,
-                    justifyContent: 'center'
-                  }}>
-                  <Icon name="checkmark" />
-                  <Text style={{ paddingRight: 30 }}>Save</Text>
-                </Button>
-              </View>
-            </PlaylistCard>
-          </View>
-        </Content>
-      </Container>
-    );
-  }
-}
+    <Container style={styles.container}>
+      <Content>
+        <View padder>
+          <PlaylistCard
+            title={title}
+            author={user.user.firstname}
+            // description={description}
+          >
+            <View padder>
+              <Item stackedLabel>
+                <Label>Title</Label>
+
+                <Input label="Title" onChange={(e) => setTitle(e.nativeEvent.text)} value={title} />
+              </Item>
+              <Item stackedLabel>
+                <Label>Description</Label>
+                <Textarea rowSpan={5} style={{ width: '100%' }} bordered onChange={(e) => setDescription(e.nativeEvent.text)} value={description} />
+              </Item>
+            </View>
+            <View padder style={{ flexDirection: 'row' }}>
+              <Button
+                iconLeft
+                bordered
+                danger
+                style={{
+                  flex: 1,
+                  marginRight: 10,
+                  justifyContent: 'center',
+                }}
+              >
+                <Icon name="close-outline" />
+                <Text style={{ paddingRight: 30 }}>Cancel</Text>
+              </Button>
+              <Button
+                iconLeft
+                bordered
+                success
+                style={{
+                  flex: 1,
+                  marginRight: 10,
+                  justifyContent: 'center',
+                }}
+              >
+                <Icon name="checkmark" />
+                <Text style={{ paddingRight: 30 }}>Save</Text>
+              </Button>
+            </View>
+          </PlaylistCard>
+        </View>
+      </Content>
+    </Container>
+  );
+};
 
 export default reduxForm<{}, PlaylistEditProps>({
   form: 'playlistEdit',
-  validate
+  validate,
 })(PlaylistEdit as any);

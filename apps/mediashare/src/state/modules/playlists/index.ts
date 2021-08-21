@@ -17,7 +17,7 @@ export const playlistItemActionTypes = makeEnum(PLAYLIST_ITEM_ACTIONS);
 
 export const getUserPlaylistById = createAsyncThunk(playlistActionTypes.getUserPlaylist, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = await api.playlists.playlistControllerFindOne({ playlistId: id }, { query: {}, headers: {} });
+  const response = await api.playlists.playlistControllerFindOne({ playlistId: id });
   return response && response.status === 200 ? response.data : undefined;
 });
 
@@ -42,15 +42,15 @@ export const shareUserPlaylist = createAsyncThunk(playlistActionTypes.shareUserP
 
 export const removeUserPlaylist = createAsyncThunk(playlistActionTypes.removeUserPlaylist, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = await api.playlists.playlistControllerRemove({ playlistId: id });
-  return response && response.status === 200 ? response.data : undefined;
+  const response = await api.playlists.playlistControllerRemove({ playlistId: id }).toPromise();
+  return response;
 });
 
 export const findUserPlaylists = createAsyncThunk(playlistsActionTypes.findUserPlaylists, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore
-  const response = await api.user.userControllerGetPlaylists({ query: {}, headers: {} });
-  return response && response.status === 200 ? [response.data] : [];
+  const response = await api.user.userControllerGetPlaylists({ query: {}, headers: {} }).toPromise();
+  return response && response.status === 200 ? [response] : [];
 });
 
 export const addUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.addUserPlaylistItem, async (playlist: CreatePlaylistDto, { extra }) => {
