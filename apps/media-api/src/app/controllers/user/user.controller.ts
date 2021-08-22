@@ -62,7 +62,7 @@ export class UserController {
 
   @Get('playlists')
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
-  async getPlaylists(@GetUser() user: SessionUserInterface) {
+  async getUserPlaylists(@GetUser() user: SessionUserInterface) {
     console.log(user);
     const result = user._id ? await this.playlistService.getPlaylistByUserId({ userId: user._id }) : await this.playlistService.findAll();
 

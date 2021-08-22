@@ -103,7 +103,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
       const user = await this.userService.findByQuery({ username: defaultUsername });
       return await this.playlistItemService.aggregatePlaylistAndItemByIdField({ userId: user._id });
     }
-    return await this.playlistItemService.aggregatePlaylistAndItemByIdField({ userId });
+    return await this.findAllByQuery({ userId });
   }
   getPlaylistById({ playlistId }: OptionalObjectIdParameters) {
     return this.playlistItemService.aggregatePlaylistAndItemByIdField({

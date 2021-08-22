@@ -140,6 +140,25 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
     }
   }
 
+  /**
+   * Find many document by any partial query of the entity.
+   *
+   * @param {Partial<E>} query
+   * @return {*}
+   * @memberof DataService
+   */
+  async findAllByQuery(query: Partial<E>): Promise<E[]> {
+    this.logger.info(`${this.constructor.name}.findByQuery`);
+
+    try {
+      const findByQuery = await this.repository.find(query);
+
+      return R.clone(findByQuery);
+    } catch (error) {
+      this.logger.error(`${this.constructor.name}.findManyByQuery ${error}`);
+    }
+  }
+
   async insertMany(items: DeepPartial<E>[]) {
     this.logger.info(`${this.constructor.name}.insertMany`);
     try {
