@@ -10,8 +10,9 @@ import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
 import { number, string } from '@hapi/joi';
 import { AwsMediaItem } from './aws-media-item.model';
 import { MediaViewItem } from './media-view-item.model';
+import { Blob } from 'buffer';
 
-const MEDIA_ITEM_ACTIONS = ['GET_MEDIA_ITEM', 'ADD_MEDIA_ITEM', 'UPDATE_MEDIA_ITEM', 'SHARE_MEDIA_ITEM', 'REMOVE_MEDIA_ITEM'] as const;
+const MEDIA_ITEM_ACTIONS = ['GET_MEDIA_ITEM', 'ADD_MEDIA_ITEM', 'UPDATE_MEDIA_ITEM', 'SHARE_MEDIA_ITEM', 'REMOVE_MEDIA_ITEM', 'UPLOAD_MEDIA_ITEM'] as const;
 const MEDIA_ITEMS_ACTIONS = ['FIND_MEDIA_ITEMS'] as const;
 
 export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
@@ -23,10 +24,13 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
   return response;
 });
 
-export const addMediaItem = createAsyncThunk(mediaItemActionTypes.addMediaItem, async (item: CreateMediaItemDto, { extra }) => {
-  const { api } = extra as { api: ApiService };
-  // const response = await Storage.put('');
+export const uploadMediaToS3 = createAsyncThunk(mediaItemActionTypes.uploadMediaItem, async ({ blob, key }: { blob: any; key: string }, { extra }) => {
+  const response = await Storage.put(key, blob, { contentType: 'video/mp4' });
+  // console.log('🚀 -----------------------------------------------------------------');
+  // console.log('🚀 ~ file: index.ts ~ line 29 ~ addMediaItem ~ response', response);
+  // console.log('🚀 -----------------------------------------------------------------');
   // return response && response.status === 200 ? response.data : undefined;
+  return response;
 });
 
 export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (item: UpdateMediaItemDto, { extra }) => {
@@ -62,10 +66,11 @@ const initialState: { mediaItems: AwsMediaItem[]; loading: boolean } = {
   mediaItems: [],
 };
 
-const initialMediaItemState: { getMediaItem: string; loading: boolean; selectedMediaItem: MediaViewItem } = {
+const initialMediaItemState: { getMediaItem: string; loading: boolean; selectedMediaItem: MediaViewItem; file: object } = {
   getMediaItem: null,
   selectedMediaItem: null,
   loading: false,
+  file: null,
 };
 
 export const MEDIA_ITEMS_STATE_KEY = 'mediaItems';
@@ -83,6 +88,19 @@ const mediaItemReducer = createReducer(
     builder.addCase(getMediaItemById.pending, (state) => ({ ...state, loading: true }));
 
     builder.addCase(getMediaItemById.fulfilled, (state, action) => ({ ...state, getMediaItem: action.payload, loading: false }));
+
+    builder.addCase(uploadMediaToS3.pending, (state, action) => {
+      console.log(state, action);
+      return { ...state, loading: true };
+    });
+    builder.addCase(uploadMediaToS3.rejected, (state, action) => {
+      console.log(state, action);
+      return { ...state, loading: false };
+    });
+    builder.addCase(uploadMediaToS3.fulfilled, (state, action) => {
+      console.log(state, action);
+      return { ...state, loading: false, file: action.payload };
+    });
     builder.addCase(selectMediaItem, (state, action) => {
       return { ...state, selectedMediaItem: action.payload };
     });

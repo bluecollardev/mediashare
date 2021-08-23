@@ -1,10 +1,9 @@
-import { createAction, createAsyncThunk, createReducer, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 
-import { ActionsFactory, withPayloadType } from '../../core/factory';
+import { ActionsFactory } from '../../core/factory';
 import { LoginResponseDto } from '../../../api/models/login-response-dto';
 import { LoginDto } from '../../../api/models/login-dto';
-import { apis, ApiService } from '../../apis';
-import { addItem } from '../../core/reducers';
+import { apis } from '../../apis';
 
 export const USER_STATE_KEY = 'user';
 
@@ -20,13 +19,13 @@ const initialState: LoginResponseDto = {
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 // const login = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => await apis.user.userControllerLogin({ loginDto }));
 
-export const loginThunk = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => {
+export const loginAction = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => {
   const response = await apis.user.userControllerLogin({ loginDto }).toPromise();
   return response;
 });
 
 const userReducer = createReducer(initialState, (builder) =>
-  builder.addCase(loginThunk.fulfilled, (state, action) => {
+  builder.addCase(loginAction.fulfilled, (state, action) => {
     return action.payload;
   })
 );

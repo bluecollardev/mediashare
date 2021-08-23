@@ -1,4 +1,5 @@
 {
   "name": "bluecollar_mediashare",
-  "displayName": "bluecollar_mediashare"
+  "displayName": "bluecollar_mediashare",
+  "usesIcloudStorage": true
 }

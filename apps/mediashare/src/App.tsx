@@ -124,14 +124,7 @@ Amplify.configure(awsmobile);
 async function fakeLogin() {
   await Auth.currentCredentials();
 }
-
-Auth.signOut();
-const signUpConfig = {
-  header: 'My Customized Sign Up',
-  hideAllDefaults: true,
-  defaultCountryCode: '1',
-  signupFields: [],
-};
+fakeLogin().then();
 
 console.log(Auth.configure());
 const App = () => {
@@ -163,14 +156,3 @@ const App = () => {
   );
 };
 export default App;
-
-function mapDispatchToProps(dispatch: any) {
-  return {};
-}
-
-const mapStateToProps = (state: RootState) => ({
-  ...state,
-});
-
-// export default connect(mapStateToProps, mapDispatchToProps)(App);
-// export default App;
