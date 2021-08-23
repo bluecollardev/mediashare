@@ -5,6 +5,7 @@ import { LoginResponseDto } from '../../../api/models/login-response-dto';
 import { LoginDto } from '../../../api/models/login-dto';
 import { apis, ApiService } from '../../apis';
 import { addItem } from '../../core/reducers';
+import { Auth } from 'aws-amplify';
 
 export const USER_STATE_KEY = 'user';
 
@@ -20,13 +21,9 @@ const initialState: LoginResponseDto = {
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 // const login = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => await apis.user.userControllerLogin({ loginDto }));
 
-export const loginThunk = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => {
-  const response = await apis.user.userControllerLogin({ loginDto }).toPromise();
-  return response;
-});
-
 const userReducer = createReducer(initialState, (builder) =>
-  builder.addCase(loginThunk.fulfilled, (state, action) => {
+  builder.addCase(UserActions.login, (state, action) => {
+    console.log(action);
     return action.payload;
   })
 );

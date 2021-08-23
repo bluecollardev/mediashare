@@ -77,7 +77,6 @@ const PlaylistEdit = ({ navigation }: { navigation: any }) => {
     }
   }
   if (!playlist.loading && playlist.createdPlaylist) {
-    console.log('playlist created', playlist.createdPlaylist);
     dispatch(findUserPlaylists({}));
     dispatch(clearPlaylistAction());
     navigation.navigate(routeConfig.playlists);

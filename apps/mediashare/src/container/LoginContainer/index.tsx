@@ -1,17 +1,28 @@
 import * as React from 'react';
-import { Text, Button } from 'native-base';
+import { Text, Button, Container, View, Segment, Content } from 'native-base';
 import Login from '../../screens/Login';
 
 import { Component, useContext, useState } from 'react';
-import { UserContext } from '../../state/user-context';
-import { LoginDto } from '../../api';
 
+import {
+  Authenticator,
+  SignIn,
+  SignUp,
+  Greetings,
+  VerifyContact,
+  ForgotPassword,
+  TOTPSetup,
+  Loading,
+  AmplifyTheme,
+  ConfirmSignIn,
+} from 'aws-amplify-react-native';
+import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
-import { Authenticator } from 'aws-amplify-react-native';
+import { UserActions } from '../../state/modules/user';
 
-import { AmplifyTheme } from 'aws-amplify-react-native';
+const sectionFooterLink = Object.assign({}, AmplifyTheme.sectionFooterLink, { color: '#2874F0', fontFamily: 'System' });
 
-// const MySectionHeader = Object.assign({}, AmplifyTheme.button, { backgroundColor: 'black' });
+const sectionFooterLinkDisabled = Object.assign({}, AmplifyTheme.sectionFooterLinkDisabled, { color: '#b5b5b5', fontFamily: 'System' });
 
 const MyTheme = Object.assign({}, AmplifyTheme, {
   button: {
@@ -34,6 +45,28 @@ const MyTheme = Object.assign({}, AmplifyTheme, {
     textAlign: 'center',
     width: '100%',
   },
+  buttonDisabled: {
+    backgroundColor: '#b5b5b5',
+    fontFamily: 'System',
+
+    paddingVertical: 6,
+    // paddingHorizontal: variables.buttonPadding + 10,
+    borderRadius: 5,
+    borderColor: '#2874F0',
+    borderWidth: null,
+    height: 45,
+    elevation: 2,
+    shadowColor: undefined,
+    shadowOffset: undefined,
+    shadowOpacity: undefined,
+    shadowRadius: undefined,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    textAlign: 'center',
+    width: '100%',
+  },
+  sectionFooterLink,
+  sectionFooterLinkDisabled,
 });
 
 const maxLength = (max: any) => (value: any) => value && value.length > max ? `Must be ${max} characters or less` : undefined;
@@ -43,31 +76,16 @@ const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4
 export interface LoginFormState {}
 
 const LoginComponent = () => {
-  const [] = useState('test@example.com');
-  const [] = useState('string12345');
+  // const [username] = useState('test@example.com');
+  // const [password] = useState('string12345');
   const dispatch = useDispatch();
-
-  const signUpConfig = {
-    header: 'My Customized Sign Up',
-    hideAllDefaults: true,
-    defaultCountryCode: '1',
-    signUpFields: [
-      {
-        label: 'My user name',
-        key: 'username',
-        required: true,
-        displayOrder: 1,
-        type: 'string',
-      },
-      {
-        label: 'Password',
-        key: 'password',
-        required: true,
-        displayOrder: 2,
-        type: 'password',
-      },
-    ],
-  };
+  function updateAuthState(authState, data) {
+    console.log(authState);
+    console.log(data);
+    if (authState === 'signedIn') {
+      dispatch(UserActions.login({ ...data.attributes, username: data.username }));
+    }
+  }
   return (
     <Login>
       {/* <Item error={validateUsername(username) && username.length > 0}>
@@ -76,9 +94,20 @@ const LoginComponent = () => {
       <Item error={validatePassword(password)}>
         <Input onChange={(e) => setPassword(e.nativeEvent.text)} value={password} placeholder="Password" secureTextEntry={true} />
       </Item> */}
-      <Authenticator signUpConfig={signUpConfig} theme={MyTheme}>
+      <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={true}>
         {/* <MyCustomSignUp override={'SignUp'} /> */}
+        <SignIn />
+        <SignUp />
+        <Greetings />
+        <ConfirmSignIn />
+
+        <VerifyContact />
+        <ForgotPassword />
+        {/* <TOTPSetup /> */}
+        <Loading />
+        <CustomVerify override={'ConfirmSignUp'} />
       </Authenticator>
+
       {/* <View padder>
         <Button block onPress={() => onLogin({ username, password })}>
           <Text>Login</Text>
@@ -87,4 +116,38 @@ const LoginComponent = () => {
     </Login>
   );
 };
+
+class CustomVerify extends Component<any> {
+  constructor(props: any) {
+    super(props);
+    this.gotoSignIn = this.gotoSignIn.bind(this);
+  }
+
+  gotoSignIn() {
+    // to switch the authState to 'signIn'
+    console.log(this.props);
+    this.props.onStateChange('signIn', {});
+  }
+
+  render() {
+    return (
+      <>
+        {/* only render this component when the authState is 'signUp' */}
+        {this.props.authState === 'confirmSignUp' && (
+          <Container style={{ width: '100%' }}>
+            <Content>
+              <View padder>
+                {/* <Text>My Custom SignUp Component</Text> */}
+
+                <Button onPress={this.gotoSignIn} style={{ width: '100%' }} block>
+                  <Text>Goto SignIn</Text>
+                </Button>
+              </View>
+            </Content>
+          </Container>
+        )}
+      </>
+    );
+  }
+}
 export default LoginComponent;

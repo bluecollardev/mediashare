@@ -16,17 +16,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'native-base';
-import { withAuthenticator } from 'aws-amplify-react-native';
 
 import { routeConfig } from './routes';
 import { RootState } from './state';
 import LoginContainer from './container/LoginContainer';
-import { LoginContext, UserContext } from './state/user-context';
-import { DefaultApi, LoginResponseDto, MediaItemsApi, PlaylistsApi, ShareItemsApi, UserApi, UsersApi } from './rxjs-api';
-import Amplify, { Auth, Storage } from 'aws-amplify';
+
+import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
-import { ApiService } from './state/apis';
-import { ApiContext } from './state/api-context';
+
 import { Provider } from 'react-redux';
 import { store } from './boot/configureStore';
 import { useAppSelector } from './state/index';
@@ -125,25 +122,13 @@ async function fakeLogin() {
   await Auth.currentCredentials();
 }
 
-Auth.signOut();
-const signUpConfig = {
-  header: 'My Customized Sign Up',
-  hideAllDefaults: true,
-  defaultCountryCode: '1',
-  signupFields: [],
-};
-
-console.log(Auth.configure());
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
-
-  // Amplify.configure(awsmobile);
-  // fakeLogin();
 
   const user = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    setIsLoggedIn(user._id.length > 0);
+    setIsLoggedIn(user.username.length > 0);
   }, [user]);
 
   return (
