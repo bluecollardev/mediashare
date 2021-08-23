@@ -18,16 +18,21 @@ const initialState: LoginResponseDto = {
   accessToken: '',
 };
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
-const login = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => await apis.user.userControllerLogin({ loginDto }));
+// const login = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => await apis.user.userControllerLogin({ loginDto }));
 
-export const loginThunk = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto, { extra }) => {
-  const { api } = extra as { api: typeof apis };
-  const response = await api.user.userControllerLogin({ loginDto }).toPromise();
+export const loginThunk = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => {
+  const response = await apis.user.userControllerLogin({ loginDto }).toPromise();
+  console.log(loginDto);
   return response;
 });
 console.log(loginThunk);
 
-const userReducer = createReducer(initialState, (builder) => builder.addCase(login.fulfilled, (state, action) => addItem('login')(state, action)));
+const userReducer = createReducer(initialState, (builder) =>
+  builder.addCase(loginThunk.fulfilled, (state, action) => {
+    console.log('fulfilled', action);
+    state = action.payload;
+  })
+);
 
 // export const userSlice = createSlice({
 //   name: USER_STATE_KEY,
