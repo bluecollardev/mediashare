@@ -34,6 +34,7 @@ const userSharedReducers = {
 const rootReducer = combineReducers({
   user: userReducer,
   playlists: playlistsReducer,
+  playlist: playlistReducer,
 });
 
 export { rootReducer };

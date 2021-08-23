@@ -5,6 +5,8 @@ import { MediaListItem } from '../../components/layout/MediaListItem';
 
 import { routeConfig } from '../../routes';
 import styles from './styles';
+import { useDispatch } from 'react-redux';
+import { selectPlaylistAction } from '../../state/modules/playlists/index';
 
 export interface PlaylistsProps {
   navigation: any;
@@ -15,8 +17,9 @@ export interface PlaylistsProps {
 export interface PlaylistsState {}
 
 const Playlists = (props) => {
-  const onViewDetailClicked = (id) => {
-    props?.onViewDetailClicked(id);
+  const dispatch = useDispatch();
+  const onViewDetailClicked = (item) => {
+    dispatch(selectPlaylistAction(item));
   };
   const { navigation, list } = props;
   const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
@@ -29,6 +32,7 @@ const Playlists = (props) => {
     title: item.title,
     description: `${item?.mediaItems?.length || 0} Videos`,
     image: imageSrc,
+    ...item,
   }));
 
   return (
@@ -56,7 +60,7 @@ const Playlists = (props) => {
                   description={description}
                   image={image}
                   onViewDetail={() => {
-                    onViewDetailClicked(item.id);
+                    onViewDetailClicked(item);
                   }}
                 />
               );

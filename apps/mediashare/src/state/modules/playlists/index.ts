@@ -1,16 +1,23 @@
-import { ActionReducerMapBuilder, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { makeActions, makeEnum } from '../../core/factory';
 
 import * as reducers from '../../core/reducers';
 import { ApiService } from '../../apis';
-import { CreatePlaylistDto, PlaylistItemResponseDto, UpdatePlaylistDto } from '../../../api';
+import { CreatePlaylistDto, UpdatePlaylistDto } from '../../../api';
 import { apis } from '../../apis';
-import { PlaylistResponseDto } from '../../../api/models/playlist-response-dto';
-import { CreatePlaylistDtoCategoryEnum } from '../../../api/models/create-playlist-dto';
+import { PlaylistItemResponseDto } from '../../../rxjs-api/models/PlaylistItemResponseDto';
+import { CreatePlaylistResponseDto } from '../../../api/models/create-playlist-response-dto';
 
-const PLAYLIST_ACTIONS = ['GET_USER_PLAYLIST', 'ADD_USER_PLAYLIST', 'UPDATE_USER_PLAYLIST', 'SHARE_USER_PLAYLIST', 'REMOVE_USER_PLAYLIST'] as const;
+const PLAYLIST_ACTIONS = [
+  'GET_USER_PLAYLIST',
+  'ADD_USER_PLAYLIST',
+  'UPDATE_USER_PLAYLIST',
+  'SHARE_USER_PLAYLIST',
+  'REMOVE_USER_PLAYLIST',
+  'CLEAR_USER_PLAYLIST',
+] as const;
 const PLAYLISTS_ACTIONS = ['FIND_USER_PLAYLISTS'] as const;
 const PLAYLIST_ITEM_ACTIONS = ['ADD_USER_PLAYLIST_ITEM', 'UPDATE_USER_PLAYLIST_ITEM', 'REMOVE_USER_PLAYLIST_ITEM'] as const;
 
@@ -18,6 +25,8 @@ export const playlistActionTypes = makeEnum(PLAYLIST_ACTIONS);
 export const playlistsActionTypes = makeEnum(PLAYLISTS_ACTIONS);
 export const playlistItemActionTypes = makeEnum(PLAYLIST_ITEM_ACTIONS);
 
+export const clearPlaylistAction = createAction('clearPlaylist');
+export const selectPlaylistAction = createAction<PlaylistItemResponseDto, 'selectPlaylist'>('selectPlaylist');
 export const getUserPlaylistById = createAsyncThunk(playlistActionTypes.getUserPlaylist, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
@@ -82,35 +91,38 @@ const initialState: { userPlaylists: PlaylistItemResponseDto[]; loading: boolean
 };
 
 export const USER_PLAYLISTS_STATE_KEY = 'userPlaylists';
-const initialPlaylistState: { createPlaylist: CreatePlaylistDto; loading: boolean } = {
+const initialPlaylistState: { createdPlaylist: CreatePlaylistResponseDto; loading: boolean; selectedPlaylist: PlaylistItemResponseDto } = {
   loading: false,
-  createPlaylist: {
-    createdBy: '',
-    category: CreatePlaylistDtoCategoryEnum.Builder,
-    title: '',
-    description: '',
-    mediaIds: [],
-  },
+  createdPlaylist: null,
+  selectedPlaylist: null,
 };
 
-const playlistReducer = createReducer(
-  initialPlaylistState,
-  (builder) => {}
-  builder.addCase(findUserPlaylists.fulfilled, (state, action) => {
-    state.userPlaylists = action.payload;
-  })
-  // .addCase(addUserPlaylist.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
-  // .addCase(updateUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
-  // .addCase(shareUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
-  // .addCase(removeUserPlaylist.fulfilled, reducers.removeItem(USER_PLAYLISTS_STATE_KEY))
-);
+const playlistReducer = createReducer(initialPlaylistState, (builder) => {
+  builder.addCase(addUserPlaylist.pending, (state, action) => {
+    return { ...state, loading: true };
+  });
+  builder.addCase(addUserPlaylist.fulfilled, (state, action) => {
+    console.log('submitted');
+    return { ...state, createdPlaylist: action.payload, loading: false };
+  });
+  builder.addCase(selectPlaylistAction, (state, action) => {
+    return { ...state, selectedPlaylist: action.payload };
+  });
+  builder.addCase(clearPlaylistAction, (state, action) => {
+    return { ...state, createdPlaylist: null };
+  });
+});
+// .addCase(addUserPlaylist.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
+// .addCase(updateUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
+// .addCase(shareUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
+// .addCase(removeUserPlaylist.fulfilled, reducers.removeItem(USER_PLAYLISTS_STATE_KEY))
 
 const playlistsReducer = createReducer(initialState, (builder) => {
-  builder.addCase(addUserPlaylistItem.pending, (state, action) => {
-    return { userPlaylists: action.payload, loading: true };
+  builder.addCase(findUserPlaylists.pending, (state, action) => {
+    return { ...state, userPlaylists: action.payload, loading: true };
   });
-  builder.addCase(addUserPlaylistItem.fulfilled, (state, action) => {
-    return { userPlaylists: action.payload, loading: false };
+  builder.addCase(findUserPlaylists.fulfilled, (state, action) => {
+    return { ...state, userPlaylists: action.payload, loading: false };
   });
 });
 
