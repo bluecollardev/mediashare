@@ -2,17 +2,20 @@ import { Configuration, Middleware, RequestArgs, ResponseArgs, servers } from '.
 import { UserApi, UsersApi, PlaylistsApi, DefaultApi, MediaItemsApi, ShareItemsApi } from '../rxjs-api';
 import axios from 'axios';
 import { request } from 'https';
+import { store } from '../boot/configureStore';
 
 let TOKEN = '';
 let COOKIE = '';
 function middlewareFactory() {
   const sessionMiddleWare: Middleware = {
     pre: (request: RequestArgs) => {
-      const { headers: prevHeaders, ...rest } = request;
+      const token = store.getState().user.signInUserSession.idToken.jwtToken;
 
+      const { headers: prevHeaders, ...rest } = request;
+      console.log(store.getState().user.signInUserSession);
       const headers = {
         ...prevHeaders,
-        Authorization: `Bearer ${TOKEN}`,
+        Authorization: `Bearer ${token}`,
         cookie: COOKIE,
         // cookie: 'connect.sid=s%3A2yl00r3D18IP6bGsdOvZpk87hskZIJZX.D31vWBjfaejkKUqqPNpP2zfDuZMt1%2Bf6FcXOKXK%2B9y0',
       };

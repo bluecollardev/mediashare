@@ -21,7 +21,7 @@ import { routeConfig } from './routes';
 import { RootState } from './state';
 import LoginContainer from './container/LoginContainer';
 
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify, { Auth, Hub } from 'aws-amplify';
 import awsmobile from './aws-exports';
 
 import { Provider } from 'react-redux';
@@ -118,10 +118,32 @@ const TabNavigation = () => {
   );
 };
 Amplify.configure(awsmobile);
-async function fakeLogin() {
-  await Auth.currentCredentials();
-}
 
+const listener = (data) => {
+  switch (data.payload.event) {
+    case 'signIn':
+      console.info('user signed in');
+      break;
+    case 'signUp':
+      console.info('user signed up');
+      break;
+    case 'signOut':
+      console.info('user signed out');
+      break;
+    case 'signIn_failure':
+      console.error('user sign in failed');
+      break;
+    case 'tokenRefresh':
+      console.info('token refresh succeeded');
+      break;
+    case 'tokenRefresh_failure':
+      console.error('token refresh failed');
+      break;
+    case 'configured':
+      console.info('the Auth module is configured');
+  }
+};
+Hub.listen('auth', listener);
 const App = () => {
   const user = useAppSelector((state) => state.user);
 

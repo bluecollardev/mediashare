@@ -36,6 +36,9 @@ import { AppConfigService } from './modules/app-config.module.ts/app-config.prov
       }),
       inject: [AppConfigService]
     }),
+    PassportModule.register({
+      defaultStrategy: 'jwt'
+    }),
     UserModule,
     LoggerModule.forRoot({
       pinoHttp: {

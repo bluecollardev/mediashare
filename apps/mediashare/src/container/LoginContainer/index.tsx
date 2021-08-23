@@ -81,15 +81,10 @@ const LoginComponent = () => {
   // const [password] = useState('string12345');
   const dispatch = useDispatch();
   function updateAuthState(authState, data) {
-    console.log(authState);
-    console.log(data);
-
     if (authState === 'signedIn') {
-      dispatch(UserActions.login({ ...data, username: data.username }));
+      dispatch(createUser(data.attributes.email));
 
-      console.log(Auth.Credentials);
-      // const combined = Object.create({}, { ...attributes, username });
-      dispatch(createUser(data.username));
+      dispatch(UserActions.login({ ...data, username: data.attributes.email }));
     }
   }
   return (

@@ -18,15 +18,20 @@ export const UsersActions = makeActions(USERS_ACTIONS);
 
 const initialState: UsersState = {};
 
-export const createUser = createAsyncThunk(
-  UserActions.login.type,
-  async (username: string) => await apis.users.usersControllerCreate({ createUserDto: { username } })
-);
-export const usersReducer = createReducer(initialState, (builder) =>
-  builder
-    .addCase(UsersActions.loadUsers, genericListReducers.addItems(USERS_STATE_KEY))
-    .addCase(UsersActions.addUser, genericListReducers.addItems(USERS_STATE_KEY))
-    .addCase(UsersActions.addUsers, genericListReducers.addItems(USERS_STATE_KEY))
-    .addCase(UsersActions.removeUser, genericListReducers.removeItem(USERS_STATE_KEY))
-    .addCase(UsersActions.removeUsers, genericListReducers.removeItem(USERS_STATE_KEY))
+export const createUser = createAsyncThunk('createUser', async (username: string) => {
+  console.log(username);
+  const user = await apis.users.usersControllerCreate({ createUserDto: { username } }).toPromise();
+  console.log('user', user);
+});
+export const usersReducer = createReducer(
+  initialState,
+  (builder) =>
+    builder.addCase(createUser.fulfilled, (state, action) => {
+      return { ...state };
+    })
+  // .addCase(UsersActions.loadUsers, genericListReducers.addItems(USERS_STATE_KEY))
+  // .addCase(UsersActions.addUser, genericListReducers.addItems(USERS_STATE_KEY))
+  // .addCase(UsersActions.addUsers, genericListReducers.addItems(USERS_STATE_KEY))
+  // .addCase(UsersActions.removeUser, genericListReducers.removeItem(USERS_STATE_KEY))
+  // .addCase(UsersActions.removeUsers, genericListReducers.removeItem(USERS_STATE_KEY))
 );

@@ -19,11 +19,6 @@ const initialState = {};
 
 export const SHARE_ITEMS_STATE_KEY = 'shareItems';
 
-const shareItemsReducer = createReducer(
-  initialState,
-  (builder) =>
-    builder
-      .addCase(findShareItems.fulfilled, reducers.loadItems(SHARE_ITEMS_STATE_KEY))
-);
+const shareItemsReducer = createReducer(initialState, (builder) => builder.addCase(findShareItems.fulfilled, reducers.loadItems(SHARE_ITEMS_STATE_KEY)));
 
 export { shareItemsReducer };

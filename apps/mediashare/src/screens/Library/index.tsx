@@ -29,7 +29,6 @@ const Library = ({ navigation, list }: { navigation: any; list: AwsMediaItem[] }
     image: imageSrc,
   }));
 
-  // this.fetchImages().subscribe((obs) => console.log(obs));
   const viewItem = async function (item: MediaViewItem) {
     dispatch(getMediaItemById(item.title));
     dispatch(selectMediaItem(item));

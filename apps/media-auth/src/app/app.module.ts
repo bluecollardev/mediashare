@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthUser } from './auth/auth-user.entity';
 
@@ -17,7 +18,7 @@ const ormConfig = {
   ssl: false,
   entities: [AuthUser],
   connectTimeoutMS: 2000,
-  logNotifications: true,
+  logNotifications: true
 };
 
 console.log(ormConfig);
@@ -28,13 +29,15 @@ console.log(ormConfig);
       load: [configuration],
       envFilePath: 'development.env',
       ignoreEnvVars: process.env.NODE_ENV === 'development',
-      ignoreEnvFile: process.env.NODE_ENV !== 'development',
+      ignoreEnvFile: process.env.NODE_ENV !== 'development'
     }),
-
+    PassportModule.register({
+      defaultStrategy: 'jwt'
+    }),
     TypeOrmModule.forRoot(ormConfig),
-    AuthModule,
+    AuthModule
   ],
   controllers: [],
-  providers: [ConfigService],
+  providers: [ConfigService]
 })
 export class AppModule {}

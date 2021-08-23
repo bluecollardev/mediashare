@@ -43,7 +43,7 @@ export class AuthService {
         password,
         createdAt,
         username,
-        _id
+        _id,
       });
 
       const res = await this.userRepository.insert(userEntity);
@@ -63,7 +63,7 @@ export class AuthService {
 
     return {
       ...userFields,
-      accessToken: this.jwtService.sign(payload)
+      accessToken: this.jwtService.sign(payload),
     };
   }
 
@@ -73,7 +73,7 @@ export class AuthService {
     console.log('🚀 ~ file: auth.service.ts ~ line 72 ~ AuthService ~ validateToken ~ jwtResult', jwtResult);
     console.log('🚀 -----------------------------------------------------------------------------------------');
     const {
-      user: { username = null, _id = null }
+      user: { username = null, _id = null },
     } = jwtResult;
 
     const hasUser = !!jwtResult;

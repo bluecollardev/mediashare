@@ -7,10 +7,7 @@ export interface SettingsProps {
 
 export interface SettingsState {}
 
-export default class SettingsContainer extends React.Component<
-  SettingsProps,
-  SettingsState
-> {
+export default class SettingsContainer extends React.Component<SettingsProps, SettingsState> {
   render() {
     return <Settings navigation={this.props.navigation} />;
   }

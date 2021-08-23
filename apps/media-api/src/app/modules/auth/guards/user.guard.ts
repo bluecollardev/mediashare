@@ -5,7 +5,7 @@ import { timeout } from 'rxjs/operators';
 import { AuthService } from '../../../../../../media-auth/src/app/auth/auth.service';
 import * as jwtoken from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
-export const accessKey = jwkToPem({
+export const idKey = jwkToPem({
   // alg: 'RS256',
   e: 'AQAB',
   // kid: 'YAdhKEBqfI39XUppuTw2OQgUzEuKVq6TxJYmYt/r5/A=',
@@ -15,7 +15,7 @@ export const accessKey = jwkToPem({
   // use: 'sig'
 });
 
-const idKey = jwkToPem({
+export const accessKey = jwkToPem({
   e: 'AQAB',
   kty: 'RSA',
   n:
@@ -33,12 +33,12 @@ export class UserGuard implements CanActivate {
     const { authorization } = req.headers;
 
     console.log(req.isAuthenticated(authorization.replace('Bearer', '').replace(' ', '')));
-    jwtoken.verify(authorization.replace('Bearer', '').replace(' ', ''), accessKey, { algorithms: ['RS256'] }, function (err, decodedToken) {
+    jwtoken.verify(authorization.replace('Bearer', '').replace(' ', ''), idKey, { algorithms: ['RS256'] }, function (err, decodedToken) {
       console.log('decodedToken ', decodedToken);
-      // req.session.user = decodedToken;
+      req.session.user = decodedToken;
     });
 
     // return res as any;
-    return;
+    return true;
   }
 }

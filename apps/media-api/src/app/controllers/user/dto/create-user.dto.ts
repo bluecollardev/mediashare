@@ -8,12 +8,9 @@ import { LoginDto } from './login.dto';
 import { User } from '../entities/user.entity';
 
 const uuidExample = '1731ee8a-8f27-53af-805d-2ee2e705f0e2';
-export class CreateUserDto extends LoginDto {
+export class CreateUserDto {
   @ApiName({ required: true })
-  firstName: string;
-
-  @ApiName({ required: true })
-  lastName: string;
+  username: string;
 }
 
 export class UserAuthFieldsDto {
@@ -25,7 +22,7 @@ export class UserAuthFieldsDto {
     readOnly: true,
     example: uuidExample,
     maxLength: uuidExample.length,
-    minLength: uuidExample.length
+    minLength: uuidExample.length,
   })
   @IsUUID()
   authId: Readonly<string>;

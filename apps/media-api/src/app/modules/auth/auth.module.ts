@@ -38,9 +38,7 @@ import { PassportModule } from '@nestjs/passport';
     ]),
     TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
     ShareItemModule,
-    PassportModule.register({
-      defaultStrategy: 'jwt'
-    }),
+
     JwtModule.register({
       publicKey: accessKey,
       signOptions: { expiresIn: '10h' },

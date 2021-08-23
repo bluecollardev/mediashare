@@ -61,12 +61,16 @@ export class UserController {
   }
 
   @Get('playlists')
+  @UseGuards(UserGuard, JwtAuthGuard)
+  @ApiBearerAuth()
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   async getUserPlaylists(@GetUser() user: SessionUserInterface) {
-    console.log(user);
+    console.log('🚀 ----------------------------------------------------------------------------------------');
+    console.log('🚀 ~ file: user.controller.ts ~ line 68 ~ UserController ~ getUserPlaylists ~ user', user);
+    console.log('🚀 ----------------------------------------------------------------------------------------');
+
     const result = user._id ? await this.playlistService.getPlaylistByUserId({ userId: user._id }) : await this.playlistService.findAll();
 
-    console.log(result);
     return result;
   }
 
@@ -85,6 +89,7 @@ export class UserController {
 
     return this.shareItemService.aggregateSharedMediaItems({ userId });
   }
+  @UseGuards(JwtAuthGuard)
   @Get('playlists/shared')
   @UserGetResponse({ isArray: true, type: ShareItem })
   async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
