@@ -10,11 +10,13 @@ import { AppConfigService } from '../app-config.module.ts/app-config.provider';
 import { PlaylistItem } from '../playlist-item/entities/playlist-item.entity';
 import { ShareItemModule } from '../share-item/share-item.module';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 import { SessionSerializer } from './session.serializer';
 import { UserService } from './user.service';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule, JwtSecretRequestType, JwtService } from '@nestjs/jwt';
+import { accessKey, UserGuard } from './guards/user.guard';
+import * as jwtoken from 'jsonwebtoken';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -36,9 +38,16 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
     ]),
     TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
     ShareItemModule,
+    PassportModule.register({
+      defaultStrategy: 'jwt'
+    }),
     JwtModule.register({
-      secret: 'this-is-my-secret-key',
-      signOptions: { expiresIn: '10h' }
+      publicKey: accessKey,
+      signOptions: { expiresIn: '10h' },
+      verifyOptions: {
+        // algorithms: ['RS256'],
+        ignoreExpiration: true
+      }
     })
   ],
   controllers: [],

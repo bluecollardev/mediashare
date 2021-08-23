@@ -94,12 +94,12 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   @Post('authorize')
-  async authorize(@Param(':id') id: string, @Body() body: TokenDto) {
-    const { token = null } = body;
-    const valid = await this.userService.validateToken({ token, _id: id });
-    if (!valid) throw new UnauthorizedException();
-    return valid;
+  async authorize() {
+    // const valid = await this.userService.validateToken({ token, _id: id });
+    // if (!valid) throw new UnauthorizedException();
+    // return valid;
   }
 }

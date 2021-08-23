@@ -83,7 +83,9 @@ const LoginComponent = () => {
     console.log(authState);
     console.log(data);
     if (authState === 'signedIn') {
-      dispatch(UserActions.login({ ...data.attributes, username: data.username }));
+      dispatch(UserActions.login({ ...data, username: data.username }));
+
+      console.log(Auth.Credentials);
     }
   }
   return (

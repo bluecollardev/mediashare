@@ -32,9 +32,9 @@ import { AppConfigService } from './modules/app-config.module.ts/app-config.prov
         synchronize: configService.db('synchronize'),
         ssl: configService.db('ssl'),
         useUnifiedTopology: true,
-        useNewUrlParser: true,
+        useNewUrlParser: true
       }),
-      inject: [AppConfigService],
+      inject: [AppConfigService]
     }),
     UserModule,
     LoggerModule.forRoot({
@@ -42,18 +42,17 @@ import { AppConfigService } from './modules/app-config.module.ts/app-config.prov
         prettyPrint: {
           colorize: true,
           levelFirst: true,
-          translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z',
-        },
-      },
+          translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z'
+        }
+      }
     }),
     MediaItemModule,
     ProfileModule,
     PlaylistModule,
-    PassportModule,
-    ShareItemsModule,
+    ShareItemsModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {
   constructor(private appConfigService: AppConfigService) {}

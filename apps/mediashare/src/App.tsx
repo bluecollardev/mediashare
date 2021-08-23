@@ -128,7 +128,7 @@ const App = () => {
   const user = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    setIsLoggedIn(user.username.length > 0);
+    setIsLoggedIn(user?.username?.length > 0);
   }, [user]);
 
   return (

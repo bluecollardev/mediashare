@@ -2,7 +2,7 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "../dist/out-tsc",
-    "types": ["node"],
+    "types": ["node", "@types/jwk-to-pem"],
     "emitDecoratorMetadata": true,
     "target": "es2015",
     "module": "commonjs"
