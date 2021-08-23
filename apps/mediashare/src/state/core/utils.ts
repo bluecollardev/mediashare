@@ -5,8 +5,7 @@ import * as R from 'remeda';
 
 export type SnakeCaseToCamelCase<S extends string> = S extends `${infer FirstWord}_${infer Rest}`
   ? `${Lowercase<FirstWord>}${SnakeCaseToPascalCase<Rest>}`
-  : // eslint-disable-next-line no-undef
-    `${Lowercase<S>}`;
+  : `${Lowercase<S>}`;
 
 export type SnakeCaseToPascalCase<S extends string> = S extends `${infer FirstWord}_${infer Rest}`
   ? // eslint-disable-next-line no-undef
@@ -24,4 +23,7 @@ export function snakeCaseToCamelCase<S extends string>(snakeCaseString: S): Snak
 }
 
 export const cloneState = (state: RootState): RootState => R.clone<RootState>(state);
-export const mergeState = (state: RootState) => <T>(item: T) => R.merge(cloneState(state), R.clone(item));
+export const mergeState =
+  (state: RootState) =>
+  <T>(item: T) =>
+    R.merge(cloneState(state), R.clone(item));

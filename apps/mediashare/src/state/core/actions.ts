@@ -4,10 +4,12 @@ import { SnakeCaseToCamelCase, snakeCaseToCamelCase } from './utils';
 
 export const ACTION_TYPES = ['ADD', 'REMOVE', 'GET', 'FIND'] as const;
 
-const CreateActionFactory = (type: string) => <T>(payload: T = null) => ({
-  type,
-  ...payloadFactory(payload),
-});
+const CreateActionFactory =
+  (type: string) =>
+  <T>(payload: T = null) => ({
+    type,
+    ...payloadFactory(payload),
+  });
 
 const payloadFactory = <T>(payload: T) => ({
   payload,
