@@ -18,8 +18,7 @@ import { take } from 'rxjs/operators';
 import { MediaListItem } from '../../components/layout/MediaListItem';
 import { MediaListItemCheckBox } from '../../components/layout/MediaListItemCheckBox';
 import { useAppSelector } from '../../state';
-import { dispatch } from 'rxjs/internal/observable/pairs';
-import { addUserPlaylist } from '../../state/modules/playlists/index';
+import { addUserPlaylist, clearPlaylistAction, findUserPlaylists } from '../../state/modules/playlists/index';
 import { useDispatch } from 'react-redux';
 
 const validate = (values) => {
@@ -54,17 +53,14 @@ export interface PlaylistEditProps extends MediaDetailProps {
 export interface PlaylistEditState extends MediaDetailState {}
 
 const PlaylistEdit = ({ navigation }: { navigation: any }) => {
+  const playlist = useAppSelector((app) => app.playlist);
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
   const [mediaItems, setMediaItems] = useState([]);
   const dispatch = useDispatch();
   const user = useAppSelector((state) => state.user);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleSubmit = (values: { description: string; title: string; mediaIds: any[] }) => {
-    const { description, title, mediaIds } = values;
 
-    dispatch(addUserPlaylist({ description, title, mediaIds, createdBy: user._id, category: CreatePlaylistDtoCategoryEnum.Builder }));
-  };
   const author = user.firstName;
 
   async function processAction(items: typeof mediaItems) {
@@ -73,11 +69,18 @@ const PlaylistEdit = ({ navigation }: { navigation: any }) => {
       setMediaItems(res.map((itm) => ({ ...itm, checked: false })));
     }
 
-    if (items.some((item) => item.checked)) {
+    if (items.some((item) => item.checked) && !playlist.loading) {
       const mediaIds = items.filter((item) => item.checked).map((item) => item.key);
 
-      const results = await handleSubmit({ description, title, mediaIds });
+      // const results = await handleSubmit({ description, title, mediaIds });
+      dispatch(addUserPlaylist({ description, title, mediaIds, createdBy: user._id, category: CreatePlaylistDtoCategoryEnum.Builder }));
     }
+  }
+  if (!playlist.loading && playlist.createdPlaylist) {
+    console.log('playlist created', playlist.createdPlaylist);
+    dispatch(findUserPlaylists({}));
+    dispatch(clearPlaylistAction());
+    navigation.navigate(routeConfig.playlists);
   }
 
   // useEffect(() => {
@@ -123,7 +126,7 @@ const PlaylistEdit = ({ navigation }: { navigation: any }) => {
             )}
           </PlaylistCard>
 
-          <Button block onPress={() => processAction(mediaItems)}>
+          <Button block onPress={() => processAction(mediaItems)} disabled={playlist.loading}>
             <Text>{mediaItems.length > 0 ? 'Create' : 'Next'}</Text>
           </Button>
         </View>
