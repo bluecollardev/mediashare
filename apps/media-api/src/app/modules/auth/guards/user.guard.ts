@@ -31,13 +31,11 @@ export class UserGuard implements CanActivate {
     console.log(req.headers);
 
     const { authorization } = req.headers;
-    console.log('🚀 -------------------------------------------------------------------------------------------');
-    console.log('🚀 ~ file: user.guard.ts ~ line 32 ~ UserGuard ~ canActivate ~ authorization', authorization);
-    console.log('🚀 -------------------------------------------------------------------------------------------');
+
     console.log(req.isAuthenticated(authorization.replace('Bearer', '').replace(' ', '')));
     jwtoken.verify(authorization.replace('Bearer', '').replace(' ', ''), accessKey, { algorithms: ['RS256'] }, function (err, decodedToken) {
       console.log('decodedToken ', decodedToken);
-      req.session.user = decodedToken;
+      // req.session.user = decodedToken;
     });
 
     // return res as any;

@@ -6,7 +6,7 @@ import * as jwtoken from 'jsonwebtoken';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(context) {
-    console.log(context.args);
+    // console.log(context.args);
 
     return super.canActivate(context);
     // console.log(can);
