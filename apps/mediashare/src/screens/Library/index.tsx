@@ -7,6 +7,10 @@ import { MediaItemsApi } from '../../api';
 import { Storage } from 'aws-amplify';
 import { useState } from 'react';
 import Video from 'react-native-video';
+import { AwsMediaItem } from '../../state/modules/media-items/aws-media-item.model';
+import { useDispatch } from 'react-redux';
+import { getMediaItemById, selectMediaItem } from '../../state/modules/media-items/index';
+import { MediaViewItem } from '../../state/modules/media-items/media-view-item.model';
 
 export interface LibraryProps {
   navigation: any;
@@ -14,25 +18,24 @@ export interface LibraryProps {
 }
 
 export interface LibraryState {}
-const Library = ({ navigation, list }: { navigation: any; list: any }) => {
+const Library = ({ navigation, list }: { navigation: any; list: AwsMediaItem[] }) => {
+  const dispatch = useDispatch();
   const [item, setItem] = useState(null);
   const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
   const items = list?.map((item) => ({
-    title: item.title,
-    description: `${item?.mediaItems?.length || 0} Videos`,
+    title: item.key,
+    description: `${item?.size} `,
     image: imageSrc,
   }));
 
   // this.fetchImages().subscribe((obs) => console.log(obs));
+  const viewItem = async function (item: MediaViewItem) {
+    dispatch(getMediaItemById(item.title));
+    dispatch(selectMediaItem(item));
+    navigation.navigate(routeConfig.libraryItemDetail.name);
+  };
 
-  const fetchImage = async function (key: string) {
-    const res = await Storage.get(key);
-    setItem(res);
-  };
-  const clearItem = () => {
-    setItem(null);
-  };
   return (
     <Container style={styles.container}>
       <Content>
@@ -60,7 +63,7 @@ const Library = ({ navigation, list }: { navigation: any; list: any }) => {
               {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
               {items.map((item, idx) => {
                 const { title, description, image } = item;
-                return <MediaListItem key={`item-${idx}`} title={title} description={description} image={image} onViewDetail={() => fetchImage(title)} />;
+                return <MediaListItem key={`item-${idx}`} title={title} description={description} image={image} onViewDetail={() => viewItem(item)} />;
               })}
               {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
             </List>
