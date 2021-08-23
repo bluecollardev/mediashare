@@ -20,7 +20,6 @@ models/playlist-item-response-dto.ts
 models/playlist-response-dto.ts
 models/playlist.ts
 models/share-item.ts
-models/token-dto.ts
 models/update-media-item-dto.ts
 models/update-playlist-dto.ts
 models/update-user-dto.ts

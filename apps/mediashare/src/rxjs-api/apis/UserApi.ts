@@ -12,13 +12,8 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { LoginDto, LoginResponseDto, MediaItemDto, PlaylistItemResponseDto, ShareItem, TokenDto, UserDto } from '../models';
-
-export interface UserControllerAuthorizeRequest {
-  id: string;
-  tokenDto: TokenDto;
-}
+import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, OperationOpts, RawAjaxResponse } from '../runtime';
+import { LoginDto, LoginResponseDto, MediaItemDto, PlaylistItemResponseDto, ShareItem, UserDto } from '../models';
 
 export interface UserControllerLoginRequest {
   loginDto: LoginDto;
@@ -30,22 +25,20 @@ export interface UserControllerLoginRequest {
 export class UserApi extends BaseAPI {
   /**
    */
-  userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest): Observable<void>;
-  userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
-  userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
-    throwIfNullOrUndefined(id, 'id', 'userControllerAuthorize');
-    throwIfNullOrUndefined(tokenDto, 'tokenDto', 'userControllerAuthorize');
-
+  userControllerAuthorize(): Observable<void>;
+  userControllerAuthorize(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
+  userControllerAuthorize(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     const headers: HttpHeaders = {
-      'Content-Type': 'application/json',
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
     };
 
     return this.request<void>(
       {
-        url: '/api/user/authorize'.replace('{:id}', encodeURI(id)),
+        url: '/api/user/authorize',
         method: 'POST',
         headers,
-        body: tokenDto,
       },
       opts?.responseOpts
     );

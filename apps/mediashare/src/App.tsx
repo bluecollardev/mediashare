@@ -123,9 +123,9 @@ async function fakeLogin() {
 }
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
-
   const user = useAppSelector((state) => state.user);
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!user);
 
   useEffect(() => {
     setIsLoggedIn(user?.username?.length > 0);

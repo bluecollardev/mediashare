@@ -11,7 +11,6 @@ export * from './playlist';
 export * from './playlist-item-response-dto';
 export * from './playlist-response-dto';
 export * from './share-item';
-export * from './token-dto';
 export * from './update-media-item-dto';
 export * from './update-playlist-dto';
 export * from './update-user-dto';

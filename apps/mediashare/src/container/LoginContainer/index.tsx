@@ -19,6 +19,7 @@ import {
 import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import { UserActions } from '../../state/modules/user';
+import { createUser } from '../../state/modules/users';
 
 const sectionFooterLink = Object.assign({}, AmplifyTheme.sectionFooterLink, { color: '#2874F0', fontFamily: 'System' });
 
@@ -82,20 +83,17 @@ const LoginComponent = () => {
   function updateAuthState(authState, data) {
     console.log(authState);
     console.log(data);
+
     if (authState === 'signedIn') {
       dispatch(UserActions.login({ ...data, username: data.username }));
 
       console.log(Auth.Credentials);
+      // const combined = Object.create({}, { ...attributes, username });
+      dispatch(createUser(data.username));
     }
   }
   return (
     <Login>
-      {/* <Item error={validateUsername(username) && username.length > 0}>
-        <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" />
-      </Item>
-      <Item error={validatePassword(password)}>
-        <Input onChange={(e) => setPassword(e.nativeEvent.text)} value={password} placeholder="Password" secureTextEntry={true} />
-      </Item> */}
       <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={true}>
         {/* <MyCustomSignUp override={'SignUp'} /> */}
         <SignIn />
@@ -109,12 +107,6 @@ const LoginComponent = () => {
         <Loading />
         <CustomVerify override={'ConfirmSignUp'} />
       </Authenticator>
-
-      {/* <View padder>
-        <Button block onPress={() => onLogin({ username, password })}>
-          <Text>Login</Text>
-        </Button>
-      </View> */}
     </Login>
   );
 };
@@ -127,7 +119,6 @@ class CustomVerify extends Component<any> {
 
   gotoSignIn() {
     // to switch the authState to 'signIn'
-    console.log(this.props);
     this.props.onStateChange('signIn', {});
   }
 

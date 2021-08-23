@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Container, View, Header, Title, Content, Accordion, Text, Button, Icon, Left, Right, Body } from 'native-base';
-
-import styles from './styles';
 import { ContactList } from '../../components/layout/ContactList';
-import Account from '../../container/AccountContainer';
+import { Auth } from 'aws-amplify';
+import styles from './styles';
 
 export interface SettingsProps {
   navigation: any;
@@ -13,6 +12,10 @@ export interface SettingsState {}
 
 class Settings extends React.Component<SettingsProps, SettingsState> {
   sections = [];
+
+  signOut() {
+    Auth.signOut();
+  }
 
   constructor(props: SettingsProps) {
     super(props);
@@ -66,6 +69,9 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
       <Container style={styles.container}>
         <Content padder>
           <Accordion dataArray={this.sections} renderHeader={this.renderHeader} renderContent={this.renderContent} />
+          <Button onPress={this.signOut} style={{ alignSelf: 'center' }} transparent>
+            <Text>SignOut</Text>
+          </Button>
         </Content>
       </Container>
     );

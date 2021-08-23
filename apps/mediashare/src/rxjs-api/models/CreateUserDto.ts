@@ -21,19 +21,4 @@ export interface CreateUserDto {
    * @memberof CreateUserDto
    */
   username: string;
-  /**
-   * @type {string}
-   * @memberof CreateUserDto
-   */
-  password: string;
-  /**
-   * @type {string}
-   * @memberof CreateUserDto
-   */
-  firstName: string;
-  /**
-   * @type {string}
-   * @memberof CreateUserDto
-   */
-  lastName: string;
 }

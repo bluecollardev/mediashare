@@ -20,7 +20,6 @@ models/Playlist.ts
 models/PlaylistItemResponseDto.ts
 models/PlaylistResponseDto.ts
 models/ShareItem.ts
-models/TokenDto.ts
 models/UpdateMediaItemDto.ts
 models/UpdatePlaylistDto.ts
 models/UpdateUserDto.ts

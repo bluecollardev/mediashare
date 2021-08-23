@@ -13,6 +13,7 @@
     "update-app": "git pull --rebase"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^1.2.10",
     "@expo/vector-icons": "12.0.2",
     "@react-native-async-storage/async-storage": "^1.15.6",
     "@react-native-community/masked-view": "0.1.10",

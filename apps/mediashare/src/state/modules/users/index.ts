@@ -1,9 +1,11 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import { apis } from '../../apis';
 
 import { makeActions, makeEnum } from '../../core/factory';
 // import { UserDto } from '../../../api';
 
 import * as genericListReducers from '../../core/reducers';
+import { UserActions } from '../user';
 
 export const USERS_STATE_KEY = 'users';
 
@@ -16,6 +18,10 @@ export const UsersActions = makeActions(USERS_ACTIONS);
 
 const initialState: UsersState = {};
 
+export const createUser = createAsyncThunk(
+  UserActions.login.type,
+  async (username: string) => await apis.users.usersControllerCreate({ createUserDto: { username } })
+);
 export const usersReducer = createReducer(initialState, (builder) =>
   builder
     .addCase(UsersActions.loadUsers, genericListReducers.addItems(USERS_STATE_KEY))
