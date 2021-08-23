@@ -9,7 +9,7 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -28,6 +28,7 @@ import { ApiService } from './state/apis';
 import { ApiContext } from './state/api-context';
 import { Provider } from 'react-redux';
 import { store } from './boot/configureStore';
+import { useAppSelector } from './state/index';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -123,24 +124,39 @@ async function fakeLogin() {
   await Auth.currentCredentials();
 }
 const App = () => {
-  const [user, setUser] = useState<LoginResponseDto>();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
 
   Amplify.configure(awsmobile);
   fakeLogin();
 
+  const user = useAppSelector((state) => state.user);
+
+  useEffect(() => {
+    setIsLoggedIn(user._id.length > 0);
+  }, [user]);
+  // setIsLoggedIn(!!useSelector);
+  // store.subscribe(() => {
+  //   const state = store.getState();
+  //   if (state.user._id.length) {
+  //     console.log(state);
+  //     setIsLoggedIn(true);
+  //   }
+
+  // });
+
   return (
     <Provider store={store}>
-      <UserContext.Provider value={{ user, setUser }}>
-        {user ? (
-          <NavigationContainer>
-            <TabNavigation />
-          </NavigationContainer>
-        ) : (
-          <LoginContainer />
+      {/* <UserContext.Provider value={{ isLoggedIn, setUser }}> */}
+      {isLoggedIn ? (
+        <NavigationContainer>
+          <TabNavigation />
+        </NavigationContainer>
+      ) : (
+        <LoginContainer />
 
-          // </UserContext.Provider>
-        )}
-      </UserContext.Provider>
+        // </UserContext.Provider>
+      )}
+      {/* </UserContext.Provider> */}
     </Provider>
   );
 };

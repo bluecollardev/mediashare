@@ -10,23 +10,9 @@ export interface PlaylistEditContainerProps {
 }
 export interface PlaylistEditContainerState {}
 
-class PlaylistEditContainer extends React.Component<PlaylistEditContainerProps, PlaylistEditContainerState> {
-  componentDidMount() {
-    // this.props.fetchList();
-  }
-  render() {
-    return <PlaylistEdit navigation={this.props.navigation} list={this.props.data} />;
-  }
-}
+const PlaylistEditContainer = (props) => {
+  console.log(props);
+  return <PlaylistEdit navigation={props.navigation} />;
+};
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    // fetchList: (url: any) => dispatch(fetchList(url)),
-  };
-}
-
-const mapStateToProps = (state: any) => ({
-  data: state && state.playlistEdit ? state.playlistEdit.list : [],
-  isLoading: state && state.playlistEdit ? state.playlistEdit.isLoading : false,
-});
-export default connect(mapStateToProps, mapDispatchToProps)(PlaylistEditContainer);
+export default PlaylistEditContainer;

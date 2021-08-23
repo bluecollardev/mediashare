@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import Playlists from '../../screens/Playlists';
 
 import { findUserPlaylists } from '../../state/modules/playlists';
@@ -8,6 +8,10 @@ import { useContext, useEffect, useState } from 'react';
 import { apis } from '../../state/apis';
 import { UserContext } from '../../state/user-context';
 import { useAppSelector } from '../../state';
+import { RootState } from '../../state/index';
+import { Text } from 'native-base';
+import { stat } from 'fs/promises';
+import { findAllPlaylists } from '../../state/modules/all-playlists/index';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -17,38 +21,22 @@ export interface PlaylistsContainerProps {
 }
 
 export const PlaylistsContainer = (props) => {
-  const [data, setData] = useState([]);
-  const user = useContext(UserContext);
-  const { navigation } = props;
-  const slice = useAppSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const playlists = useAppSelector((state) => state.playlists);
 
-  async function getAllPlaylists() {
-    const res = await apis.user.userControllerGetUserPlaylists().toPromise();
-    setData(res);
+  const { navigation } = props;
+
+  if (!playlists.loading && playlists.userPlaylists.length < 1) {
+    dispatch(findUserPlaylists({}));
   }
 
-  useEffect(() => {
-    getAllPlaylists();
-  }, []);
   function onViewDetailClicked(id) {
     const { navigation } = this.props;
     navigation.navigate(routeConfig.playlistDetail.name, {
       playlistId: id,
     });
   }
-  return <Playlists navigation={navigation} list={data} onViewDetailClicked={onViewDetailClicked} />;
+  return <Playlists navigation={navigation} list={playlists.userPlaylists} onViewDetailClicked={onViewDetailClicked} />;
 };
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    // @ts-ignore
-    fetchList: () => dispatch(findUserPlaylists()),
-  };
-}
-
-const mapStateToProps = (state: any) => ({
-  state: state,
-  data: state?.userPlaylists?.userPlaylists ? state.userPlaylists.userPlaylists : [],
-  isLoading: state && state?.isLoading ? state?.userPlaylists.isLoading : false,
-});
-export default connect(mapStateToProps, mapDispatchToProps)(PlaylistsContainer);
+export default PlaylistsContainer;

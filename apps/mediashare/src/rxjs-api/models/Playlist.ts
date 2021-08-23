@@ -49,6 +49,11 @@ export interface Playlist {
    */
   title: string;
   /**
+   * @type {string}
+   * @memberof Playlist
+   */
+  description: string;
+  /**
    * @type {Array<string>}
    * @memberof Playlist
    */

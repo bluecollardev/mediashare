@@ -35,6 +35,12 @@ export interface CreatePlaylistDto {
    * @type {string}
    * @memberof CreatePlaylistDto
    */
+  description: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CreatePlaylistDto
+   */
   category: CreatePlaylistDtoCategoryEnum;
   /**
    *

@@ -22,25 +22,13 @@ export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 
 export const loginThunk = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => {
   const response = await apis.user.userControllerLogin({ loginDto }).toPromise();
-  console.log(loginDto);
   return response;
 });
-console.log(loginThunk);
 
 const userReducer = createReducer(initialState, (builder) =>
   builder.addCase(loginThunk.fulfilled, (state, action) => {
-    console.log('fulfilled', action);
-    state = action.payload;
+    return action.payload;
   })
 );
-
-// export const userSlice = createSlice({
-//   name: USER_STATE_KEY,
-//   initialState,
-//   reducers: {
-//     // login: loginThunk,
-//   },
-// });
-
 // export const;
 export { userReducer };

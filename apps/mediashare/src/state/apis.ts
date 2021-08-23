@@ -2,14 +2,7 @@ import { Configuration, Middleware, RequestArgs, ResponseArgs, servers } from '.
 import { UserApi, UsersApi, PlaylistsApi, DefaultApi, MediaItemsApi, ShareItemsApi } from '../rxjs-api';
 import axios from 'axios';
 import { request } from 'https';
-export interface ApiService {
-  default: DefaultApi;
-  mediaItems: MediaItemsApi;
-  playlists: PlaylistsApi;
-  shareItems: ShareItemsApi;
-  user: UserApi;
-  users: UsersApi;
-}
+
 let TOKEN = '';
 let COOKIE = '';
 function middlewareFactory() {
@@ -50,7 +43,7 @@ function middlewareFactory() {
 const configuration = new Configuration({ basePath: servers[0].getUrl(), accessToken: TOKEN, middleware: middlewareFactory() });
 export const basePath = 'http://localhost:5000';
 
-const apis: ApiService = {
+const apis = {
   default: new DefaultApi(configuration),
   mediaItems: new MediaItemsApi(configuration),
   shareItems: new ShareItemsApi(configuration),
@@ -58,5 +51,7 @@ const apis: ApiService = {
   user: new UserApi(configuration),
   users: new UsersApi(configuration),
 };
+
+export type ApiService = typeof apis;
 
 export { apis };

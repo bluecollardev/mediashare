@@ -17,6 +17,7 @@ import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { MediaListItem } from '../../components/layout/MediaListItem';
 import { MediaListItemCheckBox } from '../../components/layout/MediaListItemCheckBox';
+import { useAppSelector } from '../../state';
 
 const validate = (values) => {
   const error = {} as any;
@@ -53,22 +54,20 @@ const PlaylistEdit = ({ navigation }: { navigation: any }) => {
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
   const [mediaItems, setMediaItems] = useState([]);
-  const user = useContext(UserContext) as any;
 
+  const user = useAppSelector((state) => state.user);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSubmit = (values: { description: string; title: string; mediaIds: any[] }) => {
     const { description, title, mediaIds } = values;
 
-    apis.playlists
-      .playlistControllerCreate({ createPlaylistDto: { title, mediaIds, createdBy: '', category: CreatePlaylistDtoCategoryEnum.Rehab } })
-      .pipe(take(1))
-      .subscribe((res) => {
-        routeConfig.playlistDetail;
-      });
+    // apis.playlists
+    //   .playlistControllerCreate({ createPlaylistDto: { title, mediaIds, createdBy: '', category: CreatePlaylistDtoCategoryEnum.Rehab } })
+    //   .pipe(take(1))
+    //   .subscribe((res) => {
+    //     routeConfig.playlistDetail;
+    //   });
   };
-  const author = 'Blue Collar Dev';
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  console.log(user);
+  const author = user.firstName;
 
   async function processAction(items: typeof mediaItems) {
     if (items.length < 1) {
@@ -77,9 +76,7 @@ const PlaylistEdit = ({ navigation }: { navigation: any }) => {
     }
 
     if (items.some((item) => item.checked)) {
-      console.log(mediaItems);
       const mediaIds = items.filter((item) => item.checked).map((item) => item.key);
-      console.log(mediaIds);
 
       const results = await handleSubmit({ description, title, mediaIds });
     }
@@ -96,7 +93,7 @@ const PlaylistEdit = ({ navigation }: { navigation: any }) => {
         <View padder>
           <PlaylistCard
             title={title}
-            author={user.user.firstname}
+            author={author}
             // description={description}
           >
             {mediaItems.length < 1 ? (
@@ -137,7 +134,4 @@ const PlaylistEdit = ({ navigation }: { navigation: any }) => {
   );
 };
 
-export default reduxForm<{}, PlaylistEditProps>({
-  form: 'playlistEdit',
-  validate,
-})(PlaylistEdit as any);
+export default PlaylistEdit;

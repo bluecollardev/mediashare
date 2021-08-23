@@ -13,7 +13,11 @@ export class Playlist extends BcEntity implements PlaylistInterface {
   @ApiString()
   title: string;
 
-  @Column('title')
+  @Column('description')
+  @ApiString()
+  description: PlaylistCategoryType;
+
+  @Column('mediaIds')
   @ApiProperty({ type: String, isArray: true })
   mediaIds: string[];
 

@@ -12,7 +12,6 @@ export const MediaListItemCheckBox: React.FC<MediaListItemCheckBoxProps> = (prop
   const { title, description, image, selectable = true } = props;
   const [checked, setChecked] = useState(props.checked);
   function changeChecked(bool) {
-    console.log(bool);
     props.changeChecked(bool);
     setChecked(bool);
   }
