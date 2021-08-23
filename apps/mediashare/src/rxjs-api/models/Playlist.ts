@@ -49,6 +49,11 @@ export interface Playlist {
    */
   title: string;
   /**
+   * @type {Array<string>}
+   * @memberof Playlist
+   */
+  mediaIds: Array<string>;
+  /**
    * @type {string}
    * @memberof Playlist
    */

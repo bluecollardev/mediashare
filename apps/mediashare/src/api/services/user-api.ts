@@ -145,33 +145,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerGetPlaylists: async (options: any = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/user/playlists`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
     userControllerGetSharedMediaItems: async (options: any = {}): Promise<RequestArgs> => {
       const localVarPath = `/api/user/media-items/shared`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -201,6 +174,33 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
      */
     userControllerGetUser: async (options: any = {}): Promise<RequestArgs> => {
       const localVarPath = `/api/user`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    userControllerGetUserPlaylists: async (options: any = {}): Promise<RequestArgs> => {
+      const localVarPath = `/api/user/playlists`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -329,15 +329,6 @@ export const UserApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userControllerGetPlaylists(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PlaylistItemResponseDto>>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetPlaylists(options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
     async userControllerGetSharedMediaItems(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MediaItemDto>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetSharedMediaItems(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -349,6 +340,15 @@ export const UserApiFp = function (configuration?: Configuration) {
      */
     async userControllerGetUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUser(options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async userControllerGetUserPlaylists(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PlaylistItemResponseDto>>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUserPlaylists(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -411,14 +411,6 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerGetPlaylists(options?: any): AxiosPromise<Array<PlaylistItemResponseDto>> {
-      return localVarFp.userControllerGetPlaylists(options).then((request) => request(axios, basePath));
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
     userControllerGetSharedMediaItems(options?: any): AxiosPromise<Array<MediaItemDto>> {
       return localVarFp.userControllerGetSharedMediaItems(options).then((request) => request(axios, basePath));
     },
@@ -429,6 +421,14 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
      */
     userControllerGetUser(options?: any): AxiosPromise<UserDto> {
       return localVarFp.userControllerGetUser(options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    userControllerGetUserPlaylists(options?: any): AxiosPromise<Array<PlaylistItemResponseDto>> {
+      return localVarFp.userControllerGetUserPlaylists(options).then((request) => request(axios, basePath));
     },
     /**
      *
@@ -535,18 +535,6 @@ export class UserApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof UserApi
    */
-  public userControllerGetPlaylists(options?: any) {
-    return UserApiFp(this.configuration)
-      .userControllerGetPlaylists(options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof UserApi
-   */
   public userControllerGetSharedMediaItems(options?: any) {
     return UserApiFp(this.configuration)
       .userControllerGetSharedMediaItems(options)
@@ -562,6 +550,18 @@ export class UserApi extends BaseAPI {
   public userControllerGetUser(options?: any) {
     return UserApiFp(this.configuration)
       .userControllerGetUser(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UserApi
+   */
+  public userControllerGetUserPlaylists(options?: any) {
+    return UserApiFp(this.configuration)
+      .userControllerGetUserPlaylists(options)
       .then((request) => request(this.axios, this.basePath));
   }
 

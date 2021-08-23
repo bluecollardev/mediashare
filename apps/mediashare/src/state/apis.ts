@@ -30,7 +30,6 @@ function middlewareFactory() {
     post: (response: ResponseArgs) => {
       const originalEvent = response.xhr as any;
       const cookie = originalEvent.responseHeaders['Set-Cookie'];
-      console.log('event', JSON.stringify(cookie, null, 2));
       COOKIE = cookie ? cookie : COOKIE;
       return response;
     },

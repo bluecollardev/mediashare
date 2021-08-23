@@ -122,7 +122,6 @@ const TabNavigation = () => {
 async function fakeLogin() {
   await Auth.currentCredentials();
 }
-
 const App = () => {
   const [user, setUser] = useState<LoginResponseDto>();
 
@@ -130,19 +129,19 @@ const App = () => {
   fakeLogin();
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {user ? (
-        <Provider store={store}>
+    <Provider store={store}>
+      <UserContext.Provider value={{ user, setUser }}>
+        {user ? (
           <NavigationContainer>
             <TabNavigation />
           </NavigationContainer>
-        </Provider>
-      ) : (
-        <LoginContainer />
+        ) : (
+          <LoginContainer />
 
-        // </UserContext.Provider>
-      )}
-    </UserContext.Provider>
+          // </UserContext.Provider>
+        )}
+      </UserContext.Provider>
+    </Provider>
   );
 };
 export default App;

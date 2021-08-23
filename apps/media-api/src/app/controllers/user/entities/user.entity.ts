@@ -17,21 +17,4 @@ export class User extends BcEntity {
   password?: string;
   @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
   @Column({ array: true, nullable: true }) sharedMediaItems?: ObjectId[];
-
-  // @BeforeInsert()
-  // async hashPassword() {
-  //   this.password = await hash(this.password, 10);
-  // }
-
-  // @Column('enum', { default: [bcRoles.guest], array: true, enum: BC_ROLES })
-  // roles: BcRolesType[];
-  // @Column()
-  // @IsEmail()
-  // email: string;
-
-  // @CreateDateColumn()
-  // createdAt: Date;
-
-  // @UpdateDateColumn()
-  // updatedAt: Date;
 }

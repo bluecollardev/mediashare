@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 import { userReducer } from './modules/user';
 import { usersReducer } from './modules/users';
 import { mediaItemsReducer } from './modules/media-items';
-import { playlistsReducer, playlistItemsReducer } from './modules/playlists';
+import { playlistsReducer, playlistItemsReducer, playlistReducer } from './modules/playlists';
 
 // Global app flags and data
 const systemReducers = {
@@ -32,10 +32,8 @@ const userSharedReducers = {
 
 // Combine our reducers and export
 const rootReducer = combineReducers({
-  ...systemReducers,
-  ...userReducers,
-  ...userOwnedReducers,
-  ...userSharedReducers,
+  user: userReducer,
+  playlist: playlistReducer,
 });
 
 export { rootReducer };

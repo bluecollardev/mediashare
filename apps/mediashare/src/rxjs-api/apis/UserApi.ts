@@ -81,20 +81,6 @@ export class UserApi extends BaseAPI {
 
   /**
    */
-  userControllerGetPlaylists(): Observable<Array<PlaylistItemResponseDto>>;
-  userControllerGetPlaylists(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
-  userControllerGetPlaylists(opts?: OperationOpts): Observable<Array<PlaylistItemResponseDto> | RawAjaxResponse<Array<PlaylistItemResponseDto>>> {
-    return this.request<Array<PlaylistItemResponseDto>>(
-      {
-        url: '/api/user/playlists',
-        method: 'GET',
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
   userControllerGetSharedMediaItems(): Observable<Array<MediaItemDto>>;
   userControllerGetSharedMediaItems(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
   userControllerGetSharedMediaItems(opts?: OperationOpts): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
@@ -115,6 +101,20 @@ export class UserApi extends BaseAPI {
     return this.request<UserDto>(
       {
         url: '/api/user',
+        method: 'GET',
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  userControllerGetUserPlaylists(): Observable<Array<PlaylistItemResponseDto>>;
+  userControllerGetUserPlaylists(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
+  userControllerGetUserPlaylists(opts?: OperationOpts): Observable<Array<PlaylistItemResponseDto> | RawAjaxResponse<Array<PlaylistItemResponseDto>>> {
+    return this.request<Array<PlaylistItemResponseDto>>(
+      {
+        url: '/api/user/playlists',
         method: 'GET',
       },
       opts?.responseOpts

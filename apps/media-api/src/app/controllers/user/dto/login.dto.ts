@@ -29,12 +29,6 @@ export class LoginResponseDto implements Omit<User, '_id' | 'sharedMediaItems' |
   @ApiName()
   lastName: string;
 
-  @ApiPastDate()
-  createdAt?: Date;
-  @ApiPastDate()
-  updatedDate?: Date;
-  createdBy?: Readonly<ObjectId>;
-
   @ApiProperty({
     type: String,
     pattern: '^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$',
@@ -42,23 +36,8 @@ export class LoginResponseDto implements Omit<User, '_id' | 'sharedMediaItems' |
   })
   accessToken;
 
-  @ApiProperty({ type: Date })
-  updatedAt: Date;
-
   @ApiProperty({ type: String })
   _id: string;
-
-  @ApiProperty({ type: MediaItem, isArray: true })
-  sharedMediaItems: MediaItem[];
-
-  @ApiProperty({ type: Playlist, isArray: true })
-  sharedPlaylists: Playlist[];
-
-  @ApiProperty({ type: MediaItem, isArray: true })
-  mediaItems: MediaItem[];
-
-  @ApiProperty({ type: Playlist, isArray: true })
-  playlists: Playlist[];
 }
 
 export class TokenDto {
