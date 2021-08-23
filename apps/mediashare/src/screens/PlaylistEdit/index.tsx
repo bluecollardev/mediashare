@@ -18,6 +18,9 @@ import { take } from 'rxjs/operators';
 import { MediaListItem } from '../../components/layout/MediaListItem';
 import { MediaListItemCheckBox } from '../../components/layout/MediaListItemCheckBox';
 import { useAppSelector } from '../../state';
+import { dispatch } from 'rxjs/internal/observable/pairs';
+import { addUserPlaylist } from '../../state/modules/playlists/index';
+import { useDispatch } from 'react-redux';
 
 const validate = (values) => {
   const error = {} as any;
@@ -54,18 +57,13 @@ const PlaylistEdit = ({ navigation }: { navigation: any }) => {
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
   const [mediaItems, setMediaItems] = useState([]);
-
+  const dispatch = useDispatch();
   const user = useAppSelector((state) => state.user);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSubmit = (values: { description: string; title: string; mediaIds: any[] }) => {
     const { description, title, mediaIds } = values;
 
-    // apis.playlists
-    //   .playlistControllerCreate({ createPlaylistDto: { title, mediaIds, createdBy: '', category: CreatePlaylistDtoCategoryEnum.Rehab } })
-    //   .pipe(take(1))
-    //   .subscribe((res) => {
-    //     routeConfig.playlistDetail;
-    //   });
+    dispatch(addUserPlaylist({ description, title, mediaIds, createdBy: user._id, category: CreatePlaylistDtoCategoryEnum.Builder }));
   };
   const author = user.firstName;
 
