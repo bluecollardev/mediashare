@@ -95,10 +95,10 @@ const initialPlaylistState: { createPlaylist: CreatePlaylistDto; loading: boolea
 
 const playlistReducer = createReducer(
   initialPlaylistState,
-  (builder) => {}
-  builder.addCase(findUserPlaylists.fulfilled, (state, action) => {
-    state.userPlaylists = action.payload;
-  })
+  (builder) =>
+    builder.addCase(findUserPlaylists.fulfilled, (state, action) => {
+      state.userPlaylists = action.payload;
+    })
   // .addCase(addUserPlaylist.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
   // .addCase(updateUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
   // .addCase(shareUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
