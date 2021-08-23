@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-  Button,
-  Container,
-  Content,
-  Icon,
-  List,
-  Text,
-  View
-} from 'native-base';
+import { Button, Container, Content, Icon, List, Text, View } from 'native-base';
 
 import { MediaListItem } from '../../components/layout/MediaListItem';
 
@@ -21,20 +13,16 @@ export interface AddToPlaylistProps {
 
 export interface AddToPlaylistState {}
 
-class AddToPlaylist extends React.Component<
-  AddToPlaylistProps,
-  AddToPlaylistState
-> {
+class AddToPlaylist extends React.Component<AddToPlaylistProps, AddToPlaylistState> {
   render() {
     const { navigation } = this.props;
-    const imageSrc =
-      'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+    const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
     const items1 = [
       { title: 'Playlist 1', description: '9 Videos', image: imageSrc },
       { title: 'Playlist 2', description: '2 Videos', image: imageSrc },
       { title: 'Playlist 3', description: '3 Videos', image: imageSrc },
-      { title: 'Playlist 4', description: '4 Videos', image: imageSrc }
+      { title: 'Playlist 4', description: '4 Videos', image: imageSrc },
     ];
 
     return (
@@ -51,9 +39,7 @@ class AddToPlaylist extends React.Component<
                     title={title}
                     description={description}
                     image={image}
-                    onViewDetail={() =>
-                      navigation.navigate(routeConfig.playlistDetail.name)
-                    }
+                    onViewDetail={() => navigation.navigate(routeConfig.playlistDetail.name)}
                     selectable={false}
                     showActions={false}
                   />
@@ -70,7 +56,8 @@ class AddToPlaylist extends React.Component<
                 flex: 1,
                 marginRight: 10,
                 justifyContent: 'center',
-              }}>
+              }}
+            >
               <Icon name="close-outline" />
               <Text style={{ paddingRight: 30 }}>Cancel</Text>
             </Button>
@@ -81,8 +68,9 @@ class AddToPlaylist extends React.Component<
               style={{
                 flex: 1,
                 marginRight: 10,
-                justifyContent: 'center'
-              }}>
+                justifyContent: 'center',
+              }}
+            >
               <Icon name="add-outline" />
               <Text style={{ paddingRight: 30 }}>Add</Text>
             </Button>

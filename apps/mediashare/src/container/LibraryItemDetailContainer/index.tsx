@@ -1,6 +1,8 @@
+import { Text } from 'native-base';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import LibraryItemDetail from '../../screens/LibraryItemDetail';
+import { useAppSelector } from '../../state';
 
 export interface LibraryItemDetailContainerProps {
   navigation: any;
@@ -9,26 +11,13 @@ export interface LibraryItemDetailContainerProps {
 }
 export interface LibraryItemDetailContainerState {}
 
-class LibraryItemDetailContainer extends React.Component<
-  LibraryItemDetailContainerProps,
-  LibraryItemDetailContainerState
-> {
-  componentDidMount() {
-    // this.props.fetchList();
+const LibraryItemDetailContainer = (props) => {
+  const mediaItem = useAppSelector((state) => state.mediaItem);
+  if (mediaItem.loading) {
+    return <Text>...loading</Text>;
   }
-  render() {
-    return <LibraryItemDetail navigation={this.props.navigation} list={this.props.data} />;
-  }
-}
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    // fetchList: (url: any) => dispatch(fetchList(url)),
-  };
-}
+  return <LibraryItemDetail navigation={props.navigation} item={mediaItem.selectedMediaItem} src={mediaItem.getMediaItem} />;
+};
 
-const mapStateToProps = (state: any) => ({
-  data: state && state.libraryItemDetail ? state.libraryItemDetail.list : [],
-  isLoading: state && state.isLoading ? state.libraryItemDetail.isLoading : false,
-});
-export default connect(mapStateToProps, mapDispatchToProps)(LibraryItemDetailContainer);
+export default LibraryItemDetailContainer;

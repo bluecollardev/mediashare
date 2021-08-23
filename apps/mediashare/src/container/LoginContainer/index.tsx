@@ -1,61 +1,90 @@
 import * as React from 'react';
-import { Item, Input, Text, Button, View } from 'native-base';
+import { Text, Button } from 'native-base';
 import Login from '../../screens/Login';
 
-import { Dispatch, useContext, useState } from 'react';
+import { Component, useContext, useState } from 'react';
 import { UserContext } from '../../state/user-context';
 import { LoginDto } from '../../api';
-import { apis, ApiService } from '../../state/apis';
-import { DefaultApi, MediaItemsApi, PlaylistsApi, servers, ShareItemsApi, UserApi, UsersApi } from '../../rxjs-api';
-import { Configuration } from '../../rxjs-api/runtime';
-import { ApiContext } from '../../state/api-context';
-import { useDispatch, useSelector } from 'react-redux';
-import { useAppDispatch, useAppSelector } from '../../state';
-import { loginThunk, UserActions } from '../../state/modules/user';
 
-const required = (value: any) => (value ? undefined : 'Required');
-const maxLength = (max: any) => (value: any) => (value && value.length > max ? `Must be ${max} characters or less` : undefined);
-const maxLength15 = maxLength(15);
-const minLength = (min: any) => (value: any) => (value && value.length < min ? `Must be ${min} characters or more` : undefined);
-const minLength8 = minLength(8);
+import { useDispatch } from 'react-redux';
+import { Authenticator } from 'aws-amplify-react-native';
+
+import { AmplifyTheme } from 'aws-amplify-react-native';
+
+// const MySectionHeader = Object.assign({}, AmplifyTheme.button, { backgroundColor: 'black' });
+
+const MyTheme = Object.assign({}, AmplifyTheme, {
+  button: {
+    backgroundColor: '#2874F0',
+    fontFamily: 'System',
+
+    paddingVertical: 6,
+    // paddingHorizontal: variables.buttonPadding + 10,
+    borderRadius: 5,
+    borderColor: '#2874F0',
+    borderWidth: null,
+    height: 45,
+    elevation: 2,
+    shadowColor: undefined,
+    shadowOffset: undefined,
+    shadowOpacity: undefined,
+    shadowRadius: undefined,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    textAlign: 'center',
+    width: '100%',
+  },
+});
+
+const maxLength = (max: any) => (value: any) => value && value.length > max ? `Must be ${max} characters or less` : undefined;
+const minLength = (min: any) => (value: any) => value && value.length < min ? `Must be ${min} characters or more` : undefined;
 const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined);
-const alphaNumeric = (value: any) => (value && /[^a-zA-Z0-9 ]/i.test(value) ? 'Only alphanumeric characters' : undefined);
 
 export interface LoginFormState {}
 
-function validateUsername(username: string) {
-  return email(username) && username.length > 0;
-}
-function validatePassword(password: string) {
-  return email(password) && password.length > 0;
-}
-
 const LoginComponent = () => {
-  const [username, setUsername] = useState('test@example.com');
-  const [password, setPassword] = useState('string12345');
-  const user = useContext(UserContext);
+  const [] = useState('test@example.com');
+  const [] = useState('string12345');
   const dispatch = useDispatch();
 
-  const onLogin = async (loginDto: LoginDto) => {
-    // const login = await apis.user.userControllerLogin({ loginDto }).toPromise();
-    dispatch(loginThunk(loginDto));
-    // user.setUser(login);
+  const signUpConfig = {
+    header: 'My Customized Sign Up',
+    hideAllDefaults: true,
+    defaultCountryCode: '1',
+    signUpFields: [
+      {
+        label: 'My user name',
+        key: 'username',
+        required: true,
+        displayOrder: 1,
+        type: 'string',
+      },
+      {
+        label: 'Password',
+        key: 'password',
+        required: true,
+        displayOrder: 2,
+        type: 'password',
+      },
+    ],
   };
   return (
     <Login>
-      <Item error={validateUsername(username) && username.length > 0}>
+      {/* <Item error={validateUsername(username) && username.length > 0}>
         <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" />
       </Item>
       <Item error={validatePassword(password)}>
         <Input onChange={(e) => setPassword(e.nativeEvent.text)} value={password} placeholder="Password" secureTextEntry={true} />
-      </Item>
-      <View padder>
+      </Item> */}
+      <Authenticator signUpConfig={signUpConfig} theme={MyTheme}>
+        {/* <MyCustomSignUp override={'SignUp'} /> */}
+      </Authenticator>
+      {/* <View padder>
         <Button block onPress={() => onLogin({ username, password })}>
           <Text>Login</Text>
         </Button>
-      </View>
+      </View> */}
     </Login>
   );
 };
-
 export default LoginComponent;

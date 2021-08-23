@@ -12,6 +12,8 @@ target 'bluecollar_mediashare' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 
+  pod 'RNAWSCognito', :path => '../node_modules/amazon-cognito-identity-js'
+
   target 'bluecollar_mediashareTests' do
     inherit! :complete
     # Pods for testing

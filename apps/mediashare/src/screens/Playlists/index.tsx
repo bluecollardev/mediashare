@@ -18,15 +18,18 @@ export interface PlaylistsState {}
 
 const Playlists = (props) => {
   const dispatch = useDispatch();
-  const onViewDetailClicked = (item) => {
-    dispatch(selectPlaylistAction(item));
-  };
+
   const { navigation, list } = props;
   const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
   if (!list) {
     return <Text>...loading</Text>;
   }
+
+  const onViewDetailClicked = (item) => {
+    dispatch(selectPlaylistAction(item));
+    navigation.navigate();
+  };
   const items = list.map((item) => ({
     id: item._id,
     title: item.title,

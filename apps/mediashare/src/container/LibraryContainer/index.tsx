@@ -1,11 +1,13 @@
 import { Storage } from 'aws-amplify';
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import Library from '../../screens/Library';
 
 import { findMediaItems } from '../../state/modules/media-items';
 import { useState, useEffect } from 'react';
-import { RootState } from '../../state/store';
+import { RootState } from '../../state';
+import { useAppSelector } from '../../state/index';
+import { Text } from 'native-base';
 
 export interface LibraryContainerProps {
   navigation: any;
@@ -15,35 +17,16 @@ export interface LibraryContainerProps {
 }
 export interface LibraryContainerState {}
 const LibraryContainer = (props: { navigation: any }) => {
-  // componentDidMount() {
-  //   const { fetchList } = this.props;
-  //   fetchList();
-  // }
+  const dispatch = useDispatch();
 
-  // const { state } = .props;
-  const [data, setData] = useState([]);
-  const loginAndStorage = async function () {
-    const list = await Storage.list('');
-    setData(list.map((itm) => ({ title: itm.key })));
-  };
+  const mediaItems = useAppSelector((state) => state.mediaItems);
 
   console.log(props);
+  if (!mediaItems?.loading && mediaItems?.mediaItems?.length < 1) {
+    dispatch(findMediaItems());
+  }
 
-  useEffect(() => {
-    loginAndStorage();
-  }, []);
-  return <Library navigation={props.navigation} list={data} />;
+  return <>{mediaItems.loading ? <Text>...loading</Text> : <Library navigation={props.navigation} list={mediaItems.mediaItems} />}</>;
 };
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    fetchList: () => dispatch(findMediaItems(null)),
-  };
-}
-
-const mapStateToProps = (state: RootState) => ({
-  state: state,
-  data: state?.userMediaItems?.userMediaItems ? state.userMediaItems.userMediaItems : [],
-  isLoading: state && state.userMediaItems ? state.userMediaItems.isLoading : false,
-});
-export default connect(mapStateToProps, mapDispatchToProps)(LibraryContainer);
+export default LibraryContainer;

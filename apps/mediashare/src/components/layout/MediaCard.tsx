@@ -1,17 +1,7 @@
 import * as React from 'react';
-import {
-  Text,
-  Button,
-  Icon,
-  Left,
-  Body,
-  Right,
-  CardItem,
-  Card,
-  View,
-  ActionSheet
-} from 'native-base';
+import { Text, Button, Icon, Left, Body, Right, CardItem, Card, View, ActionSheet } from 'native-base';
 import { Image } from 'react-native';
+import Video from 'react-native-video';
 
 export interface MediaListItemProps {
   navigation?: any;
@@ -36,25 +26,20 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     buttons = false,
     showActions = false,
     onActionsClicked = () => {},
-    children
+    children,
   } = props;
 
   return (
     <Card style={{ flex: 0 }}>
       {mediaSrc && (
         <CardItem cardBody>
-          <Image
-            source={{ uri: mediaSrc }}
-            style={{ height: 200, width: null, flex: 1, marginTop: 5 }}
-          />
+          <Video source={{ uri: mediaSrc }} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />
         </CardItem>
       )}
       <CardItem>
         <Body>
           <Text>{title}</Text>
-          <Text style={{ fontSize: 12, color: 'grey' }}>
-            {author} @bluecollardev
-          </Text>
+          <Text style={{ fontSize: 12, color: 'grey' }}>{author} @bluecollardev</Text>
           <Text style={{ fontSize: 12, color: 'grey' }}>5 items - 1h 20m</Text>
         </Body>
         {showActions && (

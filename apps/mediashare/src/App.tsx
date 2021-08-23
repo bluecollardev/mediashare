@@ -16,6 +16,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'native-base';
+import { withAuthenticator } from 'aws-amplify-react-native';
 
 import { routeConfig } from './routes';
 import { RootState } from './state';
@@ -119,30 +120,31 @@ const TabNavigation = () => {
     </TabNavigator.Navigator>
   );
 };
-
+Amplify.configure(awsmobile);
 async function fakeLogin() {
   await Auth.currentCredentials();
 }
+
+Auth.signOut();
+const signUpConfig = {
+  header: 'My Customized Sign Up',
+  hideAllDefaults: true,
+  defaultCountryCode: '1',
+  signupFields: [],
+};
+
+console.log(Auth.configure());
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
 
-  Amplify.configure(awsmobile);
-  fakeLogin();
+  // Amplify.configure(awsmobile);
+  // fakeLogin();
 
   const user = useAppSelector((state) => state.user);
 
   useEffect(() => {
     setIsLoggedIn(user._id.length > 0);
   }, [user]);
-  // setIsLoggedIn(!!useSelector);
-  // store.subscribe(() => {
-  //   const state = store.getState();
-  //   if (state.user._id.length) {
-  //     console.log(state);
-  //     setIsLoggedIn(true);
-  //   }
-
-  // });
 
   return (
     <Provider store={store}>
