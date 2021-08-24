@@ -11,8 +11,10 @@ import { mediaFormConfig } from '../../container/AddMediaContainer/formConfig';
 import { useState } from 'react';
 import { CreateMediaItemDto } from '../../api';
 import { useDispatch } from 'react-redux';
-import { uploadMediaToS3 } from '../../state/modules/media-items';
+import { addMediaItem } from '../../state/modules/media-items';
 import { useAppSelector } from '../../state';
+import { CreateMediaItemDtoCategoryEnum } from '../../rxjs-api/models/CreateMediaItemDto';
+import { routeConfig } from '../../routes';
 
 export interface MediaDetailProps {
   navigation: any;
@@ -22,6 +24,7 @@ export interface MediaDetailProps {
 export interface MediaDetailState {}
 
 const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation }) => {
+  const { navigation } = props;
   const {
     config: { summary: summaryCfg, description: descriptionCfg, title: titleCfg },
   } = props;
@@ -35,10 +38,6 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
 
   const dispatch = useDispatch();
 
-  const onSubmit = (createMediaItemDto: Partial<CreateMediaItemDto>) => {
-    console.log(createMediaItemDto);
-  };
-
   async function getDocument() {
     const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
     setDocumentName(document.name);
@@ -48,17 +47,27 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
       if (true) {
         return;
       }
-      const file = await fetch(document.uri);
-      const blob = await file.blob();
-
-      dispatch(uploadMediaToS3({ blob, key: document.name }));
     } catch (err) {
       console.log(err);
     }
   }
+  if (media.mediaItem) {
+    return navigation.navigate(routeConfig.libraryItemDetail);
+  }
+
+  function submit() {
+    const addMediaItemParams = {
+      key: documentName,
+      title,
+      description,
+      summary,
+      category: CreateMediaItemDtoCategoryEnum.Endurance,
+      uri: documentUri,
+    };
+    dispatch(addMediaItem(addMediaItemParams));
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { navigation } = props;
 
   return (
     <Container style={styles.container}>
@@ -78,6 +87,7 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
                     {documentUri.length > 0 ? (
                       <Button
                         transparent
+                        disabled={media.loading}
                         onPress={() => {
                           setDocumentName('');
                           setDocumentUri('');
@@ -115,7 +125,7 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
               </Item>
             </View>
           </MediaCard>
-          <Button block onPress={() => onSubmit({ summary, description, title })}>
+          <Button block onPress={() => submit()} disabled={media.loading}>
             <Text>Create</Text>
           </Button>
         </View>
