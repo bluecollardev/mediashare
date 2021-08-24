@@ -18,24 +18,24 @@ export interface LibraryProps {
   list: any;
 }
 
-const sliceFolder = (s: string) => s.split('/')[1].split('.')[0].trim();
-
 export interface LibraryState {}
 const Library = ({ navigation, list }: { navigation: any; list: MediaItem[] }) => {
   const dispatch = useDispatch();
-  const [item] = useState(null);
-
   console.log(list);
   const items = list
     ?.map((item) => ({
       title: item.title,
       description: item.description,
       image: item.thumbnail,
+      summary: item.summary,
+      createdAt: item.createdAt,
+      createdBy: item.createdBy,
+      uri: item.uri,
     }))
     .filter((item) => item.title !== '');
 
-  const viewItem = async function (item: MediaViewItem) {
-    dispatch(getMediaItemById(item.title));
+  const viewItem = async function (item: MediaItem) {
+    dispatch(getMediaItemById(item.uri));
     dispatch(selectMediaItem(item));
     navigation.navigate(routeConfig.libraryItemDetail.name);
   };

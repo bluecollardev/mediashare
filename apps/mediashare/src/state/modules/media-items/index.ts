@@ -1,5 +1,4 @@
 import { createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
-import { Storage } from 'aws-amplify';
 
 import { makeEnum } from '../../core/factory';
 
@@ -7,10 +6,8 @@ import * as reducers from '../../core/reducers';
 
 import { apis, ApiService } from '../../apis';
 import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
-import { AwsMediaItem } from './aws-media-item.model';
-import { MediaViewItem } from './media-view-item.model';
 import { MediaItem } from '../../../rxjs-api';
-import { uploadMedia } from './storage';
+import { uploadMedia, getStorage } from './storage';
 import { KeyFactory } from './key-factory';
 import { getAllMedia } from './media-items';
 
@@ -19,18 +16,25 @@ const MEDIA_ITEM_ACTIONS = ['GET_MEDIA_ITEM', 'ADD_MEDIA_ITEM', 'UPDATE_MEDIA_IT
 export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
 export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
 
-export const selectMediaItem = createAction<MediaViewItem, 'selectMediaItem'>('selectMediaItem');
+export const selectMediaItem = createAction<MediaItem, 'selectMediaItem'>('selectMediaItem');
 export const clearMediaItem = createAction('clearMediaItem');
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async (id: string) => {
-  const response = (await Storage.get(id, {})) as string;
+  const response = await getStorage(id);
+  console.log('🚀 ---------------------------------------------------------------------');
+  console.log('🚀 ~ file: index.ts ~ line 24 ~ getMediaItemById ~ response', response);
+  console.log('🚀 ---------------------------------------------------------------------');
+  if (typeof response !== 'string') {
+    return '';
+  }
+
   return response;
 });
 
 export const addMediaItem = createAsyncThunk(
   mediaItemActionTypes.addMediaItem,
   async (dto: Pick<CreateMediaItemDto, 'category' | 'description' | 'summary' | 'title' | 'key' | 'uri'>) => {
-    const { uri: fileUri, title, key: initialKey, category, summary, description } = dto;
+    const { uri: fileUri, title, category, summary, description } = dto;
     console.log('starting this');
     try {
       const options = { description: dto.description, summary: dto.summary, contentType: 'video/mp4' };
@@ -85,9 +89,6 @@ export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMedia
 
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async () => {
   const response = await getAllMedia();
-  console.log('🚀 -------------------------------------------------------------------');
-  console.log('🚀 ~ file: index.ts ~ line 89 ~ findMediaItems ~ response', response);
-  console.log('🚀 -------------------------------------------------------------------');
 
   return response;
 });
@@ -98,12 +99,12 @@ const initialState: { mediaItems: MediaItem[]; loading: boolean; loaded: boolean
   loaded: false,
 };
 
-const initialMediaItemState: { getMediaItem: string; loading: boolean; selectedMediaItem: MediaViewItem; file: any; mediaItem: MediaItem } = {
+const initialMediaItemState: { getMediaItem: string; loading: boolean; file: any; mediaItem: MediaItem; mediaSrc: string } = {
   getMediaItem: null,
-  selectedMediaItem: null,
   mediaItem: null,
   loading: false,
   file: null,
+  mediaSrc: null,
 };
 
 export const MEDIA_ITEMS_STATE_KEY = 'mediaItems';
@@ -119,7 +120,7 @@ const mediaItemReducer = createReducer(
     builder
       .addCase(getMediaItemById.rejected, reducers.rejectedReducer('getMediaItem'))
       .addCase(getMediaItemById.pending, (state) => ({ ...state, loading: true }))
-      .addCase(getMediaItemById.fulfilled, (state, action) => ({ ...state, getMediaItem: action.payload, loading: false }))
+      .addCase(getMediaItemById.fulfilled, (state, action) => ({ ...state, mediaSrc: action.payload, loading: false }))
       .addCase(addMediaItem.pending, (state, action) => {
         console.log(state, action);
         return { ...state, loading: true };
@@ -133,7 +134,7 @@ const mediaItemReducer = createReducer(
         return { ...state, loading: false, mediaItem: action.payload };
       })
       .addCase(selectMediaItem, (state, action) => {
-        return { ...state, selectedMediaItem: action.payload };
+        return { ...state, mediaItem: action.payload };
       })
       .addCase(clearMediaItem, (state) => {
         return { ...state, mediaItem: null };

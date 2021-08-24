@@ -15,7 +15,7 @@ export interface PutStorageParams {
   options?: StorageOptions;
 }
 
-function getStorage(key: string) {
+export function getStorage(key: string) {
   return Storage.get(key);
 }
 

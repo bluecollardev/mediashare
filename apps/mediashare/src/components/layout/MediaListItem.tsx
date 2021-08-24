@@ -13,10 +13,11 @@ export interface MediaListItemProps {
   showActions?: boolean;
   onViewDetail?: () => void;
 }
-
+const DEFAULT_IMAGE = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+const sliceFolder = (s: string) => s.split('/')[1].split('.')[0].trim();
 export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
   const { title, description, image, selectable = true, showActions = true, onViewDetail = () => {} } = props;
-  const [source, setSource] = useState('');
+  const [source, setSource] = useState(DEFAULT_IMAGE);
   console.log(image);
   useEffect(() => {
     Storage.get(image).then((res: string) => {

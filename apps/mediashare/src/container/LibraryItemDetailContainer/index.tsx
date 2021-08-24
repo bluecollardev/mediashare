@@ -1,8 +1,11 @@
-import { Text } from 'native-base';
+import { Container, Content, Text, View } from 'native-base';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import LibraryItemDetail from '../../screens/LibraryItemDetail';
+import { LibraryItemCard } from '../../components/layout/LibraryItemCard';
+import styles from '../../screens/Home/styles';
 import { useAppSelector } from '../../state';
+
+import { MediaViewItem } from '../../state/modules/media-items/media-view-item.model';
 
 export interface LibraryItemDetailContainerProps {
   navigation: any;
@@ -12,12 +15,26 @@ export interface LibraryItemDetailContainerProps {
 export interface LibraryItemDetailContainerState {}
 
 const LibraryItemDetailContainer = (props) => {
-  const mediaItem = useAppSelector((state) => state.mediaItem);
-  if (mediaItem.loading) {
-    return <Text>...loading</Text>;
-  }
+  const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
+  const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
 
-  return <LibraryItemDetail navigation={props.navigation} item={mediaItem.selectedMediaItem} src={mediaItem.getMediaItem} />;
+  return (
+    <Container style={styles.container}>
+      <Content>
+        <View padder>
+          <LibraryItemCard
+            title={mediaItem.title}
+            description={mediaItem.description}
+            image={mediaItemSrc}
+            showActions={true}
+            onEditClicked={() => console.log('clicked')}
+            onDeleteClicked={() => console.log('clicked')}
+            content={mediaItem.summary}
+          />
+        </View>
+      </Content>
+    </Container>
+  );
 };
 
 export default LibraryItemDetailContainer;
