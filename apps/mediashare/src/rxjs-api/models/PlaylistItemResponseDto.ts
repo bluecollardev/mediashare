@@ -61,16 +61,6 @@ export interface PlaylistItemResponseDto {
    * @type {string}
    * @memberof PlaylistItemResponseDto
    */
-  displayFileName: string;
-  /**
-   * @type {string}
-   * @memberof PlaylistItemResponseDto
-   */
-  thumbnail?: string;
-  /**
-   * @type {string}
-   * @memberof PlaylistItemResponseDto
-   */
   uri: string;
   /**
    * @type {string}

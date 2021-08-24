@@ -67,16 +67,6 @@ export interface MediaItem {
    * @type {string}
    * @memberof MediaItem
    */
-  displayFileName: string;
-  /**
-   * @type {string}
-   * @memberof MediaItem
-   */
-  thumbnail?: string;
-  /**
-   * @type {string}
-   * @memberof MediaItem
-   */
   uri: string;
   /**
    * @type {string}

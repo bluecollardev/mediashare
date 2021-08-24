@@ -18,6 +18,7 @@ import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.constants';
 import { GetUserId } from '../../core/decorators/user.decorator';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { MediaItem } from './entities/media-item.entity';
 
 @ApiTags('media-items')
 @Controller('media-items')
@@ -35,8 +36,10 @@ export class MediaItemController {
    */
   @Post()
   @MediaPostResponse()
-  create(@CreateDto() createMediaItemDto: CreateMediaItemDto) {
-    return this.mediaItemService.create(createMediaItemDto);
+  @UseGuards(JwtAuthGuard)
+  create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUserId() createdBy: ObjectId) {
+    const mediaItem: Omit<MediaItem, '_id'> = { ...createMediaItemDto, userId: createdBy };
+    return this.mediaItemService.create(mediaItem);
   }
 
   /* TODO: findout what this needs to be */

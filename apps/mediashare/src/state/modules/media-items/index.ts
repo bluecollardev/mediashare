@@ -40,7 +40,7 @@ export const addMediaItem = createAsyncThunk(
         throw new Error('no response in add media  item');
       }
       console.log(response);
-      const createMediaItemDto: CreateMediaItemDto = { ...partialDto, key: response.name, uri: response.name, isPlayable: true };
+      const createMediaItemDto: CreateMediaItemDto = { ...partialDto, key: initialKey, uri: initialKey, isPlayable: true };
       const mediaItem = await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
       return mediaItem;
     } catch (err) {

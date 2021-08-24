@@ -13,5 +13,6 @@ export const GetUser = createParamDecorator((data, context: ExecutionContext) =>
 export const GetUserId = createParamDecorator((data, context: ExecutionContext) => {
   const ctx = context.switchToHttp().getRequest();
   const user = ctx.session?.passport?.user ?? null;
+  console.log(ctx.session);
   return user?._id ? ObjectIdGuard(user._id) : {};
 });

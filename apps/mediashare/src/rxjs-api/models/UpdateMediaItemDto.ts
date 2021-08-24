@@ -67,16 +67,6 @@ export interface UpdateMediaItemDto {
    * @type {string}
    * @memberof UpdateMediaItemDto
    */
-  displayFileName?: string;
-  /**
-   * @type {string}
-   * @memberof UpdateMediaItemDto
-   */
-  thumbnail?: string;
-  /**
-   * @type {string}
-   * @memberof UpdateMediaItemDto
-   */
   uri?: string;
   /**
    * @type {string}

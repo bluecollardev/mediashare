@@ -33,13 +33,6 @@ export class MediaItem extends BcEntity {
   @Column({ nullable: true, type: 'text' })
   title: string;
 
-  @ApiString()
-  @Column()
-  displayFileName: string;
-
-  @Column()
-  @ApiUriString({ required: false })
-  thumbnail?: string;
   @Column()
   @ApiUriString()
   uri: string;

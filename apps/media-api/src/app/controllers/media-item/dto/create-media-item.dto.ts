@@ -7,12 +7,8 @@ import { Tag } from '../../../core/entities/tag.entity';
 import { ApiObjectId, ApiString, ApiUriString } from '@mediashare/shared';
 
 // const CreateKeys:  Readonly<keyof MediaItem[]> = [ 'summary', 'isPlayable', 'description', 'title', 'category', 'userId' ] as const;
-const OPTIONAL_MEDIA_DTO_KEYS = ['_id', 'displayFileName', 'thumbnail', 'uri', 'updatedDate'] as const;
+const OPTIONAL_MEDIA_DTO_KEYS = ['_id', 'createdAt', 'updatedDate', 'userId', 'createdBy'] as const;
 export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_DTO_KEYS]) {
-  @IsBoolean()
-  @ApiProperty({ required: true })
-  isPlayable: boolean;
-
   @IsString()
   @ApiProperty({ required: true })
   summary: string;
@@ -23,9 +19,6 @@ export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_D
   @ApiProperty({ required: true })
   description: string;
 
-  @ApiObjectId({ required: true })
-  userId: NonNullable<ObjectId>;
-
   @IsString()
   @MinLength(ApiDefaults.longString.min)
   @MaxLength(ApiDefaults.longString.max)
@@ -35,6 +28,10 @@ export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_D
   @ApiProperty({ required: true, enum: MEDIA_CATEGORY })
   @IsIn(MEDIA_CATEGORY)
   category: MediaCategoryType;
+
+  @IsString()
+  @ApiString({ required: true })
+  key: string;
 }
 
 export class AdditionalMediaItemDto extends CreateMediaItemDto {
