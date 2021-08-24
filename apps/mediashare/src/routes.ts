@@ -75,6 +75,11 @@ export const routeConfig = {
     component: AddFromLibrary,
     options: { title: 'Add From Library', header: AppScreenHeader },
   },
+  addPlaylist: {
+    name: 'addPlaylist',
+    component: PlaylistEdit,
+    options: { title: 'Add Playlist', header: AppScreenHeader },
+  },
   addMedia: {
     name: 'addToPlaylist',
     component: AddMediaContainer,

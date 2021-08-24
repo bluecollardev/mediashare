@@ -52,6 +52,7 @@ const PlaylistsNavigation = () => {
       <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.addPlaylist} />
       <PlaylistsStackNavigator.Screen {...routeConfig.libraryItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />
       <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />
