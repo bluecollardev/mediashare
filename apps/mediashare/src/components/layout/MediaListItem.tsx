@@ -13,18 +13,18 @@ export interface MediaListItemProps {
   showActions?: boolean;
   onViewDetail?: () => void;
 }
-const DEFAULT_IMAGE = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
-const sliceFolder = (s: string) => s.split('/')[1].split('.')[0].trim();
+const DEFAULT_IMAGE = require('./video-placeholder.jpg');
+
 export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
   const { title, description, image, selectable = true, showActions = true, onViewDetail = () => {} } = props;
-  const [source, setSource] = useState(DEFAULT_IMAGE);
+  const [source, setSource] = useState(null);
   console.log(image);
   useEffect(() => {
     Storage.get(image).then((res: string) => {
       console.log(res);
-      setSource(res);
+      setSource({ uri: res });
     });
-  }, []);
+  }, [image]);
   return (
     <ListItem style={{ borderWidth: 0 }}>
       {selectable && (
@@ -32,9 +32,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
           <CheckBox color="black" checked={false} />
         </Left>
       )}
-      <Left style={{ width: '20%', flex: 1 }}>
-        <Thumbnail source={{ uri: source }} />
-      </Left>
+      <Left style={{ width: '20%', flex: 1 }}>{!source ? <Thumbnail source={DEFAULT_IMAGE} square /> : <Thumbnail source={source} square />}</Left>
       <Body
         style={{
           flex: 4,

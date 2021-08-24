@@ -18,7 +18,6 @@ const payloadFactory = <T>(payload: T) => ({
 function makeActions<T extends string>(actionKeys: readonly T[]) {
   const baseActionsFactory = CreateActionFactory;
 
-  // eslint-disable-next-line no-undef
   const actions: Record<SnakeCaseToCamelCase<T>, ReturnType<typeof CreateActionFactory>> = actionKeys.reduce(
     (prev, curr) => ({ ...prev, [snakeCaseToCamelCase(curr)]: baseActionsFactory(curr) }),
     Object.create({})

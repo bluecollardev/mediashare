@@ -5,6 +5,7 @@ import { userReducer } from './modules/user';
 import { usersReducer } from './modules/users';
 import { mediaItemReducer, mediaItemsReducer } from './modules/media-items';
 import { playlistsReducer, playlistItemsReducer, playlistReducer } from './modules/playlists';
+import { reducer as createPlaylistReducer } from './modules/create-playlist';
 
 // Global app flags and data
 const systemReducers = {
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   playlist: playlistReducer,
   mediaItems: mediaItemsReducer,
   mediaItem: mediaItemReducer,
+  createPlaylist: createPlaylistReducer,
 });
 
 export { rootReducer };

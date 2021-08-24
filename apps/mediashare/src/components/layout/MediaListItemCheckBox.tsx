@@ -5,14 +5,13 @@ import { useState } from 'react';
 
 export interface MediaListItemCheckBoxProps extends MediaListItemProps {
   checked?: boolean;
-  changeChecked: (bool) => void;
 }
 
 export const MediaListItemCheckBox: React.FC<MediaListItemCheckBoxProps> = (props) => {
   const { title, description, image, selectable = true } = props;
   const [checked, setChecked] = useState(props.checked);
   function changeChecked(bool) {
-    props.changeChecked(bool);
+    // props.changeChecked(bool);
     setChecked(bool);
   }
   return (

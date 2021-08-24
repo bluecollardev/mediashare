@@ -21,9 +21,7 @@ export const clearMediaItem = createAction('clearMediaItem');
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async (id: string) => {
   const response = await getStorage(id);
-  console.log('🚀 ---------------------------------------------------------------------');
-  console.log('🚀 ~ file: index.ts ~ line 24 ~ getMediaItemById ~ response', response);
-  console.log('🚀 ---------------------------------------------------------------------');
+
   if (typeof response !== 'string') {
     return '';
   }
@@ -109,53 +107,51 @@ const initialMediaItemState: { getMediaItem: string; loading: boolean; file: any
 
 export const MEDIA_ITEMS_STATE_KEY = 'mediaItems';
 
-const mediaItemReducer = createReducer(
-  initialMediaItemState,
-  (builder) => {
-    // builder.addCase(findMediaItems.fulfilled, (state, action) => {
-    //   return { ...state, mediaItems: action.payload, loading: false };
-    // })
+const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
+  // builder.addCase(findMediaItems.fulfilled, (state, action) => {
+  //   return { ...state, mediaItems: action.payload, loading: false };
+  // })
 
-    // .addCase(findMediaItems.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
-    builder
-      .addCase(getMediaItemById.rejected, reducers.rejectedReducer('getMediaItem'))
-      .addCase(getMediaItemById.pending, (state) => ({ ...state, loading: true }))
-      .addCase(getMediaItemById.fulfilled, (state, action) => ({ ...state, mediaSrc: action.payload, loading: false }))
-      .addCase(addMediaItem.pending, (state, action) => {
-        console.log(state, action);
-        return { ...state, loading: true };
-      })
-      .addCase(addMediaItem.rejected, (state, action) => {
-        console.log(state, action);
-        return { ...state, loading: false };
-      })
-      .addCase(addMediaItem.fulfilled, (state, action) => {
-        console.log(state, action.payload);
-        return { ...state, loading: false, mediaItem: action.payload };
-      })
-      .addCase(selectMediaItem, (state, action) => {
-        return { ...state, mediaItem: action.payload };
-      })
-      .addCase(clearMediaItem, (state) => {
-        return { ...state, mediaItem: null };
-      });
-  }
-  // .addCase(addMediaItem.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
-  // .addCase(updateMediaItem.fulfilled, reducers.updateItem(MEDIA_ITEMS_STATE_KEY))
-  // .addCase(shareMediaItem.fulfilled, reducers.updateItem(MEDIA_ITEMS_STATE_KEY))
-  // .addCase(removeMediaItem.fulfilled, reducers.removeItem(MEDIA_ITEMS_STATE_KEY))
-);
+  // .addCase(findMediaItems.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
+  builder
+    .addCase(getMediaItemById.rejected, reducers.rejectedReducer('getMediaItem'))
+    .addCase(getMediaItemById.pending, (state) => ({ ...state, loading: true }))
+    .addCase(getMediaItemById.fulfilled, (state, action) => ({ ...state, mediaSrc: action.payload, loading: false }))
+    .addCase(addMediaItem.pending, (state, action) => {
+      console.log(state, action);
+      return { ...state, loading: true };
+    })
+    .addCase(addMediaItem.rejected, (state, action) => {
+      console.log(state, action);
+      return { ...state, loading: false };
+    })
+    .addCase(addMediaItem.fulfilled, (state, action) => {
+      console.log(state, action.payload);
+      return { ...state, loading: false, mediaItem: action.payload };
+    })
+    .addCase(selectMediaItem, (state, action) => {
+      return { ...state, mediaItem: action.payload };
+    })
+    .addCase(clearMediaItem, (state) => {
+      return { ...state, mediaItem: null };
+    });
+});
 
 const mediaItemsReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(findMediaItems.rejected, (state) => {
-      return { ...state, loading: false };
+      return { ...state, loading: false, loaded: false };
     })
     .addCase(findMediaItems.pending, (state) => {
-      return { ...state, loading: true };
+      return { ...state, loading: true, loaded: false };
     })
     .addCase(findMediaItems.fulfilled, (state, action) => {
-      return { ...state, mediaItems: action.payload, loading: false, loaded: true };
+      return {
+        ...state,
+        mediaItems: action.payload,
+        loading: false,
+        loaded: true,
+      };
     });
 });
 
