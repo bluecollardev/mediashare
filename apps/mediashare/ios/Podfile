@@ -16,6 +16,8 @@ target 'bluecollar_mediashare' do
 
   pod 'RNAWSCognito', :path => '../node_modules/amazon-cognito-identity-js'
 
+  pod 'react-native-create-thumbnail', :path => '../node_modules/react-native-create-thumbnail'
+
   target 'bluecollar_mediashareTests' do
     inherit! :complete
     # Pods for testing

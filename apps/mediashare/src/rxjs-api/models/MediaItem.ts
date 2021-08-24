@@ -73,6 +73,11 @@ export interface MediaItem {
    * @memberof MediaItem
    */
   category: MediaItemCategoryEnum;
+  /**
+   * @type {string}
+   * @memberof MediaItem
+   */
+  thumbnail: string;
 }
 
 /**

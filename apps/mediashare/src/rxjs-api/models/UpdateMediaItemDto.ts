@@ -73,6 +73,11 @@ export interface UpdateMediaItemDto {
    * @memberof UpdateMediaItemDto
    */
   category?: UpdateMediaItemDtoCategoryEnum;
+  /**
+   * @type {string}
+   * @memberof UpdateMediaItemDto
+   */
+  thumbnail?: string;
 }
 
 /**

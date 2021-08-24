@@ -59,6 +59,12 @@ export interface CreateMediaItemDto {
    * @type {string}
    * @memberof CreateMediaItemDto
    */
+  thumbnail: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CreateMediaItemDto
+   */
   key: string;
 }
 

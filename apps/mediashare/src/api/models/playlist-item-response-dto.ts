@@ -83,6 +83,12 @@ export interface PlaylistItemResponseDto {
    * @type {string}
    * @memberof PlaylistItemResponseDto
    */
+  thumbnail: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PlaylistItemResponseDto
+   */
   mediaId: string;
   /**
    *

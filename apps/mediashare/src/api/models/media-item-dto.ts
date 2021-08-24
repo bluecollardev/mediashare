@@ -59,6 +59,12 @@ export interface MediaItemDto {
    * @type {string}
    * @memberof MediaItemDto
    */
+  thumbnail: string;
+  /**
+   *
+   * @type {string}
+   * @memberof MediaItemDto
+   */
   key: string;
   /**
    *
@@ -66,12 +72,6 @@ export interface MediaItemDto {
    * @memberof MediaItemDto
    */
   displayFileName: string;
-  /**
-   *
-   * @type {string}
-   * @memberof MediaItemDto
-   */
-  thumbnail: string;
 }
 
 /**

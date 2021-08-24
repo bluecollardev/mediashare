@@ -9,25 +9,29 @@ import { AwsMediaItem } from '../../state/modules/media-items/aws-media-item.mod
 import { useDispatch } from 'react-redux';
 import { getMediaItemById, selectMediaItem } from '../../state/modules/media-items/index';
 import { MediaViewItem } from '../../state/modules/media-items/media-view-item.model';
+import { Storage } from 'aws-amplify';
+import { S3Image } from 'aws-amplify-react-native';
 
 export interface LibraryProps {
   navigation: any;
   list: any;
 }
 
+const sliceFolder = (s: string) => s.split('/')[1].trim();
+
 export interface LibraryState {}
 const Library = ({ navigation, list }: { navigation: any; list: AwsMediaItem[] }) => {
   const dispatch = useDispatch();
   const [item] = useState(null);
-  const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
-  const items = list?.map((item) => ({
-    title: item.key,
-    description: `${item?.size} `,
-    image: imageSrc,
-  }));
+  const items = list
+    ?.map((item) => ({
+      title: sliceFolder(item.key),
+      description: `${item?.size} `,
+      image: 'thumbnail/' + sliceFolder(item.key) + '.jpeg',
+    }))
+    .filter((item) => item.title !== '');
 
-  // this.fetchImages().subscribe((obs) => console.log(obs));
   const viewItem = async function (item: MediaViewItem) {
     dispatch(getMediaItemById(item.title));
     dispatch(selectMediaItem(item));

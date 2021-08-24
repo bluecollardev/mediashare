@@ -19,8 +19,7 @@ const LibraryContainer = (props: { navigation: any }) => {
 
   const mediaItems = useAppSelector((state) => state.mediaItems);
 
-  console.log(props);
-  if (!mediaItems?.loading && mediaItems?.mediaItems?.length < 1) {
+  if (!mediaItems.loaded && !mediaItems?.loading && mediaItems?.mediaItems?.length < 1) {
     dispatch(findMediaItems());
   }
   console.log(mediaItems);

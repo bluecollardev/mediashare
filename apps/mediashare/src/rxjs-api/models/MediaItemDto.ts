@@ -50,17 +50,17 @@ export interface MediaItemDto {
    * @type {string}
    * @memberof MediaItemDto
    */
+  thumbnail: string;
+  /**
+   * @type {string}
+   * @memberof MediaItemDto
+   */
   key: string;
   /**
    * @type {string}
    * @memberof MediaItemDto
    */
   displayFileName: string;
-  /**
-   * @type {string}
-   * @memberof MediaItemDto
-   */
-  thumbnail: string;
 }
 
 /**

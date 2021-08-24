@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { Text, Button, Icon, Left, Body, Right, ListItem, CheckBox, Thumbnail } from 'native-base';
+import { S3Image } from 'aws-amplify-react-native';
+import { useEffect, useState } from 'react';
+import { Storage } from 'aws-amplify';
 
 export interface MediaListItemProps {
   navigation?: any;
@@ -13,6 +16,14 @@ export interface MediaListItemProps {
 
 export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
   const { title, description, image, selectable = true, showActions = true, onViewDetail = () => {} } = props;
+  const [source, setSource] = useState('');
+  console.log(image);
+  useEffect(() => {
+    Storage.get(image).then((res: string) => {
+      console.log(res);
+      setSource(res);
+    });
+  }, []);
   return (
     <ListItem style={{ borderWidth: 0 }}>
       {selectable && (
@@ -21,7 +32,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
         </Left>
       )}
       <Left style={{ width: '20%', flex: 1 }}>
-        <Thumbnail square source={{ uri: image }} />
+        <Thumbnail source={{ uri: source }} />
       </Left>
       <Body
         style={{

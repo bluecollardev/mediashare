@@ -1,4 +1,4 @@
-import { AsyncThunk, createAction, createAsyncThunk, createReducer, PayloadAction } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import { Storage } from 'aws-amplify';
 
 import { makeEnum } from '../../core/factory';
@@ -7,11 +7,10 @@ import * as reducers from '../../core/reducers';
 
 import { apis, ApiService } from '../../apis';
 import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
-import { number, string } from '@hapi/joi';
 import { AwsMediaItem } from './aws-media-item.model';
 import { MediaViewItem } from './media-view-item.model';
-import { Blob } from 'buffer';
 import { MediaItem } from '../../../rxjs-api';
+import { createThumbnail } from 'react-native-create-thumbnail';
 
 const MEDIA_ITEM_ACTIONS = ['GET_MEDIA_ITEM', 'ADD_MEDIA_ITEM', 'UPDATE_MEDIA_ITEM', 'SHARE_MEDIA_ITEM', 'REMOVE_MEDIA_ITEM', 'UPLOAD_MEDIA_ITEM'] as const;
 const MEDIA_ITEMS_ACTIONS = ['FIND_MEDIA_ITEMS'] as const;
@@ -35,16 +34,27 @@ export const addMediaItem = createAsyncThunk(
       if (!blob) {
         throw new Error('no file blob in add media  item');
       }
-      const response = (await Storage.put(initialKey, blob, {
+      const videoKey = 'video/' + initialKey;
+      const thumbnailKey = 'thumbnail/' + initialKey + '.jpeg';
+      const response = (await Storage.put(videoKey, blob, {
         contentType: 'video/mp4',
         contentDisposition: dto.title,
         metaData: { description: dto.description, summary: dto.summary },
       })) as any;
+      const thumbnail = await createThumbnail({ url: fileUri });
+      console.log('🚀 ----------------------------------------------------');
+      console.log('🚀 ~ file: index.ts ~ line 48 ~ thumbnail', thumbnail);
+      console.log('🚀 ----------------------------------------------------');
+      const thumbFile = await fetch(thumbnail.path);
+      const thumbBlob = await thumbFile.blob();
+      const thumbnailResponse = await Storage.put(thumbnailKey, thumbBlob);
+
       if (!response) {
         throw new Error('no response in add media  item');
       }
       console.log(response);
-      const createMediaItemDto: CreateMediaItemDto = { ...partialDto, key: initialKey, uri: initialKey, isPlayable: true };
+      const createMediaItemDto: CreateMediaItemDto = { ...partialDto, key: videoKey, uri: initialKey, isPlayable: true, thumbnail: thumbnailKey };
+
       const mediaItem = await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
       return mediaItem;
     } catch (err) {
@@ -76,14 +86,15 @@ export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMedia
 
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async () => {
   // @ts-ignore
-  const response = await Storage.list('');
+  const response = await Storage.list('video/');
 
   return response as AwsMediaItem[];
 });
 
-const initialState: { mediaItems: AwsMediaItem[]; loading: boolean } = {
+const initialState: { mediaItems: AwsMediaItem[]; loading: boolean; loaded: boolean } = {
   loading: false,
   mediaItems: [],
+  loaded: false,
 };
 
 const initialMediaItemState: { getMediaItem: string; loading: boolean; selectedMediaItem: MediaViewItem; file: any; mediaItem: MediaItem } = {
@@ -140,7 +151,7 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
       return { ...state, loading: true };
     })
     .addCase(findMediaItems.fulfilled, (state, action) => {
-      return { ...state, mediaItems: action.payload, loading: false };
+      return { ...state, mediaItems: action.payload, loading: false, loaded: true };
     });
 });
 
