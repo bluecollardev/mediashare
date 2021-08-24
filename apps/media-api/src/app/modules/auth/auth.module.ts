@@ -34,12 +34,12 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
         inject: [AppConfigService]
       }
     ]),
-    TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
-    ShareItemModule,
     JwtModule.register({
       secret: 'this-is-my-secret-key',
       signOptions: { expiresIn: '10h' }
-    })
+    }),
+    TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
+    ShareItemModule
   ],
   controllers: [],
   providers: [LocalStrategy, SessionSerializer, AuthService, UserService],

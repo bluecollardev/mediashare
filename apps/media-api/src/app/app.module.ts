@@ -48,10 +48,7 @@ import { JwtModule } from '@nestjs/jwt';
         }
       }
     }),
-    JwtModule.register({
-      secret: 'this-is-my-secret-key',
-      signOptions: { expiresIn: '10h' }
-    }),
+
     MediaItemModule,
     ProfileModule,
     PlaylistModule,
