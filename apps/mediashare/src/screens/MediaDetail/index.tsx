@@ -4,7 +4,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 
 import { MediaCard } from '../../components/layout/MediaCard';
-import { Button, Container, Content, Input, Item, Label, Text, View, Textarea, Grid, Row, Col, Icon, Image, Thumbnail } from 'native-base';
+import { Button, Container, Content, Input, Item, Label, Text, View, Textarea, Grid, Row, Col, Icon, Image, Thumbnail, Spinner } from 'native-base';
 import styles from './styles';
 
 import { mediaFormConfig } from '../../container/AddMediaContainer/formConfig';
@@ -28,7 +28,8 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
   const [summary, setSummary] = useState(summaryCfg.value);
   const [description, setDescription] = useState(descriptionCfg.value);
   const [title, setTitle] = useState(titleCfg.value);
-  const [imageSrc, setImageSrc] = useState('');
+  const [documentName, setDocumentName] = useState('');
+  const [documentUri, setDocumentUri] = useState('');
 
   const media = useAppSelector((state) => state.mediaItem);
 
@@ -39,22 +40,21 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
   };
 
   async function getDocument() {
-    console.log('started');
     const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
-
+    setDocumentName(document.name);
+    setDocumentUri(document.uri);
     try {
       // const fileLink = await FileSystem.getContentUriAsync(document.uri);
+      if (true) {
+        return;
+      }
       const file = await fetch(document.uri);
       const blob = await file.blob();
 
-      // const blob = await FileSystem.readAsStringAsync(document.uri, { encoding: FileSystem.EncodingType.Base64 });
-
-      // FileSystem.uploadAsync
       dispatch(uploadMediaToS3({ blob, key: document.name }));
     } catch (err) {
       console.log(err);
     }
-    setImageSrc(document.uri);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -66,20 +66,36 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
         <View padder>
           <MediaCard>
             <View padder>
-              <Grid style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
-                <Col>
-                  <Item>
-                    <Button bordered iconLeft disabled={media.loading || !!media.file} onPress={() => getDocument()}>
+              <Item>
+                <Grid style={{ display: 'flex', alignItems: 'flex-start' }}>
+                  <Col style={{ width: 140 }}>
+                    <Button bordered iconLeft disabled={documentUri.length > 0} onPress={() => getDocument()}>
                       <Icon name="cloud-upload-outline" />
                       <Text>Upload</Text>
                     </Button>
-                    <Thumbnail source={{ uri: imageSrc }} />
-                  </Item>
-                </Col>
-                {/* <Col>
+                  </Col>
+                  <Col>
+                    {documentUri.length > 0 ? (
+                      <Button
+                        transparent
+                        onPress={() => {
+                          setDocumentName('');
+                          setDocumentUri('');
+                        }}
+                      >
+                        <Label>{documentName}</Label>
+                        <Icon name="close-circle-outline" />
+                      </Button>
+                    ) : (
+                      <></>
+                    )}
+                  </Col>
+                </Grid>
+              </Item>
+
+              {/* <Col>
                   <Image source={{ uri: imageSrc }} />
                 </Col> */}
-              </Grid>
               <Item stackedLabel>
                 <Label>{titleCfg.label}</Label>
 
