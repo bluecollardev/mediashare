@@ -27,7 +27,6 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
 export const uploadMediaToS3 = createAsyncThunk(mediaItemActionTypes.uploadMediaItem, async ({ blob, key }: { blob: any; key: string }, { extra }) => {
   const response = await Storage.put(key, blob, { contentType: 'video/mp4' });
   // console.log('🚀 -----------------------------------------------------------------');
-  // console.log('🚀 ~ file: index.ts ~ line 29 ~ addMediaItem ~ response', response);
   // console.log('🚀 -----------------------------------------------------------------');
   // return response && response.status === 200 ? response.data : undefined;
   return response;

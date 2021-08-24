@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { CreateMediaItemDto } from '../../api';
 import { useDispatch } from 'react-redux';
 import { uploadMediaToS3 } from '../../state/modules/media-items';
+import { useAppSelector } from '../../state';
 
 export interface MediaDetailProps {
   navigation: any;
@@ -29,6 +30,8 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
   const [title, setTitle] = useState(titleCfg.value);
   const [imageSrc, setImageSrc] = useState('');
 
+  const media = useAppSelector((state) => state.mediaItem);
+
   const dispatch = useDispatch();
 
   const onSubmit = (createMediaItemDto: Partial<CreateMediaItemDto>) => {
@@ -39,19 +42,15 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
     console.log('started');
     const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
 
-    console.log('🚀 -----------------------------------------------------------------');
-    console.log('🚀 ~ file: index.tsx ~ line 34 ~ getDocument ~ document', document);
-    console.log('🚀 -----------------------------------------------------------------');
     try {
-      const fileLink = await FileSystem.getContentUriAsync(document.uri);
+      // const fileLink = await FileSystem.getContentUriAsync(document.uri);
       const file = await fetch(document.uri);
       const blob = await file.blob();
 
       // const blob = await FileSystem.readAsStringAsync(document.uri, { encoding: FileSystem.EncodingType.Base64 });
+
+      // FileSystem.uploadAsync
       dispatch(uploadMediaToS3({ blob, key: document.name }));
-      console.log('🚀 ---------------------------------------------------------');
-      console.log('🚀 ~ file: index.tsx ~ line 42 ~ getDocument ~ blob', file);
-      console.log('🚀 ---------------------------------------------------------');
     } catch (err) {
       console.log(err);
     }
@@ -70,7 +69,7 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
               <Grid style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <Col>
                   <Item>
-                    <Button bordered iconLeft onPress={() => getDocument()}>
+                    <Button bordered iconLeft disabled={media.loading || !!media.file} onPress={() => getDocument()}>
                       <Icon name="cloud-upload-outline" />
                       <Text>Upload</Text>
                     </Button>
