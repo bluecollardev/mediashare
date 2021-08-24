@@ -2,7 +2,6 @@ import Login from './container/LoginContainer';
 import Home from './container/HomeContainer';
 import Explore from './container/ExploreContainer';
 import AddFromLibrary from './container/AddFromLibraryContainer';
-import AddToPlaylist from './container/AddToPlaylistContainer';
 import AddFromFeed from './container/AddFromFeedContainer';
 import Playlists from './container/PlaylistsContainer';
 import PlaylistDetail from './container/PlaylistDetailContainer';
@@ -36,6 +35,10 @@ export const routeConfig = {
     name: 'playlists',
     component: Playlists,
     options: { title: 'Playlists', header: AppScreenHeader },
+  },
+  addMediaItem: {
+    name: 'addMediaItem',
+    component: AddMediaContainer,
   },
   playlistDetail: {
     name: 'playlistDetail',
@@ -72,7 +75,7 @@ export const routeConfig = {
     component: AddFromLibrary,
     options: { title: 'Add From Library', header: AppScreenHeader },
   },
-  addToPlaylist: {
+  addMedia: {
     name: 'addToPlaylist',
     component: AddMediaContainer,
     options: { title: 'Upload Media', header: AppScreenHeader },

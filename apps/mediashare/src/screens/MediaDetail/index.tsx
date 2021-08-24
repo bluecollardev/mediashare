@@ -1,15 +1,13 @@
 import * as React from 'react';
 
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
 
 import { MediaCard } from '../../components/layout/MediaCard';
-import { Button, Container, Content, Input, Item, Label, Text, View, Textarea, Grid, Row, Col, Icon, Image, Thumbnail, Spinner } from 'native-base';
+import { Button, Container, Content, Input, Item, Label, Text, View, Textarea, Grid, Col, Icon } from 'native-base';
 import styles from './styles';
 
 import { mediaFormConfig } from '../../container/AddMediaContainer/formConfig';
-import { useState } from 'react';
-import { CreateMediaItemDto } from '../../api';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addMediaItem } from '../../state/modules/media-items';
 import { useAppSelector } from '../../state';
@@ -38,6 +36,12 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (media.mediaItem) {
+      navigation.navigate(routeConfig.libraryItemDetail);
+    }
+  }, [media, navigation]);
+
   async function getDocument() {
     const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
     setDocumentName(document.name);
@@ -51,6 +55,7 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
       console.log(err);
     }
   }
+
   if (media.mediaItem) {
     return navigation.navigate(routeConfig.libraryItemDetail);
   }
@@ -66,8 +71,6 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
     };
     dispatch(addMediaItem(addMediaItemParams));
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   return (
     <Container style={styles.container}>

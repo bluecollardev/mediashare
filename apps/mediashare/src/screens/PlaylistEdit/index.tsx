@@ -2,20 +2,15 @@ import * as React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Container, Content, View, Button, Icon, Text, Input, Item, Label, Textarea } from 'native-base';
 
-import MediaEdit, { MediaDetailProps, MediaDetailState } from '../MediaDetail';
 import { PlaylistCard } from '../../components/layout/PlaylistCard';
-import TextField from '../../components/form/TextField';
 
 import styles from './styles';
-import { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../state/user-context';
-import { apis } from '../../state/apis';
+import { useState } from 'react';
+
 import { routeConfig } from '../../routes';
 import { CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 import { Storage } from 'aws-amplify';
-import { of } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { MediaListItem } from '../../components/layout/MediaListItem';
+
 import { MediaListItemCheckBox } from '../../components/layout/MediaListItemCheckBox';
 import { useAppSelector } from '../../state';
 import { addUserPlaylist, clearPlaylistAction, findUserPlaylists } from '../../state/modules/playlists/index';
@@ -50,8 +45,6 @@ export interface PlaylistEditProps extends MediaDetailProps {
   list: any;
 }
 
-export interface PlaylistEditState extends MediaDetailState {}
-
 const PlaylistEdit = ({ navigation }: { navigation: any }) => {
   const playlist = useAppSelector((app) => app.playlist);
   const [description, setDescription] = useState('');
@@ -83,9 +76,6 @@ const PlaylistEdit = ({ navigation }: { navigation: any }) => {
     navigation.navigate(routeConfig.playlists);
   }
 
-  // useEffect(() => {
-  //   getMediaItems();
-  // });
   return (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
 

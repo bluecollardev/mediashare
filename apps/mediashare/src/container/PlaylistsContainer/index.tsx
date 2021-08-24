@@ -4,14 +4,8 @@ import Playlists from '../../screens/Playlists';
 
 import { findUserPlaylists } from '../../state/modules/playlists';
 import { routeConfig } from '../../routes';
-import { useContext, useEffect, useState } from 'react';
-import { apis } from '../../state/apis';
-import { UserContext } from '../../state/user-context';
+
 import { useAppSelector } from '../../state';
-import { RootState } from '../../state/index';
-import { Text } from 'native-base';
-import { stat } from 'fs/promises';
-import { findAllPlaylists } from '../../state/modules/all-playlists/index';
 
 export interface PlaylistsContainerProps {
   navigation: any;

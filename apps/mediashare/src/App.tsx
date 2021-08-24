@@ -21,12 +21,9 @@ import { withAuthenticator } from 'aws-amplify-react-native';
 import { routeConfig } from './routes';
 import { RootState } from './state';
 import LoginContainer from './container/LoginContainer';
-import { LoginContext, UserContext } from './state/user-context';
-import { DefaultApi, LoginResponseDto, MediaItemsApi, PlaylistsApi, ShareItemsApi, UserApi, UsersApi } from './rxjs-api';
+
 import Amplify, { Auth, Storage } from 'aws-amplify';
 import awsmobile from './aws-exports';
-import { ApiService } from './state/apis';
-import { ApiContext } from './state/api-context';
 import { Provider } from 'react-redux';
 import { store } from './boot/configureStore';
 import { useAppSelector } from './state/index';
@@ -71,7 +68,7 @@ const LibraryNavigation = () => {
       <LibraryStackNavigator.Screen {...routeConfig.libraryItemEdit} />
       <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
       {/* TODO: Add to playlist! */}
-      <LibraryStackNavigator.Screen {...routeConfig.addToPlaylist} />
+      <LibraryStackNavigator.Screen {...routeConfig.addMedia} />
     </LibraryStackNavigator.Navigator>
   );
 };
@@ -99,7 +96,7 @@ const TabNavigator = createBottomTabNavigator();
 const TabNavigation = () => {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Playlists'}
+      initialRouteName={'explore'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {

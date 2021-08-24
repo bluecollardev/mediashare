@@ -35,7 +35,11 @@ export const addMediaItem = createAsyncThunk(
       if (!blob) {
         throw new Error('no file blob in add media  item');
       }
-      const response = (await Storage.put(initialKey, blob, { contentType: 'video/mp4' })) as any;
+      const response = (await Storage.put(initialKey, blob, {
+        contentType: 'video/mp4',
+        contentDisposition: dto.title,
+        metaData: { description: dto.description, summary: dto.summary },
+      })) as any;
       if (!response) {
         throw new Error('no response in add media  item');
       }
@@ -100,27 +104,26 @@ const mediaItemReducer = createReducer(
     // })
 
     // .addCase(findMediaItems.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
-    builder.addCase(getMediaItemById.rejected, reducers.rejectedReducer('getMediaItem'));
-
-    builder.addCase(getMediaItemById.pending, (state) => ({ ...state, loading: true }));
-
-    builder.addCase(getMediaItemById.fulfilled, (state, action) => ({ ...state, getMediaItem: action.payload, loading: false }));
-
-    builder.addCase(addMediaItem.pending, (state, action) => {
-      console.log(state, action);
-      return { ...state, loading: true };
-    });
-    builder.addCase(addMediaItem.rejected, (state, action) => {
-      console.log(state, action);
-      return { ...state, loading: false };
-    });
-    builder.addCase(addMediaItem.fulfilled, (state, action) => {
-      console.log(state, action.payload);
-      return { ...state, loading: false };
-    });
-    builder.addCase(selectMediaItem, (state, action) => {
-      return { ...state, selectedMediaItem: action.payload };
-    });
+    builder
+      .addCase(getMediaItemById.rejected, reducers.rejectedReducer('getMediaItem'))
+      .addCase(getMediaItemById.pending, (state) => ({ ...state, loading: true }))
+      .addCase(getMediaItemById.fulfilled, (state, action) => ({ ...state, getMediaItem: action.payload, loading: false }))
+      .addCase(addMediaItem.pending, (state, action) => {
+        console.log(state, action);
+        return { ...state, loading: true };
+      })
+      .addCase(addMediaItem.rejected, (state, action) => {
+        console.log(state, action);
+        return { ...state, loading: false };
+      });
+    builder
+      .addCase(addMediaItem.fulfilled, (state, action) => {
+        console.log(state, action.payload);
+        return { ...state, loading: false, mediaItem: action.payload };
+      })
+      .addCase(selectMediaItem, (state, action) => {
+        return { ...state, selectedMediaItem: action.payload };
+      });
   }
   // .addCase(addMediaItem.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
   // .addCase(updateMediaItem.fulfilled, reducers.updateItem(MEDIA_ITEMS_STATE_KEY))
@@ -134,7 +137,7 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
       return { ...state, loading: false };
     })
     .addCase(findMediaItems.pending, (state, action) => {
-      return { ...state, mediaItems: action.payload, loading: true };
+      return { ...state, loading: true };
     })
     .addCase(findMediaItems.fulfilled, (state, action) => {
       return { ...state, mediaItems: action.payload, loading: false };

@@ -1,11 +1,9 @@
-import { Storage } from 'aws-amplify';
 import * as React from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Library from '../../screens/Library';
 
 import { findMediaItems } from '../../state/modules/media-items';
-import { useState, useEffect } from 'react';
-import { RootState } from '../../state';
+
 import { useAppSelector } from '../../state/index';
 import { Text } from 'native-base';
 
@@ -25,6 +23,7 @@ const LibraryContainer = (props: { navigation: any }) => {
   if (!mediaItems?.loading && mediaItems?.mediaItems?.length < 1) {
     dispatch(findMediaItems());
   }
+  console.log(mediaItems);
 
   return <>{mediaItems.loading ? <Text>...loading</Text> : <Library navigation={props.navigation} list={mediaItems.mediaItems} />}</>;
 };

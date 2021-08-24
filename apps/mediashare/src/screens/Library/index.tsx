@@ -3,8 +3,6 @@ import { Container, Content, View, Text, Button, Icon, List, CardItem } from 'na
 import { MediaListItem } from '../../components/layout/MediaListItem';
 import { routeConfig } from '../../routes';
 import styles from './styles';
-import { MediaItemsApi } from '../../api';
-import { Storage } from 'aws-amplify';
 import { useState } from 'react';
 import Video from 'react-native-video';
 import { AwsMediaItem } from '../../state/modules/media-items/aws-media-item.model';
@@ -20,7 +18,7 @@ export interface LibraryProps {
 export interface LibraryState {}
 const Library = ({ navigation, list }: { navigation: any; list: AwsMediaItem[] }) => {
   const dispatch = useDispatch();
-  const [item, setItem] = useState(null);
+  const [item] = useState(null);
   const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
   const items = list?.map((item) => ({
@@ -50,7 +48,7 @@ const Library = ({ navigation, list }: { navigation: any; list: AwsMediaItem[] }
             dark
             style={{ flex: 1 }}
             onPress={() => {
-              navigation.navigate(routeConfig.addToPlaylist.name);
+              navigation.navigate(routeConfig.addMedia.name);
             }}
           >
             <Icon name="add-outline" />
@@ -80,7 +78,7 @@ const Library = ({ navigation, list }: { navigation: any; list: AwsMediaItem[] }
             dark
             style={{ flex: 1, justifyContent: 'center' }}
             onPress={() => {
-              navigation.navigate(routeConfig.addToPlaylist.name);
+              navigation.navigate(routeConfig.addFromLibrary.name);
             }}
           >
             <Icon name="add-outline" />
