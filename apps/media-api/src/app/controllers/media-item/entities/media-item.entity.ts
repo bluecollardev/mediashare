@@ -42,4 +42,8 @@ export class MediaItem extends BcEntity {
   @IsArray()
   @IsIn(MEDIA_CATEGORY)
   category: MediaCategoryType;
+
+  @Column()
+  @ApiString()
+  thumbnail?: string;
 }

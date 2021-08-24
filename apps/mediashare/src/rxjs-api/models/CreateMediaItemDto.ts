@@ -56,6 +56,11 @@ export interface CreateMediaItemDto {
    * @memberof CreateMediaItemDto
    */
   key: string;
+  /**
+   * @type {string}
+   * @memberof CreateMediaItemDto
+   */
+  eTag: string;
 }
 
 /**

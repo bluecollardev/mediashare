@@ -32,6 +32,14 @@ export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_D
   @IsString()
   @ApiString({ required: true })
   key: string;
+
+  @IsString()
+  @ApiString({ required: true })
+  thumbnail?: string;
+
+  @IsString()
+  @ApiString()
+  eTag?: string;
 }
 
 export class AdditionalMediaItemDto extends CreateMediaItemDto {

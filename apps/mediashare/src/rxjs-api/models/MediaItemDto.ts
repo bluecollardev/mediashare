@@ -60,6 +60,11 @@ export interface MediaItemDto {
    * @type {string}
    * @memberof MediaItemDto
    */
+  eTag: string;
+  /**
+   * @type {string}
+   * @memberof MediaItemDto
+   */
   displayFileName: string;
 }
 

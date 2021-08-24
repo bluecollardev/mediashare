@@ -23,7 +23,7 @@ export interface LibraryState {}
 const Library = ({ navigation, list }: { navigation: any; list: AwsMediaItem[] }) => {
   const dispatch = useDispatch();
   const [item] = useState(null);
-
+  console.log(list);
   const items = list
     ?.map((item) => ({
       title: sliceFolder(item.key),

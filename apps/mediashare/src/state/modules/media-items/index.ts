@@ -42,18 +42,23 @@ export const addMediaItem = createAsyncThunk(
         metaData: { description: dto.description, summary: dto.summary },
       })) as any;
       const thumbnail = await createThumbnail({ url: fileUri });
-      console.log('🚀 ----------------------------------------------------');
-      console.log('🚀 ~ file: index.ts ~ line 48 ~ thumbnail', thumbnail);
-      console.log('🚀 ----------------------------------------------------');
+
       const thumbFile = await fetch(thumbnail.path);
       const thumbBlob = await thumbFile.blob();
       const thumbnailResponse = await Storage.put(thumbnailKey, thumbBlob);
-
+      console.log(response);
       if (!response) {
         throw new Error('no response in add media  item');
       }
       console.log(response);
-      const createMediaItemDto: CreateMediaItemDto = { ...partialDto, key: videoKey, uri: initialKey, isPlayable: true, thumbnail: thumbnailKey };
+      const createMediaItemDto: CreateMediaItemDto = {
+        ...partialDto,
+        key: videoKey,
+        uri: initialKey,
+        isPlayable: true,
+        thumbnail: thumbnailKey,
+        eTag: response.etag,
+      };
 
       const mediaItem = await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
       return mediaItem;
