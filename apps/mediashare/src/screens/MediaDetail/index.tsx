@@ -9,10 +9,11 @@ import styles from './styles';
 import { mediaFormConfig } from '../../container/AddMediaContainer/formConfig';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addMediaItem } from '../../state/modules/media-items';
+import { addMediaItem, clearMediaItem } from '../../state/modules/media-items';
 import { useAppSelector } from '../../state';
 import { CreateMediaItemDtoCategoryEnum } from '../../rxjs-api/models/CreateMediaItemDto';
 import { routeConfig } from '../../routes';
+import { findMediaItems } from '../../state/modules/media-items/index';
 
 export interface MediaDetailProps {
   navigation: any;
@@ -36,16 +37,10 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (media.mediaItem) {
-      navigation.navigate(routeConfig.libraryItemDetail);
-    }
-  }, [media, navigation]);
-
   async function getDocument() {
     const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
-    setDocumentName(document.name);
-    setDocumentUri(document.uri);
+    setDocumentName(document?.name || '');
+    setDocumentUri(document?.uri || '');
     try {
       // const fileLink = await FileSystem.getContentUriAsync(document.uri);
       if (true) {
@@ -55,12 +50,17 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
       console.log(err);
     }
   }
-
-  if (media.mediaItem) {
-    return navigation.navigate(routeConfig.libraryItemDetail);
-  }
+  useEffect(() => {
+    if (media.mediaItem) {
+      dispatch(clearMediaItem);
+      navigation.navigate(routeConfig.library);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [media, navigation]);
 
   function submit() {
+    console.log('submitting');
+
     const addMediaItemParams = {
       key: documentName,
       title,

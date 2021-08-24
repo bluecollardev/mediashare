@@ -17,14 +17,15 @@ export interface LibraryContainerState {}
 const LibraryContainer = (props: { navigation: any }) => {
   const dispatch = useDispatch();
 
-  const mediaItems = useAppSelector((state) => state.mediaItems);
+  const { loaded, loading, mediaItems } = useAppSelector((state) => state.mediaItems);
 
-  if (!mediaItems.loaded && !mediaItems?.loading && mediaItems?.mediaItems?.length < 1) {
+  if (!loaded && !loading && mediaItems.length < 1) {
+    console.log('dispatched');
     dispatch(findMediaItems());
   }
   console.log(mediaItems);
 
-  return <>{mediaItems.loading ? <Text>...loading</Text> : <Library navigation={props.navigation} list={mediaItems.mediaItems} />}</>;
+  return <>{loading ? <Text>...loading</Text> : <Library navigation={props.navigation} list={mediaItems} />}</>;
 };
 
 export default LibraryContainer;

@@ -11,24 +11,26 @@ import { getMediaItemById, selectMediaItem } from '../../state/modules/media-ite
 import { MediaViewItem } from '../../state/modules/media-items/media-view-item.model';
 import { Storage } from 'aws-amplify';
 import { S3Image } from 'aws-amplify-react-native';
+import { MediaItem } from '../../rxjs-api';
 
 export interface LibraryProps {
   navigation: any;
   list: any;
 }
 
-const sliceFolder = (s: string) => s.split('/')[1].trim();
+const sliceFolder = (s: string) => s.split('/')[1].split('.')[0].trim();
 
 export interface LibraryState {}
-const Library = ({ navigation, list }: { navigation: any; list: AwsMediaItem[] }) => {
+const Library = ({ navigation, list }: { navigation: any; list: MediaItem[] }) => {
   const dispatch = useDispatch();
   const [item] = useState(null);
+
   console.log(list);
   const items = list
     ?.map((item) => ({
-      title: sliceFolder(item.key),
-      description: `${item?.size} `,
-      image: 'thumbnail/' + sliceFolder(item.key) + '.jpeg',
+      title: item.title,
+      description: item.description,
+      image: item.thumbnail,
     }))
     .filter((item) => item.title !== '');
 
@@ -60,20 +62,14 @@ const Library = ({ navigation, list }: { navigation: any; list: AwsMediaItem[] }
           </Button>
         </View>
         <View>
-          {!item ? (
-            <List>
-              {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
-              {items.map((item, idx) => {
-                const { title, description, image } = item;
-                return <MediaListItem key={`item-${idx}`} title={title} description={description} image={image} onViewDetail={() => viewItem(item)} />;
-              })}
-              {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
-            </List>
-          ) : (
-            <CardItem>
-              <Video source={{ uri: item }} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />
-            </CardItem>
-          )}
+          <List>
+            {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
+            {items.map((item, idx) => {
+              const { title, description, image } = item;
+              return <MediaListItem key={`item-${idx}`} title={title} description={description} image={image} onViewDetail={() => viewItem(item)} />;
+            })}
+            {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
+          </List>
         </View>
         <View padder style={{ flexDirection: 'row' }}>
           <Button

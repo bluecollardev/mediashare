@@ -10,15 +10,18 @@ import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
 import { AwsMediaItem } from './aws-media-item.model';
 import { MediaViewItem } from './media-view-item.model';
 import { MediaItem } from '../../../rxjs-api';
-import { createThumbnail } from 'react-native-create-thumbnail';
+import { uploadMedia } from './storage';
+import { KeyFactory } from './key-factory';
+import { getAllMedia } from './media-items';
 
-const MEDIA_ITEM_ACTIONS = ['GET_MEDIA_ITEM', 'ADD_MEDIA_ITEM', 'UPDATE_MEDIA_ITEM', 'SHARE_MEDIA_ITEM', 'REMOVE_MEDIA_ITEM', 'UPLOAD_MEDIA_ITEM'] as const;
 const MEDIA_ITEMS_ACTIONS = ['FIND_MEDIA_ITEMS'] as const;
-
+const MEDIA_ITEM_ACTIONS = ['GET_MEDIA_ITEM', 'ADD_MEDIA_ITEM', 'UPDATE_MEDIA_ITEM', 'SHARE_MEDIA_ITEM', 'REMOVE_MEDIA_ITEM', 'UPLOAD_MEDIA_ITEM'] as const;
 export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
 export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
 
 export const selectMediaItem = createAction<MediaViewItem, 'selectMediaItem'>('selectMediaItem');
+export const clearMediaItem = createAction('clearMediaItem');
+
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async (id: string) => {
   const response = (await Storage.get(id, {})) as string;
   return response;
@@ -27,37 +30,28 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
 export const addMediaItem = createAsyncThunk(
   mediaItemActionTypes.addMediaItem,
   async (dto: Pick<CreateMediaItemDto, 'category' | 'description' | 'summary' | 'title' | 'key' | 'uri'>) => {
+    const { uri: fileUri, title, key: initialKey, category, summary, description } = dto;
+    console.log('starting this');
     try {
-      const { uri: fileUri, key: initialKey, ...partialDto } = dto;
-      const file = await fetch(fileUri);
-      const blob = await file.blob();
-      if (!blob) {
-        throw new Error('no file blob in add media  item');
-      }
-      const videoKey = 'video/' + initialKey;
-      const thumbnailKey = 'thumbnail/' + initialKey + '.jpeg';
-      const response = (await Storage.put(videoKey, blob, {
-        contentType: 'video/mp4',
-        contentDisposition: dto.title,
-        metaData: { description: dto.description, summary: dto.summary },
-      })) as any;
-      const thumbnail = await createThumbnail({ url: fileUri });
+      const options = { description: dto.description, summary: dto.summary, contentType: 'video/mp4' };
 
-      const thumbFile = await fetch(thumbnail.path);
-      const thumbBlob = await thumbFile.blob();
-      const thumbnailResponse = await Storage.put(thumbnailKey, thumbBlob);
-      console.log(response);
-      if (!response) {
+      const { video, thumb } = await uploadMedia({ fileUri, key: title, options });
+      console.log(video, thumb);
+      if (!video) {
         throw new Error('no response in add media  item');
       }
-      console.log(response);
+      const { thumbnailKey, videoKey } = KeyFactory(title);
       const createMediaItemDto: CreateMediaItemDto = {
-        ...partialDto,
+        category,
+        summary,
+        description,
         key: videoKey,
-        uri: initialKey,
+        uri: videoKey,
         isPlayable: true,
         thumbnail: thumbnailKey,
-        eTag: response.etag,
+        // eTag: video.,
+        eTag: '',
+        title,
       };
 
       const mediaItem = await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
@@ -83,20 +77,22 @@ export const shareMediaItem = createAsyncThunk(
   }
 );
 
-export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (id: string, { extra }) => {
+export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async function (id: string, { extra }) {
   const { api } = extra as { api: ApiService };
   const response = await api.mediaItems.mediaItemControllerRemove({ mediaId: id });
   return response && response.status === 200 ? response.data : undefined;
 });
 
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async () => {
-  // @ts-ignore
-  const response = await Storage.list('video/');
+  const response = await getAllMedia();
+  console.log('🚀 -------------------------------------------------------------------');
+  console.log('🚀 ~ file: index.ts ~ line 89 ~ findMediaItems ~ response', response);
+  console.log('🚀 -------------------------------------------------------------------');
 
-  return response as AwsMediaItem[];
+  return response;
 });
 
-const initialState: { mediaItems: AwsMediaItem[]; loading: boolean; loaded: boolean } = {
+const initialState: { mediaItems: MediaItem[]; loading: boolean; loaded: boolean } = {
   loading: false,
   mediaItems: [],
   loaded: false,
@@ -131,14 +127,16 @@ const mediaItemReducer = createReducer(
       .addCase(addMediaItem.rejected, (state, action) => {
         console.log(state, action);
         return { ...state, loading: false };
-      });
-    builder
+      })
       .addCase(addMediaItem.fulfilled, (state, action) => {
         console.log(state, action.payload);
         return { ...state, loading: false, mediaItem: action.payload };
       })
       .addCase(selectMediaItem, (state, action) => {
         return { ...state, selectedMediaItem: action.payload };
+      })
+      .addCase(clearMediaItem, (state) => {
+        return { ...state, mediaItem: null };
       });
   }
   // .addCase(addMediaItem.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
@@ -152,7 +150,7 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
     .addCase(findMediaItems.rejected, (state) => {
       return { ...state, loading: false };
     })
-    .addCase(findMediaItems.pending, (state, action) => {
+    .addCase(findMediaItems.pending, (state) => {
       return { ...state, loading: true };
     })
     .addCase(findMediaItems.fulfilled, (state, action) => {
