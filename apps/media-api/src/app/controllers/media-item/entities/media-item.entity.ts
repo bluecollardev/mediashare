@@ -27,6 +27,7 @@ export class MediaItem extends BcEntity {
   @ApiLongString()
   summary: string;
   @ApiString({ required: true })
+  @Column()
   description: string;
 
   @ApiString()

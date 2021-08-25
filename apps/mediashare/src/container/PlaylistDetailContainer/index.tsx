@@ -56,7 +56,7 @@ const PlaylistDetailContainer = (props) => {
             onEditClicked={onEditClicked}
             onDeleteClicked={onDeleteClicked}
           />
-          {/* <PlaylistDetail navigation={navigation} list={data} />; */}
+          <PlaylistDetail navigation={navigation} />
           <View>
             <List>
               {items.map((item, idx) => {

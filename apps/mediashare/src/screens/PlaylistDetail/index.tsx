@@ -1,18 +1,9 @@
 import * as React from 'react';
-import { Button, Container, Content, Icon, List, Text, View } from 'native-base';
-
-import MediaDetail, { MediaDetailProps, MediaDetailState } from '../MediaDetail';
+import { Button, Icon, Text, View } from 'native-base';
 
 import { routeConfig } from '../../routes';
 
-export interface PlaylistDetailProps extends MediaDetailProps {
-  navigation: any;
-  list: any;
-}
-
-export interface PlaylistDetailState extends MediaDetailState {}
-
-const PlaylistDetail = (props) => {
+const PlaylistDetail = (props: { navigation }) => {
   const { navigation } = props;
 
   return (
