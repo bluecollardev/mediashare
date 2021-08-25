@@ -50,13 +50,6 @@ const MediaDetail = (props: { config: typeof mediaFormConfig } & { navigation })
       console.log(err);
     }
   }
-  useEffect(() => {
-    if (media.mediaItem) {
-      dispatch(clearMediaItem);
-      navigation.navigate(routeConfig.library);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [media, navigation]);
 
   function submit() {
     console.log('submitting');

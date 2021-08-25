@@ -284,6 +284,8 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.15.6):
     - React-Core
+  - RNCCheckbox (0.5.8):
+    - React-Core
   - RNCMaskedView (0.1.10):
     - React
   - RNFS (2.18.0):
@@ -346,6 +348,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNAWSCognito (from `../node_modules/amazon-cognito-identity-js`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -437,6 +440,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/amazon-cognito-identity-js"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCCheckbox:
+    :path: "../node_modules/@react-native-community/checkbox"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNFS:
@@ -499,6 +504,7 @@ SPEC CHECKSUMS:
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
   RNAWSCognito: 7a4bdf757dcfdefd07f23e4fa83200d8eeff6818
   RNCAsyncStorage: b7c6564ce662366dd44d0189456183ef7eda2d4d
+  RNCCheckbox: 6bd119c26c6eb8264a29d59ff66cb70a14de3349
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
@@ -511,6 +517,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 2be431101b73604e64fbfffcf759336f9d8fccbb
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
 
-PODFILE CHECKSUM: 7500ac4c7c95c10bc3a193579117aeef189b0231
+PODFILE CHECKSUM: 36a6764fef7b8d0fe4eb9fc35bd5b730d572a4a0
 
 COCOAPODS: 1.10.1

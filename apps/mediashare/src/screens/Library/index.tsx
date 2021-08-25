@@ -22,17 +22,17 @@ export interface LibraryState {}
 const Library = ({ navigation, list }: { navigation: any; list: MediaItem[] }) => {
   const dispatch = useDispatch();
   console.log(list);
-  const items = list
-    ?.map((item) => ({
-      title: item.title,
-      description: item.description,
-      image: item.thumbnail,
-      summary: item.summary,
-      createdAt: item.createdAt,
-      createdBy: item.createdBy,
-      uri: item.uri,
-    }))
-    .filter((item) => item.title !== '');
+  // const items = list
+  //   ?.map((item) => ({
+  //     title: item.title,
+  //     description: item.description,
+  //     image: item.thumbnail,
+  //     summary: item.summary,
+  //     createdAt: item.createdAt,
+  //     createdBy: item.createdBy,
+  //     uri: item.uri,
+  //   }))
+  //   .filter((item) => item.title !== '');
 
   const viewItem = async function (item: MediaItem) {
     dispatch(getMediaItemById(item.uri));
@@ -64,9 +64,9 @@ const Library = ({ navigation, list }: { navigation: any; list: MediaItem[] }) =
         <View>
           <List>
             {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
-            {items.map((item, idx) => {
-              const { title, description, image } = item;
-              return <MediaListItem key={`item-${idx}`} title={title} description={description} image={image} onViewDetail={() => viewItem(item)} />;
+            {list.map((item, idx) => {
+              const { title, description, thumbnail } = item;
+              return <MediaListItem key={`item-${idx}`} title={title} description={description} image={thumbnail} onViewDetail={() => viewItem(list[idx])} />;
             })}
             {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
           </List>

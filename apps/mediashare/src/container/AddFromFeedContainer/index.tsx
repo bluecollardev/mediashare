@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import AddFromFeed from '../../screens/AddFrom';
 import styles from '../../screens/Home/styles';
 import { useAppSelector } from '../../state';
+import ActionButtons from '../../components/layout/ActionButtons';
+import { routeConfig } from '../../routes';
 
 export interface AddFromFeedContainerProps {
   navigation: any;
@@ -13,14 +15,19 @@ export interface AddFromFeedContainerProps {
 export interface AddFromFeedContainerState {}
 
 const AddFromFeedContainer = (props) => {
+  const hasCreateDetail = useAppSelector((state) => !!state.createPlaylist.title);
+  const actionCb = () => {
+    const segment = hasCreateDetail ? routeConfig.playlistDetail.name : routeConfig.playlistEdit.name;
+    props.navigation.navigate(segment);
+  };
   const list = useAppSelector((state) => state.mediaItems.mediaItems);
-  const map = new Map(list.map((itm) => [itm._id, { ...itm, checked: false }]));
   return (
     <Container style={styles.container}>
       <Content>
         <View>
-          <AddFromFeed navigation={props.navigation} list={map} />
+          <AddFromFeed navigation={props.navigation} />
         </View>
+        <ActionButtons actionLabel={hasCreateDetail ? 'Create' : 'Next'} cancelLabel="Back" actionCb={actionCb} cancelCb={props.navigation.goBack} />
       </Content>
     </Container>
   );

@@ -34,7 +34,6 @@ const Playlists = (props) => {
     id: item._id,
     title: item.title,
     description: `${item?.mediaItems?.length || 0} Videos`,
-    image: imageSrc,
     ...item,
   }));
 
@@ -55,13 +54,12 @@ const Playlists = (props) => {
           <List>
             {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
             {items.map((item, idx) => {
-              const { title, description, image } = item;
+              const { title, description } = item;
               return (
                 <MediaListItem
                   key={`item-${idx}`}
                   title={title}
                   description={description}
-                  image={image}
                   onViewDetail={() => {
                     onViewDetailClicked(item);
                   }}

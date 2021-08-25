@@ -17,6 +17,8 @@ export interface MediaListItemProps {
 }
 
 export const MediaCard: React.FC<MediaListItemProps> = (props) => {
+  const DEFAULT_IMAGE = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+
   const {
     title = '',
     author = '',
@@ -33,7 +35,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     <Card style={{ flex: 0 }}>
       {mediaSrc && (
         <CardItem cardBody>
-          <Video source={{ uri: mediaSrc }} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />
+          <Video source={{ uri: mediaSrc }} poster={DEFAULT_IMAGE} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />
         </CardItem>
       )}
       <CardItem>

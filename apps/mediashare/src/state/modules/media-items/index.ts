@@ -17,6 +17,8 @@ export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
 export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
 
 export const selectMediaItem = createAction<MediaItem, 'selectMediaItem'>('selectMediaItem');
+export const toggleMediaItem = createAction<number, 'selectMediaItem'>('selectMediaItem');
+
 export const clearMediaItem = createAction('clearMediaItem');
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async (id: string) => {
@@ -28,6 +30,8 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
 
   return response;
 });
+
+type MediaSelectionType = MediaItem & { checked: boolean };
 
 export const addMediaItem = createAsyncThunk(
   mediaItemActionTypes.addMediaItem,
@@ -88,21 +92,30 @@ export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMedia
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async () => {
   const response = await getAllMedia();
 
-  return response;
+  const mapped = response.map((mediaItem) => ({ ...mediaItem, checked: false }));
+  return mapped;
 });
 
-const initialState: { mediaItems: MediaItem[]; loading: boolean; loaded: boolean } = {
+const initialState: { mediaItems: MediaSelectionType[]; loading: boolean; loaded: boolean } = {
   loading: false,
   mediaItems: [],
   loaded: false,
 };
 
-const initialMediaItemState: { getMediaItem: string; loading: boolean; file: any; mediaItem: MediaItem; mediaSrc: string } = {
+const initialMediaItemState: {
+  getMediaItem: string;
+  loading: boolean;
+  file: any;
+  mediaItem: MediaItem;
+  mediaSrc: string;
+  createState: 'submitting' | 'progress' | 'empty';
+} = {
   getMediaItem: null,
   mediaItem: null,
   loading: false,
   file: null,
   mediaSrc: null,
+  createState: 'empty',
 };
 
 export const MEDIA_ITEMS_STATE_KEY = 'mediaItems';
@@ -125,15 +138,15 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
       console.log(state, action);
       return { ...state, loading: false };
     })
+
     .addCase(addMediaItem.fulfilled, (state, action) => {
-      console.log(state, action.payload);
-      return { ...state, loading: false, mediaItem: action.payload };
+      return { ...state, loading: false, mediaItem: action.payload, createState: 'submitting' };
     })
     .addCase(selectMediaItem, (state, action) => {
       return { ...state, mediaItem: action.payload };
     })
     .addCase(clearMediaItem, (state) => {
-      return { ...state, mediaItem: null };
+      return { ...state, mediaItem: null, createState: 'empty' };
     });
 });
 
@@ -141,6 +154,13 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(findMediaItems.rejected, (state) => {
       return { ...state, loading: false, loaded: false };
+    })
+    .addCase(toggleMediaItem, (state, action) => {
+      console.log('run action', action);
+      if (state?.mediaItems[action.payload]) {
+        state.mediaItems[action.payload].checked = !state.mediaItems[action.payload].checked;
+      }
+      return state;
     })
     .addCase(findMediaItems.pending, (state) => {
       return { ...state, loading: true, loaded: false };

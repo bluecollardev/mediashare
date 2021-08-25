@@ -13,7 +13,6 @@ export interface LibraryContainerProps {
   data: Object;
   state: Object;
 }
-export interface LibraryContainerState {}
 const LibraryContainer = (props: { navigation: any }) => {
   const dispatch = useDispatch();
 
@@ -23,7 +22,6 @@ const LibraryContainer = (props: { navigation: any }) => {
     console.log('dispatched');
     dispatch(findMediaItems());
   }
-  console.log(mediaItems);
 
   return <>{loading ? <Text>...loading</Text> : <Library navigation={props.navigation} list={mediaItems} />}</>;
 };

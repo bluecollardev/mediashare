@@ -8,7 +8,7 @@ interface Props {
   cancelCb: () => void;
 }
 
-const ActionButtons = ({ cancelCb, actionCb, actionLabel, cancelLabel }: Props) => {
+const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel = 'Back' }: Props) => {
   return (
     <View padder style={{ flexDirection: 'row' }}>
       <Button

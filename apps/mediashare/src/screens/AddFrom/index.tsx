@@ -8,23 +8,26 @@ import { routeConfig } from '../../routes';
 import styles from './styles';
 import { useAppSelector } from '../../state/index';
 import { MediaItem } from '../../rxjs-api';
+import { dispatch } from 'rxjs/internal/observable/pairs';
+import { useDispatch } from 'react-redux';
+import { toggleMediaItem } from '../../state/modules/media-items/index';
 
 export interface AddFromProps {
   navigation: any;
-  list: Map<string, MediaItem & { checked: boolean }>;
 }
 
 export interface AddFromState {}
 
 const AddFrom = (props: AddFromProps) => {
   const { navigation } = props;
+  const dispatch = useDispatch();
   const items = useAppSelector((state) => state.mediaItems.mediaItems);
   console.log(items);
   return (
     <List>
       <ListItemGroup key={'group1'} text={'Vimeo'} />
       {items.map((item, idx) => {
-        const { title, description, thumbnail } = item;
+        const { title, description, thumbnail, checked } = item;
 
         return (
           <MediaListItem
@@ -32,6 +35,8 @@ const AddFrom = (props: AddFromProps) => {
             title={title}
             description={description}
             image={thumbnail}
+            checked={checked}
+            onChecked={() => dispatch(toggleMediaItem(idx))}
             onViewDetail={() => {
               navigation.navigate(routeConfig.libraryItemDetail.name);
             }}
