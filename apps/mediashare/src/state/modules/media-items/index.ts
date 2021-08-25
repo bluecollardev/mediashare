@@ -18,7 +18,7 @@ export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
 
 export const selectMediaItem = createAction<MediaItem, 'selectMediaItem'>('selectMediaItem');
 export const toggleMediaItem = createAction<number, 'selectMediaItem'>('selectMediaItem');
-
+export const clearMediaItemSelection = createAction('clearMediaItems');
 export const clearMediaItem = createAction('clearMediaItem');
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async (id: string) => {
@@ -172,6 +172,9 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
         loading: false,
         loaded: true,
       };
+    })
+    .addCase(clearMediaItemSelection, (state) => {
+      return { ...state, mediaItems: state.mediaItems.map((item) => ({ ...item, checked: false })) };
     });
 });
 

@@ -5,6 +5,7 @@ import styles from '../../screens/Home/styles';
 import PlaylistEdit from '../../screens/PlaylistEdit/index';
 import { routeConfig } from '../../routes';
 import ActionButtons from '../../components/layout/ActionButtons';
+import { useAppSelector } from '../../state';
 
 export interface PlaylistEditContainerProps {
   navigation: any;
@@ -14,7 +15,11 @@ export interface PlaylistEditContainerProps {
 export interface PlaylistEditContainerState {}
 
 const PlaylistEditContainer = (props) => {
-  const actionCb = () => props.navigation.navigate(routeConfig.addFromFeed.name);
+  const createPlaylistState = useAppSelector((state) => state.createPlaylist);
+  const hasMediaItems = createPlaylistState.mediaIds.length > 0;
+  const actionCb = () => {
+    props.navigation.navigate(hasMediaItems ? routeConfig.playlistDetail : routeConfig.addFromFeed.name);
+  };
   const cancelCb = props.navigation.goBack;
   const actionLabel = 'Next';
   const cancelLabel = 'Cancel';

@@ -23,7 +23,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
   const [source, setSource] = useState(null);
   useEffect(() => {
     if (image) {
-      Storage.get(image).then((res: string) => {
+      Storage.get(image, { download: false }).then((res: string) => {
         console.log(res);
         setSource({ uri: res });
       });

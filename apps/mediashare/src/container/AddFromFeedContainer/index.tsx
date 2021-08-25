@@ -20,14 +20,13 @@ const AddFromFeedContainer = (props) => {
     const segment = hasCreateDetail ? routeConfig.playlistDetail.name : routeConfig.playlistEdit.name;
     props.navigation.navigate(segment);
   };
-  const list = useAppSelector((state) => state.mediaItems.mediaItems);
+
   return (
     <Container style={styles.container}>
       <Content>
         <View>
           <AddFromFeed navigation={props.navigation} />
         </View>
-        <ActionButtons actionLabel={hasCreateDetail ? 'Create' : 'Next'} cancelLabel="Back" actionCb={actionCb} cancelCb={props.navigation.goBack} />
       </Content>
     </Container>
   );

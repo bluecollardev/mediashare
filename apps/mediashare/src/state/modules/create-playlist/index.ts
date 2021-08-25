@@ -1,6 +1,6 @@
 import { CreatePlaylistDto } from '../../../rxjs-api';
 import { CreatePlaylistDtoCategoryEnum } from '../../../api/models/create-playlist-dto';
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { bindActionCreators } from 'redux';
 
 const initialState: Partial<CreatePlaylistDto> = {
@@ -12,6 +12,11 @@ const initialState: Partial<CreatePlaylistDto> = {
 };
 const CREATE_PLAYLIST_KEY = 'createPlaylist' as const;
 // const actions = makeActions(['addItem', 'removeItem', 'setDescription', 'setCreatedBy', 'setTitle', 'setCategory']);
+
+const createPlaylist = createAsyncThunk('createPlaylist', async function (createPlaylistDto: CreatePlaylistDto) {
+  const playlist = await createPlaylist(createPlaylistDto);
+  return playlist;
+});
 
 const slice = createSlice({
   initialState,
@@ -35,4 +40,4 @@ const {
   reducer,
 } = slice;
 
-export { reducer, setCategory, setDescription, setMediaIds, setTitle };
+export { reducer, setCategory, setDescription, setMediaIds, setTitle, createPlaylist };

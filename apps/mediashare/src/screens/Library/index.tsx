@@ -41,52 +41,16 @@ const Library = ({ navigation, list }: { navigation: any; list: MediaItem[] }) =
   };
 
   return (
-    <Container style={styles.container}>
-      <Content>
-        <View padder style={{ flexDirection: 'row' }}>
-          <Button iconLeft bordered dark style={{ flex: 1, marginRight: 10 }} onPress={() => navigation.navigate(routeConfig.addFromFeed.name)}>
-            <Icon name="add-outline" />
-            <Text style={{ paddingRight: 30 }}>Add From Feed</Text>
-          </Button>
-          <Button
-            iconLeft
-            bordered
-            dark
-            style={{ flex: 1 }}
-            onPress={() => {
-              navigation.navigate(routeConfig.addMedia.name);
-            }}
-          >
-            <Icon name="add-outline" />
-            <Text style={{ paddingRight: 30 }}>Add Media</Text>
-          </Button>
-        </View>
-        <View>
-          <List>
-            {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
-            {list.map((item, idx) => {
-              const { title, description, thumbnail } = item;
-              return <MediaListItem key={`item-${idx}`} title={title} description={description} image={thumbnail} onViewDetail={() => viewItem(list[idx])} />;
-            })}
-            {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
-          </List>
-        </View>
-        <View padder style={{ flexDirection: 'row' }}>
-          <Button
-            iconLeft
-            bordered
-            dark
-            style={{ flex: 1, justifyContent: 'center' }}
-            onPress={() => {
-              navigation.navigate(routeConfig.addFromLibrary.name);
-            }}
-          >
-            <Icon name="add-outline" />
-            <Text style={{ paddingRight: 30 }}>Add to Playlist</Text>
-          </Button>
-        </View>
-      </Content>
-    </Container>
+    <View>
+      <List>
+        {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
+        {list.map((item, idx) => {
+          const { title, description, thumbnail } = item;
+          return <MediaListItem key={`item-${idx}`} title={title} description={description} image={thumbnail} onViewDetail={() => viewItem(list[idx])} />;
+        })}
+        {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
+      </List>
+    </View>
   );
 };
 
