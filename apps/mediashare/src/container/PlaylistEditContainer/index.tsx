@@ -8,7 +8,8 @@ import ActionButtons from '../../components/layout/ActionButtons';
 import { useAppSelector } from '../../state';
 import { useDispatch } from 'react-redux';
 import { createPlaylist } from '../../state/modules/create-playlist';
-import { clearMediaItemSelection } from '../../state/modules/media-items';
+import { clearMediaItemSelection, findMediaItems } from '../../state/modules/media-items';
+import { findUserPlaylists } from '../../state/modules/playlists/index';
 
 export interface PlaylistEditContainerProps {
   navigation: any;
@@ -26,6 +27,7 @@ const PlaylistEditContainer = ({ navigation }) => {
     if (hasMediaItems) {
       const res = await dispatch(createPlaylist(createPlaylistState));
       dispatch(clearMediaItemSelection());
+      dispatch(findUserPlaylists({}));
 
       navigation.navigate('Playlists');
     }

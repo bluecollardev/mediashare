@@ -8,6 +8,7 @@ import ActionButtons from '../../components/layout/ActionButtons';
 import { getRoute, routeConfig } from '../../routes';
 import { createPlaylist, setMediaIds } from '../../state/modules/create-playlist';
 import { findMediaItems, clearMediaItemSelection } from '../../state/modules/media-items/index';
+import { findUserPlaylists } from '../../state/modules/playlists';
 
 export interface AddFromFeedContainerProps {
   navigation: any;
@@ -33,11 +34,10 @@ const AddFromFeedContainer = ({ navigation, route }) => {
     const segment = createDto.title.length > 0 ? routeConfig.playlists.name : routeConfig.playlistEdit.name;
 
     if (createDto.title.length > 0) {
-      dispatch(createPlaylist({ ...createDto, mediaIds }));
-      const unwrap = dispatch as any;
-      unwrap.then(() => navigation.navigate('Playlists', { screen: routeConfig.playlistDetail.name }));
+      await dispatch(createPlaylist({ ...createDto, mediaIds }));
 
       dispatch(clearMediaItemSelection());
+      await dispatch(findUserPlaylists({}));
     } else {
       navigation.navigate(segment, { state: 'create' });
     }
