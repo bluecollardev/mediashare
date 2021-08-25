@@ -9,6 +9,8 @@ import { useAppSelector } from '../../state';
 import { useEffect, useState } from 'react';
 import { Container, Content, View, Button, Icon, Text } from 'native-base';
 import styles from '../../screens/Home/styles';
+import TopActionButtons from '../../components/layout/TopActionButtons';
+import { useRouteName } from '../../hooks/UseRouteConfig';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -20,8 +22,17 @@ export interface PlaylistsContainerProps {
 export const PlaylistsContainer = ({ navigation }) => {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
-  const playlists = useAppSelector((state) => state.playlists);
 
+  const playlistEditRoute = useRouteName('playlistEdit');
+  const shareWithRoute = useRouteName('shareWith');
+
+  const playlists = useAppSelector((state) => state.playlists);
+  const createPlaylistAction = () => {
+    navigation.navigate(playlistEditRoute);
+  };
+  const createFromFeedAction = () => {
+    navigation.navigate(shareWithRoute);
+  };
   useEffect(() => {
     if (!loaded) {
       dispatch(findUserPlaylists({}));
@@ -36,22 +47,7 @@ export const PlaylistsContainer = ({ navigation }) => {
   };
   return (
     <Container style={styles.container}>
-      <View padder style={{ flexDirection: 'row' }}>
-        <Button
-          iconLeft
-          bordered
-          dark
-          style={{ flex: 1, marginRight: 10 }}
-          onPress={() => navigation.navigate(routeConfig.addPlaylist.name, { state: 'create' })}
-        >
-          <Icon name="add-outline" />
-          <Text style={{ paddingRight: 30 }}>Create Playlist</Text>
-        </Button>
-        <Button iconLeft bordered dark style={{ flex: 1 }} onPress={() => navigation.navigate(routeConfig.shareWith.name)}>
-          <Icon name="add-outline" />
-          <Text style={{ paddingRight: 30 }}>Share Playlists</Text>
-        </Button>
-      </View>
+      <TopActionButtons leftAction={createPlaylistAction} rightAction={createFromFeedAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
 
       <Content>
         <Playlists navigation={navigation} list={playlists.userPlaylists} onViewDetailClicked={onViewDetailClicked} />

@@ -3,17 +3,14 @@ import * as React from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 
 import { MediaCard } from '../../components/layout/MediaCard';
-import { Button, Container, Content, Input, Item, Label, Text, View, Textarea, Grid, Col, Icon } from 'native-base';
-import styles from './styles';
+import { Button, Input, Item, Label, Text, View, Textarea, Grid, Col, Icon } from 'native-base';
 
 import { mediaFormConfig } from '../../container/AddMediaContainer/formConfig';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addMediaItem, clearMediaItem } from '../../state/modules/media-items';
+import { addMediaItem } from '../../state/modules/media-items';
 import { useAppSelector } from '../../state';
 import { CreateMediaItemDtoCategoryEnum } from '../../rxjs-api/models/CreateMediaItemDto';
-import { routeConfig } from '../../routes';
-import { findMediaItems } from '../../state/modules/media-items/index';
 
 export interface MediaDetailProps {
   navigation: any;
