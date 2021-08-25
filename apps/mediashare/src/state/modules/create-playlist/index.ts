@@ -36,9 +36,6 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(createPlaylist.fulfilled, (state, action) => {
-      console.log('🚀 ----------------------------------------------------------------');
-      console.log('🚀 ~ file: index.ts ~ line 39 ~ builder.addCase ~ action', action);
-      console.log('🚀 ----------------------------------------------------------------');
       return initialState;
     });
   },

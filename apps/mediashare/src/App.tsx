@@ -42,7 +42,7 @@ const ExploreNavigation = () => {
 };
 
 const PlaylistsStackNavigator = createStackNavigator();
-const PlaylistsNavigation = () => {
+function PlaylistsNavigation() {
   return (
     <PlaylistsStackNavigator.Navigator>
       <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
@@ -56,10 +56,10 @@ const PlaylistsNavigation = () => {
       <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />
     </PlaylistsStackNavigator.Navigator>
   );
-};
+}
 
 const LibraryStackNavigator = createStackNavigator();
-const LibraryNavigation = () => {
+function LibraryNavigation() {
   return (
     <LibraryStackNavigator.Navigator>
       <LibraryStackNavigator.Screen {...routeConfig.library} />
@@ -72,7 +72,7 @@ const LibraryNavigation = () => {
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
     </LibraryStackNavigator.Navigator>
   );
-};
+}
 
 const SettingsStackNavigator = createStackNavigator();
 const SettingsNavigation = () => {
@@ -94,7 +94,7 @@ export const tabNavigationIconsMap = {
 
 const TabNavigator = createBottomTabNavigator();
 
-const TabNavigation = () => {
+function TabNavigation() {
   return (
     <TabNavigator.Navigator
       initialRouteName={'Playlists'}
@@ -117,14 +117,14 @@ const TabNavigation = () => {
       <TabNavigator.Screen name={'Settings'} component={SettingsNavigation} />
     </TabNavigator.Navigator>
   );
-};
+}
 Amplify.configure(awsmobile);
 async function fakeLogin() {
   await Auth.currentCredentials();
 }
 fakeLogin().then();
 
-const App = () => {
+function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
 
   // Amplify.configure(awsmobile);
@@ -138,18 +138,17 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      {/* <UserContext.Provider value={{ isLoggedIn, setUser }}> */}
-      {isLoggedIn ? (
-        <NavigationContainer>
-          <TabNavigation />
-        </NavigationContainer>
-      ) : (
+      {/* {isLoggedIn ? ( */}
+      <NavigationContainer>
+        <TabNavigation />
+      </NavigationContainer>
+      {/* )
+     : (
         <LoginContainer />
 
-        // </UserContext.Provider>
-      )}
-      {/* </UserContext.Provider> */}
+
+    )} */}
     </Provider>
   );
-};
+}
 export default App;

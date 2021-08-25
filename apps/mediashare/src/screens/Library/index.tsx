@@ -21,18 +21,6 @@ export interface LibraryProps {
 export interface LibraryState {}
 const Library = ({ navigation, list }: { navigation: any; list: MediaItem[] }) => {
   const dispatch = useDispatch();
-  console.log(list);
-  // const items = list
-  //   ?.map((item) => ({
-  //     title: item.title,
-  //     description: item.description,
-  //     image: item.thumbnail,
-  //     summary: item.summary,
-  //     createdAt: item.createdAt,
-  //     createdBy: item.createdBy,
-  //     uri: item.uri,
-  //   }))
-  //   .filter((item) => item.title !== '');
 
   const viewItem = async function (item: MediaItem) {
     dispatch(getMediaItemById(item.uri));

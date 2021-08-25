@@ -22,7 +22,6 @@ const AddFrom = (props: AddFromProps) => {
   const { navigation } = props;
   const dispatch = useDispatch();
   const items = useAppSelector((state) => state.mediaItems.mediaItems);
-  console.log(items);
   return (
     <List>
       <ListItemGroup key={'group1'} text={'Vimeo'} />

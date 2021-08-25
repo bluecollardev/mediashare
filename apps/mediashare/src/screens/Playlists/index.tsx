@@ -7,6 +7,7 @@ import { routeConfig } from '../../routes';
 import styles from './styles';
 import { useDispatch } from 'react-redux';
 import { selectPlaylistAction } from '../../state/modules/playlists/index';
+import { useRoute } from '@react-navigation/native';
 
 export interface PlaylistsProps {
   navigation: any;
@@ -16,20 +17,13 @@ export interface PlaylistsProps {
 
 export interface PlaylistsState {}
 
-const Playlists = (props) => {
-  const dispatch = useDispatch();
-
-  const { navigation, list } = props;
+const Playlists = ({ onViewDetailClicked, navigation, list }) => {
   const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
   if (!list) {
     return <Text>...loading</Text>;
   }
 
-  const onViewDetailClicked = (item) => {
-    dispatch(selectPlaylistAction(item));
-    navigation.navigate(routeConfig.playlistDetail);
-  };
   const items = list.map((item) => ({
     id: item._id,
     title: item.title,
@@ -52,7 +46,6 @@ const Playlists = (props) => {
         </View>
         <View>
           <List>
-            {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
             {items.map((item, idx) => {
               const { title, description } = item;
               return (
@@ -66,7 +59,6 @@ const Playlists = (props) => {
                 />
               );
             })}
-            {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
           </List>
         </View>
         <View padder style={{ flexDirection: 'row' }}>

@@ -9,6 +9,7 @@ import { CreatePlaylistDto, UpdatePlaylistDto } from '../../../api';
 import { apis } from '../../apis';
 import { PlaylistItemResponseDto } from '../../../rxjs-api/models/PlaylistItemResponseDto';
 import { CreatePlaylistResponseDto } from '../../../api/models/create-playlist-response-dto';
+import { PlaylistResponseDto } from '../../../api/models/playlist-response-dto';
 
 const PLAYLIST_ACTIONS = [
   'GET_USER_PLAYLIST',
@@ -17,6 +18,7 @@ const PLAYLIST_ACTIONS = [
   'SHARE_USER_PLAYLIST',
   'REMOVE_USER_PLAYLIST',
   'CLEAR_USER_PLAYLIST',
+  'GET_PLAYLIST_BY_ID',
 ] as const;
 const PLAYLISTS_ACTIONS = ['FIND_USER_PLAYLISTS'] as const;
 const PLAYLIST_ITEM_ACTIONS = ['ADD_USER_PLAYLIST_ITEM', 'UPDATE_USER_PLAYLIST_ITEM', 'REMOVE_USER_PLAYLIST_ITEM'] as const;
@@ -59,7 +61,6 @@ export const removeUserPlaylist = createAsyncThunk(playlistActionTypes.removeUse
 });
 
 export const findUserPlaylists = createAsyncThunk(playlistsActionTypes.findUserPlaylists, async (opts: {} | undefined, { extra }) => {
-  console.log('finding user playlist');
   // @ts-ignore
   const response = await apis.user.userControllerGetUserPlaylists().toPromise();
   return response;
@@ -85,32 +86,57 @@ export const removeUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.r
   return response && response.status === 200 ? response.data : undefined;
 });
 
+export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: string, { extra }) => {
+  const { api } = extra as { api: ApiService };
+  // @ts-ignore - TODO: Add playlistControllerRemoveItem to API service!
+  console.log(id);
+  const response = await api.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
+  console.log('🚀 --------------------------------------------------------------------');
+  console.log('🚀 ~ file: index.ts ~ line 94 ~ getPlaylistById ~ response', response);
+  console.log('🚀 --------------------------------------------------------------------');
+
+  return response;
+});
+
 const initialState: { userPlaylists: PlaylistItemResponseDto[]; loading: boolean } = {
   userPlaylists: [],
   loading: false,
 };
 
 export const USER_PLAYLISTS_STATE_KEY = 'userPlaylists';
-const initialPlaylistState: { createdPlaylist: CreatePlaylistResponseDto; loading: boolean; selectedPlaylist: PlaylistItemResponseDto } = {
+const initialPlaylistState: { createdPlaylist: CreatePlaylistResponseDto; loading: boolean; selectedPlaylist: PlaylistResponseDto } = {
   loading: false,
   createdPlaylist: null,
   selectedPlaylist: null,
 };
 
 const playlistReducer = createReducer(initialPlaylistState, (builder) => {
-  builder.addCase(addUserPlaylist.pending, (state, action) => {
-    return { ...state, loading: true };
-  });
-  builder.addCase(addUserPlaylist.fulfilled, (state, action) => {
-    console.log('submitted');
-    return { ...state, createdPlaylist: action.payload, loading: false };
-  });
-  builder.addCase(selectPlaylistAction, (state, action) => {
-    return { ...state, selectedPlaylist: action.payload };
-  });
-  builder.addCase(clearPlaylistAction, (state, action) => {
-    return { ...state, createdPlaylist: null };
-  });
+  builder
+    .addCase(addUserPlaylist.pending, (state, action) => {
+      return { ...state, loading: true };
+    })
+    .addCase(addUserPlaylist.fulfilled, (state, action) => {
+      return { ...state, createdPlaylist: action.payload, loading: false };
+    })
+    .addCase(selectPlaylistAction, (state, action) => {
+      return { ...state };
+    })
+    .addCase(clearPlaylistAction, (state, action) => {
+      return { ...state, createdPlaylist: null };
+    })
+    .addCase(getPlaylistById.pending, (state) => {
+      console.log('🚀 --------------------------------------------------------');
+      console.log('🚀 ~ file: index.ts ~ line 128 ~ .addCase ~ state', state);
+      console.log('🚀 --------------------------------------------------------');
+      return { ...state, loading: true };
+    })
+    .addCase(getPlaylistById.rejected, (state) => {
+      return { ...state, loading: false };
+    })
+    .addCase(getPlaylistById.fulfilled, (state, action) => {
+      console.log(action);
+      return { ...state, selectedPlaylist: action.payload, loading: false };
+    });
 });
 // .addCase(addUserPlaylist.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
 // .addCase(updateUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
@@ -128,10 +154,9 @@ const playlistsReducer = createReducer(initialState, (builder) => {
 
 const playlistItemsReducer = createReducer(
   initialState,
-  (builder) =>
-    builder
-      .addCase(addUserPlaylistItem.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
-      .addCase(updateUserPlaylistItem.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
+  (builder) => builder
+  // .addCase(addUserPlaylistItem.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
+  // .addCase(updateUserPlaylistItem.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
   // .addCase(removeUserPlaylistItem.fulfilled, reducers.removeItem(USER_PLAYLISTS_STATE_KEY))
 );
 

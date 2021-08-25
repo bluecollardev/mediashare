@@ -21,7 +21,6 @@ export function getStorage(key: string) {
 
 export function putToS3({ key, file, options = {} }: PutStorageParams) {
   const { title = '', description = '', summary = '', contentType = 'video/mp4' } = options;
-  console.log(options);
   return Storage.put(key, file, { contentType, metadata: { summary, description }, contentDisposition: title });
 }
 
@@ -36,7 +35,6 @@ export async function fetchMedia(path: string) {
 
 export async function fetchAndPutToS3({ fileUri, key, options }: { fileUri: string; key: string; options?: StorageOptions }) {
   const file = await fetchMedia(fileUri);
-  console.log(file);
   const putFile = await putToS3({ key, file, options });
   return putFile;
 }

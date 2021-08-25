@@ -3,7 +3,14 @@ import { Button, Icon, Text, View } from 'native-base';
 
 import { routeConfig } from '../../routes';
 
-const PlaylistDetail = (props: { navigation }) => {
+export interface PlaylistDetailProps extends MediaDetailProps {
+  navigation: any;
+  list: any;
+}
+
+export interface PlaylistDetailState extends MediaDetailState {}
+
+const PlaylistDetail = (props) => {
   const { navigation } = props;
 
   return (

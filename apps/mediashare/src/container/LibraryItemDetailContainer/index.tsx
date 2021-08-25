@@ -1,11 +1,8 @@
 import { Container, Content, Text, View } from 'native-base';
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { LibraryItemCard } from '../../components/layout/LibraryItemCard';
 import styles from '../../screens/Home/styles';
 import { useAppSelector } from '../../state';
-
-import { MediaViewItem } from '../../state/modules/media-items/media-view-item.model';
 
 export interface LibraryItemDetailContainerProps {
   navigation: any;

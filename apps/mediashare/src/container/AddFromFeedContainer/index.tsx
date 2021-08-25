@@ -20,7 +20,6 @@ const AddFromFeedContainer = (props) => {
 
   const createDto = useAppSelector((state) => state.createPlaylist);
   const mediaItems = useAppSelector((state) => state.mediaItems.mediaItems).filter((mediaItem) => mediaItem.checked);
-  console.log(mediaItems);
   const actionCb = () => {
     const mediaIds = mediaItems.map((item) => item?._id);
     dispatch(setMediaIds(mediaIds));

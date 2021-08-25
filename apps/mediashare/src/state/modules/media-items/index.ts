@@ -37,12 +37,10 @@ export const addMediaItem = createAsyncThunk(
   mediaItemActionTypes.addMediaItem,
   async (dto: Pick<CreateMediaItemDto, 'category' | 'description' | 'summary' | 'title' | 'key' | 'uri'>) => {
     const { uri: fileUri, title, category, summary, description } = dto;
-    console.log('starting this');
     try {
       const options = { description: dto.description, summary: dto.summary, contentType: 'video/mp4' };
 
       const { video, thumb } = await uploadMedia({ fileUri, key: title, options });
-      console.log(video, thumb);
       if (!video) {
         throw new Error('no response in add media  item');
       }
@@ -131,11 +129,9 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
     .addCase(getMediaItemById.pending, (state) => ({ ...state, loading: true }))
     .addCase(getMediaItemById.fulfilled, (state, action) => ({ ...state, mediaSrc: action.payload, loading: false }))
     .addCase(addMediaItem.pending, (state, action) => {
-      console.log(state, action);
       return { ...state, loading: true };
     })
     .addCase(addMediaItem.rejected, (state, action) => {
-      console.log(state, action);
       return { ...state, loading: false };
     })
 
@@ -156,7 +152,6 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
       return { ...state, loading: false, loaded: false };
     })
     .addCase(toggleMediaItem, (state, action) => {
-      console.log('run action', action);
       if (state?.mediaItems[action.payload]) {
         state.mediaItems[action.payload].checked = !state.mediaItems[action.payload].checked;
       }

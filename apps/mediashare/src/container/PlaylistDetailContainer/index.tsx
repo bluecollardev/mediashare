@@ -1,13 +1,15 @@
 import { Container, Content, List, View } from 'native-base';
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { MediaListItem } from '../../components/layout/MediaListItem';
 import { PlaylistCard } from '../../components/layout/PlaylistCard';
 import { routeConfig } from '../../routes';
 import styles from '../../screens/Home/styles';
 import PlaylistDetail from '../../screens/PlaylistDetail';
 import { getUserPlaylistById } from '../../state/modules/playlists';
-
+import { useAppSelector } from '../../state/index';
+import { getPlaylistById } from '../../state/modules/playlists/index';
+import { useEffect } from 'react';
 export interface PlaylistDetailContainerProps {
   navigation: any;
   route: any;
@@ -18,30 +20,30 @@ export interface PlaylistDetailContainerProps {
 }
 export interface PlaylistDetailContainerState {}
 
-const PlaylistDetailContainer = (props) => {
+const PlaylistDetailContainer = ({ route, navigation, data }) => {
   // const { fetchList } = props;
   // const { playlistId } = props?.route?.params;
   // fetchList(playlistId);
-  console.log(props);
+  console.log(route);
+  const id = route?.params?.playlistId;
+  const isCreate = !!id;
   const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+  const dispatch = useDispatch();
 
-  const title = 'My First Playlist';
-  const author = 'Blue Collar Dev';
-  const description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' + 'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+  const playlist = useAppSelector((state) => state.playlist);
+  if (!playlist.loading && playlist?.selectedPlaylist?._id !== id) {
+    dispatch(getPlaylistById(id));
+  }
+  const author = '';
+  const { selectedPlaylist } = playlist || {};
 
-  const { state } = props;
-  const { navigation, data } = props;
+  const { description = '', title = '' } = selectedPlaylist || {};
   const onEditClicked = () => {
-    navigation.navigate(routeConfig.playlistEdit.name);
+    console.log('dispatch');
+    navigation.navigate(routeConfig.playlistEdit.name, { id });
   };
   const onDeleteClicked = () => {};
-  const items = [
-    { title: 'Video 1', description: 'Ipsum lorem dolor', image: imageSrc },
-    { title: 'Video 2', description: 'Ipsum lorem dolor', image: imageSrc },
-    { title: 'Video 3', description: 'Ipsum lorem dolor', image: imageSrc },
-    { title: 'Video 4', description: 'Ipsum lorem dolor', image: imageSrc },
-    { title: 'Video 5', description: 'Ipsum lorem dolor', image: imageSrc },
-  ];
+  const items = selectedPlaylist?.mediaItems || [];
 
   return (
     <Container style={styles.container}>
@@ -56,17 +58,17 @@ const PlaylistDetailContainer = (props) => {
             onEditClicked={onEditClicked}
             onDeleteClicked={onDeleteClicked}
           />
-          <PlaylistDetail navigation={navigation} />
+          <PlaylistDetail navigation={navigation} list={data} />
           <View>
             <List>
               {items.map((item, idx) => {
-                const { title, description, image } = item;
+                const { title, description, thumbnail } = item;
                 return (
                   <MediaListItem
                     key={`item-${idx}`}
                     title={title}
                     description={description}
-                    image={image}
+                    image={thumbnail}
                     onViewDetail={() => {
                       navigation.navigate(routeConfig.libraryItemDetail.name);
                     }}
