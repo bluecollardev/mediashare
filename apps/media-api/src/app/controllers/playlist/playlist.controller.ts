@@ -28,7 +28,12 @@ export class PlaylistController {
   @ApiBody({ type: CreatePlaylistDto })
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() getUserId: ObjectId) {
     console.log('dto', createPlaylistDto);
-    return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, userId: getUserId.toHexString() });
+    const { mediaIds } = createPlaylistDto;
+    return await this.playlistService.createPlaylistWithItems({
+      ...createPlaylistDto,
+      userId: getUserId,
+      mediaIds: mediaIds.map((id) => new ObjectId(id))
+    });
   }
 
   @Get()
@@ -42,17 +47,19 @@ export class PlaylistController {
     return { categories: PLAYLIST_CATEGORY };
   }
 
-  @PlaylistGetResponse({ type: PlaylistResponseDto })
+  @Get(':playlistId')
   @ApiParam({
     name: 'playlistId',
     required: true,
     type: 'string',
     example: new ObjectId().toHexString()
   })
-  @Get(':playlistId')
   @ApiParam({ name: 'playlistId', type: String, required: true })
-  findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
-    return this.playlistService.getPlaylistById({ playlistId });
+  @PlaylistGetResponse({ type: PlaylistResponseDto })
+  async findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
+    const response = await this.playlistService.getPlaylistById({ playlistId });
+
+    return response;
   }
 
   @Put(':playlistId')

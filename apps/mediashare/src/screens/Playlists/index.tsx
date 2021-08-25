@@ -32,49 +32,23 @@ const Playlists = ({ onViewDetailClicked, navigation, list }) => {
   }));
 
   return (
-    <Container style={styles.container}>
-      <Content>
-        <View padder style={{ flexDirection: 'row' }}>
-          <Button
-            iconLeft
-            bordered
-            dark
-            style={{ flex: 1, marginRight: 10 }}
-            onPress={() => navigation.navigate(routeConfig.addPlaylist.name, { state: 'create' })}
-          >
-            <Icon name="add-outline" />
-            <Text style={{ paddingRight: 30 }}>Create Playlist</Text>
-          </Button>
-          <Button iconLeft bordered dark style={{ flex: 1 }} onPress={() => navigation.navigate(routeConfig.shareWith.name)}>
-            <Icon name="add-outline" />
-            <Text style={{ paddingRight: 30 }}>Share Playlists</Text>
-          </Button>
-        </View>
-        <View>
-          <List>
-            {items.map((item, idx) => {
-              const { title, description } = item;
-              return (
-                <MediaListItem
-                  key={`item-${idx}`}
-                  title={title}
-                  description={description}
-                  onViewDetail={() => {
-                    onViewDetailClicked(item);
-                  }}
-                />
-              );
-            })}
-          </List>
-        </View>
-        <View padder style={{ flexDirection: 'row' }}>
-          <Button iconLeft bordered dark style={{ flex: 1, justifyContent: 'center' }} onPress={() => navigation.navigate(routeConfig.shareWith.name)}>
-            <Icon name="share-outline" />
-            <Text style={{ paddingRight: 30 }}>Share with User</Text>
-          </Button>
-        </View>
-      </Content>
-    </Container>
+    <View>
+      <List>
+        {items.map((item, idx) => {
+          const { title, description } = item;
+          return (
+            <MediaListItem
+              key={`item-${idx}`}
+              title={title}
+              description={description}
+              onViewDetail={() => {
+                onViewDetailClicked(item);
+              }}
+            />
+          );
+        })}
+      </List>
+    </View>
   );
 };
 

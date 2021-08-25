@@ -15,35 +15,35 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
           from: 'media_item',
           localField: 'mediaId',
           foreignField: '_id',
-          as: 'mediaItems'
-        }
+          as: 'mediaItems',
+        },
       },
       {
         $unwind: {
           path: '$mediaItems',
-          preserveNullAndEmptyArrays: false
-        }
+          preserveNullAndEmptyArrays: false,
+        },
       },
       {
         $replaceRoot: {
           newRoot: {
-            $mergeObjects: [{ playlistItemId: '$_id', mediaId: '$mediaId', playlistId: '$playlistId', userId: 0 }, '$mediaItems']
-          }
-        }
+            $mergeObjects: [{ playlistItemId: '$_id', mediaId: '$mediaId', playlistId: '$playlistId', userId: 0 }, '$mediaItems'],
+          },
+        },
       },
       {
         $lookup: {
           from: 'playlist',
           localField: 'playlistId',
           foreignField: '_id',
-          as: 'playlist'
-        }
+          as: 'playlist',
+        },
       },
       {
         $unwind: {
           path: '$playlist',
-          preserveNullAndEmptyArrays: false
-        }
+          preserveNullAndEmptyArrays: false,
+        },
       },
       {
         $replaceRoot: {
@@ -57,13 +57,13 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
             description: '$description',
             category: '$category',
             title: '$title',
-            playlistTitle: '$playlist.title'
-          }
-        }
+            playlistTitle: '$playlist.title',
+          },
+        },
       },
       {
-        $group: { _id: '$playlistId', title: { $first: '$playlistTitle' }, mediaItems: { $push: '$$ROOT' } }
-      }
+        $group: { _id: '$playlistId', title: { $first: '$playlistTitle' }, mediaItems: { $push: '$$ROOT' } },
+      },
     ];
   }
   constructor(
@@ -78,35 +78,35 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
     return this.repository
       .aggregate([
         {
-          $match: { ...params }
+          $match: { ...params },
         },
         {
           $lookup: {
             from: 'playlist',
             localField: 'playlistId',
             foreignField: '_id',
-            as: 'playlist'
-          }
+            as: 'playlist',
+          },
         },
         {
-          $unwind: { path: '$playlist' }
+          $unwind: { path: '$playlist' },
         },
 
         {
           $lookup: {
             from: 'media_item',
-            localField: 'mediaId',
+            localField: 'mediaIds',
             foreignField: '_id',
-            as: 'mediaItems'
-          }
+            as: 'mediaItems',
+          },
         },
         {
           $lookup: {
             from: 'user',
             localField: 'userId',
             foreignField: '_id',
-            as: 'user'
-          }
+            as: 'user',
+          },
         },
         { $unwind: { path: '$mediaItems' } },
         { $unwind: { path: '$user' } },
@@ -116,10 +116,10 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
             title: { $first: '$playlist.title' },
             userId: { $first: '$playlist.userId' },
             mediaItems: {
-              $push: { $mergeObjects: ['$mediaItems', { playlistItemId: '$_id' }] }
-            }
-          }
-        }
+              $push: { $mergeObjects: ['$mediaItems', { playlistItemId: '$_id' }] },
+            },
+          },
+        },
       ])
       .toArray();
   }

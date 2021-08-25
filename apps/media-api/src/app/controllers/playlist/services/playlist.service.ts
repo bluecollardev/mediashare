@@ -40,9 +40,9 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    * @memberof PlaylistService
    */
   async createPlaylistWithItems({ createdBy, userId, mediaIds, title = '' }: CreatePlaylistDto) {
-    const userIdAsObjectId = new ObjectId(userId);
+    // const userIdAsObjectId = new ObjectId(userId);
 
-    const playlist = await this.create({ userId: userIdAsObjectId, title, createdBy, mediaIds });
+    const playlist = await this.create({ userId, title, createdBy, mediaIds });
 
     const { _id: playlistId } = playlist;
 
@@ -106,9 +106,33 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return await this.findAllByQuery({ userId });
   }
   getPlaylistById({ playlistId }: OptionalObjectIdParameters) {
-    return this.playlistItemService.aggregatePlaylistAndItemByIdField({
-      playlistId
-    });
+    return this.repository
+      .aggregate([
+        {
+          $match: { _id: new ObjectId(playlistId) }
+        },
+
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $unwind: { path: '$user' }
+        },
+        {
+          $lookup: {
+            from: 'media_item',
+            localField: 'mediaIds',
+            foreignField: '_id',
+            as: 'mediaItems'
+          }
+        }
+      ])
+      .next();
   }
 
   findall() {
