@@ -28,7 +28,7 @@ const Playlists = (props) => {
 
   const onViewDetailClicked = (item) => {
     dispatch(selectPlaylistAction(item));
-    navigation.navigate();
+    navigation.navigate(routeConfig.playlistDetail);
   };
   const items = list.map((item) => ({
     id: item._id,

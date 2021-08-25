@@ -2,8 +2,9 @@ import { CreatePlaylistDto } from '../../../rxjs-api';
 import { CreatePlaylistDtoCategoryEnum } from '../../../api/models/create-playlist-dto';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { bindActionCreators } from 'redux';
+import { savePlaylist } from './playlist-api';
 
-const initialState: Partial<CreatePlaylistDto> = {
+const initialState: CreatePlaylistDto = {
   description: '',
   createdBy: '',
   title: '',
@@ -14,7 +15,7 @@ const CREATE_PLAYLIST_KEY = 'createPlaylist' as const;
 // const actions = makeActions(['addItem', 'removeItem', 'setDescription', 'setCreatedBy', 'setTitle', 'setCategory']);
 
 const createPlaylist = createAsyncThunk('createPlaylist', async function (createPlaylistDto: CreatePlaylistDto) {
-  const playlist = await createPlaylist(createPlaylistDto);
+  const playlist = await savePlaylist(createPlaylistDto);
   return playlist;
 });
 
@@ -32,6 +33,14 @@ const slice = createSlice({
     setTitle: (state, action) => ({ ...state, title: action.payload }),
     setCategory: (state, action) => ({ ...state, category: action.payload }),
     setDescription: (state, action) => ({ ...state, description: action.payload }),
+  },
+  extraReducers: (builder) => {
+    builder.addCase(createPlaylist.fulfilled, (state, action) => {
+      console.log('🚀 ----------------------------------------------------------------');
+      console.log('🚀 ~ file: index.ts ~ line 39 ~ builder.addCase ~ action', action);
+      console.log('🚀 ----------------------------------------------------------------');
+      return initialState;
+    });
   },
 });
 

@@ -1,5 +1,10 @@
+import { Container, Content, List, View } from 'native-base';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { MediaListItem } from '../../components/layout/MediaListItem';
+import { PlaylistCard } from '../../components/layout/PlaylistCard';
+import { routeConfig } from '../../routes';
+import styles from '../../screens/Home/styles';
 import PlaylistDetail from '../../screens/PlaylistDetail';
 import { getUserPlaylistById } from '../../state/modules/playlists';
 
@@ -13,29 +18,67 @@ export interface PlaylistDetailContainerProps {
 }
 export interface PlaylistDetailContainerState {}
 
-class PlaylistDetailContainer extends React.Component<PlaylistDetailContainerProps, PlaylistDetailContainerState> {
-  componentDidMount() {
-    const { fetchList } = this.props;
-    const { playlistId } = this.props?.route?.params;
-    fetchList(playlistId);
-  }
+const PlaylistDetailContainer = (props) => {
+  // const { fetchList } = props;
+  // const { playlistId } = props?.route?.params;
+  // fetchList(playlistId);
+  console.log(props);
+  const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 
-  render() {
-    const { state } = this.props;
-    const { navigation, data } = this.props;
-    return <PlaylistDetail navigation={navigation} list={data} />;
-  }
-}
+  const title = 'My First Playlist';
+  const author = 'Blue Collar Dev';
+  const description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ' + 'eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    fetchList: (playlistId) => dispatch(getUserPlaylistById(String(playlistId))),
+  const { state } = props;
+  const { navigation, data } = props;
+  const onEditClicked = () => {
+    navigation.navigate(routeConfig.playlistEdit.name);
   };
-}
+  const onDeleteClicked = () => {};
+  const items = [
+    { title: 'Video 1', description: 'Ipsum lorem dolor', image: imageSrc },
+    { title: 'Video 2', description: 'Ipsum lorem dolor', image: imageSrc },
+    { title: 'Video 3', description: 'Ipsum lorem dolor', image: imageSrc },
+    { title: 'Video 4', description: 'Ipsum lorem dolor', image: imageSrc },
+    { title: 'Video 5', description: 'Ipsum lorem dolor', image: imageSrc },
+  ];
 
-const mapStateToProps = (state: any) => ({
-  state: state,
-  data: state && state.playlistDetail ? state.playlistDetail.list : [],
-  isLoading: state && state.playlistDetail ? state.playlistDetail.isLoading : false,
-});
-export default connect(mapStateToProps, mapDispatchToProps)(PlaylistDetailContainer);
+  return (
+    <Container style={styles.container}>
+      <Content>
+        <View padder>
+          <PlaylistCard
+            title={title}
+            author={author}
+            description={description}
+            showSocial={true}
+            showActions={true}
+            onEditClicked={onEditClicked}
+            onDeleteClicked={onDeleteClicked}
+          />
+          {/* <PlaylistDetail navigation={navigation} list={data} />; */}
+          <View>
+            <List>
+              {items.map((item, idx) => {
+                const { title, description, image } = item;
+                return (
+                  <MediaListItem
+                    key={`item-${idx}`}
+                    title={title}
+                    description={description}
+                    image={image}
+                    onViewDetail={() => {
+                      navigation.navigate(routeConfig.libraryItemDetail.name);
+                    }}
+                  />
+                );
+              })}
+            </List>
+          </View>
+        </View>
+      </Content>
+    </Container>
+  );
+};
+
+export default PlaylistDetailContainer;

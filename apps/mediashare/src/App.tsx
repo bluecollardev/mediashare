@@ -10,19 +10,15 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { useEffect, useState } from 'react';
-// import { Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-// import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'native-base';
-import { withAuthenticator } from 'aws-amplify-react-native';
 
 import { routeConfig } from './routes';
-import { RootState } from './state';
 import LoginContainer from './container/LoginContainer';
 
-import Amplify, { Auth, Storage } from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
 import { Provider } from 'react-redux';
 import { store } from './boot/configureStore';
@@ -68,10 +64,12 @@ const LibraryNavigation = () => {
     <LibraryStackNavigator.Navigator>
       <LibraryStackNavigator.Screen {...routeConfig.library} />
       <LibraryStackNavigator.Screen {...routeConfig.libraryItemDetail} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
       <LibraryStackNavigator.Screen {...routeConfig.libraryItemEdit} />
       <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
       {/* TODO: Add to playlist! */}
       <LibraryStackNavigator.Screen {...routeConfig.addMedia} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
     </LibraryStackNavigator.Navigator>
   );
 };
@@ -99,7 +97,7 @@ const TabNavigator = createBottomTabNavigator();
 const TabNavigation = () => {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Library'}
+      initialRouteName={'Playlists'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {
@@ -126,7 +124,6 @@ async function fakeLogin() {
 }
 fakeLogin().then();
 
-console.log(Auth.configure());
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
 

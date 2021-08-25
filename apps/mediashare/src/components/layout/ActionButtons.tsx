@@ -2,13 +2,15 @@ import { View, Button, Icon, Text } from 'native-base';
 import React from 'react';
 
 interface Props {
-  actionLabel: string;
-  cancelLabel: string;
+  actionLabel?: string;
+  cancelLabel?: string;
   actionCb: () => void;
   cancelCb: () => void;
+  disableAction?: boolean;
+  disableCancel?: boolean;
 }
 
-const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel = 'Back' }: Props) => {
+const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel = 'Back', disableAction = false, disableCancel = false }: Props) => {
   return (
     <View padder style={{ flexDirection: 'row' }}>
       <Button
@@ -21,6 +23,7 @@ const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel =
           marginRight: 10,
           justifyContent: 'center',
         }}
+        disabled={disableCancel}
       >
         <Icon name="close-outline" />
         <Text style={{ paddingRight: 30 }}>{cancelLabel}</Text>
@@ -30,6 +33,7 @@ const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel =
         bordered
         success
         onPress={() => actionCb()}
+        disabled={disableAction}
         style={{
           flex: 1,
           marginRight: 10,

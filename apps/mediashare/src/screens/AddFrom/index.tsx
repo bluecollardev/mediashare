@@ -36,7 +36,7 @@ const AddFrom = (props: AddFromProps) => {
             description={description}
             image={thumbnail}
             checked={checked}
-            onChecked={() => dispatch(toggleMediaItem(idx))}
+            onChecked={(bool) => dispatch(toggleMediaItem(idx))}
             onViewDetail={() => {
               navigation.navigate(routeConfig.libraryItemDetail.name);
             }}

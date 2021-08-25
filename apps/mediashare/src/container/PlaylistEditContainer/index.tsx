@@ -6,6 +6,8 @@ import PlaylistEdit from '../../screens/PlaylistEdit/index';
 import { routeConfig } from '../../routes';
 import ActionButtons from '../../components/layout/ActionButtons';
 import { useAppSelector } from '../../state';
+import { useDispatch } from 'react-redux';
+import { createPlaylist } from '../../state/modules/create-playlist';
 
 export interface PlaylistEditContainerProps {
   navigation: any;
@@ -15,9 +17,13 @@ export interface PlaylistEditContainerProps {
 export interface PlaylistEditContainerState {}
 
 const PlaylistEditContainer = (props) => {
+  const dispatch = useDispatch();
   const createPlaylistState = useAppSelector((state) => state.createPlaylist);
   const hasMediaItems = createPlaylistState.mediaIds.length > 0;
   const actionCb = () => {
+    if (hasMediaItems) {
+      dispatch(createPlaylist(createPlaylistState));
+    }
     props.navigation.navigate(hasMediaItems ? routeConfig.playlistDetail : routeConfig.addFromFeed.name);
   };
   const cancelCb = props.navigation.goBack;

@@ -20,7 +20,7 @@ export const AddMediaContainer = ({ navigation }: { navigation: any }) => {
     <Container style={styles.container}>
       <Content>
         <View padder>
-          <MediaDetail config={mediaFormConfig} navigation={navigation} />{' '}
+          <MediaDetail config={mediaFormConfig} navigation={navigation} />
         </View>
       </Content>
     </Container>
