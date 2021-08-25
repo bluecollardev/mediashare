@@ -10,6 +10,7 @@ import { MediaItem } from '../../../rxjs-api';
 import { uploadMedia, getStorage } from './storage';
 import { KeyFactory } from './key-factory';
 import { getAllMedia } from './media-items';
+import { bindActionCreators } from 'redux';
 
 const MEDIA_ITEMS_ACTIONS = ['FIND_MEDIA_ITEMS'] as const;
 const MEDIA_ITEM_ACTIONS = ['GET_MEDIA_ITEM', 'ADD_MEDIA_ITEM', 'UPDATE_MEDIA_ITEM', 'SHARE_MEDIA_ITEM', 'REMOVE_MEDIA_ITEM', 'UPLOAD_MEDIA_ITEM'] as const;
@@ -155,7 +156,9 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
       if (state?.mediaItems[action.payload]) {
         state.mediaItems[action.payload].checked = !state.mediaItems[action.payload].checked;
       }
-      return state;
+
+      // state.mediaItems[action.payload] = { ...state.mediaItems[action.payload], checked: !state.mediaItems[action.payload] };
+      // return (state.mediaItems = [...state.mediaItems]);
     })
     .addCase(findMediaItems.pending, (state) => {
       return { ...state, loading: true, loaded: false };
@@ -169,7 +172,7 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
       };
     })
     .addCase(clearMediaItemSelection, (state) => {
-      return { ...state, mediaItems: state.mediaItems.map((item) => ({ ...item, checked: false })) };
+      return { ...state, mediaItems: [] };
     });
 });
 

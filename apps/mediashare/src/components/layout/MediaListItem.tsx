@@ -3,6 +3,7 @@ import { Text, Button, Icon, Left, Body, Right, ListItem, Thumbnail } from 'nati
 import { useEffect, useState } from 'react';
 import { Storage } from 'aws-amplify';
 import CheckBox from '@react-native-community/checkbox';
+import { usePreviewImage } from '../../hooks/UsePreviewImage';
 
 export interface MediaListItemProps {
   navigation?: any;
@@ -13,13 +14,21 @@ export interface MediaListItemProps {
   showActions?: boolean;
   checked?: boolean;
   onViewDetail?: () => void;
-  onChecked?: (cb: boolean) => void;
+  onChecked?: () => void;
 }
 
-export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
-  const DEFAULT_IMAGE = require('./video-placeholder.jpg');
-
-  const { title, description, image, selectable = true, showActions = true, onViewDetail = () => {}, onChecked = (cb: boolean) => {}, checked = false } = props;
+export const MediaListItem: React.FC<MediaListItemProps> = ({
+  checked,
+  image,
+  description,
+  title,
+  onViewDetail,
+  onChecked = () => {},
+  selectable = true,
+  showActions = true,
+}: MediaListItemProps) => {
+  const DEFAULT_IMAGE = usePreviewImage();
+  const [isChecked, setIsChecked] = useState(checked);
   const [source, setSource] = useState(null);
   useEffect(() => {
     if (image) {
@@ -28,11 +37,12 @@ export const MediaListItem: React.FC<MediaListItemProps> = (props) => {
       });
     }
   }, [image]);
+  useEffect(() => {}, [source]);
   return (
     <ListItem style={{ borderWidth: 0 }}>
       {selectable && (
         <Left style={{ width: '10%', flex: 1 }}>
-          <CheckBox value={checked} onValueChange={(newValue) => onChecked(newValue)} />
+          <CheckBox value={isChecked} onValueChange={(v) => onChecked()} />
         </Left>
       )}
       <Left style={{ width: '20%', flex: 1 }}>{!source ? <Thumbnail source={DEFAULT_IMAGE} square /> : <Thumbnail source={source} square />}</Left>

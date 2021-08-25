@@ -8,6 +8,7 @@ import ActionButtons from '../../components/layout/ActionButtons';
 import { useAppSelector } from '../../state';
 import { useDispatch } from 'react-redux';
 import { createPlaylist } from '../../state/modules/create-playlist';
+import { clearMediaItemSelection } from '../../state/modules/media-items';
 
 export interface PlaylistEditContainerProps {
   navigation: any;
@@ -16,24 +17,30 @@ export interface PlaylistEditContainerProps {
 }
 export interface PlaylistEditContainerState {}
 
-const PlaylistEditContainer = (props) => {
+const PlaylistEditContainer = ({ navigation }) => {
   const dispatch = useDispatch();
   const createPlaylistState = useAppSelector((state) => state.createPlaylist);
+
   const hasMediaItems = createPlaylistState.mediaIds.length > 0;
-  const actionCb = () => {
+  const actionCb = async () => {
     if (hasMediaItems) {
-      dispatch(createPlaylist(createPlaylistState));
+      const res = await dispatch(createPlaylist(createPlaylistState));
+      dispatch(clearMediaItemSelection());
+
+      navigation.navigate('Playlists');
     }
-    props.navigation.navigate(hasMediaItems ? routeConfig.playlistDetail : routeConfig.addFromFeed.name);
+    if (!hasMediaItems) {
+      navigation.navigate(routeConfig.addFromFeed.name, { state: 'create' });
+    }
   };
-  const cancelCb = props.navigation.goBack;
+  const cancelCb = navigation.goBack;
   const actionLabel = 'Next';
   const cancelLabel = 'Cancel';
   return (
     <Container style={styles.container}>
       <Content>
         <View padder>
-          <PlaylistEdit navigation={props.navigation} />
+          <PlaylistEdit navigation={navigation} />
           <ActionButtons actionCb={() => actionCb()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
         </View>
       </Content>

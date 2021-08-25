@@ -32,7 +32,7 @@ export const routeConfig = {
     options: { title: 'Explore', header: AppScreenHeader },
   },
   playlists: {
-    name: 'playlists',
+    name: 'Playlists',
     component: Playlists,
     options: { title: 'Playlists', header: AppScreenHeader },
   },
@@ -80,6 +80,11 @@ export const routeConfig = {
     component: PlaylistEdit,
     options: { title: 'Add Playlist', header: AppScreenHeader },
   },
+  addItemsToPlaylist: {
+    name: 'addItemsToPlaylist',
+    component: AddFromFeed,
+    options: { title: 'Add Playlist', header: AppScreenHeader },
+  },
   addMedia: {
     name: 'addToPlaylist',
     component: AddMediaContainer,
@@ -96,3 +101,13 @@ export const routeConfig = {
     options: { title: 'Settings', header: AppScreenHeader },
   },
 };
+
+function routeConfigFactory(cfg: typeof routeConfig) {
+  function mapper(key: keyof typeof routeConfig) {
+    return cfg[key].name;
+  }
+  return mapper;
+}
+const getRoute = routeConfigFactory(routeConfig);
+
+export { getRoute };

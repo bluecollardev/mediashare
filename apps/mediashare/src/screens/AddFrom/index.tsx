@@ -10,40 +10,43 @@ import { useAppSelector } from '../../state/index';
 import { MediaItem } from '../../rxjs-api';
 import { dispatch } from 'rxjs/internal/observable/pairs';
 import { useDispatch } from 'react-redux';
-import { toggleMediaItem } from '../../state/modules/media-items/index';
+import { findMediaItems, toggleMediaItem } from '../../state/modules/media-items/index';
 
 export interface AddFromProps {
   navigation: any;
+  onViewDetail: () => void;
+  items: MediaItem[];
 }
 
 export interface AddFromState {}
 
-const AddFrom = (props: AddFromProps) => {
-  const { navigation } = props;
+function AddFrom({ onViewDetail = () => {}, items }: AddFromProps) {
   const dispatch = useDispatch();
-  const items = useAppSelector((state) => state.mediaItems.mediaItems);
+
+  function toggleField(id: number) {
+    console.log(id);
+    dispatch(toggleMediaItem(id));
+    console.log(items[id]);
+  }
   return (
     <List>
       <ListItemGroup key={'group1'} text={'Vimeo'} />
-      {items.map((item, idx) => {
-        const { title, description, thumbnail, checked } = item;
-
+      {items.concat([]).map((item, idx) => {
+        const { title, description, thumbnail } = item;
         return (
           <MediaListItem
             key={`item-${idx}`}
             title={title}
             description={description}
             image={thumbnail}
-            checked={checked}
-            onChecked={(bool) => dispatch(toggleMediaItem(idx))}
-            onViewDetail={() => {
-              navigation.navigate(routeConfig.libraryItemDetail.name);
-            }}
+            checked={false}
+            onChecked={() => toggleField(idx)}
+            onViewDetail={onViewDetail}
           />
         );
       })}
     </List>
   );
-};
+}
 
 export default AddFrom;

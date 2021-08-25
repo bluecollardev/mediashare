@@ -29,7 +29,13 @@ const LibraryContainer = (props: { navigation: any }) => {
   return (
     <Container style={styles.container}>
       <View padder style={{ flexDirection: 'row' }}>
-        <Button iconLeft bordered dark style={{ flex: 1, marginRight: 10 }} onPress={() => navigation.navigate(routeConfig.addFromFeed.name)}>
+        <Button
+          iconLeft
+          bordered
+          dark
+          style={{ flex: 1, marginRight: 10 }}
+          onPress={() => navigation.navigate(routeConfig.addFromFeed.name, { state: 'create' })}
+        >
           <Icon name="add-outline" />
           <Text style={{ paddingRight: 30 }}>Add From Feed</Text>
         </Button>

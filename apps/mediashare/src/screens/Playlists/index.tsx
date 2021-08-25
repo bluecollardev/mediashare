@@ -35,7 +35,13 @@ const Playlists = ({ onViewDetailClicked, navigation, list }) => {
     <Container style={styles.container}>
       <Content>
         <View padder style={{ flexDirection: 'row' }}>
-          <Button iconLeft bordered dark style={{ flex: 1, marginRight: 10 }} onPress={() => navigation.navigate(routeConfig.addPlaylist.name)}>
+          <Button
+            iconLeft
+            bordered
+            dark
+            style={{ flex: 1, marginRight: 10 }}
+            onPress={() => navigation.navigate(routeConfig.addPlaylist.name, { state: 'create' })}
+          >
             <Icon name="add-outline" />
             <Text style={{ paddingRight: 30 }}>Create Playlist</Text>
           </Button>

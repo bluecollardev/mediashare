@@ -25,13 +25,14 @@ const PlaylistDetailContainer = ({ route, navigation, data }) => {
   // const { playlistId } = props?.route?.params;
   // fetchList(playlistId);
   console.log(route);
+
   const id = route?.params?.playlistId;
   const isCreate = !!id;
   const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
   const dispatch = useDispatch();
 
   const playlist = useAppSelector((state) => state.playlist);
-  if (!playlist.loading && playlist?.selectedPlaylist?._id !== id) {
+  if (!isCreate || (!playlist.loading && playlist?.selectedPlaylist?._id !== id)) {
     dispatch(getPlaylistById(id));
   }
   const author = '';
