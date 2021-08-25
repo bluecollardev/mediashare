@@ -101,13 +101,3 @@ export const routeConfig = {
     options: { title: 'Settings', header: AppScreenHeader },
   },
 };
-
-function routeConfigFactory(cfg: typeof routeConfig) {
-  function mapper(key: keyof typeof routeConfig) {
-    return cfg[key].name;
-  }
-  return mapper;
-}
-const getRoute = routeConfigFactory(routeConfig);
-
-export { getRoute };

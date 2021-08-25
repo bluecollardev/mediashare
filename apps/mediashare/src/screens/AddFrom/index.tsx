@@ -28,9 +28,10 @@ function AddFrom({ onViewDetail = () => {}, items }: AddFromProps) {
     dispatch(toggleMediaItem(id));
     console.log(items[id]);
   }
+
   return (
     <List>
-      <ListItemGroup key={'group1'} text={'Vimeo'} />
+      <ListItemGroup key={'group1'} />
       {items.concat([]).map((item, idx) => {
         const { title, description, thumbnail } = item;
         return (

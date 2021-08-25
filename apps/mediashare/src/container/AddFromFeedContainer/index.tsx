@@ -33,12 +33,11 @@ const AddFromFeedContainer = ({ navigation, route }) => {
     const segment = createDto.title.length > 0 ? routeConfig.playlists.name : routeConfig.playlistEdit.name;
 
     if (createDto.title.length > 0) {
-      const dispatched = await dispatch(createPlaylist({ ...createDto, mediaIds }));
-      console.log('🚀 ------------------------------------------------------------------');
-      console.log('🚀 ~ file: index.tsx ~ line 33 ~ actionCb ~ dispatched', dispatched);
-      console.log('🚀 ------------------------------------------------------------------');
+      dispatch(createPlaylist({ ...createDto, mediaIds }));
+      const unwrap = dispatch as any;
+      unwrap.then(() => navigation.navigate('Playlists', { screen: routeConfig.playlistDetail.name }));
+
       dispatch(clearMediaItemSelection());
-      navigation.navigate('Playlists', { screen: routeConfig.playlistDetail.name });
     } else {
       navigation.navigate(segment, { state: 'create' });
     }

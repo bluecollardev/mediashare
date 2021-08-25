@@ -49,7 +49,7 @@ function PlaylistsNavigation() {
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addPlaylist} />
-      <LibraryStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
+      <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
 
       <PlaylistsStackNavigator.Screen {...routeConfig.libraryItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />
@@ -97,7 +97,7 @@ const TabNavigator = createBottomTabNavigator();
 function TabNavigation() {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Library'}
+      initialRouteName={'Playlists'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {

@@ -98,9 +98,10 @@ export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: st
   return response;
 });
 
-const initialState: { userPlaylists: PlaylistItemResponseDto[]; loading: boolean } = {
+const initialState: { userPlaylists: PlaylistItemResponseDto[]; loading: boolean; loaded: boolean } = {
   userPlaylists: [],
   loading: false,
+  loaded: false,
 };
 
 export const USER_PLAYLISTS_STATE_KEY = 'userPlaylists';
@@ -145,10 +146,10 @@ const playlistReducer = createReducer(initialPlaylistState, (builder) => {
 
 const playlistsReducer = createReducer(initialState, (builder) => {
   builder.addCase(findUserPlaylists.pending, (state, action) => {
-    return { ...state, userPlaylists: action.payload, loading: true };
+    return { ...state, userPlaylists: action.payload, loading: true, loaded: false };
   });
   builder.addCase(findUserPlaylists.fulfilled, (state, action) => {
-    return { ...state, userPlaylists: action.payload, loading: false };
+    return { ...state, userPlaylists: action.payload, loading: false, loaded: true };
   });
 });
 

@@ -6,6 +6,7 @@ import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/pla
 import { routeConfig } from '../../routes';
 
 import { useAppSelector } from '../../state';
+import { useEffect, useState } from 'react';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -15,12 +16,17 @@ export interface PlaylistsContainerProps {
 }
 
 export const PlaylistsContainer = ({ navigation }) => {
+  const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
   const playlists = useAppSelector((state) => state.playlists);
 
-  if (!playlists.loading && playlists.userPlaylists.length < 1) {
-    dispatch(findUserPlaylists({}));
-  }
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(findUserPlaylists({}));
+      setLoaded(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded]);
 
   const onViewDetailClicked = (item) => {
     dispatch(selectPlaylistAction(item));
