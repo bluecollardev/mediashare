@@ -120,6 +120,7 @@ function TabNavigation() {
 }
 Amplify.configure(awsmobile);
 async function fakeLogin() {
+  await Auth.signOut();
   await Auth.currentCredentials();
 }
 fakeLogin().then();

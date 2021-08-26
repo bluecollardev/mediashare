@@ -14,10 +14,9 @@ import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
-import { Playlist } from '../playlist/entities/playlist.entity';
 import { PlaylistGetResponse } from '../playlist/playlist.decorator';
-import { PlaylistItemResponseDto } from '../playlist/dto/playlist-response.dto';
-import { UserGuard } from '../../modules/auth/guards/user.guard';
+import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
+
 @ApiTags('user')
 @Controller({ path: ['user'] })
 export class UserController {
@@ -61,7 +60,7 @@ export class UserController {
   }
 
   @Get('playlists')
-  @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
+  @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
   async getUserPlaylists(@GetUser() user: SessionUserInterface) {
     console.log(user);
     const result = user._id ? await this.playlistService.getPlaylistByUserId({ userId: user._id }) : await this.playlistService.findAll();

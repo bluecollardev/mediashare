@@ -37,7 +37,7 @@ import { LoginResponseDto } from '../models';
 // @ts-ignore
 import { MediaItemDto } from '../models';
 // @ts-ignore
-import { PlaylistItemResponseDto } from '../models';
+import { PlaylistResponseDto } from '../models';
 // @ts-ignore
 import { ShareItem } from '../models';
 // @ts-ignore
@@ -347,7 +347,7 @@ export const UserApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userControllerGetUserPlaylists(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PlaylistItemResponseDto>>> {
+    async userControllerGetUserPlaylists(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PlaylistResponseDto>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUserPlaylists(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -427,7 +427,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerGetUserPlaylists(options?: any): AxiosPromise<Array<PlaylistItemResponseDto>> {
+    userControllerGetUserPlaylists(options?: any): AxiosPromise<Array<PlaylistResponseDto>> {
       return localVarFp.userControllerGetUserPlaylists(options).then((request) => request(axios, basePath));
     },
     /**

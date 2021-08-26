@@ -15,7 +15,7 @@ import Settings from './container/SettingsContainer';
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
 import { AddMediaContainer } from './container/AddMediaContainer/index';
 
-export const routeConfig = {
+const routeConfig = {
   login: {
     name: 'login',
     component: Login,
@@ -100,4 +100,22 @@ export const routeConfig = {
     component: Settings,
     options: { title: 'Settings', header: AppScreenHeader },
   },
-};
+} as const;
+type RouteEnumKeys = keyof typeof routeConfig;
+type RouteEnumType<Key extends RouteEnumKeys> = typeof routeConfig[Key]['name'];
+type MappedRouteEnum = { [P in RouteEnumKeys]: RouteEnumType<P> };
+
+function createRouteConfig(config: typeof routeConfig) {
+  const obj: Partial<MappedRouteEnum> = Object.create({});
+  for (let key in config) {
+    console.log(key);
+    if (config.hasOwnProperty(key)) {
+      Object.assign(obj, { [key]: config[key].name });
+    }
+  }
+  return obj;
+}
+
+const ROUTES = createRouteConfig(routeConfig);
+
+export { routeConfig, ROUTES };

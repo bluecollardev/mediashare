@@ -98,7 +98,7 @@ export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: st
   return response;
 });
 
-const initialState: { userPlaylists: PlaylistItemResponseDto[]; loading: boolean; loaded: boolean } = {
+const initialState: { userPlaylists: PlaylistResponseDto[]; loading: boolean; loaded: boolean } = {
   userPlaylists: [],
   loading: false,
   loaded: false,
@@ -113,16 +113,16 @@ const initialPlaylistState: { createdPlaylist: CreatePlaylistResponseDto; loadin
 
 const playlistReducer = createReducer(initialPlaylistState, (builder) => {
   builder
-    .addCase(addUserPlaylist.pending, (state, action) => {
+    .addCase(addUserPlaylist.pending, (state) => {
       return { ...state, loading: true };
     })
     .addCase(addUserPlaylist.fulfilled, (state, action) => {
       return { ...state, createdPlaylist: action.payload, loading: false };
     })
-    .addCase(selectPlaylistAction, (state, action) => {
+    .addCase(selectPlaylistAction, (state) => {
       return { ...state };
     })
-    .addCase(clearPlaylistAction, (state, action) => {
+    .addCase(clearPlaylistAction, (state) => {
       return { ...state, createdPlaylist: null };
     })
     .addCase(getPlaylistById.pending, (state) => {

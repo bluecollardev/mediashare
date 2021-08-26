@@ -5,7 +5,7 @@ import { Playlist } from '../entities/playlist.entity';
 import { PlaylistItemResponseDto } from './playlist-response-item.dto';
 
 class PlaylistResponseDto extends Playlist {
-  @ApiProperty({ type: () => MediaItem })
+  @ApiProperty({ type: () => MediaItem, isArray: true })
   mediaItems: MediaItem[];
   @ApiProperty({ type: () => UserDto })
   user: UserDto;

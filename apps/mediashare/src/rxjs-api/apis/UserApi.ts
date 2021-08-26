@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { LoginDto, LoginResponseDto, MediaItemDto, PlaylistItemResponseDto, ShareItem, TokenDto, UserDto } from '../models';
+import { LoginDto, LoginResponseDto, MediaItemDto, PlaylistResponseDto, ShareItem, TokenDto, UserDto } from '../models';
 
 export interface UserControllerAuthorizeRequest {
   id: string;
@@ -109,10 +109,10 @@ export class UserApi extends BaseAPI {
 
   /**
    */
-  userControllerGetUserPlaylists(): Observable<Array<PlaylistItemResponseDto>>;
-  userControllerGetUserPlaylists(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
-  userControllerGetUserPlaylists(opts?: OperationOpts): Observable<Array<PlaylistItemResponseDto> | RawAjaxResponse<Array<PlaylistItemResponseDto>>> {
-    return this.request<Array<PlaylistItemResponseDto>>(
+  userControllerGetUserPlaylists(): Observable<Array<PlaylistResponseDto>>;
+  userControllerGetUserPlaylists(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistResponseDto>>>;
+  userControllerGetUserPlaylists(opts?: OperationOpts): Observable<Array<PlaylistResponseDto> | RawAjaxResponse<Array<PlaylistResponseDto>>> {
+    return this.request<Array<PlaylistResponseDto>>(
       {
         url: '/api/user/playlists',
         method: 'GET',

@@ -1,16 +1,18 @@
 import * as React from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import Playlists from '../../screens/Playlists';
 
-import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/playlists';
-import { routeConfig } from '../../routes';
+import { findUserPlaylists } from '../../state/modules/playlists';
+import { routeConfig, ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
 import { useEffect, useState } from 'react';
 import { Container, Content, View, Button, Icon, Text } from 'native-base';
 import styles from '../../screens/Home/styles';
 import TopActionButtons from '../../components/layout/TopActionButtons';
-import { useRouteName } from '../../hooks/UseRouteConfig';
+import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { mapPlaylists } from '../../screens/Playlists/index';
+import { ListActionButton } from '../../components/layout/ListActionButton';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -20,44 +22,43 @@ export interface PlaylistsContainerProps {
 }
 
 export const PlaylistsContainer = ({ navigation }) => {
-  const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
 
-  const playlistEditRoute = useRouteName('playlistEdit');
-  const shareWithRoute = useRouteName('shareWith');
-
+  const shareWithAction = useRouteName(ROUTES.shareWith);
+  const createPlaylistAction = useRouteName(ROUTES.addPlaylist);
+  const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
   const playlists = useAppSelector((state) => state.playlists);
-  const createPlaylistAction = () => {
-    navigation.navigate(playlistEditRoute);
-  };
-  const createFromFeedAction = () => {
-    navigation.navigate(shareWithRoute);
-  };
-  useEffect(() => {
-    if (!loaded) {
-      dispatch(findUserPlaylists({}));
-      setLoaded(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaded]);
+  const initLoaded = useAppSelector((state) => state.playlists.loaded);
 
-  const onViewDetailClicked = (item) => {
-    dispatch(selectPlaylistAction(item));
-    navigation.navigate(routeConfig.playlistDetail.name, { playlistId: item._id });
+  const [loaded, setLoaded] = useState(initLoaded);
+
+  const loadData = async function () {
+    await dispatch(findUserPlaylists({}));
+
+    setLoaded(true);
   };
+
+  useEffect(() => {
+    if (!playlists.loaded && !playlists.loading) {
+      console.log('dispatched');
+      loadData();
+      // return <Text>...loading</Text>;
+    }
+  });
+
+  console.log('rendered');
+  if (!loaded) {
+    return <Text>Loading</Text>;
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
     <Container style={styles.container}>
-      <TopActionButtons leftAction={createPlaylistAction} rightAction={createFromFeedAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
+      <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
 
       <Content>
-        <Playlists navigation={navigation} list={playlists.userPlaylists} onViewDetailClicked={onViewDetailClicked} />
+        <Playlists list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ itemId: item._id })} />
       </Content>
-      <View padder style={{ flexDirection: 'row' }}>
-        <Button iconLeft bordered dark style={{ flex: 1, justifyContent: 'center' }} onPress={() => navigation.navigate(routeConfig.shareWith.name)}>
-          <Icon name="share-outline" />
-          <Text style={{ paddingRight: 30 }}>Share with User</Text>
-        </Button>
-      </View>
+      <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" />
     </Container>
   );
 };
