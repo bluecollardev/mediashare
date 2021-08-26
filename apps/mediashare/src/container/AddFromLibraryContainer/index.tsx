@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import AddFromLibrary from '../../screens/AddFrom';
+import AddToPlaylist from '../../screens/AddToPlaylist';
 
 export interface AddFromLibraryContainerProps {
   navigation: any;
@@ -14,7 +14,8 @@ class AddFromLibraryContainer extends React.Component<AddFromLibraryContainerPro
     // this.props.fetchList();
   }
   render() {
-    return <AddFromLibrary navigation={this.props.navigation} list={this.props.data} />;
+    const data = [{ title: 'this is a title', description: 'this is a description', image: '' }];
+    return <AddToPlaylist navigation={this.props.navigation} list={data} />;
   }
 }
 
