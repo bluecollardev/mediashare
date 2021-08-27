@@ -38,12 +38,14 @@ export const getUserPlaylistById = createAsyncThunk(playlistActionTypes.getUserP
 export const addUserPlaylist = createAsyncThunk(playlistActionTypes.addUserPlaylist, async (playlist: CreatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.playlists.playlistControllerCreate({ createPlaylistDto: playlist }).toPromise();
+
   return response;
 });
 
 export const updateUserPlaylist = createAsyncThunk(playlistActionTypes.updateUserPlaylist, async (playlist: UpdatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Fix _id property on UpdatePlaylistDto!
+  console.log(playlist);
   const response = await api.playlists.playlistControllerUpdate({ playlistId: playlist._id, updatePlaylistDto: playlist }).toPromise();
   return response;
 });
@@ -74,9 +76,8 @@ export const addUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.addU
 });
 
 export const updateUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.updateUserPlaylistItem, async (playlist: UpdatePlaylistDto) => {
-  // @ts-ignore - TODO: Fix _id property on DTO! | TODO: Add playlistControllerUpdateItem to API service!
-  const response = await apis.playlists.playlistControllerUpdateItem({ playlistId: playlist._id, updatePlaylistDto: playlist });
-  return response && response.status === 200 ? response.data : undefined;
+  const response = await apis.playlists.playlistControllerUpdate({ playlistId: playlist._id, updatePlaylistDto: playlist });
+  return response;
 });
 
 export const removeUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.removeUserPlaylistItem, async (id: string, { extra }) => {

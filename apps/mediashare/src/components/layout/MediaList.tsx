@@ -15,7 +15,6 @@ interface MediaListProps {
 }
 
 function MediaList({ list, onViewDetail, isSelectable, addItem = () => {}, removeItem = () => {} }: MediaListProps) {
-  console.log(list);
   return (
     <Content>
       <View>

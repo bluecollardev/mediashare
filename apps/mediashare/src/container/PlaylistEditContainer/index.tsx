@@ -1,4 +1,4 @@
-import { Button, Container, Content, Icon, Text, View } from 'native-base';
+import { ActionSheet, Button, Container, Content, Icon, Text, View } from 'native-base';
 import * as React from 'react';
 import styles from '../../screens/Home/styles';
 
@@ -15,9 +15,10 @@ import MediaList, { MediaListType } from '../../components/layout/MediaList';
 import { usePageRoute, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { MediaCard } from '../../components/layout/MediaCard';
 import { useEffect, useState } from 'react';
-import { CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
+import { CreatePlaylistDtoCategoryEnum, MediaItem } from '../../rxjs-api';
 import { UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api/models/UpdatePlaylistDto';
 import { ListActionButton } from '../../components/layout/ListActionButton';
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 
 export interface PlaylistEditContainerProps {
   navigation: any;
@@ -32,12 +33,13 @@ const PlaylistEditContainer = ({ navigation, route }) => {
 
   const [loaded, setLoaded] = React.useState(false);
   const playlist = useAppSelector((state) => state.playlist);
+  // const initCategory = useAppSelector((state) => state.playlist?.selectedPlaylist?.category) || UpdatePlaylistDtoCategoryEnum.Builder;
   const { selectedPlaylist } = playlist;
   const [title, setTitle] = useState(selectedPlaylist?.title);
   const [description, setDescription] = useState(selectedPlaylist?.description);
-  const [category, setCategory] = useState(UpdatePlaylistDtoCategoryEnum[selectedPlaylist.category]);
+  const [category, setCategory] = useState(UpdatePlaylistDtoCategoryEnum.Builder);
 
-  const selectedItems = new Set<string>();
+  const [selectedItems] = useState(new Set<string>(selectedPlaylist?.mediaItems.map((item) => item._id)));
 
   // const [selectedItems] = useState(new Set<string>());
 
@@ -47,20 +49,18 @@ const PlaylistEditContainer = ({ navigation, route }) => {
     setLoaded(true);
   };
 
-  const onTitleChange = setTitle;
-  const onDescriptionChange = setDescription;
-  const onCategoryChange = setCategory;
   const [selected, setSelected] = useState(selectedItems.size);
   const onAddItem = (item: MediaItem) => {
     console.log('🚀 -------------------------------------------------------');
     console.log('🚀 ~ file: index.tsx ~ line 52 ~ onAddItem ~ item', item);
     console.log('🚀 -------------------------------------------------------');
-    selectedItems.add(item._id);
+    selectedItems.delete(item._id);
+    console.log(selectedItems.keys);
     setSelected(selectedItems.size);
   };
 
   const onRemoveItem = (item: MediaItem) => {
-    selectedItems.delete(item._id);
+    selectedItems.add(item._id);
     console.log(selectedItems.size);
     setSelected(selectedItems.size);
   };
@@ -72,17 +72,30 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   useEffect(() => {
     console.log(selectedItems);
   }, [selectedItems]);
-  React.useEffect(() => {
-    if (!playlist.loading && playlist.selectedPlaylist?._id !== playlistId) {
-      loadData();
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(getPlaylistById(playlistId));
+      setLoaded(true);
     }
-  });
-  const mediaItemRoute = useRouteWithParams(ROUTES.libraryItemDetail);
+  }, [loaded, dispatch, playlistId]);
+  const save = async function () {
+    console.log(items);
+
+    const result = await dispatch(
+      updateUserPlaylist({
+        title: title,
+        mediaIds: Array.from(selectedItems.keys()),
+        description: description,
+        category,
+        _id: selectedPlaylist._id,
+      })
+    );
+
+    setLoaded(false);
+    await loadData();
+  };
   const onViewMediaItemClicked = useViewMediaItem();
-  async function saveItem() {
-    dispatch(updateUserPlaylist({ title, items: Array.from(selectedItems.keys()), category: UpdatePlaylistDtoCategoryEnum[category] }));
-  }
-  if (!playlistId) {
+  if (!playlistId || !loaded) {
     return <Text>Item not found</Text>;
   }
 
@@ -94,21 +107,51 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   const cancelCb = navigation.goBack;
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
+  const showCardMenu = function (count: number) {
+    ActionSheet.show(
+      {
+        options: ['Cancel', 'Remove'],
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+      },
+      (buttonIdx) => {
+        switch (buttonIdx) {
+          case 0:
+            console.log(1);
+            break;
+          case 1:
+            save();
+            break;
+        }
+      }
+    );
+  };
+  if (!selectedPlaylist) {
+    return <Text>Loading</Text>;
+  }
   return (
     <Container style={styles.container}>
-      <View padder>
-        <MediaCard
-          title={title}
-          author={author}
-          description={description}
-          category={category}
-          categoryOptions={options}
-          onCategoryChange={onCategoryChange as any}
-          onTitleChange={onTitleChange}
-          onDescriptionChange={onDescriptionChange}
-          isEdit={true}
-        />
-      </View>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View padder>
+            <MediaCard
+              title={title}
+              author={author}
+              description={description}
+              category={category}
+              categoryOptions={options}
+              onCategoryChange={(e: any) => {
+                setCategory(e);
+                console.log(category);
+              }}
+              onTitleChange={(e) => setTitle(e)}
+              onDescriptionChange={(e) => setDescription(e)}
+              isEdit={true}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+
       <MediaList
         onViewDetail={(itm) => onViewMediaItemClicked({ mediaId: itm._id, uri: itm.uri })}
         list={items}
@@ -116,10 +159,10 @@ const PlaylistEditContainer = ({ navigation, route }) => {
         removeItem={onRemoveItem}
         addItem={onAddItem}
       />
-      {selected < 1 ? (
-        <ActionButtons actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
+      {selected === selectedPlaylist?.mediaItems?.length ? (
+        <ActionButtons actionCb={() => save()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
       ) : (
-        <ListActionButton danger={true} icon="trash" actionCb={() => saveItem()} label={'Delete Items'} />
+        <ListActionButton danger={true} icon="trash" actionCb={() => showCardMenu(selectedItems.size)} label={'Remove Items from Playlist'} />
       )}
     </Container>
   );

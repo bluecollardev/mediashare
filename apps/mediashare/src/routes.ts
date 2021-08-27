@@ -15,6 +15,7 @@ import Settings from './container/SettingsContainer';
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
 import { AddMediaContainer } from './container/AddMediaContainer/index';
 import PlaylistAddContainer from './container/PlaylistAddContainer/index';
+import AddToPlaylistContainer from './container/AddToPlaylistContainer/index';
 
 const routeConfig = {
   login: {
@@ -88,7 +89,7 @@ const routeConfig = {
   },
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
-    component: AddFromFeed,
+    component: AddToPlaylistContainer,
     options: { title: 'Add Playlist', header: AppScreenHeader },
   },
   addMedia: {

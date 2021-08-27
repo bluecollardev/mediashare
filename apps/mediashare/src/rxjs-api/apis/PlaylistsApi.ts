@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { CreatePlaylistDto, CreatePlaylistResponseDto, PlaylistItemResponseDto, PlaylistResponseDto, ShareItem, UpdatePlaylistDto } from '../models';
+import { CreatePlaylistDto, CreatePlaylistResponseDto, Playlist, PlaylistItemResponseDto, PlaylistResponseDto, ShareItem, UpdatePlaylistDto } from '../models';
 
 export interface PlaylistControllerCreateRequest {
   createPlaylistDto: CreatePlaylistDto;
@@ -154,9 +154,12 @@ export class PlaylistsApi extends BaseAPI {
 
   /**
    */
-  playlistControllerUpdate({ playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest): Observable<void>;
-  playlistControllerUpdate({ playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
-  playlistControllerUpdate({ playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+  playlistControllerUpdate({ playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest): Observable<Playlist>;
+  playlistControllerUpdate({ playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Playlist>>;
+  playlistControllerUpdate(
+    { playlistId, updatePlaylistDto }: PlaylistControllerUpdateRequest,
+    opts?: OperationOpts
+  ): Observable<Playlist | RawAjaxResponse<Playlist>> {
     throwIfNullOrUndefined(playlistId, 'playlistId', 'playlistControllerUpdate');
     throwIfNullOrUndefined(updatePlaylistDto, 'updatePlaylistDto', 'playlistControllerUpdate');
 
@@ -164,7 +167,7 @@ export class PlaylistsApi extends BaseAPI {
       'Content-Type': 'application/json',
     };
 
-    return this.request<void>(
+    return this.request<Playlist>(
       {
         url: '/api/playlists/{playlistId}'.replace('{playlistId}', encodeURI(playlistId)),
         method: 'PUT',

@@ -35,6 +35,8 @@ import { CreatePlaylistDto } from '../models';
 // @ts-ignore
 import { CreatePlaylistResponseDto } from '../models';
 // @ts-ignore
+import { Playlist } from '../models';
+// @ts-ignore
 import { PlaylistItemResponseDto } from '../models';
 // @ts-ignore
 import { PlaylistResponseDto } from '../models';
@@ -356,7 +358,7 @@ export const PlaylistsApiFp = function (configuration?: Configuration) {
       playlistId: string,
       updatePlaylistDto: UpdatePlaylistDto,
       options?: any
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Playlist>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.playlistControllerUpdate(playlistId, updatePlaylistDto, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -430,7 +432,7 @@ export const PlaylistsApiFactory = function (configuration?: Configuration, base
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    playlistControllerUpdate(playlistId: string, updatePlaylistDto: UpdatePlaylistDto, options?: any): AxiosPromise<void> {
+    playlistControllerUpdate(playlistId: string, updatePlaylistDto: UpdatePlaylistDto, options?: any): AxiosPromise<Playlist> {
       return localVarFp.playlistControllerUpdate(playlistId, updatePlaylistDto, options).then((request) => request(axios, basePath));
     },
   };

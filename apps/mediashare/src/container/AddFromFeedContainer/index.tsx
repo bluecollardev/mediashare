@@ -42,7 +42,6 @@ const AddFromFeedContainer = () => {
     }
     const items = Array.from(selectedItems.values());
     const res = await dispatch(saveFeedMediaItems({ keys: items }));
-    console.log(res);
     goToMediaItems();
   };
   useEffect(() => {

@@ -20,7 +20,17 @@ export interface UpdatePlaylistDto {
    * @type {string}
    * @memberof UpdatePlaylistDto
    */
+  _id: string;
+  /**
+   * @type {string}
+   * @memberof UpdatePlaylistDto
+   */
   title: string;
+  /**
+   * @type {string}
+   * @memberof UpdatePlaylistDto
+   */
+  description: string;
   /**
    * @type {string}
    * @memberof UpdatePlaylistDto
@@ -30,7 +40,7 @@ export interface UpdatePlaylistDto {
    * @type {Array<string>}
    * @memberof UpdatePlaylistDto
    */
-  items?: Array<string>;
+  mediaIds?: Array<string>;
 }
 
 /**

@@ -23,7 +23,6 @@ const LibraryItemDetailContainer = ({ route }) => {
   const { mediaItem, loading, loaded } = useAppSelector((state) => state.mediaItem);
 
   const [isLoaded, setIsLoaded] = useState(loaded);
-  console.log(mediaItem);
   const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const { _id } = mediaItem || {};
   useEffect(() => {
@@ -43,7 +42,6 @@ const LibraryItemDetailContainer = ({ route }) => {
       </Container>
     );
   }
-  console.log(mediaItem);
   const { title, description, category, author } = mediaItem || {};
 
   return (

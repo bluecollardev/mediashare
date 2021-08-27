@@ -31,7 +31,7 @@ export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
     buttons,
     content,
     children,
-    showActions = false,
+    showActions = true,
     onEditClicked = () => {},
     category = '',
     onDeleteClicked = () => {},

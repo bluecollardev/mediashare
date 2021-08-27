@@ -11,7 +11,8 @@ import { getPlaylistById } from '../../state/modules/playlists/index';
 import { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import MediaList from '../../components/layout/MediaList';
-import { usePageRoute, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
+import { usePageRoute, useRouteWithParams, useViewMediaItem, useViewPlaylist } from '../../hooks/NavigationHooks';
+import { ListActionButton } from '../../components/layout/ListActionButton';
 export interface PlaylistDetailContainerProps {
   navigation: any;
   route: any;
@@ -25,6 +26,7 @@ export interface PlaylistDetailContainerState {}
 const PlaylistDetailContainer = ({ route }) => {
   const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
   const onViewMediaItemClicked = useViewMediaItem();
+  const onAddToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
 
   const onDeleteClicked = () => {};
   const dispatch = useDispatch();
@@ -67,7 +69,7 @@ const PlaylistDetailContainer = ({ route }) => {
           onDeleteClicked={onDeleteClicked}
         />
       </View>
-
+      <ListActionButton icon="add" label="Add Video From Library" actionCb={() => onAddToPlaylist({ playlistId })} />
       <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
     </Container>
   );

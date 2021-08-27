@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { EnumLiteralsOf } from '../lib/Generics';
 import { routeConfig, ROUTES } from '../routes';
-type RouteConfigKeyType = keyof typeof routeConfig;
+type RouteConfigKeyType = EnumLiteralsOf<typeof ROUTES>;
 type RouteParentKeyType = keyof Pick<typeof routeConfig, 'explore' | 'library' | 'playlists' | 'settings'>;
 
 export function useRouteName(key: RouteConfigKeyType) {
@@ -29,7 +29,7 @@ export function useViewMediaItem() {
   return ({ mediaId, uri }) => nav.navigate(ROUTES.libraryItemDetail, { mediaId, uri });
 }
 
-export function usePlaylist() {
+export function useViewPlaylist() {
   const nav = useNavigation();
-  return ({ playlistId }) => nav.navigate(ROUTES.playlistDetail, { playlistId, uri });
+  return ({ playlistId }) => nav.navigate(ROUTES.playlistDetail, { playlistId });
 }

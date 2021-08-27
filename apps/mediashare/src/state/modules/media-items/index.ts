@@ -33,9 +33,7 @@ export const clearMediaItemSelection = createAction('clearMediaItems');
 export const clearMediaItem = createAction('clearMediaItem');
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async ({ uri, mediaId }: { uri: string; mediaId: string }) => {
-  const result = await forkJoin({ mediaItem: apis.mediaItems.mediaItemControllerFindOne({ mediaId }).toPromise(), src: getStorage(uri) })
-    .pipe(tap((obs) => console.log(obs)))
-    .toPromise();
+  const result = await forkJoin({ mediaItem: apis.mediaItems.mediaItemControllerFindOne({ mediaId }).toPromise(), src: getStorage(uri) }).toPromise();
 
   return { mediaItem: result.mediaItem as MediaItemDto, src: result.src };
 });
@@ -79,7 +77,6 @@ export const addMediaItem = createAsyncThunk(
 
 export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
   const mediaItems = (await listStorage('uploads/')) as AwsMediaItem[];
-  console.log(mediaItems);
   return mediaItems.filter((item) => item.key !== 'uploads/').map((item) => ({ ...item, key: sanitizeFoldername(item.key) }));
 });
 

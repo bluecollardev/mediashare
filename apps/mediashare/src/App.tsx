@@ -47,8 +47,9 @@ function PlaylistsNavigation() {
     <PlaylistsStackNavigator.Navigator>
       <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
       {/* <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} /> */}
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
+
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
 
       <PlaylistsStackNavigator.Screen {...routeConfig.libraryItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />
@@ -66,19 +67,11 @@ function LibraryNavigation() {
       <LibraryStackNavigator.Screen {...routeConfig.libraryItemDetail} />
       <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
       <LibraryStackNavigator.Screen {...routeConfig.libraryItemEdit} />
-      <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
+      <LibraryStackNavigator.Screen {...routeConfig.addMedia} />
     </LibraryStackNavigator.Navigator>
   );
 }
 const PageStackNavigator = createStackNavigator();
-
-function PageNavigation() {
-  return (
-    <PageStackNavigator.Navigator>
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
-    </PageStackNavigator.Navigator>
-  );
-}
 
 const SettingsStackNavigator = createStackNavigator();
 const SettingsNavigation = () => {
@@ -147,12 +140,10 @@ function App() {
     <Provider store={store}>
       {isLoggedIn ? (
         <NavigationContainer>
-          <PageStackNavigator.Navigator>
+          <PageStackNavigator.Navigator screenOptions={{ headerShown: false }}>
             <PageStackNavigator.Screen component={TabNavigation} name={'home'} />
 
-            <LibraryStackNavigator.Screen {...routeConfig.addMedia} />
-
-            <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
+            <PageStackNavigator.Screen {...routeConfig.playlistEdit} options={{ headerShown: true }} />
           </PageStackNavigator.Navigator>
         </NavigationContainer>
       ) : (
