@@ -27,6 +27,35 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
     });
   }
 
+  findMediaItemWithDetail(id: ObjectId) {
+    return this.repository
+      .aggregate([
+        { $match: { _id: id } },
+
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              _id: '$_id',
+              author: '$user.username',
+              description: '$description',
+              category: '$category',
+              title: '$title',
+              userId: '$userId',
+            },
+          },
+        },
+      ])
+      .next();
+  }
+
   findMediaItemsByUserId(userId: ObjectId) {
     return this.repository.find({ userId });
   }

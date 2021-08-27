@@ -3,6 +3,7 @@ import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { UseJwtGuard } from '../../modules/auth/auth.decorator';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
+import { MediaItemDto } from './dto/media-item.dto';
 import { MediaItem } from './entities/media-item.entity';
 
 function MediaPostResponse({ isArray = false, type = MediaItem, description }: ApiControllerDecoratorParams = {}) {
@@ -13,7 +14,7 @@ function MediaPostResponse({ isArray = false, type = MediaItem, description }: A
   );
 }
 
-const MediaGetResponse = function ({ isArray = false, type = MediaItem }: ApiControllerDecoratorParams = {}) {
+const MediaGetResponse = function ({ isArray = false, type = MediaItemDto }: ApiControllerDecoratorParams = {}) {
   return applyDecorators(
     ApiResponse({ type, isArray, status: 200 })
     // UseJwtGuard()

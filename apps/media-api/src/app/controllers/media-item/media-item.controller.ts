@@ -54,11 +54,11 @@ export class MediaItemController {
     return MEDIA_CATEGORY;
   }
 
-  @MediaGetResponse()
   @Get(':mediaId')
+  @MediaGetResponse()
   @ApiParam({ name: 'mediaId', type: String, required: true })
   async findOne(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId) {
-    const mediaItem = await this.mediaItemService.findOne(mediaId);
+    const mediaItem = await this.mediaItemService.findMediaItemWithDetail(mediaId);
 
     if (!mediaItem) throw notFoundResponse('mediaItem', { args: { mediaId } });
     return mediaItem;
@@ -101,7 +101,7 @@ export class MediaItemController {
       createdBy,
       userId,
       mediaId,
-      title
+      title,
     });
     response.status(HttpStatus.CREATED);
 
