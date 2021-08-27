@@ -48,7 +48,7 @@ function PlaylistsNavigation() {
       <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.addPlaylist} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} />
       <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
 
       <PlaylistsStackNavigator.Screen {...routeConfig.libraryItemDetail} />

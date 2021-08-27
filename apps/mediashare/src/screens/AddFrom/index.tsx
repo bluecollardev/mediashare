@@ -24,9 +24,7 @@ function AddFrom({ onViewDetail = () => {}, items }: AddFromProps) {
   const dispatch = useDispatch();
 
   function toggleField(id: number) {
-    console.log(id);
     dispatch(toggleMediaItem(id));
-    console.log(items[id]);
   }
 
   return (

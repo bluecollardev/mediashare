@@ -14,7 +14,7 @@ export interface MediaListItemProps {
   showActions?: boolean;
   checked?: boolean;
   onViewDetail?: () => void;
-  onChecked?: () => void;
+  onChecked?: (bool: boolean) => void;
 }
 
 export const MediaListItem: React.FC<MediaListItemProps> = ({
@@ -42,7 +42,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
     <ListItem style={{ borderWidth: 0 }}>
       {selectable && (
         <Left style={{ width: '10%', flex: 1 }}>
-          <CheckBox value={isChecked} onValueChange={(v) => onChecked()} />
+          <CheckBox value={isChecked} onValueChange={(v) => onChecked(v)} />
         </Left>
       )}
       <Left style={{ width: '20%', flex: 1 }}>{!source ? <Thumbnail source={DEFAULT_IMAGE} square /> : <Thumbnail source={source} square />}</Left>

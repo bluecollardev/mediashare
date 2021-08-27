@@ -25,7 +25,7 @@ export const PlaylistsContainer = () => {
   const dispatch = useDispatch();
 
   const shareWithAction = useRouteName(ROUTES.shareWith);
-  const createPlaylistAction = useRouteName(ROUTES.addPlaylist);
+  const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
   const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
   const playlists = useAppSelector((state) => state.playlists);
   const initLoaded = useAppSelector((state) => state.playlists.loaded);
@@ -40,12 +40,10 @@ export const PlaylistsContainer = () => {
 
   useEffect(() => {
     if (!playlists.loaded && !playlists.loading) {
-      console.log('dispatched');
       loadData();
     }
   });
 
-  console.log('rendered');
   if (!loaded) {
     return <Text>Loading</Text>;
   }

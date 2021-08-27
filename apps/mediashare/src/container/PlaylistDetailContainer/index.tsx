@@ -1,12 +1,11 @@
 import { Container, Content, List, View } from 'native-base';
 import * as React from 'react';
-import { connect, useDispatch } from 'react-redux';
-import { MediaListItem } from '../../components/layout/MediaListItem';
+import { useDispatch } from 'react-redux';
+
 import { PlaylistCard } from '../../components/layout/PlaylistCard';
-import { routeConfig, ROUTES } from '../../routes';
+import { ROUTES } from '../../routes';
 import styles from '../../screens/Home/styles';
-import PlaylistDetail from '../../screens/PlaylistDetail';
-import { getUserPlaylistById } from '../../state/modules/playlists';
+
 import { useAppSelector } from '../../state/index';
 import { getPlaylistById } from '../../state/modules/playlists/index';
 import { useEffect, useState } from 'react';
@@ -23,7 +22,7 @@ export interface PlaylistDetailContainerProps {
 }
 export interface PlaylistDetailContainerState {}
 
-const PlaylistDetailContainer = ({ route, navigation, data }) => {
+const PlaylistDetailContainer = ({ route }) => {
   const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
   const onViewMediaItemClicked = usePageRoute('library', 'libraryItemDetail', {});
 

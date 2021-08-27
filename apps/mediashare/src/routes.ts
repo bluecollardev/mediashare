@@ -14,6 +14,7 @@ import Settings from './container/SettingsContainer';
 
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
 import { AddMediaContainer } from './container/AddMediaContainer/index';
+import PlaylistAddContainer from './container/PlaylistAddContainer/index';
 
 const routeConfig = {
   login: {
@@ -48,6 +49,11 @@ const routeConfig = {
   playlistEdit: {
     name: 'playlistEdit',
     component: PlaylistEdit,
+    options: { title: 'Edit Playlist', header: AppScreenHeader },
+  },
+  playlistAdd: {
+    name: 'playlistAdd',
+    component: PlaylistAddContainer,
     options: { title: 'Edit Playlist', header: AppScreenHeader },
   },
   library: {

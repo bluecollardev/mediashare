@@ -1,18 +1,19 @@
-import { List, View, Text } from 'native-base';
-import React, { ReactNode } from 'react';
+import { List, View } from 'native-base';
+import React from 'react';
 
 import { StyleSheet } from 'react-native';
-import { routeConfig } from '../../routes';
-import { MediaItem, MediaItemDto } from '../../rxjs-api';
+import { MediaItem } from '../../rxjs-api';
 import { MediaListItem } from './MediaListItem';
 
 interface MediaListProps {
   list: MediaItem[];
   onViewDetail: (item: MediaItem) => void;
   isSelectable: boolean;
+  addItem?: (item?: MediaItem) => void;
+  removeItem?: (item?: MediaItem) => void;
 }
 
-function MediaList({ list, onViewDetail, isSelectable }: MediaListProps) {
+function MediaList({ list, onViewDetail, isSelectable, addItem = () => {}, removeItem = () => {} }: MediaListProps) {
   return (
     <View>
       <List>
@@ -25,6 +26,7 @@ function MediaList({ list, onViewDetail, isSelectable }: MediaListProps) {
               description={description}
               image={thumbnail}
               selectable={isSelectable}
+              onChecked={(v) => (v ? addItem(item) : removeItem(item))}
               onViewDetail={() => onViewDetail(item)}
             />
           );

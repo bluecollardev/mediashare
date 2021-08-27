@@ -89,11 +89,7 @@ export const removeUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.r
 export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Add playlistControllerRemoveItem to API service!
-  console.log(id);
   const response = await api.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
-  console.log('🚀 --------------------------------------------------------------------');
-  console.log('🚀 ~ file: index.ts ~ line 94 ~ getPlaylistById ~ response', response);
-  console.log('🚀 --------------------------------------------------------------------');
 
   return response;
 });
@@ -132,7 +128,6 @@ const playlistReducer = createReducer(initialPlaylistState, (builder) => {
       return { ...state, loading: false };
     })
     .addCase(getPlaylistById.fulfilled, (state, action) => {
-      console.log(action);
       return { ...state, selectedPlaylist: action.payload, loading: false };
     });
 });

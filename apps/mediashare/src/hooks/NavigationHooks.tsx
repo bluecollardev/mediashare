@@ -19,3 +19,7 @@ export function usePageRoute(key: RouteParentKeyType, child: RouteConfigKeyType,
   const nav = useNavigation();
   return () => nav.navigate(key, { screen: child });
 }
+export function useGoBack() {
+  const nav = useNavigation();
+  return () => nav.goBack();
+}
