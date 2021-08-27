@@ -30,7 +30,7 @@ export const PlaylistsContainer = () => {
   const playlists = useAppSelector((state) => state.playlists);
   const initLoaded = useAppSelector((state) => state.playlists.loaded);
 
-  const [loaded, setLoaded] = useState(initLoaded);
+  const [loaded, setLoaded] = useState(false);
 
   const loadData = async function () {
     await dispatch(findUserPlaylists({}));
@@ -39,10 +39,11 @@ export const PlaylistsContainer = () => {
   };
 
   useEffect(() => {
-    if (!playlists.loaded && !playlists.loading) {
+    if (!loaded) {
       loadData();
+      setLoaded(true);
     }
-  });
+  }, [loaded]);
 
   if (!loaded) {
     return <Text>Loading</Text>;

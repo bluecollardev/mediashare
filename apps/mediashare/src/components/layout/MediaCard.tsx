@@ -38,7 +38,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     onActionsClicked = () => {},
     children,
     category = '',
-    isEdit = true,
+    isEdit = false,
     onTitleChange = (v: string) => {},
     onDescriptionChange = (v: string) => {},
     onCategoryChange = (v: string) => {},

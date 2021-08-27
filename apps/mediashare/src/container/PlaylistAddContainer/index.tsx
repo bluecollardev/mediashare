@@ -5,7 +5,8 @@ import { useDispatch } from 'react-redux';
 import ActionButtons from '../../components/layout/ActionButtons';
 import { MediaCard } from '../../components/layout/MediaCard';
 import MediaList from '../../components/layout/MediaList';
-import { useGoBack } from '../../hooks/NavigationHooks';
+import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { ROUTES } from '../../routes';
 import { CreateMediaItemDto, CreatePlaylistDto, CreatePlaylistDtoCategoryEnum, MediaItem } from '../../rxjs-api';
 import styles from '../../screens/Home/styles';
 import { useAppSelector } from '../../state';
@@ -33,9 +34,10 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
     goBack();
   };
 
+  const goToItem = useRouteWithParams(ROUTES.playlistDetail);
+
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
-  const actionCb = () => {};
   const cancelCb = clearAndGoBack;
 
   const dispatch = useDispatch();
@@ -74,8 +76,9 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
       createdBy: '',
     };
     console.log(dto);
-    await dispatch(addUserPlaylist(dto));
-    clearAndGoBack();
+    const res = await dispatch(addUserPlaylist(dto));
+    const item = res as any;
+    goToItem({ playlistId: item.payload.playlist._id });
   };
   console.log(title);
 
@@ -92,6 +95,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
           onCategoryChange={onCategoryChange as any}
           onTitleChange={onTitleChange}
           onDescriptionChange={onDescriptionChange}
+          isEdit={true}
         />
       </View>
       <Content>
