@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Text, Button, Icon, Left, Body, Right, CardItem, Card, View, Input, Textarea, Picker, Item } from 'native-base';
-import { Image, StyleSheet } from 'react-native';
+import { Text, Button, Icon, Left, Body, Right, CardItem, Card, View, Input, Textarea, Picker, Item, Image } from 'native-base';
+import { StyleSheet } from 'react-native';
 import Video from 'react-native-video';
 import { dispatch } from 'rxjs/internal/observable/pairs';
 import { setDescription } from '../../state/modules/create-playlist';
+import { usePreviewImage } from '../../hooks/UsePreviewImage';
 
 export interface MediaListItemProps {
-  navigation?: any;
   mediaSrc?: string | null;
   title?: string;
   author?: string;
@@ -31,7 +31,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     title = '',
     author = '',
     description = '',
-    mediaSrc = null,
+    mediaSrc,
     showSocial = false,
     buttons = false,
     showActions = false,
@@ -91,7 +91,6 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           </Right>
         )}
       </CardItem>
-
       <CardItem>
         {isEdit ? (
           <Textarea rowSpan={5} style={{ width: '100%' }} bordered onChange={(e) => onDescriptionChange(e.nativeEvent.text)} value={description} />
@@ -132,7 +131,6 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     </Card>
   );
 };
-
 const styles = StyleSheet.create({
   input: {},
   title: {

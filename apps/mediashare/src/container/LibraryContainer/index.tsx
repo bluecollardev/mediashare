@@ -2,13 +2,18 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import Library from '../../screens/Library';
 
-import { findMediaItems } from '../../state/modules/media-items';
+import { findMediaItems, getMediaItemById, selectMediaItem } from '../../state/modules/media-items';
 
 import { useAppSelector } from '../../state/index';
 import { Button, Container, Content, Icon, Text, View } from 'native-base';
-import { routeConfig } from '../../routes';
+import { routeConfig, ROUTES } from '../../routes';
 import styles from '../../screens/Home/styles';
 import { useEffect, useState } from 'react';
+import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { ListActionButton } from '../../components/layout/ListActionButton';
+import ActionButtons from '../../components/layout/ActionButtons';
+import TopActionButtons from '../../components/layout/TopActionButtons';
+import { MediaItem } from '../../rxjs-api';
 
 export interface LibraryContainerProps {
   navigation: any;
@@ -17,11 +22,18 @@ export interface LibraryContainerProps {
   state: Object;
 }
 const LibraryContainer = (props: { navigation: any }) => {
-  const { navigation } = props;
   const dispatch = useDispatch();
-  const { loaded, loading, mediaItems } = useAppSelector((state) => state.mediaItems);
+  const addFromLibrary = useRouteName(ROUTES.addFromLibrary);
+  const addFromFeed = useRouteName(ROUTES.addFromFeed);
+  const addMedia = useRouteName(ROUTES.addMediaItem);
+  const viewMedia = useRouteWithParams(ROUTES.libraryItemDetail);
+
+  const { loaded, mediaItems } = useAppSelector((state) => state.mediaItems);
 
   const [isLoaded, setIsLoaded] = useState(loaded);
+  const onViewItem = async function (item: MediaItem) {
+    viewMedia({ mediaId: item._id, uri: item.uri });
+  };
 
   useEffect(() => {
     if (!isLoaded) {
@@ -32,48 +44,10 @@ const LibraryContainer = (props: { navigation: any }) => {
 
   return (
     <Container style={styles.container}>
-      <View padder style={{ flexDirection: 'row' }}>
-        <Button
-          iconLeft
-          bordered
-          dark
-          style={{ flex: 1, marginRight: 10 }}
-          onPress={() => navigation.navigate(routeConfig.addFromFeed.name, { state: 'create' })}
-        >
-          <Icon name="add-outline" />
-          <Text style={{ paddingRight: 30 }}>Add From Feed</Text>
-        </Button>
-        <Button
-          iconLeft
-          bordered
-          dark
-          style={{ flex: 1 }}
-          onPress={() => {
-            navigation.navigate(routeConfig.addMedia.name);
-          }}
-        >
-          <Icon name="add-outline" />
-          <Text style={{ paddingRight: 30 }}>Add Media</Text>
-        </Button>
-      </View>
+      <TopActionButtons leftAction={addFromFeed} rightAction={addMedia} leftLabel="Add from Feed" rightLabel="Add Media" />
 
-      <Content>
-        <Library navigation={props.navigation} list={mediaItems} />
-      </Content>
-      <View padder style={{ flexDirection: 'row' }}>
-        <Button
-          iconLeft
-          bordered
-          dark
-          style={{ flex: 1, justifyContent: 'center' }}
-          onPress={() => {
-            navigation.navigate(routeConfig.addFromLibrary.name);
-          }}
-        >
-          <Icon name="add-outline" />
-          <Text style={{ paddingRight: 30 }}>Add to Playlist</Text>
-        </Button>
-      </View>
+      <Library navigation={props.navigation} list={mediaItems} onViewDetail={onViewItem} />
+      <ListActionButton actionCb={() => addFromLibrary()} label={'Add to Playlist'} icon="add" />
     </Container>
   );
 };

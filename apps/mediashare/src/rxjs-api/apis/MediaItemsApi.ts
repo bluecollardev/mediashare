@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { CreateMediaItemDto, MediaItem, ShareItem, UpdateMediaItemDto } from '../models';
+import { CreateMediaItemDto, MediaItem, MediaItemDto, ShareItem, UpdateMediaItemDto } from '../models';
 
 export interface MediaItemControllerCreateRequest {
   createMediaItemDto: CreateMediaItemDto;
@@ -69,10 +69,10 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerFindAll(): Observable<Array<MediaItem>>;
-  mediaItemControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItem>>>;
-  mediaItemControllerFindAll(opts?: OperationOpts): Observable<Array<MediaItem> | RawAjaxResponse<Array<MediaItem>>> {
-    return this.request<Array<MediaItem>>(
+  mediaItemControllerFindAll(): Observable<Array<MediaItemDto>>;
+  mediaItemControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
+  mediaItemControllerFindAll(opts?: OperationOpts): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
+    return this.request<Array<MediaItemDto>>(
       {
         url: '/api/media-items',
         method: 'GET',
@@ -83,12 +83,12 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest): Observable<MediaItem>;
-  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>;
-  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
+  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest): Observable<MediaItemDto>;
+  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItemDto>>;
+  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<MediaItemDto | RawAjaxResponse<MediaItemDto>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerFindOne');
 
-    return this.request<MediaItem>(
+    return this.request<MediaItemDto>(
       {
         url: '/api/media-items/{mediaId}'.replace('{mediaId}', encodeURI(mediaId)),
         method: 'GET',

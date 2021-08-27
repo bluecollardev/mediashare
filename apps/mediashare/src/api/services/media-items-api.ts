@@ -35,6 +35,8 @@ import { CreateMediaItemDto } from '../models';
 // @ts-ignore
 import { MediaItem } from '../models';
 // @ts-ignore
+import { MediaItemDto } from '../models';
+// @ts-ignore
 import { ShareItem } from '../models';
 // @ts-ignore
 import { UpdateMediaItemDto } from '../models';
@@ -296,7 +298,7 @@ export const MediaItemsApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async mediaItemControllerFindAll(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MediaItem>>> {
+    async mediaItemControllerFindAll(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MediaItemDto>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.mediaItemControllerFindAll(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -306,7 +308,7 @@ export const MediaItemsApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async mediaItemControllerFindOne(mediaId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaItem>> {
+    async mediaItemControllerFindOne(mediaId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaItemDto>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.mediaItemControllerFindOne(mediaId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -385,7 +387,7 @@ export const MediaItemsApiFactory = function (configuration?: Configuration, bas
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    mediaItemControllerFindAll(options?: any): AxiosPromise<Array<MediaItem>> {
+    mediaItemControllerFindAll(options?: any): AxiosPromise<Array<MediaItemDto>> {
       return localVarFp.mediaItemControllerFindAll(options).then((request) => request(axios, basePath));
     },
     /**
@@ -394,7 +396,7 @@ export const MediaItemsApiFactory = function (configuration?: Configuration, bas
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    mediaItemControllerFindOne(mediaId: string, options?: any): AxiosPromise<MediaItem> {
+    mediaItemControllerFindOne(mediaId: string, options?: any): AxiosPromise<MediaItemDto> {
       return localVarFp.mediaItemControllerFindOne(mediaId, options).then((request) => request(axios, basePath));
     },
     /**

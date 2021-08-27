@@ -21,7 +21,7 @@ export interface AddFromFeedContainerProps {
 }
 export interface AddFromFeedContainerState {}
 
-const AddFromFeedContainer = ({ navigation, route }) => {
+const AddFromFeedContainer = () => {
   const dispatch = useDispatch();
   const goToMediaItems = useRouteName(ROUTES.library);
   const selectedItems = new Set<string>();
@@ -32,8 +32,6 @@ const AddFromFeedContainer = ({ navigation, route }) => {
   const removeItemCb = function (id: string) {
     selectedItems.delete(id);
   };
-
-  const isCreate = route?.params.state;
 
   const [loaded, setLoaded] = React.useState(false);
   const items = useAppSelector((state) => state.mediaItem.feed);

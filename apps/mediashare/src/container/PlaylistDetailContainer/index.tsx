@@ -68,7 +68,6 @@ const PlaylistDetailContainer = ({ route }) => {
             onEditClicked={() => onEditClicked({ playlistId })}
             onDeleteClicked={onDeleteClicked}
           />
-          {/* <PlaylistDetail navigation={navigation} list={data} /> */}
           <MediaList onViewDetail={onViewMediaItemClicked} list={items} isSelectable={false} />
         </View>
       </Content>

@@ -14,26 +14,22 @@ export interface LibraryProps {
 }
 
 export interface LibraryState {}
-const Library = ({ navigation, list }: { navigation: any; list: MediaItem[] }) => {
+const Library = ({ onViewDetail, list }: { navigation: any; list: MediaItem[]; onViewDetail: any }) => {
   const dispatch = useDispatch();
 
-  const viewItem = async function (item: MediaItem) {
-    dispatch(getMediaItemById(item.uri));
-    dispatch(selectMediaItem(item));
-    navigation.navigate(routeConfig.libraryItemDetail.name);
-  };
-
   return (
-    <View>
-      <List>
-        {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
-        {list.map((item, idx) => {
-          const { title, description, thumbnail } = item;
-          return <MediaListItem key={`item-${idx}`} title={title} description={description} image={thumbnail} onViewDetail={() => viewItem(list[idx])} />;
-        })}
-        {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
-      </List>
-    </View>
+    <Content>
+      <View>
+        <List>
+          {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
+          {list.map((item, idx) => {
+            const { title, description, thumbnail } = item;
+            return <MediaListItem key={`item-${idx}`} title={title} description={description} image={thumbnail} onViewDetail={() => onViewDetail(item)} />;
+          })}
+          {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
+        </List>
+      </View>
+    </Content>
   );
 };
 

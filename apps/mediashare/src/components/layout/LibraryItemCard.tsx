@@ -14,6 +14,7 @@ export interface LibraryItemCardProps {
   showActions?: boolean;
   onEditClicked?: () => void;
   onDeleteClicked?: () => void;
+  category?: string;
 }
 
 const mediaCardButtons = ['Edit', 'Delete', 'Cancel'];
@@ -23,16 +24,17 @@ const cancel_idx = 2;
 export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
   const {
     navigation,
-    title,
-    author,
-    description,
+    title = '',
+    author = '',
+    description = '',
     image,
     buttons,
     content,
     children,
     showActions = false,
     onEditClicked = () => {},
-    onDeleteClicked = () => {}
+    category = '',
+    onDeleteClicked = () => {},
   } = props;
 
   const showCardMenu = () => {
@@ -40,7 +42,7 @@ export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
       {
         options: mediaCardButtons,
         cancelButtonIndex: cancel_idx,
-        destructiveButtonIndex: destructive_idx
+        destructiveButtonIndex: destructive_idx,
       },
       (buttonIdx) => {
         switch (buttonIdx) {
@@ -57,16 +59,16 @@ export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
 
   return (
     <MediaCard
-      navigation={navigation}
       title={title}
       author={author}
       description={description}
       mediaSrc={image}
-      buttons={buttons}
-      content={content}
-      children={children}
+      category={category}
       showActions={showActions}
       onActionsClicked={showCardMenu}
+      buttons={buttons}
+      showSocial={true}
+      children={children}
     />
   );
 };

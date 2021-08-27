@@ -55,7 +55,6 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
 
   return (
     <MediaCard
-      navigation={navigation}
       title={title}
       author={author}
       description={description}
