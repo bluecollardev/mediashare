@@ -12,9 +12,7 @@ export interface LibraryItemDetailProps extends MediaDetailProps {
 export interface LibraryItemDetailState extends MediaDetailState {}
 
 import styles from './styles';
-import { PlaylistCard } from '../../components/layout/PlaylistCard';
 import { routeConfig } from '../../routes';
-import { AwsMediaItem } from '../../state/modules/media-items/aws-media-item.model';
 import { MediaViewItem } from '../../state/modules/media-items/media-view-item.model';
 
 type LibraryDetailProps = { navigation?: any; item: MediaViewItem; src: string };
@@ -32,20 +30,14 @@ const LibraryItemDetail = ({ navigation, item, src }: LibraryDetailProps) => {
   const onDeleteClicked = () => {};
 
   return (
-    <Container style={styles.container}>
-      <Content>
-        <View padder>
-          <LibraryItemCard
-            title={item.title}
-            description={item.description}
-            image={src}
-            showActions={true}
-            onEditClicked={onEditClicked}
-            onDeleteClicked={onDeleteClicked}
-          />
-        </View>
-      </Content>
-    </Container>
+    <LibraryItemCard
+      title={item.title}
+      description={item.description}
+      image={src}
+      showActions={true}
+      onEditClicked={onEditClicked}
+      onDeleteClicked={onDeleteClicked}
+    />
   );
 };
 

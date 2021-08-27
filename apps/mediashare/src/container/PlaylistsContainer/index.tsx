@@ -28,7 +28,6 @@ export const PlaylistsContainer = () => {
   const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
   const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
   const playlists = useAppSelector((state) => state.playlists);
-  const initLoaded = useAppSelector((state) => state.playlists.loaded);
 
   const [loaded, setLoaded] = useState(false);
 
@@ -43,6 +42,7 @@ export const PlaylistsContainer = () => {
       loadData();
       setLoaded(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
 
   if (!loaded) {

@@ -7,13 +7,25 @@ import * as reducers from '../../core/reducers';
 import { apis, ApiService } from '../../apis';
 import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
 import { MediaItem } from '../../../rxjs-api';
-import { uploadMedia, getStorage } from './storage';
+import { uploadMedia, getStorage, listStorage, copyStorage, sanitizeFoldername, deleteStorage } from './storage';
 import { KeyFactory } from './key-factory';
 import { getAllMedia } from './media-items';
 import { bindActionCreators } from 'redux';
+import { AwsMediaItem } from './aws-media-item.model';
+import { merge, of, concat } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 const MEDIA_ITEMS_ACTIONS = ['FIND_MEDIA_ITEMS'] as const;
-const MEDIA_ITEM_ACTIONS = ['GET_MEDIA_ITEM', 'ADD_MEDIA_ITEM', 'UPDATE_MEDIA_ITEM', 'SHARE_MEDIA_ITEM', 'REMOVE_MEDIA_ITEM', 'UPLOAD_MEDIA_ITEM'] as const;
+const MEDIA_ITEM_ACTIONS = [
+  'GET_MEDIA_ITEM',
+  'ADD_MEDIA_ITEM',
+  'UPDATE_MEDIA_ITEM',
+  'SHARE_MEDIA_ITEM',
+  'REMOVE_MEDIA_ITEM',
+  'UPLOAD_MEDIA_ITEM',
+  'FEED_MEDIA_ITEMS',
+  'SAVE_FEED_MEDIA_ITEMS',
+] as const;
 export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
 export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
 
@@ -67,6 +79,32 @@ export const addMediaItem = createAsyncThunk(
   }
 );
 
+export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
+  const mediaItems = (await listStorage('uploads/')) as AwsMediaItem[];
+  console.log(mediaItems);
+  return mediaItems.filter((item) => item.key !== 'uploads/').map((item) => ({ ...item, key: sanitizeFoldername(item.key) }));
+});
+
+export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ keys }: { keys: string[] }) => {
+  // const promises = ;
+  const copy = keys.map((key) => copyStorage(key));
+
+  const dtos: CreateMediaItemDto[] = keys.map((key) => ({
+    description: `Uploaded to bucket on ${Date.now()}`,
+    title: key,
+    thumbnail: 'thumbnail/' + key,
+    video: 'video/' + key,
+    uri: 'video/' + key,
+  }));
+
+  const dtoPromises = dtos.map((dto) => apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto: dto }));
+  const save = merge(...dtoPromises).pipe(tap((res) => console.log(res)));
+  const deleted = keys.map((key) => deleteStorage('uploads/' + key));
+
+  const result = await concat(copy, save, deleted).toPromise();
+  return result;
+});
+
 export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (item: UpdateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.mediaItems.mediaItemControllerUpdate({ mediaId: item._id, updateMediaItemDto: item });
@@ -107,6 +145,7 @@ const initialMediaItemState: {
   file: any;
   mediaItem: MediaItem;
   mediaSrc: string;
+  feed: AwsMediaItem[];
   createState: 'submitting' | 'progress' | 'empty';
 } = {
   getMediaItem: null,
@@ -115,6 +154,7 @@ const initialMediaItemState: {
   file: null,
   mediaSrc: null,
   createState: 'empty',
+  feed: null,
 };
 
 export const MEDIA_ITEMS_STATE_KEY = 'mediaItems';
@@ -139,6 +179,17 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
     .addCase(addMediaItem.fulfilled, (state, action) => {
       return { ...state, loading: false, mediaItem: action.payload, createState: 'submitting' };
     })
+    .addCase(getFeedMediaItems.pending, (state) => {
+      return { ...state, loading: true };
+    })
+    .addCase(getFeedMediaItems.rejected, (state) => {
+      return { ...state, loading: false };
+    })
+
+    .addCase(getFeedMediaItems.fulfilled, (state, action) => {
+      return { ...state, loading: false, feed: action.payload };
+    })
+
     .addCase(selectMediaItem, (state, action) => {
       return { ...state, mediaItem: action.payload };
     })
@@ -173,6 +224,17 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
     })
     .addCase(clearMediaItemSelection, (state) => {
       return { ...state, mediaItems: [] };
+    })
+
+    .addCase(saveFeedMediaItems.pending, (state) => {
+      return { ...state, loading: true };
+    })
+    .addCase(saveFeedMediaItems.rejected, (state) => {
+      return { ...state, loading: false };
+    })
+
+    .addCase(saveFeedMediaItems.fulfilled, (state) => {
+      return { ...state, loading: false, loaded: false };
     });
 });
 

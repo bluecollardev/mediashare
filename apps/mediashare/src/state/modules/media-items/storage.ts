@@ -14,9 +14,24 @@ export interface PutStorageParams {
   key: string;
   options?: StorageOptions;
 }
-
+export function sanitizeFoldername(key: string) {
+  const test = key.replace(/(uploads\/)/, '');
+  return test;
+}
 export function getStorage(key: string) {
   return Storage.get(key);
+}
+
+export function deleteStorage(key: string) {
+  return Storage.remove(key);
+}
+
+export function listStorage(key: string) {
+  return Storage.list(key);
+}
+
+export function copyStorage(key) {
+  return Storage.copy({ key: 'uploads/' + key }, { key: 'video/' + key });
 }
 
 export function putToS3({ key, file, options = {} }: PutStorageParams) {

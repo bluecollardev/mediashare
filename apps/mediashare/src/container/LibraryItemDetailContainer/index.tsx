@@ -12,24 +12,23 @@ export interface LibraryItemDetailContainerProps {
 export interface LibraryItemDetailContainerState {}
 
 const LibraryItemDetailContainer = (props) => {
+  const onEditClicked = () => {};
+  const onDeleteClicked = () => {};
   const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
   const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
 
   return (
     <Container style={styles.container}>
-      <Content>
-        <View padder>
-          <LibraryItemCard
-            title={mediaItem.title}
-            description={mediaItem.description}
-            image={mediaItemSrc}
-            showActions={true}
-            onEditClicked={() => console.log('clicked')}
-            onDeleteClicked={() => console.log('clicked')}
-            content={mediaItem.summary}
-          />
-        </View>
-      </Content>
+      <View padder>
+        <LibraryItemCard
+          title={mediaItem.title}
+          description={mediaItem.description}
+          image={mediaItemSrc}
+          showActions={true}
+          onEditClicked={onEditClicked}
+          onDeleteClicked={onDeleteClicked}
+        />
+      </View>
     </Container>
   );
 };

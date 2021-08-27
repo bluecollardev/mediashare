@@ -97,7 +97,7 @@ const TabNavigator = createBottomTabNavigator();
 function TabNavigation() {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Playlists'}
+      initialRouteName={'Library'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {

@@ -2,15 +2,10 @@ import * as React from 'react';
 import { Container, Content, View, Text, Button, Icon, List, CardItem } from 'native-base';
 import { MediaListItem } from '../../components/layout/MediaListItem';
 import { routeConfig } from '../../routes';
-import styles from './styles';
-import { useState } from 'react';
-import Video from 'react-native-video';
-import { AwsMediaItem } from '../../state/modules/media-items/aws-media-item.model';
+
 import { useDispatch } from 'react-redux';
 import { getMediaItemById, selectMediaItem } from '../../state/modules/media-items/index';
-import { MediaViewItem } from '../../state/modules/media-items/media-view-item.model';
-import { Storage } from 'aws-amplify';
-import { S3Image } from 'aws-amplify-react-native';
+
 import { MediaItem } from '../../rxjs-api';
 
 export interface LibraryProps {

@@ -8,6 +8,7 @@ import { useAppSelector } from '../../state/index';
 import { Button, Container, Content, Icon, Text, View } from 'native-base';
 import { routeConfig } from '../../routes';
 import styles from '../../screens/Home/styles';
+import { useEffect, useState } from 'react';
 
 export interface LibraryContainerProps {
   navigation: any;
@@ -18,13 +19,16 @@ export interface LibraryContainerProps {
 const LibraryContainer = (props: { navigation: any }) => {
   const { navigation } = props;
   const dispatch = useDispatch();
-
   const { loaded, loading, mediaItems } = useAppSelector((state) => state.mediaItems);
 
-  if (!loaded && !loading && mediaItems.length < 1) {
-    console.log('dispatched');
-    dispatch(findMediaItems());
-  }
+  const [isLoaded, setIsLoaded] = useState(loaded);
+
+  useEffect(() => {
+    if (!isLoaded) {
+      dispatch(findMediaItems());
+      setIsLoaded(true);
+    }
+  }, [isLoaded, dispatch]);
 
   return (
     <Container style={styles.container}>
@@ -52,6 +56,7 @@ const LibraryContainer = (props: { navigation: any }) => {
           <Text style={{ paddingRight: 30 }}>Add Media</Text>
         </Button>
       </View>
+
       <Content>
         <Library navigation={props.navigation} list={mediaItems} />
       </Content>
