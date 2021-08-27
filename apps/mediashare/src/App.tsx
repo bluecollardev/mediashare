@@ -35,7 +35,7 @@ const ExploreNavigation = () => {
     <ExploreStackNavigator.Navigator>
       <ExploreStackNavigator.Screen {...routeConfig.explore} />
       <ExploreStackNavigator.Screen {...routeConfig.playlistDetail} />
-      <ExploreStackNavigator.Screen {...routeConfig.libraryItemDetail} />
+
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />
     </ExploreStackNavigator.Navigator>
   );
@@ -46,14 +46,14 @@ function PlaylistsNavigation() {
   return (
     <PlaylistsStackNavigator.Navigator>
       <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
+      {/* <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} /> */}
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} />
-      <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
 
       <PlaylistsStackNavigator.Screen {...routeConfig.libraryItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />
       <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
     </PlaylistsStackNavigator.Navigator>
   );
 }
@@ -64,13 +64,19 @@ function LibraryNavigation() {
     <LibraryStackNavigator.Navigator>
       <LibraryStackNavigator.Screen {...routeConfig.library} />
       <LibraryStackNavigator.Screen {...routeConfig.libraryItemDetail} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
+      <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
       <LibraryStackNavigator.Screen {...routeConfig.libraryItemEdit} />
       <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
-      {/* TODO: Add to playlist! */}
-      <LibraryStackNavigator.Screen {...routeConfig.addMedia} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
     </LibraryStackNavigator.Navigator>
+  );
+}
+const PageStackNavigator = createStackNavigator();
+
+function PageNavigation() {
+  return (
+    <PageStackNavigator.Navigator>
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
+    </PageStackNavigator.Navigator>
   );
 }
 
@@ -97,7 +103,7 @@ const TabNavigator = createBottomTabNavigator();
 function TabNavigation() {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Library'}
+      initialRouteName={'Playlists'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {
@@ -141,7 +147,13 @@ function App() {
     <Provider store={store}>
       {isLoggedIn ? (
         <NavigationContainer>
-          <TabNavigation />
+          <PageStackNavigator.Navigator>
+            <PageStackNavigator.Screen component={TabNavigation} name={'home'} />
+
+            <LibraryStackNavigator.Screen {...routeConfig.addMedia} />
+
+            <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
+          </PageStackNavigator.Navigator>
         </NavigationContainer>
       ) : (
         <LoginContainer />

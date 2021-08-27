@@ -13,6 +13,7 @@ export interface PlaylistCardProps {
   showActions?: boolean;
   onEditClicked?: () => void;
   onDeleteClicked?: () => void;
+  isEdit?: boolean;
 }
 
 const mediaCardButtons = ['Edit', 'Delete', 'Cancel'];
@@ -28,6 +29,7 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
     showSocial,
     buttons,
     children,
+    isEdit = false,
     showActions = false,
     onEditClicked = () => {},
     onDeleteClicked = () => {},
@@ -63,6 +65,7 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
       children={children}
       showActions={showSocial}
       onActionsClicked={showCardMenu}
+      isEdit={isEdit}
     />
   );
 };

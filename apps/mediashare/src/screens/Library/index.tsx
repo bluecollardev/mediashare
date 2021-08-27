@@ -21,12 +21,10 @@ const Library = ({ onViewDetail, list }: { navigation: any; list: MediaItemDto[]
     <Content>
       <View>
         <List>
-          {/* <ListItemGroup key={'group1'} text={'Group 1'} /> */}
           {list.map((item, idx) => {
             const { title, description, thumbnail } = item;
             return <MediaListItem key={`item-${idx}`} title={title} description={description} image={thumbnail} onViewDetail={() => onViewDetail(item)} />;
           })}
-          {/* <ListItemGroup key={'group2'} text={'Group 2'} /> */}
         </List>
       </View>
     </Content>

@@ -15,11 +15,21 @@ export function useRouteWithParams(key: EnumLiteralsOf<typeof ROUTES>) {
   return (params: { [x: string]: string }) => nav.navigate(key, params);
 }
 
-export function usePageRoute(key: RouteParentKeyType, child: RouteConfigKeyType, params: Record<string, string | number>) {
+export function usePageRoute(key: RouteParentKeyType, child: RouteConfigKeyType) {
   const nav = useNavigation();
-  return () => nav.navigate(key, { screen: child });
+  return (params: Record<string, string | number>) => nav.navigate(key, { screen: child, params });
 }
 export function useGoBack() {
   const nav = useNavigation();
   return () => nav.goBack();
+}
+
+export function useViewMediaItem() {
+  const nav = useNavigation();
+  return ({ mediaId, uri }) => nav.navigate(ROUTES.libraryItemDetail, { mediaId, uri });
+}
+
+export function usePlaylist() {
+  const nav = useNavigation();
+  return ({ playlistId }) => nav.navigate(ROUTES.playlistDetail, { playlistId, uri });
 }

@@ -11,7 +11,7 @@ import { getPlaylistById } from '../../state/modules/playlists/index';
 import { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import MediaList from '../../components/layout/MediaList';
-import { usePageRoute, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { usePageRoute, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 export interface PlaylistDetailContainerProps {
   navigation: any;
   route: any;
@@ -24,13 +24,13 @@ export interface PlaylistDetailContainerState {}
 
 const PlaylistDetailContainer = ({ route }) => {
   const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
-  const onViewMediaItemClicked = usePageRoute('library', 'libraryItemDetail', {});
+  const onViewMediaItemClicked = useViewMediaItem();
 
   const onDeleteClicked = () => {};
   const dispatch = useDispatch();
 
   const loadData = async function () {
-    await dispatch(dispatch(getPlaylistById(playlistId)));
+    await dispatch(getPlaylistById(playlistId));
 
     setLoaded(true);
   };
@@ -52,25 +52,23 @@ const PlaylistDetailContainer = ({ route }) => {
   const { description = '', title = '', user } = selectedPlaylist || {};
 
   const items = selectedPlaylist?.mediaItems || [];
-
   const author = user?.username;
 
   return (
     <Container style={styles.container}>
-      <Content>
-        <View padder>
-          <PlaylistCard
-            title={title}
-            author={author}
-            description={description}
-            showSocial={true}
-            showActions={true}
-            onEditClicked={() => onEditClicked({ playlistId })}
-            onDeleteClicked={onDeleteClicked}
-          />
-          <MediaList onViewDetail={onViewMediaItemClicked} list={items} isSelectable={false} />
-        </View>
-      </Content>
+      <View padder>
+        <PlaylistCard
+          title={title}
+          author={author}
+          description={description}
+          showSocial={true}
+          showActions={true}
+          onEditClicked={() => onEditClicked({ playlistId })}
+          onDeleteClicked={onDeleteClicked}
+        />
+      </View>
+
+      <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
     </Container>
   );
 };

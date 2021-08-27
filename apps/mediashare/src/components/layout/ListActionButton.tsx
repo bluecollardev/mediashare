@@ -9,12 +9,14 @@ interface ListActionButtonProps {
   actionCb: () => void;
   label: string;
   icon: string;
+  danger?: boolean;
+  dark?: boolean;
 }
 
-const ListActionButton = ({ actionCb, label, icon }: ListActionButtonProps) => {
+const ListActionButton = ({ danger = false, dark = true, actionCb, label, icon }: ListActionButtonProps) => {
   return (
     <View padder style={styles.container}>
-      <Button iconLeft bordered dark style={styles.button} onPress={() => actionCb()}>
+      <Button danger={danger} iconLeft bordered dark={!danger && dark} style={styles.button} onPress={() => actionCb()}>
         <Icon name={icon + '-outline'} />
         <Text style={styles.text}>{label}</Text>
       </Button>
