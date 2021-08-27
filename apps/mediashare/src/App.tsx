@@ -50,6 +50,7 @@ function PlaylistsNavigation() {
 
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
 
       <PlaylistsStackNavigator.Screen {...routeConfig.libraryItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />

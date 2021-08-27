@@ -14,6 +14,8 @@ import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
 import { ListActionButton } from '../../components/layout/ListActionButton';
 import { PlaylistResponseDto } from '../../rxjs-api/models/PlaylistResponseDto';
 import { selectPlaylistAction } from '../../state/modules/playlists/index';
+import { RefreshControl } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -60,9 +62,9 @@ export const PlaylistsContainer = () => {
     <Container style={styles.container}>
       <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
 
-      <Content>
+      <ScrollView contentContainerStyle={styles.scrollView} refreshControl={<RefreshControl refreshing={!loaded} onRefresh={loadData} />}>
         <Playlists onChecked={updateSelection} list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
-      </Content>
+      </ScrollView>
       <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" />
     </Container>
   );
