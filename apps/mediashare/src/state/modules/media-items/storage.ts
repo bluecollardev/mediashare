@@ -54,6 +54,14 @@ export async function fetchAndPutToS3({ fileUri, key, options }: { fileUri: stri
   return putFile;
 }
 
+export async function uploadThumbnail({ fileUri, key }) {
+  const { thumbnailKey } = KeyFactory(key);
+  const { path } = await createThumbnail({ url: fileUri });
+  const thumbnailResponse = (await fetchAndPutToS3({ key: thumbnailKey, fileUri: path, options: { contentType: 'image/jpeg' } })) as any;
+  const getItem = await getStorage(thumbnailResponse.key);
+  return getItem;
+}
+
 export async function uploadMedia({ key, fileUri, options }: { key: string; fileUri: string; options: StorageOptions }) {
   const { videoKey, thumbnailKey } = KeyFactory(key);
 

@@ -4,13 +4,14 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { MediaItem } from '../../rxjs-api';
 import { MediaListItem } from './MediaListItem';
+import { MediaItemDto } from '../../rxjs-api/models/MediaItemDto';
 
 interface MediaListProps {
-  list: MediaItem[];
-  onViewDetail: (item: MediaItem) => void;
+  list: MediaItemDto[];
+  onViewDetail: (item: MediaItemDto) => void;
   isSelectable: boolean;
-  addItem?: (item?: MediaItem) => void;
-  removeItem?: (item?: MediaItem) => void;
+  addItem?: (item?: MediaItemDto) => void;
+  removeItem?: (item?: MediaItemDto) => void;
 }
 
 function MediaList({ list, onViewDetail, isSelectable, addItem = () => {}, removeItem = () => {} }: MediaListProps) {

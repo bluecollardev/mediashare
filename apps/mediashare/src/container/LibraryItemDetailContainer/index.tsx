@@ -15,7 +15,6 @@ export interface LibraryItemDetailContainerState {}
 
 const LibraryItemDetailContainer = ({ route }) => {
   const dispatch = useDispatch();
-  console.log(route);
 
   const onEditClicked = () => {};
   const onDeleteClicked = () => {};
@@ -24,25 +23,25 @@ const LibraryItemDetailContainer = ({ route }) => {
   const { mediaItem, loading, loaded } = useAppSelector((state) => state.mediaItem);
 
   const [isLoaded, setIsLoaded] = useState(loaded);
-
+  console.log(mediaItem);
   const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
-
+  const { _id } = mediaItem || {};
   useEffect(() => {
-    if (!isLoaded) {
+    if (!isLoaded || _id !== mediaId) {
       dispatch(getMediaItemById({ uri, mediaId }));
 
       setIsLoaded(true);
     }
-  }, [dispatch, isLoaded, uri, mediaId]);
+  }, [dispatch, isLoaded, uri, mediaId, _id]);
 
   if (!isLoaded && !mediaItem) {
-    // return (
-    //   // <Container style={styles.container}>
-    //   //   <View padder>
-    //   //     <LibraryItemCard title="" description="" showActions={false} category="" onEditClicked={onEditClicked} onDeleteClicked={onDeleteClicked} author="" />
-    //   //   </View>
-    //   // </Container>
-    // );
+    return (
+      <Container style={styles.container}>
+        <View padder>
+          <LibraryItemCard title="" description="" showActions={false} category="" onEditClicked={onEditClicked} onDeleteClicked={onDeleteClicked} author="" />
+        </View>
+      </Container>
+    );
   }
   console.log(mediaItem);
   const { title, description, category, author } = mediaItem || {};
@@ -58,7 +57,7 @@ const LibraryItemDetailContainer = ({ route }) => {
           category={category}
           onEditClicked={onEditClicked}
           onDeleteClicked={onDeleteClicked}
-          author={''}
+          author={author}
         />
       </View>
     </Container>

@@ -47,7 +47,7 @@ const LibraryContainer = (props: { navigation: any }) => {
       <TopActionButtons leftAction={addFromFeed} rightAction={addMedia} leftLabel="Add from Feed" rightLabel="Add Media" />
 
       <Library navigation={props.navigation} list={mediaItems} onViewDetail={onViewItem} />
-      <ListActionButton actionCb={() => addFromLibrary()} label={'Add to Playlist'} icon="add" />
+      <ListActionButton actionCb={addFromLibrary} label={'Add to Playlist'} icon="add" />
     </Container>
   );
 };

@@ -2,19 +2,16 @@ import { createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit'
 
 import { makeEnum } from '../../core/factory';
 
-import * as reducers from '../../core/reducers';
-
 import { apis, ApiService } from '../../apis';
 import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
-import { MediaItem } from '../../../rxjs-api';
-import { uploadMedia, getStorage, listStorage, copyStorage, sanitizeFoldername, deleteStorage } from './storage';
+import { uploadMedia, getStorage, listStorage, copyStorage, sanitizeFoldername, deleteStorage, uploadThumbnail } from './storage';
 import { KeyFactory } from './key-factory';
 import { getAllMedia } from './media-items';
-import { bindActionCreators } from 'redux';
 import { AwsMediaItem } from './aws-media-item.model';
-import { merge, of, concat, forkJoin } from 'rxjs';
-import { mergeMap, tap } from 'rxjs/operators';
+import { merge, concat, forkJoin } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { MediaItemDto } from '../../../rxjs-api/models/MediaItemDto';
+import { CreateMediaItemDtoCategoryEnum } from '../../../rxjs-api/models/CreateMediaItemDto';
 
 const MEDIA_ITEMS_ACTIONS = ['FIND_MEDIA_ITEMS'] as const;
 const MEDIA_ITEM_ACTIONS = [
@@ -39,14 +36,14 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
   const result = await forkJoin({ mediaItem: apis.mediaItems.mediaItemControllerFindOne({ mediaId }).toPromise(), src: getStorage(uri) })
     .pipe(tap((obs) => console.log(obs)))
     .toPromise();
-  console.log('🚀 -----------------------------------------------------------------');
-  console.log('🚀 ~ file: index.ts ~ line 39 ~ getMediaItemById ~ result', result);
-  console.log('🚀 -----------------------------------------------------------------');
+
   return { mediaItem: result.mediaItem as MediaItemDto, src: result.src };
 });
 
-type MediaSelectionType = MediaItemDto & { checked: boolean };
-
+export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {
+  const thumb = await uploadThumbnail({ fileUri, key });
+  return thumb;
+});
 export const addMediaItem = createAsyncThunk(
   mediaItemActionTypes.addMediaItem,
   async (dto: Pick<CreateMediaItemDto, 'category' | 'description' | 'summary' | 'title' | 'key' | 'uri'>) => {
@@ -91,11 +88,16 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
   const copy = keys.map((key) => copyStorage(key));
 
   const dtos: CreateMediaItemDto[] = keys.map((key) => ({
-    description: `Uploaded to bucket on ${new Date().toDateString()}`,
+    description: `Uploaded to bucket on ${new Date()}`,
     title: key,
     thumbnail: 'thumbnail/' + key,
     video: 'video/' + key,
     uri: 'video/' + key,
+    isPlayable: false,
+    category: CreateMediaItemDtoCategoryEnum.Endurance,
+    eTag: '',
+    key: key,
+    summary: '',
   }));
 
   const dtoPromises = dtos.map((dto) => apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto: dto }));
@@ -130,11 +132,10 @@ export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMedia
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async () => {
   const response = await getAllMedia();
 
-  const mapped = response.map((mediaItem) => ({ ...mediaItem, checked: false }));
-  return mapped;
+  return response;
 });
 
-const initialState: { mediaItems: MediaSelectionType[]; loading: boolean; loaded: boolean } = {
+const initialState: { mediaItems: MediaItemDto[]; loading: boolean; loaded: boolean } = {
   loading: false,
   mediaItems: [],
   loaded: false,
@@ -169,8 +170,11 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
 
   // .addCase(findMediaItems.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
   builder
-
-    .addCase(getMediaItemById.pending, (state) => ({ ...state, loading: true, loaded: false }))
+    .addCase(createThumbnail.fulfilled, (state, action) => ({
+      ...state,
+      getMediaItem: action.payload as string,
+    }))
+    .addCase(getMediaItemById.pending, (state) => ({ ...state, loading: true, loaded: false, mediaItem: null, mediaSrc: null }))
     .addCase(getMediaItemById.fulfilled, (state, action) => ({
       ...state,
       mediaItem: action.payload.mediaItem,
@@ -178,16 +182,16 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
       loading: false,
       loaded: true,
     }))
-    .addCase(getMediaItemById.rejected, (state, action) => ({ ...state, loading: false, loaded: true }))
-    .addCase(addMediaItem.pending, (state, action) => {
+    .addCase(getMediaItemById.rejected, (state) => ({ ...state, loading: false, loaded: true, mediaItem: null }))
+    .addCase(addMediaItem.pending, (state) => {
       return { ...state, loading: true };
     })
-    .addCase(addMediaItem.rejected, (state, action) => {
+    .addCase(addMediaItem.rejected, (state) => {
       return { ...state, loading: false };
     })
 
     .addCase(addMediaItem.fulfilled, (state, action) => {
-      return { ...state, loading: false, createState: 'submitting' };
+      return { ...state, loading: false, loaded: false, getMediaItem: action.payload.uri, mediaSrc: null };
     })
     .addCase(getFeedMediaItems.pending, (state) => {
       return { ...state, loading: true };
@@ -213,14 +217,7 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
     .addCase(findMediaItems.rejected, (state) => {
       return { ...state, loading: false, loaded: false };
     })
-    .addCase(toggleMediaItem, (state, action) => {
-      if (state?.mediaItems[action.payload]) {
-        state.mediaItems[action.payload].checked = !state.mediaItems[action.payload].checked;
-      }
 
-      // state.mediaItems[action.payload] = { ...state.mediaItems[action.payload], checked: !state.mediaItems[action.payload] };
-      // return (state.mediaItems = [...state.mediaItems]);
-    })
     .addCase(findMediaItems.pending, (state) => {
       return { ...state, loading: true, loaded: false };
     })

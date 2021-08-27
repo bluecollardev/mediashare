@@ -6,7 +6,7 @@ import { routeConfig } from '../../routes';
 import { useDispatch } from 'react-redux';
 import { getMediaItemById, selectMediaItem } from '../../state/modules/media-items/index';
 
-import { MediaItem } from '../../rxjs-api';
+import { MediaItem, MediaItemDto } from '../../rxjs-api';
 
 export interface LibraryProps {
   navigation: any;
@@ -14,7 +14,7 @@ export interface LibraryProps {
 }
 
 export interface LibraryState {}
-const Library = ({ onViewDetail, list }: { navigation: any; list: MediaItem[]; onViewDetail: any }) => {
+const Library = ({ onViewDetail, list }: { navigation: any; list: MediaItemDto[]; onViewDetail: any }) => {
   const dispatch = useDispatch();
 
   return (

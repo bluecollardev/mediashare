@@ -2,9 +2,6 @@ import * as React from 'react';
 import { Text, Button, Icon, Left, Body, Right, CardItem, Card, View, Input, Textarea, Picker, Item, Image } from 'native-base';
 import { StyleSheet } from 'react-native';
 import Video from 'react-native-video';
-import { dispatch } from 'rxjs/internal/observable/pairs';
-import { setDescription } from '../../state/modules/create-playlist';
-import { usePreviewImage } from '../../hooks/UsePreviewImage';
 
 export interface MediaListItemProps {
   mediaSrc?: string | null;
@@ -53,6 +50,8 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
         </CardItem>
       )}
 
+      {children}
+
       <CardItem>
         <Body>
           {isEdit ? (
@@ -75,7 +74,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
                 onValueChange={(e) => onCategoryChange(e)}
               >
                 {categoryOptions.map((option) => (
-                  <Picker.Item label={option} value={option} />
+                  <Picker.Item label={option} key={option} value={option} />
                 ))}
               </Picker>
             </Item>
@@ -105,7 +104,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           {buttons()}
         </View>
       )}
-      {children}
+
       {showSocial === true && (
         <CardItem>
           <Left>
