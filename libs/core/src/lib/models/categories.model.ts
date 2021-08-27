@@ -1,6 +1,6 @@
 import { ConfigEnum } from '../types/configEnum.type';
 
-const PLAYLIST_CATEGORY = ['rehab', 'builder', 'warmup'] as const;
+const PLAYLIST_CATEGORY = ['Rehab', 'Builder', 'Warmup'] as const;
 
 export type PlaylistCategoryType = ConfigEnum<typeof PLAYLIST_CATEGORY>;
 const [rehab, builder, warmup] = PLAYLIST_CATEGORY;

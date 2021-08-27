@@ -9,7 +9,7 @@ import { PlaylistService } from './services/playlist.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { PLAYLIST_CATEGORY } from '@core-lib';
 import { GetUserId } from '../../core/decorators/user.decorator';
-import { PlaylistGetResponse, PlaylistPostResponse } from './playlist.decorator';
+import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse } from './playlist.decorator';
 
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
@@ -63,10 +63,17 @@ export class PlaylistController {
   }
 
   @Put(':playlistId')
-  @ApiParam({ name: 'playlistId', type: String, required: true })
-  update(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() userId: ObjectId, @Body() updatePlaylistDto: UpdatePlaylistDto) {
-    const { ...rest } = updatePlaylistDto;
-    return this.playlistService.update(playlistId, { ...rest, userId });
+  @ApiParam({ name: 'playlistId', type: 'string', required: true })
+  @PlaylistPutResponse()
+  async update(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() userId: ObjectId, @Body() updatePlaylistDto: UpdatePlaylistDto) {
+    const { mediaIds, ...rest } = updatePlaylistDto;
+
+    const result = await this.playlistService.update(playlistId, {
+      ...rest,
+      mediaIds: mediaIds.length > 0 && mediaIds.map((id) => new ObjectId(id))
+    });
+
+    return result;
   }
 
   @Delete(PLAYLIST_ID_TOKEN)
