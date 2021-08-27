@@ -126,10 +126,7 @@ const playlistReducer = createReducer(initialPlaylistState, (builder) => {
       return { ...state, createdPlaylist: null };
     })
     .addCase(getPlaylistById.pending, (state) => {
-      console.log('🚀 --------------------------------------------------------');
-      console.log('🚀 ~ file: index.ts ~ line 128 ~ .addCase ~ state', state);
-      console.log('🚀 --------------------------------------------------------');
-      return { ...state, loading: true };
+      return { ...state, selectedPlaylist: null, loading: true };
     })
     .addCase(getPlaylistById.rejected, (state) => {
       return { ...state, loading: false };

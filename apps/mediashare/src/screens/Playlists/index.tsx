@@ -35,12 +35,12 @@ const Playlists = ({ onViewDetailClicked, list }: PlaylistsProps) => {
     <View>
       <List>
         {list.map((item, idx) => {
-          const { title, description } = item;
+          const { title, mediaIds } = item;
           return (
             <MediaListItem
               key={item._id}
               title={title}
-              description={description}
+              description={`${mediaIds.length || 0} videos`}
               onViewDetail={() => {
                 onViewDetailClicked(item);
               }}

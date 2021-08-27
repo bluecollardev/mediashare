@@ -15,6 +15,7 @@ export function useRouteWithParams(key: EnumLiteralsOf<typeof ROUTES>) {
   return (params: { [x: string]: string }) => nav.navigate(key, params);
 }
 
-// export function usePageRoute(key: Pick<typeof routeConfig, ''>, child: RouteParentKeyType, params: Record<string, string | number>) {
-//   return;
-// }
+export function usePageRoute(key: RouteParentKeyType, child: RouteConfigKeyType, params: Record<string, string | number>) {
+  const nav = useNavigation();
+  return () => nav.navigate(key, { screen: child });
+}

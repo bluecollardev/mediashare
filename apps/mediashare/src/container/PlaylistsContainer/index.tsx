@@ -21,7 +21,7 @@ export interface PlaylistsContainerProps {
   state: Object;
 }
 
-export const PlaylistsContainer = ({ navigation }) => {
+export const PlaylistsContainer = () => {
   const dispatch = useDispatch();
 
   const shareWithAction = useRouteName(ROUTES.shareWith);
@@ -42,7 +42,6 @@ export const PlaylistsContainer = ({ navigation }) => {
     if (!playlists.loaded && !playlists.loading) {
       console.log('dispatched');
       loadData();
-      // return <Text>...loading</Text>;
     }
   });
 
@@ -56,7 +55,7 @@ export const PlaylistsContainer = ({ navigation }) => {
       <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
 
       <Content>
-        <Playlists list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ itemId: item._id })} />
+        <Playlists list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
       </Content>
       <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" />
     </Container>

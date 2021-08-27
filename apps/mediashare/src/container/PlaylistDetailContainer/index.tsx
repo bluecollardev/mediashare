@@ -3,13 +3,16 @@ import * as React from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { MediaListItem } from '../../components/layout/MediaListItem';
 import { PlaylistCard } from '../../components/layout/PlaylistCard';
-import { routeConfig } from '../../routes';
+import { routeConfig, ROUTES } from '../../routes';
 import styles from '../../screens/Home/styles';
 import PlaylistDetail from '../../screens/PlaylistDetail';
 import { getUserPlaylistById } from '../../state/modules/playlists';
 import { useAppSelector } from '../../state/index';
 import { getPlaylistById } from '../../state/modules/playlists/index';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Text } from 'react-native';
+import MediaList from '../../components/layout/MediaList';
+import { usePageRoute, useRouteWithParams } from '../../hooks/NavigationHooks';
 export interface PlaylistDetailContainerProps {
   navigation: any;
   route: any;
@@ -21,30 +24,37 @@ export interface PlaylistDetailContainerProps {
 export interface PlaylistDetailContainerState {}
 
 const PlaylistDetailContainer = ({ route, navigation, data }) => {
-  // const { fetchList } = props;
-  // const { playlistId } = props?.route?.params;
-  // fetchList(playlistId);
-  console.log(route);
+  const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
+  const onViewMediaItemClicked = usePageRoute('library', 'libraryItemDetail', {});
 
-  const id = route?.params?.playlistId;
-  const isCreate = !!id;
-  const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+  const onDeleteClicked = () => {};
   const dispatch = useDispatch();
 
+  const loadData = async function () {
+    await dispatch(dispatch(getPlaylistById(playlistId)));
+
+    setLoaded(true);
+  };
+  const [loaded, setLoaded] = useState(false);
   const playlist = useAppSelector((state) => state.playlist);
-  if (!isCreate || (!playlist.loading && playlist?.selectedPlaylist?._id !== id)) {
-    dispatch(getPlaylistById(id));
+
+  const { playlistId = '' } = route?.params;
+  useEffect(() => {
+    if (!playlist.loading && playlist.selectedPlaylist?._id !== playlistId) {
+      loadData();
+    }
+  });
+  if (!playlistId) {
+    return <Text>Item not found</Text>;
   }
-  const author = '';
+
   const { selectedPlaylist } = playlist || {};
 
-  const { description = '', title = '' } = selectedPlaylist || {};
-  const onEditClicked = () => {
-    console.log('dispatch');
-    navigation.navigate(routeConfig.playlistEdit.name, { id });
-  };
-  const onDeleteClicked = () => {};
+  const { description = '', title = '', user } = selectedPlaylist || {};
+
   const items = selectedPlaylist?.mediaItems || [];
+
+  const author = user?.username;
 
   return (
     <Container style={styles.container}>
@@ -56,28 +66,11 @@ const PlaylistDetailContainer = ({ route, navigation, data }) => {
             description={description}
             showSocial={true}
             showActions={true}
-            onEditClicked={onEditClicked}
+            onEditClicked={() => onEditClicked({ playlistId })}
             onDeleteClicked={onDeleteClicked}
           />
-          <PlaylistDetail navigation={navigation} list={data} />
-          <View>
-            <List>
-              {items.map((item, idx) => {
-                const { title, description, thumbnail } = item;
-                return (
-                  <MediaListItem
-                    key={`item-${idx}`}
-                    title={title}
-                    description={description}
-                    image={thumbnail}
-                    onViewDetail={() => {
-                      navigation.navigate(routeConfig.libraryItemDetail.name);
-                    }}
-                  />
-                );
-              })}
-            </List>
-          </View>
+          {/* <PlaylistDetail navigation={navigation} list={data} /> */}
+          <MediaList onViewDetail={onViewMediaItemClicked} list={items} isSelectable={false} />
         </View>
       </Content>
     </Container>

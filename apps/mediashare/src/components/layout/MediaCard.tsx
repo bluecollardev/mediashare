@@ -13,6 +13,7 @@ export interface MediaListItemProps {
   buttons?: any | boolean;
   content?: any;
   showActions?: boolean;
+  category?: string;
   onActionsClicked?: () => void;
 }
 
@@ -29,6 +30,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     showActions = false,
     onActionsClicked = () => {},
     children,
+    category = '',
   } = props;
 
   return (
@@ -41,8 +43,8 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
       <CardItem>
         <Body>
           <Text>{title}</Text>
-          <Text style={{ fontSize: 12, color: 'grey' }}>{author} @bluecollardev</Text>
-          <Text style={{ fontSize: 12, color: 'grey' }}>5 items - 1h 20m</Text>
+          <Text style={{ fontSize: 12, color: 'grey' }}>{author} </Text>
+          <Text style={{ fontSize: 12, color: 'grey' }}>{category}</Text>
         </Body>
         {showActions && (
           <Right>

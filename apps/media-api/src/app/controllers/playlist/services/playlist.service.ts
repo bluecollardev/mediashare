@@ -39,19 +39,8 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    * @param {{ mediaIds: string[]; userId: ObjectId }} { userId, mediaIds }
    * @memberof PlaylistService
    */
-  async createPlaylistWithItems({ createdBy, userId, mediaIds, title = '' }: CreatePlaylistDto) {
-    // const userIdAsObjectId = new ObjectId(userId);
-
-    const playlist = await this.create({ userId, title, createdBy, mediaIds });
-
-    const { _id: playlistId } = playlist;
-
-    // const playlistItems = await this.createPlaylistItems({
-    //   playlistId,
-    //   createdBy,
-    //   items: [...mediaIds]
-    // });
-
+  async createPlaylistWithItems(dto: CreatePlaylistDto) {
+    const playlist = await this.create(dto);
     return { playlist };
   }
 
