@@ -52,7 +52,7 @@ const PlaylistDetailContainer = ({ route }) => {
   const { selectedPlaylist } = playlist || {};
 
   const { description = '', title = '', user } = selectedPlaylist || {};
-
+  console.log(selectedPlaylist);
   const items = selectedPlaylist?.mediaItems || [];
   const author = user?.username;
 

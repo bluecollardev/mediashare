@@ -46,7 +46,7 @@ function PlaylistsNavigation() {
   return (
     <PlaylistsStackNavigator.Navigator>
       <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
-      {/* <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} /> */}
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
 
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
@@ -54,7 +54,6 @@ function PlaylistsNavigation() {
       <PlaylistsStackNavigator.Screen {...routeConfig.libraryItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />
       <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
     </PlaylistsStackNavigator.Navigator>
   );
 }
@@ -140,11 +139,7 @@ function App() {
     <Provider store={store}>
       {isLoggedIn ? (
         <NavigationContainer>
-          <PageStackNavigator.Navigator screenOptions={{ headerShown: false }}>
-            <PageStackNavigator.Screen component={TabNavigation} name={'home'} />
-
-            <PageStackNavigator.Screen {...routeConfig.playlistEdit} options={{ headerShown: true }} />
-          </PageStackNavigator.Navigator>
+          <TabNavigation />
         </NavigationContainer>
       ) : (
         <LoginContainer />

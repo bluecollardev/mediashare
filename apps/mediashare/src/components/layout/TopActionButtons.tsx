@@ -13,16 +13,6 @@ export interface TopActionButtonsProps {
 const TopActionButtons = ({ leftAction, rightAction, leftLabel, rightLabel }: TopActionButtonsProps) => {
   return (
     <View padder style={{ flexDirection: 'row' }}>
-      {/* <Button
-        iconLeft
-        bordered
-        dark
-        style={{ flex: 1, marginRight: 10 }}
-        onPress={() => leftAction()} />
-
-      <Icon name="add-outline" />
-      <Text style={{ paddingRight: 30 }}>{leftLabel}</Text>
-    </Button> */}
       <Button iconLeft bordered dark style={{ flex: 1, marginRight: 10 }} onPress={() => leftAction()}>
         <Icon name="add-outline" />
         <Text style={{ paddingRight: 30 }}>{leftLabel}</Text>

@@ -1,26 +1,45 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 
 import { makeActions, makeEnum } from '../../core/factory';
 // import { UserDto } from '../../../api';
 
 import * as genericListReducers from '../../core/reducers';
+import { UserDto } from '../../../rxjs-api/models/UserDto';
+import { apis } from '../../apis';
 
 export const USERS_STATE_KEY = 'users';
 
-export interface UsersState {}
+export interface UsersState {
+  entities: UserDto[];
+  loading: boolean;
+}
 
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
 const USERS_ACTIONS = ['LOAD_USERS', 'ADD_USER', 'ADD_USERS', 'REMOVE_USER', 'REMOVE_USERS'] as const;
 export const ActionTypes = makeEnum(USERS_ACTIONS);
 export const UsersActions = makeActions(USERS_ACTIONS);
+export const loadUsers = createAsyncThunk(ActionTypes.loadUsers, async () => {
+  const users = await apis.users.usersControllerFindAll().toPromise();
+  return users;
+});
 
-const initialState: UsersState = {};
+const initialState: UsersState = {
+  entities: [],
+  loading: false,
+};
 
-export const usersReducer = createReducer(initialState, (builder) =>
+export const usersReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(UsersActions.loadUsers, genericListReducers.addItems(USERS_STATE_KEY))
-    .addCase(UsersActions.addUser, genericListReducers.addItems(USERS_STATE_KEY))
-    .addCase(UsersActions.addUsers, genericListReducers.addItems(USERS_STATE_KEY))
-    .addCase(UsersActions.removeUser, genericListReducers.removeItem(USERS_STATE_KEY))
-    .addCase(UsersActions.removeUsers, genericListReducers.removeItem(USERS_STATE_KEY))
-);
+    .addCase(loadUsers.fulfilled, (state, action) => {
+      return { ...state, loading: false, entities: action.payload };
+    })
+    .addCase(loadUsers.rejected, (state) => {
+      return { ...state, loading: false };
+    })
+    .addCase(loadUsers.pending, (state) => ({ ...state, loading: true }));
+  // .addCase(UsersActions.loadUsers, genericListReducers.addItems(USERS_STATE_KEY))
+  // .addCase(UsersActions.addUser, genericListReducers.addItems(USERS_STATE_KEY))
+  // .addCase(UsersActions.addUsers, genericListReducers.addItems(USERS_STATE_KEY))
+  // .addCase(UsersActions.removeUser, genericListReducers.removeItem(USERS_STATE_KEY))
+  // .addCase(UsersActions.removeUsers, genericListReducers.removeItem(USERS_STATE_KEY))
+});

@@ -69,15 +69,7 @@ export const AddMediaContainer = () => {
     };
     const res = await dispatch(addMediaItem(dto));
     const item = res as any;
-    console.log('🚀 ------------------------------------------------------');
-    console.log('🚀 ~ file: index.tsx ~ line 72 ~ saveItem ~ item', item);
-    console.log('🚀 ------------------------------------------------------');
-    // eslint-disable-next-line react-hooks/rules-of-hooks
 
-    console.log('🚀 ----------------------------------------------------------------------');
-    console.log('🚀 ~ file: index.tsx ~ line 71 ~ saveItem ~ getMediaItem', getMediaItem);
-    console.log('🚀 ----------------------------------------------------------------------');
-    setTitle('Title');
     setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
     setDescription('Description');
     setThumnail('');

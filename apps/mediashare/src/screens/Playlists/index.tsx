@@ -2,12 +2,12 @@ import * as React from 'react';
 import { View, Text, List } from 'native-base';
 
 import { MediaListItem } from '../../components/layout/MediaListItem';
-import { PlaylistItemResponseDto } from '../../rxjs-api';
 import { PlaylistResponseDto } from '../../api/models/playlist-response-dto';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
   onViewDetailClicked: Function;
+  onChecked?: (bool: boolean, item: PlaylistResponseDto) => void;
 }
 
 export function mapPlaylists(playlist: PlaylistResponseDto[]) {
@@ -26,7 +26,7 @@ export function mapPlaylists(playlist: PlaylistResponseDto[]) {
 
 export interface PlaylistsState {}
 
-const Playlists = ({ onViewDetailClicked, list }: PlaylistsProps) => {
+const Playlists = ({ onViewDetailClicked, list, onChecked }: PlaylistsProps) => {
   if (!list) {
     return <Text>...loading</Text>;
   }
@@ -44,6 +44,7 @@ const Playlists = ({ onViewDetailClicked, list }: PlaylistsProps) => {
               onViewDetail={() => {
                 onViewDetailClicked(item);
               }}
+              onChecked={(b) => onChecked(b, item)}
             />
           );
         })}

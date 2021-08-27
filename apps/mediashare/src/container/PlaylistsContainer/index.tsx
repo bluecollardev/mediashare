@@ -7,12 +7,13 @@ import { routeConfig, ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
 import { useEffect, useState } from 'react';
-import { Container, Content, View, Button, Icon, Text } from 'native-base';
+import { Container, Content, Text } from 'native-base';
 import styles from '../../screens/Home/styles';
 import TopActionButtons from '../../components/layout/TopActionButtons';
 import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
-import { mapPlaylists } from '../../screens/Playlists/index';
 import { ListActionButton } from '../../components/layout/ListActionButton';
+import { PlaylistResponseDto } from '../../rxjs-api/models/PlaylistResponseDto';
+import { selectPlaylistAction } from '../../state/modules/playlists/index';
 
 export interface PlaylistsContainerProps {
   navigation: any;
@@ -36,6 +37,12 @@ export const PlaylistsContainer = () => {
 
     setLoaded(true);
   };
+  const selectedPlaylists = useAppSelector((state) => state.playlists.selectedPlaylists);
+
+  const updateSelection = function (bool, item) {
+    dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
+    console.log(selectedPlaylists);
+  };
 
   useEffect(() => {
     if (!loaded) {
@@ -54,7 +61,7 @@ export const PlaylistsContainer = () => {
       <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
 
       <Content>
-        <Playlists list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
+        <Playlists onChecked={updateSelection} list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
       </Content>
       <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" />
     </Container>

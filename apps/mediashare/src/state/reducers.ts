@@ -12,12 +12,6 @@ const systemReducers = {
   // isOffline: 'test',
 };
 
-// User profile data
-const userReducers = {
-  user: userReducer, // The current user
-  users: usersReducer, // Should be read only
-};
-
 // Media item and playlist data
 const userOwnedReducers = {
   userMediaItems: mediaItemsReducer,
@@ -39,6 +33,7 @@ const rootReducer = combineReducers({
   mediaItems: mediaItemsReducer,
   mediaItem: mediaItemReducer,
   createPlaylist: createPlaylistReducer,
+  users: usersReducer,
 });
 
 export { rootReducer };
