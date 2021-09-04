@@ -1,6 +1,8 @@
 import React from 'react';
 import { PropsWithChildren } from 'react';
-import { Field, reduxForm } from 'redux-form';
+
+import { Input, Item } from 'native-base';
+
 import TextField from '../form/TextField';
 
 export interface AccountFormProps {
@@ -9,20 +11,22 @@ export interface AccountFormProps {
   items?: any[];
 }
 
-export const AccountFormLayout: React.FC<AccountFormProps> = (
-  props: PropsWithChildren<any>
-) => {
-  const {} = props;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const AccountForm: React.FC<AccountFormProps> = (props: PropsWithChildren<any>) => {
   return (
     <>
-      <Field name="firstname" label="First Name" component={TextField} />
-      <Field name="lastname" label="Last Name" component={TextField} />
-      <Field name="email" label="E-mail Address" component={TextField} />
-      <Field name="mobile" label="Mobile Phone (SMS)" component={TextField} />
+      <Item regular style={{ marginBottom: 10 }}>
+        <Input value="" placeholder="First Name" />
+      </Item>
+      <Item regular style={{ marginBottom: 10 }}>
+        <Input value="" placeholder="Last Name" />
+      </Item>
+      <Item regular style={{ marginBottom: 10 }}>
+        <Input value="" placeholder="E-mail Address" />
+      </Item>
+      <Item regular style={{ marginBottom: 10 }}>
+        <Input value="" placeholder="Mobile Phone (SMS)" />
+      </Item>
     </>
   );
 };
-
-export const AccountForm = reduxForm<{}, AccountFormProps>({
-  form: 'accountEdit',
-})(AccountFormLayout as any);

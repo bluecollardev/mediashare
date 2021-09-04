@@ -1,32 +1,33 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { AccountForm as Account } from '../../layout/AccountForm';
+import { Container, View } from 'native-base';
+
+import { AccountForm } from '../../layout/AccountForm';
+
+import styles from '../../../styles';
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
+import { Accordion } from '../../layout/Accordion';
 
 export interface AccountContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
+
 export interface AccountContainerState {}
 
-class AccountContainer extends React.Component<AccountContainerProps, AccountContainerState> {
-  componentDidMount() {
-    // this.props.fetchList();
-  }
-  render() {
-    return <Account navigation={this.props.navigation} />;
-  }
-}
+export const AccountContainer = ({ navigation }: AccountContainerProps) => {
+  return (
+    <Container style={styles.container}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View padder>
+            <AccountForm navigation={navigation} />
+            <Accordion />
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </Container>
+  );
+};
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    // fetchList: (url: any) => dispatch(fetchList(url)),
-  };
-}
-
-const mapStateToProps = (state: any) => ({
-  data: state && state.playlists ? state.playlists.list : [],
-  isLoading: state && state.playlists ? state.playlists.isLoading : false,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(AccountContainer);
+export default AccountContainer;

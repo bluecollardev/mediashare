@@ -73,12 +73,12 @@ function LibraryNavigation() {
 }
 const PageStackNavigator = createStackNavigator();
 
-const SettingsStackNavigator = createStackNavigator();
-const SettingsNavigation = () => {
+const AccountStackNavigator = createStackNavigator();
+const AccountNavigation = () => {
   return (
-    <SettingsStackNavigator.Navigator>
-      <SettingsStackNavigator.Screen {...routeConfig.settings} />
-    </SettingsStackNavigator.Navigator>
+    <AccountStackNavigator.Navigator>
+      <AccountStackNavigator.Screen {...routeConfig.account} />
+    </AccountStackNavigator.Navigator>
   );
 };
 
@@ -88,7 +88,7 @@ export const tabNavigationIconsMap = {
   Playlists: 'play-circle-outline',
   Library: 'film-outline',
   Feeds: 'share-social-outline',
-  Settings: 'settings-outline',
+  Account: 'person-outline',
 };
 
 const TabNavigator = createBottomTabNavigator();
@@ -113,7 +113,7 @@ function TabNavigation() {
       <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
       <TabNavigator.Screen name={'Library'} component={LibraryNavigation} />
       {/* <TabNavigator.Screen name={'Feeds'} component={null} />*/}
-      <TabNavigator.Screen name={'Settings'} component={SettingsNavigation} />
+      <TabNavigator.Screen name={'Account'} component={AccountNavigation} />
     </TabNavigator.Navigator>
   );
 }

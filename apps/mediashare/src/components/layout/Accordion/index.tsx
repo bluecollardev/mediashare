@@ -1,35 +1,31 @@
 import React from 'react';
-import { Accordion, Container, Content, Icon, Text, View } from 'native-base';
+import { Accordion as NBAccordion, Container, Content, Icon, Text, View } from 'native-base';
 
-import { ContactList } from '../../layout/ContactList';
+import { ContactList } from '../ContactList';
 
 import styles from '../../../styles';
 
-export interface SettingsProps {
+export interface AccordionProps {
   navigation: any;
 }
 
-export interface SettingsState {}
+export interface AccordionState {}
 
-export class Settings extends React.Component<SettingsProps, SettingsState> {
+export class Accordion extends React.Component<AccordionProps, AccordionState> {
   sections = [];
 
-  constructor(props: SettingsProps) {
+  constructor(props: AccordionProps) {
     super(props);
 
     this.sections = [
       {
-        title: 'My Account',
-        // content: (props: SettingsProps) => <Account navigation={props.navigation} />,
-      },
-      {
-        title: 'Manage Clients',
+        title: 'My Contacts',
         content: () => <ContactList />,
       },
-      {
+      /* {
         title: 'Manage Groups',
         content: () => <ContactList />,
-      },
+      }, */
     ];
   }
 
@@ -59,30 +55,26 @@ export class Settings extends React.Component<SettingsProps, SettingsState> {
     // TODO: Fix this!
     const param = {
       name: {
-        item: 'Settings',
+        item: 'Accordion',
       },
     }; // this.props.navigation.state.params;
     return (
-      <Container style={styles.container}>
-        <Content padder>
-          <Accordion dataArray={this.sections} renderHeader={this.renderHeader} renderContent={this.renderContent} />
-        </Content>
-      </Container>
+      <NBAccordion dataArray={this.sections} renderHeader={this.renderHeader} renderContent={this.renderContent} />
     );
   }
 }
 
-export interface SettingsProps {
+export interface AccordionProps {
   navigation: any;
 }
 
-export interface SettingsState {}
+export interface AccordionState {}
 
-export default class SettingsContainer extends React.Component<
-  SettingsProps,
-  SettingsState
+export default class AccordionContainer extends React.Component<
+  AccordionProps,
+  AccordionState
 > {
   render() {
-    return <Settings navigation={this.props.navigation} />;
+    return <Accordion navigation={this.props.navigation} />;
   }
 }

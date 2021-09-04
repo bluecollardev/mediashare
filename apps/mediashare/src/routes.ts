@@ -13,7 +13,8 @@ import Library from './components/pages/Library';
 import LibraryItemDetail from './components/pages/LibraryItemDetail';
 import LibraryItemEdit from './components/pages/LibraryItemEdit';
 import ShareWith from './components/pages/ShareWith';
-import Settings from './components/pages/Settings';
+import Account from './components/pages/Account';
+import Settings from './components/layout/Accordion';
 
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
 
@@ -41,6 +42,7 @@ const routeConfig = {
   addMediaItem: {
     name: 'addMediaItem',
     component: AddMedia,
+    options: { title: 'Add Media' },
   },
   playlistDetail: {
     name: 'playlistDetail',
@@ -101,6 +103,11 @@ const routeConfig = {
     name: 'shareWith',
     component: ShareWith,
     options: { title: 'Share With', header: AppScreenHeader },
+  },
+  account: {
+    name: 'account',
+    component: Account,
+    options: { title: 'Account', header: AppScreenHeader },
   },
   settings: {
     name: 'settings',
