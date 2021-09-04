@@ -39,7 +39,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   }, [image]);
   useEffect(() => {}, [source]);
   return (
-    <ListItem style={{ borderWidth: 0 }}>
+    <ListItem style={{ borderWidth: 0 }} onPress={onViewDetail}>
       {selectable && (
         <Left style={{ width: '10%', flex: 1 }}>
           <CheckBox value={isChecked} onValueChange={(v) => onChecked(v)} />
