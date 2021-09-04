@@ -79,7 +79,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
               </Picker>
             </Item>
           ) : (
-            <Text style={{ fontSize: 12, color: 'grey' }}>{category}</Text>
+            <Text style={{ fontSize: 12, color: 'grey', borderColor: 'grey', borderStyle: 'solid', borderWidth: 1, borderRadius: 3, padding: 3, marginTop: 5 }}>{category}</Text>
           )}
         </Body>
         {showActions && (
