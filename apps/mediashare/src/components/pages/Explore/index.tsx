@@ -57,6 +57,7 @@ export const Explore = ({ onViewDetailClicked, list }: ExploreProps) => {
               key={item._id}
               title={title}
               selectable={false}
+              showThumbnail={true}
               description={`${mediaIds.length || 0} videos`}
               onViewDetail={() => {
                 onViewDetailClicked(item);
@@ -73,6 +74,7 @@ export const Explore = ({ onViewDetailClicked, list }: ExploreProps) => {
               key={item._id}
               title={title}
               selectable={false}
+              showThumbnail={true}
               description={`${mediaIds.length || 0} videos`}
               onViewDetail={() => {
                 onViewDetailClicked(item);

@@ -44,7 +44,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   useEffect(() => {}, [source]);
   return (
     <ListItem style={{ borderWidth: 0 }}>
-      {true && (
+      {selectable && (
         <Left style={{ width: '10%', flex: 1 }}>
           <CheckBox value={isChecked} onValueChange={(v) => onChecked(v)} />
         </Left>
@@ -60,15 +60,15 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       >
         <TouchableWithoutFeedback onPress={onViewDetail}>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {!source ? (
+            {!source && showThumbnail ? (
               <View style={{ marginRight: 10 }}>
                 <Thumbnail source={DEFAULT_IMAGE} square />
               </View>
-            ) : (
+            ) : showThumbnail ? (
               <View style={{ marginRight: 10 }}>
                 <Thumbnail source={source} square />
               </View>
-            )}
+            ) : null}
             <View>
               <Text style={{ borderWidth: 0, marginBottom: 3, fontSize: 15 }}>{typeof title === 'string' ? title.replace('.', ' ') : ''}</Text>
               <Text note numberOfLines={2} style={{ color: '#333', fontSize: 11 }}>
