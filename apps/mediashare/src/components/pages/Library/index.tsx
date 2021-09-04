@@ -31,7 +31,16 @@ export const Library = ({ onViewDetail, list }: { navigation: any; list: MediaIt
         <List>
           {list.map((item, idx) => {
             const { title, description, thumbnail } = item;
-            return <MediaListItem key={`item-${idx}`} title={title} description={description} image={thumbnail} onViewDetail={() => onViewDetail(item)} />;
+            return (
+              <MediaListItem
+                key={`item-${idx}`}
+                title={title}
+                description={description}
+                showThumbnail={true}
+                image={thumbnail}
+                onViewDetail={() => onViewDetail(item)}
+              />
+            );
           })}
         </List>
       </View>

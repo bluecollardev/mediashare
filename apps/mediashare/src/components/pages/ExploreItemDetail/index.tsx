@@ -54,7 +54,7 @@ const ExploreItemDetailContainer = ({ route }) => {
           title={title}
           description={description}
           image={mediaItemSrc}
-          showActions={true}
+          showActions={false}
           category={category}
           onEditClicked={onEditClicked}
           onDeleteClicked={onDeleteClicked}
