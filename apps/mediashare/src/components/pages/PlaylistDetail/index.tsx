@@ -94,12 +94,13 @@ export const PlaylistDetailContainer = ({ route }) => {
           description={description}
           showSocial={false}
           showActions={true}
+          showThumbnail={true}
           onEditClicked={() => onEditClicked({ playlistId })}
           onDeleteClicked={onDeleteClicked}
         />
       </View>
       <ListActionButton icon="add" label="Add From Library" actionCb={() => onAddToPlaylist({ playlistId })} />
-      <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
+      <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} showThumbnail={true} />
     </Container>
   );
 };

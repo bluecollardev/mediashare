@@ -11,6 +11,7 @@ export interface PlaylistCardProps {
   author?: string;
   description?: string;
   showActions?: boolean;
+  showThumbnail?: boolean;
   onEditClicked?: () => void;
   onDeleteClicked?: () => void;
   isEdit?: boolean;
@@ -31,6 +32,7 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
     children,
     isEdit = false,
     showActions = false,
+    showThumbnail = false,
     onEditClicked = () => {},
     onDeleteClicked = () => {},
   } = props;
@@ -64,6 +66,7 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
       buttons={buttons}
       children={children}
       showActions={showActions}
+      showThumbnail={showThumbnail}
       onActionsClicked={showCardMenu}
       isEdit={isEdit}
     />
