@@ -43,14 +43,16 @@ export const Explore = ({ onViewDetailClicked, list }: ExploreProps) => {
     return <Text>...loading</Text>;
   }
 
-  list = list.filter((item) => item.mediaIds.length > 0);
+  let sortedList = list.map((item) => item);
+  sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
+  sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 
   return (
     <View>
       <List>
         {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
         <ListItemGroup key={'adam'} text={'Playlists by Adam Fehr'} />
-        {list.slice(0, 1).map((item, idx) => {
+        {sortedList.slice(0, 1).map((item, idx) => {
           const { title, mediaIds } = item;
           return (
             <MediaListItem
@@ -67,7 +69,7 @@ export const Explore = ({ onViewDetailClicked, list }: ExploreProps) => {
         })}
         <ListItemGroup key={'popular'} text={'Popular'} />
         {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-        {list.slice(2, 8).map((item, idx) => {
+        {sortedList.slice(2, 8).map((item, idx) => {
           const { title, mediaIds } = item;
           return (
             <MediaListItem

@@ -47,7 +47,7 @@ const routeConfig = {
     options: { title: 'Title', header: AppScreenHeader },
   },
   playlists: {
-    name: 'Playlists',
+    name: 'playlists',
     component: Playlists,
     options: { title: 'Playlists', header: AppScreenHeader },
   },

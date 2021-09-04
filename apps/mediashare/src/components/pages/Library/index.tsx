@@ -24,12 +24,18 @@ export interface LibraryContainerProps {
 }
 
 export const Library = ({ onViewDetail, list }: { navigation: any; list: MediaItemDto[]; onViewDetail: any }) => {
-  // const dispatch = useDispatch();
+  if (!list) {
+    return <Text>...loading</Text>;
+  }
+
+  const sortedList = list.map((item) => item);
+  sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
+
   return (
     <Content>
       <View>
         <List>
-          {list.map((item, idx) => {
+          {sortedList.map((item, idx) => {
             const { title, description, thumbnail } = item;
             return (
               <MediaListItem

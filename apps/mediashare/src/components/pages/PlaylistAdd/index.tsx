@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Container, Content, View } from 'native-base';
 
-import { useGoBack, useRouteWithParams } from '../../../hooks/NavigationHooks';
+import { useGoBack, useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
 
 import { ROUTES } from '../../../routes';
 
@@ -39,7 +39,9 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
     goBack();
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const goToItem = useRouteWithParams(ROUTES.playlistDetail);
+  const goToPlaylists = useRouteName(ROUTES.playlists);
 
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
@@ -81,11 +83,14 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
       createdBy: '',
     };
     console.log(dto);
-    const res = await dispatch(addUserPlaylist(dto));
-    const item = res as any;
-    goToItem({ playlistId: item.payload.playlist._id });
+    // const res = await dispatch(addUserPlaylist(dto));
+    await dispatch(addUserPlaylist(dto));
+    await dispatch(findMediaItems());
+
+    // const item = res as any;
+    // goToItem({ playlistId: item.payload.playlist._id });
+    goToPlaylists();
   };
-  console.log(title);
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -104,7 +109,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
         />
       </View>
       <Content>
-        <MediaList isSelectable={true} list={list} onViewDetail={onMediaItemClick} addItem={onAddItem} removeItem={onRemoveItem} />
+        <MediaList isSelectable={true} list={list} onViewDetail={onMediaItemClick} addItem={onAddItem} removeItem={onRemoveItem} showThumbnail={true} />
       </Content>
       <ActionButtons actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
     </Container>

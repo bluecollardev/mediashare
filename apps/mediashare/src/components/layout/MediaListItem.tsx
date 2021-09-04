@@ -52,7 +52,6 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       <Body
         style={{
           flex: 4,
-          width: '60%',
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
           borderWidth: 0,
@@ -83,9 +82,11 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       </Body>
       {showActions === true && (
         <Right style={{ width: '10%', flex: 1 }}>
-          <Button transparent onPress={onViewDetail}>
-            <Icon name="chevron-forward-outline" />
-          </Button>
+          <TouchableWithoutFeedback>
+            <Button transparent onPress={onViewDetail}>
+              <Icon name="chevron-forward-outline" />
+            </Button>
+          </TouchableWithoutFeedback>
         </Right>
       )}
     </ListItem>

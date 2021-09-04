@@ -44,11 +44,14 @@ export const Playlists = ({ onViewDetailClicked, list }: PlaylistsProps) => {
     return <Text>...loading</Text>;
   }
 
+  const sortedList = list.map((item) => item);
+  sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
+
   return (
     <View>
       <List>
         {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-        {list.map((item, idx) => {
+        {sortedList.map((item, idx) => {
           const { title, mediaIds } = item;
           return (
             <MediaListItem
