@@ -109,7 +109,7 @@ function TabNavigation() {
         showLabel: false,
       }}
     >
-      <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />
+      {/* <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} /> */}
       <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
       <TabNavigator.Screen name={'Library'} component={LibraryNavigation} />
       {/* <TabNavigator.Screen name={'Feeds'} component={null} />*/}

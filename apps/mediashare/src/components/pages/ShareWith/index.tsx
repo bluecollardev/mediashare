@@ -29,7 +29,6 @@ class ShareWith extends React.Component<ShareWithProps, ShareWithState> {
           <View padder style={{ flexDirection: 'row' }}>
             <Button
               iconLeft
-              bordered
               danger
               style={{
                 flex: 1,
@@ -42,7 +41,7 @@ class ShareWith extends React.Component<ShareWithProps, ShareWithState> {
             <Button
               iconLeft
               bordered
-              success
+              disabled
               style={{
                 flex: 1,
                 marginRight: 10,

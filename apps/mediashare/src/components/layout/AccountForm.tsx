@@ -24,5 +24,5 @@ export const AccountFormLayout: React.FC<AccountFormProps> = (
 };
 
 export const AccountForm = reduxForm<{}, AccountFormProps>({
-  form: 'accountEdit'
+  form: 'accountEdit',
 })(AccountFormLayout as any);

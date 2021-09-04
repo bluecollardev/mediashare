@@ -15,7 +15,6 @@ export const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancel
     <View padder style={{ flexDirection: 'row' }}>
       <Button
         iconLeft
-        bordered
         danger
         onPress={() => cancelCb()}
         style={{
@@ -30,7 +29,6 @@ export const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancel
       </Button>
       <Button
         iconLeft
-        bordered
         success
         onPress={() => actionCb()}
         disabled={disableAction}

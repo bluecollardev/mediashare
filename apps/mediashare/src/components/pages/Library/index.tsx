@@ -63,7 +63,6 @@ export const LibraryContainer = (props: { navigation: any }) => {
   return (
     <Container style={styles.container}>
       <TopActionButtons leftAction={addFromFeed} rightAction={addMedia} leftLabel="Add from Feed" rightLabel="Add Media" />
-      <Text>Where</Text>
       <Library navigation={props.navigation} list={mediaItems} onViewDetail={onViewItem} />
       <ListActionButton actionCb={addFromLibrary} label={'Add to Playlist'} icon="add" />
     </Container>
