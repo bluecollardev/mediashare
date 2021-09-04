@@ -36,7 +36,7 @@ export const ExploreDetail = (props) => {
       }}
     >
       <Icon name="add-outline" />
-      <Text style={{ paddingRight: 30 }}>Add Video From Library</Text>
+      <Text style={{ paddingRight: 30 }}>Add From Library</Text>
     </Button>
   );
 };

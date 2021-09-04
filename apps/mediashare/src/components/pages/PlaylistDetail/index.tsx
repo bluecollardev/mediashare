@@ -37,7 +37,7 @@ export const PlaylistDetail = (props) => {
       }}
     >
       <Icon name="add-outline" />
-      <Text style={{ paddingRight: 30 }}>Add Video From Library</Text>
+      <Text style={{ paddingRight: 30 }}>Add From Library</Text>
     </Button>
   );
 };
@@ -98,7 +98,7 @@ export const PlaylistDetailContainer = ({ route }) => {
           onDeleteClicked={onDeleteClicked}
         />
       </View>
-      <ListActionButton icon="add" label="Add Video From Library" actionCb={() => onAddToPlaylist({ playlistId })} />
+      <ListActionButton icon="add" label="Add From Library" actionCb={() => onAddToPlaylist({ playlistId })} />
       <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
     </Container>
   );
