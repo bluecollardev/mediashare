@@ -34,7 +34,8 @@ const ExploreNavigation = () => {
   return (
     <ExploreStackNavigator.Navigator>
       <ExploreStackNavigator.Screen {...routeConfig.explore} />
-      <ExploreStackNavigator.Screen {...routeConfig.exploreDetail} />
+      <ExploreStackNavigator.Screen {...routeConfig.sharedPlaylistDetail} />
+      <ExploreStackNavigator.Screen {...routeConfig.sharedItemDetail} />
     </ExploreStackNavigator.Navigator>
   );
 };

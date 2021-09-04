@@ -5,7 +5,13 @@ import { Text } from 'react-native';
 
 import { routeConfig, ROUTES } from '../../../routes';
 
-import { usePageRoute, useRouteWithParams, useViewMediaItem, useViewPlaylist } from '../../../hooks/NavigationHooks';
+import {
+  usePageRoute,
+  useRouteWithParams,
+  useViewMediaItem,
+  useViewPlaylist,
+  useViewSharedMediaItem
+} from '../../../hooks/NavigationHooks';
 
 import { useAppSelector } from '../../../state';
 import { getPlaylistById } from '../../../state/modules/playlists';
@@ -52,7 +58,7 @@ export interface ExploreDetailContainerProps {
 export interface ExploreDetailContainerState {}
 
 export const ExploreDetailContainer = ({ route }) => {
-  const onViewMediaItemClicked = useViewMediaItem();
+  const onViewMediaItemClicked = useViewSharedMediaItem();
   const dispatch = useDispatch();
 
   const loadData = async function () {

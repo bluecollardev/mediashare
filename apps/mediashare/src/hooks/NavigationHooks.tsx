@@ -24,6 +24,11 @@ export function useGoBack() {
   return () => nav.goBack();
 }
 
+export function useViewSharedMediaItem() {
+  const nav = useNavigation();
+  return ({ mediaId, uri }) => nav.navigate(ROUTES.sharedItemDetail, { mediaId, uri });
+}
+
 export function useViewMediaItem() {
   const nav = useNavigation();
   return ({ mediaId, uri }) => nav.navigate(ROUTES.libraryItemDetail, { mediaId, uri });
