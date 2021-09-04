@@ -94,7 +94,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
         {isEdit ? (
           <Textarea rowSpan={5} style={{ width: '100%' }} bordered onChange={(e) => onDescriptionChange(e.nativeEvent.text)} value={description} />
         ) : (
-          <Text note numberOfLines={3} style={{ color: 'black' }}>
+          <Text note numberOfLines={3} style={{ color: 'black', marginBottom: 20 }}>
             {description}
           </Text>
         )}

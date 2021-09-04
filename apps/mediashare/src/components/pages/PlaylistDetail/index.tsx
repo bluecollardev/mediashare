@@ -92,7 +92,7 @@ export const PlaylistDetailContainer = ({ route }) => {
           title={title}
           author={author}
           description={description}
-          showSocial={true}
+          showSocial={false}
           showActions={true}
           onEditClicked={() => onEditClicked({ playlistId })}
           onDeleteClicked={onDeleteClicked}

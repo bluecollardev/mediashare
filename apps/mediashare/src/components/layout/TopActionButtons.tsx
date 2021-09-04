@@ -21,11 +21,11 @@ export const TopActionButtons = ({ leftAction, rightAction, leftLabel, rightLabe
       <Icon name="add-outline" />
       <Text style={{ paddingRight: 30 }}>{leftLabel}</Text>
     </Button> */}
-      <Button iconLeft bordered dark style={{ flex: 1, marginRight: 10 }} onPress={() => leftAction()}>
+      <Button iconLeft style={{ flex: 1, marginRight: 10 }} onPress={() => leftAction()}>
         <Icon name="add-outline" />
         <Text style={{ paddingRight: 30 }}>{leftLabel}</Text>
       </Button>
-      <Button iconLeft bordered dark style={{ flex: 1 }}>
+      <Button success iconLeft style={{ flex: 1 }}>
         <Icon name="add-outline" />
         <Text style={{ paddingRight: 30 }} onPress={() => rightAction()}>
           {rightLabel}

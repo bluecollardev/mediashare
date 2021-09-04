@@ -104,7 +104,6 @@ export const PlaylistsContainer = () => {
   return (
     <Container style={styles.container}>
       <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
-
       <Content>
         <Playlists list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
       </Content>

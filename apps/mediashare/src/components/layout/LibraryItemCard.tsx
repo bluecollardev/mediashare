@@ -67,7 +67,7 @@ export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
       showActions={showActions}
       onActionsClicked={showCardMenu}
       buttons={buttons}
-      showSocial={true}
+      showSocial={false}
       children={children}
     />
   );
