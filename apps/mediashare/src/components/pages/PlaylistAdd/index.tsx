@@ -8,13 +8,13 @@ import { ROUTES } from '../../../routes';
 
 import { useAppSelector } from '../../../state';
 import { findMediaItems } from '../../../state/modules/media-items';
-import { addUserPlaylist } from '../../../state/modules/playlists';
+import { addUserPlaylist, findUserPlaylists } from '../../../state/modules/playlists';
 
 import { ActionButtons } from '../../layout/ActionButtons';
 import { MediaCard } from '../../layout/MediaCard';
 import { MediaList } from '../../layout/MediaList';
 
-import { CreateMediaItemDto, CreatePlaylistDto, CreatePlaylistDtoCategoryEnum, MediaItem } from '../../../rxjs-api';
+import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum, MediaItem } from '../../../rxjs-api';
 
 import styles from '../../../styles';
 
@@ -85,7 +85,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
     console.log(dto);
     // const res = await dispatch(addUserPlaylist(dto));
     await dispatch(addUserPlaylist(dto));
-    await dispatch(findMediaItems());
+    await dispatch(findUserPlaylists({}));
 
     // const item = res as any;
     // goToItem({ playlistId: item.payload.playlist._id });
