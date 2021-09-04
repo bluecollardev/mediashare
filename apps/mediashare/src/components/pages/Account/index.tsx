@@ -5,7 +5,7 @@ import { AccountForm } from '../../layout/AccountForm';
 
 import styles from '../../../styles';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
-import { Accordion } from '../../layout/Accordion';
+// import { Accordion } from '../../layout/Accordion';
 
 export interface AccountContainerProps {
   navigation: any;
@@ -22,7 +22,7 @@ export const AccountContainer = ({ navigation }: AccountContainerProps) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View padder>
             <AccountForm navigation={navigation} />
-            <Accordion />
+            {/* <Accordion /> */}
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

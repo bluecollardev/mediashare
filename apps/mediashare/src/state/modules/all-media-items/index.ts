@@ -16,18 +16,21 @@ export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.mediaItems.mediaItemControllerFindOne({ mediaId: id });
+  // @ts-ignore
   return response && response.status === 200 ? response.data : undefined;
 });
 
 export const addMediaItem = createAsyncThunk(mediaItemActionTypes.addMediaItem, async (item: CreateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.mediaItems.mediaItemControllerCreate({ createMediaItemDto: item });
+  // @ts-ignore
   return response && response.status === 200 ? response.data : undefined;
 });
 
 export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (item: UpdateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.mediaItems.mediaItemControllerUpdate({ mediaId: item._id, updateMediaItemDto: item });
+  // @ts-ignore
   return response && response.status === 200 ? response.data : undefined;
 });
 
@@ -36,6 +39,7 @@ export const shareMediaItem = createAsyncThunk(
   async (args: { id: string; userId: string; item: CreateMediaItemDto }, { extra }) => {
     const { api } = extra as { api: ApiService };
     const response = await api.mediaItems.mediaItemControllerShare({ mediaId: args.id, userId: args.userId, createMediaItemDto: args.item });
+    // @ts-ignore
     return response && response.status === 200 ? response.data : undefined;
   }
 );
@@ -43,6 +47,7 @@ export const shareMediaItem = createAsyncThunk(
 export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   const response = await api.mediaItems.mediaItemControllerRemove({ mediaId: id });
+  // @ts-ignore
   return response && response.status === 200 ? response.data : undefined;
 });
 

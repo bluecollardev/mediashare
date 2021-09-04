@@ -96,7 +96,7 @@ const TabNavigator = createBottomTabNavigator();
 function TabNavigation() {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Playlists'}
+      initialRouteName={'Explore'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {
@@ -109,7 +109,7 @@ function TabNavigation() {
         showLabel: false,
       }}
     >
-      {/* <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} /> */}
+      <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />
       <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
       <TabNavigator.Screen name={'Library'} component={LibraryNavigation} />
       {/* <TabNavigator.Screen name={'Feeds'} component={null} />*/}

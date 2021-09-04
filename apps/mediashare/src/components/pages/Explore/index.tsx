@@ -1,102 +1,143 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Container, Content, List, View } from 'native-base';
-import { ListItemGroup } from '../../layout/ListItemGroup';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { Container, Content, View, Text, List } from 'native-base';
+
+import { ROUTES } from '../../../routes';
+
+import { useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
+
+import { useAppSelector } from '../../../state';
+import { findUserPlaylists } from '../../../state/modules/playlists';
+
 import { MediaListItem } from '../../layout/MediaListItem';
-import { routeConfig } from '../../../routes';
+import { ListItemGroup } from '../../layout/ListItemGroup';
+
+import { PlaylistResponseDto } from '../../../api';
 
 import styles from '../../../styles';
 
 export interface ExploreProps {
-  navigation: any;
-  list: any;
+  list: PlaylistResponseDto[];
+  onViewDetailClicked: Function;
+}
+
+export function mapPlaylists(playlist: PlaylistResponseDto[]) {
+  const list = playlist.map((item) => {
+    const keyed = {
+      id: item._id,
+      title: item.title,
+      description: `${item?.mediaItems?.length || 0} Videos`,
+      key: item._id,
+      ...item,
+    };
+    return keyed;
+  });
+  return list;
 }
 
 export interface ExploreState {}
 
-class Explore extends React.Component<ExploreProps, ExploreState> {
-  render() {
-    const { navigation } = this.props;
-    const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
-
-    const items1 = [
-      { title: 'Playlist 1', description: '9 Videos', image: imageSrc },
-      { title: 'Playlist 2', description: '2 Videos', image: imageSrc },
-    ];
-    const items2 = [
-      { title: 'Playlist 3', description: '3 Videos', image: imageSrc },
-      { title: 'Playlist 4', description: '6 Videos', image: imageSrc },
-    ];
-
-    return (
-      <Container style={styles.container}>
-        <Content>
-          {/* <View padder>
-            <MediaCard />
-          </View> */}
-          {/*<Accordion dataArray={dataArray} expanded={0} />*/}
-          <View>
-            <List>
-              <ListItemGroup key={'group1'} text={'Playlists by Bob Johnson'} />
-              {items1.map((item, idx) => {
-                const { title, description, image } = item;
-                return (
-                  <MediaListItem
-                    key={`item-${idx}`}
-                    title={title}
-                    description={description}
-                    image={image}
-                    onViewDetail={() => navigation.navigate(routeConfig.playlistDetail.name)}
-                  />
-                );
-              })}
-              <ListItemGroup key={'group2'} text={'Playlists by Jane Doe'} />
-              {items2.map((item, idx) => {
-                const { title, description, image } = item;
-                return (
-                  <MediaListItem
-                    key={`item-${idx}`}
-                    title={title}
-                    description={description}
-                    image={image}
-                    onViewDetail={() => navigation.navigate(routeConfig.playlistDetail.name)}
-                  />
-                );
-              })}
-            </List>
-          </View>
-        </Content>
-      </Container>
-    );
+export const Explore = ({ onViewDetailClicked, list }: ExploreProps) => {
+  if (!list) {
+    return <Text>...loading</Text>;
   }
-}
+
+  return (
+    <View>
+      <List>
+        {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
+        <ListItemGroup key={'adam'} text={'Playlists by Adam Fehr'} />
+        {list.slice(0, 3).map((item, idx) => {
+          const { title, mediaIds } = item;
+          return (
+            <MediaListItem
+              key={item._id}
+              title={title}
+              selectable={false}
+              description={`${mediaIds.length || 0} videos`}
+              onViewDetail={() => {
+                onViewDetailClicked(item);
+              }}
+            />
+          );
+        })}
+        <ListItemGroup key={'popular'} text={'Popular'} />
+        {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
+        {list.slice(4, 6).map((item, idx) => {
+          const { title, mediaIds } = item;
+          return (
+            <MediaListItem
+              key={item._id}
+              title={title}
+              selectable={false}
+              description={`${mediaIds.length || 0} videos`}
+              onViewDetail={() => {
+                onViewDetailClicked(item);
+              }}
+            />
+          );
+        })}
+        <ListItemGroup key={'latest'} text={'Latest'} />
+        {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
+        {list.slice(7, 9).map((item, idx) => {
+          const { title, mediaIds } = item;
+          return (
+            <MediaListItem
+              key={item._id}
+              title={title}
+              selectable={false}
+              description={`${mediaIds.length || 0} videos`}
+              onViewDetail={() => {
+                onViewDetailClicked(item);
+              }}
+            />
+          );
+        })}
+      </List>
+    </View>
+  );
+};
 
 export interface ExploreContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
-}
-export interface ExploreContainerState {}
-
-class ExploreContainer extends React.Component<ExploreContainerProps, ExploreContainerState> {
-  componentDidMount() {
-    // this.props.fetchList(datas);
-  }
-  render() {
-    return <Explore navigation={this.props.navigation} list={this.props.data} />;
-  }
+  state: Object;
 }
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    // fetchList: (url: any) => dispatch(fetchList(url)),
-    fetchList: (url) => console.log(url),
+export const ExploreContainer = () => {
+  const dispatch = useDispatch();
+  const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
+  const playlists = useAppSelector((state) => state.playlists);
+
+  const [loaded, setLoaded] = useState(false);
+
+  const loadData = async function () {
+    await dispatch(findUserPlaylists({}));
+
+    setLoaded(true);
   };
-}
 
-const mapStateToProps = (state: any) => ({
-  data: state && state.explore ? state.explore.list : [],
-  isLoading: state && state.explore ? state.explore.isLoading : false,
-});
+  useEffect(() => {
+    if (!loaded) {
+      loadData();
+      setLoaded(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded]);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExploreContainer);
+  if (!loaded) {
+    return <Text>Loading</Text>;
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return (
+    <Container style={styles.container}>
+      <Content>
+        <Explore list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
+      </Content>
+    </Container>
+  );
+};
+
+export default ExploreContainer;
