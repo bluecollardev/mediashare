@@ -63,7 +63,7 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
       showSocial={showSocial}
       buttons={buttons}
       children={children}
-      showActions={showSocial}
+      showActions={showActions}
       onActionsClicked={showCardMenu}
       isEdit={isEdit}
     />
