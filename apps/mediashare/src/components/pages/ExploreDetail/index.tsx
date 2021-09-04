@@ -12,7 +12,6 @@ import { getPlaylistById } from '../../../state/modules/playlists';
 
 import { PlaylistCard } from '../../layout/PlaylistCard';
 import { MediaList } from '../../layout/MediaList';
-import { ListActionButton } from '../../layout/ListActionButton';
 
 import styles from '../../../styles';
 
@@ -53,11 +52,7 @@ export interface ExploreDetailContainerProps {
 export interface ExploreDetailContainerState {}
 
 export const ExploreDetailContainer = ({ route }) => {
-  const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
   const onViewMediaItemClicked = useViewMediaItem();
-  const onAddToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
-
-  const onDeleteClicked = () => {};
   const dispatch = useDispatch();
 
   const loadData = async function () {
@@ -96,7 +91,6 @@ export const ExploreDetailContainer = ({ route }) => {
           showActions={false}
         />
       </View>
-      <ListActionButton icon="add" label="Add Video From Library" actionCb={() => onAddToPlaylist({ playlistId })} />
       <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
     </Container>
   );

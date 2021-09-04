@@ -108,7 +108,7 @@ export interface ExploreContainerProps {
 
 export const ExploreContainer = () => {
   const dispatch = useDispatch();
-  const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
+  const viewPlaylistAction = useRouteWithParams(ROUTES.exploreDetail);
   const playlists = useAppSelector((state) => state.playlists);
 
   const [loaded, setLoaded] = useState(false);

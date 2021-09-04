@@ -1,6 +1,7 @@
 import Login from './components/pages/Login';
 import Home from './components/pages/Home';
 import Explore from './components/pages/Explore';
+import ExploreDetail from './components/pages/ExploreDetail';
 import AddFromLibrary from './components/pages/AddFromLibrary';
 import AddMedia from './components/pages/AddMedia';
 import AddFromFeed from './components/pages/AddFromFeed';
@@ -33,6 +34,11 @@ const routeConfig = {
     name: 'explore',
     component: Explore,
     options: { title: 'Explore', header: AppScreenHeader },
+  },
+  exploreDetail: {
+    name: 'exploreDetail',
+    component: ExploreDetail,
+    options: { title: "Adam Fehr's PLaylist", header: AppScreenHeader },
   },
   playlists: {
     name: 'Playlists',
