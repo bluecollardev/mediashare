@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { PropsWithChildren } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import TextField from '../form/TextField';

@@ -1,11 +1,12 @@
-import { Content, List, View } from 'native-base';
 import React from 'react';
-
+import { Content, List, View } from 'native-base';
 import { StyleSheet } from 'react-native';
-import { MediaItem } from '../../rxjs-api';
+
 import { MediaListItem } from './MediaListItem';
-import { MediaItemDto } from '../../rxjs-api/models/MediaItemDto';
+import { MediaItem, MediaItemDto } from '../../rxjs-api';
+
 export type MediaListType = Omit<Pick<MediaItemDto, keyof MediaItem>, 'category'>;
+
 interface MediaListProps {
   list: MediaListType[];
   onViewDetail: (item: MediaListType) => void;
@@ -14,7 +15,7 @@ interface MediaListProps {
   removeItem?: (item?: MediaListType) => void;
 }
 
-function MediaList({ list, onViewDetail, isSelectable, addItem = () => {}, removeItem = () => {} }: MediaListProps) {
+export const MediaList = ({ list, onViewDetail, isSelectable, addItem = () => {}, removeItem = () => {} }: MediaListProps) => {
   return (
     <Content>
       <View>
@@ -37,9 +38,9 @@ function MediaList({ list, onViewDetail, isSelectable, addItem = () => {}, remov
       </View>
     </Content>
   );
-}
+};
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -52,5 +53,3 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
-
-export default MediaList;

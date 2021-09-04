@@ -1,8 +1,7 @@
-import { View, Button, Icon, Text } from 'native-base';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { routeConfig } from '../../routes';
+import { View, Button, Icon, Text } from 'native-base';
 
 interface ListActionButtonProps {
   // children: ReactNode;

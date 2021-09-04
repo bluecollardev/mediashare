@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Text, Button, Icon, Left, Body, Right, ListItem, Thumbnail } from 'native-base';
 import { useEffect, useState } from 'react';
 import { Storage } from 'aws-amplify';

@@ -1,7 +1,5 @@
-import { string } from '@hapi/joi';
-import { View, Button, Icon, Text } from 'native-base';
 import React from 'react';
-import { routeConfig } from '../../routes';
+import { View, Button, Icon, Text } from 'native-base';
 
 export interface TopActionButtonsProps {
   leftLabel: string;
@@ -10,7 +8,7 @@ export interface TopActionButtonsProps {
   rightAction: () => void;
 }
 
-const TopActionButtons = ({ leftAction, rightAction, leftLabel, rightLabel }: TopActionButtonsProps) => {
+export const TopActionButtons = ({ leftAction, rightAction, leftLabel, rightLabel }: TopActionButtonsProps) => {
   return (
     <View padder style={{ flexDirection: 'row' }}>
       {/* <Button
@@ -36,5 +34,3 @@ const TopActionButtons = ({ leftAction, rightAction, leftLabel, rightLabel }: To
     </View>
   );
 };
-
-export default TopActionButtons;

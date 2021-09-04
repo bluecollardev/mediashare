@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { MediaCard } from './MediaCard';
 import { ActionSheet } from 'native-base';

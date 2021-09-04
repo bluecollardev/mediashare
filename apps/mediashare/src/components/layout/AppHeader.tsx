@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Body, Button, Header, Icon, Left, Right, Title } from 'native-base';
 
 export interface AppHeaderProps {

@@ -10,7 +10,7 @@ interface Props {
   disableCancel?: boolean;
 }
 
-const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel = 'Back', disableAction = false, disableCancel = false }: Props) => {
+export const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel = 'Back', disableAction = false, disableCancel = false }: Props) => {
   return (
     <View padder style={{ flexDirection: 'row' }}>
       <Button
@@ -46,5 +46,3 @@ const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel =
     </View>
   );
 };
-
-export default ActionButtons;

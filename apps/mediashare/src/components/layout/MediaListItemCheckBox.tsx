@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Text, Left, Body, ListItem, CheckBox, Thumbnail } from 'native-base';
 import { MediaListItemProps } from './MediaListItem';
 import { useState } from 'react';

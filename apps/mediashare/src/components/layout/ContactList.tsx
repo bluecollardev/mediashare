@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { List } from 'native-base';
 import { ListItemGroup } from './ListItemGroup';
 import { MediaListItem } from './MediaListItem';

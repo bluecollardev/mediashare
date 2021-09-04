@@ -1,21 +1,21 @@
-import Login from './container/LoginContainer';
-import Home from './container/HomeContainer';
-import Explore from './container/ExploreContainer';
-import AddFromLibrary from './container/AddFromLibraryContainer';
-import AddFromFeed from './container/AddFromFeedContainer';
-import Playlists from './container/PlaylistsContainer';
-import PlaylistDetail from './container/PlaylistDetailContainer';
-import PlaylistEdit from './container/PlaylistEditContainer';
-import Library from './container/LibraryContainer';
-import LibraryItemDetail from './container/LibraryItemDetailContainer';
-import LibraryItemEdit from './container/LibraryItemEditContainer';
-import ShareWith from './container/ShareWithContainer';
-import Settings from './container/SettingsContainer';
+import Login from './components/pages/Login';
+import Home from './components/pages/Home';
+import Explore from './components/pages/Explore';
+import AddFromLibrary from './components/pages/AddFromLibrary';
+import AddMedia from './components/pages/AddMedia';
+import AddFromFeed from './components/pages/AddFromFeed';
+import Playlists from './components/pages/Playlists';
+import PlaylistDetail from './components/pages/PlaylistDetail';
+import PlaylistEdit from './components/pages/PlaylistEdit';
+import PlaylistAdd from './components/pages/PlaylistAdd';
+import AddToPlaylist from './components/pages/AddToPlaylist';
+import Library from './components/pages/Library';
+import LibraryItemDetail from './components/pages/LibraryItemDetail';
+import LibraryItemEdit from './components/pages/LibraryItemEdit';
+import ShareWith from './components/pages/ShareWith';
+import Settings from './components/pages/Settings';
 
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
-import { AddMediaContainer } from './container/AddMediaContainer/index';
-import PlaylistAddContainer from './container/PlaylistAddContainer/index';
-import AddToPlaylistContainer from './container/AddToPlaylistContainer/index';
 
 const routeConfig = {
   login: {
@@ -40,7 +40,7 @@ const routeConfig = {
   },
   addMediaItem: {
     name: 'addMediaItem',
-    component: AddMediaContainer,
+    component: AddMedia,
   },
   playlistDetail: {
     name: 'playlistDetail',
@@ -54,7 +54,7 @@ const routeConfig = {
   },
   playlistAdd: {
     name: 'playlistAdd',
-    component: PlaylistAddContainer,
+    component: PlaylistAdd,
     options: { title: 'Edit Playlist', header: AppScreenHeader },
   },
   library: {
@@ -89,12 +89,12 @@ const routeConfig = {
   },
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
-    component: AddToPlaylistContainer,
+    component: AddToPlaylist,
     options: { title: 'Add Playlist', header: AppScreenHeader },
   },
   addMedia: {
     name: 'addMediaItem',
-    component: AddMediaContainer,
+    component: AddMedia,
     options: { title: 'Upload Media', header: AppScreenHeader },
   },
   shareWith: {

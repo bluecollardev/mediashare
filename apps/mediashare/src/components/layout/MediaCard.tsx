@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Text, Button, Icon, Left, Body, Right, CardItem, Card, View, Input, Textarea, Picker, Item, Image } from 'native-base';
 import { StyleSheet } from 'react-native';
 import Video from 'react-native-video';

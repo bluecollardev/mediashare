@@ -16,7 +16,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'native-base';
 
 import { routeConfig } from './routes';
-import LoginContainer from './container/LoginContainer';
+import LoginContainer from './components/pages/Login';
 
 import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
