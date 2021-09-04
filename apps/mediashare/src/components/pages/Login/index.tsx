@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, Button, Input, Item, View, Container, Header, Body, Content } from 'native-base';
+import { Text, Button, Input, Item, View, Container, Header, Body, Content, Card, CardItem } from 'native-base';
+import { Image, Platform } from 'react-native';
 
 import { useState } from 'react';
 import { LoginDto } from '../../../api';
@@ -8,7 +9,6 @@ import { useDispatch } from 'react-redux';
 
 import { loginAction } from '../../../state/modules/user';
 import { RootState } from '../../../state';
-import { Image, Platform } from 'react-native';
 
 export const maxLength = (max: any) => (value: any) => (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 export const minLength = (min: any) => (value: any) => (value && value.length < min ? `Must be ${min} characters or more` : undefined);
@@ -39,9 +39,9 @@ export const Login = ({ children }) => {
           <Image
             source={require('./logo.png')}
             style={{
-              width: '100%',
+              width: '75%',
               height: 100,
-              resizeMode: 'cover',
+              resizeMode: "contain",
             }}
           />
 
@@ -65,17 +65,22 @@ const LoginComponent = () => {
   };
   return (
     <Login>
-      <Item error={validateUsername(username) && username.length > 0}>
-        <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" />
-      </Item>
-      <Item error={validatePassword(password)}>
-        <Input onChange={(e) => setPassword(e.nativeEvent.text)} value={password} placeholder="Password" secureTextEntry={true} />
-      </Item>
-
       <View padder>
-        <Button block onPress={() => onLogin({ username, password })}>
-          <Text>Login</Text>
-        </Button>
+        <Card style={{ margin: 30, paddingBottom: 30 }}>
+          <CardItem>
+            <Body>
+              <Item error={validateUsername(username) && username.length > 0}>
+                <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" />
+              </Item>
+              <Item error={validatePassword(password)}>
+                <Input onChange={(e) => setPassword(e.nativeEvent.text)} value={password} placeholder="Password" secureTextEntry={true} />
+              </Item>
+              <Button block onPress={() => onLogin({ username, password })}>
+                <Text>Login</Text>
+              </Button>
+            </Body>
+          </CardItem>
+        </Card>
       </View>
     </Login>
   );

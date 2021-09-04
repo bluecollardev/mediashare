@@ -52,16 +52,16 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
 
       {children}
 
-      <CardItem>
+      <CardItem style={{ marginTop: 10 }}>
         <Body>
           {isEdit ? (
-            <Item regular>
+            <Item regular style={{ marginBottom: 10 }}>
               <Input value={title} onChange={(e) => onTitleChange(e.nativeEvent.text)} />
             </Item>
           ) : (
             <Text>{title}</Text>
           )}
-          <Text style={{ fontSize: 12, color: 'grey' }}>{author} </Text>
+          {/* <Text style={{ fontSize: 12, color: 'grey' }}>{author} </Text> */}
           {isEdit && (
             <Item regular>
               <Picker
@@ -93,7 +93,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           </Right>
         )}
       </CardItem>
-      <CardItem>
+      <CardItem style={{ marginBottom: 20 }}>
         {isEdit ? (
           <Textarea rowSpan={5} style={{ width: '100%' }} bordered onChange={(e) => onDescriptionChange(e.nativeEvent.text)} value={description} />
         ) : (

@@ -43,12 +43,14 @@ export const Explore = ({ onViewDetailClicked, list }: ExploreProps) => {
     return <Text>...loading</Text>;
   }
 
+  list = list.filter((item) => item.mediaIds.length > 0);
+
   return (
     <View>
       <List>
         {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
         <ListItemGroup key={'adam'} text={'Playlists by Adam Fehr'} />
-        {list.slice(0, 3).map((item, idx) => {
+        {list.slice(0, 1).map((item, idx) => {
           const { title, mediaIds } = item;
           return (
             <MediaListItem
@@ -64,23 +66,7 @@ export const Explore = ({ onViewDetailClicked, list }: ExploreProps) => {
         })}
         <ListItemGroup key={'popular'} text={'Popular'} />
         {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-        {list.slice(4, 6).map((item, idx) => {
-          const { title, mediaIds } = item;
-          return (
-            <MediaListItem
-              key={item._id}
-              title={title}
-              selectable={false}
-              description={`${mediaIds.length || 0} videos`}
-              onViewDetail={() => {
-                onViewDetailClicked(item);
-              }}
-            />
-          );
-        })}
-        <ListItemGroup key={'latest'} text={'Latest'} />
-        {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-        {list.slice(7, 9).map((item, idx) => {
+        {list.slice(2, 8).map((item, idx) => {
           const { title, mediaIds } = item;
           return (
             <MediaListItem

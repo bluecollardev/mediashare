@@ -63,7 +63,7 @@ const routeConfig = {
   playlistAdd: {
     name: 'playlistAdd',
     component: PlaylistAdd,
-    options: { title: 'Edit Playlist', header: AppScreenHeader },
+    options: { title: 'Create Playlist', header: AppScreenHeader },
   },
   library: {
     name: 'library',
