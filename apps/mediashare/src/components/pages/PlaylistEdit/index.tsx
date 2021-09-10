@@ -81,11 +81,12 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   const playlist = useAppSelector((state) => state.playlist);
   // const initCategory = useAppSelector((state) => state.playlist?.selectedPlaylist?.category) || UpdatePlaylistDtoCategoryEnum.Builder;
   const { selectedPlaylist } = playlist;
+  console.log(selectedPlaylist);
   const [title, setTitle] = useState(selectedPlaylist?.title);
   const [description, setDescription] = useState(selectedPlaylist?.description);
-  const [category, setCategory] = useState(UpdatePlaylistDtoCategoryEnum.Builder);
+  const [category, setCategory] = useState();
 
-  const [selectedItems] = useState(new Set<string>(selectedPlaylist?.mediaItems.map((item) => item._id)));
+  const [selectedItems, setSelectedItems] = useState([]);
 
   // const [selectedItems] = useState(new Set<string>());
 
@@ -95,20 +96,17 @@ const PlaylistEditContainer = ({ navigation, route }) => {
     setLoaded(true);
   };
 
-  const [selected, setSelected] = useState(selectedItems.size);
+  // const [selected, setSelected] = useState(selectedItems.size);
   const onAddItem = (item: MediaItem) => {
-    console.log('🚀 -------------------------------------------------------');
-    console.log('🚀 ~ file: index.tsx ~ line 52 ~ onAddItem ~ item', item);
-    console.log('🚀 -------------------------------------------------------');
-    selectedItems.delete(item._id);
-    console.log(selectedItems.keys);
-    setSelected(selectedItems.size);
+    // setSelected(selectedItems.size);
+    const updatedItems = selectedItems.concat([item._id]);
+    setSelectedItems(updatedItems);
   };
 
-  const onRemoveItem = (item: MediaItem) => {
-    selectedItems.add(item._id);
-    console.log(selectedItems.size);
-    setSelected(selectedItems.size);
+  const onRemoveItem = (selected: MediaItem) => {
+    const updatedItems = selectedItems.filter((item) => item !== selected._id);
+
+    setSelectedItems(updatedItems);
   };
 
   const options = [];
@@ -124,19 +122,30 @@ const PlaylistEditContainer = ({ navigation, route }) => {
       setLoaded(true);
     }
   }, [loaded, dispatch, playlistId]);
-  const save = async function () {
-    console.log(items);
-
-    const result = await dispatch(
+  const withIds = function (mediaIds: string[]) {
+    return dispatch(
       updateUserPlaylist({
         title: title,
-        mediaIds: Array.from(selectedItems.keys()),
+        mediaIds,
         description: description,
         category,
         _id: selectedPlaylist._id,
       })
     );
-
+  };
+  const save = async function () {
+    const result = await withIds(selectedPlaylist.mediaIds);
+    console.log(result);
+    setLoaded(false);
+    await loadData();
+  };
+  const saveMediaUpdates = async function () {
+    const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
+    console.log('🚀 -----------------------------------------------------------------------');
+    console.log('🚀 ~ file: index.tsx ~ line 144 ~ saveMediaUpdates ~ filtered', filtered);
+    console.log('🚀 -----------------------------------------------------------------------');
+    const result = await withIds(filtered);
+    console.log(result);
     setLoaded(false);
     await loadData();
   };
@@ -150,7 +159,13 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   const items = selectedPlaylist?.mediaItems || [];
   const author = '';
 
-  const cancelCb = navigation.goBack;
+  const resetData = () => {
+    setSelectedItems([]);
+  };
+  const cancelCb = () => {
+    navigation.goBack();
+    resetData();
+  };
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
   const showCardMenu = function (count: number) {
@@ -166,7 +181,7 @@ const PlaylistEditContainer = ({ navigation, route }) => {
             console.log(1);
             break;
           case 1:
-            save();
+            saveMediaUpdates();
             break;
         }
       }
@@ -188,10 +203,9 @@ const PlaylistEditContainer = ({ navigation, route }) => {
               categoryOptions={options}
               onCategoryChange={(e: any) => {
                 setCategory(e);
-                console.log(category);
               }}
-              onTitleChange={(e) => setTitle(e)}
-              onDescriptionChange={(e) => setDescription(e)}
+              onTitleChange={setTitle}
+              onDescriptionChange={setDescription}
               isEdit={true}
             />
           </View>
@@ -206,10 +220,10 @@ const PlaylistEditContainer = ({ navigation, route }) => {
         addItem={onAddItem}
         showThumbnail={true}
       />
-      {selected === selectedPlaylist?.mediaItems?.length ? (
+      {selectedItems.length < 1 ? (
         <ActionButtons rightIcon={'check-bold'} actionCb={() => save()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
       ) : (
-        <ListActionButton danger={true} icon="trash" actionCb={() => showCardMenu(selectedItems.size)} label={'Remove Items from Playlist'} />
+        <ListActionButton danger={false} icon="trash" actionCb={() => showCardMenu(selectedItems.length)} label={'Remove Items from Playlist'} />
       )}
     </Container>
   );
