@@ -1,11 +1,11 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
 import { Text, Button, Icon, Left, Body, Right, ListItem, Thumbnail, View } from 'native-base';
 import { Storage } from 'aws-amplify';
 
 import { usePreviewImage } from '../../hooks/UsePreviewImage';
+import { Checkbox, List } from 'react-native-paper';
 
 export interface MediaListItemProps {
   navigation?: any;
@@ -34,6 +34,16 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   const DEFAULT_IMAGE = usePreviewImage();
   const [isChecked, setIsChecked] = useState(checked);
   const [source, setSource] = useState(null);
+  const selectComponent = () =>
+    selectable && (
+      <Checkbox
+        status={isChecked ? 'checked' : 'unchecked'}
+        onPress={() => {
+          setIsChecked(!isChecked);
+          onChecked(!isChecked);
+        }}
+      />
+    );
   useEffect(() => {
     if (image) {
       Storage.get(image, { download: false }).then((res: string) => {
@@ -43,52 +53,61 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   }, [image]);
   useEffect(() => {}, [source]);
   return (
-    <ListItem style={{ borderWidth: 0 }}>
-      {selectable && (
-        <Left style={{ width: '10%', flex: 1 }}>
-          <CheckBox value={isChecked} onValueChange={(v) => onChecked(v)} />
-        </Left>
-      )}
-      <Body
-        style={{
-          flex: 4,
-          justifyContent: 'flex-start',
-          alignItems: 'flex-start',
-          borderWidth: 0,
-        }}
-      >
-        <TouchableWithoutFeedback onPress={onViewDetail}>
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {!source && showThumbnail ? (
-              <View style={{ marginRight: 10 }}>
-                <Thumbnail source={DEFAULT_IMAGE} square />
-              </View>
-            ) : showThumbnail ? (
-              <View style={{ marginRight: 10 }}>
-                <Thumbnail source={source} square />
-              </View>
-            ) : null}
-            <View>
-              <Text style={{ borderWidth: 0, marginBottom: 3, fontSize: 15 }}>{typeof title === 'string' ? title.replace('.', ' ') : ''}</Text>
-              <Text note numberOfLines={2} style={{ color: '#333', fontSize: 11 }}>
-                {description}
-              </Text>
-              <Text note numberOfLines={2} style={{ color: '#333', fontSize: 11 }}>
-                Length: 12s
-              </Text>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Body>
-      {showActions === true && (
-        <Right style={{ width: '10%', flex: 1 }}>
-          <TouchableWithoutFeedback>
-            <Button transparent onPress={onViewDetail}>
-              <Icon name="chevron-forward-outline" />
-            </Button>
-          </TouchableWithoutFeedback>
-        </Right>
-      )}
-    </ListItem>
+    <List.Item
+      title={title}
+      description={description}
+      left={selectComponent}
+      onPress={() => {
+        setIsChecked(!isChecked);
+        onChecked(!isChecked);
+      }}
+    />
+    // <ListItem style={{ borderWidth: 0 }}>
+    //   {selectable && (
+    //     <Left style={{ width: '10%', flex: 1 }}>
+    //       <CheckBox value={isChecked} onValueChange={(v) => onChecked(v)} />
+    //     </Left>
+    //   )}
+    //   <Body
+    //     style={{
+    //       flex: 4,
+    //       justifyContent: 'flex-start',
+    //       alignItems: 'flex-start',
+    //       borderWidth: 0,
+    //     }}
+    //   >
+    //     <TouchableWithoutFeedback onPress={onViewDetail}>
+    //       <View style={{ display: 'flex', flexDirection: 'row' }}>
+    //         {!source && showThumbnail ? (
+    //           <View style={{ marginRight: 10 }}>
+    //             <Thumbnail source={DEFAULT_IMAGE} square />
+    //           </View>
+    //         ) : showThumbnail ? (
+    //           <View style={{ marginRight: 10 }}>
+    //             <Thumbnail source={source} square />
+    //           </View>
+    //         ) : null}
+    //         <View>
+    //           <Text style={{ borderWidth: 0, marginBottom: 3, fontSize: 15 }}>{typeof title === 'string' ? title.replace('.', ' ') : ''}</Text>
+    //           <Text note numberOfLines={2} style={{ color: '#333', fontSize: 11 }}>
+    //             {description}
+    //           </Text>
+    //           <Text note numberOfLines={2} style={{ color: '#333', fontSize: 11 }}>
+    //             Length: 12s
+    //           </Text>
+    //         </View>
+    //       </View>
+    //     </TouchableWithoutFeedback>
+    //   </Body>
+    //   {showActions === true && (
+    //     <Right style={{ width: '10%', flex: 1 }}>
+    //       <TouchableWithoutFeedback>
+    //         <Button transparent onPress={onViewDetail}>
+    //           <Icon name="chevron-forward-outline" />
+    //         </Button>
+    //       </TouchableWithoutFeedback>
+    //     </Right>
+    //   )}
+    // </ListItem>
   );
 };

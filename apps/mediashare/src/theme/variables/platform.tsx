@@ -108,8 +108,8 @@ export default {
   cardDefaultBg: '#fff',
 
   // Color
-  brandPrimary: platform === 'ios' ? '#007aff' : '#3F51B5',
-  brandInfo: '#62B1F6',
+  brandPrimary: '#252932',
+  brandInfo: '#3F51B5',
   brandSuccess: '#5cb85c',
   brandDanger: '#d9534f',
   brandWarning: '#f0ad4e',

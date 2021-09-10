@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { View, Button, Icon, Text } from 'native-base';
+import { View } from 'native-base';
+import { Button } from 'react-native-paper';
+import { theme } from '../../styles';
 
 interface ListActionButtonProps {
   // children: ReactNode;
@@ -15,9 +17,8 @@ interface ListActionButtonProps {
 const ListActionButton = ({ danger = false, actionCb, label, icon }: ListActionButtonProps) => {
   return (
     <View padder style={styles.container}>
-      <Button success danger={danger} iconLeft style={styles.button} onPress={() => actionCb()}>
-        <Icon name={icon + '-outline'} />
-        <Text style={styles.text}>{label}</Text>
+      <Button mode="contained" color={theme.colors.success} loading={danger} style={styles.button} onPress={() => actionCb()} icon={icon}>
+        {label}
       </Button>
     </View>
   );

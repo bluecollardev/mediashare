@@ -12,9 +12,11 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Icon } from 'native-base';
+import { BottomTabBarOptions, BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import { Provider as PaperProvider } from 'react-native-paper';
 import { routeConfig } from './routes';
 import LoginContainer from './components/pages/Login';
 
@@ -23,6 +25,7 @@ import awsmobile from './aws-exports';
 import { Provider } from 'react-redux';
 import { store } from './boot/configureStore';
 import { useAppSelector } from './state/index';
+import { theme } from './styles';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -82,11 +85,11 @@ const AccountNavigation = () => {
 
 // Map route names to icons
 export const tabNavigationIconsMap = {
-  Explore: 'earth-outline',
+  Explore: 'earth',
   Playlists: 'play-circle-outline',
-  Library: 'film-outline',
-  Feeds: 'share-social-outline',
-  Account: 'person-outline',
+  Library: 'video-account',
+  // Feeds: 'share-social-outline',
+  Account: 'account-settings-outline',
 };
 
 const TabNavigator = createBottomTabNavigator();
@@ -94,11 +97,14 @@ const TabNavigator = createBottomTabNavigator();
 function TabNavigation() {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Explore'}
+      initialRouteName={'playlists'}
+      barStyle={{ backgroundColor: '#fff' }}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {
-          return <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
+          return <MaterialCommunityIcons name={tabNavigationIconsMap[route.name]} color={color} size={26} />;
+
+          // <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
         },
       })}
       tabBarOptions={{
@@ -136,13 +142,15 @@ function App() {
 
   return (
     <Provider store={store}>
-      {isLoggedIn ? (
-        <NavigationContainer>
-          <TabNavigation />
-        </NavigationContainer>
-      ) : (
-        <LoginContainer />
-      )}
+      <PaperProvider theme={theme}>
+        {isLoggedIn ? (
+          <NavigationContainer>
+            <TabNavigation />
+          </NavigationContainer>
+        ) : (
+          <LoginContainer />
+        )}
+      </PaperProvider>
     </Provider>
   );
 }

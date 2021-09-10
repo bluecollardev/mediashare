@@ -1,4 +1,6 @@
-import { View, Button, Icon, Text } from 'native-base';
+import { View, Icon, Text } from 'native-base';
+import { Button } from 'react-native-paper';
+
 import React from 'react';
 
 interface Props {
@@ -14,8 +16,6 @@ export const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancel
   return (
     <View padder style={{ flexDirection: 'row' }}>
       <Button
-        iconLeft
-        danger
         onPress={() => cancelCb()}
         style={{
           flex: 1,
@@ -28,8 +28,7 @@ export const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancel
         <Text style={{ paddingRight: 30 }}>{cancelLabel}</Text>
       </Button>
       <Button
-        iconLeft
-        success
+        icon="share"
         onPress={() => actionCb()}
         disabled={disableAction}
         style={{
@@ -38,7 +37,6 @@ export const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancel
           justifyContent: 'center',
         }}
       >
-        <Icon name="checkmark" />
         <Text style={{ paddingRight: 30 }}>{actionLabel}</Text>
       </Button>
     </View>
