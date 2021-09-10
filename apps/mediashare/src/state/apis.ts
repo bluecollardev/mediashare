@@ -43,7 +43,7 @@ function apiFactory() {
     };
     return [sessionMiddleWare, loginMiddleware, cookieMiddleware];
   }
-  const configuration = new Configuration({ basePath: servers[0].getUrl(), accessToken: TOKEN, middleware: middlewareFactory() });
+  const configuration = new Configuration({ basePath: servers[1].getUrl(), accessToken: TOKEN, middleware: middlewareFactory() });
 
   return {
     default: new DefaultApi(configuration),

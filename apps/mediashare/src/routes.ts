@@ -54,7 +54,7 @@ const routeConfig = {
   addMediaItem: {
     name: 'addMediaItem',
     component: AddMedia,
-    options: { title: 'Upload' },
+    options: { title: 'Add Media' },
   },
   playlistDetail: {
     name: 'playlistDetail',
@@ -109,7 +109,7 @@ const routeConfig = {
   addMedia: {
     name: 'addMediaItem',
     component: AddMedia,
-    options: { title: 'Upload', header: AppScreenHeader },
+    options: { title: 'Add Media', header: AppScreenHeader },
   },
   shareWith: {
     name: 'shareWith',

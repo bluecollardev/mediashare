@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Image } from 'react-native';
-import { Button, CardItem, Container, Icon, Text, View } from 'native-base';
+import { Image, Keyboard, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { Button, CardItem, Content, Icon, Text } from 'native-base';
 import * as DocumentPicker from 'expo-document-picker';
 
 import { ROUTES } from '../../../routes';
@@ -17,8 +17,6 @@ import { MediaCard } from '../../layout/MediaCard';
 
 import { CreateMediaItemDtoCategoryEnum, CreateMediaItemDto } from '../../../rxjs-api';
 import { CreatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
-
-import styles from '../../../styles';
 
 export const AddMediaContainer = () => {
   const dispatch = useDispatch();
@@ -84,34 +82,35 @@ export const AddMediaContainer = () => {
   };
 
   return (
-    <Container style={styles.container}>
-      <View padder>
-        <MediaCard
-          title={title}
-          author={author}
-          description={description}
-          category={category}
-          categoryOptions={options}
-          onCategoryChange={onCategoryChange as any}
-          onTitleChange={onTitleChange}
-          onDescriptionChange={onDescriptionChange}
-          isEdit={true}
-        >
-          <CardItem button onPress={getDocument} cardBody>
-            {documentUri ? (
-              <Image source={{ uri: mediaSrc }} style={{ width: '100%', height: 300 }} />
-            ) : (
-              <Button bordered style={{ width: '100%', height: 300 }} hasText={true} onPress={getDocument} full={true}>
-                <Icon name="cloud-upload-outline" />
-                <Text style={{ textAlign: 'center' }}>Upload</Text>
-              </Button>
-            )}
-          </CardItem>
-        </MediaCard>
-
-        <ActionButtons actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
-      </View>
-    </Container>
+    <Content style={{ height: '100%' }}>
+      <ScrollView>
+        <KeyboardAvoidingView behavior={'padding'} style={{ height: '100%' }} keyboardVerticalOffset={50}>
+          <MediaCard
+            title={title}
+            author={author}
+            description={description}
+            category={category}
+            categoryOptions={options}
+            onCategoryChange={onCategoryChange as any}
+            onTitleChange={onTitleChange}
+            onDescriptionChange={onDescriptionChange}
+            isEdit={true}
+          >
+            <CardItem button onPress={getDocument} cardBody>
+              {documentUri ? (
+                <Image source={{ uri: mediaSrc }} style={{ height: 50, width: 50 }} />
+              ) : (
+                <Button bordered style={{ width: '100%' }} hasText={true} onPress={getDocument} full={true}>
+                  <Icon name="cloud-upload-outline" />
+                  <Text style={{ textAlign: 'center' }}>Upload</Text>
+                </Button>
+              )}
+            </CardItem>
+          </MediaCard>
+        </KeyboardAvoidingView>
+      </ScrollView>
+      <ActionButtons actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
+    </Content>
   );
 };
 

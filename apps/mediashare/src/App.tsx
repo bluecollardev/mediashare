@@ -26,6 +26,7 @@ import { Provider } from 'react-redux';
 import { store } from './boot/configureStore';
 import { useAppSelector } from './state/index';
 import { theme } from './styles';
+import { KeyboardAvoidingView } from 'react-native';
 
 declare const global: { HermesInternal: null | {} };
 
