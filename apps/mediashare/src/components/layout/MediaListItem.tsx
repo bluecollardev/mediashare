@@ -1,11 +1,12 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { Text, Button, Icon, Left, Body, Right, ListItem, Thumbnail, View } from 'native-base';
+import { Button, Icon, Left, Body, Right, ListItem, Thumbnail, View } from 'native-base';
 import { Storage } from 'aws-amplify';
 
 import { usePreviewImage } from '../../hooks/UsePreviewImage';
-import { Checkbox, List } from 'react-native-paper';
+import { Avatar, Caption, Checkbox, IconButton, List, Text } from 'react-native-paper';
+import { theme } from '../../styles';
 
 export interface MediaListItemProps {
   navigation?: any;
@@ -19,7 +20,9 @@ export interface MediaListItemProps {
   onViewDetail?: () => void;
   onChecked?: (bool: boolean) => void;
 }
-
+const AvatarComponent = (uri: any) => {
+  return <Avatar.Image size={24} source={{ uri: uri.uri }} />;
+};
 export const MediaListItem: React.FC<MediaListItemProps> = ({
   checked,
   image,
@@ -31,19 +34,11 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   showActions = true,
   showThumbnail = false,
 }: MediaListItemProps) => {
-  const DEFAULT_IMAGE = usePreviewImage();
   const [isChecked, setIsChecked] = useState(checked);
+  const DEFAULT_IMAGE = usePreviewImage();
+
   const [source, setSource] = useState(null);
-  const selectComponent = () =>
-    selectable && (
-      <Checkbox
-        status={isChecked ? 'checked' : 'unchecked'}
-        onPress={() => {
-          setIsChecked(!isChecked);
-          onChecked(!isChecked);
-        }}
-      />
-    );
+
   useEffect(() => {
     if (image) {
       Storage.get(image, { download: false }).then((res: string) => {
@@ -55,17 +50,43 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   return (
     <List.Item
       title={title}
-      description={description}
-      left={selectComponent}
-      onPress={() => {
-        setIsChecked(!isChecked);
-        onChecked(!isChecked);
+      description={() => {
+        return (
+          <Caption style={{ height: '100%' }} onPress={onViewDetail}>
+            {description}
+          </Caption>
+        );
       }}
+      left={() =>
+        selectable ? (
+          <>
+            <Checkbox.IOS
+              status={!isChecked ? 'indeterminate' : 'checked'}
+              onPress={() => {
+                setIsChecked(!isChecked);
+                onChecked(isChecked);
+              }}
+              color={isChecked ? theme.colors.success : theme.colors.disabled}
+            />
+            {showThumbnail ? source ? <Avatar.Image size={36} source={source} /> : <Avatar.Image size={36} source={{ uri: DEFAULT_IMAGE }} /> : <></>}
+          </>
+        ) : (
+          showThumbnail && source && <Avatar.Image size={36} source={source} />
+        )
+      }
+      right={() => showActions === true && <IconButton icon="chevron-right" color={theme.colors.accent} onPress={onViewDetail} />}
     />
-    // <ListItem style={{ borderWidth: 0 }}>
+    // <ListItem style={{ borderWidth: 0 }} selected={false}>
     //   {selectable && (
     //     <Left style={{ width: '10%', flex: 1 }}>
-    //       <CheckBox value={isChecked} onValueChange={(v) => onChecked(v)} />
+    //       <Checkbox.IOS
+    //         status={!isChecked ? 'indeterminate' : 'checked'}
+    //         onPress={() => {
+    //           setIsChecked(!isChecked);
+    //           onChecked(isChecked);
+    //         }}
+    //         color={isChecked ? theme.colors.success : theme.colors.disabled}
+    //       />
     //     </Left>
     //   )}
     //   <Body
@@ -80,11 +101,11 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
     //       <View style={{ display: 'flex', flexDirection: 'row' }}>
     //         {!source && showThumbnail ? (
     //           <View style={{ marginRight: 10 }}>
-    //             <Thumbnail source={DEFAULT_IMAGE} square />
+    //             <Avatar.Image source={{ uri: DEFAULT_IMAGE }} />
     //           </View>
     //         ) : showThumbnail ? (
     //           <View style={{ marginRight: 10 }}>
-    //             <Thumbnail source={source} square />
+    //             <Avatar.Image size={48} source={source} />
     //           </View>
     //         ) : null}
     //         <View>
@@ -102,9 +123,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
     //   {showActions === true && (
     //     <Right style={{ width: '10%', flex: 1 }}>
     //       <TouchableWithoutFeedback>
-    //         <Button transparent onPress={onViewDetail}>
-    //           <Icon name="chevron-forward-outline" />
-    //         </Button>
+    //         <IconButton icon="chevron-right" color={theme.colors.accent} onPress={onViewDetail} />
     //       </TouchableWithoutFeedback>
     //     </Right>
     //   )}

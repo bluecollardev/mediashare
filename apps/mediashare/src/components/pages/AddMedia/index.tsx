@@ -28,7 +28,9 @@ export const AddMediaContainer = () => {
   const [category, setCategory] = useState(CreateMediaItemDtoCategoryEnum.Endurance);
   const [documentUri, setDocumentUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
-  const mediaSrc = useAppSelector((state) => state.mediaItem.getMediaItem);
+  const mediaSrc =
+    useAppSelector((state) => state.mediaItem.getMediaItem) ||
+    'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
   const goBack = useGoBack();
 
   const clearAndGoBack = () => {
@@ -60,7 +62,6 @@ export const AddMediaContainer = () => {
     setDocumentUri(document?.uri || '');
     dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
   }
-  const { getMediaItem } = useAppSelector((state) => state.mediaItem);
   const saveItem = async function () {
     const dto: CreateMediaItemDto = {
       title,
@@ -69,7 +70,7 @@ export const AddMediaContainer = () => {
       summary: '',
       isPlayable: true,
       uri: documentUri,
-      thumbnail: '',
+      thumbnail: thumbnail,
       key: title,
       eTag: '',
     };
@@ -97,7 +98,7 @@ export const AddMediaContainer = () => {
           isEdit={true}
         >
           <CardItem button onPress={getDocument} cardBody>
-            {mediaSrc ? (
+            {documentUri ? (
               <Image source={{ uri: mediaSrc }} style={{ width: '100%', height: 300 }} />
             ) : (
               <Button bordered style={{ width: '100%', height: 300 }} hasText={true} onPress={getDocument} full={true}>
@@ -107,6 +108,7 @@ export const AddMediaContainer = () => {
             )}
           </CardItem>
         </MediaCard>
+
         <ActionButtons actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
       </View>
     </Container>

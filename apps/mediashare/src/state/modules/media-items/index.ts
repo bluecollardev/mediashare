@@ -152,7 +152,7 @@ const initialMediaItemState: {
   mediaItem: null,
   loading: false,
   file: null,
-  mediaSrc: null,
+  mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
   createState: 'empty',
   feed: null,
   loaded: false,
@@ -171,7 +171,13 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
       ...state,
       getMediaItem: action.payload as string,
     }))
-    .addCase(getMediaItemById.pending, (state) => ({ ...state, loading: true, loaded: false, mediaItem: null, mediaSrc: null }))
+    .addCase(getMediaItemById.pending, (state) => ({
+      ...state,
+      loading: true,
+      loaded: false,
+      mediaItem: null,
+      mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
+    }))
     .addCase(getMediaItemById.fulfilled, (state, action) => ({
       ...state,
       mediaItem: action.payload.mediaItem,
@@ -188,7 +194,13 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
     })
 
     .addCase(addMediaItem.fulfilled, (state, action) => {
-      return { ...state, loading: false, loaded: false, getMediaItem: action.payload.uri, mediaSrc: null };
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+        getMediaItem: action.payload.uri,
+        mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
+      };
     })
     .addCase(getFeedMediaItems.pending, (state) => {
       return { ...state, loading: true };

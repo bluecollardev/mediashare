@@ -29,6 +29,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const [description, setDescription] = useState('Description');
   const [category, setCategory] = useState(CreatePlaylistDtoCategoryEnum.Builder);
   const [loaded, setLoaded] = useState(false);
+  const [selected, setSelected] = useState([]);
   const goBack = useGoBack();
 
   const clearAndGoBack = function () {
@@ -56,10 +57,11 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const onTitleChange = setTitle;
   const onDescriptionChange = setDescription;
   const onCategoryChange = setCategory;
-  const onAddItem = (item: MediaItem) => selectedItems.add(item._id);
 
-  const onRemoveItem = (item: MediaItem) => selectedItems.delete(item._id);
-
+  const updateSelection = function (bool: boolean, item: MediaListType) {
+    const filtered = bool ? selected.concat([item._id]) : selected.filter((key) => key !== item._id);
+    setSelected(filtered);
+  };
   const options = [];
   for (const value in CreatePlaylistDtoCategoryEnum) {
     options.push(value);
@@ -79,7 +81,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
       title,
       category: CreatePlaylistDtoCategoryEnum[category],
       description,
-      mediaIds: Array.from(selectedItems.values()),
+      mediaIds: selected,
       createdBy: '',
     };
     console.log(dto);
@@ -109,7 +111,14 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
         />
       </View>
       <Content>
-        <MediaList isSelectable={true} list={list} onViewDetail={onMediaItemClick} addItem={onAddItem} removeItem={onRemoveItem} showThumbnail={true} />
+        <MediaList
+          isSelectable={true}
+          list={list}
+          showThumbnail={true}
+          onViewDetail={onMediaItemClick}
+          addItem={(item) => updateSelection(true, item)}
+          removeItem={(item) => updateSelection(false, item)}
+        />
       </Content>
       <ActionButtons actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
     </Container>
