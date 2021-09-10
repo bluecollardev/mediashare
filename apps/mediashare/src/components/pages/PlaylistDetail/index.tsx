@@ -60,20 +60,21 @@ export const PlaylistDetailContainer = ({ route }) => {
   const onDeleteClicked = () => {};
   const dispatch = useDispatch();
 
-  const loadData = async function () {
-    await dispatch(getPlaylistById(playlistId));
+  // const loadData = async function () {
+  //   await dispatch(getPlaylistById(playlistId));
 
-    setLoaded(true);
-  };
+  //   setLoaded(true);
+  // };
   const [loaded, setLoaded] = useState(false);
   const playlist = useAppSelector((state) => state.playlist);
 
   const { playlistId = '' } = route?.params;
   useEffect(() => {
-    if (!playlist.loading && playlist.selectedPlaylist?._id !== playlistId) {
-      loadData();
+    if (!loaded) {
+      dispatch(getPlaylistById(playlistId));
+      setLoaded(true);
     }
-  });
+  }, [loaded, dispatch, playlistId]);
   if (!playlistId) {
     return <Text>Item not found</Text>;
   }

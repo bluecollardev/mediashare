@@ -12,7 +12,7 @@ import { addUserPlaylist, findUserPlaylists } from '../../../state/modules/playl
 
 import { ActionButtons } from '../../layout/ActionButtons';
 import { MediaCard } from '../../layout/MediaCard';
-import { MediaList } from '../../layout/MediaList';
+import { MediaList, MediaListType } from '../../layout/MediaList';
 
 import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum, MediaItem } from '../../../rxjs-api';
 
@@ -23,13 +23,11 @@ interface PlaylistAddContainerProps {
 }
 
 function PlaylistAddContainer({}: PlaylistAddContainerProps) {
-  const selectedItems = new Set<string>();
   const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState('Title');
   const [description, setDescription] = useState('Description');
   const [category, setCategory] = useState(CreatePlaylistDtoCategoryEnum.Builder);
   const [loaded, setLoaded] = useState(false);
-  const [loading, set] = useState(false);
 
   const [selected, setSelected] = useState([]);
   const goBack = useGoBack();
@@ -53,16 +51,26 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const dispatch = useDispatch();
 
   const onMediaItemClick = (e) => {
-    console.log(e);
+    // goToItem({ playlistId: e });
+    console.log('🚀 --------------------------------------------------------');
+    console.log('🚀 ~ file: index.tsx ~ line 59 ~ onMediaItemClick ~ e', e);
+    console.log('🚀 --------------------------------------------------------');
   };
 
   const onTitleChange = setTitle;
   const onDescriptionChange = setDescription;
-  const onCategoryChange = setCategory;
+  const onCategoryChange = (category) => {
+    console.log('🚀 ----------------------------------------------------------------------');
+    console.log('🚀 ~ file: index.tsx ~ line 63 ~ onCategoryChange ~ category', category);
+    console.log('🚀 ----------------------------------------------------------------------');
+
+    setCategory(category);
+  };
 
   const updateSelection = function (bool: boolean, item: MediaListType) {
     const filtered = bool ? selected.concat([item._id]) : selected.filter((key) => key !== item._id);
     setSelected(filtered);
+    console.log(item, filtered);
   };
   const options = [];
   for (const value in CreatePlaylistDtoCategoryEnum) {
@@ -81,7 +89,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const saveItem = async function () {
     const dto: CreatePlaylistDto = {
       title,
-      category: CreatePlaylistDtoCategoryEnum[category],
+      category: category,
       description,
       mediaIds: selected,
       createdBy: '',

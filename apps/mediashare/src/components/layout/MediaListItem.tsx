@@ -56,11 +56,12 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       left={() =>
         selectable ? (
           <>
-            <Checkbox.IOS
+            <Checkbox
               status={!isChecked ? 'indeterminate' : 'checked'}
               onPress={() => {
+                console.log('checked status', isChecked);
                 setIsChecked(!isChecked);
-                onChecked(isChecked);
+                onChecked(!isChecked);
               }}
               color={isChecked ? theme.colors.success : theme.colors.disabled}
             />
