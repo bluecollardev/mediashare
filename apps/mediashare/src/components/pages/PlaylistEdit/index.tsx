@@ -5,12 +5,12 @@ import { ActionSheet, Container, Text, View } from 'native-base';
 
 import { ActionButtons } from '../../layout/ActionButtons';
 
-import { MediaList, MediaListType } from '../../layout/MediaList';
-import { usePageRoute, useRouteName, useRouteWithParams, useViewMediaItem } from '../../../hooks/NavigationHooks';
+import { MediaList } from '../../layout/MediaList';
+import { useViewMediaItem } from '../../../hooks/NavigationHooks';
 import { MediaCard } from '../../layout/MediaCard';
 
 import { useAppSelector } from '../../../state';
-import { findUserPlaylists, getPlaylistById, updateUserPlaylist } from '../../../state/modules/playlists';
+import { getPlaylistById, updateUserPlaylist } from '../../../state/modules/playlists';
 
 import { ListActionButton } from '../../layout/ListActionButton';
 
@@ -204,9 +204,10 @@ const PlaylistEditContainer = ({ navigation, route }) => {
         isSelectable={true}
         removeItem={onRemoveItem}
         addItem={onAddItem}
+        showThumbnail={true}
       />
       {selected === selectedPlaylist?.mediaItems?.length ? (
-        <ActionButtons actionCb={() => save()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
+        <ActionButtons rightIcon={'check-bold'} actionCb={() => save()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
       ) : (
         <ListActionButton danger={true} icon="trash" actionCb={() => showCardMenu(selectedItems.size)} label={'Remove Items from Playlist'} />
       )}

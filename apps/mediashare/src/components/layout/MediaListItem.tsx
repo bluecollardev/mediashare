@@ -51,11 +51,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
     <List.Item
       title={title}
       description={() => {
-        return (
-          <Caption style={{ height: '100%' }} onPress={onViewDetail}>
-            {description}
-          </Caption>
-        );
+        return <Caption onPress={onViewDetail}>{description}</Caption>;
       }}
       left={() =>
         selectable ? (
@@ -76,57 +72,5 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       }
       right={() => showActions === true && <IconButton icon="chevron-right" color={theme.colors.accent} onPress={onViewDetail} />}
     />
-    // <ListItem style={{ borderWidth: 0 }} selected={false}>
-    //   {selectable && (
-    //     <Left style={{ width: '10%', flex: 1 }}>
-    //       <Checkbox.IOS
-    //         status={!isChecked ? 'indeterminate' : 'checked'}
-    //         onPress={() => {
-    //           setIsChecked(!isChecked);
-    //           onChecked(isChecked);
-    //         }}
-    //         color={isChecked ? theme.colors.success : theme.colors.disabled}
-    //       />
-    //     </Left>
-    //   )}
-    //   <Body
-    //     style={{
-    //       flex: 4,
-    //       justifyContent: 'flex-start',
-    //       alignItems: 'flex-start',
-    //       borderWidth: 0,
-    //     }}
-    //   >
-    //     <TouchableWithoutFeedback onPress={onViewDetail}>
-    //       <View style={{ display: 'flex', flexDirection: 'row' }}>
-    //         {!source && showThumbnail ? (
-    //           <View style={{ marginRight: 10 }}>
-    //             <Avatar.Image source={{ uri: DEFAULT_IMAGE }} />
-    //           </View>
-    //         ) : showThumbnail ? (
-    //           <View style={{ marginRight: 10 }}>
-    //             <Avatar.Image size={48} source={source} />
-    //           </View>
-    //         ) : null}
-    //         <View>
-    //           <Text style={{ borderWidth: 0, marginBottom: 3, fontSize: 15 }}>{typeof title === 'string' ? title.replace('.', ' ') : ''}</Text>
-    //           <Text note numberOfLines={2} style={{ color: '#333', fontSize: 11 }}>
-    //             {description}
-    //           </Text>
-    //           <Text note numberOfLines={2} style={{ color: '#333', fontSize: 11 }}>
-    //             Length: 12s
-    //           </Text>
-    //         </View>
-    //       </View>
-    //     </TouchableWithoutFeedback>
-    //   </Body>
-    //   {showActions === true && (
-    //     <Right style={{ width: '10%', flex: 1 }}>
-    //       <TouchableWithoutFeedback>
-    //         <IconButton icon="chevron-right" color={theme.colors.accent} onPress={onViewDetail} />
-    //       </TouchableWithoutFeedback>
-    //     </Right>
-    //   )}
-    // </ListItem>
   );
 };

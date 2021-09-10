@@ -29,6 +29,8 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const [description, setDescription] = useState('Description');
   const [category, setCategory] = useState(CreatePlaylistDtoCategoryEnum.Builder);
   const [loaded, setLoaded] = useState(false);
+  const [loading, set] = useState(false);
+
   const [selected, setSelected] = useState([]);
   const goBack = useGoBack();
 
@@ -97,19 +99,17 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   return (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     <Container style={styles.container}>
-      <View padder>
-        <MediaCard
-          title={title}
-          author={author}
-          description={description}
-          category={category}
-          categoryOptions={options}
-          onCategoryChange={onCategoryChange as any}
-          onTitleChange={onTitleChange}
-          onDescriptionChange={onDescriptionChange}
-          isEdit={true}
-        />
-      </View>
+      <MediaCard
+        title={title}
+        author={author}
+        description={description}
+        category={category}
+        categoryOptions={options}
+        onCategoryChange={onCategoryChange as any}
+        onTitleChange={onTitleChange}
+        onDescriptionChange={onDescriptionChange}
+        isEdit={true}
+      />
       <Content>
         <MediaList
           isSelectable={true}
@@ -120,7 +120,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
           removeItem={(item) => updateSelection(false, item)}
         />
       </Content>
-      <ActionButtons actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
+      <ActionButtons rightIcon={'check-bold'} actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
     </Container>
   );
 }

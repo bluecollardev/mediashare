@@ -80,7 +80,7 @@ export const PlaylistDetailContainer = ({ route }) => {
 
   const { selectedPlaylist } = playlist || {};
 
-  const { description = '', title = '', user } = selectedPlaylist || {};
+  const { description = '', title = '', user, category } = selectedPlaylist || {};
   console.log(selectedPlaylist);
   const items = selectedPlaylist?.mediaItems || [];
   const author = user?.username;
@@ -97,9 +97,10 @@ export const PlaylistDetailContainer = ({ route }) => {
           showThumbnail={true}
           onEditClicked={() => onEditClicked({ playlistId })}
           onDeleteClicked={onDeleteClicked}
+          category={category}
         />
       </View>
-      <ListActionButton icon="add" label="Add From Library" actionCb={() => onAddToPlaylist({ playlistId })} />
+      <ListActionButton icon="plus" label="Add From Library" actionCb={() => onAddToPlaylist({ playlistId })} />
       <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} showThumbnail={true} />
     </Container>
   );

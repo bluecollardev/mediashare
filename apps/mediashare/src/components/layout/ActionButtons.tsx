@@ -2,6 +2,7 @@ import { View, Icon, Text } from 'native-base';
 import { Button } from 'react-native-paper';
 
 import React from 'react';
+import { theme } from '../../styles';
 
 interface Props {
   actionLabel?: string;
@@ -10,12 +11,27 @@ interface Props {
   cancelCb: () => void;
   disableAction?: boolean;
   disableCancel?: boolean;
+  rightIcon?: string;
+  leftIcon?: string;
+  loading?: boolean;
 }
 
-export const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel = 'Back', disableAction = false, disableCancel = false }: Props) => {
+export const ActionButtons = ({
+  cancelCb,
+  actionCb,
+  actionLabel = 'Next',
+  cancelLabel = 'Back',
+  disableAction = false,
+  disableCancel = false,
+  rightIcon = 'share',
+  leftIcon = 'cancel',
+  loading = false,
+}: Props) => {
   return (
     <View padder style={{ flexDirection: 'row' }}>
       <Button
+        icon={leftIcon}
+        loading={loading}
         onPress={() => cancelCb()}
         style={{
           flex: 1,
@@ -23,12 +39,13 @@ export const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancel
           justifyContent: 'center',
         }}
         disabled={disableCancel}
+        color={theme.colors.error}
       >
-        <Icon name="close-outline" />
-        <Text style={{ paddingRight: 30 }}>{cancelLabel}</Text>
+        {cancelLabel}
       </Button>
       <Button
-        icon="share"
+        loading={loading}
+        icon={rightIcon}
         onPress={() => actionCb()}
         disabled={disableAction}
         style={{
@@ -36,8 +53,9 @@ export const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancel
           marginRight: 10,
           justifyContent: 'center',
         }}
+        color={theme.colors.primary}
       >
-        <Text style={{ paddingRight: 30 }}>{actionLabel}</Text>
+        {actionLabel}
       </Button>
     </View>
   );

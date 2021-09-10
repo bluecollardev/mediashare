@@ -17,7 +17,7 @@ interface ListActionButtonProps {
 const ListActionButton = ({ danger = false, actionCb, label, icon }: ListActionButtonProps) => {
   return (
     <View padder style={styles.container}>
-      <Button mode="contained" color={theme.colors.success} loading={danger} style={styles.button} onPress={() => actionCb()} icon={icon}>
+      <Button mode="outlined" color={theme.colors.primary} loading={danger} style={styles.button} onPress={() => actionCb()} icon={icon}>
         {label}
       </Button>
     </View>

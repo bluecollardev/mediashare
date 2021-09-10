@@ -20,23 +20,21 @@ export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, add
   return (
     <Content>
       <View>
-        <List>
-          {list.map((item, idx) => {
-            const { title, description, thumbnail } = item;
-            return (
-              <MediaListItem
-                key={`item-${idx}`}
-                title={title}
-                description={description}
-                image={thumbnail}
-                selectable={isSelectable}
-                showThumbnail={showThumbnail}
-                onChecked={(v) => (v ? addItem(item) : removeItem(item))}
-                onViewDetail={() => onViewDetail(item)}
-              />
-            );
-          })}
-        </List>
+        {list.map((item, idx) => {
+          const { title, description, thumbnail } = item;
+          return (
+            <MediaListItem
+              key={`item-${idx}`}
+              title={title}
+              description={description}
+              image={thumbnail}
+              selectable={isSelectable}
+              showThumbnail={showThumbnail}
+              onChecked={(v) => (v ? addItem(item) : removeItem(item))}
+              onViewDetail={() => onViewDetail(item)}
+            />
+          );
+        })}
       </View>
     </Content>
   );
