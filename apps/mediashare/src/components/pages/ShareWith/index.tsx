@@ -1,61 +1,16 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Button, Container, Content, Icon, Text, View } from 'native-base';
-
-import { ContactList } from '../../layout/ContactList';
-
+import { Container, Content, Text, View } from 'native-base';
+import * as React from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useGoBack, useRouteName } from '../../../hooks/NavigationHooks';
+import { ROUTES } from '../../../routes';
+import { UserDto } from '../../../rxjs-api';
+import { useAppSelector } from '../../../state';
+import { shareUserPlaylist } from '../../../state/modules/playlists';
+import { loadUsers } from '../../../state/modules/users';
 import styles from '../../../styles';
-
-export interface ShareWithProps {
-  navigation: any;
-  list: any;
-}
-
-export interface ShareWithState {}
-
-class ShareWith extends React.Component<ShareWithProps, ShareWithState> {
-  render() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { navigation } = this.props;
-
-    return (
-      <Container style={styles.container}>
-        <Content>
-          <View>
-            <ContactList showGroups={true} />
-          </View>
-          <View padder style={{ flexDirection: 'row' }}>
-            <Button
-              iconLeft
-              danger
-              style={{
-                flex: 1,
-                marginRight: 10,
-                justifyContent: 'center',
-              }}
-            >
-              <Icon name="close-outline" />
-              <Text style={{ paddingRight: 30 }}>Cancel</Text>
-            </Button>
-            <Button
-              iconLeft
-              bordered
-              disabled
-              style={{
-                flex: 1,
-                marginRight: 10,
-                justifyContent: 'center',
-              }}
-            >
-              <Icon name="checkmark" />
-              <Text style={{ paddingRight: 30 }}>Share</Text>
-            </Button>
-          </View>
-        </Content>
-      </Container>
-    );
-  }
-}
+import { ActionButtons } from '../../layout/ActionButtons';
+import { ContactList } from '../../layout/ContactList';
 
 export interface ShareWithContainerProps {
   navigation: any;
@@ -64,24 +19,47 @@ export interface ShareWithContainerProps {
 }
 export interface ShareWithContainerState {}
 
-class ShareWithContainer extends React.Component<ShareWithContainerProps, ShareWithContainerState> {
-  componentDidMount() {
-    // this.props.fetchList();
-  }
-  render() {
-    return <ShareWith navigation={this.props.navigation} list={this.props.data} />;
-  }
-}
+const ShareWithContainer = () => {
+  const dispatch = useDispatch();
+  const goBack = useGoBack();
+  const viewPlaylists = useRouteName(ROUTES.playlists);
+  const [loaded, setLoaded] = React.useState(false);
+  const actionCb = async function () {
+    console.log('submitting');
+    console.log('playlists', playlists);
+    const res = await dispatch(shareUserPlaylist({ userIds: selectedUsers.map((user) => user._id), playlistIds: playlists.map((playlist) => playlist._id) }));
+    console.log(res);
+    setLoaded(false);
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    // fetchList: (url: any) => dispatch(fetchList(url)),
+    viewPlaylists();
   };
-}
+  const users = useAppSelector((state) => state.users.entities);
+  const playlists = useAppSelector((state) => state.playlists.selectedPlaylists);
+  const [selectedUsers, setSelectedUsers] = React.useState([]);
+  const updateSelectedUsers = function (bool: boolean, user: UserDto) {
+    const filtered = bool ? selectedUsers.concat([user]) : selectedUsers.filter((item) => item._id !== user._id);
+    setSelectedUsers(filtered);
+  };
 
-const mapStateToProps = (state: any) => ({
-  data: state && state.playlistDetail ? state.playlistDetail.list : [],
-  isLoading: state && state.playlistDetail ? state.playlistDetail.isLoading : false,
-});
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(loadUsers());
+      setLoaded(true);
+    }
+  }, [loaded, dispatch]);
+  if (!loaded) {
+    return <Text>Loading</Text>;
+  }
+  return (
+    <Container style={styles.container}>
+      <Content>
+        <View>
+          <ContactList showGroups={true} items={users} onChecked={updateSelectedUsers} />
+        </View>
+      </Content>
+      <ActionButtons cancelCb={goBack} actionCb={actionCb} actionLabel="Share" cancelLabel="Cancel" />
+    </Container>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShareWithContainer);
+export default ShareWithContainer;

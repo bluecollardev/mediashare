@@ -141,9 +141,7 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   };
   const saveMediaUpdates = async function () {
     const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
-    console.log('🚀 -----------------------------------------------------------------------');
-    console.log('🚀 ~ file: index.tsx ~ line 144 ~ saveMediaUpdates ~ filtered', filtered);
-    console.log('🚀 -----------------------------------------------------------------------');
+
     const result = await withIds(filtered);
     console.log(result);
     setLoaded(false);

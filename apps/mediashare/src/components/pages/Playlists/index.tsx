@@ -8,7 +8,7 @@ import { ROUTES } from '../../../routes';
 import { useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
 
 import { useAppSelector } from '../../../state';
-import { findUserPlaylists } from '../../../state/modules/playlists';
+import { findUserPlaylists, selectPlaylistAction } from '../../../state/modules/playlists';
 
 import { TopActionButtons } from '../../layout/TopActionButtons';
 import { ListActionButton } from '../../layout/ListActionButton';
@@ -21,6 +21,7 @@ import styles from '../../../styles';
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
   onViewDetailClicked: Function;
+  onChecked?: (checked: boolean, item?: any) => void;
 }
 
 export function mapPlaylists(playlist: PlaylistResponseDto[]) {
@@ -39,7 +40,7 @@ export function mapPlaylists(playlist: PlaylistResponseDto[]) {
 
 export interface PlaylistsState {}
 
-export const Playlists = ({ onViewDetailClicked, list }: PlaylistsProps) => {
+export const Playlists = ({ onViewDetailClicked, list, onChecked = () => {} }: PlaylistsProps) => {
   if (!list) {
     return <Text>...loading</Text>;
   }
@@ -61,6 +62,7 @@ export const Playlists = ({ onViewDetailClicked, list }: PlaylistsProps) => {
               onViewDetail={() => {
                 onViewDetailClicked(item);
               }}
+              onChecked={(checked) => onChecked(checked, item)}
             />
           );
         })}
@@ -91,7 +93,12 @@ export const PlaylistsContainer = () => {
 
     setLoaded(true);
   };
+  const selectedPlaylists = useAppSelector((state) => state.playlists.selectedPlaylists);
 
+  const updateSelection = function (bool, item) {
+    dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
+    console.log(selectedPlaylists);
+  };
   useEffect(() => {
     if (!loaded) {
       loadData();
@@ -108,7 +115,7 @@ export const PlaylistsContainer = () => {
     <Container style={styles.container}>
       <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
       <Content>
-        <Playlists list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
+        <Playlists onChecked={updateSelection} list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
       </Content>
       <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" />
     </Container>
