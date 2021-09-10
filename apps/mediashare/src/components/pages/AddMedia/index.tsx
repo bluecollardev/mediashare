@@ -98,7 +98,7 @@ export const AddMediaContainer = () => {
           >
             <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {documentUri ? (
-                <Image source={{ uri: mediaSrc }} style={{ height: 200, width: 300 }} />
+                <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
               ) : (
                 <Button bordered style={{ width: '100%' }} hasText={true} onPress={getDocument} full={true}>
                   <Icon name="cloud-upload-outline" />
