@@ -84,7 +84,7 @@ export const AddMediaContainer = () => {
   return (
     <Content style={{ height: '100%' }}>
       <ScrollView>
-        <KeyboardAvoidingView behavior={'padding'} style={{ height: '100%' }} keyboardVerticalOffset={50}>
+        <KeyboardAvoidingView behavior={'padding'}>
           <MediaCard
             title={title}
             author={author}
@@ -96,9 +96,9 @@ export const AddMediaContainer = () => {
             onDescriptionChange={onDescriptionChange}
             isEdit={true}
           >
-            <CardItem button onPress={getDocument} cardBody>
+            <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {documentUri ? (
-                <Image source={{ uri: mediaSrc }} style={{ height: 50, width: 50 }} />
+                <Image source={{ uri: mediaSrc }} style={{ height: 200, width: 300 }} />
               ) : (
                 <Button bordered style={{ width: '100%' }} hasText={true} onPress={getDocument} full={true}>
                   <Icon name="cloud-upload-outline" />
