@@ -41,7 +41,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const goToItem = useRouteWithParams(ROUTES.playlistDetail);
+  const goToItem = useRouteWithParams(ROUTES.libraryItemDetail);
   const goToPlaylists = useRouteName(ROUTES.playlists);
 
   const actionLabel = 'Save';
@@ -51,21 +51,12 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const dispatch = useDispatch();
 
   const onMediaItemClick = (e) => {
-    // goToItem({ playlistId: e });
-    console.log('🚀 --------------------------------------------------------');
-    console.log('🚀 ~ file: index.tsx ~ line 59 ~ onMediaItemClick ~ e', e);
-    console.log('🚀 --------------------------------------------------------');
+    goToItem({ mediaId: e._id });
   };
 
   const onTitleChange = setTitle;
   const onDescriptionChange = setDescription;
-  const onCategoryChange = (category) => {
-    console.log('🚀 ----------------------------------------------------------------------');
-    console.log('🚀 ~ file: index.tsx ~ line 63 ~ onCategoryChange ~ category', category);
-    console.log('🚀 ----------------------------------------------------------------------');
-
-    setCategory(category);
-  };
+  const onCategoryChange = setCategory;
 
   const updateSelection = function (bool: boolean, item: MediaListType) {
     const filtered = bool ? selected.concat([item._id]) : selected.filter((key) => key !== item._id);

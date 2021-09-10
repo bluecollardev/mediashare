@@ -98,8 +98,10 @@ const TabNavigator = createBottomTabNavigator();
 function TabNavigation() {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'playlists'}
-      barStyle={{ backgroundColor: '#fff' }}
+      initialRouteName={'Playlists'}
+      activeColor={theme.colors.surface}
+      inactiveColor={theme.colors.onSurface}
+      barStyle={{ backgroundColor: theme.colors.accent }}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {
@@ -112,6 +114,7 @@ function TabNavigation() {
         activeTintColor: 'tomato',
         inactiveTintColor: 'gray',
         showLabel: false,
+        tabBarColor: theme.colors.accent,
       }}
     >
       <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />

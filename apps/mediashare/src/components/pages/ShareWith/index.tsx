@@ -22,9 +22,7 @@ class ShareWith extends React.Component<ShareWithProps, ShareWithState> {
       <Container style={styles.container}>
         <Content>
           <View>
-            <ContactList
-              showGroups={true}
-            />
+            <ContactList showGroups={true} />
           </View>
           <View padder style={{ flexDirection: 'row' }}>
             <Button
@@ -34,7 +32,8 @@ class ShareWith extends React.Component<ShareWithProps, ShareWithState> {
                 flex: 1,
                 marginRight: 10,
                 justifyContent: 'center',
-              }}>
+              }}
+            >
               <Icon name="close-outline" />
               <Text style={{ paddingRight: 30 }}>Cancel</Text>
             </Button>
@@ -45,8 +44,9 @@ class ShareWith extends React.Component<ShareWithProps, ShareWithState> {
               style={{
                 flex: 1,
                 marginRight: 10,
-                justifyContent: 'center'
-              }}>
+                justifyContent: 'center',
+              }}
+            >
               <Icon name="checkmark" />
               <Text style={{ paddingRight: 30 }}>Share</Text>
             </Button>
