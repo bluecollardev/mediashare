@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Text, Button, Icon, Left, Body, Right, CardItem, Card, View, Input, Textarea, Picker, Item, Image } from 'native-base';
 import { StyleSheet } from 'react-native';
 import Video from 'react-native-video';
@@ -12,6 +12,7 @@ export interface MediaListItemProps {
   buttons?: any | boolean;
   content?: any;
   showActions?: boolean;
+  showThumbnail?: boolean;
   category?: string;
   isEdit?: boolean;
   onActionsClicked?: () => void;
@@ -32,6 +33,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     showSocial = false,
     buttons = false,
     showActions = false,
+    showThumbnail = false,
     onActionsClicked = () => {},
     children,
     category = '',
@@ -52,17 +54,17 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
 
       {children}
 
-      <CardItem>
+      <CardItem style={{ marginTop: 10 }}>
         <Body>
           {isEdit ? (
-            <Item regular>
+            <Item regular style={{ marginBottom: 10 }}>
               <Input value={title} onChange={(e) => onTitleChange(e.nativeEvent.text)} />
             </Item>
           ) : (
             <Text>{title}</Text>
           )}
-          <Text style={{ fontSize: 12, color: 'grey' }}>{author} </Text>
-          {isEdit ? (
+          {/* <Text style={{ fontSize: 12, color: 'grey' }}>{author} </Text> */}
+          {isEdit && (
             <Item regular>
               <Picker
                 iosIcon={<Icon name="chevron-down" />}
@@ -78,8 +80,11 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
                 ))}
               </Picker>
             </Item>
-          ) : (
-            <Text style={{ fontSize: 12, color: 'grey' }}>{category}</Text>
+          )}
+          {!isEdit && !!category && (
+            <Text style={{ fontSize: 12, color: 'grey', borderColor: 'grey', borderStyle: 'solid', borderWidth: 1, borderRadius: 3, padding: 3, marginTop: 5 }}>
+              {category}
+            </Text>
           )}
         </Body>
         {showActions && (
@@ -90,11 +95,11 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           </Right>
         )}
       </CardItem>
-      <CardItem>
+      <CardItem style={{ marginBottom: 20 }}>
         {isEdit ? (
           <Textarea rowSpan={5} style={{ width: '100%' }} bordered onChange={(e) => onDescriptionChange(e.nativeEvent.text)} value={description} />
         ) : (
-          <Text note numberOfLines={3} style={{ color: 'black' }}>
+          <Text note numberOfLines={3} style={{ color: 'black', marginBottom: 20 }}>
             {description}
           </Text>
         )}

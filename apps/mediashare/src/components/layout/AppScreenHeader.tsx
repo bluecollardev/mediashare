@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { AppHeader } from './AppHeader';
 
 export interface AppScreenHeaderProps {
@@ -13,8 +13,9 @@ export interface AppScreenHeaderProps {
 export const AppScreenHeader = (props) => {
   const { scene, previous, navigation } = props;
   const { options } = scene.descriptor;
-  const title = options.headerTitle !== undefined ? options.headerTitle : options.title !== undefined ? options.title : scene.route.name;
-
+  const title = options.headerTitle !== undefined ? options.headerTitle : options.title !== undefined ? options.title : '';
+  console.log(title);
+  console.log(options.headerTitle);
   return (
     <AppHeader
       title={title}

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { MediaCard } from './MediaCard';
 import { ActionSheet } from 'native-base';
@@ -11,6 +11,7 @@ export interface PlaylistCardProps {
   author?: string;
   description?: string;
   showActions?: boolean;
+  showThumbnail?: boolean;
   onEditClicked?: () => void;
   onDeleteClicked?: () => void;
   isEdit?: boolean;
@@ -31,6 +32,7 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
     children,
     isEdit = false,
     showActions = false,
+    showThumbnail = false,
     onEditClicked = () => {},
     onDeleteClicked = () => {},
   } = props;
@@ -63,7 +65,8 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
       showSocial={showSocial}
       buttons={buttons}
       children={children}
-      showActions={showSocial}
+      showActions={showActions}
+      showThumbnail={showThumbnail}
       onActionsClicked={showCardMenu}
       isEdit={isEdit}
     />

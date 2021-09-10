@@ -16,7 +16,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'native-base';
 
 import { routeConfig } from './routes';
-import LoginContainer from './container/LoginContainer';
+import LoginContainer from './components/pages/Login';
 
 import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
@@ -34,9 +34,8 @@ const ExploreNavigation = () => {
   return (
     <ExploreStackNavigator.Navigator>
       <ExploreStackNavigator.Screen {...routeConfig.explore} />
-      <ExploreStackNavigator.Screen {...routeConfig.playlistDetail} />
-
-      <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />
+      <ExploreStackNavigator.Screen {...routeConfig.sharedPlaylistDetail} />
+      <ExploreStackNavigator.Screen {...routeConfig.sharedItemDetail} />
     </ExploreStackNavigator.Navigator>
   );
 };
@@ -72,12 +71,12 @@ function LibraryNavigation() {
 }
 const PageStackNavigator = createStackNavigator();
 
-const SettingsStackNavigator = createStackNavigator();
-const SettingsNavigation = () => {
+const AccountStackNavigator = createStackNavigator();
+const AccountNavigation = () => {
   return (
-    <SettingsStackNavigator.Navigator>
-      <SettingsStackNavigator.Screen {...routeConfig.settings} />
-    </SettingsStackNavigator.Navigator>
+    <AccountStackNavigator.Navigator>
+      <AccountStackNavigator.Screen {...routeConfig.account} />
+    </AccountStackNavigator.Navigator>
   );
 };
 
@@ -87,7 +86,7 @@ export const tabNavigationIconsMap = {
   Playlists: 'play-circle-outline',
   Library: 'film-outline',
   Feeds: 'share-social-outline',
-  Settings: 'settings-outline',
+  Account: 'person-outline',
 };
 
 const TabNavigator = createBottomTabNavigator();
@@ -95,7 +94,7 @@ const TabNavigator = createBottomTabNavigator();
 function TabNavigation() {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Playlists'}
+      initialRouteName={'Explore'}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color, size }) => {
@@ -112,7 +111,7 @@ function TabNavigation() {
       <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
       <TabNavigator.Screen name={'Library'} component={LibraryNavigation} />
       {/* <TabNavigator.Screen name={'Feeds'} component={null} />*/}
-      <TabNavigator.Screen name={'Settings'} component={SettingsNavigation} />
+      <TabNavigator.Screen name={'Account'} component={AccountNavigation} />
     </TabNavigator.Navigator>
   );
 }

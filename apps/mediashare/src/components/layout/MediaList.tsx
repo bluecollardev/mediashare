@@ -1,21 +1,22 @@
-import { Content, List, View } from 'native-base';
 import React from 'react';
-
+import { Content, List, View } from 'native-base';
 import { StyleSheet } from 'react-native';
-import { MediaItem } from '../../rxjs-api';
+
 import { MediaListItem } from './MediaListItem';
-import { MediaItemDto } from '../../rxjs-api/models/MediaItemDto';
+import { MediaItem, MediaItemDto } from '../../rxjs-api';
+
 export type MediaListType = Omit<Pick<MediaItemDto, keyof MediaItem>, 'category'>;
+
 interface MediaListProps {
   list: MediaListType[];
   onViewDetail: (item: MediaListType) => void;
   isSelectable: boolean;
+  showThumbnail: boolean;
   addItem?: (item?: MediaListType) => void;
   removeItem?: (item?: MediaListType) => void;
 }
 
-function MediaList({ list, onViewDetail, isSelectable, addItem = () => {}, removeItem = () => {} }: MediaListProps) {
-  console.log(list);
+export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, addItem = () => {}, removeItem = () => {} }: MediaListProps) => {
   return (
     <Content>
       <View>
@@ -29,6 +30,7 @@ function MediaList({ list, onViewDetail, isSelectable, addItem = () => {}, remov
                 description={description}
                 image={thumbnail}
                 selectable={isSelectable}
+                showThumbnail={showThumbnail}
                 onChecked={(v) => (v ? addItem(item) : removeItem(item))}
                 onViewDetail={() => onViewDetail(item)}
               />
@@ -38,9 +40,9 @@ function MediaList({ list, onViewDetail, isSelectable, addItem = () => {}, remov
       </View>
     </Content>
   );
-}
+};
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -53,5 +55,3 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
-
-export default MediaList;

@@ -10,12 +10,11 @@ interface Props {
   disableCancel?: boolean;
 }
 
-const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel = 'Back', disableAction = false, disableCancel = false }: Props) => {
+export const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel = 'Back', disableAction = false, disableCancel = false }: Props) => {
   return (
     <View padder style={{ flexDirection: 'row' }}>
       <Button
         iconLeft
-        bordered
         danger
         onPress={() => cancelCb()}
         style={{
@@ -30,7 +29,6 @@ const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel =
       </Button>
       <Button
         iconLeft
-        bordered
         success
         onPress={() => actionCb()}
         disabled={disableAction}
@@ -46,5 +44,3 @@ const ActionButtons = ({ cancelCb, actionCb, actionLabel = 'Next', cancelLabel =
     </View>
   );
 };
-
-export default ActionButtons;
