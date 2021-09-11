@@ -50,14 +50,6 @@ const LoginComponent = () => {
       <AppSpinner />
       <Card elevation={0}>
         <Card.Cover style={{ backgroundColor: '#fff' }} resizeMode={'contain'} source={require('./logo.png')} />
-        {/* <Image
-            source={require('./logo.png')}
-            style={{
-              width: '75%',
-              height: 100,
-              resizeMode: 'contain',
-            }}
-          /> */}
       </Card>
       <Card elevation={0}>
         <Card.Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>

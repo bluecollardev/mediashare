@@ -5,6 +5,7 @@ import variable from '../src/theme/variables/platform';
 const styles: any = StyleSheet.create({
   container: {
     backgroundColor: '#FBFAFA',
+    height: '100%',
   },
   row: {
     flex: 1,
@@ -55,13 +56,13 @@ const theme: Theme = {
     bgColor: variable.bgColor,
   },
   fonts: {
-    ...DefaultTheme.fonts,
-    // light: { fontFamily: 'Chalkboard SE', fontWeight: '400' },
-    // medium: { fontFamily: 'Chalkboard SE', fontWeight: '700' },
+    medium: { fontFamily: 'Roboto_500Medium', fontWeight: '500' },
 
-    // regular: { fontFamily: 'Thonburi', fontWeight: '500' },
-    // thin: { fontFamily: 'Chalkboard SE', fontWeight: '300' },
+    light: { fontFamily: 'Roboto_300Light', fontWeight: '300' },
+
+    regular: { fontFamily: 'Roboto_400Regular', fontWeight: '400' },
+    thin: { fontFamily: 'Roboto_100Thin', fontWeight: '100' },
   },
-};
+} as const;
 
 export { theme };

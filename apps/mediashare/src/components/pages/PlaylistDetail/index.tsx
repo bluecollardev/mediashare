@@ -61,11 +61,6 @@ export const PlaylistDetailContainer = ({ route }) => {
   const onDeleteClicked = () => {};
   const dispatch = useDispatch();
 
-  // const loadData = async function () {
-  //   await dispatch(getPlaylistById(playlistId));
-
-  //   setLoaded(true);
-  // };
   const [loaded, setLoaded] = useState(false);
   const playlist = useAppSelector((state) => state.playlist);
 

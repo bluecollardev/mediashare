@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Container, Content, List, Text, View } from 'native-base';
+import { List, Text, View } from 'native-base';
 
 import { ROUTES } from '../../../routes';
 
@@ -16,7 +16,11 @@ import { MediaListItem } from '../../layout/MediaListItem';
 
 import { PlaylistResponseDto } from '../../../api';
 
-import styles from '../../../styles';
+import PageContainer from '../../layout/PageContainer';
+import AppContent from '../../layout/AppContent';
+import { SPINNER_DEFAULTS, useSpinner } from '../../../hooks/useSpinner';
+import { ScrollView } from 'react-native';
+import { useLoadData, useLoadPlaylistData } from '../../../hooks/useLoadData';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
@@ -80,45 +84,35 @@ export interface PlaylistsContainerProps {
 
 export const PlaylistsContainer = () => {
   const dispatch = useDispatch();
-
   const shareWithAction = useRouteName(ROUTES.shareWith);
   const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
   const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
-  const playlists = useAppSelector((state) => state.playlists);
 
-  const [loaded, setLoaded] = useState(false);
-
-  const loadData = async function () {
-    await dispatch(findUserPlaylists({}));
-
-    setLoaded(true);
-  };
-  const selectedPlaylists = useAppSelector((state) => state.playlists.selectedPlaylists);
+  const [{ AppSpinner, endLoad, isLoading }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: true });
+  const [{ loaded, state }] = useLoadPlaylistData({ endLoad });
 
   const updateSelection = function (bool, item) {
     dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
-    console.log(selectedPlaylists);
   };
-  useEffect(() => {
-    if (!loaded) {
-      loadData();
-      setLoaded(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaded]);
 
-  if (!loaded) {
-    return <Text>Loading</Text>;
+  if (!loaded || isLoading) {
+    return <AppSpinner />;
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
-    <Container style={styles.container}>
+    <PageContainer>
+      <AppSpinner />
       <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
-      <Content>
-        <Playlists onChecked={updateSelection} list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
-      </Content>
+      <ScrollView>
+        <Playlists
+          onChecked={updateSelection}
+          list={state.playlists.userPlaylists}
+          onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })}
+        />
+      </ScrollView>
+
       <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" />
-    </Container>
+    </PageContainer>
   );
 };
 
