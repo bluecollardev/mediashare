@@ -39,22 +39,24 @@ export const Login = ({ children }) => {
 
   return (
     <Container>
-      <Header style={{ height: 200 }}>
-        <Body style={{ alignItems: 'center' }}>
-          <Image
+      {/* <Header style={{ height: 200 }}>
+        <Body style={{ alignItems: 'center' }}> */}
+      <Card>
+        <Card.Cover resizeMode={'contain'} source={require('./logo.png')} />
+        {/* <Image
             source={require('./logo.png')}
             style={{
               width: '75%',
               height: 100,
               resizeMode: 'contain',
             }}
-          />
-
-          <View padder>
+          /> */}
+      </Card>
+      {/* <View padder>
             <Text style={{ color: Platform.OS === 'ios' ? '#000' : '#FFF' }} />
           </View>
-        </Body>
-      </Header>
+        </Body> */}
+      {/* </Header> */}
       {children}
     </Container>
   );
@@ -69,33 +71,36 @@ const LoginComponent = () => {
     dispatch(loginAction(loginDto));
   };
   return (
-    <Login>
-      <View padder>
-        <Card elevation={0}>
-          {/* <Item error={validateUsername(username) && username.length > 0}>
-            <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" />
-          </Item>
-          <Item error={validatePassword(password)}>
-            <Input onChange={(e) => setPassword(e.nativeEvent.text)} value={password} placeholder="Password" secureTextEntry={true} />
-          </Item> */}
-          <Card.Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
-            <TextInput mode="outlined" dense error={validateUsername(username)} label="Username" onChange={(e) => setUsername(e.nativeEvent.text)} />
+    <View padder>
+      <Card elevation={0}>
+        <Card.Cover style={{ backgroundColor: '#fff' }} resizeMode={'contain'} source={require('./logo.png')} />
+        {/* <Image
+            source={require('./logo.png')}
+            style={{
+              width: '75%',
+              height: 100,
+              resizeMode: 'contain',
+            }}
+          /> */}
+      </Card>
+      <Card elevation={0}>
+        <Card.Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
+          <TextInput mode="outlined" dense error={validateUsername(username)} label="Username" onChange={(e) => setUsername(e.nativeEvent.text)} />
 
-            <TextInput
-              dense
-              mode="outlined"
-              error={validatePassword(password)}
-              label="Password"
-              secureTextEntry={true}
-              onChange={(e) => setPassword(e.nativeEvent.text)}
-            />
-          </Card.Content>
-        </Card>
-        <Button dark mode={'contained'} onPress={() => onLogin({ username, password })}>
-          Login
-        </Button>
-      </View>
-    </Login>
+          <TextInput
+            dense
+            mode="outlined"
+            error={validatePassword(password)}
+            label="Password"
+            secureTextEntry={true}
+            onChange={(e) => setPassword(e.nativeEvent.text)}
+          />
+        </Card.Content>
+      </Card>
+      <Button dark mode={'contained'} onPress={() => onLogin({ username, password })}>
+        Login
+      </Button>
+    </View>
   );
 };
 
