@@ -1,5 +1,4 @@
 import Login from './components/pages/Login';
-import Home from './components/pages/Home';
 import Explore from './components/pages/Explore';
 import ExploreDetail from './components/pages/ExploreDetail';
 import ExploreItemDetail from './components/pages/ExploreItemDetail';
@@ -25,11 +24,6 @@ const routeConfig = {
     name: 'login',
     component: Login,
     options: { title: 'Login', header: AppScreenHeader },
-  },
-  home: {
-    name: 'home',
-    component: Home,
-    options: { title: 'Home', header: AppScreenHeader },
   },
   explore: {
     name: 'explore',
