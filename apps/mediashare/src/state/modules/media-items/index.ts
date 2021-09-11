@@ -115,10 +115,12 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
 
 export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (item: UpdateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = await api.mediaItems.mediaItemControllerUpdate({
-    mediaId: item._id,
-    updateMediaItemDto: item,
-  }).toPromise;
+  const response = await api.mediaItems
+    .mediaItemControllerUpdate({
+      mediaId: item._id,
+      updateMediaItemDto: item,
+    })
+    .toPromise();
   return response;
 });
 

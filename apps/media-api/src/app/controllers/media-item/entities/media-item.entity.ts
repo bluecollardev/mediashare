@@ -26,7 +26,7 @@ export class MediaItem extends BcEntity {
   @Column()
   @ApiLongString()
   summary: string;
-  @ApiString({ required: true })
+  @ApiString({})
   @Column()
   description: string;
 
@@ -40,7 +40,6 @@ export class MediaItem extends BcEntity {
 
   @Column()
   @ApiProperty({ enum: MEDIA_CATEGORY })
-  @IsArray()
   @IsIn(MEDIA_CATEGORY)
   category: MediaCategoryType;
 

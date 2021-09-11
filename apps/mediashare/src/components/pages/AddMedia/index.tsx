@@ -38,7 +38,7 @@ export const AddMediaContainer = () => {
     goBack();
   };
   const options = [];
-  for (const value in CreatePlaylistDtoCategoryEnum) {
+  for (const value in CreateMediaItemDtoCategoryEnum) {
     options.push(value);
   }
 

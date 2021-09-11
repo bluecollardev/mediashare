@@ -11,6 +11,8 @@ import { MediaItemCard } from '../../layout/MediaItemCard';
 import styles from '../../../styles';
 import { useRouteWithParams } from '../../../hooks/NavigationHooks';
 import { ROUTES } from '../../../routes';
+import { useSpinner } from '../../../hooks/useSpinner';
+import PageContainer from '../../layout/PageContainer';
 
 export interface MediaItemDetailContainerProps {
   navigation: any;
@@ -30,39 +32,28 @@ const MediaItemDetailContainer = ({ route }) => {
 
   const { mediaId, uri } = route?.params || {};
   const { mediaItem, loading, loaded } = useAppSelector((state) => state.mediaItem);
+
   const [isLoaded, setIsLoaded] = useState(loaded);
+
   const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const { _id } = mediaItem || {};
 
   useEffect(() => {
-    if (!isLoaded || _id !== mediaId) {
+    async function loadData() {
       dispatch(getMediaItemById({ uri, mediaId }));
 
       setIsLoaded(true);
     }
+    if (!isLoaded || _id !== mediaId) {
+      loadData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isLoaded, uri, mediaId, _id]);
 
-  if (!isLoaded && !mediaItem) {
-    return (
-      <Container style={styles.container}>
-        <View padder>
-          <MediaItemCard
-            author=""
-            title=""
-            description=""
-            showActions={false}
-            category=""
-            onEditClicked={() => onEditClicked({ mediaId })}
-            onDeleteClicked={onDeleteClicked}
-          />
-        </View>
-      </Container>
-    );
-  }
   const { title, description, category, author } = mediaItem || {};
 
   return (
-    <Container style={styles.container}>
+    <PageContainer>
       <View padder>
         <MediaItemCard
           title={title}
@@ -75,7 +66,7 @@ const MediaItemDetailContainer = ({ route }) => {
           author={author}
         />
       </View>
-    </Container>
+    </PageContainer>
   );
 };
 

@@ -52,7 +52,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
       {children}
       {isEdit ? (
         <Card.Content>
-          <TextInput dense mode={'outlined'} textAlign={'left'} placeholder={'Title'} value={title} onChangeText={(text) => onTitleChange(text)} />
+          <TextInput dense mode={'outlined'} textAlign={'left'} label={'Title'} value={title} onChangeText={(text) => onTitleChange(text)} />
           <SwitchSelector
             style={{ marginTop: 10 }}
             options={categoryOptions.map((option) => ({ value: option, label: option }))}
@@ -63,7 +63,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
             multiline={true}
             mode={'outlined'}
             textAlign={'left'}
-            placeholder={'Description'}
+            label={'Description'}
             value={description}
             numberOfLines={5}
             onChangeText={(text) => onDescriptionChange(text)}
