@@ -4,6 +4,7 @@ import { Card, Chip, IconButton, Paragraph, TextInput, Title } from 'react-nativ
 import { StyleSheet } from 'react-native';
 import Video from 'react-native-video';
 import SwitchSelector from 'react-native-switch-selector';
+import { categoryValidator, descriptionValidator, titleValidator } from './formConfig';
 
 export interface MediaListItemProps {
   mediaSrc?: string | null;
@@ -52,7 +53,15 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
       {children}
       {isEdit ? (
         <Card.Content>
-          <TextInput dense mode={'outlined'} textAlign={'left'} label={'Title'} value={title} onChangeText={(text) => onTitleChange(text)} />
+          <TextInput
+            dense
+            mode={'outlined'}
+            textAlign={'left'}
+            label={'Title'}
+            value={title}
+            error={titleValidator(title)}
+            onChangeText={(text) => onTitleChange(text)}
+          />
           <SwitchSelector
             style={{ marginTop: 10 }}
             options={categoryOptions.map((option) => ({ value: option, label: option }))}
@@ -66,6 +75,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
             label={'Description'}
             value={description}
             numberOfLines={5}
+            error={descriptionValidator(description)}
             onChangeText={(text) => onDescriptionChange(text)}
           />
         </Card.Content>

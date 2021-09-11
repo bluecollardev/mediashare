@@ -11,7 +11,7 @@ export const useSpinner = function ({ initialMessage, loadingState }: { initialM
     setIsLoading(true);
     timer = setTimeout(() => {
       setIsLoading(false);
-    }, 10000);
+    }, 5000);
   };
   const AppSpinner = () => <Spinner visible={isLoading} textContent={message} />;
 

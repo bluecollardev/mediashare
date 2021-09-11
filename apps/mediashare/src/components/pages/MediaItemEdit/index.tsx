@@ -121,7 +121,7 @@ const MediaItemEditContainer = ({ navigation, route }) => {
             />
           </View>
         </TouchableWithoutFeedback>
-        <ActionButtons actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
+        <ActionButtons actionCb={saveItem} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
       </KeyboardAvoidingView>
     </PageContainer>
   );
