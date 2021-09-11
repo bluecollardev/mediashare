@@ -24,8 +24,8 @@ interface PlaylistAddContainerProps {
 
 function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const author = useAppSelector((state) => state?.user.username);
-  const [title, setTitle] = useState('Title');
-  const [description, setDescription] = useState('Description');
+  const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
   const [category, setCategory] = useState(CreatePlaylistDtoCategoryEnum.Builder);
   const [loaded, setLoaded] = useState(false);
 
@@ -33,9 +33,9 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const goBack = useGoBack();
 
   const clearAndGoBack = function () {
-    setTitle('Title');
+    setTitle('');
     setCategory(CreatePlaylistDtoCategoryEnum.Builder);
-    setDescription('Description');
+    setDescription('');
     setLoaded(false);
     goBack();
   };

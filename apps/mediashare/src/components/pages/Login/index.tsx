@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { loginAction } from '../../../state/modules/user';
 import { RootState } from '../../../state';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { useSpinner } from '../../../hooks/useSpinner';
+import { SPINNER_DEFAULTS, useSpinner } from '../../../hooks/useSpinner';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -37,7 +37,7 @@ const LoginComponent = () => {
   const [username, setUsername] = useState('test@example.com');
   const [password, setPassword] = useState('string12345');
   const dispatch = useDispatch();
-  const [{ startLoad, endLoad, AppSpinner }] = useSpinner();
+  const [{ startLoad, endLoad, AppSpinner }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
 
   const onLogin = async (loginDto: LoginDto) => {
     startLoad();

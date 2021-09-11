@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Container, Icon, View } from 'native-base';
-import { Text } from 'react-native';
+import { RefreshControl, ScrollView, Text } from 'react-native';
 
 import { routeConfig, ROUTES } from '../../../routes';
 
@@ -15,6 +15,9 @@ import { MediaList } from '../../layout/MediaList';
 import { ListActionButton } from '../../layout/ListActionButton';
 
 import styles from '../../../styles';
+import { useLoadPlaylistByIdData } from '../../../hooks/useLoadData';
+import PageContainer from '../../layout/PageContainer';
+import { useSpinner } from '../../../hooks/useSpinner';
 
 export interface PlaylistDetailProps {
   navigation: any;
@@ -52,54 +55,59 @@ export interface PlaylistDetailContainerProps {
 }
 
 export interface PlaylistDetailContainerState {}
-
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 export const PlaylistDetailContainer = ({ route }) => {
   const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
   const onViewMediaItemClicked = useViewMediaItem();
   const onAddToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
 
   const onDeleteClicked = () => {};
-  const dispatch = useDispatch();
-
-  const [loaded, setLoaded] = useState(false);
-  const playlist = useAppSelector((state) => state.playlist);
-
   const { playlistId = '' } = route?.params;
+  const [{ AppSpinner, isLoading, endLoad }] = useSpinner({ loadingState: true });
+  const [loaded, setLoaded] = useState(false);
+  const dispatch = useDispatch();
+  const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
   useEffect(() => {
+    async function loadData() {
+      await dispatch(getPlaylistById(playlistId));
+      endLoad();
+    }
     if (!loaded) {
-      dispatch(getPlaylistById(playlistId));
+      loadData();
       setLoaded(true);
     }
-  }, [loaded, dispatch, playlistId]);
-  if (!playlistId) {
-    return <Text>Item not found</Text>;
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded, playlistId]);
 
-  const { selectedPlaylist } = playlist || {};
+  const { description = '', title = '', user, category, mediaItems = [] } = selectedPlaylist || {};
 
-  const { description = '', title = '', user, category } = selectedPlaylist || {};
-  console.log(selectedPlaylist);
-  const items = selectedPlaylist?.mediaItems || [];
+  const items = mediaItems;
   const author = user?.username;
 
+  if (!loaded || isLoading) {
+    return <AppSpinner />;
+  }
+
   return (
-    <Container style={styles.container}>
-      <View padder>
-        <PlaylistCard
-          title={title}
-          author={author}
-          description={description}
-          showSocial={false}
-          showActions={true}
-          showThumbnail={true}
-          onEditClicked={() => onEditClicked({ playlistId })}
-          onDeleteClicked={onDeleteClicked}
-          category={category}
-        />
-      </View>
+    <PageContainer>
+      <AppSpinner />
+
+      <PlaylistCard
+        title={title}
+        author={author}
+        description={description}
+        showSocial={false}
+        showActions={true}
+        showThumbnail={true}
+        onEditClicked={() => onEditClicked({ playlistId })}
+        onDeleteClicked={onDeleteClicked}
+        category={category}
+      />
       <ListActionButton icon="plus" label="Add From Media" actionCb={() => onAddToPlaylist({ playlistId })} />
       <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} showThumbnail={true} />
-    </Container>
+    </PageContainer>
   );
 };
 

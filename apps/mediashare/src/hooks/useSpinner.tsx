@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
-export const SPINNER_DEFAULTS = { initialMessage: '', loadingState: false } as const;
+export const SPINNER_DEFAULTS = { initialMessage: '', loadingState: true } as const;
 export const useSpinner = function ({ initialMessage, loadingState }: { initialMessage?: string; loadingState?: boolean } = SPINNER_DEFAULTS) {
   const [isLoading, setIsLoading] = useState(loadingState);
   const [message, setMessage] = useState(initialMessage);

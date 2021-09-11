@@ -88,7 +88,7 @@ export const PlaylistsContainer = () => {
   const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
   const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
 
-  const [{ AppSpinner, endLoad, isLoading }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: true });
+  const [{ AppSpinner, endLoad, isLoading }] = useSpinner();
   const [{ loaded, state }] = useLoadPlaylistData({ endLoad });
 
   const updateSelection = function (bool, item) {
