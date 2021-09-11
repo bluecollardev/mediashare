@@ -5,25 +5,24 @@ import { Container, Content, List, Text, View } from 'native-base';
 import { ROUTES } from '../../../routes';
 
 import { useAppSelector } from '../../../state';
-import { findMediaItems, getMediaItemById, selectMediaItem } from '../../../state/modules/media-items';
+import { findMediaItems } from '../../../state/modules/media-items';
 
 import { useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
 import { TopActionButtons } from '../../layout/TopActionButtons';
-import { ListActionButton } from '../../layout/ListActionButton';
 import { MediaListItem } from '../../layout/MediaListItem';
 
 import { MediaItem, MediaItemDto } from '../../../rxjs-api';
 
 import styles from './styles';
 
-export interface LibraryContainerProps {
+export interface MediaContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
   state: Object;
 }
 
-export const Library = ({ onViewDetail, list }: { navigation: any; list: MediaItemDto[]; onViewDetail: any }) => {
+export const Media = ({ onViewDetail, list }: { navigation: any; list: MediaItemDto[]; onViewDetail: any }) => {
   if (!list) {
     return <Text>...loading</Text>;
   }
@@ -54,12 +53,12 @@ export const Library = ({ onViewDetail, list }: { navigation: any; list: MediaIt
   );
 };
 
-export const LibraryContainer = (props: { navigation: any }) => {
+export const MediaContainer = (props: { navigation: any }) => {
   const dispatch = useDispatch();
-  const addFromLibrary = useRouteName(ROUTES.addFromLibrary);
+  const addFromMedia = useRouteName(ROUTES.addFromMedia);
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
   const addMedia = useRouteName(ROUTES.addMediaItem);
-  const viewMedia = useRouteWithParams(ROUTES.libraryItemDetail);
+  const viewMedia = useRouteWithParams(ROUTES.mediaItemDetail);
 
   const { loaded, mediaItems } = useAppSelector((state) => state.mediaItems);
 
@@ -78,10 +77,10 @@ export const LibraryContainer = (props: { navigation: any }) => {
   return (
     <Container style={styles.container}>
       <TopActionButtons leftAction={addFromFeed} rightAction={addMedia} leftLabel="Add from Feed" rightLabel="Upload" />
-      <Library navigation={props.navigation} list={mediaItems} onViewDetail={onViewItem} />
-      {/* <ListActionButton actionCb={addFromLibrary} label={'Add to Playlist'} icon="plus" /> */}
+      <Media navigation={props.navigation} list={mediaItems} onViewDetail={onViewItem} />
+      {/* <ListActionButton actionCb={addFromMedia} label={'Add to Playlist'} icon="plus" /> */}
     </Container>
   );
 };
 
-export default LibraryContainer;
+export default MediaContainer;

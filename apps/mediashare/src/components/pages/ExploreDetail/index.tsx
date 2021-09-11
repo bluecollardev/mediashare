@@ -3,15 +3,9 @@ import { useDispatch } from 'react-redux';
 import { Button, Container, Icon, View } from 'native-base';
 import { Text } from 'react-native';
 
-import { routeConfig, ROUTES } from '../../../routes';
+import { routeConfig } from '../../../routes';
 
-import {
-  usePageRoute,
-  useRouteWithParams,
-  useViewMediaItem,
-  useViewPlaylist,
-  useViewSharedMediaItem
-} from '../../../hooks/NavigationHooks';
+import { useViewSharedMediaItem } from '../../../hooks/NavigationHooks';
 
 import { useAppSelector } from '../../../state';
 import { getPlaylistById } from '../../../state/modules/playlists';
@@ -38,11 +32,11 @@ export const ExploreDetail = (props) => {
       dark
       style={{ flex: 1, marginRight: 10, justifyContent: 'center' }}
       onPress={() => {
-        navigation.navigate(routeConfig.addFromLibrary.name);
+        navigation.navigate(routeConfig.addFromMedia.name);
       }}
     >
       <Icon name="add-outline" />
-      <Text style={{ paddingRight: 30 }}>Add From Library</Text>
+      <Text style={{ paddingRight: 30 }}>Add From Media</Text>
     </Button>
   );
 };
@@ -55,6 +49,7 @@ export interface ExploreDetailContainerProps {
   state: Object;
   playlistId: string | number; // TODO: Make a type
 }
+
 export interface ExploreDetailContainerState {}
 
 export const ExploreDetailContainer = ({ route }) => {
@@ -89,13 +84,7 @@ export const ExploreDetailContainer = ({ route }) => {
   return (
     <Container style={styles.container}>
       <View padder>
-        <PlaylistCard
-          title={title}
-          author={author}
-          description={description}
-          showSocial={false}
-          showActions={false}
-        />
+        <PlaylistCard title={title} author={author} description={description} showSocial={false} showActions={false} />
       </View>
       <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
     </Container>

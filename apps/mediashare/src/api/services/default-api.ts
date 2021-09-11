@@ -12,29 +12,30 @@
  * Do not edit the class manually.
  */
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
+import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-  DUMMY_BASE_URL,
   assertParamExists,
+  createRequestFunction,
+  DUMMY_BASE_URL,
+  serializeDataIfNeeded,
   setApiKeyToObject,
   setBasicAuthToObject,
   setBearerAuthToObject,
   setOAuthToObject,
   setSearchParams,
-  serializeDataIfNeeded,
-  toPathString,
-  createRequestFunction,
+  toPathString
 } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, BaseAPI, COLLECTION_FORMATS, RequestArgs, RequiredError } from '../base';
+
 /**
  * DefaultApi - axios parameter creator
  * @export
  */
-export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
+export const DefaultApiAxiosParamCreator = function(configuration?: Configuration) {
   return {
     /**
      *
@@ -60,9 +61,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
-    },
+    }
   };
 };
 
@@ -70,7 +71,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
  * DefaultApi - functional programming interface
  * @export
  */
-export const DefaultApiFp = function (configuration?: Configuration) {
+export const DefaultApiFp = function(configuration?: Configuration) {
   const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration);
   return {
     /**
@@ -81,7 +82,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async appControllerIsOnline(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.appControllerIsOnline(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
+    }
   };
 };
 
@@ -89,7 +90,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
  * DefaultApi - factory interface
  * @export
  */
-export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+export const DefaultApiFactory = function(configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = DefaultApiFp(configuration);
   return {
     /**
@@ -99,7 +100,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
      */
     appControllerIsOnline(options?: any): AxiosPromise<void> {
       return localVarFp.appControllerIsOnline(options).then((request) => request(axios, basePath));
-    },
+    }
   };
 };
 
@@ -118,7 +119,7 @@ export class DefaultApi extends BaseAPI {
    */
   public appControllerIsOnline(options?: any) {
     return DefaultApiFp(this.configuration)
-      .appControllerIsOnline(options)
-      .then((request) => request(this.axios, this.basePath));
+    .appControllerIsOnline(options)
+    .then((request) => request(this.axios, this.basePath));
   }
 }

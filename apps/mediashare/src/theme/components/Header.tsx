@@ -123,8 +123,7 @@ export default (variables = variable) => {
     },
     '.rounded': {
       'NativeBase.Item': {
-        borderRadius:
-          platform === 'ios' && platformStyle !== 'material' ? 25 : 3,
+        borderRadius: platform === 'ios' && platformStyle !== 'material' ? 25 : 3,
       },
     },
     'NativeBase.Left': {
@@ -197,10 +196,7 @@ export default (variables = variable) => {
     },
     'NativeBase.Body': {
       flex: 1,
-      alignItems:
-        platform === 'ios' && platformStyle !== 'material'
-          ? 'center'
-          : 'flex-start',
+      alignItems: platform === 'ios' && platformStyle !== 'material' ? 'center' : 'flex-start',
       alignSelf: 'center',
       'NativeBase.Segment': {
         borderWidth: 0,
@@ -260,20 +256,14 @@ export default (variables = variable) => {
           borderRadius: 50,
           'NativeBase.Icon': {
             color: variables.toolbarBtnColor,
-            fontSize:
-              platform === 'ios'
-                ? variables.iconHeaderSize - 6
-                : variables.iconHeaderSize - 2,
+            fontSize: platform === 'ios' ? variables.iconHeaderSize - 6 : variables.iconHeaderSize - 2,
             marginTop: 2,
             marginLeft: 2,
             marginRight: 2,
           },
           'NativeBase.IconNB': {
             color: variables.toolbarBtnColor,
-            fontSize:
-              platform === 'ios'
-                ? variables.iconHeaderSize - 6
-                : variables.iconHeaderSize - 2,
+            fontSize: platform === 'ios' ? variables.iconHeaderSize - 6 : variables.iconHeaderSize - 2,
             marginTop: 2,
             marginLeft: 2,
             marginRight: 2,
@@ -311,14 +301,12 @@ export default (variables = variable) => {
     paddingHorizontal: 10,
     justifyContent: 'center',
     paddingTop: platform === 'ios' ? 15 : 0,
-    borderBottomWidth:
-      platform === 'ios' ? 1 / PixelRatio.getPixelSizeForLayoutSize(1) : 0,
+    borderBottomWidth: platform === 'ios' ? 1 / PixelRatio.getPixelSizeForLayoutSize(1) : 0,
     borderBottomColor: variables.toolbarDefaultBorder,
     height: variables.toolbarHeight,
     elevation: 3,
     shadowColor: platformStyle === 'material' ? '#000' : undefined,
-    shadowOffset:
-      platformStyle === 'material' ? { width: 0, height: 2 } : undefined,
+    shadowOffset: platformStyle === 'material' ? { width: 0, height: 2 } : undefined,
     shadowOpacity: platformStyle === 'material' ? 0.2 : undefined,
     shadowRadius: platformStyle === 'material' ? 1.2 : undefined,
     top: 0,

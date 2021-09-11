@@ -215,11 +215,7 @@ export default (variables = variable) => {
     _.forEach(parent, (style, styleName) => {
       // console.log('styleName', styleName);
       // console.log('parentKey', parentKey);
-      if (
-        styleName.indexOf('.') === 0 &&
-        parentKey &&
-        parentKey.indexOf('.') === 0
-      ) {
+      if (styleName.indexOf('.') === 0 && parentKey && parentKey.indexOf('.') === 0) {
         if (grandparent) {
           if (!grandparent[styleName]) {
             grandparent[styleName] = {};

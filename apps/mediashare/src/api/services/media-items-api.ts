@@ -12,39 +12,36 @@
  * Do not edit the class manually.
  */
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
+import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-  DUMMY_BASE_URL,
   assertParamExists,
+  createRequestFunction,
+  DUMMY_BASE_URL,
+  serializeDataIfNeeded,
   setApiKeyToObject,
   setBasicAuthToObject,
   setBearerAuthToObject,
   setOAuthToObject,
   setSearchParams,
-  serializeDataIfNeeded,
-  toPathString,
-  createRequestFunction,
+  toPathString
 } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, BaseAPI, COLLECTION_FORMATS, RequestArgs, RequiredError } from '../base';
 // @ts-ignore
-import { CreateMediaItemDto } from '../models';
 // @ts-ignore
-import { MediaItem } from '../models';
 // @ts-ignore
-import { MediaItemDto } from '../models';
 // @ts-ignore
-import { ShareItem } from '../models';
 // @ts-ignore
-import { UpdateMediaItemDto } from '../models';
+import { CreateMediaItemDto, MediaItem, MediaItemDto, ShareItem, UpdateMediaItemDto } from '../models';
+
 /**
  * MediaItemsApi - axios parameter creator
  * @export
  */
-export const MediaItemsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const MediaItemsApiAxiosParamCreator = function(configuration?: Configuration) {
   return {
     /**
      *
@@ -76,7 +73,7 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -103,7 +100,7 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -133,7 +130,7 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -160,7 +157,7 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -190,7 +187,7 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -209,8 +206,8 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
       // verify required parameter 'createMediaItemDto' is not null or undefined
       assertParamExists('mediaItemControllerShare', 'createMediaItemDto', createMediaItemDto);
       const localVarPath = `/api/media-items/{mediaId}/share/{userId}`
-        .replace(`{${'mediaId'}}`, encodeURIComponent(String(mediaId)))
-        .replace(`{${'userId'}}`, encodeURIComponent(String(userId)));
+      .replace(`{${'mediaId'}}`, encodeURIComponent(String(mediaId)))
+      .replace(`{${'userId'}}`, encodeURIComponent(String(userId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -231,7 +228,7 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -267,9 +264,9 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
-    },
+    }
   };
 };
 
@@ -277,7 +274,7 @@ export const MediaItemsApiAxiosParamCreator = function (configuration?: Configur
  * MediaItemsApi - functional programming interface
  * @export
  */
-export const MediaItemsApiFp = function (configuration?: Configuration) {
+export const MediaItemsApiFp = function(configuration?: Configuration) {
   const localVarAxiosParamCreator = MediaItemsApiAxiosParamCreator(configuration);
   return {
     /**
@@ -362,7 +359,7 @@ export const MediaItemsApiFp = function (configuration?: Configuration) {
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaItem>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.mediaItemControllerUpdate(mediaId, updateMediaItemDto, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
+    }
   };
 };
 
@@ -370,7 +367,7 @@ export const MediaItemsApiFp = function (configuration?: Configuration) {
  * MediaItemsApi - factory interface
  * @export
  */
-export const MediaItemsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+export const MediaItemsApiFactory = function(configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = MediaItemsApiFp(configuration);
   return {
     /**
@@ -436,7 +433,7 @@ export const MediaItemsApiFactory = function (configuration?: Configuration, bas
      */
     mediaItemControllerUpdate(mediaId: string, updateMediaItemDto: UpdateMediaItemDto, options?: any): AxiosPromise<MediaItem> {
       return localVarFp.mediaItemControllerUpdate(mediaId, updateMediaItemDto, options).then((request) => request(axios, basePath));
-    },
+    }
   };
 };
 
@@ -547,8 +544,8 @@ export class MediaItemsApi extends BaseAPI {
    */
   public mediaItemControllerCreate(requestParameters: MediaItemsApiMediaItemControllerCreateRequest, options?: any) {
     return MediaItemsApiFp(this.configuration)
-      .mediaItemControllerCreate(requestParameters.createMediaItemDto, options)
-      .then((request) => request(this.axios, this.basePath));
+    .mediaItemControllerCreate(requestParameters.createMediaItemDto, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -559,8 +556,8 @@ export class MediaItemsApi extends BaseAPI {
    */
   public mediaItemControllerFindAll(options?: any) {
     return MediaItemsApiFp(this.configuration)
-      .mediaItemControllerFindAll(options)
-      .then((request) => request(this.axios, this.basePath));
+    .mediaItemControllerFindAll(options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -572,8 +569,8 @@ export class MediaItemsApi extends BaseAPI {
    */
   public mediaItemControllerFindOne(requestParameters: MediaItemsApiMediaItemControllerFindOneRequest, options?: any) {
     return MediaItemsApiFp(this.configuration)
-      .mediaItemControllerFindOne(requestParameters.mediaId, options)
-      .then((request) => request(this.axios, this.basePath));
+    .mediaItemControllerFindOne(requestParameters.mediaId, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -584,8 +581,8 @@ export class MediaItemsApi extends BaseAPI {
    */
   public mediaItemControllerGetCategories(options?: any) {
     return MediaItemsApiFp(this.configuration)
-      .mediaItemControllerGetCategories(options)
-      .then((request) => request(this.axios, this.basePath));
+    .mediaItemControllerGetCategories(options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -597,8 +594,8 @@ export class MediaItemsApi extends BaseAPI {
    */
   public mediaItemControllerRemove(requestParameters: MediaItemsApiMediaItemControllerRemoveRequest, options?: any) {
     return MediaItemsApiFp(this.configuration)
-      .mediaItemControllerRemove(requestParameters.mediaId, options)
-      .then((request) => request(this.axios, this.basePath));
+    .mediaItemControllerRemove(requestParameters.mediaId, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -610,8 +607,8 @@ export class MediaItemsApi extends BaseAPI {
    */
   public mediaItemControllerShare(requestParameters: MediaItemsApiMediaItemControllerShareRequest, options?: any) {
     return MediaItemsApiFp(this.configuration)
-      .mediaItemControllerShare(requestParameters.mediaId, requestParameters.userId, requestParameters.createMediaItemDto, options)
-      .then((request) => request(this.axios, this.basePath));
+    .mediaItemControllerShare(requestParameters.mediaId, requestParameters.userId, requestParameters.createMediaItemDto, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -623,7 +620,7 @@ export class MediaItemsApi extends BaseAPI {
    */
   public mediaItemControllerUpdate(requestParameters: MediaItemsApiMediaItemControllerUpdateRequest, options?: any) {
     return MediaItemsApiFp(this.configuration)
-      .mediaItemControllerUpdate(requestParameters.mediaId, requestParameters.updateMediaItemDto, options)
-      .then((request) => request(this.axios, this.basePath));
+    .mediaItemControllerUpdate(requestParameters.mediaId, requestParameters.updateMediaItemDto, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 }

@@ -1,5 +1,6 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import { LoginResponseDto } from '../api/models/login-response-dto';
+
 export type UserContextType = {
   user: LoginResponseDto;
   setUser: (user: LoginResponseDto) => void;

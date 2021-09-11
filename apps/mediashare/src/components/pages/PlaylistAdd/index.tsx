@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Container, Content, View } from 'native-base';
+import { Container, Content } from 'native-base';
 
 import { useGoBack, useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
 
@@ -14,7 +14,7 @@ import { ActionButtons } from '../../layout/ActionButtons';
 import { MediaCard } from '../../layout/MediaCard';
 import { MediaList, MediaListType } from '../../layout/MediaList';
 
-import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum, MediaItem } from '../../../rxjs-api';
+import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
 
 import styles from '../../../styles';
 
@@ -41,7 +41,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const goToItem = useRouteWithParams(ROUTES.libraryItemDetail);
+  const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
   const goToPlaylists = useRouteName(ROUTES.playlists);
 
   const actionLabel = 'Save';

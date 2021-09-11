@@ -52,6 +52,7 @@ class BlankPage extends React.Component<BlankPageProps, BlankPageState> {
 export interface BlankPageProps {
   navigation: any;
 }
+
 export interface BlankPageState {}
 
 export default class BlankPageContainer extends React.Component<BlankPageProps, BlankPageState> {

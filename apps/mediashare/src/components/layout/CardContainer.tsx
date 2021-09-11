@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 interface CardContainerProps {
   children: ReactNode;
@@ -8,8 +8,8 @@ interface CardContainerProps {
 
 function CardContainer({ children }: CardContainerProps) {
   return (
-    <View style={ styles.container }>
-      <Text style={ styles.title }>CardContainer</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>CardContainer</Text>
       {children}
     </View>
   );

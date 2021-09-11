@@ -14,10 +14,12 @@ export interface PutStorageParams {
   key: string;
   options?: StorageOptions;
 }
+
 export function sanitizeFoldername(key: string) {
   const test = key.replace(/(uploads\/)/, '');
   return test;
 }
+
 export function getStorage(key: string) {
   return Storage.get(key);
 }
@@ -57,7 +59,11 @@ export async function fetchAndPutToS3({ fileUri, key, options }: { fileUri: stri
 export async function uploadThumbnail({ fileUri, key }) {
   const { thumbnailKey } = KeyFactory(key);
   const { path } = await createThumbnail({ url: fileUri });
-  const thumbnailResponse = (await fetchAndPutToS3({ key: thumbnailKey, fileUri: path, options: { contentType: 'image/jpeg' } })) as any;
+  const thumbnailResponse = (await fetchAndPutToS3({
+    key: thumbnailKey,
+    fileUri: path,
+    options: { contentType: 'image/jpeg' },
+  })) as any;
   const getItem = await getStorage(thumbnailResponse.key);
   return getItem;
 }
@@ -66,7 +72,11 @@ export async function uploadMedia({ key, fileUri, options }: { key: string; file
   const { videoKey, thumbnailKey } = KeyFactory(key);
 
   const { path } = await createThumbnail({ url: fileUri });
-  const thumbnailResponse = await fetchAndPutToS3({ key: thumbnailKey, fileUri: path, options: { contentType: 'image/jpeg' } });
+  const thumbnailResponse = await fetchAndPutToS3({
+    key: thumbnailKey,
+    fileUri: path,
+    options: { contentType: 'image/jpeg' },
+  });
   const videoResponse = await fetchAndPutToS3({ fileUri, key: videoKey, options });
   return { thumb: thumbnailResponse, video: videoResponse };
 }

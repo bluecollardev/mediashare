@@ -6,20 +6,27 @@ import { Container, View } from 'native-base';
 import { useAppSelector } from '../../../state';
 import { getMediaItemById } from '../../../state/modules/media-items';
 
-import { LibraryItemCard } from '../../layout/LibraryItemCard';
+import { MediaItemCard } from '../../layout/MediaItemCard';
 
 import styles from '../../../styles';
+import { useRouteWithParams } from '../../../hooks/NavigationHooks';
+import { ROUTES } from '../../../routes';
 
-export interface LibraryItemDetailContainerProps {
+export interface MediaItemDetailContainerProps {
   navigation: any;
+  route: any;
   data: Object;
+  state: Object;
+  mediaId: string | number; // TODO: Make a type
 }
-export interface LibraryItemDetailContainerState {}
 
-const LibraryItemDetailContainer = ({ route }) => {
+export interface MediaItemDetailContainerState {}
+
+const MediaItemDetailContainer = ({ route }) => {
   const dispatch = useDispatch();
 
-  const onEditClicked = () => {};
+  const onEditClicked = useRouteWithParams(ROUTES.mediaItemEdit);
+
   const onDeleteClicked = () => {};
 
   const { mediaId, uri } = route?.params || {};
@@ -40,7 +47,15 @@ const LibraryItemDetailContainer = ({ route }) => {
     return (
       <Container style={styles.container}>
         <View padder>
-          <LibraryItemCard title="" description="" showActions={false} category="" onEditClicked={onEditClicked} onDeleteClicked={onDeleteClicked} author="" />
+          <MediaItemCard
+            author=""
+            title=""
+            description=""
+            showActions={false}
+            category=""
+            onEditClicked={() => onEditClicked({ mediaId })}
+            onDeleteClicked={onDeleteClicked}
+          />
         </View>
       </Container>
     );
@@ -50,13 +65,13 @@ const LibraryItemDetailContainer = ({ route }) => {
   return (
     <Container style={styles.container}>
       <View padder>
-        <LibraryItemCard
+        <MediaItemCard
           title={title}
           description={description}
           image={mediaItemSrc}
           showActions={true}
           category={category}
-          onEditClicked={onEditClicked}
+          onEditClicked={() => onEditClicked({ mediaId })}
           onDeleteClicked={onDeleteClicked}
           author={author}
         />
@@ -65,4 +80,4 @@ const LibraryItemDetailContainer = ({ route }) => {
   );
 };
 
-export default LibraryItemDetailContainer;
+export default MediaItemDetailContainer;

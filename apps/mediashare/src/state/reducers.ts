@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 import { userReducer } from './modules/user';
 import { usersReducer } from './modules/users';
 import { mediaItemReducer, mediaItemsReducer } from './modules/media-items';
-import { playlistsReducer, playlistItemsReducer, playlistReducer } from './modules/playlists';
+import { playlistItemsReducer, playlistReducer, playlistsReducer } from './modules/playlists';
 import { reducer as createPlaylistReducer } from './modules/create-playlist';
 
 // Global app flags and data

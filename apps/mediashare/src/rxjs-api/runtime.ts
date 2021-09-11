@@ -13,7 +13,7 @@
 
 import { Observable, of } from 'rxjs';
 import { ajax, AjaxRequest, AjaxResponse } from 'rxjs/ajax';
-import { map, concatMap } from 'rxjs/operators';
+import { concatMap, map } from 'rxjs/operators';
 import { servers } from './servers';
 
 export const BASE_PATH = servers[0].getUrl();
@@ -201,9 +201,11 @@ export const throwIfNullOrUndefined = (value: any, paramName: string, nickname: 
 
 // alias for easier importing
 export interface RequestArgs extends AjaxRequest {}
+
 export interface ResponseArgs extends AjaxResponse {}
 
 export interface Middleware {
   pre?(request: RequestArgs): RequestArgs;
+
   post?(response: ResponseArgs): ResponseArgs;
 }

@@ -2,8 +2,6 @@ import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 
 import { makeActions, makeEnum } from '../../core/factory';
 // import { UserDto } from '../../../api';
-
-import * as genericListReducers from '../../core/reducers';
 import { UserDto } from '../../../rxjs-api/models/UserDto';
 import { apis } from '../../apis';
 

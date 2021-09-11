@@ -14,10 +14,10 @@ const awsmobile = {
   aws_cognito_mfa_types: ['SMS'],
   aws_cognito_password_protection_settings: {
     passwordPolicyMinLength: 8,
-    passwordPolicyCharacters: [],
+    passwordPolicyCharacters: []
   },
   aws_user_files_s3_bucket: 'mediashare0079445c24114369af875159b71aee1c04439-dev',
-  aws_user_files_s3_bucket_region: 'us-west-2',
+  aws_user_files_s3_bucket_region: 'us-west-2'
 };
 
 export default awsmobile;

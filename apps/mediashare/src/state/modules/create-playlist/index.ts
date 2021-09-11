@@ -1,11 +1,8 @@
 import { CreatePlaylistDto } from '../../../rxjs-api';
 import { CreatePlaylistDtoCategoryEnum } from '../../../api/models/create-playlist-dto';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { bindActionCreators } from 'redux';
 import { savePlaylist } from './playlist-api';
 import { store } from '../../../boot/index';
-import { clearMediaItemSelection } from '../media-items/index';
-import { actions } from '../../../boot/configureStore';
 
 function initialStateFactory(): CreatePlaylistDto & { loading: boolean } {
   const initialState = {
@@ -19,6 +16,7 @@ function initialStateFactory(): CreatePlaylistDto & { loading: boolean } {
   const obj = Object.create(null);
   return Object.assign(obj, initialState);
 }
+
 const CREATE_PLAYLIST_KEY = 'createPlaylist' as const;
 
 // const actions = makeActions(['addItem', 'removeItem', 'setDescription', 'setCreatedBy', 'setTitle', 'setCategory']);

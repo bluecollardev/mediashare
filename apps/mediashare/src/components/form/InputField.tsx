@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 interface InputFieldProps {
   children: ReactNode;
@@ -8,8 +8,8 @@ interface InputFieldProps {
 
 function InputField({ children }: InputFieldProps) {
   return (
-    <View style={ styles.container }>
-      <Text style={ styles.title }>InputField</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>InputField</Text>
       {children}
     </View>
   );

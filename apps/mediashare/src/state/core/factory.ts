@@ -13,7 +13,14 @@ export const makeActions = <T extends readonly string[], V>(actions: T): Actions
   actions.reduce((prev, curr) => ({ ...prev, [snakeCaseToCamelCase(curr)]: createAction(curr) }), Object.create({}));
 
 export const ActionsFactory = <T extends readonly string[], V>(actions: T, initialState: V): ActionsTypeSc<T, V> =>
-  actions.reduce((prev, curr) => ({ ...prev, [snakeCaseToCamelCase(curr)]: createAction<V>(snakeCaseToCamelCase(curr)) }), Object.create({}));
+  actions.reduce(
+    (prev, curr) => ({
+      ...prev,
+      [snakeCaseToCamelCase(curr)]: createAction<V>(snakeCaseToCamelCase(curr)),
+    }),
+    Object.create({})
+  );
+
 export function withPayloadType<T>() {
   return (t: T) => ({ payload: t });
 }

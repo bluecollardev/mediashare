@@ -1,7 +1,6 @@
-import React from 'react';
-import { Text, Left, Body, ListItem, CheckBox, Thumbnail } from 'native-base';
+import React, { useState } from 'react';
+import { Body, CheckBox, Left, ListItem, Text, Thumbnail } from 'native-base';
 import { MediaListItemProps } from './MediaListItem';
-import { useState } from 'react';
 
 export interface MediaListItemCheckBoxProps extends MediaListItemProps {
   checked?: boolean;
@@ -10,10 +9,12 @@ export interface MediaListItemCheckBoxProps extends MediaListItemProps {
 export const MediaListItemCheckBox: React.FC<MediaListItemCheckBoxProps> = (props) => {
   const { title, description, image, selectable = true } = props;
   const [checked, setChecked] = useState(props.checked);
+
   function changeChecked(bool) {
     // props.changeChecked(bool);
     setChecked(bool);
   }
+
   return (
     <ListItem style={{ borderWidth: 0 }}>
       {selectable && (

@@ -1,18 +1,17 @@
 import * as React from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Playlists from '../../screens/Playlists';
 
 import { findUserPlaylists } from '../../state/modules/playlists';
-import { routeConfig, ROUTES } from '../../routes';
+import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
-import { useEffect, useState } from 'react';
-import { Container, Content, Text } from 'native-base';
+import { Container, Text } from 'native-base';
 import styles from '../../screens/Home/styles';
 import TopActionButtons from '../../components/layout/TopActionButtons';
 import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
 import { ListActionButton } from '../../components/layout/ListActionButton';
-import { PlaylistResponseDto } from '../../rxjs-api/models/PlaylistResponseDto';
 import { selectPlaylistAction } from '../../state/modules/playlists/index';
 import { RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Icon, Text } from 'native-base';
+import { View } from 'native-base';
 import { Button } from 'react-native-paper';
 import { theme } from '../../styles';
 

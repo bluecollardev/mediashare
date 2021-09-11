@@ -1,11 +1,8 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
-import { Button, Icon, Left, Body, Right, ListItem, Thumbnail, View } from 'native-base';
+import React, { useEffect, useState } from 'react';
 import { Storage } from 'aws-amplify';
 
 import { usePreviewImage } from '../../hooks/UsePreviewImage';
-import { Avatar, Caption, Checkbox, IconButton, List, Text } from 'react-native-paper';
+import { Avatar, Caption, Checkbox, IconButton, List } from 'react-native-paper';
 import { theme } from '../../styles';
 
 export interface MediaListItemProps {
@@ -20,6 +17,7 @@ export interface MediaListItemProps {
   onViewDetail?: () => void;
   onChecked?: (bool: boolean) => void;
 }
+
 const AvatarComponent = (uri: any) => {
   return <Avatar.Image size={24} source={{ uri: uri.uri }} />;
 };

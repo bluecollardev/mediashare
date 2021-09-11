@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import * as DocumentPicker from 'expo-document-picker';
 
 import { MediaCard } from '../../layout/MediaCard';
-import { Button, Input, Item, Label, Text, View, Textarea, Grid, Col, Icon } from 'native-base';
+import { Button, Col, Grid, Icon, Input, Item, Label, Text, Textarea, View } from 'native-base';
 
 import { mediaFormConfig } from '../../pages/AddMedia/formConfig';
-import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addMediaItem } from '../../../state/modules/media-items';
 import { useAppSelector } from '../../../state';

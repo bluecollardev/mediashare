@@ -57,11 +57,12 @@ export interface AddFromFeedContainerProps {
   fetchList: Function;
   data: Object;
 }
+
 export interface AddFromFeedContainerState {}
 
 export const AddFromFeedContainer = () => {
   const dispatch = useDispatch();
-  const goToMediaItems = useRouteName(ROUTES.library);
+  const goToMediaItems = useRouteName(ROUTES.media);
   const selectedItems = new Set<string>();
 
   const addItemCb = function (id: string) {

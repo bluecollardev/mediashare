@@ -17,6 +17,7 @@ export interface ShareWithContainerProps {
   fetchList: Function;
   data: Object;
 }
+
 export interface ShareWithContainerState {}
 
 const ShareWithContainer = () => {
@@ -27,7 +28,12 @@ const ShareWithContainer = () => {
   const actionCb = async function () {
     console.log('submitting');
     console.log('playlists', playlists);
-    const res = await dispatch(shareUserPlaylist({ userIds: selectedUsers.map((user) => user._id), playlistIds: playlists.map((playlist) => playlist._id) }));
+    const res = await dispatch(
+      shareUserPlaylist({
+        userIds: selectedUsers.map((user) => user._id),
+        playlistIds: playlists.map((playlist) => playlist._id),
+      })
+    );
     console.log(res);
     setLoaded(false);
 

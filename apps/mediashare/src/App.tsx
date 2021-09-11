@@ -25,7 +25,7 @@ import { Provider } from 'react-redux';
 import { store } from './boot/configureStore';
 import { useAppSelector } from './state/index';
 import { theme } from './styles';
-import { useFonts, Roboto_500Medium, Roboto_900Black, Roboto_700Bold, Roboto_100Thin, Roboto_300Light, Roboto_400Regular } from '@expo-google-fonts/roboto';
+import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black, useFonts } from '@expo-google-fonts/roboto';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -44,6 +44,7 @@ const ExploreNavigation = () => {
 };
 
 const PlaylistsStackNavigator = createStackNavigator();
+
 function PlaylistsNavigation() {
   return (
     <PlaylistsStackNavigator.Navigator>
@@ -54,25 +55,27 @@ function PlaylistsNavigation() {
       <PlaylistsStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
 
-      <PlaylistsStackNavigator.Screen {...routeConfig.libraryItemDetail} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.addFromLibrary} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemDetail} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.addFromMedia} />
       <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />
     </PlaylistsStackNavigator.Navigator>
   );
 }
 
-const LibraryStackNavigator = createStackNavigator();
-function LibraryNavigation() {
+const MediaStackNavigator = createStackNavigator();
+
+function MediaNavigation() {
   return (
-    <LibraryStackNavigator.Navigator>
-      <LibraryStackNavigator.Screen {...routeConfig.library} />
-      <LibraryStackNavigator.Screen {...routeConfig.libraryItemDetail} />
-      <LibraryStackNavigator.Screen {...routeConfig.addFromFeed} />
-      <LibraryStackNavigator.Screen {...routeConfig.libraryItemEdit} />
-      <LibraryStackNavigator.Screen {...routeConfig.addMedia} />
-    </LibraryStackNavigator.Navigator>
+    <MediaStackNavigator.Navigator>
+      <MediaStackNavigator.Screen {...routeConfig.media} />
+      <MediaStackNavigator.Screen {...routeConfig.mediaItemDetail} />
+      <MediaStackNavigator.Screen {...routeConfig.addFromFeed} />
+      <MediaStackNavigator.Screen {...routeConfig.mediaItemEdit} />
+      <MediaStackNavigator.Screen {...routeConfig.addMedia} />
+    </MediaStackNavigator.Navigator>
   );
 }
+
 const PageStackNavigator = createStackNavigator();
 
 const AccountStackNavigator = createStackNavigator();
@@ -88,7 +91,7 @@ const AccountNavigation = () => {
 export const tabNavigationIconsMap = {
   Explore: 'earth',
   Playlists: 'play-circle-outline',
-  Library: 'video-account',
+  Media: 'video-account',
   // Feeds: 'share-social-outline',
   Account: 'account-settings-outline',
 };
@@ -120,22 +123,32 @@ function TabNavigation() {
     >
       <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />
       <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
-      <TabNavigator.Screen name={'Library'} component={LibraryNavigation} />
+      <TabNavigator.Screen name={'Media'} component={MediaNavigation} />
       {/* <TabNavigator.Screen name={'Feeds'} component={null} />*/}
       <TabNavigator.Screen name={'Account'} component={AccountNavigation} />
     </TabNavigator.Navigator>
   );
 }
+
 Amplify.configure(awsmobile);
+
 async function fakeLogin() {
   await Auth.signOut();
   await Auth.currentCredentials();
 }
+
 fakeLogin().then();
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
-  const [fontsLoaded] = useFonts({ Roboto_500Medium, Roboto_900Black, Roboto_700Bold, Roboto_100Thin, Roboto_300Light, Roboto_400Regular });
+  const [fontsLoaded] = useFonts({
+    Roboto_500Medium,
+    Roboto_900Black,
+    Roboto_700Bold,
+    Roboto_100Thin,
+    Roboto_300Light,
+    Roboto_400Regular,
+  });
   // Amplify.configure(awsmobile);
   // fakeLogin();
 
@@ -175,4 +188,5 @@ function App() {
     );
   }
 }
+
 export default App;

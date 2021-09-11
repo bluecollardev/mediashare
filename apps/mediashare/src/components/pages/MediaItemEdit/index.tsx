@@ -1,29 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
+
 import { ActionSheet, Container, Text, View } from 'native-base';
 
-import { ActionButtons } from '../../layout/ActionButtons';
-
-import { MediaList } from '../../layout/MediaList';
-import { useViewMediaItem } from '../../../hooks/NavigationHooks';
-import { MediaCard } from '../../layout/MediaCard';
-
+import styles from '../../../styles';
 import { useAppSelector } from '../../../state';
+import { CreatePlaylistDtoCategoryEnum, MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
+import { MediaCard } from '../../layout/MediaCard';
 import { getPlaylistById, updateUserPlaylist } from '../../../state/modules/playlists';
-
+import { useViewMediaItem } from '../../../hooks/NavigationHooks';
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
+import { MediaList } from '../../layout/MediaList';
+import { ActionButtons } from '../../layout/ActionButtons';
 import { ListActionButton } from '../../layout/ListActionButton';
 
-import { CreatePlaylistDtoCategoryEnum, MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
-
-import styles from '../../../styles';
-
-export interface PlaylistEditProps {
+export interface MediaItemEditProps {
   navigation: any;
   list: any;
 }
 
-export const PlaylistEdit = ({ navigation }: { navigation: any }) => {
+export const MediaItemEdit = ({ navigation }: { navigation: any }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   const { title, description } = useAppSelector((state) => state.createPlaylist);
@@ -42,22 +38,22 @@ export const PlaylistEdit = ({ navigation }: { navigation: any }) => {
   );
 };
 
-export interface PlaylistEditContainerProps {
+export interface MediaItemEditContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
 
-export interface PlaylistEditContainerState {}
+export interface MediaItemEditContainerState {}
 
-const PlaylistEditContainer = ({ navigation, route }) => {
+const MediaItemEditContainer = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const { playlistId } = route.params;
+  const { mediaId } = route.params;
 
   const [loaded, setLoaded] = useState(false);
-  const playlist = useAppSelector((state) => state.playlist);
-  // const initCategory = useAppSelector((state) => state.playlist?.selectedPlaylist?.category) || UpdatePlaylistDtoCategoryEnum.Builder;
-  const { selectedPlaylist } = playlist;
+  const media = useAppSelector((state) => state.media);
+  // const initCategory = useAppSelector((state) => state.media?.selectedPlaylist?.category) || UpdatePlaylistDtoCategoryEnum.Builder;
+  const { selectedPlaylist } = media;
   console.log(selectedPlaylist);
   const [title, setTitle] = useState(selectedPlaylist?.title);
   const [description, setDescription] = useState(selectedPlaylist?.description);
@@ -68,7 +64,7 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   // const [selectedItems] = useState(new Set<string>());
 
   const loadData = async function () {
-    await dispatch(getPlaylistById(playlistId));
+    await dispatch(getPlaylistById(mediaId));
 
     setLoaded(true);
   };
@@ -95,10 +91,10 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   }, [selectedItems]);
   useEffect(() => {
     if (!loaded) {
-      dispatch(getPlaylistById(playlistId));
+      dispatch(getPlaylistById(mediaId));
       setLoaded(true);
     }
-  }, [loaded, dispatch, playlistId]);
+  }, [loaded, dispatch, mediaId]);
   const withIds = function (mediaIds: string[]) {
     return dispatch(
       updateUserPlaylist({
@@ -125,7 +121,7 @@ const PlaylistEditContainer = ({ navigation, route }) => {
     await loadData();
   };
   const onViewMediaItemClicked = useViewMediaItem();
-  if (!playlistId || !loaded) {
+  if (!mediaId || !loaded) {
     return <Text>Item not found</Text>;
   }
 
@@ -204,4 +200,4 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   );
 };
 
-export default PlaylistEditContainer;
+export default MediaItemEditContainer;

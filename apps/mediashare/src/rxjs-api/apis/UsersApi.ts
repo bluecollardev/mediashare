@@ -12,7 +12,7 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
+import { BaseAPI, encodeURI, HttpHeaders, OperationOpts, RawAjaxResponse, throwIfNullOrUndefined } from '../runtime';
 import { CreateUserDto, PlaylistResponseDto, UpdateUserDto, UserDto } from '../models';
 
 export interface UsersControllerCreateRequest {

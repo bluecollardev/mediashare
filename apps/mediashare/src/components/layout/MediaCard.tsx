@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, Icon, Left, Body, Right, CardItem, View, Input, Textarea, Item, Image, Picker, Radio } from 'native-base';
 
-import { Paragraph, Title, Text, Card, IconButton, Caption, Chip, TextInput, RadioButton } from 'react-native-paper';
-import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { Card, Chip, IconButton, Paragraph, TextInput, Title } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 import Video from 'react-native-video';
 import SwitchSelector from 'react-native-switch-selector';
 

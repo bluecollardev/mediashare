@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Image, Keyboard, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { Image, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Button, CardItem, Content, Icon, Text } from 'native-base';
 import * as DocumentPicker from 'expo-document-picker';
 
@@ -15,8 +15,7 @@ import { addMediaItem, createThumbnail } from '../../../state/modules/media-item
 import { ActionButtons } from '../../layout/ActionButtons';
 import { MediaCard } from '../../layout/MediaCard';
 
-import { CreateMediaItemDtoCategoryEnum, CreateMediaItemDto } from '../../../rxjs-api';
-import { CreatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
+import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
 
 export const AddMediaContainer = () => {
   const dispatch = useDispatch();
@@ -43,7 +42,7 @@ export const AddMediaContainer = () => {
     options.push(value);
   }
 
-  const goToItem = useRouteWithParams(ROUTES.libraryItemDetail);
+  const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
   const onTitleChange = setTitle;
   const onDescriptionChange = setDescription;
   const onCategoryChange = setCategory;
@@ -60,6 +59,7 @@ export const AddMediaContainer = () => {
     setDocumentUri(document?.uri || '');
     dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
   }
+
   const saveItem = async function () {
     const dto: CreateMediaItemDto = {
       title,

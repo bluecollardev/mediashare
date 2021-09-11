@@ -14,6 +14,7 @@ export interface ExploreItemDetailContainerProps {
   navigation: any;
   data: Object;
 }
+
 export interface ExploreItemDetailContainerState {}
 
 const ExploreItemDetailContainer = ({ route }) => {

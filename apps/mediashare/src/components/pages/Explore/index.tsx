@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Container, Content, View, Text } from 'native-base';
+import { Container, Content, Text, View } from 'native-base';
 import { List } from 'react-native-paper';
 import { ROUTES } from '../../../routes';
 
-import { useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
+import { useRouteWithParams } from '../../../hooks/NavigationHooks';
 
 import { useAppSelector } from '../../../state';
 import { findUserPlaylists } from '../../../state/modules/playlists';
 
 import { MediaListItem } from '../../layout/MediaListItem';
-import { ListItemGroup } from '../../layout/ListItemGroup';
 
 import { PlaylistResponseDto } from '../../../api';
 

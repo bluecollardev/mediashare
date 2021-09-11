@@ -11,7 +11,7 @@ export const index = (props: MediaItem[]) => {
   //       // image={image}
   //       changeChecked={(bool) => (item.checked = bool)}
   //       onViewDetail={() => {
-  //         navigation.navigate(routeConfig.libraryItemDetail.name);
+  //         navigation.navigate(routeConfig.mediaItemDetail.name);
   //       }}
   //     />
   //   ))

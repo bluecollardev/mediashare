@@ -1,9 +1,6 @@
-import React from 'react';
-import { Text, View, Container, Header, Body } from 'native-base';
-import { Card, Button, TextInput } from 'react-native-paper';
-import { Image, Platform } from 'react-native';
-
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Container, View } from 'native-base';
+import { Button, Card, TextInput } from 'react-native-paper';
 import { LoginDto } from '../../../api';
 
 import { useDispatch } from 'react-redux';
@@ -18,6 +15,7 @@ export const email = (value: any) => !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/
 function validateUsername(username: string) {
   return email(username) && username.length > 0;
 }
+
 function validatePassword(password: string) {
   if (password.length < 1) {
     return true;

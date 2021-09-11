@@ -38,7 +38,11 @@ export const shareMediaItem = createAsyncThunk(
   mediaItemActionTypes.shareMediaItem,
   async (args: { id: string; userId: string; item: CreateMediaItemDto }, { extra }) => {
     const { api } = extra as { api: ApiService };
-    const response = await api.mediaItems.mediaItemControllerShare({ mediaId: args.id, userId: args.userId, createMediaItemDto: args.item });
+    const response = await api.mediaItems.mediaItemControllerShare({
+      mediaId: args.id,
+      userId: args.userId,
+      createMediaItemDto: args.item,
+    });
     // @ts-ignore
     return response && response.status === 200 ? response.data : undefined;
   }

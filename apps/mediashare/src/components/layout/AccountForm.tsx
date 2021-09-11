@@ -1,9 +1,6 @@
-import React from 'react';
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import { Input, Item } from 'native-base';
-
-import TextField from '../form/TextField';
 
 export interface AccountFormProps {
   navigation?: any;

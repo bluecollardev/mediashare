@@ -2,7 +2,6 @@ import * as React from 'react';
 // import { StyleProvider } from 'native-base';
 // import getTheme from '../../src/theme/components';
 // import variables from '../../src/theme/variables/platform';
-
 import { Provider } from 'react-redux';
 import { Root } from 'native-base';
 
@@ -10,6 +9,7 @@ import { store } from './configureStore';
 import App from '../../src/App';
 
 export interface SetupProps {}
+
 export interface SetupState {
   isLoading: boolean;
 }

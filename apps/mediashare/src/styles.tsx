@@ -21,6 +21,7 @@ const styles: any = StyleSheet.create({
 });
 export default styles;
 type ThemeType = typeof DefaultTheme;
+
 interface Theme extends ThemeType {
   colors: ThemeType['colors'] & {
     success: string;
@@ -33,6 +34,7 @@ interface Theme extends ThemeType {
     bgColor: string;
   };
 }
+
 const theme: Theme = {
   ...DefaultTheme,
   roundness: 2,

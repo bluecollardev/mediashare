@@ -12,31 +12,32 @@
  * Do not edit the class manually.
  */
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
+import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-  DUMMY_BASE_URL,
   assertParamExists,
+  createRequestFunction,
+  DUMMY_BASE_URL,
+  serializeDataIfNeeded,
   setApiKeyToObject,
   setBasicAuthToObject,
   setBearerAuthToObject,
   setOAuthToObject,
   setSearchParams,
-  serializeDataIfNeeded,
-  toPathString,
-  createRequestFunction,
+  toPathString
 } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, BaseAPI, COLLECTION_FORMATS, RequestArgs, RequiredError } from '../base';
 // @ts-ignore
 import { ShareItem } from '../models';
+
 /**
  * ShareItemsApi - axios parameter creator
  * @export
  */
-export const ShareItemsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const ShareItemsApiAxiosParamCreator = function(configuration?: Configuration) {
   return {
     /**
      *
@@ -62,7 +63,7 @@ export const ShareItemsApiAxiosParamCreator = function (configuration?: Configur
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -92,7 +93,7 @@ export const ShareItemsApiAxiosParamCreator = function (configuration?: Configur
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -122,9 +123,9 @@ export const ShareItemsApiAxiosParamCreator = function (configuration?: Configur
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
-    },
+    }
   };
 };
 
@@ -132,7 +133,7 @@ export const ShareItemsApiAxiosParamCreator = function (configuration?: Configur
  * ShareItemsApi - functional programming interface
  * @export
  */
-export const ShareItemsApiFp = function (configuration?: Configuration) {
+export const ShareItemsApiFp = function(configuration?: Configuration) {
   const localVarAxiosParamCreator = ShareItemsApiAxiosParamCreator(configuration);
   return {
     /**
@@ -163,7 +164,7 @@ export const ShareItemsApiFp = function (configuration?: Configuration) {
     async shareItemsControllerRemove(shareId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShareItem>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.shareItemsControllerRemove(shareId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
+    }
   };
 };
 
@@ -171,7 +172,7 @@ export const ShareItemsApiFp = function (configuration?: Configuration) {
  * ShareItemsApi - factory interface
  * @export
  */
-export const ShareItemsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+export const ShareItemsApiFactory = function(configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = ShareItemsApiFp(configuration);
   return {
     /**
@@ -199,7 +200,7 @@ export const ShareItemsApiFactory = function (configuration?: Configuration, bas
      */
     shareItemsControllerRemove(shareId: string, options?: any): AxiosPromise<ShareItem> {
       return localVarFp.shareItemsControllerRemove(shareId, options).then((request) => request(axios, basePath));
-    },
+    }
   };
 };
 
@@ -246,8 +247,8 @@ export class ShareItemsApi extends BaseAPI {
    */
   public shareItemsControllerFindAll(options?: any) {
     return ShareItemsApiFp(this.configuration)
-      .shareItemsControllerFindAll(options)
-      .then((request) => request(this.axios, this.basePath));
+    .shareItemsControllerFindAll(options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -259,8 +260,8 @@ export class ShareItemsApi extends BaseAPI {
    */
   public shareItemsControllerFindOne(requestParameters: ShareItemsApiShareItemsControllerFindOneRequest, options?: any) {
     return ShareItemsApiFp(this.configuration)
-      .shareItemsControllerFindOne(requestParameters.shareId, options)
-      .then((request) => request(this.axios, this.basePath));
+    .shareItemsControllerFindOne(requestParameters.shareId, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -272,7 +273,7 @@ export class ShareItemsApi extends BaseAPI {
    */
   public shareItemsControllerRemove(requestParameters: ShareItemsApiShareItemsControllerRemoveRequest, options?: any) {
     return ShareItemsApiFp(this.configuration)
-      .shareItemsControllerRemove(requestParameters.shareId, options)
-      .then((request) => request(this.axios, this.basePath));
+    .shareItemsControllerRemove(requestParameters.shareId, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 }

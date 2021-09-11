@@ -3,7 +3,7 @@ import Home from './components/pages/Home';
 import Explore from './components/pages/Explore';
 import ExploreDetail from './components/pages/ExploreDetail';
 import ExploreItemDetail from './components/pages/ExploreItemDetail';
-import AddFromLibrary from './components/pages/AddFromLibrary';
+import AddFromMedia from './components/pages/AddFromMedia';
 import AddMedia from './components/pages/AddMedia';
 import AddFromFeed from './components/pages/AddFromFeed';
 import Playlists from './components/pages/Playlists';
@@ -11,9 +11,9 @@ import PlaylistDetail from './components/pages/PlaylistDetail';
 import PlaylistEdit from './components/pages/PlaylistEdit';
 import PlaylistAdd from './components/pages/PlaylistAdd';
 import AddToPlaylist from './components/pages/AddToPlaylist';
-import Library from './components/pages/Library';
-import LibraryItemDetail from './components/pages/LibraryItemDetail';
-import LibraryItemEdit from './components/pages/LibraryItemEdit';
+import Media from './components/pages/Media';
+import MediaItemDetail from './components/pages/MediaItemDetail';
+import MediaItemEdit from './components/pages/MediaItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
 import Settings from './components/layout/Accordion';
@@ -71,30 +71,30 @@ const routeConfig = {
     component: PlaylistAdd,
     options: { title: 'Create Playlist', header: AppScreenHeader },
   },
-  library: {
-    name: 'library',
-    component: Library,
-    options: { title: 'Library', header: AppScreenHeader },
+  media: {
+    name: 'media',
+    component: Media,
+    options: { title: 'Media', header: AppScreenHeader },
   },
-  libraryItemDetail: {
-    name: 'libraryItemDetail',
-    component: LibraryItemDetail,
-    options: { title: 'Library Item', header: AppScreenHeader },
+  mediaItemDetail: {
+    name: 'mediaItemDetail',
+    component: MediaItemDetail,
+    options: { title: 'Media Item', header: AppScreenHeader },
   },
-  libraryItemEdit: {
-    name: 'libraryItemEdit',
-    component: LibraryItemEdit,
-    options: { title: 'Edit Library Item', header: AppScreenHeader },
+  mediaItemEdit: {
+    name: 'mediaItemEdit',
+    component: MediaItemEdit,
+    options: { title: 'Edit Media Item', header: AppScreenHeader },
   },
   addFromFeed: {
     name: 'addFromFeed',
     component: AddFromFeed,
     options: { title: 'Add From Feed', header: AppScreenHeader },
   },
-  addFromLibrary: {
-    name: 'addFromLibrary',
-    component: AddFromLibrary,
-    options: { title: 'Add From Library', header: AppScreenHeader },
+  addFromMedia: {
+    name: 'addFromMedia',
+    component: AddFromMedia,
+    options: { title: 'Add From Media', header: AppScreenHeader },
   },
   addPlaylist: {
     name: 'addPlaylist',

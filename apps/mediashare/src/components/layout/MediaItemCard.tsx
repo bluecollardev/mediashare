@@ -3,7 +3,7 @@ import React from 'react';
 import { MediaCard } from './MediaCard';
 import { ActionSheet } from 'native-base';
 
-export interface LibraryItemCardProps {
+export interface MediaItemCardProps {
   navigation?: any;
   buttons?: any;
   title?: string;
@@ -21,7 +21,7 @@ const mediaCardButtons = ['Edit', 'Delete', 'Cancel'];
 const destructive_idx = 1;
 const cancel_idx = 2;
 
-export const LibraryItemCard: React.FC<LibraryItemCardProps> = (props) => {
+export const MediaItemCard: React.FC<MediaItemCardProps> = (props) => {
   const {
     navigation,
     title = '',

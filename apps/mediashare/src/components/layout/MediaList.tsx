@@ -1,5 +1,5 @@
 import React from 'react';
-import { Content, List, View } from 'native-base';
+import { Content, View } from 'native-base';
 import { StyleSheet } from 'react-native';
 
 import { MediaListItem } from './MediaListItem';

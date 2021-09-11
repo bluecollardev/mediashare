@@ -1,6 +1,7 @@
 export * from './middlewares';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { store } from '../boot/configureStore';
+
 export interface ErrorType {
   description: string;
   message: string;

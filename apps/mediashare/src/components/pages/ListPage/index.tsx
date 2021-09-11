@@ -61,12 +61,14 @@ export interface ListPageProps {
   fetchList: Function;
   data: Object;
 }
+
 export interface ListPageState {}
 
 export class ListPageContainer extends React.Component<ListPageProps, ListPageState> {
   componentDidMount() {
     // this.props.fetchList();
   }
+
   render() {
     return null;
     // return <ListPage navigation={this.props.navigation} list={this.props.data} />;

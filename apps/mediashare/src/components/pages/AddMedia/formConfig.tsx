@@ -1,4 +1,5 @@
 import { CreateMediaItemDto } from '../../../api';
+
 type FormConfigType = { name: string; label: string; value?: any };
 export type FormConfig<Keys extends string> = { [key in Keys]?: FormConfigType };
 

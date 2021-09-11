@@ -1,4 +1,4 @@
-import { View, Icon, Text } from 'native-base';
+import { View } from 'native-base';
 import { Button } from 'react-native-paper';
 
 import React from 'react';

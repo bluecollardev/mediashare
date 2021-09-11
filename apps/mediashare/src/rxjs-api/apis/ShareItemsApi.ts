@@ -12,7 +12,7 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
+import { BaseAPI, encodeURI, OperationOpts, RawAjaxResponse, throwIfNullOrUndefined } from '../runtime';
 import { ShareItem } from '../models';
 
 export interface ShareItemsControllerFindOneRequest {

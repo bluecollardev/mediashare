@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 
 import { routeConfig, ROUTES } from '../../../routes';
 
-import { usePageRoute, useRouteWithParams, useViewMediaItem, useViewPlaylist } from '../../../hooks/NavigationHooks';
+import { useRouteWithParams, useViewMediaItem } from '../../../hooks/NavigationHooks';
 
 import { useAppSelector } from '../../../state';
 import { getPlaylistById } from '../../../state/modules/playlists';
@@ -33,11 +33,11 @@ export const PlaylistDetail = (props) => {
       dark
       style={{ flex: 1, marginRight: 10, justifyContent: 'center' }}
       onPress={() => {
-        navigation.navigate(routeConfig.addFromLibrary.name);
+        navigation.navigate(routeConfig.addFromMedia.name);
       }}
     >
       <Icon name="add-outline" />
-      <Text style={{ paddingRight: 30 }}>Add From Library</Text>
+      <Text style={{ paddingRight: 30 }}>Add From Media</Text>
     </Button>
   );
 };
@@ -50,6 +50,7 @@ export interface PlaylistDetailContainerProps {
   state: Object;
   playlistId: string | number; // TODO: Make a type
 }
+
 export interface PlaylistDetailContainerState {}
 
 export const PlaylistDetailContainer = ({ route }) => {
@@ -101,7 +102,7 @@ export const PlaylistDetailContainer = ({ route }) => {
           category={category}
         />
       </View>
-      <ListActionButton icon="plus" label="Add From Library" actionCb={() => onAddToPlaylist({ playlistId })} />
+      <ListActionButton icon="plus" label="Add From Media" actionCb={() => onAddToPlaylist({ playlistId })} />
       <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} showThumbnail={true} />
     </Container>
   );

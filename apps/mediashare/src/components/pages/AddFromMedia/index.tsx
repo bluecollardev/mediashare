@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { toggleMediaItem } from '../../../state/modules/media-items';
-
-import { ListItemGroup } from '../../layout/ListItemGroup';
 import { MediaListItem } from '../../layout/MediaListItem';
 
 import { MediaItem } from '../../../rxjs-api';
 import { findUserPlaylists } from '../../../state/modules/playlists';
-import { useAppSelector } from '../../../state/index';
-import { ScrollView, View } from 'react-native';
+import { useAppSelector } from '../../../state';
+import { ScrollView } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { theme } from '../../../styles';
 import { ActionButtons } from '../../layout/ActionButtons';
-import { PlaylistResponseDto } from '../../../api/models/playlist-response-dto';
+import { PlaylistResponseDto } from '../../../api';
 
 export interface AddFromProps {
   navigation: any;
@@ -44,6 +42,7 @@ export const AddFrom = ({ onViewDetail = () => {} }: AddFromProps) => {
   function toggleField(id: number) {
     dispatch(toggleMediaItem(id));
   }
+
   console.log(items);
   if (!loaded || loading || items?.length < 1) {
     return <ActivityIndicator animating={true} color={theme.colors.accent} />;

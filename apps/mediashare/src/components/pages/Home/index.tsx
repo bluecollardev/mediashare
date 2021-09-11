@@ -37,6 +37,7 @@ class HomeContainer extends React.Component<HomeContainerProps, HomeContainerSta
   componentDidMount() {
     // this.props.fetchList(datas);
   }
+
   render() {
     return <Home navigation={this.props.navigation} list={this.props.data} />;
   }

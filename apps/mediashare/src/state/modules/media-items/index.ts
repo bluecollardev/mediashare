@@ -4,11 +4,11 @@ import { makeEnum } from '../../core/factory';
 
 import { apis, ApiService } from '../../apis';
 import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
-import { uploadMedia, getStorage, listStorage, copyStorage, sanitizeFoldername, deleteStorage, uploadThumbnail } from './storage';
+import { copyStorage, deleteStorage, getStorage, listStorage, sanitizeFoldername, uploadMedia, uploadThumbnail } from './storage';
 import { KeyFactory } from './key-factory';
 import { getAllMedia } from './media-items';
 import { AwsMediaItem } from './aws-media-item.model';
-import { merge, concat, forkJoin } from 'rxjs';
+import { concat, forkJoin, merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { MediaItemDto } from '../../../rxjs-api/models/MediaItemDto';
 import { CreateMediaItemDtoCategoryEnum } from '../../../rxjs-api/models/CreateMediaItemDto';
@@ -33,7 +33,10 @@ export const clearMediaItemSelection = createAction('clearMediaItems');
 export const clearMediaItem = createAction('clearMediaItem');
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async ({ uri, mediaId }: { uri: string; mediaId: string }) => {
-  const result = await forkJoin({ mediaItem: apis.mediaItems.mediaItemControllerFindOne({ mediaId }).toPromise(), src: getStorage(uri) }).toPromise();
+  const result = await forkJoin({
+    mediaItem: apis.mediaItems.mediaItemControllerFindOne({ mediaId }).toPromise(),
+    src: getStorage(uri),
+  }).toPromise();
 
   return { mediaItem: result.mediaItem as MediaItemDto, src: result.src };
 });
@@ -77,7 +80,12 @@ export const addMediaItem = createAsyncThunk(
 
 export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
   const mediaItems = (await listStorage('uploads/')) as AwsMediaItem[];
-  return mediaItems.filter((item) => item.key !== 'uploads/').map((item) => ({ ...item, key: sanitizeFoldername(item.key) }));
+  return mediaItems
+    .filter((item) => item.key !== 'uploads/')
+    .map((item) => ({
+      ...item,
+      key: sanitizeFoldername(item.key),
+    }));
 });
 
 export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ keys }: { keys: string[] }) => {
@@ -107,7 +115,10 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
 
 export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (item: UpdateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = await api.mediaItems.mediaItemControllerUpdate({ mediaId: item._id, updateMediaItemDto: item }).toPromise;
+  const response = await api.mediaItems.mediaItemControllerUpdate({
+    mediaId: item._id,
+    updateMediaItemDto: item,
+  }).toPromise;
   return response;
 });
 
@@ -115,7 +126,11 @@ export const shareMediaItem = createAsyncThunk(
   mediaItemActionTypes.shareMediaItem,
   async (args: { id: string; userId: string; item: CreateMediaItemDto }, { extra }) => {
     const { api } = extra as { api: ApiService };
-    const response = await api.mediaItems.mediaItemControllerShare({ mediaId: args.id, userId: args.userId, createMediaItemDto: args.item });
+    const response = await api.mediaItems.mediaItemControllerShare({
+      mediaId: args.id,
+      userId: args.userId,
+      createMediaItemDto: args.item,
+    });
     return response;
   }
 );

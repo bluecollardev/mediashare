@@ -1,9 +1,7 @@
 import React from 'react';
-import { Accordion as NBAccordion, Container, Content, Icon, Text, View } from 'native-base';
+import { Accordion as NBAccordion, Icon, Text, View } from 'native-base';
 
 import { ContactList } from '../ContactList';
-
-import styles from '../../../styles';
 
 export interface AccordionProps {
   navigation: any;
@@ -58,9 +56,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         item: 'Accordion',
       },
     }; // this.props.navigation.state.params;
-    return (
-      <NBAccordion dataArray={this.sections} renderHeader={this.renderHeader} renderContent={this.renderContent} />
-    );
+    return <NBAccordion dataArray={this.sections} renderHeader={this.renderHeader} renderContent={this.renderContent} />;
   }
 }
 
@@ -70,10 +66,7 @@ export interface AccordionProps {
 
 export interface AccordionState {}
 
-export default class AccordionContainer extends React.Component<
-  AccordionProps,
-  AccordionState
-> {
+export default class AccordionContainer extends React.Component<AccordionProps, AccordionState> {
   render() {
     return <Accordion navigation={this.props.navigation} />;
   }

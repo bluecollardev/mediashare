@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, TextInput, View } from 'react-native';
-import { Item, Label, Input } from 'native-base';
+import { Text, View } from 'react-native';
+import { Input, Item, Label } from 'native-base';
 import { WrappedFieldProps } from 'redux-form';
 
 export interface TextFieldProps extends WrappedFieldProps {
@@ -34,11 +34,7 @@ export default function TextField(props: TextFieldProps) {
             <Text>{label}</Text>
           </Label>
         )}
-        <Input
-          {...input}
-          onFocus={onFocus}
-          style={{ borderColor: 'lightgrey', borderWidth: 1, borderRadius: 3 }}
-        />
+        <Input {...input} onFocus={onFocus} style={{ borderColor: 'lightgrey', borderWidth: 1, borderRadius: 3 }} />
         {hasError ? <Text>{error}</Text> : <Text />}
       </Item>
     </View>

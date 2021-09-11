@@ -12,43 +12,46 @@
  * Do not edit the class manually.
  */
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
+import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-  DUMMY_BASE_URL,
   assertParamExists,
+  createRequestFunction,
+  DUMMY_BASE_URL,
+  serializeDataIfNeeded,
   setApiKeyToObject,
   setBasicAuthToObject,
   setBearerAuthToObject,
   setOAuthToObject,
   setSearchParams,
-  serializeDataIfNeeded,
-  toPathString,
-  createRequestFunction,
+  toPathString
 } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, BaseAPI, COLLECTION_FORMATS, RequestArgs, RequiredError } from '../base';
 // @ts-ignore
-import { CreatePlaylistDto } from '../models';
 // @ts-ignore
-import { CreatePlaylistResponseDto } from '../models';
 // @ts-ignore
-import { Playlist } from '../models';
 // @ts-ignore
-import { PlaylistItemResponseDto } from '../models';
 // @ts-ignore
-import { PlaylistResponseDto } from '../models';
 // @ts-ignore
-import { ShareItem } from '../models';
 // @ts-ignore
-import { UpdatePlaylistDto } from '../models';
+import {
+  CreatePlaylistDto,
+  CreatePlaylistResponseDto,
+  Playlist,
+  PlaylistItemResponseDto,
+  PlaylistResponseDto,
+  ShareItem,
+  UpdatePlaylistDto
+} from '../models';
+
 /**
  * PlaylistsApi - axios parameter creator
  * @export
  */
-export const PlaylistsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const PlaylistsApiAxiosParamCreator = function(configuration?: Configuration) {
   return {
     /**
      *
@@ -80,7 +83,7 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -107,7 +110,7 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -137,7 +140,7 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -164,7 +167,7 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -194,7 +197,7 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -210,8 +213,8 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
       // verify required parameter 'userId' is not null or undefined
       assertParamExists('playlistControllerShare', 'userId', userId);
       const localVarPath = `/api/playlists/{playlistId}/share/{userId}`
-        .replace(`{${'playlistId'}}`, encodeURIComponent(String(playlistId)))
-        .replace(`{${'userId'}}`, encodeURIComponent(String(userId)));
+      .replace(`{${'playlistId'}}`, encodeURIComponent(String(playlistId)))
+      .replace(`{${'userId'}}`, encodeURIComponent(String(userId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -229,7 +232,7 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
     },
     /**
@@ -265,9 +268,9 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+        options: localVarRequestOptions
       };
-    },
+    }
   };
 };
 
@@ -275,7 +278,7 @@ export const PlaylistsApiAxiosParamCreator = function (configuration?: Configura
  * PlaylistsApi - functional programming interface
  * @export
  */
-export const PlaylistsApiFp = function (configuration?: Configuration) {
+export const PlaylistsApiFp = function(configuration?: Configuration) {
   const localVarAxiosParamCreator = PlaylistsApiAxiosParamCreator(configuration);
   return {
     /**
@@ -361,7 +364,7 @@ export const PlaylistsApiFp = function (configuration?: Configuration) {
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Playlist>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.playlistControllerUpdate(playlistId, updatePlaylistDto, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
+    }
   };
 };
 
@@ -369,7 +372,7 @@ export const PlaylistsApiFp = function (configuration?: Configuration) {
  * PlaylistsApi - factory interface
  * @export
  */
-export const PlaylistsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+export const PlaylistsApiFactory = function(configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = PlaylistsApiFp(configuration);
   return {
     /**
@@ -434,7 +437,7 @@ export const PlaylistsApiFactory = function (configuration?: Configuration, base
      */
     playlistControllerUpdate(playlistId: string, updatePlaylistDto: UpdatePlaylistDto, options?: any): AxiosPromise<Playlist> {
       return localVarFp.playlistControllerUpdate(playlistId, updatePlaylistDto, options).then((request) => request(axios, basePath));
-    },
+    }
   };
 };
 
@@ -538,8 +541,8 @@ export class PlaylistsApi extends BaseAPI {
    */
   public playlistControllerCreate(requestParameters: PlaylistsApiPlaylistControllerCreateRequest, options?: any) {
     return PlaylistsApiFp(this.configuration)
-      .playlistControllerCreate(requestParameters.createPlaylistDto, options)
-      .then((request) => request(this.axios, this.basePath));
+    .playlistControllerCreate(requestParameters.createPlaylistDto, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -550,8 +553,8 @@ export class PlaylistsApi extends BaseAPI {
    */
   public playlistControllerFindAll(options?: any) {
     return PlaylistsApiFp(this.configuration)
-      .playlistControllerFindAll(options)
-      .then((request) => request(this.axios, this.basePath));
+    .playlistControllerFindAll(options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -563,8 +566,8 @@ export class PlaylistsApi extends BaseAPI {
    */
   public playlistControllerFindOne(requestParameters: PlaylistsApiPlaylistControllerFindOneRequest, options?: any) {
     return PlaylistsApiFp(this.configuration)
-      .playlistControllerFindOne(requestParameters.playlistId, options)
-      .then((request) => request(this.axios, this.basePath));
+    .playlistControllerFindOne(requestParameters.playlistId, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -575,8 +578,8 @@ export class PlaylistsApi extends BaseAPI {
    */
   public playlistControllerGetCategories(options?: any) {
     return PlaylistsApiFp(this.configuration)
-      .playlistControllerGetCategories(options)
-      .then((request) => request(this.axios, this.basePath));
+    .playlistControllerGetCategories(options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -588,8 +591,8 @@ export class PlaylistsApi extends BaseAPI {
    */
   public playlistControllerRemove(requestParameters: PlaylistsApiPlaylistControllerRemoveRequest, options?: any) {
     return PlaylistsApiFp(this.configuration)
-      .playlistControllerRemove(requestParameters.playlistId, options)
-      .then((request) => request(this.axios, this.basePath));
+    .playlistControllerRemove(requestParameters.playlistId, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -601,8 +604,8 @@ export class PlaylistsApi extends BaseAPI {
    */
   public playlistControllerShare(requestParameters: PlaylistsApiPlaylistControllerShareRequest, options?: any) {
     return PlaylistsApiFp(this.configuration)
-      .playlistControllerShare(requestParameters.playlistId, requestParameters.userId, options)
-      .then((request) => request(this.axios, this.basePath));
+    .playlistControllerShare(requestParameters.playlistId, requestParameters.userId, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -614,7 +617,7 @@ export class PlaylistsApi extends BaseAPI {
    */
   public playlistControllerUpdate(requestParameters: PlaylistsApiPlaylistControllerUpdateRequest, options?: any) {
     return PlaylistsApiFp(this.configuration)
-      .playlistControllerUpdate(requestParameters.playlistId, requestParameters.updatePlaylistDto, options)
-      .then((request) => request(this.axios, this.basePath));
+    .playlistControllerUpdate(requestParameters.playlistId, requestParameters.updatePlaylistDto, options)
+    .then((request) => request(this.axios, this.basePath));
   }
 }

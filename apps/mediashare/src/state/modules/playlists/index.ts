@@ -3,12 +3,11 @@ import { createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { makeEnum } from '../../core/factory';
 
-import { ApiService, playlists } from '../../apis';
+import { apis, ApiService } from '../../apis';
 import { CreatePlaylistDto, UpdatePlaylistDto } from '../../../api';
-import { apis } from '../../apis';
 import { CreatePlaylistResponseDto } from '../../../api/models/create-playlist-response-dto';
 import { PlaylistResponseDto } from '../../../rxjs-api/models/PlaylistResponseDto';
-import { flatMap, flattenDeep, mergeAll } from 'remeda';
+import { flattenDeep } from 'remeda';
 import { merge } from 'rxjs';
 
 const PLAYLIST_ACTIONS = [
@@ -48,7 +47,12 @@ export const updateUserPlaylist = createAsyncThunk(playlistActionTypes.updateUse
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Fix _id property on UpdatePlaylistDto!
   console.log(playlist);
-  const response = await api.playlists.playlistControllerUpdate({ playlistId: playlist._id, updatePlaylistDto: playlist }).toPromise();
+  const response = await api.playlists
+    .playlistControllerUpdate({
+      playlistId: playlist._id,
+      updatePlaylistDto: playlist,
+    })
+    .toPromise();
   return response;
 });
 
@@ -86,7 +90,10 @@ export const addUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.addU
 });
 
 export const updateUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.updateUserPlaylistItem, async (playlist: UpdatePlaylistDto) => {
-  const response = await apis.playlists.playlistControllerUpdate({ playlistId: playlist._id, updatePlaylistDto: playlist });
+  const response = await apis.playlists.playlistControllerUpdate({
+    playlistId: playlist._id,
+    updatePlaylistDto: playlist,
+  });
   return response;
 });
 

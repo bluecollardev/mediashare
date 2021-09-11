@@ -20,23 +20,23 @@ const routes = [
     caption: 'Playlist Detail',
   },
   {
-    route: 'AddFromLibrary',
-    caption: 'Add From Library',
+    route: 'AddFromMedia',
+    caption: 'Add From Media',
   },
   {
     route: 'PlaylistEdit',
     caption: 'Edit Playlist',
   },
   {
-    route: 'Library',
-    caption: 'Library',
+    route: 'Media',
+    caption: 'Media',
   },
   {
-    route: 'LibraryItemEdit',
+    route: 'MediaItemEdit',
     caption: 'Edit Item',
   },
   {
-    route: 'LibraryItemDetail',
+    route: 'MediaItemDetail',
     caption: 'Preview Item',
   },
   {
@@ -91,9 +91,7 @@ export class Sidebar extends React.Component<SidebarProps, SidebarState> {
                   // key={`item-${idx}`}
                   button
                   onPress={() => {
-                    data.route === 'Login'
-                      ? this.props.navigation.dispatch(resetAction)
-                      : this.props.navigation.navigate(data.route);
+                    data.route === 'Login' ? this.props.navigation.dispatch(resetAction) : this.props.navigation.navigate(data.route);
                   }}
                 >
                   <Text>{data.caption}</Text>
@@ -113,10 +111,7 @@ export interface SidebarContainerProps {
 
 export interface SidebarContainerState {}
 
-export default class SidebarContainer extends React.Component<
-  SidebarContainerProps,
-  SidebarContainerState
-> {
+export default class SidebarContainer extends React.Component<SidebarContainerProps, SidebarContainerState> {
   render() {
     return <Sidebar navigation={this.props.navigation} />;
   }

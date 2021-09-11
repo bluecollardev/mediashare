@@ -6,7 +6,7 @@ import { Text } from 'react-native';
 
 import { routeConfig } from '../../../routes';
 
-import { useViewMediaItem, useViewPlaylist, useGoBack } from '../../../hooks/NavigationHooks';
+import { useGoBack, useViewMediaItem, useViewPlaylist } from '../../../hooks/NavigationHooks';
 
 import { useAppSelector } from '../../../state';
 import { getPlaylistById, updateUserPlaylist } from '../../../state/modules/playlists';
@@ -16,7 +16,7 @@ import { ActionButtons } from '../../layout/ActionButtons';
 import { MediaList, MediaListType } from '../../layout/MediaList';
 import { MediaListItem } from '../../layout/MediaListItem';
 
-import { UpdatePlaylistDto, UpdatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
+import { UpdatePlaylistDto } from '../../../rxjs-api';
 
 import styles from '../../../styles';
 
@@ -100,6 +100,7 @@ export interface AddToPlaylistContainerProps {
   fetchList: Function;
   data: Object;
 }
+
 export interface AddToPlaylistContainerState {}
 
 export const AddToPlaylistContainer = ({ route }) => {
