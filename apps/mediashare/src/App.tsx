@@ -12,7 +12,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { BottomTabBarOptions, BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -100,9 +99,10 @@ function TabNavigation() {
   return (
     <TabNavigator.Navigator
       initialRouteName={'Playlists'}
-      activeColor={theme.colors.accentDarker}
-      inactiveColor={theme.colors.accent}
-      barStyle={{ backgroundColor: theme.colors.bgColor }}
+      activeColor={theme.colors.primaryTextLighter}
+      inactiveColor={theme.colors.accentLighter}
+      barStyle={{ backgroundColor: theme.colors.accent }}
+      labeled={false}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color }) => {

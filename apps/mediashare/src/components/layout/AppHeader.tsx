@@ -19,7 +19,7 @@ export const AppHeader = (props: AppHeaderProps) => {
     showSort = false,
   } = props;
   return (
-    <Appbar.Header style={{ backgroundColor: theme.colors.bgColor }}>
+    <Appbar.Header dark style={{ backgroundColor: theme.colors.accent }}>
       {showBack && <Appbar.BackAction onPress={navigation.goBack} />}
 
       <Appbar.Content title={title} />
