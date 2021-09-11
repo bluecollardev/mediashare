@@ -7,7 +7,6 @@ import styles from '../../../styles';
 import { useAppSelector } from '../../../state';
 import {
   UpdateMediaItemDto,
-  CreateMediaItemDtoCategoryEnum,
   UpdateMediaItemDtoCategoryEnum
 } from '../../../rxjs-api';
 import { MediaCard } from '../../layout/MediaCard';
@@ -24,17 +23,13 @@ export interface MediaItemEditProps {
 }
 
 export const MediaItemEdit = ({ navigation }: { navigation: any }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { title, description } = useAppSelector((state) => state.mediaItem);
-  const dispatch = useDispatch();
   const options = [];
-  for (const value in CreateMediaItemDtoCategoryEnum) {
+  for (const value in UpdateMediaItemDtoCategoryEnum) {
     options.push(value);
   }
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
     <MediaCard categoryOptions={options}>
       <View padder />
     </MediaCard>
@@ -51,59 +46,34 @@ export interface MediaItemEditContainerState {}
 
 const MediaItemEditContainer = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const { mediaId } = route.params;
 
-  const [loaded, setLoaded] = useState(false);
-  const media = useAppSelector((state) => state.mediaItem);
-  // const initCategory = useAppSelector((state) => state.media?.selectedMedia?.category) || UpdateMediaDtoCategoryEnum.Builder;
-  // const { selectedMedia } = media;
-  const { mediaItem } = media;
-  console.log(mediaItem);
+  const { mediaId, uri } = route?.params || {};
+  const { mediaItem, loading, loaded } = useAppSelector((state) => state.mediaItem);
+  const [isLoaded, setIsLoaded] = useState(loaded);
+  const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
+  const { _id } = mediaItem || {};
+
+  useEffect(() => {
+    if (!isLoaded || _id !== mediaId) {
+      dispatch(getMediaItemById({ uri, mediaId }));
+
+      setIsLoaded(true);
+    }
+  }, [dispatch, isLoaded, uri, mediaId, _id]);
+
   const [title, setTitle] = useState(mediaItem?.title);
   const [description, setDescription] = useState(mediaItem?.description);
   const [category, setCategory] = useState();
 
   const [documentUri, setDocumentUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
-  const mediaSrc =
-    useAppSelector((state) => state.mediaItem.getMediaItem) ||
-    'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
 
   const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
-
-  const loadData = async function () {
-    await dispatch(getMediaItemById(mediaId));
-
-    setLoaded(true);
-  };
 
   const options = [];
   for (const value in UpdateMediaItemDtoCategoryEnum) {
     options.push(value);
   }
-  useEffect(() => {
-    if (!loaded) {
-      dispatch(getMediaItemById(mediaId));
-      setLoaded(true);
-    }
-  }, [loaded, dispatch, mediaId]);
-  const withIds = function (mediaIds: string[]) {
-    /*  return dispatch(
-      updateMediaItem({
-        title: title,
-        mediaIds,
-        description: description,
-        category,
-        _id: selectedMedia._id,
-      })
-    ); */
-  };
-  const save = async function () {
-    /* const result = await withIds(mediaItem.mediaIds);
-    console.log(result);
-    setLoaded(false);
-    await loadData(); */
-  };
 
   const saveMediaUpdates = async function () {
     /* const filtered = mediaItem.mediaIds.filter((id) => !selectedItems.includes(id));
@@ -188,7 +158,7 @@ const MediaItemEditContainer = ({ navigation, route }) => {
               title={title}
               author={author}
               description={description}
-              mediaSrc={mediaItem.uri}
+              mediaSrc={mediaItemSrc}
               category={category}
               categoryOptions={options}
               onCategoryChange={(e: any) => {
@@ -200,7 +170,7 @@ const MediaItemEditContainer = ({ navigation, route }) => {
             >
               <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {documentUri ? (
-                  <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
+                  <Image source={{ uri: mediaItemSrc }} style={{ height: 200, width: '100%' }} />
                 ) : (
                   <Button bordered style={{ width: '100%' }} hasText={true} onPress={getDocument} full={true}>
                     <Icon name="cloud-upload-outline" />

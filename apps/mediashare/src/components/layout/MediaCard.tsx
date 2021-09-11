@@ -59,16 +59,6 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
             initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
             onPress={(value) => onCategoryChange(value as string)}
           />
-        </Card.Content>
-      ) : (
-        <Card.Title
-          title={<Title>{title}</Title>}
-          subtitle={<Chip>{category ?? 'No category'}</Chip>}
-          right={(props: any) => showActions && <IconButton {...props} icon="dots-vertical" onPress={onActionsClicked} />}
-        />
-      )}
-      <Card.Content>
-        {isEdit ? (
           <TextInput
             multiline={true}
             mode={'outlined'}
@@ -78,10 +68,19 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
             numberOfLines={5}
             onChangeText={(text) => onDescriptionChange(text)}
           />
-        ) : (
-          <Paragraph>{description}</Paragraph>
-        )}
-      </Card.Content>
+        </Card.Content>
+      ) : (
+        <>
+          <Card.Title
+            title={<Title>{title}</Title>}
+            subtitle={<Chip>{category ?? 'No category'}</Chip>}
+            right={(props: any) => showActions && <IconButton {...props} icon="dots-vertical" onPress={onActionsClicked} />}
+          />
+          <Card.Content>
+            <Paragraph style={{ marginTop: 2, marginBottom: 5 }}>{description}</Paragraph>
+          </Card.Content>
+        </>
+      )}
     </Card>
 
     // <Card style={{ flex: 0 }}>

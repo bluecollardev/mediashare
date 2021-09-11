@@ -19,21 +19,34 @@ export const ContactList: React.FC<ContactListProps> = (props) => {
 
   return (
     <List>
-      {showGroups && <ListItemGroup key={'group1'} text={'Sample Group'} />}
-      {items.map((item, idx) => {
-        // const { title, description, image } = item;
-        return (
-          <MediaListItem
-            key={item._id}
-            title={`${item.firstName} ${item.lastName}`}
-            description={item.username}
-            image={imageSrc}
-            selectable={true}
-            onChecked={(b) => props.onChecked(b, item)}
-            // showActions={true}
-          />
-        );
-      })}
+      {showGroups && (
+        <>
+          <ListItemGroup key={'recent'} text={'Recents'} />
+          {items.map((item, idx) => (
+            <MediaListItem
+              key={item._id}
+              title={`${item.firstName} ${item.lastName}`}
+              description={item.username}
+              image={imageSrc}
+              selectable={true}
+              onChecked={(b) => props.onChecked(b, item)}
+              showActions={false}
+            />
+          ))}
+          <ListItemGroup key={'all'} text={'All Contacts'} />
+          {items.map((item, idx) => (
+            <MediaListItem
+              key={item._id}
+              title={`${item.firstName} ${item.lastName}`}
+              description={item.username}
+              image={imageSrc}
+              selectable={true}
+              onChecked={(b) => props.onChecked(b, item)}
+              showActions={false}
+            />
+          ))}
+        </>
+      )}
     </List>
   );
 };

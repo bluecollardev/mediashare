@@ -26,15 +26,14 @@ const MediaItemDetailContainer = ({ route }) => {
   const dispatch = useDispatch();
 
   const onEditClicked = useRouteWithParams(ROUTES.mediaItemEdit);
-
   const onDeleteClicked = () => {};
 
   const { mediaId, uri } = route?.params || {};
   const { mediaItem, loading, loaded } = useAppSelector((state) => state.mediaItem);
-
   const [isLoaded, setIsLoaded] = useState(loaded);
   const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const { _id } = mediaItem || {};
+
   useEffect(() => {
     if (!isLoaded || _id !== mediaId) {
       dispatch(getMediaItemById({ uri, mediaId }));
