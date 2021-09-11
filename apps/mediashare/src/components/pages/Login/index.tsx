@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 
 import { loginAction } from '../../../state/modules/user';
 import { RootState } from '../../../state';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { useSpinner } from '../../../hooks/useSpinner';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -31,44 +33,21 @@ export interface LoginProps {
 
 export interface LoginState extends Pick<RootState, never> {}
 
-export const Login = ({ children }) => {
-  // <Icon name="flash" style={{ fontSize: 104 }} />
-
-  return (
-    <Container>
-      {/* <Header style={{ height: 200 }}>
-        <Body style={{ alignItems: 'center' }}> */}
-      <Card>
-        <Card.Cover resizeMode={'contain'} source={require('./logo.png')} />
-        {/* <Image
-            source={require('./logo.png')}
-            style={{
-              width: '75%',
-              height: 100,
-              resizeMode: 'contain',
-            }}
-          /> */}
-      </Card>
-      {/* <View padder>
-            <Text style={{ color: Platform.OS === 'ios' ? '#000' : '#FFF' }} />
-          </View>
-        </Body> */}
-      {/* </Header> */}
-      {children}
-    </Container>
-  );
-};
-
 const LoginComponent = () => {
   const [username, setUsername] = useState('test@example.com');
   const [password, setPassword] = useState('string12345');
   const dispatch = useDispatch();
+  const [{ startLoad, endLoad, AppSpinner }] = useSpinner();
 
   const onLogin = async (loginDto: LoginDto) => {
-    dispatch(loginAction(loginDto));
+    startLoad();
+
+    await dispatch(loginAction(loginDto));
+    endLoad();
   };
   return (
     <View padder>
+      <AppSpinner />
       <Card elevation={0}>
         <Card.Cover style={{ backgroundColor: '#fff' }} resizeMode={'contain'} source={require('./logo.png')} />
         {/* <Image

@@ -165,7 +165,7 @@ function App() {
 
       light: { fontFamily: 'Roboto_300Light', fontWeight: '300' as const },
 
-      regular: { fontFamily: 'Roboto_500Medium', fontWeight: '400' as const },
+      regular: { fontFamily: 'Roboto_400Regular', fontWeight: '400' as const },
       thin: { fontFamily: 'Roboto_100Thin', fontWeight: '100' as const },
     },
   };

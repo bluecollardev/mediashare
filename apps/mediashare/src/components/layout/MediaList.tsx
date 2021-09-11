@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 
 import { MediaListItem } from './MediaListItem';
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
+import { Divider } from 'react-native-paper';
 
 export type MediaListType = Omit<Pick<MediaItemDto, keyof MediaItem>, 'category'>;
 
@@ -20,19 +21,22 @@ export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, add
   return (
     <Content>
       <View>
-        {list.map((item, idx) => {
+        {list.map((item, idx, arr) => {
           const { title, description, thumbnail } = item;
           return (
-            <MediaListItem
-              key={`item-${idx}`}
-              title={title}
-              description={description}
-              image={thumbnail}
-              selectable={isSelectable}
-              showThumbnail={showThumbnail}
-              onChecked={(v) => (v ? addItem(item) : removeItem(item))}
-              onViewDetail={() => onViewDetail(item)}
-            />
+            <>
+              <MediaListItem
+                key={`item-${idx}`}
+                title={title}
+                description={description}
+                image={thumbnail}
+                selectable={isSelectable}
+                showThumbnail={showThumbnail}
+                onChecked={(v) => (v ? addItem(item) : removeItem(item))}
+                onViewDetail={() => onViewDetail(item)}
+              />
+              {idx !== arr.length && <Divider />}
+            </>
           );
         })}
       </View>
