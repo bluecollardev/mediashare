@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, Button, Input, Item, View, Container, Header, Body, Content, Card, CardItem } from 'native-base';
+import { Text, View, Container, Header, Body } from 'native-base';
+import { Card, Button, TextInput } from 'react-native-paper';
 import { Image, Platform } from 'react-native';
 
 import { useState } from 'react';
@@ -10,15 +11,19 @@ import { useDispatch } from 'react-redux';
 import { loginAction } from '../../../state/modules/user';
 import { RootState } from '../../../state';
 
-export const maxLength = (max: any) => (value: any) => (value && value.length > max ? `Must be ${max} characters or less` : undefined);
-export const minLength = (min: any) => (value: any) => (value && value.length < min ? `Must be ${min} characters or more` : undefined);
-export const email = (value: any) => (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined);
+export const maxLength = (max: any) => (value: any) => value?.length > max;
+export const minLength = (min: any) => (value: any) => value?.length < min;
+export const email = (value: any) => !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
 
 function validateUsername(username: string) {
   return email(username) && username.length > 0;
 }
 function validatePassword(password: string) {
-  return email(password) && password.length > 0;
+  if (password.length < 1) {
+    console.log('valid');
+    return true;
+  }
+  return minLength(6)(password) || maxLength(15)(password);
 }
 
 export interface LoginProps {
@@ -41,7 +46,7 @@ export const Login = ({ children }) => {
             style={{
               width: '75%',
               height: 100,
-              resizeMode: "contain",
+              resizeMode: 'contain',
             }}
           />
 
@@ -50,7 +55,7 @@ export const Login = ({ children }) => {
           </View>
         </Body>
       </Header>
-      <Content>{children}</Content>
+      {children}
     </Container>
   );
 };
@@ -66,21 +71,29 @@ const LoginComponent = () => {
   return (
     <Login>
       <View padder>
-        <Card style={{ margin: 30, paddingBottom: 30 }}>
-          <CardItem>
-            <Body>
-              <Item error={validateUsername(username) && username.length > 0}>
-                <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" />
-              </Item>
-              <Item error={validatePassword(password)}>
-                <Input onChange={(e) => setPassword(e.nativeEvent.text)} value={password} placeholder="Password" secureTextEntry={true} />
-              </Item>
-              <Button block onPress={() => onLogin({ username, password })}>
-                <Text>Login</Text>
-              </Button>
-            </Body>
-          </CardItem>
+        <Card elevation={0}>
+          {/* <Item error={validateUsername(username) && username.length > 0}>
+            <Input onChange={(e) => setUsername(e.nativeEvent.text)} value={username} placeholder="Username" />
+          </Item>
+          <Item error={validatePassword(password)}>
+            <Input onChange={(e) => setPassword(e.nativeEvent.text)} value={password} placeholder="Password" secureTextEntry={true} />
+          </Item> */}
+          <Card.Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
+            <TextInput mode="outlined" dense error={validateUsername(username)} label="Username" onChange={(e) => setUsername(e.nativeEvent.text)} />
+
+            <TextInput
+              dense
+              mode="outlined"
+              error={validatePassword(password)}
+              label="Password"
+              secureTextEntry={true}
+              onChange={(e) => setPassword(e.nativeEvent.text)}
+            />
+          </Card.Content>
         </Card>
+        <Button dark mode={'contained'} onPress={() => onLogin({ username, password })}>
+          Login
+        </Button>
       </View>
     </Login>
   );

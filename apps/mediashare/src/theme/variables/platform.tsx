@@ -114,7 +114,7 @@ export default {
   accentLighter: '#b3f0ff',
   brandSuccess: '#05ffa1',
   brandDanger: '#ff71ce',
-  brandWarning: '#f0ad4e',
+  brandWarning: '#ff71ce',
   brandSidebar: '#fffb96',
   primaryText: 'rgba(0, 0, 0, 0.87)',
   primaryLighter: '#ead1ff',
