@@ -20,7 +20,6 @@ function validateUsername(username: string) {
 }
 function validatePassword(password: string) {
   if (password.length < 1) {
-    console.log('valid');
     return true;
   }
   return minLength(6)(password) || maxLength(15)(password);
@@ -85,7 +84,15 @@ const LoginComponent = () => {
       </Card>
       <Card elevation={0}>
         <Card.Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
-          <TextInput mode="outlined" dense error={validateUsername(username)} label="Username" onChange={(e) => setUsername(e.nativeEvent.text)} />
+          <TextInput
+            mode="outlined"
+            dense
+            error={validateUsername(username)}
+            label="Username"
+            value={username}
+            style={{ marginTop: 10 }}
+            onChange={(e) => setUsername(e.nativeEvent.text)}
+          />
 
           <TextInput
             dense
@@ -93,13 +100,21 @@ const LoginComponent = () => {
             error={validatePassword(password)}
             label="Password"
             secureTextEntry={true}
+            value={password}
+            style={{ marginTop: 10 }}
             onChange={(e) => setPassword(e.nativeEvent.text)}
           />
+          <Button
+            dark
+            mode={'contained'}
+            style={{ marginTop: 10 }}
+            onPress={() => onLogin({ username, password })}
+            disabled={validateUsername(username) || validatePassword(password)}
+          >
+            Login
+          </Button>
         </Card.Content>
       </Card>
-      <Button dark mode={'contained'} onPress={() => onLogin({ username, password })}>
-        Login
-      </Button>
     </View>
   );
 };
