@@ -20,7 +20,7 @@ const routes = [
     caption: 'Playlist Detail',
   },
   {
-    route: 'AddFromMedia',
+    route: 'AddFromCollection',
     caption: 'Add From Media',
   },
   {

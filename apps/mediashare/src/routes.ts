@@ -3,7 +3,7 @@ import Home from './components/pages/Home';
 import Explore from './components/pages/Explore';
 import ExploreDetail from './components/pages/ExploreDetail';
 import ExploreItemDetail from './components/pages/ExploreItemDetail';
-import AddFromMedia from './components/pages/AddFromMedia';
+import AddFromCollection from './components/pages/AddFromCollection';
 import AddMedia from './components/pages/AddMedia';
 import AddFromFeed from './components/pages/AddFromFeed';
 import Playlists from './components/pages/Playlists';
@@ -93,7 +93,7 @@ const routeConfig = {
   },
   addFromMedia: {
     name: 'addFromMedia',
-    component: AddFromMedia,
+    component: AddFromCollection,
     options: { title: 'Add From Media', header: AppScreenHeader },
   },
   addPlaylist: {

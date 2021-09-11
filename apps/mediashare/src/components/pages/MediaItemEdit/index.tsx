@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ActionSheet, Container, Text, View } from 'native-base';
+import { ActionSheet, Button, CardItem, Container, Icon, Text, View } from 'native-base';
 
 import styles from '../../../styles';
 import { useAppSelector } from '../../../state';
-import { CreatePlaylistDtoCategoryEnum, MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
+import { CreateMediaItemDtoCategoryEnum, UpdateMediaItemDtoCategoryEnum } from '../../../rxjs-api';
 import { MediaCard } from '../../layout/MediaCard';
-import { getPlaylistById, updateUserPlaylist } from '../../../state/modules/playlists';
-import { useViewMediaItem } from '../../../hooks/NavigationHooks';
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
-import { MediaList } from '../../layout/MediaList';
+import { createThumbnail, getMediaItemById, updateMediaItem } from '../../../state/modules/media-items';
+import { Image, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
 import { ActionButtons } from '../../layout/ActionButtons';
-import { ListActionButton } from '../../layout/ListActionButton';
 
 export interface MediaItemEditProps {
   navigation: any;
@@ -22,10 +20,10 @@ export interface MediaItemEditProps {
 export const MediaItemEdit = ({ navigation }: { navigation: any }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-  const { title, description } = useAppSelector((state) => state.createPlaylist);
+  const { title, description } = useAppSelector((state) => state.mediaItem);
   const dispatch = useDispatch();
   const options = [];
-  for (const value in CreatePlaylistDtoCategoryEnum) {
+  for (const value in CreateMediaItemDtoCategoryEnum) {
     options.push(value);
   }
 
@@ -51,88 +49,80 @@ const MediaItemEditContainer = ({ navigation, route }) => {
   const { mediaId } = route.params;
 
   const [loaded, setLoaded] = useState(false);
-  const media = useAppSelector((state) => state.media);
-  // const initCategory = useAppSelector((state) => state.media?.selectedPlaylist?.category) || UpdatePlaylistDtoCategoryEnum.Builder;
-  const { selectedPlaylist } = media;
-  console.log(selectedPlaylist);
-  const [title, setTitle] = useState(selectedPlaylist?.title);
-  const [description, setDescription] = useState(selectedPlaylist?.description);
+  const media = useAppSelector((state) => state.mediaItem);
+  // const initCategory = useAppSelector((state) => state.media?.selectedMedia?.category) || UpdateMediaDtoCategoryEnum.Builder;
+  // const { selectedMedia } = media;
+  const { mediaItem } = media;
+  console.log(mediaItem);
+  const [title, setTitle] = useState(mediaItem?.title);
+  const [description, setDescription] = useState(mediaItem?.description);
   const [category, setCategory] = useState();
 
-  const [selectedItems, setSelectedItems] = useState([]);
-
-  // const [selectedItems] = useState(new Set<string>());
+  const [documentUri, setDocumentUri] = useState('');
 
   const loadData = async function () {
-    await dispatch(getPlaylistById(mediaId));
+    await dispatch(getMediaItemById(mediaId));
 
     setLoaded(true);
   };
 
-  // const [selected, setSelected] = useState(selectedItems.size);
-  const onAddItem = (item: MediaItem) => {
-    // setSelected(selectedItems.size);
-    const updatedItems = selectedItems.concat([item._id]);
-    setSelectedItems(updatedItems);
-  };
-
-  const onRemoveItem = (selected: MediaItem) => {
-    const updatedItems = selectedItems.filter((item) => item !== selected._id);
-
-    setSelectedItems(updatedItems);
-  };
-
   const options = [];
-  for (const value in UpdatePlaylistDtoCategoryEnum) {
+  for (const value in UpdateMediaItemDtoCategoryEnum) {
     options.push(value);
   }
   useEffect(() => {
-    console.log(selectedItems);
-  }, [selectedItems]);
-  useEffect(() => {
     if (!loaded) {
-      dispatch(getPlaylistById(mediaId));
+      dispatch(getMediaItemById(mediaId));
       setLoaded(true);
     }
   }, [loaded, dispatch, mediaId]);
   const withIds = function (mediaIds: string[]) {
-    return dispatch(
-      updateUserPlaylist({
+    /*  return dispatch(
+      updateMediaItem({
         title: title,
         mediaIds,
         description: description,
         category,
-        _id: selectedPlaylist._id,
+        _id: selectedMedia._id,
       })
-    );
+    ); */
   };
   const save = async function () {
-    const result = await withIds(selectedPlaylist.mediaIds);
+    /* const result = await withIds(mediaItem.mediaIds);
     console.log(result);
     setLoaded(false);
-    await loadData();
+    await loadData(); */
   };
+
   const saveMediaUpdates = async function () {
-    const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
+    /* const filtered = mediaItem.mediaIds.filter((id) => !selectedItems.includes(id));
 
     const result = await withIds(filtered);
     console.log(result);
     setLoaded(false);
-    await loadData();
+    await loadData(); */
   };
-  const onViewMediaItemClicked = useViewMediaItem();
+
+  /* const onViewMediaItemClicked = useViewMediaItem();
   if (!mediaId || !loaded) {
     return <Text>Item not found</Text>;
+  } */
+  const mediaSrc =
+    useAppSelector((state) => state.mediaItem.getMediaItem) ||
+    'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
+
+  async function getDocument() {
+    const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
+    if (!document) {
+      return;
+    }
+    setDocumentUri(document?.uri || '');
+    dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
   }
 
-  // const {username} = useAppSelector((state) => state.user)
-
-  const items = selectedPlaylist?.mediaItems || [];
   const author = '';
 
-  const resetData = () => {
-    setSelectedItems([]);
-  };
+  const resetData = () => {};
   const cancelCb = () => {
     navigation.goBack();
     resetData();
@@ -158,7 +148,7 @@ const MediaItemEditContainer = ({ navigation, route }) => {
       }
     );
   };
-  if (!selectedPlaylist) {
+  if (!mediaItem) {
     return <Text>Loading</Text>;
   }
   return (
@@ -170,6 +160,7 @@ const MediaItemEditContainer = ({ navigation, route }) => {
               title={title}
               author={author}
               description={description}
+              mediaSrc={mediaItem.uri}
               category={category}
               categoryOptions={options}
               onCategoryChange={(e: any) => {
@@ -178,24 +169,22 @@ const MediaItemEditContainer = ({ navigation, route }) => {
               onTitleChange={setTitle}
               onDescriptionChange={setDescription}
               isEdit={true}
-            />
+            >
+              <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {documentUri ? (
+                  <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
+                ) : (
+                  <Button bordered style={{ width: '100%' }} hasText={true} onPress={getDocument} full={true}>
+                    <Icon name="cloud-upload-outline" />
+                    <Text style={{ textAlign: 'center' }}>Upload</Text>
+                  </Button>
+                )}
+              </CardItem>
+            </MediaCard>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-
-      <MediaList
-        onViewDetail={(itm) => onViewMediaItemClicked({ mediaId: itm._id, uri: itm.uri })}
-        list={items}
-        isSelectable={true}
-        removeItem={onRemoveItem}
-        addItem={onAddItem}
-        showThumbnail={true}
-      />
-      {selectedItems.length < 1 ? (
-        <ActionButtons rightIcon={'check-bold'} actionCb={() => save()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
-      ) : (
-        <ListActionButton danger={false} icon="trash" actionCb={() => showCardMenu(selectedItems.length)} label={'Remove Items from Playlist'} />
-      )}
+      <ActionButtons actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
     </Container>
   );
 };

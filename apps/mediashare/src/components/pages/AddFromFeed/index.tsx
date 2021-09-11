@@ -16,15 +16,15 @@ import { MediaItem } from '../../../rxjs-api';
 
 import styles from '../../../styles';
 
-export interface AddFromProps {
+export interface AddFromFeedProps {
   navigation: any;
   onViewDetail: () => void;
   items: MediaItem[];
 }
 
-export interface AddFromState {}
+export interface AddFromFeedState {}
 
-export const AddFrom = ({ onViewDetail = () => {}, items }: AddFromProps) => {
+export const AddFromFeed = ({ onViewDetail = () => {}, items }: AddFromFeedProps) => {
   const dispatch = useDispatch();
 
   function toggleField(id: number) {

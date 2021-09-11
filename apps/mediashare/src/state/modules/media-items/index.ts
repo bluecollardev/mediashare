@@ -138,6 +138,7 @@ export const shareMediaItem = createAsyncThunk(
 export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async function (id: string, { extra }) {
   const { api } = extra as { api: ApiService };
   const response = await api.mediaItems.mediaItemControllerRemove({ mediaId: id });
+  // @ts-ignore
   return response && response.status === 200 ? response.data : undefined;
 });
 

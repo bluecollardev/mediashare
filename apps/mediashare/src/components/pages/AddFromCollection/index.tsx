@@ -13,15 +13,15 @@ import { theme } from '../../../styles';
 import { ActionButtons } from '../../layout/ActionButtons';
 import { PlaylistResponseDto } from '../../../api';
 
-export interface AddFromProps {
+export interface AddFromCollectionProps {
   navigation: any;
   onViewDetail: () => void;
   items: MediaItem[];
 }
 
-export interface AddFromState {}
+export interface AddFromCollectionState {}
 
-export const AddFrom = ({ onViewDetail = () => {} }: AddFromProps) => {
+export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollectionProps) => {
   const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
@@ -70,4 +70,4 @@ export const AddFrom = ({ onViewDetail = () => {} }: AddFromProps) => {
   );
 };
 
-export default AddFrom;
+export default AddFromCollection;
