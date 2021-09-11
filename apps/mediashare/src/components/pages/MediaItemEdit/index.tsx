@@ -5,12 +5,18 @@ import { ActionSheet, Button, CardItem, Container, Icon, Text, View } from 'nati
 
 import styles from '../../../styles';
 import { useAppSelector } from '../../../state';
-import { CreateMediaItemDtoCategoryEnum, UpdateMediaItemDtoCategoryEnum } from '../../../rxjs-api';
+import {
+  UpdateMediaItemDto,
+  CreateMediaItemDtoCategoryEnum,
+  UpdateMediaItemDtoCategoryEnum
+} from '../../../rxjs-api';
 import { MediaCard } from '../../layout/MediaCard';
 import { createThumbnail, getMediaItemById, updateMediaItem } from '../../../state/modules/media-items';
 import { Image, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { ActionButtons } from '../../layout/ActionButtons';
+import { useRouteWithParams } from '../../../hooks/NavigationHooks';
+import { ROUTES } from '../../../routes';
 
 export interface MediaItemEditProps {
   navigation: any;
@@ -19,7 +25,6 @@ export interface MediaItemEditProps {
 
 export const MediaItemEdit = ({ navigation }: { navigation: any }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
   const { title, description } = useAppSelector((state) => state.mediaItem);
   const dispatch = useDispatch();
   const options = [];
@@ -59,6 +64,12 @@ const MediaItemEditContainer = ({ navigation, route }) => {
   const [category, setCategory] = useState();
 
   const [documentUri, setDocumentUri] = useState('');
+  const [thumbnail, setThumbnail] = useState(null);
+  const mediaSrc =
+    useAppSelector((state) => state.mediaItem.getMediaItem) ||
+    'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
+
+  const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
 
   const loadData = async function () {
     await dispatch(getMediaItemById(mediaId));
@@ -107,9 +118,6 @@ const MediaItemEditContainer = ({ navigation, route }) => {
   if (!mediaId || !loaded) {
     return <Text>Item not found</Text>;
   } */
-  const mediaSrc =
-    useAppSelector((state) => state.mediaItem.getMediaItem) ||
-    'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
 
   async function getDocument() {
     const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
@@ -126,6 +134,26 @@ const MediaItemEditContainer = ({ navigation, route }) => {
   const cancelCb = () => {
     navigation.goBack();
     resetData();
+  };
+  const saveItem = async function () {
+    const dto: UpdateMediaItemDto = {
+      title,
+      // category: CreatePlaylistDtoCategoryEnum[category],
+      description,
+      summary: '',
+      isPlayable: true,
+      uri: documentUri,
+      thumbnail: thumbnail,
+      // key: title,
+      // eTag: '',
+    };
+    const res = await dispatch(updateMediaItem(dto));
+    const item = res as any;
+
+    // setCategory();
+    setDescription('Description');
+    setThumbnail('');
+    goToItem({ mediaId: item.payload._id, uri: item.payload.uri });
   };
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
