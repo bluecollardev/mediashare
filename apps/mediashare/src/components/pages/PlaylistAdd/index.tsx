@@ -17,6 +17,11 @@ import { MediaList, MediaListType } from '../../layout/MediaList';
 import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
 
 import styles from '../../../styles';
+import { titleValidator, descriptionValidator, categoryValidator } from '../../layout/formConfig';
+import { minLength } from '../Login';
+import PageContainer from '../../layout/PageContainer';
+import { KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface PlaylistAddContainerProps {
   children: ReactNode;
@@ -54,10 +59,10 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
     goToItem({ mediaId: e._id });
   };
 
-  const onTitleChange = setTitle;
-  const onDescriptionChange = setDescription;
-  const onCategoryChange = setCategory;
-
+  const isValid = function () {
+    const test = !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !(selected.length < 1);
+    return test;
+  };
   const updateSelection = function (bool: boolean, item: MediaListType) {
     const filtered = bool ? selected.concat([item._id]) : selected.filter((key) => key !== item._id);
     setSelected(filtered);
@@ -70,7 +75,6 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const list = useAppSelector((state) => state.mediaItems.mediaItems);
 
   useEffect(() => {
-    console.log('run');
     if (!loaded) {
       dispatch(findMediaItems());
       setLoaded(true);
@@ -97,19 +101,26 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    <Container style={styles.container}>
-      <MediaCard
-        title={title}
-        author={author}
-        description={description}
-        category={category}
-        categoryOptions={options}
-        onCategoryChange={onCategoryChange as any}
-        onTitleChange={onTitleChange}
-        onDescriptionChange={onDescriptionChange}
-        isEdit={true}
-      />
-      <Content>
+    <PageContainer>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView>
+            <MediaCard
+              title={title}
+              author={author}
+              description={description}
+              category={category}
+              categoryOptions={options}
+              onCategoryChange={setCategory as any}
+              onTitleChange={setTitle as any}
+              onDescriptionChange={setDescription as any}
+              isEdit={true}
+            />
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+
+      <ScrollView>
         <MediaList
           isSelectable={true}
           list={list}
@@ -118,9 +129,17 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
           addItem={(item) => updateSelection(true, item)}
           removeItem={(item) => updateSelection(false, item)}
         />
-      </Content>
-      <ActionButtons rightIcon={'check-bold'} actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
-    </Container>
+      </ScrollView>
+
+      <ActionButtons
+        rightIcon={'check-bold'}
+        actionCb={() => saveItem()}
+        cancelCb={cancelCb}
+        actionLabel={actionLabel}
+        cancelLabel={cancelLabel}
+        disableAction={!isValid()}
+      />
+    </PageContainer>
   );
 }
 

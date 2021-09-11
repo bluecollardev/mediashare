@@ -29,7 +29,6 @@ export const AddMediaContainer = () => {
   const [category, setCategory] = useState(CreateMediaItemDtoCategoryEnum.Endurance);
   const [documentUri, setDocumentUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
-  const [isSubmitting, setSubmitting] = useState(false);
   const mediaSrc =
     useAppSelector((state) => state.mediaItem.getMediaItem) ||
     'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
@@ -101,7 +100,7 @@ export const AddMediaContainer = () => {
       <AppSpinner />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View padder>
+          <ScrollView>
             <MediaCard
               title={title}
               author={author}
@@ -124,7 +123,7 @@ export const AddMediaContainer = () => {
                 )}
               </CardItem>
             </MediaCard>
-          </View>
+          </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
 
