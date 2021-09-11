@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { toggleMediaItem } from '../../../state/modules/media-items';
-import { MediaListItem } from '../../layout/MediaListItem';
-
 import { MediaItem } from '../../../rxjs-api';
+// import { PlaylistResponseDto } from '../../../api';
+
 import { findUserPlaylists } from '../../../state/modules/playlists';
 import { useAppSelector } from '../../../state';
+
 import { ScrollView } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { theme } from '../../../styles';
+import { MediaListItem } from '../../layout/MediaListItem';
 import { ActionButtons } from '../../layout/ActionButtons';
-import { PlaylistResponseDto } from '../../../api';
+
+import { theme } from '../../../styles';
 
 export interface AddFromCollectionProps {
   navigation: any;
@@ -25,8 +26,8 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
   const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
-  const { loading } = useAppSelector((state) => state.playlists.loading);
-  const items = useAppSelector((state) => state.playlists.userPlaylists);
+  const loading = useAppSelector((state) => state.mediaItems.loading);
+  const items = useAppSelector((state) => state.mediaItems.mediaItems);
   useEffect(() => {
     if (!loaded) {
       dispatch(findUserPlaylists({}));
@@ -34,16 +35,11 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
     }
   }, [loaded, setLoaded, dispatch]);
 
-  const updateMediaItem = function (add: boolean, selected: PlaylistResponseDto) {
+  const updateMediaItem = function (add: boolean, selected: any) {
     const updatedItems = add ? selectedPlaylists.concat([selected]) : selectedPlaylists.filter((item) => item._id !== selected._id);
     setSelectedPlaylists(updatedItems);
   };
 
-  function toggleField(id: number) {
-    dispatch(toggleMediaItem(id));
-  }
-
-  console.log(items);
   if (!loaded || loading || items?.length < 1) {
     return <ActivityIndicator animating={true} color={theme.colors.accent} />;
   }
