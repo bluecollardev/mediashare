@@ -10,6 +10,9 @@ PODS:
   - EXFileSystem (11.1.3):
     - ExpoModulesCore
     - UMCore
+  - EXFont (9.2.1):
+    - ExpoModulesCore
+    - UMCore
   - EXImageLoader (2.2.0):
     - ExpoModulesCore
     - React-Core
@@ -313,6 +316,7 @@ DEPENDENCIES:
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXDocumentPicker (from `../node_modules/expo-document-picker/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
+  - EXFont (from `../node_modules/expo-font/ios`)
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -374,6 +378,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-document-picker/ios"
   EXFileSystem:
     :path: "../node_modules/expo-file-system/ios"
+  EXFont:
+    :path: "../node_modules/expo-font/ios"
   EXImageLoader:
     :path: "../node_modules/expo-image-loader/ios"
   ExpoModulesCore:
@@ -471,6 +477,7 @@ SPEC CHECKSUMS:
   EXConstants: 3babb61f8f4bb7dffe85b8b7d6eaa31d903e4d7e
   EXDocumentPicker: a96d7fc2e6fcfeb0fe52cede8e32497ca225f7d1
   EXFileSystem: 0a04aba8da751b9ac954065911bcf166503f8267
+  EXFont: 9846ba1bb6f5f5aed44e20eea3ac70693323832d
   EXImageLoader: d3531a3fe530b22925c19977cb53bb43e3821fe6
   ExpoModulesCore: 2734852616127a6c1fc23012197890a6f3763dc7
   FBLazyVector: 878b59e31113e289e275165efbe4b54fa614d43d

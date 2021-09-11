@@ -108,13 +108,20 @@ export default {
   cardDefaultBg: '#fff',
 
   // Color
-  brandPrimary: '#252932',
-  brandInfo: '#3F51B5',
-  brandSuccess: '#5cb85c',
-  brandDanger: '#d9534f',
+  brandPrimary: '#b967ff',
+  brandInfo: '#01cdfe',
+  accentDarker: '#01bafe',
+  accentLighter: '#b3f0ff',
+  brandSuccess: '#05ffa1',
+  brandDanger: '#ff71ce',
   brandWarning: '#f0ad4e',
-  brandSidebar: '#252932',
+  brandSidebar: '#fffb96',
+  primaryText: 'rgba(0, 0, 0, 0.87)',
+  primaryLighter: '#ead1ff',
+  primaryDarker: '#a24aff',
+  primaryTextDarker: '#ffffff',
 
+  bgColor: '#fafafa',
   // Font
   fontFamily: platform === 'ios' ? 'System' : 'Roboto',
   fontSizeBase: 15,

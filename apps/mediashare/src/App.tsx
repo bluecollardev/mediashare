@@ -16,7 +16,7 @@ import { BottomTabBarOptions, BottomTabBarProps } from '@react-navigation/bottom
 import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Provider as PaperProvider } from 'react-native-paper';
+import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
 import { routeConfig } from './routes';
 import LoginContainer from './components/pages/Login';
 
@@ -26,7 +26,7 @@ import { Provider } from 'react-redux';
 import { store } from './boot/configureStore';
 import { useAppSelector } from './state/index';
 import { theme } from './styles';
-import { KeyboardAvoidingView } from 'react-native';
+import { useFonts, Roboto_500Medium, Roboto_900Black, Roboto_700Bold, Roboto_100Thin, Roboto_300Light, Roboto_400Regular } from '@expo-google-fonts/roboto';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -100,12 +100,12 @@ function TabNavigation() {
   return (
     <TabNavigator.Navigator
       initialRouteName={'Playlists'}
-      activeColor={theme.colors.surface}
-      inactiveColor={theme.colors.onSurface}
-      barStyle={{ backgroundColor: theme.colors.accent }}
+      activeColor={theme.colors.accentDarker}
+      inactiveColor={theme.colors.accent}
+      barStyle={{ backgroundColor: theme.colors.bgColor }}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color }) => {
           return <MaterialCommunityIcons name={tabNavigationIconsMap[route.name]} color={color} size={26} />;
 
           // <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
@@ -135,7 +135,7 @@ fakeLogin().then();
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
-
+  const [fontsLoaded] = useFonts({ Roboto_500Medium, Roboto_900Black, Roboto_700Bold, Roboto_100Thin, Roboto_300Light, Roboto_400Regular });
   // Amplify.configure(awsmobile);
   // fakeLogin();
 
@@ -145,18 +145,34 @@ function App() {
     setIsLoggedIn(user._id.length > 0);
   }, [user]);
 
-  return (
-    <Provider store={store}>
-      <PaperProvider theme={theme}>
-        {isLoggedIn ? (
-          <NavigationContainer>
-            <TabNavigation />
-          </NavigationContainer>
-        ) : (
-          <LoginContainer />
-        )}
-      </PaperProvider>
-    </Provider>
-  );
+  const customTheme = {
+    ...theme,
+    fonts: {
+      medium: { fontFamily: 'Roboto_500Medium', fontWeight: '500' as const },
+
+      light: { fontFamily: 'Roboto_300Light', fontWeight: '300' as const },
+
+      regular: { fontFamily: 'Roboto_500Medium', fontWeight: '400' as const },
+      thin: { fontFamily: 'Roboto_100Thin', fontWeight: '100' as const },
+    },
+  };
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator />;
+  } else {
+    return (
+      <Provider store={store}>
+        <PaperProvider theme={customTheme}>
+          {isLoggedIn ? (
+            <NavigationContainer>
+              <TabNavigation />
+            </NavigationContainer>
+          ) : (
+            <LoginContainer />
+          )}
+        </PaperProvider>
+      </Provider>
+    );
+  }
 }
 export default App;

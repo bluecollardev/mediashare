@@ -22,7 +22,16 @@ const styles: any = StyleSheet.create({
 export default styles;
 type ThemeType = typeof DefaultTheme;
 interface Theme extends ThemeType {
-  colors: ThemeType['colors'] & { success: string };
+  colors: ThemeType['colors'] & {
+    success: string;
+    primaryLighter: string;
+    accentDarker: string;
+    accentLighter: string;
+    primaryDarker: string;
+    primaryText: string;
+    primaryTextLighter: string;
+    bgColor: string;
+  };
 }
 const theme: Theme = {
   ...DefaultTheme,
@@ -33,15 +42,23 @@ const theme: Theme = {
     accent: variable.brandInfo as string,
     success: variable.brandSuccess as string,
     error: variable.brandWarning as string,
-    text: variable.brandPrimary,
+    text: variable.primaryText,
     background: variable.segmentBackgroundColor,
+    primaryLighter: variable.primaryLighter,
+    accentDarker: variable.accentDarker,
+    accentLighter: variable.accentLighter,
+    primaryDarker: variable.primaryDarker,
+    primaryText: variable.primaryText,
+    primaryTextLighter: variable.primaryTextDarker,
+    bgColor: variable.bgColor,
   },
   fonts: {
-    light: { fontFamily: variable.btnFontFamily, fontWeight: '400' },
-    medium: { fontFamily: variable.btnFontFamily, fontWeight: '700' },
+    ...DefaultTheme.fonts,
+    // light: { fontFamily: 'Chalkboard SE', fontWeight: '400' },
+    // medium: { fontFamily: 'Chalkboard SE', fontWeight: '700' },
 
-    regular: { fontFamily: variable.btnFontFamily, fontWeight: '500' },
-    thin: { fontFamily: variable.btnFontFamily, fontWeight: '300' },
+    // regular: { fontFamily: 'Thonburi', fontWeight: '500' },
+    // thin: { fontFamily: 'Chalkboard SE', fontWeight: '300' },
   },
 };
 

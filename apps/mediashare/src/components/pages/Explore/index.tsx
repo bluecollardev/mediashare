@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Container, Content, View, Text, List } from 'native-base';
-
+import { Container, Content, View, Text } from 'native-base';
+import { List } from 'react-native-paper';
 import { ROUTES } from '../../../routes';
 
 import { useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
@@ -49,9 +49,11 @@ export const Explore = ({ onViewDetailClicked, list }: ExploreProps) => {
 
   return (
     <View>
-      <List>
+      <List.Section>
         {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-        <ListItemGroup key={'adam'} text={'Playlists by Adam Fehr'} />
+
+        <List.Subheader>Playlists by Adam Fehr</List.Subheader>
+
         {sortedList.slice(0, 1).map((item, idx) => {
           const { title, mediaIds } = item;
           return (
@@ -67,7 +69,11 @@ export const Explore = ({ onViewDetailClicked, list }: ExploreProps) => {
             />
           );
         })}
-        <ListItemGroup key={'popular'} text={'Popular'} />
+      </List.Section>
+
+      <List.Section>
+        <List.Subheader>Popular</List.Subheader>
+
         {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
         {sortedList.slice(2, 8).map((item, idx) => {
           const { title, mediaIds } = item;
@@ -84,7 +90,7 @@ export const Explore = ({ onViewDetailClicked, list }: ExploreProps) => {
             />
           );
         })}
-      </List>
+      </List.Section>
     </View>
   );
 };

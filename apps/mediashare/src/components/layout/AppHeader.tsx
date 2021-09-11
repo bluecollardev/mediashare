@@ -1,5 +1,4 @@
 import React from 'react';
-import { Body, Button, Header, Icon, Left, Right, Title } from 'native-base';
 import { Appbar } from 'react-native-paper';
 import { theme } from '../../styles';
 
@@ -20,7 +19,7 @@ export const AppHeader = (props: AppHeaderProps) => {
     showSort = false,
   } = props;
   return (
-    <Appbar.Header style={{ backgroundColor: theme.colors.accent }}>
+    <Appbar.Header style={{ backgroundColor: theme.colors.bgColor }}>
       {showBack && <Appbar.BackAction onPress={navigation.goBack} />}
 
       <Appbar.Content title={title} />
