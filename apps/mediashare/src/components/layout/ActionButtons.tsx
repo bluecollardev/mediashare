@@ -14,6 +14,7 @@ interface Props {
   rightIcon?: string;
   leftIcon?: string;
   loading?: boolean;
+  disabled?: boolean;
 }
 
 export const ActionButtons = ({

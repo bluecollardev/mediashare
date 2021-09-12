@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from 'react-native';
-import { Button, CardItem, Content, Icon, Text, View } from 'native-base';
+import { Button, CardItem, Icon, Text } from 'native-base';
 import * as DocumentPicker from 'expo-document-picker';
 
 import { ROUTES } from '../../../routes';
@@ -39,9 +39,9 @@ export const AddMediaContainer = () => {
   };
 
   const clearAndGoBack = () => {
-    setTitle('Title');
+    setTitle('');
     setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
-    setDescription('Description');
+    setDescription('');
     setThumbnail('');
     goBack();
   };
@@ -89,7 +89,7 @@ export const AddMediaContainer = () => {
     const item = res as any;
 
     setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
-    setDescription('Description');
+    setDescription('');
     setThumbnail('');
     endLoad();
     goToItem({ mediaId: item.payload._id, uri: item.payload.uri });

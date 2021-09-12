@@ -15,6 +15,9 @@ import { MediaListItem } from '../../layout/MediaListItem';
 import { MediaItem } from '../../../rxjs-api';
 
 import styles from '../../../styles';
+import PageContainer from '../../layout/PageContainer';
+import { useSpinner } from '../../../hooks/useSpinner';
+import { ScrollView } from 'react-native';
 
 export interface AddFromFeedProps {
   navigation: any;
@@ -47,6 +50,7 @@ export const AddFromFeedContainer = () => {
   const [loaded, setLoaded] = useState(false);
   const items = useAppSelector((state) => state.mediaItem.feed);
   console.log(items);
+  const [{ AppSpinner, startLoad, endLoad }] = useSpinner();
 
   const saveMedia = async function () {
     if (selectedItems.size < 1) {
@@ -58,45 +62,42 @@ export const AddFromFeedContainer = () => {
   };
   useEffect(() => {
     const loadData = async function () {
+      startLoad();
       await dispatch(getFeedMediaItems());
       setLoaded(true);
+      endLoad();
     };
     if (!loaded) {
       loadData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded, dispatch]);
   if (!items && loaded) {
     return <Text>No items to download</Text>;
   }
-  if (!items) {
-    return <Text>...loading</Text>;
-  }
 
   if (items) {
     return (
-      <Container style={styles.container}>
-        <Content>
-          <View>
-            <List>
-              <ListItemGroup key={'group1'} />
-              {items.map((item, idx) => {
-                const { key, size, lastModified } = item;
+      <PageContainer>
+        <AppSpinner />
+        <ScrollView>
+          {items.map((item, idx) => {
+            const { key, size, lastModified } = item;
 
-                return (
-                  <MediaListItem
-                    key={idx}
-                    title={key}
-                    description={size + lastModified}
-                    checked={false}
-                    onChecked={(v) => (v ? addItemCb(key) : removeItemCb(key))}
-                  />
-                );
-              })}
-            </List>
-          </View>
-        </Content>
+            return (
+              <MediaListItem
+                showActions={false}
+                key={idx}
+                title={key}
+                description={size + lastModified}
+                checked={false}
+                onChecked={(v) => (v ? addItemCb(key) : removeItemCb(key))}
+              />
+            );
+          })}
+        </ScrollView>
         <ActionButtons actionCb={saveMedia} actionLabel="Next" cancelLabel="Back" cancelCb={goToMediaItems} />
-      </Container>
+      </PageContainer>
     );
   }
 };
