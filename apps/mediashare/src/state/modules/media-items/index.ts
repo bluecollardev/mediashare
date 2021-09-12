@@ -80,12 +80,14 @@ export const addMediaItem = createAsyncThunk(
 
 export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
   const mediaItems = (await listStorage('uploads/')) as AwsMediaItem[];
-  return mediaItems
+  const items = mediaItems
     .filter((item) => item.key !== 'uploads/')
     .map((item) => ({
       ...item,
       key: sanitizeFoldername(item.key),
     }));
+  console.log(items);
+  return items;
 });
 
 export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ keys }: { keys: string[] }) => {

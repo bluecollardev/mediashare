@@ -45,7 +45,7 @@ export const useLoadPlaylistByIdData = function ({ endLoad, playlistId }: { endL
       endLoad();
     }
     if (!loaded || playlistId !== state.playlist.selectedPlaylist._id) {
-      loadData();
+      loadData().then(() => endLoad());
       setLoaded(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

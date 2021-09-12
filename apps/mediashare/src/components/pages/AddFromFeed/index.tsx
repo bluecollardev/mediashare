@@ -24,34 +24,6 @@ export interface AddFromFeedProps {
 
 export interface AddFromFeedState {}
 
-export const AddFromFeed = ({ onViewDetail = () => {}, items }: AddFromFeedProps) => {
-  const dispatch = useDispatch();
-
-  function toggleField(id: number) {
-    dispatch(toggleMediaItem(id));
-  }
-
-  return (
-    <List>
-      <ListItemGroup key={'group1'} />
-      {items.concat([]).map((item, idx) => {
-        const { title, description, thumbnail } = item;
-        return (
-          <MediaListItem
-            key={`item-${idx}`}
-            title={title}
-            description={description}
-            image={thumbnail}
-            checked={false}
-            onChecked={() => toggleField(idx)}
-            onViewDetail={onViewDetail}
-          />
-        );
-      })}
-    </List>
-  );
-};
-
 export interface AddFromFeedContainerProps {
   navigation: any;
   fetchList: Function;
@@ -74,6 +46,7 @@ export const AddFromFeedContainer = () => {
 
   const [loaded, setLoaded] = useState(false);
   const items = useAppSelector((state) => state.mediaItem.feed);
+  console.log(items);
 
   const saveMedia = async function () {
     if (selectedItems.size < 1) {
@@ -84,9 +57,12 @@ export const AddFromFeedContainer = () => {
     goToMediaItems();
   };
   useEffect(() => {
-    if (!loaded) {
-      dispatch(getFeedMediaItems());
+    const loadData = async function () {
+      await dispatch(getFeedMediaItems());
       setLoaded(true);
+    };
+    if (!loaded) {
+      loadData();
     }
   }, [loaded, dispatch]);
   if (!items && loaded) {
@@ -95,6 +71,7 @@ export const AddFromFeedContainer = () => {
   if (!items) {
     return <Text>...loading</Text>;
   }
+
   if (items) {
     return (
       <Container style={styles.container}>

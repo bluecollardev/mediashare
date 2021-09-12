@@ -95,9 +95,6 @@ export const PlaylistsContainer = () => {
     dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
   };
 
-  if (!loaded || isLoading) {
-    return <AppSpinner />;
-  }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
     <PageContainer>
