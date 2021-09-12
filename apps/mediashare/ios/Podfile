@@ -4,7 +4,7 @@ require File.join(File.dirname(`node --print "require.resolve('react-native-unim
 
 platform :ios, '11.0'
 
-target 'bluecollar_mediashare' do
+target 'MediashareTechnology' do
   use_unimodules!
   config = use_native_modules!
 
@@ -18,7 +18,7 @@ target 'bluecollar_mediashare' do
 
   pod 'react-native-create-thumbnail', :path => '../node_modules/react-native-create-thumbnail'
 
-  target 'bluecollar_mediashareTests' do
+  target 'MediashareTechnologyTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -39,11 +39,11 @@ target 'bluecollar_mediashare' do
   # end
 end
 
-# target 'bluecollar_mediashare-tvOS' do
-  # Pods for bluecollar_mediashare-tvOS
+# target 'MediashareTechnology-tvOS' do
+  # Pods for MediashareTechnology-tvOS
 #
 #
-#   target 'bluecollar_mediashare-tvOSTests' do
+#   target 'MediashareTechnology-tvOSTests' do
 #     inherit! :search_paths
     # Pods for testing
 #   end

@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.bluecollar_mediashare"
+        applicationId "oi.technologycompany.mediashare"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

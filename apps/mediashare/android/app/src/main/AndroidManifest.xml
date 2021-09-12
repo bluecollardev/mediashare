@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.bluecollar_mediashare">
+  package="oi.technologycompany.mediashare">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

@@ -34,8 +34,8 @@ export interface LoginProps {
 export interface LoginState extends Pick<RootState, never> {}
 
 const LoginComponent = () => {
-  const [username, setUsername] = useState('test@example.com');
-  const [password, setPassword] = useState('string12345');
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
   const dispatch = useDispatch();
   const [{ startLoad, endLoad, AppSpinner }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
 
