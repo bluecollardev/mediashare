@@ -128,7 +128,6 @@ type MappedRouteEnum = { [P in RouteEnumKeys]: RouteEnumType<P> };
 function createRouteConfig(config: typeof routeConfig): MappedRouteEnum {
   const obj = Object.create({});
   for (let key in config) {
-    console.log(key);
     if (config.hasOwnProperty(key)) {
       Object.assign(obj, { [key]: config[key].name });
     }

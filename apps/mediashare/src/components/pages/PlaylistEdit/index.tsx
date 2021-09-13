@@ -42,7 +42,6 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   const playlist = useAppSelector((state) => state.playlist);
   const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
   const { selectedPlaylist } = playlist;
-  console.log(selectedPlaylist);
   const [title, setTitle] = useState(selectedPlaylist?.title);
   const [description, setDescription] = useState(selectedPlaylist?.description);
   const [category, setCategory] = useState(selectedPlaylist?.category);
@@ -99,7 +98,6 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   };
   const save = async function () {
     const result = await withIds(selectedPlaylist.mediaIds);
-    console.log(result);
     setLoaded(false);
     await loadData();
   };
@@ -107,7 +105,6 @@ const PlaylistEditContainer = ({ navigation, route }) => {
     const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
 
     const result = await withIds(filtered);
-    console.log(result);
     setLoaded(false);
     startLoad();
     await loadData();

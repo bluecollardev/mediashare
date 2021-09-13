@@ -42,7 +42,6 @@ export const PlaylistsContainer = () => {
 
   const updateSelection = function (bool, item) {
     dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
-    console.log(selectedPlaylists);
   };
 
   useEffect(() => {

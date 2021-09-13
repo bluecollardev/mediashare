@@ -79,7 +79,6 @@ const MediaItemEditContainer = ({ navigation, route }) => {
     resetData();
   };
   const saveItem = async function () {
-    console.log(mediaItem);
     const dto: UpdateMediaItemDto & { _id } = {
       title,
       category: CreatePlaylistDtoCategoryEnum[category as any],
@@ -89,7 +88,6 @@ const MediaItemEditContainer = ({ navigation, route }) => {
       // key: title,
       // eTag: '',
     };
-    console.log(dto);
     const res = await dispatch(updateMediaItem(dto));
 
     // goToItem({ mediaId, uri });

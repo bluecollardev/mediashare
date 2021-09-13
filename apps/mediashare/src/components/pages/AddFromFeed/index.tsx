@@ -49,7 +49,6 @@ export const AddFromFeedContainer = () => {
 
   const [loaded, setLoaded] = useState(false);
   const items = useAppSelector((state) => state.mediaItem.feed);
-  console.log(items);
   const [{ AppSpinner, startLoad, endLoad }] = useSpinner();
 
   const saveMedia = async function () {
@@ -76,30 +75,28 @@ export const AddFromFeedContainer = () => {
     return <Text>No items to download</Text>;
   }
 
-  if (items) {
-    return (
-      <PageContainer>
-        <AppSpinner />
-        <ScrollView>
-          {items.map((item, idx) => {
-            const { key, size, lastModified } = item;
+  return (
+    <PageContainer>
+      <AppSpinner />
+      <ScrollView>
+        {items?.map((item, idx) => {
+          const { key, size, lastModified } = item;
 
-            return (
-              <MediaListItem
-                showActions={false}
-                key={idx}
-                title={key}
-                description={size + lastModified}
-                checked={false}
-                onChecked={(v) => (v ? addItemCb(key) : removeItemCb(key))}
-              />
-            );
-          })}
-        </ScrollView>
-        <ActionButtons actionCb={saveMedia} actionLabel="Next" cancelLabel="Back" cancelCb={goToMediaItems} />
-      </PageContainer>
-    );
-  }
+          return (
+            <MediaListItem
+              showActions={false}
+              key={idx}
+              title={key}
+              description={size + lastModified}
+              checked={false}
+              onChecked={(v) => (v ? addItemCb(key) : removeItemCb(key))}
+            />
+          );
+        })}
+      </ScrollView>
+      <ActionButtons actionCb={saveMedia} actionLabel="Next" cancelLabel="Back" cancelCb={goToMediaItems} />
+    </PageContainer>
+  );
 };
 
 export default AddFromFeedContainer;

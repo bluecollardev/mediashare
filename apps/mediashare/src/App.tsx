@@ -26,6 +26,7 @@ import { store } from './boot/configureStore';
 import { useAppSelector } from './state/index';
 import { theme } from './styles';
 import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black, useFonts } from '@expo-google-fonts/roboto';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -141,6 +142,8 @@ fakeLogin().then();
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [fontsLoaded] = useFonts({
     Roboto_500Medium,
     Roboto_900Black,
@@ -152,15 +155,19 @@ function App() {
   // Amplify.configure(awsmobile);
   // fakeLogin();
 
-  const user = useAppSelector((state) => state.user);
+  const loading = useAppSelector((state) => state.appStateReducer.loading);
 
+  useEffect(() => {
+    setIsLoading(loading);
+    console.log('ran loading', loading);
+  }, [loading]);
+  const user = useAppSelector((state) => state.user);
   useEffect(() => {
     setIsLoggedIn(user._id.length > 0);
   }, [user]);
 
   const customTheme = {
     ...theme,
-
   };
 
   if (!fontsLoaded) {
@@ -168,6 +175,8 @@ function App() {
   } else {
     return (
       <Provider store={store}>
+        <Spinner visible={loading} />
+
         <PaperProvider theme={customTheme}>
           {isLoggedIn ? (
             <NavigationContainer>

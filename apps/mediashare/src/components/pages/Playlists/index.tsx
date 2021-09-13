@@ -19,7 +19,7 @@ import { PlaylistResponseDto } from '../../../api';
 import PageContainer from '../../layout/PageContainer';
 import AppContent from '../../layout/AppContent';
 import { SPINNER_DEFAULTS, useSpinner } from '../../../hooks/useSpinner';
-import { ScrollView } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
 import { useLoadData, useLoadPlaylistData } from '../../../hooks/useLoadData';
 
 export interface PlaylistsProps {
@@ -87,9 +87,15 @@ export const PlaylistsContainer = () => {
   const shareWithAction = useRouteName(ROUTES.shareWith);
   const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
   const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  const [{ AppSpinner, endLoad, isLoading }] = useSpinner();
-  const [{ loaded, state }] = useLoadPlaylistData({ endLoad });
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    await dispatch(findUserPlaylists({}));
+    setRefreshing(false);
+  }, [dispatch]);
+
+  const [{ loaded, state, AppSpinner }] = useLoadPlaylistData();
 
   const updateSelection = function (bool, item) {
     dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
@@ -99,15 +105,16 @@ export const PlaylistsContainer = () => {
   return (
     <PageContainer>
       <AppSpinner />
-      <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
-      <ScrollView>
-        <Playlists
-          onChecked={updateSelection}
-          list={state.playlists.userPlaylists}
-          onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })}
-        />
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
+        <ScrollView>
+          <Playlists
+            onChecked={updateSelection}
+            list={state.playlists.userPlaylists}
+            onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })}
+          />
+        </ScrollView>
       </ScrollView>
-
       <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" />
     </PageContainer>
   );

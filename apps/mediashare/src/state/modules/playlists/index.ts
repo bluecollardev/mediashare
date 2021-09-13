@@ -9,6 +9,8 @@ import { CreatePlaylistResponseDto } from '../../../api/models/create-playlist-r
 import { PlaylistResponseDto } from '../../../rxjs-api/models/PlaylistResponseDto';
 import { flattenDeep } from 'remeda';
 import { merge } from 'rxjs';
+import { useDispatch } from 'react-redux';
+import { loading } from '../app-state';
 
 const PLAYLIST_ACTIONS = [
   'GET_USER_PLAYLIST',
@@ -46,7 +48,6 @@ export const addUserPlaylist = createAsyncThunk(playlistActionTypes.addUserPlayl
 export const updateUserPlaylist = createAsyncThunk(playlistActionTypes.updateUserPlaylist, async (playlist: UpdatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Fix _id property on UpdatePlaylistDto!
-  console.log(playlist);
   const response = await api.playlists
     .playlistControllerUpdate({
       playlistId: playlist._id,
@@ -62,7 +63,6 @@ export const shareUserPlaylist = createAsyncThunk(
     const { api } = extra as { api: ApiService };
     const prom = ({ playlistId, userId }) => api.playlists.playlistControllerShare({ playlistId, userId });
     const promises = userIds.map((userId) => playlistIds.map((playlistId) => prom({ userId, playlistId })));
-    console.log(promises);
     const flat = flattenDeep(promises);
     const res = await merge(...flat).toPromise();
 
@@ -155,6 +155,8 @@ const playlistReducer = createReducer(initialPlaylistState, (builder) => {
 
 const playlistsReducer = createReducer(initialState, (builder) => {
   builder.addCase(findUserPlaylists.pending, (state, action) => {
+    const dispatch = useDispatch();
+    dispatch(loading(true));
     return { ...state, userPlaylists: action.payload, loading: true, loaded: false };
   });
   builder

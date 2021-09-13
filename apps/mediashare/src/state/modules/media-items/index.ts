@@ -86,7 +86,6 @@ export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMedia
       ...item,
       key: sanitizeFoldername(item.key),
     }));
-  console.log(items);
   return items;
 });
 
@@ -181,11 +180,6 @@ const initialMediaItemState: {
 export const MEDIA_ITEMS_STATE_KEY = 'mediaItems';
 
 const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
-  // builder.addCase(findMediaItems.fulfilled, (state, action) => {
-  //   return { ...state, mediaItems: action.payload, loading: false };
-  // })
-
-  // .addCase(findMediaItems.fulfilled, reducers.addItem(MEDIA_ITEMS_STATE_KEY))
   builder
     .addCase(createThumbnail.fulfilled, (state, action) => ({
       ...state,

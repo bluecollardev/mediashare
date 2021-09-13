@@ -1,3 +1,4 @@
+import { loadStateAction, store } from '../boot/configureStore';
 import {
   Configuration,
   DefaultApi,
@@ -11,6 +12,7 @@ import {
   UserApi,
   UsersApi,
 } from '../rxjs-api';
+import { loading } from './modules/app-state';
 
 let TOKEN = '';
 let COOKIE = '';
@@ -50,7 +52,16 @@ function apiFactory() {
         return response;
       },
     };
-    return [sessionMiddleWare, loginMiddleware, cookieMiddleware];
+    const loaderMiddleware: Middleware = {
+      pre: (request) => {
+        store.dispatch(loading);
+        return request;
+      },
+      post: (response: ResponseArgs) => {
+        return response;
+      },
+    };
+    return [sessionMiddleWare, loginMiddleware, cookieMiddleware, loaderMiddleware];
   }
 
   const configuration = new Configuration({

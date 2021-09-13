@@ -66,7 +66,6 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const updateSelection = function (bool: boolean, item: MediaListType) {
     const filtered = bool ? selected.concat([item._id]) : selected.filter((key) => key !== item._id);
     setSelected(filtered);
-    console.log(item, filtered);
   };
   const options = [];
   for (const value in CreatePlaylistDtoCategoryEnum) {
@@ -89,7 +88,6 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
       mediaIds: selected,
       createdBy: '',
     };
-    console.log(dto);
     // const res = await dispatch(addUserPlaylist(dto));
     await dispatch(addUserPlaylist(dto));
     await dispatch(findUserPlaylists({}));
