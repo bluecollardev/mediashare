@@ -9,6 +9,7 @@ import { loginAction } from '../../../state/modules/user';
 import { RootState } from '../../../state';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { SPINNER_DEFAULTS, useSpinner } from '../../../hooks/useSpinner';
+import PageContainer from '../../layout/PageContainer';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -34,7 +35,7 @@ export interface LoginProps {
 export interface LoginState extends Pick<RootState, never> {}
 
 const LoginComponent = () => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('test@example.com');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const [{ startLoad, endLoad, AppSpinner }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
@@ -49,7 +50,7 @@ const LoginComponent = () => {
     endLoad();
   };
   return (
-    <View padder>
+    <PageContainer>
       <AppSpinner />
       <Card elevation={0}>
         <Card.Cover style={{ backgroundColor: '#fff' }} resizeMode={'contain'} source={require('./logo.png')} />
@@ -87,7 +88,7 @@ const LoginComponent = () => {
           </Button>
         </Card.Content>
       </Card>
-    </View>
+    </PageContainer>
   );
 };
 

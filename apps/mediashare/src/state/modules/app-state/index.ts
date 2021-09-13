@@ -1,14 +1,16 @@
 import { CaseReducer, createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as R from 'remeda';
 import { makeEnum } from '../../core/factory';
+
 const INITIAL_STATE = {
   loading: false,
-  z: 'a',
+  error: {
+    name: '',
+    message: '',
+  },
+  hasError: false,
 };
-// type InitialAppStateType = typeof INITIAL_STATE;
-type InitialAppStateKeys = keyof InitialAppStateType;
 
-// export type ObjectInfer<O> = O extends { InitialAppStateKeys[number]: infer A /** you could put another object in here */ } ? A : never;
 export type ValuesWithKeys<T, K extends keyof T> = T[K];
 
 export type InitialStateUnion<T extends object> = { [P in keyof T]: ValuesWithKeys<T, P> };
@@ -17,6 +19,18 @@ const appStateSlice = createSlice({
   name: 'appState',
   initialState: INITIAL_STATE,
   reducers: {
+    setError: (state, action: PayloadAction<{ name: string; message: string }>) => {
+      const { name, message } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        hasError: true,
+        error: { name: `Error: ${name}`, message: `Message: ${message}` },
+      };
+    },
+    clearError: (state) => {
+      return { ...state, hasError: false, error: { name: '', message: '' } };
+    },
     loading: (state, action: PayloadAction<boolean>) => {
       console.log('loading', action);
       return {
@@ -27,5 +41,5 @@ const appStateSlice = createSlice({
   },
 });
 
-export const { loading } = appStateSlice.actions;
+export const { loading, setError, clearError } = appStateSlice.actions;
 export const reducer = appStateSlice.reducer;

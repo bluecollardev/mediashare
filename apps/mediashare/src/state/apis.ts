@@ -55,13 +55,16 @@ function apiFactory() {
     const loaderMiddleware: Middleware = {
       pre: (request) => {
         loadStateAction(true);
+        setTimeout(() => {
+          loadStateAction(false);
+        }, 3000);
         return request;
       },
       post: (response: ResponseArgs) => {
         // setTimeout(function () {
         loadStateAction(false);
         // }, 1000);
-
+        console.log('rejected ', response);
         return response;
       },
     };

@@ -157,10 +157,6 @@ function App() {
 
   const loading = useAppSelector((state) => state.app.loading);
 
-  useEffect(() => {
-    setIsLoading(loading);
-    console.log('ran loading', loading);
-  }, [loading]);
   const user = useAppSelector((state) => state.user);
   useEffect(() => {
     setIsLoggedIn(user._id.length > 0);
