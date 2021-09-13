@@ -54,10 +54,14 @@ function apiFactory() {
     };
     const loaderMiddleware: Middleware = {
       pre: (request) => {
-        store.dispatch(loading);
+        loadStateAction(true);
         return request;
       },
       post: (response: ResponseArgs) => {
+        // setTimeout(function () {
+        loadStateAction(false);
+        // }, 1000);
+
         return response;
       },
     };

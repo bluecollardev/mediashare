@@ -155,7 +155,7 @@ function App() {
   // Amplify.configure(awsmobile);
   // fakeLogin();
 
-  const loading = useAppSelector((state) => state.appStateReducer.loading);
+  const loading = useAppSelector((state) => state.app.loading);
 
   useEffect(() => {
     setIsLoading(loading);

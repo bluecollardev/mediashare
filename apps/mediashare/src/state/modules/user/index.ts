@@ -4,6 +4,7 @@ import { ActionsFactory } from '../../core/factory';
 import { LoginResponseDto } from '../../../api/models/login-response-dto';
 import { LoginDto } from '../../../api/models/login-dto';
 import { apis } from '../../apis';
+import { loadStateAction } from '../../../boot/configureStore';
 
 export const USER_STATE_KEY = 'user';
 
@@ -24,10 +25,24 @@ export const loginAction = createAsyncThunk(UserActions.login.type, async (login
   return response;
 });
 
+export const logoutAction = createAsyncThunk(UserActions.login.type, async () => {
+  const response = await apis.user.userControllerLogout().toPromise();
+
+  return response;
+});
+
 const userReducer = createReducer(initialState, (builder) =>
-  builder.addCase(loginAction.fulfilled, (state, action) => {
-    return action.payload;
-  })
+  builder
+    .addCase(loginAction.fulfilled, (state, action) => {
+      return action.payload;
+    })
+    .addCase(loginAction.pending, (state, action) => {
+      return { ...state };
+    })
+    .addCase(loginAction.rejected, (state, action) => {
+      console.log('error: ', action);
+      return { ...state };
+    })
 );
 // export const;
 export { userReducer };

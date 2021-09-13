@@ -5,16 +5,14 @@ import { savePlaylist } from './playlist-api';
 import { store } from '../../../boot/index';
 
 function initialStateFactory(): CreatePlaylistDto & { loading: boolean } {
-  const initialState = {
+  return {
     description: '',
     createdBy: '',
     title: '',
     mediaIds: [],
-    category: CreatePlaylistDtoCategoryEnum.Builder,
+    category: null,
     loading: false,
   };
-  const obj = Object.create(null);
-  return Object.assign(obj, initialState);
 }
 
 const CREATE_PLAYLIST_KEY = 'createPlaylist' as const;
@@ -46,7 +44,9 @@ const slice = createSlice({
     builder
       .addCase(createPlaylist.fulfilled, (state, action) => {
         console.log('submitted', action);
-        return { ...initialStateFactory(), mediaIds: [] };
+        const user = initialStateFactory();
+        console.log(user);
+        return { ...user, mediaIds: [] };
       })
       .addCase(createPlaylist.rejected, (state) => {
         return { ...state, loading: false };

@@ -41,8 +41,11 @@ const LoginComponent = () => {
 
   const onLogin = async (loginDto: LoginDto) => {
     startLoad();
-
-    await dispatch(loginAction(loginDto));
+    try {
+      await dispatch(loginAction(loginDto));
+    } catch (err) {
+      console.log(err);
+    }
     endLoad();
   };
   return (

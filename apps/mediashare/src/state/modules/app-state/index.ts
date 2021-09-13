@@ -13,17 +13,6 @@ export type ValuesWithKeys<T, K extends keyof T> = T[K];
 
 export type InitialStateUnion<T extends object> = { [P in keyof T]: ValuesWithKeys<T, P> };
 
-type InitialAppState = InitialStateUnion<typeof INITIAL_STATE>;
-// const mapped = R.mapValues( (value, key) => key);
-// const paired = R.toPairs(mapped)
-// const flattened = R.flatMap(paired, (input) => input[1])
-const stateKeys = R.pipe(
-  R.toPairs(R.mapValues(INITIAL_STATE, (value, key) => key)),
-  R.map((input) => input[1])
-);
-
-const APP_STATE_ACTIONS = makeEnum(stateKeys);
-
 const appStateSlice = createSlice({
   name: 'appState',
   initialState: INITIAL_STATE,
@@ -39,4 +28,4 @@ const appStateSlice = createSlice({
 });
 
 export const { loading } = appStateSlice.actions;
-export const appStateReducer = appStateSlice.reducer;
+export const reducer = appStateSlice.reducer;

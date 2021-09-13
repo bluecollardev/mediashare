@@ -8,7 +8,7 @@ import { loading } from '../state/modules/app-state';
 
 const store = configureStore({
   reducer,
-  middleware: [thunk.withExtraArgument({ api: apis })],
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk.withExtraArgument({ api: apis })),
 });
 
 const actions = bindActionCreators({ clearMediaItemSelection }, store.dispatch);
