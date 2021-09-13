@@ -5,23 +5,22 @@ import { CombinedState } from 'redux';
 import { RootState, useAppSelector } from '../state';
 import { findUserPlaylists } from '../state/modules/playlists';
 import { getPlaylistById } from '../state/modules/playlists/index';
-import { useSpinner } from './useSpinner';
 interface LoadDataResult {
   loaded: boolean;
   state: CombinedState<RootState>;
 }
 export function useLoadData({ action }: { action: any }) {
-  const [{ startLoad, endLoad, AppSpinner }] = useSpinner();
+  // const [{ startLoad, endLoad, AppSpinner }] = useSpinner();
   const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const state = useAppSelector((state) => state);
   useEffect(() => {
     const loadData = async function () {
-      startLoad();
+      // startLoad();
 
       await dispatch(action({}));
 
-      setTimeout(() => endLoad(), 1000);
+      // setTimeout(() => endLoad(), 1000);
     };
     if (!loaded) {
       loadData();
@@ -30,7 +29,7 @@ export function useLoadData({ action }: { action: any }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
 
-  return [{ loaded, state, AppSpinner }, setLoaded];
+  return [{ loaded, state }, setLoaded];
 }
 
 export const useLoadPlaylistData = function () {

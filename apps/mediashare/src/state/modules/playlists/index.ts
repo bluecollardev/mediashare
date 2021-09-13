@@ -155,8 +155,6 @@ const playlistReducer = createReducer(initialPlaylistState, (builder) => {
 
 const playlistsReducer = createReducer(initialState, (builder) => {
   builder.addCase(findUserPlaylists.pending, (state, action) => {
-    const dispatch = useDispatch();
-    dispatch(loading(true));
     return { ...state, userPlaylists: action.payload, loading: true, loaded: false };
   });
   builder

@@ -34,27 +34,10 @@ function PageContainer({ children }: PageContainerProps) {
                 Cancel
               </Button>
             </Dialog.Actions>
-
-            {/* <Dialog.Title>
-              <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <Avatar.Icon icon={'alert'} size={36} />
-                <Title>Error</Title>
-              </View>
-            </Dialog.Title>
-            <Dialog.Content>
-              <Subheading>Application has an error message</Subheading>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button mode={'text'} dark color={theme.colors.primary} onPress={hideDialog}>
-                Cancel
-              </Button>
-            </Dialog.Actions> */}
           </Dialog>
         </Portal>
       </View>
-      {/* <Button mode={'contained'} color={theme.colors.primary} onPress={() => setVisible(true)}>
-        showDialog
-      </Button> */}
+
       {children}
     </SafeAreaView>
   );

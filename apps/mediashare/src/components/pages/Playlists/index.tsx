@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { List, Text, View } from 'native-base';
@@ -89,7 +89,7 @@ export const PlaylistsContainer = () => {
   const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const onRefresh = React.useCallback(async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await dispatch(findUserPlaylists({}));
     setRefreshing(false);
@@ -104,7 +104,6 @@ export const PlaylistsContainer = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
     <PageContainer>
-      <AppSpinner />
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
         <ScrollView>
