@@ -52,7 +52,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
       {mediaSrc && <Video source={{ uri: mediaSrc }} poster={DEFAULT_IMAGE} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />}
       {children}
       {isEdit ? (
-        <Card.Content>
+        <Card.Content style={{ marginTop: 20, marginBottom: 20 }}>
           <TextInput
             dense
             mode={'outlined'}
@@ -63,12 +63,13 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
             onChangeText={(text) => onTitleChange(text)}
           />
           <SwitchSelector
-            style={{ marginTop: 10 }}
+            style={{ marginTop: 20, marginBottom: 20 }}
             options={categoryOptions.map((option) => ({ value: option, label: option }))}
             initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
             onPress={(value) => onCategoryChange(value as string)}
           />
           <TextInput
+            style={{ height: 200 }}
             multiline={true}
             mode={'outlined'}
             textAlign={'left'}
@@ -80,7 +81,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           />
         </Card.Content>
       ) : (
-        <>
+        <Card.Content>
           <Card.Title
             title={<Title>{title}</Title>}
             subtitle={category ?? 'No category'}
@@ -89,7 +90,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           <Card.Content>
             <Paragraph style={{ marginTop: 2, marginBottom: 5 }}>{description}</Paragraph>
           </Card.Content>
-        </>
+        </Card.Content>
       )}
     </Card>
     // <Card style={{ flex: 0 }}>
