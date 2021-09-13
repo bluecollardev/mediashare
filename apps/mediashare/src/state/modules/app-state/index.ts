@@ -18,10 +18,10 @@ const appStateSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     loading: (state, action: PayloadAction<boolean>) => {
-      console.log('loading');
+      console.log('loading', action);
       return {
         ...state,
-        loading: true,
+        loading: action.payload,
       };
     },
   },
