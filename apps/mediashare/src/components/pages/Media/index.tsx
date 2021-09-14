@@ -57,13 +57,13 @@ export const MediaContainer = (props: { navigation: any }) => {
   const dispatch = useDispatch();
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
   const addMedia = useRouteName(ROUTES.addMediaItem);
-  const viewMedia = useRouteWithParams(ROUTES.mediaItemDetail);
+  const editMedia = useRouteWithParams(ROUTES.mediaItemEdit);
 
   const { loaded, mediaItems } = useAppSelector((state) => state.mediaItems);
 
   const [isLoaded, setIsLoaded] = useState(loaded);
-  const onViewItem = async function (item: MediaItem) {
-    viewMedia({ mediaId: item._id, uri: item.uri });
+  const onEditItem = async function (item: MediaItem) {
+    editMedia({ mediaId: item._id, uri: item.uri });
   };
   const [refreshing, setRefreshing] = useState(false);
 
@@ -91,9 +91,9 @@ export const MediaContainer = (props: { navigation: any }) => {
 
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {mediaItems.length > 0 ? (
-          <Media navigation={props.navigation} list={mediaItems} onViewDetail={onViewItem} selectable={false} />
+          <Media navigation={props.navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />
         ) : (
-          <Subheading>No Media Items</Subheading>
+          <Subheading>There are no items in your collection</Subheading>
         )}
       </ScrollView>
       {/* <Portal> */}
