@@ -13,11 +13,9 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
 import { routeConfig } from './routes';
-import LoginContainer from './components/pages/Login';
 
 import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
@@ -76,14 +74,22 @@ function MediaNavigation() {
   );
 }
 
-const PageStackNavigator = createStackNavigator();
-
 const AccountStackNavigator = createStackNavigator();
 const AccountNavigation = () => {
   return (
     <AccountStackNavigator.Navigator>
       <AccountStackNavigator.Screen {...routeConfig.account} />
     </AccountStackNavigator.Navigator>
+  );
+};
+
+const PublicStackNavigator = createStackNavigator();
+const PublicNavigation = () => {
+  return (
+    <PublicStackNavigator.Navigator initialRouteName={'Login'}>
+      <PublicStackNavigator.Screen {...routeConfig.login} />
+      <PublicStackNavigator.Screen {...routeConfig.signup} />
+    </PublicStackNavigator.Navigator>
   );
 };
 
@@ -96,11 +102,10 @@ export const tabNavigationIconsMap = {
   Account: 'account-box',
 };
 
-const TabNavigator = createBottomTabNavigator();
-
-function TabNavigation() {
+const PrivateNavigator = createBottomTabNavigator();
+function PrivateNavigation() {
   return (
-    <TabNavigator.Navigator
+    <PrivateNavigator.Navigator
       initialRouteName={'Media'}
       activeColor={theme.colors.primaryTextLighter}
       inactiveColor={theme.colors.accentLighter}
@@ -121,11 +126,11 @@ function TabNavigation() {
         tabBarColor: theme.colors.accent,
       }}
     >
-      <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />
-      <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
-      <TabNavigator.Screen name={'Media'} component={MediaNavigation} />
-      <TabNavigator.Screen name={'Account'} component={AccountNavigation} />
-    </TabNavigator.Navigator>
+      <PrivateNavigator.Screen name={'Explore'} component={ExploreNavigation} />
+      <PrivateNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
+      <PrivateNavigator.Screen name={'Media'} component={MediaNavigation} />
+      <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} />
+    </PrivateNavigator.Navigator>
   );
 }
 
@@ -179,10 +184,12 @@ function App() {
         >
           {isLoggedIn ? (
             <NavigationContainer>
-              <TabNavigation />
+              <PrivateNavigation />
             </NavigationContainer>
           ) : (
-            <LoginContainer />
+            <NavigationContainer>
+              <PublicNavigation />
+            </NavigationContainer>
           )}
         </PaperProvider>
       </Provider>

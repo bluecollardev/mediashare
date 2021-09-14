@@ -9,6 +9,8 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
 import { Button, Card, TextInput } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
+import { useRouteName } from '../../hooks/NavigationHooks';
+import { ROUTES } from '../../routes';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -34,6 +36,8 @@ export interface LoginState extends Pick<RootState, never> {}
 
 const LoginComponent = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
+
+  const onSignupClicked = useRouteName(ROUTES.signup);
 
   const [username, setUsername] = useState('test@example.com');
   const [password, setPassword] = useState('string12345');
@@ -85,6 +89,9 @@ const LoginComponent = ({ navigation }: PageProps) => {
             disabled={validateUsername(username) || validatePassword(password)}
           >
             Login
+          </Button>
+          <Button style={{ marginTop: 15, display: 'flex', justifyContent: 'flex-end' }} onPress={onSignupClicked}>
+            Sign Up
           </Button>
         </Card.Content>
       </Card>

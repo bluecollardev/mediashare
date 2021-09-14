@@ -1,4 +1,5 @@
 import Login from './components/pages/Login';
+import Signup from './components/pages/Signup';
 import Explore from './components/pages/Explore';
 import ExploreDetail from './components/pages/ExploreDetail';
 import ExploreItemDetail from './components/pages/ExploreItemDetail';
@@ -23,7 +24,12 @@ const routeConfig = {
   login: {
     name: 'login',
     component: Login,
-    options: { title: 'Login', header: AppScreenHeader },
+    options: { title: ' ', header: undefined },
+  },
+  signup: {
+    name: 'signup',
+    component: Signup,
+    options: { title: 'Account Registration', header: undefined },
   },
   explore: {
     name: 'explore',
