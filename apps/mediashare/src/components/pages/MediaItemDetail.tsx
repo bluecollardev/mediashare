@@ -58,7 +58,7 @@ const MediaItemDetail = ({ route, onDataLoaded }: PageProps) => {
             title={title}
             description={description}
             image={mediaItemSrc}
-            showActions={true}
+            showActions={false}
             category={category}
             onEditClicked={() => onEditClicked({ mediaId })}
             onDeleteClicked={onDeleteClicked}
