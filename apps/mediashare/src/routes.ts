@@ -33,7 +33,7 @@ const routeConfig = {
   sharedPlaylistDetail: {
     name: 'sharedPlaylistDetail',
     component: ExploreDetail,
-    options: { title: "Adam Fehr's PLaylist", header: AppScreenHeader },
+    options: { title: "Adam Fehr's Playlist", header: AppScreenHeader },
   },
   sharedItemDetail: {
     name: 'sharedItemDetail',
