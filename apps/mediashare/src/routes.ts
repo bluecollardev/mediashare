@@ -1,5 +1,6 @@
 import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
+import ResetPassword from './components/pages/ResetPassword';
 import Explore from './components/pages/Explore';
 import ExploreDetail from './components/pages/ExploreDetail';
 import ExploreItemDetail from './components/pages/ExploreItemDetail';
@@ -30,6 +31,11 @@ const routeConfig = {
     name: 'signup',
     component: Signup,
     options: { title: 'Account Registration', header: undefined },
+  },
+  resetPassword: {
+    name: 'resetPassword',
+    component: ResetPassword,
+    options: { title: 'Reset Password', header: undefined },
   },
   explore: {
     name: 'explore',

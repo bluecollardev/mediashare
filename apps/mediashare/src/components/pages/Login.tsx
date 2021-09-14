@@ -7,6 +7,7 @@ import { RootState } from '../../state';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
+import { Text, View } from 'react-native';
 import { Button, Card, TextInput } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { useRouteName } from '../../hooks/NavigationHooks';
@@ -38,6 +39,7 @@ const LoginComponent = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
 
   const onSignupClicked = useRouteName(ROUTES.signup);
+  const onForgotPasswordClicked = useRouteName(ROUTES.resetPassword);
 
   const [username, setUsername] = useState('test@example.com');
   const [password, setPassword] = useState('string12345');
@@ -81,6 +83,9 @@ const LoginComponent = ({ navigation }: PageProps) => {
             style={{ marginTop: 10 }}
             onChange={(e) => setPassword(e.nativeEvent.text)}
           />
+          <Button compact onPress={onForgotPasswordClicked} style={{ marginTop: 5, display: 'flex', alignItems: 'flex-end' }}>
+            <Text style={{ color: 'grey', fontSize: 12, textTransform: 'none' }}>Forgot Password</Text>
+          </Button>
           <Button
             dark
             mode={'contained'}
