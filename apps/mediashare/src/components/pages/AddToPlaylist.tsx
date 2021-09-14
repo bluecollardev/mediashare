@@ -9,7 +9,7 @@ import { UpdatePlaylistDto } from '../../rxjs-api';
 
 import { ScrollView, View } from 'react-native';
 
-import { useGoBack, useViewMediaItem, useViewPlaylist } from '../../hooks/NavigationHooks';
+import { useGoBack, useEditMediaItem, useViewPlaylist } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
@@ -19,7 +19,7 @@ import { PageContainer, PageProps } from '../layout/PageContainer';
 export const AddToPlaylist = ({ route }: PageProps) => {
   const dispatch = useDispatch();
 
-  const viewMediaItem = useViewMediaItem();
+  const viewMediaItem = useEditMediaItem();
   const viewPlaylist = useViewPlaylist();
   const goBack = useGoBack();
 

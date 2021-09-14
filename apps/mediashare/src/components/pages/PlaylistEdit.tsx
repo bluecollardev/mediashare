@@ -9,7 +9,7 @@ import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { ActionSheet } from 'native-base';
 
-import { useViewMediaItem } from '../../hooks/NavigationHooks';
+import { useEditMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
@@ -43,7 +43,7 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
     options.push(value);
   }
 
-  const onViewMediaItemClicked = useViewMediaItem();
+  const onViewMediaItemClicked = useEditMediaItem();
 
   const items = selectedPlaylist?.mediaItems || [];
   const author = '';

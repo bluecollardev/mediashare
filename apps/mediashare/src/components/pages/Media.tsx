@@ -8,7 +8,7 @@ import { ROUTES } from '../../routes';
 import { useAppSelector } from '../../state';
 import { findMediaItems } from '../../state/modules/media-items';
 
-import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { useRouteName, useRouteWithParams, useEditMediaItem } from '../../hooks/NavigationHooks';
 import { MediaListItem } from '../layout/MediaListItem';
 
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
@@ -50,7 +50,7 @@ export const MediaComponent = ({ onViewDetail, list = [], selectable }: { naviga
 export const Media = ({ navigation, onDataLoaded }: PageProps) => {
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
   const addMedia = useRouteName(ROUTES.addMediaItem);
-  const editMedia = useRouteWithParams(ROUTES.mediaItemEdit);
+  const editMedia = useEditMediaItem();
 
   const dispatch = useDispatch();
 
