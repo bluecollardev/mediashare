@@ -26,7 +26,7 @@ export interface MediaItemDetailContainerProps {
 
 export interface MediaItemDetailContainerState {}
 
-const MediaItemDetailContainer = ({ route }) => {
+const MediaItemDetail = ({ route }) => {
   const dispatch = useDispatch();
 
   const { mediaId, uri } = route?.params || {};
@@ -94,4 +94,4 @@ const MediaItemDetailContainer = ({ route }) => {
   );
 };
 
-export default MediaItemDetailContainer;
+export default MediaItemDetail;

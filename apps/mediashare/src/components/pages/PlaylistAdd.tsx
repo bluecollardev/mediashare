@@ -15,19 +15,16 @@ import { MediaList, MediaListType } from '../layout/MediaList';
 
 import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 
-import styles from '../../styles';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
-import { minLength } from './Login';
 import { PageContainer } from '../layout/PageContainer';
 import { KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { useSpinner } from '../../hooks/useSpinner';
 
 interface PlaylistAddContainerProps {
   children: ReactNode;
 }
 
-function PlaylistAddContainer({}: PlaylistAddContainerProps) {
+export function PlaylistAdd({}: PlaylistAddContainerProps) {
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);
@@ -142,4 +139,4 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   );
 }
 
-export default PlaylistAddContainer;
+export default PlaylistAdd;

@@ -15,7 +15,7 @@ import { MediaCard } from '../layout/MediaCard';
 import { PageContainer } from '../layout/PageContainer';
 
 import styles from '../../styles';
-import { useSpinner } from '../../hooks/useSpinner';
+
 import { findUserPlaylists } from '../../state/modules/playlists';
 
 export interface MediaItemEditContainerProps {
@@ -26,7 +26,7 @@ export interface MediaItemEditContainerProps {
 
 export interface MediaItemEditContainerState {}
 
-const MediaItemEditContainer = ({ navigation, route }) => {
+const MediaItemEdit = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const { mediaId, uri } = route?.params || {};
@@ -108,4 +108,4 @@ const MediaItemEditContainer = ({ navigation, route }) => {
   );
 };
 
-export default MediaItemEditContainer;
+export default MediaItemEdit;

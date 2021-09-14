@@ -25,7 +25,7 @@ export interface PlaylistEditContainerProps {
   data: Object;
 }
 
-const PlaylistEditContainer = ({ navigation, route }) => {
+const PlaylistEdit = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const { playlistId } = route.params;
@@ -176,4 +176,4 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   }
 };
 
-export default PlaylistEditContainer;
+export default PlaylistEdit;

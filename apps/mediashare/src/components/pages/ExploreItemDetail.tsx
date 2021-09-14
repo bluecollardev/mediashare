@@ -21,7 +21,7 @@ export interface ExploreItemDetailContainerProps {
 
 export interface ExploreItemDetailContainerState {}
 
-const ExploreItemDetailContainer = ({ route }) => {
+const ExploreItemDetail = ({ route }) => {
   const dispatch = useDispatch();
 
   const onEditClicked = () => {};
@@ -70,4 +70,4 @@ const ExploreItemDetailContainer = ({ route }) => {
   );
 };
 
-export default ExploreItemDetailContainer;
+export default ExploreItemDetail;

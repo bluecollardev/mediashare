@@ -20,7 +20,7 @@ export interface ShareWithContainerProps {
   navigation: any;
 }
 
-const ShareWithContainer = () => {
+const ShareWith = () => {
   const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
@@ -77,4 +77,4 @@ const ShareWithContainer = () => {
   );
 };
 
-export default ShareWithContainer;
+export default ShareWith;

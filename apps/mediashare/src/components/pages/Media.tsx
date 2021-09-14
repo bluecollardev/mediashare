@@ -22,15 +22,7 @@ import { FAB, Subheading } from 'react-native-paper';
 import { useSpinner } from '../../hooks/useSpinner';
 import { findUserPlaylists } from '../../state/modules/playlists';
 
-export interface MediaContainerProps {
-  navigation: any;
-  fetchList: Function;
-  data: Object;
-  state: Object;
-  selectable: boolean;
-}
-
-export const Media = ({ onViewDetail, list, selectable }: { navigation: any; list: MediaItemDto[]; onViewDetail: any; selectable: boolean }) => {
+export const MediaComponent = ({ onViewDetail, list, selectable }: { navigation: any; list: MediaItemDto[]; onViewDetail: any; selectable: boolean }) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
@@ -56,7 +48,7 @@ export const Media = ({ onViewDetail, list, selectable }: { navigation: any; lis
   );
 };
 
-export const MediaContainer = (props: { navigation: any }) => {
+export const Media = (props: { navigation: any }) => {
   const dispatch = useDispatch();
 
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
@@ -76,6 +68,7 @@ export const MediaContainer = (props: { navigation: any }) => {
     await dispatch(findMediaItems());
     setRefreshing(false);
   }, [dispatch]);
+
   useEffect(() => {
     if (!isLoaded) {
       dispatch(findMediaItems());
@@ -94,7 +87,7 @@ export const MediaContainer = (props: { navigation: any }) => {
     <PageContainer>
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {mediaItems.length > 0 ? (
-          <Media navigation={props.navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />
+          <MediaComponent navigation={props.navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />
         ) : (
           <Subheading style={{ padding: 3 }}>There are no items in your collection</Subheading>
         )}
@@ -118,4 +111,4 @@ export const MediaContainer = (props: { navigation: any }) => {
   );
 };
 
-export default MediaContainer;
+export default Media;

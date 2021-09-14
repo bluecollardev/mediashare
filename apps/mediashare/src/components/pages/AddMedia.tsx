@@ -22,7 +22,7 @@ import { minLength } from '../../lib/Validators';
 import { useSpinner, SPINNER_DEFAULTS } from '../../hooks/useSpinner';
 import { findUserPlaylists } from '../../state/modules/playlists';
 
-export const AddMediaContainer = () => {
+export const AddMedia = () => {
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);
@@ -148,4 +148,4 @@ export const AddMediaContainer = () => {
   };
 };
 
-export default AddMediaContainer;
+export default AddMedia;

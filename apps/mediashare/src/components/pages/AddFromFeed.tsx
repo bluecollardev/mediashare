@@ -16,7 +16,7 @@ import { ScrollView, View } from 'react-native';
 import { Subheading, Card } from 'react-native-paper';
 import { findUserPlaylists } from '../../state/modules/playlists';
 
-export const AddFromFeedContainer = () => {
+export const AddFromFeed = () => {
   const dispatch = useDispatch();
 
   const goToMediaItems = useRouteName(ROUTES.media);
@@ -88,4 +88,4 @@ export const AddFromFeedContainer = () => {
   );
 };
 
-export default AddFromFeedContainer;
+export default AddFromFeed;

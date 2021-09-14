@@ -44,7 +44,7 @@ export function mapPlaylists(playlist: PlaylistResponseDto[]) {
 
 export interface PlaylistsState {}
 
-export const Playlists = ({ onViewDetailClicked, list, onChecked = () => {} }: PlaylistsProps) => {
+export const PlaylistsComponent = ({ onViewDetailClicked, list, onChecked = () => {} }: PlaylistsProps) => {
   if (!list) {
     return <Text>...loading</Text>;
   }
@@ -82,7 +82,7 @@ export interface PlaylistsContainerProps {
   state: Object;
 }
 
-export const PlaylistsContainer = () => {
+export const Playlists = () => {
   const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
@@ -125,7 +125,7 @@ export const PlaylistsContainer = () => {
     <PageContainer>
       {/* <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" /> */}
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        <Playlists
+        <PlaylistsComponent
           onChecked={updateSelection}
           list={state.playlists.userPlaylists}
           onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })}
@@ -149,4 +149,4 @@ export const PlaylistsContainer = () => {
   );
 };
 
-export default PlaylistsContainer;
+export default Playlists;

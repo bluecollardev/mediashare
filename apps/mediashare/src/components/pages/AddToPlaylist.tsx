@@ -14,7 +14,7 @@ import { PageContainer } from '../layout/PageContainer';
 
 import { UpdatePlaylistDto } from '../../rxjs-api';
 
-export const AddToPlaylistContainer = ({ route }) => {
+export const AddToPlaylist = ({ route }) => {
   const dispatch = useDispatch();
 
   const viewMediaItem = useViewMediaItem();
@@ -80,4 +80,4 @@ export const AddToPlaylistContainer = ({ route }) => {
   }
 };
 
-export default AddToPlaylistContainer;
+export default AddToPlaylist;

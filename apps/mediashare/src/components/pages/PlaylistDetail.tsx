@@ -18,7 +18,7 @@ import { PageContainer } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
 
-export const PlaylistDetailContainer = ({ route }) => {
+export const PlaylistDetail = ({ route }) => {
   const dispatch = useDispatch();
 
   const { playlistId = '' } = route?.params;
@@ -93,4 +93,4 @@ export const PlaylistDetailContainer = ({ route }) => {
   );
 };
 
-export default PlaylistDetailContainer;
+export default PlaylistDetail;

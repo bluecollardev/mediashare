@@ -23,7 +23,7 @@ export interface PlaylistItemDetailContainerProps {
 
 export interface PlaylistItemDetailContainerState {}
 
-const PlaylistItemDetailContainer = ({ route }) => {
+const PlaylistItemDetail = ({ route }) => {
   const dispatch = useDispatch();
 
   const { mediaId, uri } = route?.params || {};
@@ -87,4 +87,4 @@ const PlaylistItemDetailContainer = ({ route }) => {
   );
 };
 
-export default PlaylistItemDetailContainer;
+export default PlaylistItemDetail;

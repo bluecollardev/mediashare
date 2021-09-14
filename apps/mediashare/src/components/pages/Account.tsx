@@ -1,19 +1,17 @@
 import React from 'react';
 
-import { View } from 'react-native';
+import { View, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
+import { Subheading } from 'react-native-paper';
 import { PageContainer } from '../layout/PageContainer';
 import { AccountForm } from '../layout/AccountForm';
 
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
-
 import styles from '../../styles';
-import { Subheading } from 'react-native-paper';
 
 export interface AccountContainerProps {
   navigation: any;
 }
 
-export const AccountContainer = ({ navigation }: AccountContainerProps) => {
+export const Account = ({ navigation }: AccountContainerProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
@@ -28,4 +26,4 @@ export const AccountContainer = ({ navigation }: AccountContainerProps) => {
   );
 };
 
-export default AccountContainer;
+export default Account;
