@@ -16,7 +16,7 @@ import { MediaItemCard } from '../layout/MediaItemCard';
 
 import { theme } from '../../styles';
 
-const MediaItemDetail = ({ navigation }: PageProps) => {
+const MediaItemDetail = ({ route, onDataLoaded }: PageProps) => {
   const dispatch = useDispatch();
 
   const { mediaId, uri } = route?.params || {};
@@ -31,7 +31,6 @@ const MediaItemDetail = ({ navigation }: PageProps) => {
   const onDeleteClicked = () => {};
 
   const [fabState, setState] = useState({ open: false });
-
   const fabActions = [
     { icon: 'delete', onPress: () => onDeleteClicked(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
     { icon: 'edit', onPress: () => onEditClicked({ mediaId }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },

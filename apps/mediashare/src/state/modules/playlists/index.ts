@@ -109,8 +109,9 @@ const initialState: { selectedPlaylists: PlaylistResponseDto[]; userPlaylists: P
 };
 
 export const USER_PLAYLISTS_STATE_KEY = 'userPlaylists';
-const initialPlaylistState: { createdPlaylist: CreatePlaylistResponseDto; loading: boolean; selectedPlaylist: PlaylistResponseDto } = {
+const initialPlaylistState: { createdPlaylist: CreatePlaylistResponseDto; loading: boolean; loaded: boolean; selectedPlaylist: PlaylistResponseDto } = {
   loading: false,
+  loaded: false,
   createdPlaylist: null,
   selectedPlaylist: null,
 };

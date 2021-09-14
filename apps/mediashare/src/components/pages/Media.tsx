@@ -58,7 +58,7 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
   const [isLoaded, setIsLoaded] = useState(loaded);
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(refreshItems, [dispatch]);
+  const onRefresh = useCallback(refresh, [dispatch]);
   useEffect(() => {
     if (!isLoaded) {
       loadData().then(onDataLoaded);
@@ -106,7 +106,7 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
     setIsLoaded(true);
   }
 
-  async function refreshItems() {
+  async function refresh() {
     setRefreshing(true);
     await dispatch(findMediaItems());
     setRefreshing(false);

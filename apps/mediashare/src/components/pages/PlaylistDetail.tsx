@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
-import { findUserPlaylists, getPlaylistById } from '../../state/modules/playlists';
+import { getPlaylistById } from '../../state/modules/playlists';
 
 import { useRouteWithParams, useViewPlaylistItem } from '../../hooks/NavigationHooks';
 
@@ -20,7 +20,7 @@ import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
 
-export const PlaylistDetail = ({ route }: PageProps) => {
+export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const { playlistId = '' } = route?.params;
 
   const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
@@ -28,10 +28,20 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   const onViewPlaylistItemClicked = useViewPlaylistItem();
   const onDeleteClicked = ({ playlistId }) => playlistId;
 
-  const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
+  const dispatch = useDispatch();
 
-  const [fabState, setState] = useState({ open: false });
+  const { selectedPlaylist, loaded } = useAppSelector((state) => state.playlist);
+  const [isLoaded, setIsLoaded] = useState(loaded);
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = useCallback(refresh, [dispatch]);
+  useEffect(() => {
+    if (!isLoaded) {
+      loadData().then(onDataLoaded);
+    }
+  }, [isLoaded, dispatch, onDataLoaded]);
+
+  const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
     { icon: 'delete', onPress: () => onDeleteClicked({ playlistId }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
     { icon: 'edit', onPress: () => onEditClicked({ playlistId }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
@@ -85,12 +95,23 @@ export const PlaylistDetail = ({ route }: PageProps) => {
         fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
         onStateChange={(open) => {
           // open && setOpen(!open);
-          setState(open);
+          setFabState(open);
         }}
         // onPress={() => setOpen(!open)}
       />
     </PageContainer>
   );
+
+  async function loadData() {
+    await dispatch(getPlaylistById(playlistId));
+    setIsLoaded(true);
+  }
+
+  async function refresh() {
+    setRefreshing(true);
+    await dispatch(getPlaylistById(playlistId));
+    setRefreshing(false);
+  }
 };
 
 export default withLoadingSpinner(PlaylistDetail);
