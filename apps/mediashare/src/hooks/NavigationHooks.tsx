@@ -1,6 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import { EnumLiteralsOf } from '../lib/Generics';
 import { routeConfig, ROUTES } from '../routes';
+import { getMediaItemById } from '../state/modules/media-items';
 
 type RouteConfigKeyType = EnumLiteralsOf<typeof ROUTES>;
 // @ts-ignore
@@ -44,5 +46,12 @@ export function useViewSharedMediaItem() {
 
 export function useViewMediaItem() {
   const nav = useNavigation();
-  return ({ mediaId, uri }) => nav.navigate(ROUTES.mediaItemDetail, { mediaId, uri });
+  const dispatch = useDispatch();
+  return async ({ mediaId, uri }) => {
+    console.log(mediaId);
+    const res = await dispatch(getMediaItemById({ uri, mediaId }));
+    console.log(res);
+
+    nav.navigate(ROUTES.mediaItemEdit, { mediaId, uri });
+  };
 }

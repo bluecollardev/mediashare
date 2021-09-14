@@ -8,7 +8,7 @@ import { ROUTES } from '../../routes';
 import { useAppSelector } from '../../state';
 import { findMediaItems } from '../../state/modules/media-items';
 
-import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { MediaListItem } from '../layout/MediaListItem';
 
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
@@ -50,7 +50,7 @@ export const MediaComponent = ({ onViewDetail, list = [], selectable }: { naviga
 export const Media = ({ navigation, onDataLoaded }: PageProps) => {
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
   const addMedia = useRouteName(ROUTES.addMediaItem);
-  const editMedia = useRouteWithParams(ROUTES.mediaItemEdit);
+  const editMedia = useViewMediaItem();
 
   const dispatch = useDispatch();
 
@@ -59,6 +59,7 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(refreshItems, [dispatch]);
+  console.log(onDataLoaded);
   useEffect(() => {
     if (!isLoaded) {
       loadData().then(onDataLoaded);

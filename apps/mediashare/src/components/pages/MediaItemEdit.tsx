@@ -17,6 +17,7 @@ import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import styles from '../../styles';
+import { Paragraph } from 'react-native-paper';
 
 export interface MediaItemEditContainerProps {
   navigation: any;
@@ -30,21 +31,24 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
   const dispatch = useDispatch();
 
   const { mediaId, uri } = route?.params || {};
-  const { mediaItem, loaded } = useAppSelector((state) => state.mediaItem);
-  const [isLoaded, setIsLoaded] = useState(loaded);
+  const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
+  // const [isLoaded, setIsLoaded] = useState(loaded);
+  // const [mediaItem, setMediaItem] = useState(appMediaItem);
+  // setMediaItem(appMediaItem);
   const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const { _id } = mediaItem || {};
 
-  useEffect(() => {
-    if (!isLoaded || _id !== mediaId) {
-      dispatch(getMediaItemById({ uri, mediaId }));
-      setIsLoaded(true);
-    }
-  }, [dispatch, isLoaded, uri, mediaId, _id]);
+  // useEffect(() => {
+  //   if (!isLoaded || _id !== mediaId) {
+  //     dispatch(getMediaItemById({ uri, mediaId }));
+  //     setIsLoaded(true);
+  //   }
+  // }, [dispatch, isLoaded, uri, mediaId, _id]);
 
   const [title, setTitle] = useState(mediaItem?.title);
   const [description, setDescription] = useState(mediaItem?.description);
   const [category, setCategory] = useState();
+  const [cardItem, setCardItem] = useState(null);
 
   const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
   const options = [];
@@ -76,7 +80,23 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
 
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
-
+  useEffect(() => {
+    if (mediaItem) {
+      setTitle(mediaItem?.title);
+      setDescription(mediaItem?.description);
+      setCategory(mediaItem?.category as any);
+      setCardItem({
+        uri: mediaItem.uri,
+        description: mediaItem.description,
+        category: mediaItem.category,
+        author: mediaItem.author,
+        title: mediaItem.title,
+      });
+    }
+  }, [mediaItem]);
+  if (!cardItem) {
+    return <Paragraph>Loading</Paragraph>;
+  }
   return (
     <PageContainer>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
@@ -84,11 +104,11 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
           <View style={{ flex: 1 }}>
             <ScrollView>
               <MediaCard
-                title={title}
-                author={author}
-                description={description}
+                title={cardItem.title}
+                author={cardItem.author}
+                description={cardItem.description}
                 mediaSrc={mediaItemSrc}
-                category={category}
+                category={cardItem.category}
                 categoryOptions={options}
                 onCategoryChange={(e: any) => {
                   setCategory(e);
