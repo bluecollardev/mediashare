@@ -21,6 +21,9 @@ import AppContent from '../../layout/AppContent';
 import { SPINNER_DEFAULTS, useSpinner } from '../../../hooks/useSpinner';
 import { RefreshControl, ScrollView } from 'react-native';
 import { useLoadData, useLoadPlaylistData } from '../../../hooks/useLoadData';
+import AppRefresher from '../../layout/AppRefresher';
+import { theme } from '../../../styles';
+import { FAB, Subheading } from 'react-native-paper';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
@@ -87,7 +90,7 @@ export const PlaylistsContainer = () => {
   const shareWithAction = useRouteName(ROUTES.shareWith);
   const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
   const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -95,26 +98,43 @@ export const PlaylistsContainer = () => {
     setRefreshing(false);
   }, [dispatch]);
 
-  const [{ loaded, state, AppSpinner }] = useLoadPlaylistData();
+  const [{ state }] = useLoadPlaylistData();
 
   const updateSelection = function (bool, item) {
     dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
   };
 
+  const [fabState, setState] = useState({ open: false });
+
+  const fabActions = [
+    { icon: 'ios-share', onPress: shareWithAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'playlist-add', onPress: createPlaylistAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+  ];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
     <PageContainer>
+      {/* <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" /> */}
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" />
-        <ScrollView>
-          <Playlists
-            onChecked={updateSelection}
-            list={state.playlists.userPlaylists}
-            onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })}
-          />
-        </ScrollView>
+        <Playlists
+          onChecked={updateSelection}
+          list={state.playlists.userPlaylists}
+          onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })}
+        />
       </ScrollView>
-      <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" />
+      <FAB.Group
+        visible={true}
+        open={fabState.open}
+        icon={fabState.open ? 'close' : 'more-vert'}
+        actions={fabActions}
+        color={theme.colors.primaryTextLighter}
+        fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+        onStateChange={(open) => {
+          // open && setOpen(!open);
+          setState(open);
+        }}
+        // onPress={() => setOpen(!open)}
+      />
+      {/* <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" /> */}
     </PageContainer>
   );
 };

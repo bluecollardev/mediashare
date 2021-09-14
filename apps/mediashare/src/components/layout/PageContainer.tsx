@@ -1,11 +1,10 @@
 import React, { ReactNode, useState } from 'react';
 import themeStyles, { theme } from '../../styles';
-import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
-import { Portal, Dialog, Paragraph, List, Button, Avatar, Subheading, Title, Banner, Card } from 'react-native-paper';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
 import { useAppSelector } from '../../state';
 import { useDispatch } from 'react-redux';
 import { clearError } from '../../state/modules/app-state';
-import ContentTheme from '../../theme/components/Content';
 interface PageContainerProps {
   children: ReactNode;
 }
@@ -26,7 +25,7 @@ function PageContainer({ children }: PageContainerProps) {
             <Card.Title
               title={app.error.name}
               subtitle={app.error.message}
-              left={(props) => <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="folder" />}
+              left={(props) => <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="error" />}
               // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
             />
             <Dialog.Actions style={{ paddingTop: 0 }}>

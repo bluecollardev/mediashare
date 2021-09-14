@@ -105,7 +105,7 @@ export const PlaylistDetailContainer = ({ route }) => {
         onDeleteClicked={onDeleteClicked}
         category={category}
       />
-      <ListActionButton icon="plus" label="Add From Media" actionCb={() => onAddToPlaylist({ playlistId })} />
+      <ListActionButton icon="add" label="Add From Media" actionCb={() => onAddToPlaylist({ playlistId })} />
       <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} showThumbnail={true} />
     </PageContainer>
   );

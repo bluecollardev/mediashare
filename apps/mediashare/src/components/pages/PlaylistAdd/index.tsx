@@ -130,7 +130,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
       </ScrollView>
 
       <ActionButtons
-        rightIcon={'check-bold'}
+        rightIcon={'add'}
         actionCb={() => saveItem()}
         cancelCb={cancelCb}
         actionLabel={actionLabel}

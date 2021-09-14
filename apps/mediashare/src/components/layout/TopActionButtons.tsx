@@ -12,7 +12,7 @@ export interface TopActionButtonsProps {
   leftIcon?: string;
 }
 
-export const TopActionButtons = ({ leftAction, rightAction, leftLabel, rightLabel, rightIcon = 'plus', leftIcon = 'plus' }: TopActionButtonsProps) => {
+export const TopActionButtons = ({ leftAction, rightAction, leftLabel, rightLabel, rightIcon = 'add-box', leftIcon = 'add-box' }: TopActionButtonsProps) => {
   return (
     <View padder style={{ flexDirection: 'row' }}>
       <Button mode={'text'} color={theme.colors.primary} dark style={{ flex: 1, marginRight: 10 }} icon={leftIcon} onPress={() => leftAction()}>

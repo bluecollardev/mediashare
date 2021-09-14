@@ -127,7 +127,14 @@ export const AddMediaContainer = () => {
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
 
-      <ActionButtons actionCb={() => saveItem()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} disableAction={!isValid()} />
+      <ActionButtons
+        actionCb={() => saveItem()}
+        cancelCb={cancelCb}
+        actionLabel={actionLabel}
+        cancelLabel={cancelLabel}
+        disableAction={!isValid()}
+        rightIcon={'add'}
+      />
     </PageContainer>
   );
 };

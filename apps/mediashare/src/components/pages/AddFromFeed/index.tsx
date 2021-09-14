@@ -5,16 +5,14 @@ import { useDispatch } from 'react-redux';
 import { ROUTES } from '../../../routes';
 
 import { useAppSelector } from '../../../state';
-import { getFeedMediaItems, saveFeedMediaItems, toggleMediaItem } from '../../../state/modules/media-items';
+import { getFeedMediaItems, saveFeedMediaItems } from '../../../state/modules/media-items';
 
 import { useRouteName } from '../../../hooks/NavigationHooks';
 import { ActionButtons } from '../../layout/ActionButtons';
-import { ListItemGroup } from '../../layout/ListItemGroup';
 import { MediaListItem } from '../../layout/MediaListItem';
 
 import { MediaItem } from '../../../rxjs-api';
 
-import styles from '../../../styles';
 import PageContainer from '../../layout/PageContainer';
 import { useSpinner } from '../../../hooks/useSpinner';
 import { ScrollView } from 'react-native';

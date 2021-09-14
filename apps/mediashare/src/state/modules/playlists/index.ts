@@ -3,7 +3,7 @@ import { createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { makeEnum } from '../../core/factory';
 
-import { apis, ApiService } from '../../apis';
+import { apis,  ApiService } from '../../apis';
 import { CreatePlaylistDto, UpdatePlaylistDto } from '../../../api';
 import { CreatePlaylistResponseDto } from '../../../api/models/create-playlist-response-dto';
 import { PlaylistResponseDto } from '../../../rxjs-api/models/PlaylistResponseDto';
@@ -33,22 +33,19 @@ export const selectPlaylistAction = createAction<{ isChecked: boolean; plist: Pl
   playlistsActionTypes.selectPlaylist
 );
 export const getUserPlaylistById = createAsyncThunk(playlistActionTypes.getUserPlaylist, async (id: string, { extra }) => {
-  const { api } = extra as { api: ApiService };
-  const response = await api.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
+  const response = await apis.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
   return response;
 });
 
 export const addUserPlaylist = createAsyncThunk(playlistActionTypes.addUserPlaylist, async (playlist: CreatePlaylistDto, { extra }) => {
-  const { api } = extra as { api: ApiService };
-  const response = await api.playlists.playlistControllerCreate({ createPlaylistDto: playlist }).toPromise();
+  const response = await apis.playlists.playlistControllerCreate({ createPlaylistDto: playlist }).toPromise();
 
   return response;
 });
 
 export const updateUserPlaylist = createAsyncThunk(playlistActionTypes.updateUserPlaylist, async (playlist: UpdatePlaylistDto, { extra }) => {
-  const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Fix _id property on UpdatePlaylistDto!
-  const response = await api.playlists
+  const response = await apis.playlists
     .playlistControllerUpdate({
       playlistId: playlist._id,
       updatePlaylistDto: playlist,
@@ -60,8 +57,7 @@ export const updateUserPlaylist = createAsyncThunk(playlistActionTypes.updateUse
 export const shareUserPlaylist = createAsyncThunk(
   playlistActionTypes.shareUserPlaylist,
   async ({ userIds, playlistIds }: { userIds: string[]; playlistIds: string[] }, { extra }) => {
-    const { api } = extra as { api: ApiService };
-    const prom = ({ playlistId, userId }) => api.playlists.playlistControllerShare({ playlistId, userId });
+    const prom = ({ playlistId, userId }) => apis.playlists.playlistControllerShare({ playlistId, userId });
     const promises = userIds.map((userId) => playlistIds.map((playlistId) => prom({ userId, playlistId })));
     const flat = flattenDeep(promises);
     const res = await merge(...flat).toPromise();
@@ -83,9 +79,8 @@ export const findUserPlaylists = createAsyncThunk(playlistsActionTypes.findUserP
 });
 
 export const addUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.addUserPlaylistItem, async (playlist: CreatePlaylistDto, { extra }) => {
-  const { api } = extra as { api: ApiService };
   // @ts-ignore
-  const response = await api.playlists.playlistControllerCreateItem({ createPlaylistDto: playlist }).toPromise();
+  const response = await apis.playlists.playlistControllerCreateItem({ createPlaylistDto: playlist }).toPromise();
   return response.userPlaylists;
 });
 
@@ -98,16 +93,14 @@ export const updateUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.u
 });
 
 export const removeUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.removeUserPlaylistItem, async (id: string, { extra }) => {
-  const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Add playlistControllerRemoveItem to API service!
-  const response = await api.playlists.playlistControllerRemoveItem({ playlistId: id });
+  const response = await apis.playlists.playlistControllerRemoveItem({ playlistId: id });
   return response && response.status === 200 ? response.data : undefined;
 });
 
 export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: string, { extra }) => {
-  const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Add playlistControllerRemoveItem to API service!
-  const response = await api.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
+  const response = await apis.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
 
   return response;
 });

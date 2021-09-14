@@ -27,7 +27,7 @@ import { useAppSelector } from './state/index';
 import { theme } from './styles';
 import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black, useFonts } from '@expo-google-fonts/roboto';
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 declare const global: { HermesInternal: null | {} };
 
 // const deviceWidth = Dimensions.get('window').width;
@@ -90,11 +90,11 @@ const AccountNavigation = () => {
 
 // Map route names to icons
 export const tabNavigationIconsMap = {
-  Explore: 'earth',
+  Explore: 'explore',
   Playlists: 'play-circle-outline',
-  Media: 'video-account',
+  Media: 'video-library',
   // Feeds: 'share-social-outline',
-  Account: 'account-settings-outline',
+  Account: 'account-box',
 };
 
 const TabNavigator = createBottomTabNavigator();
@@ -102,7 +102,7 @@ const TabNavigator = createBottomTabNavigator();
 function TabNavigation() {
   return (
     <TabNavigator.Navigator
-      initialRouteName={'Playlists'}
+      initialRouteName={'Media'}
       activeColor={theme.colors.primaryTextLighter}
       inactiveColor={theme.colors.accentLighter}
       barStyle={{ backgroundColor: theme.colors.accent }}
@@ -110,7 +110,7 @@ function TabNavigation() {
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color }) => {
-          return <MaterialCommunityIcons name={tabNavigationIconsMap[route.name]} color={color} size={26} />;
+          return <MaterialIcons name={tabNavigationIconsMap[route.name]} color={color} size={26} />;
 
           // <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
         },
@@ -173,7 +173,12 @@ function App() {
       <Provider store={store}>
         <Spinner visible={loading} />
 
-        <PaperProvider theme={customTheme}>
+        <PaperProvider
+          theme={customTheme}
+          settings={{
+            icon: (props) => <MaterialIcons {...props} />,
+          }}
+        >
           {isLoggedIn ? (
             <NavigationContainer>
               <TabNavigation />
