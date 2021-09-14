@@ -17,6 +17,7 @@ import { ScrollView, View } from 'react-native';
 import { ContactList } from '../layout/ContactList';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { useSpinner } from '../../hooks/useSpinner';
+import { Searchbar } from 'react-native-paper';
 
 export const Contacts = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
@@ -63,6 +64,7 @@ export const Contacts = ({ navigation }: PageProps) => {
 
   return (
     <PageContainer>
+      <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />
       <ScrollView>
         <View>
           <ContactList showGroups={true} items={users} onChecked={updateSelectedUsers} />

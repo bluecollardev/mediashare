@@ -13,10 +13,12 @@ import { useSpinner } from '../../hooks/useSpinner';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ScrollView, View } from 'react-native';
+import { Searchbar } from 'react-native-paper';
 import { List } from 'react-native-paper';
 
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
+import { PlaylistCard } from '../layout/PlaylistCard';
 
 /* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
   const list = playlist.map((item) => {
@@ -37,7 +39,29 @@ export interface ExploreProps {
   onViewDetailClicked: Function;
 }
 
-export const ExploreComponent = ({ onViewDetailClicked, list = [] }: ExploreProps) => {
+export const ExploreArticlesComponent = ({ onViewDetailClicked, list = [] }: ExploreProps) => {
+  let sortedList = list.map((item) => item);
+  sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
+  sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
+
+  return (
+    <View>
+      <List.Section>
+        <List.Subheader>Latest Articles</List.Subheader>
+        {sortedList.slice(0, 1).map((item) => {
+          const { title, description } = item;
+          return (
+            <View style={{ padding: 15, paddingTop: 0 }}>
+              <PlaylistCard title={title} author={'Admin'} description={description} category={''} showSocial={true} showActions={false} showThumbnail={true} />
+            </View>
+          );
+        })}
+      </List.Section>
+    </View>
+  );
+};
+
+export const ExplorePlaylistsComponent = ({ onViewDetailClicked, list = [] }: ExploreProps) => {
   let sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
   sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
@@ -65,7 +89,7 @@ export const ExploreComponent = ({ onViewDetailClicked, list = [] }: ExploreProp
 
       <List.Section>
         <List.Subheader>Popular</List.Subheader>
-        {sortedList.slice(2, 8).map((item) => {
+        {sortedList.slice(2, 5).map((item) => {
           const { title, mediaIds } = item;
           return (
             <MediaListItem
@@ -111,8 +135,12 @@ export const Explore = ({ navigation }: PageProps) => {
 
   return (
     <PageContainer>
+      <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />
       <ScrollView>
-        <ExploreComponent list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
+        <ExploreArticlesComponent list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
+      </ScrollView>
+      <ScrollView>
+        <ExplorePlaylistsComponent list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
       </ScrollView>
     </PageContainer>
   );

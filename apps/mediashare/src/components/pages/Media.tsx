@@ -15,7 +15,7 @@ import { MediaItem, MediaItemDto } from '../../rxjs-api';
 
 import { RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Card, FAB, Subheading } from 'react-native-paper';
+import { Card, FAB, Searchbar, Subheading } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
@@ -74,6 +74,7 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
+      <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {loaded && mediaItems.length > 0 ? (
           <MediaComponent navigation={navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />

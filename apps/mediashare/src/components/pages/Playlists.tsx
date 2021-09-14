@@ -11,7 +11,7 @@ import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
 import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { FAB, Subheading } from 'react-native-paper';
+import { FAB, Searchbar, Subheading } from 'react-native-paper';
 import { RefreshControl, ScrollView } from 'react-native';
 import { useLoadData, useLoadPlaylistData } from '../../hooks/useLoadData';
 
@@ -102,6 +102,7 @@ export const Playlists = ({ navigation, onDataLoaded }: PageProps) => {
   return (
     <PageContainer>
       {/* <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" /> */}
+      <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <PlaylistsComponent
           onChecked={updateSelection}
