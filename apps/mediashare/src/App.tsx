@@ -38,8 +38,8 @@ const ExploreNavigation = () => {
   return (
     <ExploreStackNavigator.Navigator>
       <ExploreStackNavigator.Screen {...routeConfig.explore} />
-      {/*<ExploreStackNavigator.Screen {...routeConfig.sharedPlaylistDetail} />
-      <ExploreStackNavigator.Screen {...routeConfig.sharedItemDetail} />*/}
+      <ExploreStackNavigator.Screen {...routeConfig.sharedPlaylistDetail} />
+      <ExploreStackNavigator.Screen {...routeConfig.sharedItemDetail} />
     </ExploreStackNavigator.Navigator>
   );
 };
@@ -50,15 +50,14 @@ function PlaylistsNavigation() {
   return (
     <PlaylistsStackNavigator.Navigator>
       <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
-      {/*<PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
-
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromMedia} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />*/}
+      <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />
     </PlaylistsStackNavigator.Navigator>
   );
 }
@@ -69,10 +68,10 @@ function MediaNavigation() {
   return (
     <MediaStackNavigator.Navigator>
       <MediaStackNavigator.Screen {...routeConfig.media} />
-      {/*<MediaStackNavigator.Screen {...routeConfig.mediaItemDetail} />
+      <MediaStackNavigator.Screen {...routeConfig.mediaItemDetail} />
       <MediaStackNavigator.Screen {...routeConfig.addFromFeed} />
       <MediaStackNavigator.Screen {...routeConfig.mediaItemEdit} />
-      <MediaStackNavigator.Screen {...routeConfig.addMedia} />*/}
+      <MediaStackNavigator.Screen {...routeConfig.addMedia} />
     </MediaStackNavigator.Navigator>
   );
 }

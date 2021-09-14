@@ -37,7 +37,7 @@ export interface ExploreProps {
   onViewDetailClicked: Function;
 }
 
-export const ExploreComponent = ({ onViewDetailClicked, list }: ExploreProps) => {
+export const ExploreComponent = ({ onViewDetailClicked, list = [] }: ExploreProps) => {
   let sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
   sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
