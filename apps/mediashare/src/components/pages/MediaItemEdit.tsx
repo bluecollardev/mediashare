@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
-import { createThumbnail, getMediaItemById, updateMediaItem } from '../../state/modules/media-items';
+import { updateMediaItem } from '../../state/modules/media-items';
 
-import { CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum, UpdateMediaItemDto, UpdateMediaItemDtoCategoryEnum } from '../../rxjs-api';
+import { CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum, UpdateMediaItemDto } from '../../rxjs-api';
 import { useRouteWithParams } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
@@ -28,35 +28,25 @@ export interface MediaItemEditContainerProps {
 export interface MediaItemEditContainerState {}
 
 const MediaItemEdit = ({ navigation, route }: PageProps) => {
-  const dispatch = useDispatch();
-
-  const { mediaId, uri } = route?.params || {};
-  const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
-  // const [isLoaded, setIsLoaded] = useState(loaded);
-  // const [mediaItem, setMediaItem] = useState(appMediaItem);
-  // setMediaItem(appMediaItem);
-  const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
-  const { _id } = mediaItem || {};
-
-  // useEffect(() => {
-  //   if (!isLoaded || _id !== mediaId) {
-  //     dispatch(getMediaItemById({ uri, mediaId }));
-  //     setIsLoaded(true);
-  //   }
-  // }, [dispatch, isLoaded, uri, mediaId, _id]);
-
-  const [title, setTitle] = useState(mediaItem?.title);
-  const [description, setDescription] = useState(mediaItem?.description);
-  const [category, setCategory] = useState();
-  const [cardItem, setCardItem] = useState(null);
-
-  const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
+  const actionLabel = 'Save';
+  const cancelLabel = 'Cancel';
   const options = [];
   for (const value in CreateMediaItemDtoCategoryEnum) {
     options.push(value);
   }
 
-  const author = '';
+  const dispatch = useDispatch();
+
+  const { mediaId, uri } = route?.params || {};
+  const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
+
+  const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
+
+  const [title, setTitle] = useState(mediaItem?.title);
+  const [description, setDescription] = useState(mediaItem?.description);
+  const [category, setCategory] = useState();
+
+  const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
 
   const resetData = () => {};
   const cancelCb = () => {
@@ -70,31 +60,20 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
       description,
       isPlayable: true,
       _id: mediaId,
-      // key: title,
-      // eTag: '',
     };
 
     await dispatch(updateMediaItem(dto));
     goToItem({ mediaId, uri });
   };
 
-  const actionLabel = 'Save';
-  const cancelLabel = 'Cancel';
   useEffect(() => {
     if (mediaItem) {
       setTitle(mediaItem?.title);
       setDescription(mediaItem?.description);
       setCategory(mediaItem?.category as any);
-      setCardItem({
-        uri: mediaItem.uri,
-        description: mediaItem.description,
-        category: mediaItem.category,
-        author: mediaItem.author,
-        title: mediaItem.title,
-      });
     }
   }, [mediaItem]);
-  if (!cardItem) {
+  if (!mediaItem) {
     return <Paragraph>Loading</Paragraph>;
   }
   return (
@@ -102,22 +81,19 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={{ flex: 1 }}>
-            <ScrollView>
-              <MediaCard
-                title={cardItem.title}
-                author={cardItem.author}
-                description={cardItem.description}
-                mediaSrc={mediaItemSrc}
-                category={cardItem.category}
-                categoryOptions={options}
-                onCategoryChange={(e: any) => {
-                  setCategory(e);
-                }}
-                onTitleChange={setTitle}
-                onDescriptionChange={setDescription}
-                isEdit={true}
-              />
-            </ScrollView>
+            <MediaCard
+              title={title}
+              description={description}
+              mediaSrc={mediaItemSrc}
+              category={category}
+              categoryOptions={options}
+              onCategoryChange={(e: any) => {
+                setCategory(e);
+              }}
+              onTitleChange={setTitle}
+              onDescriptionChange={setDescription}
+              isEdit={true}
+            />
             <View>
               <ActionButtons actionCb={saveItem} cancelCb={cancelCb} rightIcon="check-circle" actionLabel={actionLabel} cancelLabel={cancelLabel} />
             </View>

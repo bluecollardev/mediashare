@@ -44,14 +44,11 @@ export function useViewSharedMediaItem() {
   return ({ mediaId, uri }) => nav.navigate(ROUTES.sharedItemDetail, { mediaId, uri });
 }
 
-export function useViewMediaItem() {
+export function useEditMediaItem() {
   const nav = useNavigation();
   const dispatch = useDispatch();
   return async ({ mediaId, uri }) => {
-    console.log(mediaId);
-    const res = await dispatch(getMediaItemById({ uri, mediaId }));
-    console.log(res);
-
+    await dispatch(getMediaItemById({ uri, mediaId }));
     nav.navigate(ROUTES.mediaItemEdit, { mediaId, uri });
   };
 }
