@@ -34,7 +34,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const [isLoaded, setIsLoaded] = useState(loaded);
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(refresh, [dispatch]);
+  const onRefresh = useCallback(refresh, [dispatch, playlistId]);
   useEffect(() => {
     if (!isLoaded) {
       loadData().then(onDataLoaded);

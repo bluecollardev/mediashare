@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ScrollView, Text } from 'react-native';
+import { ScrollView } from 'react-native';
 
 import { useAppSelector } from '../../state';
-import { findUserPlaylists, getPlaylistById } from '../../state/modules/playlists';
+import { getPlaylistById } from '../../state/modules/playlists';
 
 import { useViewSharedMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
@@ -12,32 +12,23 @@ import { PlaylistCard } from '../layout/PlaylistCard';
 import { MediaList } from '../layout/MediaList';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
-export const ExploreDetail = ({ route }: PageProps) => {
+export const ExploreDetail = ({ route, onDataLoaded }: PageProps) => {
+  const { playlistId = '' } = route?.params;
+
   const dispatch = useDispatch();
 
   const onViewMediaItemClicked = useViewSharedMediaItem();
 
-  const loadData = async function () {
-    await dispatch(getPlaylistById(playlistId));
+  const { selectedPlaylist, loaded } = useAppSelector((state) => state.playlist);
+  const [isLoaded, setIsLoaded] = useState(loaded);
+  const [refreshing, setRefreshing] = useState(false);
 
-    setIsLoaded(true);
-  };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [loaded, setIsLoaded] = useState(false);
-  const playlist = useAppSelector((state) => state.playlist);
-
-  const { playlistId = '' } = route?.params;
+  const onRefresh = useCallback(refresh, [dispatch, playlistId]);
   useEffect(() => {
-    if (!playlist.loading && playlist.selectedPlaylist?._id !== playlistId) {
-      loadData();
+    if (!isLoaded) {
+      loadData().then(onDataLoaded);
     }
-  });
-
-  if (!playlistId) {
-    return <Text>Item not found</Text>;
-  }
-
-  const { selectedPlaylist } = playlist || {};
+  }, [isLoaded, dispatch, onDataLoaded]);
 
   const { description = '', title = '', user } = selectedPlaylist || {};
 
@@ -52,6 +43,17 @@ export const ExploreDetail = ({ route }: PageProps) => {
       </ScrollView>
     </PageContainer>
   );
+
+  async function loadData() {
+    await dispatch(getPlaylistById(playlistId));
+    setIsLoaded(true);
+  }
+
+  async function refresh() {
+    setRefreshing(true);
+    await dispatch(getPlaylistById(playlistId));
+    setRefreshing(false);
+  }
 };
 
 export default withLoadingSpinner(ExploreDetail);
