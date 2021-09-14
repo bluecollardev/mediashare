@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useGoBack, useViewMediaItem, useViewPlaylist } from '../../hooks/NavigationHooks';
-
 import { useAppSelector } from '../../state';
 import { findUserPlaylists, getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
 import { findMediaItems } from '../../state/modules/media-items';
 
+import { UpdatePlaylistDto } from '../../rxjs-api';
+
 import { ScrollView, View } from 'react-native';
+
+import { useGoBack, useViewMediaItem, useViewPlaylist } from '../../hooks/NavigationHooks';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList, MediaListType } from '../layout/MediaList';
 import { PageContainer } from '../layout/PageContainer';
-
-import { UpdatePlaylistDto } from '../../rxjs-api';
 
 export const AddToPlaylist = ({ route }) => {
   const dispatch = useDispatch();
@@ -80,4 +82,4 @@ export const AddToPlaylist = ({ route }) => {
   }
 };
 
-export default AddToPlaylist;
+export default withLoadingSpinner(AddToPlaylist);

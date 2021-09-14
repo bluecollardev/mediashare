@@ -9,16 +9,18 @@ import { useAppSelector } from '../../state';
 import { findMediaItems } from '../../state/modules/media-items';
 import { addUserPlaylist, findUserPlaylists } from '../../state/modules/playlists';
 
+import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
+
+import { KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { MediaList, MediaListType } from '../layout/MediaList';
-
-import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
-
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
 import { PageContainer } from '../layout/PageContainer';
-import { KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
-import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface PlaylistAddContainerProps {
   children: ReactNode;
@@ -139,4 +141,4 @@ export function PlaylistAdd({}: PlaylistAddContainerProps) {
   );
 }
 
-export default PlaylistAdd;
+export default withLoadingSpinner(PlaylistAdd);

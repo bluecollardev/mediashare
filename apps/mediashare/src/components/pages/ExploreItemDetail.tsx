@@ -11,15 +11,9 @@ import { ExploreItemCard } from '../layout/ExploreItemCard';
 import { PageContainer } from '../layout/PageContainer';
 
 import styles from '../../styles';
-import { useSpinner } from '../../hooks/useSpinner';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+
 import { findUserPlaylists } from '../../state/modules/playlists';
-
-export interface ExploreItemDetailContainerProps {
-  navigation: any;
-  data: Object;
-}
-
-export interface ExploreItemDetailContainerState {}
 
 const ExploreItemDetail = ({ route }) => {
   const dispatch = useDispatch();
@@ -70,4 +64,4 @@ const ExploreItemDetail = ({ route }) => {
   );
 };
 
-export default ExploreItemDetail;
+export default withLoadingSpinner(ExploreItemDetail);

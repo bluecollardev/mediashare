@@ -3,14 +3,16 @@ import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
 
-import { useRouteWithParams, useViewPlaylistItem } from '../../hooks/NavigationHooks';
-import { useSpinner } from '../../hooks/useSpinner';
-
 import { useAppSelector } from '../../state';
 import { findUserPlaylists, getPlaylistById } from '../../state/modules/playlists';
 
+import { useRouteWithParams, useViewPlaylistItem } from '../../hooks/NavigationHooks';
+
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+
 import { ScrollView, View } from 'react-native';
 import { FAB } from 'react-native-paper';
+
 import { PlaylistCard } from '../layout/PlaylistCard';
 import { MediaList } from '../layout/MediaList';
 import { ListActionButton } from '../layout/ListActionButton';
@@ -93,4 +95,4 @@ export const PlaylistDetail = ({ route }) => {
   );
 };
 
-export default PlaylistDetail;
+export default withLoadingSpinner(PlaylistDetail);

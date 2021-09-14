@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ScrollView, Text } from 'react-native';
 
-import { useViewSharedMediaItem } from '../../hooks/NavigationHooks';
-
 import { useAppSelector } from '../../state';
 import { findUserPlaylists, getPlaylistById } from '../../state/modules/playlists';
+
+import { useViewSharedMediaItem } from '../../hooks/NavigationHooks';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { PlaylistCard } from '../layout/PlaylistCard';
 import { MediaList } from '../layout/MediaList';
@@ -53,4 +54,4 @@ export const ExploreDetail = ({ route }) => {
   );
 };
 
-export default ExploreDetail;
+export default withLoadingSpinner(ExploreDetail);

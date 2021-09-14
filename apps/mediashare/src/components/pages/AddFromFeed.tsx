@@ -10,8 +10,10 @@ import { useRouteName } from '../../hooks/NavigationHooks';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaListItem } from '../layout/MediaListItem';
 
-import { PageContainer } from '../layout/PageContainer';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useSpinner } from '../../hooks/useSpinner';
+
+import { PageContainer } from '../layout/PageContainer';
 import { ScrollView, View } from 'react-native';
 import { Subheading, Card } from 'react-native-paper';
 import { findUserPlaylists } from '../../state/modules/playlists';
@@ -88,4 +90,4 @@ export const AddFromFeed = () => {
   );
 };
 
-export default AddFromFeed;
+export default withLoadingSpinner(AddFromFeed);

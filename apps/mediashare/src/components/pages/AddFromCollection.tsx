@@ -8,6 +8,9 @@ import { useAppSelector } from '../../state';
 
 import { ScrollView } from 'react-native';
 // import { ActivityIndicator } from 'react-native-paper';
+
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+
 import { MediaListItem } from '../layout/MediaListItem';
 import { ActionButtons } from '../layout/ActionButtons';
 import { PageContainer } from '../layout/PageContainer';
@@ -62,4 +65,4 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
   }
 };
 
-export default AddFromCollection;
+export default withLoadingSpinner(AddFromCollection);

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { ROUTES } from '../../routes';
+
 import { useAppSelector } from '../../state';
 import { getMediaItemById } from '../../state/modules/media-items';
 
-import { useSpinner } from '../../hooks/useSpinner';
 import { useRouteWithParams } from '../../hooks/NavigationHooks';
-import { ROUTES } from '../../routes';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ScrollView, View } from 'react-native';
 import { FAB } from 'react-native-paper';
@@ -94,4 +95,4 @@ const MediaItemDetail = ({ route }) => {
   );
 };
 
-export default MediaItemDetail;
+export default withLoadingSpinner(MediaItemDetail);

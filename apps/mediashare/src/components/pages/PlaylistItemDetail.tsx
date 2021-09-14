@@ -6,22 +6,15 @@ import { getMediaItemById } from '../../state/modules/media-items';
 
 import { ScrollView, View } from 'react-native';
 import { FAB } from 'react-native-paper';
+
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+
 import { MediaItemCard } from '../layout/MediaItemCard';
 import { PageContainer } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
-import { useSpinner } from '../../hooks/useSpinner';
+
 import { findUserPlaylists } from '../../state/modules/playlists';
-
-export interface PlaylistItemDetailContainerProps {
-  navigation: any;
-  route: any;
-  data: Object;
-  state: Object;
-  mediaId: string | number; // TODO: Make a type
-}
-
-export interface PlaylistItemDetailContainerState {}
 
 const PlaylistItemDetail = ({ route }) => {
   const dispatch = useDispatch();
@@ -87,4 +80,4 @@ const PlaylistItemDetail = ({ route }) => {
   );
 };
 
-export default PlaylistItemDetail;
+export default withLoadingSpinner(PlaylistItemDetail);

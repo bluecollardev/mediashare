@@ -5,7 +5,7 @@ import { LoginDto } from '../../api';
 import { loginAction } from '../../state/modules/user';
 import { RootState } from '../../state';
 
-import Spinner from 'react-native-loading-spinner-overlay';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
 import { Button, Card, TextInput } from 'react-native-paper';
 import { PageContainer } from '../layout/PageContainer';
@@ -94,4 +94,4 @@ const LoginComponent = () => {
   );
 };
 
-export default LoginComponent;
+export default withLoadingSpinner(LoginComponent);

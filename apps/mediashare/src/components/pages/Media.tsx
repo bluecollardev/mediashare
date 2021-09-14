@@ -19,7 +19,7 @@ import { RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { theme } from '../../styles';
 import { FAB, Subheading } from 'react-native-paper';
-import { useSpinner } from '../../hooks/useSpinner';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { findUserPlaylists } from '../../state/modules/playlists';
 
 export const MediaComponent = ({ onViewDetail, list, selectable }: { navigation: any; list: MediaItemDto[]; onViewDetail: any; selectable: boolean }) => {
@@ -111,4 +111,4 @@ export const Media = (props: { navigation: any }) => {
   );
 };
 
-export default Media;
+export default withLoadingSpinner(Media);

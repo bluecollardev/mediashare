@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { ROUTES } from '../../routes';
+
 import { useAppSelector } from '../../state';
 import { createThumbnail, getMediaItemById, updateMediaItem } from '../../state/modules/media-items';
 
 import { CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum, UpdateMediaItemDto, UpdateMediaItemDtoCategoryEnum } from '../../rxjs-api';
-
-import { ROUTES } from '../../routes';
 import { useRouteWithParams } from '../../hooks/NavigationHooks';
+
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { View, ScrollView, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -108,4 +110,4 @@ const MediaItemEdit = ({ navigation, route }) => {
   );
 };
 
-export default MediaItemEdit;
+export default withLoadingSpinner(MediaItemEdit);

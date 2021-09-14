@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { ActionSheet } from 'native-base';
-
-import { ActionButtons } from '../layout/ActionButtons';
-
-import { MediaList } from '../layout/MediaList';
-import { useViewMediaItem } from '../../hooks/NavigationHooks';
-import { MediaCard } from '../layout/MediaCard';
 
 import { useAppSelector } from '../../state';
 import { findUserPlaylists, getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
 
-import { ListActionButton } from '../layout/ListActionButton';
-
 import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 
-import { PageContainer } from '../layout/PageContainer';
+import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { ActionSheet } from 'native-base';
+
+import { useViewMediaItem } from '../../hooks/NavigationHooks';
 import { useSpinner } from '../../hooks/useSpinner';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+
+import { ActionButtons } from '../layout/ActionButtons';
+import { MediaList } from '../layout/MediaList';
+import { MediaCard } from '../layout/MediaCard';
+import { PageContainer } from '../layout/PageContainer';
+// import { ListActionButton } from '../layout/ListActionButton';
 
 export interface PlaylistEditContainerProps {
   navigation: any;
@@ -176,4 +176,4 @@ const PlaylistEdit = ({ navigation, route }) => {
   }
 };
 
-export default PlaylistEdit;
+export default withLoadingSpinner(PlaylistEdit);

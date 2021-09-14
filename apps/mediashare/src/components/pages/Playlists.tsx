@@ -5,18 +5,18 @@ import { ROUTES } from '../../routes';
 
 import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/playlists';
 
-import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
-
-
-
 import { PlaylistResponseDto } from '../../api';
+
+import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
 import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+
 import { FAB, Subheading } from 'react-native-paper';
 import { RefreshControl, ScrollView } from 'react-native';
 import { useLoadData, useLoadPlaylistData } from '../../hooks/useLoadData';
 
 import { View } from 'react-native';
-import { List, Text } from 'native-base';
+import { List } from 'native-base';
 import { MediaListItem } from '../layout/MediaListItem';
 import { PageContainer } from '../layout/PageContainer';
 
@@ -42,13 +42,7 @@ export function mapPlaylists(playlist: PlaylistResponseDto[]) {
   return list;
 }
 
-export interface PlaylistsState {}
-
-export const PlaylistsComponent = ({ onViewDetailClicked, list, onChecked = () => {} }: PlaylistsProps) => {
-  if (!list) {
-    return <Text>...loading</Text>;
-  }
-
+export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked = () => {} }: PlaylistsProps) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
@@ -149,4 +143,4 @@ export const Playlists = () => {
   );
 };
 
-export default Playlists;
+export default withLoadingSpinner(Playlists);

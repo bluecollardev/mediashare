@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+
 import { View, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import { Subheading } from 'react-native-paper';
 import { PageContainer } from '../layout/PageContainer';
@@ -26,4 +28,4 @@ export const Account = ({ navigation }: AccountContainerProps) => {
   );
 };
 
-export default Account;
+export default withLoadingSpinner(Account);

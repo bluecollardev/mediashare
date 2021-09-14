@@ -7,11 +7,14 @@ import { useAppSelector } from '../../state';
 import { findUserPlaylists } from '../../state/modules/playlists';
 import { PlaylistResponseDto } from '../../api';
 
-import { useSpinner } from '../../hooks/useSpinner';
 import { useRouteWithParams } from '../../hooks/NavigationHooks';
+import { useSpinner } from '../../hooks/useSpinner';
+
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
+
 import { PageContainer } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
 
@@ -115,4 +118,4 @@ export const Explore = () => {
   );
 };
 
-export default Explore;
+export default withLoadingSpinner(Explore);

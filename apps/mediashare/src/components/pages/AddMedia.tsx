@@ -7,19 +7,22 @@ import * as DocumentPicker from 'expo-document-picker';
 
 import { ROUTES } from '../../routes';
 
-import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
-
 import { useAppSelector } from '../../state';
 import { addMediaItem, createThumbnail } from '../../state/modules/media-items';
 
+import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
+
+import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { useSpinner, SPINNER_DEFAULTS } from '../../hooks/useSpinner';
+
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 
-import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 import { PageContainer } from '../layout/PageContainer';
 import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
 import { minLength } from '../../lib/Validators';
-import { useSpinner, SPINNER_DEFAULTS } from '../../hooks/useSpinner';
+
 import { findUserPlaylists } from '../../state/modules/playlists';
 
 export const AddMedia = () => {
@@ -148,4 +151,4 @@ export const AddMedia = () => {
   };
 };
 
-export default AddMedia;
+export default withLoadingSpinner(AddMedia);

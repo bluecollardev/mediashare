@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
 
-import { useGoBack, useRouteName } from '../../hooks/NavigationHooks';
-import { UserDto } from '../../rxjs-api';
-
 import { useAppSelector } from '../../state';
 import { findUserPlaylists, shareUserPlaylist } from '../../state/modules/playlists';
 import { loadUsers } from '../../state/modules/users';
+
+import { UserDto } from '../../rxjs-api';
+
+import { useGoBack, useRouteName } from '../../hooks/NavigationHooks';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ScrollView, View } from 'react-native';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -77,4 +79,4 @@ const ShareWith = () => {
   );
 };
 
-export default ShareWith;
+export default withLoadingSpinner(ShareWith);

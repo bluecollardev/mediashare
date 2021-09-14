@@ -65,17 +65,17 @@ function PlaylistsNavigation() {
 
 const MediaStackNavigator = createStackNavigator();
 
-/* function MediaNavigation() {
+function MediaNavigation() {
   return (
     <MediaStackNavigator.Navigator>
       <MediaStackNavigator.Screen {...routeConfig.media} />
-      <MediaStackNavigator.Screen {...routeConfig.mediaItemDetail} />
+      {/*<MediaStackNavigator.Screen {...routeConfig.mediaItemDetail} />
       <MediaStackNavigator.Screen {...routeConfig.addFromFeed} />
       <MediaStackNavigator.Screen {...routeConfig.mediaItemEdit} />
-      <MediaStackNavigator.Screen {...routeConfig.addMedia} />
+      <MediaStackNavigator.Screen {...routeConfig.addMedia} />*/}
     </MediaStackNavigator.Navigator>
   );
-} */
+}
 
 const PageStackNavigator = createStackNavigator();
 
@@ -123,8 +123,8 @@ function TabNavigation() {
       }}
     >
       {/*<TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />*/}
-      {/* <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />*/}
-      {/*<TabNavigator.Screen name={'Media'} component={MediaNavigation} />*/}
+      <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
+      <TabNavigator.Screen name={'Media'} component={MediaNavigation} />
       <TabNavigator.Screen name={'Account'} component={AccountNavigation} />
     </TabNavigator.Navigator>
   );
