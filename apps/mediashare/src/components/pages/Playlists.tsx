@@ -21,6 +21,7 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
+import { findMediaItems } from '../../state/modules/media-items';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
@@ -69,44 +70,33 @@ export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked =
   );
 };
 
-export const Playlists = ({ navigation }: PageProps) => {
-  const dispatch = useDispatch();
-  const [loaded, setLoaded] = useState(false);
-  const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
-  const loadData = async function () {
-    await dispatch(findUserPlaylists({}));
-  };
-
+export const Playlists = ({ navigation, onDataLoaded }: PageProps) => {
   const shareWithAction = useRouteName(ROUTES.shareWith);
   const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
   const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
+
+  const dispatch = useDispatch();
+
+  const [{ state, loaded }] = useLoadPlaylistData();
+  const [isLoaded, setIsLoaded] = useState(loaded);
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await dispatch(findUserPlaylists({}));
-    setRefreshing(false);
-  }, [dispatch]);
-
-  const [{ state }] = useLoadPlaylistData();
+  const onRefresh = useCallback(refreshItems, [dispatch]);
+  useEffect(() => {
+    if (!isLoaded) {
+      loadData().then(onDataLoaded);
+    }
+  }, [isLoaded, dispatch, onDataLoaded]);
 
   const updateSelection = function (bool, item) {
     dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
   };
 
-  const [fabState, setState] = useState({ open: false });
-
+  const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
     { icon: 'ios-share', onPress: shareWithAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
     { icon: 'playlist-add', onPress: createPlaylistAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
   ];
-
-  useEffect(() => {
-    if (!loaded) {
-      loadData().then(() => setLoaded(true));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaded]);
 
   return (
     <PageContainer>
@@ -127,13 +117,24 @@ export const Playlists = ({ navigation }: PageProps) => {
         fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
         onStateChange={(open) => {
           // open && setOpen(!open);
-          setState(open);
+          setFabState(open);
         }}
         // onPress={() => setOpen(!open)}
       />
       {/* <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" /> */}
     </PageContainer>
   );
+
+  async function loadData() {
+    await dispatch(findUserPlaylists({}));
+    setIsLoaded(true);
+  }
+
+  async function refreshItems() {
+    setRefreshing(true);
+    await dispatch(findUserPlaylists({}));
+    setRefreshing(false);
+  }
 };
 
 export default withLoadingSpinner(Playlists);

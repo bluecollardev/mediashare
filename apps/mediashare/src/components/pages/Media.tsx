@@ -61,12 +61,11 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
   const onRefresh = useCallback(refreshItems, [dispatch]);
   useEffect(() => {
     if (!isLoaded) {
-      loadItems().then(onDataLoaded);
+      loadData().then(onDataLoaded);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, dispatch, onDataLoaded]);
 
-  const [state, setState] = useState({ open: false });
+  const [fabState, setState] = useState({ open: false });
   const fabActions = [
     { icon: 'delete', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
     { icon: 'cloud-upload', onPress: addFromFeed, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
@@ -88,11 +87,11 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
       </ScrollView>
       <FAB.Group
         visible={true}
-        open={state.open}
-        icon={state.open ? 'close' : 'more-vert'}
+        open={fabState.open}
+        icon={fabState.open ? 'close' : 'more-vert'}
         actions={fabActions}
         color={theme.colors.primaryTextLighter}
-        fabStyle={{ backgroundColor: state.open ? theme.colors.error : theme.colors.primary }}
+        fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
         onStateChange={(open) => {
           // open && setOpen(!open);
           setState(open);
@@ -102,7 +101,7 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
     </PageContainer>
   );
 
-  async function loadItems() {
+  async function loadData() {
     dispatch(findMediaItems());
     setIsLoaded(true);
   }
