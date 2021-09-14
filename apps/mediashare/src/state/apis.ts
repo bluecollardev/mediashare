@@ -72,7 +72,7 @@ function apiFactory() {
   }
 
   const configuration = new Configuration({
-    basePath: servers[0].getUrl(),
+    basePath: servers[1].getUrl(),
     accessToken: TOKEN,
     middleware: middlewareFactory(),
   });

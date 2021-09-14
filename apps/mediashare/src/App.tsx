@@ -79,6 +79,7 @@ const AccountNavigation = () => {
   return (
     <AccountStackNavigator.Navigator>
       <AccountStackNavigator.Screen {...routeConfig.account} />
+      <AccountStackNavigator.Screen {...routeConfig.contacts} />
     </AccountStackNavigator.Navigator>
   );
 };
