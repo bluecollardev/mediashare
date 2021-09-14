@@ -5,8 +5,9 @@ import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
 import { useAppSelector } from '../../state';
 import { useDispatch } from 'react-redux';
 import { clearError } from '../../state/modules/app-state';
+import { LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
 
-export interface PageProps {
+export interface PageProps extends LoadingSpinnerProps {
   navigation: any;
   route: any;
 }

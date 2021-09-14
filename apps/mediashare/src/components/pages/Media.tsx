@@ -9,7 +9,6 @@ import { useAppSelector } from '../../state';
 import { findMediaItems } from '../../state/modules/media-items';
 
 import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
-// import { TopActionButtons } from '../../layout/TopActionButtons';
 import { MediaListItem } from '../layout/MediaListItem';
 
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
@@ -22,7 +21,7 @@ import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
 
-export const MediaComponent = ({ onViewDetail, list, selectable }: { navigation: any; list: MediaItemDto[]; onViewDetail: any; selectable: boolean }) => {
+export const MediaComponent = ({ onViewDetail, list = [], selectable }: { navigation: any; list: MediaItemDto[]; onViewDetail: any; selectable: boolean }) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
@@ -48,33 +47,26 @@ export const MediaComponent = ({ onViewDetail, list, selectable }: { navigation:
   );
 };
 
-export const Media = ({ navigation }: PageProps) => {
-  const forceUpdate = true;
-  const dispatch = useDispatch();
-
+export const Media = ({ navigation, onDataLoaded }: PageProps) => {
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
   const addMedia = useRouteName(ROUTES.addMediaItem);
   const editMedia = useRouteWithParams(ROUTES.mediaItemEdit);
 
-  const { loaded, mediaItems } = useAppSelector((state) => state.mediaItems);
+  const dispatch = useDispatch();
 
-  const [isLoaded, setIsLoaded] = useState(forceUpdate || loaded);
+  const { loaded, mediaItems } = useAppSelector((state) => state.mediaItems);
+  const [isLoaded, setIsLoaded] = useState(loaded);
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await dispatch(findMediaItems());
-    setRefreshing(false);
-  }, [dispatch]);
-
+  const onRefresh = useCallback(refreshItems, [dispatch]);
   useEffect(() => {
     if (!isLoaded) {
-      dispatch(findMediaItems());
-      setIsLoaded(true);
+      loadItems().then(onDataLoaded);
     }
-  }, [isLoaded, dispatch]);
-  const [state, setState] = useState({ open: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, dispatch, onDataLoaded]);
 
+  const [state, setState] = useState({ open: false });
   const fabActions = [
     { icon: 'delete', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
     { icon: 'cloud-upload', onPress: addFromFeed, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
@@ -109,6 +101,17 @@ export const Media = ({ navigation }: PageProps) => {
       />
     </PageContainer>
   );
+
+  async function loadItems() {
+    dispatch(findMediaItems());
+    setIsLoaded(true);
+  }
+
+  async function refreshItems() {
+    setRefreshing(true);
+    await dispatch(findMediaItems());
+    setRefreshing(false);
+  }
 
   async function onEditItem(item: MediaItem) {
     editMedia({ mediaId: item._id, uri: item.uri });

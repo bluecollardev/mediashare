@@ -9,7 +9,6 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
 import { Button, Card, TextInput } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
-import { findUserPlaylists } from '../../state/modules/playlists';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -37,7 +36,7 @@ const LoginComponent = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
 
   const [username, setUsername] = useState('test@example.com');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('string12345');
 
   const [{ startLoad, endLoad, AppSpinner }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
 
