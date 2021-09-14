@@ -9,32 +9,12 @@ import { CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum, UpdateMe
 import { ROUTES } from '../../../routes';
 import { useRouteWithParams } from '../../../hooks/NavigationHooks';
 
-import { ScrollView, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
-import { Text, View } from 'native-base';
+import { View, ScrollView, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import { ActionButtons } from '../../layout/ActionButtons';
 import { MediaCard } from '../../layout/MediaCard';
 import PageContainer from '../../layout/PageContainer';
 
 import styles from '../../../styles';
-
-export interface MediaItemEditProps {
-  navigation: any;
-  list: any;
-}
-
-export const MediaItemEdit = ({ navigation }: { navigation: any }) => {
-  const options = [];
-  for (const value in UpdateMediaItemDtoCategoryEnum) {
-    options.push(value);
-  }
-
-  return (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    <MediaCard categoryOptions={options}>
-      <View />
-    </MediaCard>
-  );
-};
 
 export interface MediaItemEditContainerProps {
   navigation: any;
@@ -56,7 +36,6 @@ const MediaItemEditContainer = ({ navigation, route }) => {
   useEffect(() => {
     if (!isLoaded || _id !== mediaId) {
       dispatch(getMediaItemById({ uri, mediaId }));
-
       setIsLoaded(true);
     }
   }, [dispatch, isLoaded, uri, mediaId, _id]);
@@ -92,12 +71,9 @@ const MediaItemEditContainer = ({ navigation, route }) => {
     await dispatch(updateMediaItem(dto));
     goToItem({ mediaId, uri });
   };
+
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
-
-  if (!mediaItem) {
-    return <Text>Loading</Text>;
-  }
 
   return (
     <PageContainer>
@@ -121,7 +97,7 @@ const MediaItemEditContainer = ({ navigation, route }) => {
               />
             </ScrollView>
             <View>
-              <ActionButtons actionCb={saveItem} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
+              <ActionButtons actionCb={saveItem} cancelCb={cancelCb} rightIcon="check-circle" actionLabel={actionLabel} cancelLabel={cancelLabel} />
             </View>
           </View>
         </TouchableWithoutFeedback>

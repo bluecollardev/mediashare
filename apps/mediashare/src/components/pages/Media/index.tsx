@@ -83,8 +83,8 @@ export const MediaContainer = (props: { navigation: any }) => {
 
   const fabActions = [
     { icon: 'delete', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-    { icon: 'library-add', onPress: addFromFeed, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'cloud-upload', onPress: addMedia, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'cloud-upload', onPress: addFromFeed, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'library-add', onPress: addMedia, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
   ];
 
   return (
@@ -95,7 +95,7 @@ export const MediaContainer = (props: { navigation: any }) => {
         {mediaItems.length > 0 ? (
           <Media navigation={props.navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />
         ) : (
-          <Subheading>There are no items in your collection</Subheading>
+          <Subheading style={{ padding: 3 }}>There are no items in your collection</Subheading>
         )}
       </ScrollView>
       {/* <Portal> */}

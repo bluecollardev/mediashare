@@ -84,7 +84,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
         <Card.Content>
           <Card.Title
             title={<Title>{title}</Title>}
-            subtitle={category ?? 'No category'}
+            subtitle={`Tags: ${category ?? 'None'}`}
             right={(props: any) => showActions && <IconButton {...props} icon="more-vert" onPress={onActionsClicked} />}
           />
           <Card.Content>

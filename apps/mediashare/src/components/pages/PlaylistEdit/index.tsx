@@ -149,7 +149,6 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   return (
     <PageContainer>
       <AppSpinner />
-
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
           <MediaCard
@@ -167,21 +166,20 @@ const PlaylistEditContainer = ({ navigation, route }) => {
           />
         </View>
       </TouchableWithoutFeedback>
-      <AppContent>
-        <MediaList
-          onViewDetail={(itm) => onViewMediaItemClicked({ mediaId: itm._id, uri: itm.uri })}
-          list={items}
-          isSelectable={true}
-          removeItem={onRemoveItem}
-          addItem={onAddItem}
-          showThumbnail={true}
-        />
-        {selectedItems.length < 1 ? (
-          <ActionButtons rightIcon={'check-bold'} actionCb={() => save()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
-        ) : (
-          <ListActionButton danger={false} icon="delete-outline" actionCb={() => showCardMenu(selectedItems.length)} label={'Remove Items from Playlist'} />
-        )}
-      </AppContent>
+      {selectedItems.length > 0 && (
+        <ListActionButton danger={false} icon="delete-outline" actionCb={() => showCardMenu(selectedItems.length)} label={'Remove Items from Playlist'} />
+      )}
+      <MediaList
+        onViewDetail={(itm) => onViewMediaItemClicked({ mediaId: itm._id, uri: itm.uri })}
+        list={items}
+        isSelectable={true}
+        removeItem={onRemoveItem}
+        addItem={onAddItem}
+        showThumbnail={true}
+      />
+
+
+      <ActionButtons rightIcon={'check-circle'} actionCb={() => save()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
     </PageContainer>
   );
 };

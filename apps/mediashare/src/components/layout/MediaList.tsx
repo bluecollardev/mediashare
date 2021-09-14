@@ -10,9 +10,9 @@ export type MediaListType = Omit<Pick<MediaItemDto, keyof MediaItem>, 'category'
 
 interface MediaListProps {
   list: MediaListType[];
-  onViewDetail: (item: MediaListType) => void;
-  isSelectable: boolean;
-  showThumbnail: boolean;
+  onViewDetail?: (item: MediaListType) => void;
+  isSelectable?: boolean;
+  showThumbnail?: boolean;
   addItem?: (item?: MediaListType) => void;
   removeItem?: (item?: MediaListType) => void;
 }

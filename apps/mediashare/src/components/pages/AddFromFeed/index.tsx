@@ -1,4 +1,3 @@
-import { Container, Content, List, Text, View } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -11,27 +10,10 @@ import { useRouteName } from '../../../hooks/NavigationHooks';
 import { ActionButtons } from '../../layout/ActionButtons';
 import { MediaListItem } from '../../layout/MediaListItem';
 
-import { MediaItem } from '../../../rxjs-api';
-
 import PageContainer from '../../layout/PageContainer';
 import { useSpinner } from '../../../hooks/useSpinner';
-import { ScrollView } from 'react-native';
-
-export interface AddFromFeedProps {
-  navigation: any;
-  onViewDetail: () => void;
-  items: MediaItem[];
-}
-
-export interface AddFromFeedState {}
-
-export interface AddFromFeedContainerProps {
-  navigation: any;
-  fetchList: Function;
-  data: Object;
-}
-
-export interface AddFromFeedContainerState {}
+import { ScrollView, View } from 'react-native';
+import { Subheading, Card } from 'react-native-paper';
 
 export const AddFromFeedContainer = () => {
   const dispatch = useDispatch();
@@ -54,7 +36,7 @@ export const AddFromFeedContainer = () => {
       return;
     }
     const items = Array.from(selectedItems.values());
-    const res = await dispatch(saveFeedMediaItems({ keys: items }));
+    await dispatch(saveFeedMediaItems({ keys: items }));
     goToMediaItems();
   };
   useEffect(() => {
@@ -64,35 +46,45 @@ export const AddFromFeedContainer = () => {
       setLoaded(true);
       endLoad();
     };
+
     if (!loaded) {
-      loadData();
+      loadData().then(() => {});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded, dispatch]);
-  if (!items && loaded) {
-    return <Text>No items to download</Text>;
-  }
 
   return (
     <PageContainer>
       <AppSpinner />
-      <ScrollView>
-        {items?.map((item, idx) => {
-          const { key, size, lastModified } = item;
-
-          return (
-            <MediaListItem
-              showActions={false}
-              key={idx}
-              title={key}
-              description={size + lastModified}
-              checked={false}
-              onChecked={(v) => (v ? addItemCb(key) : removeItemCb(key))}
-            />
-          );
-        })}
-      </ScrollView>
-      <ActionButtons actionCb={saveMedia} actionLabel="Next" cancelLabel="Back" cancelCb={goToMediaItems} />
+      <View style={{ flex: 1 }}>
+        {(!items || items.length === 0) && loaded && (
+          <Card>
+            <Card.Content>
+              <Subheading style={{ textAlign: "center" }}>
+                Your media collection is in sync!
+              </Subheading>
+            </Card.Content>
+          </Card>
+        )}
+        <ScrollView>
+          {items?.map((item, idx) => {
+            const { key, size, lastModified } = item;
+            return (
+              <MediaListItem
+                showActions={false}
+                key={idx}
+                title={key}
+                description={size + lastModified}
+                checked={false}
+                onChecked={(v) => (v ? addItemCb(key) : removeItemCb(key))}
+              />
+            );
+          })}
+        </ScrollView>
+        <View>
+          <ActionButtons actionCb={saveMedia} rightIcon="check-circle" actionLabel="Add" cancelLabel="Back" cancelCb={goToMediaItems} />
+        </View>
+      </View>
     </PageContainer>
   );
 };

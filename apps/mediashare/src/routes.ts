@@ -49,7 +49,7 @@ const routeConfig = {
   addMediaItem: {
     name: 'addMediaItem',
     component: AddMedia,
-    options: { title: 'Add Media' },
+    options: { title: 'Add / Upload Media' },
   },
   playlistDetail: {
     name: 'playlistDetail',
@@ -74,12 +74,12 @@ const routeConfig = {
   media: {
     name: 'media',
     component: Media,
-    options: { title: 'Media', header: AppScreenHeader },
+    options: { title: 'My Media Collection', header: AppScreenHeader },
   },
   mediaItemDetail: {
     name: 'mediaItemDetail',
     component: MediaItemDetail,
-    options: { title: 'Media Item', header: AppScreenHeader },
+    options: { title: 'View Media Item', header: AppScreenHeader },
   },
   mediaItemEdit: {
     name: 'mediaItemEdit',
@@ -89,12 +89,12 @@ const routeConfig = {
   addFromFeed: {
     name: 'addFromFeed',
     component: AddFromFeed,
-    options: { title: 'Add From Feed', header: AppScreenHeader },
+    options: { title: 'Add From Feed + Cloud', header: AppScreenHeader },
   },
   addFromMedia: {
     name: 'addFromMedia',
     component: AddFromCollection,
-    options: { title: 'Add From Collection', header: AppScreenHeader },
+    options: { title: 'Add Existing Media Item', header: AppScreenHeader },
   },
   addPlaylist: {
     name: 'addPlaylist',
@@ -104,7 +104,7 @@ const routeConfig = {
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
     component: AddToPlaylist,
-    options: { title: 'Add Playlist', header: AppScreenHeader },
+    options: { title: 'Add To Playlist', header: AppScreenHeader },
   },
   addMedia: {
     name: 'addMediaItem',

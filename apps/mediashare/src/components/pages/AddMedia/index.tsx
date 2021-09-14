@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { View, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { Button, CardItem, Icon, Text } from 'native-base';
 import * as DocumentPicker from 'expo-document-picker';
 
@@ -98,34 +98,36 @@ export const AddMediaContainer = () => {
   return (
     <PageContainer>
       <AppSpinner />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView>
-            <MediaCard
-              title={title}
-              author={author}
-              description={description}
-              category={category}
-              categoryOptions={options}
-              onCategoryChange={onCategoryChange as any}
-              onTitleChange={onTitleChange}
-              onDescriptionChange={onDescriptionChange}
-              isEdit={true}
-            >
-              <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {documentUri ? (
-                  <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
-                ) : (
-                  <Button bordered style={{ width: '100%' }} hasText={true} onPress={getDocument} full={true}>
-                    <Icon name="cloud-upload-outline" />
-                    <Text style={{ textAlign: 'center' }}>Upload</Text>
-                  </Button>
-                )}
-              </CardItem>
-            </MediaCard>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <View style={{ flex: 1 }}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ScrollView>
+              <MediaCard
+                title={title}
+                author={author}
+                description={description}
+                category={category}
+                categoryOptions={options}
+                onCategoryChange={onCategoryChange as any}
+                onTitleChange={onTitleChange}
+                onDescriptionChange={onDescriptionChange}
+                isEdit={true}
+              >
+                <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 15, marginBottom: 0 }}>
+                  {documentUri ? (
+                    <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
+                  ) : (
+                    <Button bordered style={{ width: '100%' }} hasText={true} onPress={getDocument} full={true}>
+                      <Icon name="cloud-upload" />
+                      <Text style={{ textAlign: 'center' }}>Upload From Device</Text>
+                    </Button>
+                  )}
+                </CardItem>
+              </MediaCard>
+            </ScrollView>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </View>
 
       <ActionButtons
         actionCb={() => saveItem()}
@@ -133,7 +135,7 @@ export const AddMediaContainer = () => {
         actionLabel={actionLabel}
         cancelLabel={cancelLabel}
         disableAction={!isValid()}
-        rightIcon={'add'}
+        rightIcon="check-circle"
       />
     </PageContainer>
   );
