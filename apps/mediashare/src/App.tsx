@@ -34,15 +34,15 @@ declare const global: { HermesInternal: null | {} };
 // const DrawerNavigator = createDrawerNavigator();
 
 const ExploreStackNavigator = createStackNavigator();
-/* const ExploreNavigation = () => {
+const ExploreNavigation = () => {
   return (
     <ExploreStackNavigator.Navigator>
       <ExploreStackNavigator.Screen {...routeConfig.explore} />
-      <ExploreStackNavigator.Screen {...routeConfig.sharedPlaylistDetail} />
-      <ExploreStackNavigator.Screen {...routeConfig.sharedItemDetail} />
+      {/*<ExploreStackNavigator.Screen {...routeConfig.sharedPlaylistDetail} />
+      <ExploreStackNavigator.Screen {...routeConfig.sharedItemDetail} />*/}
     </ExploreStackNavigator.Navigator>
   );
-}; */
+};
 
 const PlaylistsStackNavigator = createStackNavigator();
 
@@ -122,7 +122,7 @@ function TabNavigation() {
         tabBarColor: theme.colors.accent,
       }}
     >
-      {/*<TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />*/}
+      <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />
       <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
       <TabNavigator.Screen name={'Media'} component={MediaNavigation} />
       <TabNavigator.Screen name={'Account'} component={AccountNavigation} />
