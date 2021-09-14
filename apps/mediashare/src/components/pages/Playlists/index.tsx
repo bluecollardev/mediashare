@@ -1,22 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { List, Text, View } from 'native-base';
 
 import { ROUTES } from '../../../routes';
 
-import { useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
-
-import { useAppSelector } from '../../../state';
 import { findUserPlaylists, selectPlaylistAction } from '../../../state/modules/playlists';
 
-import { TopActionButtons } from '../../layout/TopActionButtons';
-import { ListActionButton } from '../../layout/ListActionButton';
+import { useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
+
+import { View } from 'react-native';
+import { List, Text } from 'native-base';
 import { MediaListItem } from '../../layout/MediaListItem';
+import PageContainer from '../../layout/PageContainer';
 
 import { PlaylistResponseDto } from '../../../api';
-
-import PageContainer from '../../layout/PageContainer';
 import AppContent from '../../layout/AppContent';
 import { SPINNER_DEFAULTS, useSpinner } from '../../../hooks/useSpinner';
 import { RefreshControl, ScrollView } from 'react-native';

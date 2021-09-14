@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { Container, View } from 'native-base';
-import { Button, Card, TextInput } from 'react-native-paper';
-import { LoginDto } from '../../../api';
-
 import { useDispatch } from 'react-redux';
 
+import { LoginDto } from '../../../api';
 import { loginAction } from '../../../state/modules/user';
 import { RootState } from '../../../state';
+
 import Spinner from 'react-native-loading-spinner-overlay';
 import { SPINNER_DEFAULTS, useSpinner } from '../../../hooks/useSpinner';
+import { Button, Card, TextInput } from 'react-native-paper';
 import PageContainer from '../../layout/PageContainer';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;

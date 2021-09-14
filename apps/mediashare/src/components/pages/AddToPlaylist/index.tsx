@@ -61,7 +61,7 @@ class AddToPlaylist extends React.Component<AddToPlaylistProps, AddToPlaylistSta
               })}
             </List>
           </View>
-          <View padder style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row' }}>
             <Button
               iconLeft
               bordered

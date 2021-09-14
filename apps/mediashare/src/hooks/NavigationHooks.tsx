@@ -26,6 +26,16 @@ export function useGoBack() {
   return () => nav.goBack();
 }
 
+export function useViewPlaylist() {
+  const nav = useNavigation();
+  return ({ playlistId }) => nav.navigate(ROUTES.playlistDetail, { playlistId });
+}
+
+export function useViewPlaylistItem() {
+  const nav = useNavigation();
+  return ({ mediaId, uri }) => nav.navigate(ROUTES.playlistItemDetail, { mediaId, uri });
+}
+
 export function useViewSharedMediaItem() {
   const nav = useNavigation();
   return ({ mediaId, uri }) => nav.navigate(ROUTES.sharedItemDetail, { mediaId, uri });
@@ -34,9 +44,4 @@ export function useViewSharedMediaItem() {
 export function useViewMediaItem() {
   const nav = useNavigation();
   return ({ mediaId, uri }) => nav.navigate(ROUTES.mediaItemDetail, { mediaId, uri });
-}
-
-export function useViewPlaylist() {
-  const nav = useNavigation();
-  return ({ playlistId }) => nav.navigate(ROUTES.playlistDetail, { playlistId });
 }

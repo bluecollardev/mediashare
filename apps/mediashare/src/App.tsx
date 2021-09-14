@@ -55,7 +55,7 @@ function PlaylistsNavigation() {
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
-
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromMedia} />
       <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />

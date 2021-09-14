@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Container, View } from 'native-base';
+import { View } from 'react-native';
+import { Container } from 'native-base';
 
 import { useAppSelector } from '../../../state';
 import { getMediaItemById } from '../../../state/modules/media-items';
@@ -40,7 +41,7 @@ const ExploreItemDetailContainer = ({ route }) => {
   if (!isLoaded && !mediaItem) {
     return (
       <Container style={styles.container}>
-        <View padder>
+        <View>
           <ExploreItemCard title="" description="" showActions={false} category="" onEditClicked={onEditClicked} onDeleteClicked={onDeleteClicked} author="" />
         </View>
       </Container>
@@ -50,7 +51,7 @@ const ExploreItemDetailContainer = ({ route }) => {
 
   return (
     <Container style={styles.container}>
-      <View padder>
+      <View>
         <ExploreItemCard
           title={title}
           description={description}

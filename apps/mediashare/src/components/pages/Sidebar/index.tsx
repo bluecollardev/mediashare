@@ -21,7 +21,7 @@ const routes = [
   },
   {
     route: 'AddFromCollection',
-    caption: 'Add From Media',
+    caption: 'Add From Collection',
   },
   {
     route: 'PlaylistEdit',

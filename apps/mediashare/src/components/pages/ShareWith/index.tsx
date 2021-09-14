@@ -1,6 +1,5 @@
 import { Container, Content, Text, View } from 'native-base';
-import * as React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useGoBack, useRouteName } from '../../../hooks/NavigationHooks';
 import { ROUTES } from '../../../routes';

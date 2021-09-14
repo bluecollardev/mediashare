@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Container, Content } from 'native-base';
 
 import { useGoBack, useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
 
@@ -38,8 +37,10 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const goBack = useGoBack();
 
   const clearAndGoBack = function () {
+    // @ts-ignore
     setTitle('');
     setCategory(CreatePlaylistDtoCategoryEnum.Builder);
+    // @ts-ignore
     setDescription('');
     setLoaded(false);
     goBack();

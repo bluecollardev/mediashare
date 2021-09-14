@@ -153,7 +153,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     //     )}
     //   </CardItem>
     //   {buttons && typeof buttons === 'function' && (
-    //     <View padder style={{ flexDirection: 'row' }}>
+    //     <View style={{ flexDirection: 'row' }}>
     //       {buttons()}
     //     </View>
     //   )}
@@ -191,6 +191,6 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   card: {
-    margin: 4,
+    margin: 0,
   },
 });

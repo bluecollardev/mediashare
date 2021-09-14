@@ -1,74 +1,49 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Container, Icon, View } from 'native-base';
-import { RefreshControl, ScrollView, Text } from 'react-native';
 
-import { routeConfig, ROUTES } from '../../../routes';
+import { ROUTES } from '../../../routes';
 
-import { useRouteWithParams, useViewMediaItem } from '../../../hooks/NavigationHooks';
+import { useRouteWithParams, useViewPlaylistItem } from '../../../hooks/NavigationHooks';
+import { useSpinner } from '../../../hooks/useSpinner';
 
 import { useAppSelector } from '../../../state';
 import { getPlaylistById } from '../../../state/modules/playlists';
 
+import { ScrollView, View } from 'react-native';
+import { FAB } from 'react-native-paper';
 import { PlaylistCard } from '../../layout/PlaylistCard';
 import { MediaList } from '../../layout/MediaList';
 import { ListActionButton } from '../../layout/ListActionButton';
-
-import styles from '../../../styles';
-import { useLoadPlaylistByIdData } from '../../../hooks/useLoadData';
 import PageContainer from '../../layout/PageContainer';
-import { useSpinner } from '../../../hooks/useSpinner';
 
-export interface PlaylistDetailProps {
-  navigation: any;
-  list: any;
-}
+import { theme } from '../../../styles';
 
-export interface PlaylistDetailState {}
-
-export const PlaylistDetail = (props) => {
-  const { navigation } = props;
-
-  return (
-    <Button
-      iconLeft
-      bordered
-      dark
-      style={{ flex: 1, marginRight: 10, justifyContent: 'center' }}
-      onPress={() => {
-        navigation.navigate(routeConfig.addFromMedia.name);
-      }}
-    >
-      <Icon name="add-outline" />
-      <Text style={{ paddingRight: 30 }}>Add From Media</Text>
-    </Button>
-  );
-};
-
-export interface PlaylistDetailContainerProps {
-  navigation: any;
-  route: any;
-  fetchList: Function;
-  data: Object;
-  state: Object;
-  playlistId: string | number; // TODO: Make a type
-}
-
-export interface PlaylistDetailContainerState {}
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
 export const PlaylistDetailContainer = ({ route }) => {
-  const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
-  const onViewMediaItemClicked = useViewMediaItem();
-  const onAddToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
-
-  const onDeleteClicked = () => {};
   const { playlistId = '' } = route?.params;
   const [{ AppSpinner, isLoading, endLoad }] = useSpinner({ loadingState: true });
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
+
+  const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
+  const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
+  const onViewPlaylistItemClicked = useViewPlaylistItem();
+  const onDeleteClicked = ({ playlistId }) => playlistId;
+
   const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
+
+  const [fabState, setState] = useState({ open: false });
+
+  const fabActions = [
+    { icon: 'delete', onPress: () => onDeleteClicked({ playlistId }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
+    { icon: 'edit', onPress: () => onEditClicked({ playlistId }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    {
+      icon: 'playlist-add',
+      onPress: () => onAddToPlaylistClicked({ playlistId }),
+      color: theme.colors.primaryTextLighter,
+      style: { backgroundColor: theme.colors.primary },
+    },
+  ];
+
   useEffect(() => {
     async function loadData() {
       await dispatch(getPlaylistById(playlistId));
@@ -93,20 +68,43 @@ export const PlaylistDetailContainer = ({ route }) => {
   return (
     <PageContainer>
       <AppSpinner />
-
-      <PlaylistCard
-        title={title}
-        author={author}
-        description={description}
-        showSocial={false}
-        showActions={true}
-        showThumbnail={true}
-        onEditClicked={() => onEditClicked({ playlistId })}
-        onDeleteClicked={onDeleteClicked}
-        category={category}
+      <View style={{ flex: 1 }}>
+        <ScrollView>
+          <PlaylistCard
+            title={title}
+            author={author}
+            description={description}
+            showSocial={false}
+            showActions={false}
+            showThumbnail={true}
+            onEditClicked={() => onEditClicked({ playlistId })}
+            // onDeleteClicked={onDeleteClicked}
+            category={category}
+          />
+          <MediaList
+            onViewDetail={(item) => onViewPlaylistItemClicked({ mediaId: item._id, uri: item.uri })}
+            list={items}
+            isSelectable={false}
+            showThumbnail={true}
+          />
+        </ScrollView>
+        <View>
+          <ListActionButton icon="playlist-add" label="Add From Collection" actionCb={() => onAddToPlaylistClicked({ playlistId })} />
+        </View>
+      </View>
+      <FAB.Group
+        visible={true}
+        open={fabState.open}
+        icon={fabState.open ? 'close' : 'more-vert'}
+        actions={fabActions}
+        color={theme.colors.primaryTextLighter}
+        fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+        onStateChange={(open) => {
+          // open && setOpen(!open);
+          setState(open);
+        }}
+        // onPress={() => setOpen(!open)}
       />
-      <ListActionButton icon="add" label="Add From Media" actionCb={() => onAddToPlaylist({ playlistId })} />
-      <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} showThumbnail={true} />
     </PageContainer>
   );
 };

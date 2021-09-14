@@ -72,7 +72,7 @@ export class PlaylistsApi extends BaseAPI {
   /**
    */
   playlistControllerFindAll(): Observable<Array<PlaylistItemResponseDto>>;
-  playlistControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
+  playlistControllerFindAll(opts?: { headers: {}; query: {} }): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
   playlistControllerFindAll(opts?: OperationOpts): Observable<Array<PlaylistItemResponseDto> | RawAjaxResponse<Array<PlaylistItemResponseDto>>> {
     return this.request<Array<PlaylistItemResponseDto>>(
       {

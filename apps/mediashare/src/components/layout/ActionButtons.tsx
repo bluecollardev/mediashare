@@ -1,4 +1,4 @@
-import { View } from 'native-base';
+import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 
 import React from 'react';
@@ -29,7 +29,7 @@ export const ActionButtons = ({
   loading = false,
 }: Props) => {
   return (
-    <View padder style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row' }}>
       <Button
         icon={leftIcon}
         loading={loading}

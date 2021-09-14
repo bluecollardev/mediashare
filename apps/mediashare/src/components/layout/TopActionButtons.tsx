@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'native-base';
+import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { theme } from '../../styles';
 
@@ -14,7 +14,7 @@ export interface TopActionButtonsProps {
 
 export const TopActionButtons = ({ leftAction, rightAction, leftLabel, rightLabel, rightIcon = 'add-box', leftIcon = 'add-box' }: TopActionButtonsProps) => {
   return (
-    <View padder style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row' }}>
       <Button mode={'text'} color={theme.colors.primary} dark style={{ flex: 1, marginRight: 10 }} icon={leftIcon} onPress={() => leftAction()}>
         {leftLabel}
       </Button>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
-import { ActionSheet, Container, Content, Text, View } from 'native-base';
+import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { ActionSheet } from 'native-base';
 
 import { ActionButtons } from '../../layout/ActionButtons';
 
@@ -14,9 +14,8 @@ import { getPlaylistById, updateUserPlaylist } from '../../../state/modules/play
 
 import { ListActionButton } from '../../layout/ListActionButton';
 
-import { CreatePlaylistDtoCategoryEnum, MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
+import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
 
-import styles from '../../../styles';
 import PageContainer from '../../layout/PageContainer';
 import { useSpinner } from '../../../hooks/useSpinner';
 import AppContent from '../../layout/AppContent';
@@ -152,7 +151,7 @@ const PlaylistEditContainer = ({ navigation, route }) => {
       <AppSpinner />
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View padder>
+        <View>
           <MediaCard
             title={title}
             author={author}

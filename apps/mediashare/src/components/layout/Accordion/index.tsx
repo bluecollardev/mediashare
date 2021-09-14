@@ -30,7 +30,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
   renderHeader = (item: any, expanded: boolean) => {
     return (
       <View
-        padder
+
         style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -45,7 +45,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
 
   renderContent = (item: any) => {
     const { props } = this;
-    return <View padder>{item.content(props)}</View>;
+    return <View>{item.content(props)}</View>;
   };
 
   // <Icon name="ios-arrow-back" />

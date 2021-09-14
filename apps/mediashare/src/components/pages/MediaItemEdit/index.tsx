@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ActionSheet, Button, CardItem, Container, Icon, Text, View } from 'native-base';
+import { useAppSelector } from '../../../state';
+import { createThumbnail, getMediaItemById, updateMediaItem } from '../../../state/modules/media-items';
+
+import { CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum, UpdateMediaItemDto, UpdateMediaItemDtoCategoryEnum } from '../../../rxjs-api';
+
+import { ROUTES } from '../../../routes';
+import { useRouteWithParams } from '../../../hooks/NavigationHooks';
+
+import { ScrollView, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
+import { Text, View } from 'native-base';
+import { ActionButtons } from '../../layout/ActionButtons';
+import { MediaCard } from '../../layout/MediaCard';
+import PageContainer from '../../layout/PageContainer';
 
 import styles from '../../../styles';
-import { useAppSelector } from '../../../state';
-import { CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum, UpdateMediaItemDto, UpdateMediaItemDtoCategoryEnum } from '../../../rxjs-api';
-import { MediaCard } from '../../layout/MediaCard';
-import { createThumbnail, getMediaItemById, updateMediaItem } from '../../../state/modules/media-items';
-import { Image, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
-import * as DocumentPicker from 'expo-document-picker';
-import { ActionButtons } from '../../layout/ActionButtons';
-import { useRouteWithParams } from '../../../hooks/NavigationHooks';
-import { ROUTES } from '../../../routes';
-import AppContent from '../../layout/AppContent';
-import PageContainer from '../../layout/PageContainer';
 
 export interface MediaItemEditProps {
   navigation: any;
@@ -30,7 +31,7 @@ export const MediaItemEdit = ({ navigation }: { navigation: any }) => {
   return (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     <MediaCard categoryOptions={options}>
-      <View padder />
+      <View />
     </MediaCard>
   );
 };
@@ -65,7 +66,6 @@ const MediaItemEditContainer = ({ navigation, route }) => {
   const [category, setCategory] = useState();
 
   const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
-
   const options = [];
   for (const value in CreateMediaItemDtoCategoryEnum) {
     options.push(value);
@@ -88,9 +88,9 @@ const MediaItemEditContainer = ({ navigation, route }) => {
       // key: title,
       // eTag: '',
     };
-    const res = await dispatch(updateMediaItem(dto));
 
-    // goToItem({ mediaId, uri });
+    await dispatch(updateMediaItem(dto));
+    goToItem({ mediaId, uri });
   };
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
@@ -98,28 +98,33 @@ const MediaItemEditContainer = ({ navigation, route }) => {
   if (!mediaItem) {
     return <Text>Loading</Text>;
   }
+
   return (
     <PageContainer>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View padder>
-            <MediaCard
-              title={title}
-              author={author}
-              description={description}
-              mediaSrc={mediaItemSrc}
-              category={category}
-              categoryOptions={options}
-              onCategoryChange={(e: any) => {
-                setCategory(e);
-              }}
-              onTitleChange={setTitle}
-              onDescriptionChange={setDescription}
-              isEdit={true}
-            />
+          <View style={{ flex: 1 }}>
+            <ScrollView>
+              <MediaCard
+                title={title}
+                author={author}
+                description={description}
+                mediaSrc={mediaItemSrc}
+                category={category}
+                categoryOptions={options}
+                onCategoryChange={(e: any) => {
+                  setCategory(e);
+                }}
+                onTitleChange={setTitle}
+                onDescriptionChange={setDescription}
+                isEdit={true}
+              />
+            </ScrollView>
+            <View>
+              <ActionButtons actionCb={saveItem} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
+            </View>
           </View>
         </TouchableWithoutFeedback>
-        <ActionButtons actionCb={saveItem} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
       </KeyboardAvoidingView>
     </PageContainer>
   );

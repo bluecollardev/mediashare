@@ -4,18 +4,14 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../state';
 import { getMediaItemById } from '../../../state/modules/media-items';
 
-import { useSpinner } from '../../../hooks/useSpinner';
-import { useRouteWithParams } from '../../../hooks/NavigationHooks';
-import { ROUTES } from '../../../routes';
-
 import { View } from 'react-native';
 import { FAB } from 'react-native-paper';
-import PageContainer from '../../layout/PageContainer';
 import { MediaItemCard } from '../../layout/MediaItemCard';
+import PageContainer from '../../layout/PageContainer';
 
 import { theme } from '../../../styles';
 
-export interface MediaItemDetailContainerProps {
+export interface PlaylistItemDetailContainerProps {
   navigation: any;
   route: any;
   data: Object;
@@ -23,9 +19,9 @@ export interface MediaItemDetailContainerProps {
   mediaId: string | number; // TODO: Make a type
 }
 
-export interface MediaItemDetailContainerState {}
+export interface PlaylistItemDetailContainerState {}
 
-const MediaItemDetailContainer = ({ route }) => {
+const PlaylistItemDetailContainer = ({ route }) => {
   const dispatch = useDispatch();
 
   const { mediaId, uri } = route?.params || {};
@@ -36,14 +32,12 @@ const MediaItemDetailContainer = ({ route }) => {
   const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const { _id } = mediaItem || {};
 
-  const onEditClicked = useRouteWithParams(ROUTES.mediaItemEdit);
   const onDeleteClicked = () => {};
 
   const [fabState, setState] = useState({ open: false });
 
   const fabActions = [
-    { icon: 'delete', onPress: () => onDeleteClicked(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-    { icon: 'edit', onPress: () => onEditClicked({ mediaId }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'delete', onPress: () => onDeleteClicked(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
   ];
 
   useEffect(() => {
@@ -67,10 +61,8 @@ const MediaItemDetailContainer = ({ route }) => {
           title={title}
           description={description}
           image={mediaItemSrc}
-          showActions={true}
+          showActions={false}
           category={category}
-          onEditClicked={() => onEditClicked({ mediaId })}
-          onDeleteClicked={onDeleteClicked}
           author={author}
         />
       </View>
@@ -91,4 +83,4 @@ const MediaItemDetailContainer = ({ route }) => {
   );
 };
 
-export default MediaItemDetailContainer;
+export default PlaylistItemDetailContainer;

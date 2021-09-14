@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Container, Icon, View } from 'native-base';
-import { Text } from 'react-native';
+import { View, Text } from 'react-native';
+import { Button, Container, Icon } from 'native-base';
 
 import { routeConfig } from '../../../routes';
 
@@ -36,7 +36,7 @@ export const ExploreDetail = (props) => {
       }}
     >
       <Icon name="add-outline" />
-      <Text style={{ paddingRight: 30 }}>Add From Media</Text>
+      <Text style={{ paddingRight: 30 }}>Add From Collection</Text>
     </Button>
   );
 };
@@ -61,6 +61,7 @@ export const ExploreDetailContainer = ({ route }) => {
 
     setLoaded(true);
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loaded, setLoaded] = useState(false);
   const playlist = useAppSelector((state) => state.playlist);
 
@@ -83,7 +84,7 @@ export const ExploreDetailContainer = ({ route }) => {
 
   return (
     <Container style={styles.container}>
-      <View padder>
+      <View>
         <PlaylistCard title={title} author={author} description={description} showSocial={false} showActions={false} />
       </View>
       <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />

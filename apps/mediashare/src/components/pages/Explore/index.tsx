@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Container, Content, Text, View } from 'native-base';
+import { View } from 'react-native';
+import { Container, Content, Text } from 'native-base';
 import { List } from 'react-native-paper';
 import { ROUTES } from '../../../routes';
 

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Container, Content, List, Text, View } from 'native-base';
+import { View } from 'react-native';
+import { List } from 'native-base';
 
 import { ROUTES } from '../../../routes';
 
@@ -8,7 +9,7 @@ import { useAppSelector } from '../../../state';
 import { findMediaItems } from '../../../state/modules/media-items';
 
 import { useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
-import { TopActionButtons } from '../../layout/TopActionButtons';
+// import { TopActionButtons } from '../../layout/TopActionButtons';
 import { MediaListItem } from '../../layout/MediaListItem';
 
 import { MediaItem, MediaItemDto } from '../../../rxjs-api';
@@ -17,7 +18,7 @@ import PageContainer from '../../layout/PageContainer';
 import { RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { theme } from '../../../styles';
-import { Portal, FAB, Subheading } from 'react-native-paper';
+import { FAB, Subheading } from 'react-native-paper';
 
 export interface MediaContainerProps {
   navigation: any;
@@ -81,6 +82,7 @@ export const MediaContainer = (props: { navigation: any }) => {
   const [state, setState] = useState({ open: false });
 
   const fabActions = [
+    { icon: 'delete', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
     { icon: 'library-add', onPress: addFromFeed, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
     { icon: 'cloud-upload', onPress: addMedia, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
   ];

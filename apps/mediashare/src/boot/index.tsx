@@ -1,7 +1,4 @@
 import * as React from 'react';
-// import { StyleProvider } from 'native-base';
-// import getTheme from '../../src/theme/components';
-// import variables from '../../src/theme/variables/platform';
 import { Provider } from 'react-redux';
 import { Root } from 'native-base';
 
