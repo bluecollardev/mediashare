@@ -3,7 +3,7 @@ import React from 'react';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { View, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
-import { Subheading } from 'react-native-paper';
+import { Button, Subheading } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { AccountForm } from '../layout/AccountForm';
 
@@ -17,6 +17,13 @@ export const Account = ({ navigation }: PageProps) => {
           <View style={{ flex: 1, padding: 15 }}>
             <Subheading>Personal Information</Subheading>
             <AccountForm navigation={navigation} />
+            <Button
+              dark
+              mode={'contained'}
+              style={{ marginTop: 10 }}
+            >
+              Sign Out
+            </Button>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
