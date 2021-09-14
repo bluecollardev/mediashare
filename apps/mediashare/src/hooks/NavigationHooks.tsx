@@ -3,6 +3,7 @@ import { EnumLiteralsOf } from '../lib/Generics';
 import { routeConfig, ROUTES } from '../routes';
 
 type RouteConfigKeyType = EnumLiteralsOf<typeof ROUTES>;
+// @ts-ignore
 type RouteParentKeyType = keyof Pick<typeof routeConfig, 'explore' | 'media' | 'playlists' | 'settings'>;
 
 export function useRouteName(key: RouteConfigKeyType) {

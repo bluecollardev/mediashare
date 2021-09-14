@@ -55,6 +55,7 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   }, [loaded, dispatch, playlistId]);
 
   const options = [];
+
   for (const value in UpdatePlaylistDtoCategoryEnum) {
     options.push(value);
   }
@@ -86,9 +87,9 @@ const PlaylistEditContainer = ({ navigation, route }) => {
           />
         </View>
       </TouchableWithoutFeedback>
-      {selectedItems.length > 0 && (
+      {/* selectedItems.length > 0 && (
         <ListActionButton danger={false} icon="delete-outline" actionCb={() => showCardMenu(selectedItems.length)} label={'Remove Items from Playlist'} />
-      )}
+      ) */}
       <MediaList
         onViewDetail={(itm) => onViewMediaItemClicked({ mediaId: itm._id, uri: itm.uri })}
         list={items}
@@ -172,7 +173,7 @@ const PlaylistEditContainer = ({ navigation, route }) => {
         }
       }
     );
-  };
+  }
 };
 
 export default PlaylistEditContainer;

@@ -87,7 +87,7 @@ export const ExploreDetailContainer = ({ route }) => {
   return (
     <PageContainer>
       <ScrollView>
-        <PlaylistCard title={title} author={author} description={description} showSocial={false} showActions={false} />
+        {/* <PlaylistCard title={title} author={author} description={description} showSocial={false} showActions={false} /> */}
         <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
       </ScrollView>
     </PageContainer>

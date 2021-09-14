@@ -43,18 +43,6 @@ export const PlaylistDetailContainer = ({ route }) => {
     },
   ];
 
-  useEffect(() => {
-    async function loadData() {
-      await dispatch(getPlaylistById(playlistId));
-      endLoad();
-    }
-    if (!loaded) {
-      loadData();
-      setLoaded(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaded, playlistId]);
-
   const { description = '', title = '', user, category, mediaItems = [] } = selectedPlaylist || {};
 
   const items = mediaItems;

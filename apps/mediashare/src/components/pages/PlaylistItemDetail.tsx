@@ -58,7 +58,7 @@ const PlaylistItemDetailContainer = ({ route }) => {
 
   useEffect(() => {
     if (!loaded) {
-      loadData().then(() => setLoaded(true));
+      // loadData().then(() => setLoaded(true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);

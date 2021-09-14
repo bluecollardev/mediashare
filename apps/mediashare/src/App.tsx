@@ -34,7 +34,7 @@ declare const global: { HermesInternal: null | {} };
 // const DrawerNavigator = createDrawerNavigator();
 
 const ExploreStackNavigator = createStackNavigator();
-const ExploreNavigation = () => {
+/* const ExploreNavigation = () => {
   return (
     <ExploreStackNavigator.Navigator>
       <ExploreStackNavigator.Screen {...routeConfig.explore} />
@@ -42,7 +42,7 @@ const ExploreNavigation = () => {
       <ExploreStackNavigator.Screen {...routeConfig.sharedItemDetail} />
     </ExploreStackNavigator.Navigator>
   );
-};
+}; */
 
 const PlaylistsStackNavigator = createStackNavigator();
 
@@ -50,7 +50,7 @@ function PlaylistsNavigation() {
   return (
     <PlaylistsStackNavigator.Navigator>
       <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
+      {/*<PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
 
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
@@ -58,14 +58,14 @@ function PlaylistsNavigation() {
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromMedia} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />*/}
     </PlaylistsStackNavigator.Navigator>
   );
 }
 
 const MediaStackNavigator = createStackNavigator();
 
-function MediaNavigation() {
+/* function MediaNavigation() {
   return (
     <MediaStackNavigator.Navigator>
       <MediaStackNavigator.Screen {...routeConfig.media} />
@@ -75,18 +75,18 @@ function MediaNavigation() {
       <MediaStackNavigator.Screen {...routeConfig.addMedia} />
     </MediaStackNavigator.Navigator>
   );
-}
+} */
 
 const PageStackNavigator = createStackNavigator();
 
-const AccountStackNavigator = createStackNavigator();
+/* const AccountStackNavigator = createStackNavigator();
 const AccountNavigation = () => {
   return (
     <AccountStackNavigator.Navigator>
       <AccountStackNavigator.Screen {...routeConfig.account} />
     </AccountStackNavigator.Navigator>
   );
-};
+}; */
 
 // Map route names to icons
 export const tabNavigationIconsMap = {
@@ -122,11 +122,11 @@ function TabNavigation() {
         tabBarColor: theme.colors.accent,
       }}
     >
-      <TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />
-      <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
-      <TabNavigator.Screen name={'Media'} component={MediaNavigation} />
-      {/* <TabNavigator.Screen name={'Feeds'} component={null} />*/}
-      <TabNavigator.Screen name={'Account'} component={AccountNavigation} />
+      {/*<TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />*/}
+      {/* <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />*/}
+      {/*<TabNavigator.Screen name={'Media'} component={MediaNavigation} />
+      {/*<TabNavigator.Screen name={'Feeds'} component={null} />*/}
+      {/*<TabNavigator.Screen name={'Account'} component={AccountNavigation} />*/}
     </TabNavigator.Navigator>
   );
 }
