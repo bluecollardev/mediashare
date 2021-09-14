@@ -79,14 +79,14 @@ const MediaStackNavigator = createStackNavigator();
 
 const PageStackNavigator = createStackNavigator();
 
-/* const AccountStackNavigator = createStackNavigator();
+const AccountStackNavigator = createStackNavigator();
 const AccountNavigation = () => {
   return (
     <AccountStackNavigator.Navigator>
       <AccountStackNavigator.Screen {...routeConfig.account} />
     </AccountStackNavigator.Navigator>
   );
-}; */
+};
 
 // Map route names to icons
 export const tabNavigationIconsMap = {
@@ -124,9 +124,8 @@ function TabNavigation() {
     >
       {/*<TabNavigator.Screen name={'Explore'} component={ExploreNavigation} />*/}
       {/* <TabNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />*/}
-      {/*<TabNavigator.Screen name={'Media'} component={MediaNavigation} />
-      {/*<TabNavigator.Screen name={'Feeds'} component={null} />*/}
-      {/*<TabNavigator.Screen name={'Account'} component={AccountNavigation} />*/}
+      {/*<TabNavigator.Screen name={'Media'} component={MediaNavigation} />*/}
+      <TabNavigator.Screen name={'Account'} component={AccountNavigation} />
     </TabNavigator.Navigator>
   );
 }
