@@ -16,8 +16,8 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
 import { MediaCard } from '../layout/MediaCard';
-import { PageContainer } from '../layout/PageContainer';
-// import { ListActionButton } from '../layout/ListActionButton';
+import { PageContainer, PageProps } from '../layout/PageContainer';
+import { ListActionButton } from '../layout/ListActionButton';
 
 export interface PlaylistEditContainerProps {
   navigation: any;
@@ -25,7 +25,7 @@ export interface PlaylistEditContainerProps {
   data: Object;
 }
 
-const PlaylistEdit = ({ navigation, route }) => {
+const PlaylistEdit = ({ navigation, route }: PageProps) => {
   const dispatch = useDispatch();
 
   const { playlistId } = route.params;
@@ -87,9 +87,9 @@ const PlaylistEdit = ({ navigation, route }) => {
           />
         </View>
       </TouchableWithoutFeedback>
-      {/* selectedItems.length > 0 && (
+      {selectedItems.length > 0 && (
         <ListActionButton danger={false} icon="delete-outline" actionCb={() => showCardMenu(selectedItems.length)} label={'Remove Items from Playlist'} />
-      ) */}
+      )}
       <MediaList
         onViewDetail={(itm) => onViewMediaItemClicked({ mediaId: itm._id, uri: itm.uri })}
         list={items}

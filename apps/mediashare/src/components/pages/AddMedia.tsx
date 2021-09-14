@@ -19,13 +19,13 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
 import { minLength } from '../../lib/Validators';
 
 import { findUserPlaylists } from '../../state/modules/playlists';
 
-export const AddMedia = () => {
+export const AddMedia = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);

@@ -20,13 +20,13 @@ import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { MediaList, MediaListType } from '../layout/MediaList';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 
-interface PlaylistAddContainerProps {
+interface PlaylistAddContainerProps extends PageProps {
   children: ReactNode;
 }
 
-export function PlaylistAdd({}: PlaylistAddContainerProps) {
+const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);

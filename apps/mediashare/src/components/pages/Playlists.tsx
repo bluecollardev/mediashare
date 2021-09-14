@@ -18,7 +18,7 @@ import { useLoadData, useLoadPlaylistData } from '../../hooks/useLoadData';
 import { View } from 'react-native';
 import { List } from 'native-base';
 import { MediaListItem } from '../layout/MediaListItem';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
 
@@ -69,14 +69,7 @@ export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked =
   );
 };
 
-export interface PlaylistsContainerProps {
-  navigation: any;
-  fetchList: Function;
-  data: Object;
-  state: Object;
-}
-
-export const Playlists = () => {
+export const Playlists = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });

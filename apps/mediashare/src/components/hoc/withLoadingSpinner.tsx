@@ -12,10 +12,17 @@ import { PageContainer } from '../layout/PageContainer';
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [loaded]); */
 
+export interface LoadingSpinnerProps {
+  loadData: (action, params) => {};
+  isLoading: boolean;
+  startLoad: () => {};
+  endLoad: () => {};
+}
+
 export const withLoadingSpinner = (WrapperComponent) => (props) => {
   const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
-  const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
+  const [{ AppSpinner, isLoading, startLoad, endLoad }] = useSpinner({ loadingState: true });
 
   return (
     <PageContainer>

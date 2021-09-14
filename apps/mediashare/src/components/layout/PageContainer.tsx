@@ -5,7 +5,13 @@ import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
 import { useAppSelector } from '../../state';
 import { useDispatch } from 'react-redux';
 import { clearError } from '../../state/modules/app-state';
-interface PageContainerProps {
+
+export interface PageProps {
+  navigation: any;
+  route: any;
+}
+
+export interface PageContainerProps {
   children: ReactNode;
 }
 

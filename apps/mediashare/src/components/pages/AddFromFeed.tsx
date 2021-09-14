@@ -13,12 +13,12 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useSpinner } from '../../hooks/useSpinner';
 
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 import { ScrollView, View } from 'react-native';
 import { Subheading, Card } from 'react-native-paper';
 import { findUserPlaylists } from '../../state/modules/playlists';
 
-export const AddFromFeed = () => {
+export const AddFromFeed = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
 
   const goToMediaItems = useRouteName(ROUTES.media);

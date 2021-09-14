@@ -10,13 +10,11 @@ import { FAB } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { MediaItemCard } from '../layout/MediaItemCard';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
 
-import { findUserPlaylists } from '../../state/modules/playlists';
-
-const PlaylistItemDetail = ({ route }) => {
+const PlaylistItemDetail = ({ route }: PageProps) => {
   const dispatch = useDispatch();
 
   const { mediaId, uri } = route?.params || {};
@@ -62,20 +60,20 @@ const PlaylistItemDetail = ({ route }) => {
         <View>
           <MediaItemCard title={title} description={description} image={mediaItemSrc} showActions={false} category={category} author={author} />
         </View>
-        <FAB.Group
-          visible={true}
-          open={fabState.open}
-          icon={fabState.open ? 'close' : 'more-vert'}
-          actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
-          onStateChange={(open) => {
-            // open && setOpen(!open);
-            setState(open);
-          }}
-          // onPress={() => setOpen(!open)}
-        />
       </ScrollView>
+      <FAB.Group
+        visible={true}
+        open={fabState.open}
+        icon={fabState.open ? 'close' : 'more-vert'}
+        actions={fabActions}
+        color={theme.colors.primaryTextLighter}
+        fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+        onStateChange={(open) => {
+          // open && setOpen(!open);
+          setState(open);
+        }}
+        // onPress={() => setOpen(!open)}
+      />
     </PageContainer>
   );
 };

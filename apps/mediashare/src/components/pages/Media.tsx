@@ -14,13 +14,13 @@ import { MediaListItem } from '../layout/MediaListItem';
 
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
 
-import { PageContainer } from '../layout/PageContainer';
 import { RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { theme } from '../../styles';
 import { Card, FAB, Subheading } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { findUserPlaylists } from '../../state/modules/playlists';
+import { PageContainer, PageProps } from '../layout/PageContainer';
+
+import { theme } from '../../styles';
 
 export const MediaComponent = ({ onViewDetail, list, selectable }: { navigation: any; list: MediaItemDto[]; onViewDetail: any; selectable: boolean }) => {
   const sortedList = list.map((item) => item);
@@ -48,7 +48,8 @@ export const MediaComponent = ({ onViewDetail, list, selectable }: { navigation:
   );
 };
 
-export const Media = (props: { navigation: any }) => {
+export const Media = ({ navigation }: PageProps) => {
+  const forceUpdate = true;
   const dispatch = useDispatch();
 
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
@@ -57,10 +58,7 @@ export const Media = (props: { navigation: any }) => {
 
   const { loaded, mediaItems } = useAppSelector((state) => state.mediaItems);
 
-  const [isLoaded, setIsLoaded] = useState(loaded);
-  const onEditItem = async function (item: MediaItem) {
-    editMedia({ mediaId: item._id, uri: item.uri });
-  };
+  const [isLoaded, setIsLoaded] = useState(forceUpdate || loaded);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(async () => {
@@ -86,8 +84,8 @@ export const Media = (props: { navigation: any }) => {
   return (
     <PageContainer>
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        {mediaItems.length > 0 ? (
-          <MediaComponent navigation={props.navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />
+        {loaded && mediaItems.length > 0 ? (
+          <MediaComponent navigation={navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />
         ) : (
           <Card>
             <Card.Content>
@@ -96,7 +94,6 @@ export const Media = (props: { navigation: any }) => {
           </Card>
         )}
       </ScrollView>
-      {/* <Portal> */}
       <FAB.Group
         visible={true}
         open={state.open}
@@ -110,9 +107,12 @@ export const Media = (props: { navigation: any }) => {
         }}
         // onPress={() => setOpen(!open)}
       />
-      {/* </Portal> */}
     </PageContainer>
   );
+
+  async function onEditItem(item: MediaItem) {
+    editMedia({ mediaId: item._id, uri: item.uri });
+  }
 };
 
 export default withLoadingSpinner(Media);

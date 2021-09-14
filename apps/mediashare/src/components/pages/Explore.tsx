@@ -15,7 +15,7 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
 
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
 
 /* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
@@ -85,7 +85,7 @@ export const ExploreComponent = ({ onViewDetailClicked, list = [] }: ExploreProp
   );
 };
 
-export const Explore = () => {
+export const Explore = ({ navigation }: PageProps) => {
   // Set up the loader
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = useDispatch();

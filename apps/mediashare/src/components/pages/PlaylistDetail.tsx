@@ -16,13 +16,11 @@ import { FAB } from 'react-native-paper';
 import { PlaylistCard } from '../layout/PlaylistCard';
 import { MediaList } from '../layout/MediaList';
 import { ListActionButton } from '../layout/ListActionButton';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
 
-export const PlaylistDetail = ({ route }) => {
-  const dispatch = useDispatch();
-
+export const PlaylistDetail = ({ route }: PageProps) => {
   const { playlistId = '' } = route?.params;
 
   const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
@@ -77,20 +75,20 @@ export const PlaylistDetail = ({ route }) => {
             <ListActionButton icon="playlist-add" label="Add From Collection" actionCb={() => onAddToPlaylistClicked({ playlistId })} />
           </View>
         </View>
-        <FAB.Group
-          visible={true}
-          open={fabState.open}
-          icon={fabState.open ? 'close' : 'more-vert'}
-          actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
-          onStateChange={(open) => {
-            // open && setOpen(!open);
-            setState(open);
-          }}
-          // onPress={() => setOpen(!open)}
-        />
       </ScrollView>
+      <FAB.Group
+        visible={true}
+        open={fabState.open}
+        icon={fabState.open ? 'close' : 'more-vert'}
+        actions={fabActions}
+        color={theme.colors.primaryTextLighter}
+        fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+        onStateChange={(open) => {
+          // open && setOpen(!open);
+          setState(open);
+        }}
+        // onPress={() => setOpen(!open)}
+      />
     </PageContainer>
   );
 };

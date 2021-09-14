@@ -8,7 +8,7 @@ import { RootState } from '../../state';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
 import { Button, Card, TextInput } from 'react-native-paper';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 import { findUserPlaylists } from '../../state/modules/playlists';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
@@ -28,13 +28,12 @@ function validatePassword(password: string) {
 
 export interface LoginProps {
   loginForm: any;
-
   onLogin: any;
 }
 
 export interface LoginState extends Pick<RootState, never> {}
 
-const LoginComponent = () => {
+const LoginComponent = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
 
   const [username, setUsername] = useState('test@example.com');

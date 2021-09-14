@@ -14,11 +14,9 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { View, ScrollView, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import styles from '../../styles';
-
-import { findUserPlaylists } from '../../state/modules/playlists';
 
 export interface MediaItemEditContainerProps {
   navigation: any;
@@ -28,7 +26,7 @@ export interface MediaItemEditContainerProps {
 
 export interface MediaItemEditContainerState {}
 
-const MediaItemEdit = ({ navigation, route }) => {
+const MediaItemEdit = ({ navigation, route }: PageProps) => {
   const dispatch = useDispatch();
 
   const { mediaId, uri } = route?.params || {};

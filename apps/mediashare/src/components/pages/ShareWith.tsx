@@ -15,14 +15,14 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ScrollView, View } from 'react-native';
 import { ActionButtons } from '../layout/ActionButtons';
 import { ContactList } from '../layout/ContactList';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 import { useSpinner } from '../../hooks/useSpinner';
 
 export interface ShareWithContainerProps {
   navigation: any;
 }
 
-const ShareWith = () => {
+const ShareWith = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });

@@ -2,20 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ScrollView, View } from 'react-native';
-import { Container } from 'native-base';
 
 import { useAppSelector } from '../../state';
 import { getMediaItemById } from '../../state/modules/media-items';
 
 import { ExploreItemCard } from '../layout/ExploreItemCard';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 
-import styles from '../../styles';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { findUserPlaylists } from '../../state/modules/playlists';
-
-const ExploreItemDetail = ({ route }) => {
+const ExploreItemDetail = ({ route }: PageProps) => {
   const dispatch = useDispatch();
 
   const onEditClicked = () => {};
@@ -37,11 +33,11 @@ const ExploreItemDetail = ({ route }) => {
 
   if (!isLoaded && !mediaItem) {
     return (
-      <Container style={styles.container}>
+      <PageContainer>
         <View>
           <ExploreItemCard title="" description="" showActions={false} category="" onEditClicked={onEditClicked} onDeleteClicked={onDeleteClicked} author="" />
         </View>
-      </Container>
+      </PageContainer>
     );
   }
   const { title, description, category, author } = mediaItem || {};

@@ -13,12 +13,10 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { MediaListItem } from '../layout/MediaListItem';
 import { ActionButtons } from '../layout/ActionButtons';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 
-export interface AddFromCollectionProps {
-  navigation: any;
+export interface AddFromCollectionProps extends PageProps {
   onViewDetail: () => void;
-  items: MediaItem[];
 }
 
 export interface AddFromCollectionState {}

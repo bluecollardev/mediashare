@@ -10,9 +10,9 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { PlaylistCard } from '../layout/PlaylistCard';
 import { MediaList } from '../layout/MediaList';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 
-export const ExploreDetail = ({ route }) => {
+export const ExploreDetail = ({ route }: PageProps) => {
   const dispatch = useDispatch();
 
   const onViewMediaItemClicked = useViewSharedMediaItem();

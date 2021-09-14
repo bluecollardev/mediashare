@@ -14,9 +14,9 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList, MediaListType } from '../layout/MediaList';
-import { PageContainer } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 
-export const AddToPlaylist = ({ route }) => {
+export const AddToPlaylist = ({ route }: PageProps) => {
   const dispatch = useDispatch();
 
   const viewMediaItem = useViewMediaItem();
