@@ -16,7 +16,6 @@ import MediaItemDetail from './components/pages/MediaItemDetail';
 import MediaItemEdit from './components/pages/MediaItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
-import Settings from './components/layout/Accordion';
 
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
 
@@ -120,11 +119,6 @@ const routeConfig = {
     name: 'account',
     component: Account,
     options: { title: 'Account', header: AppScreenHeader },
-  },
-  settings: {
-    name: 'settings',
-    component: Settings,
-    options: { title: 'Settings', header: AppScreenHeader },
   },
 } as const;
 type RouteEnumKeys = keyof typeof routeConfig;

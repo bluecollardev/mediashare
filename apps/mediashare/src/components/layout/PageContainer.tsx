@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import themeStyles, { theme } from '../../styles';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
@@ -42,7 +42,7 @@ function PageContainer({ children }: PageContainerProps) {
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',

@@ -113,7 +113,12 @@ export const AddMediaContainer = () => {
                 onDescriptionChange={onDescriptionChange}
                 isEdit={true}
               >
-                <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 15, marginBottom: 0 }}>
+                <CardItem
+                  button
+                  onPress={getDocument}
+                  cardBody
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 15, marginBottom: 0 }}
+                >
                   {documentUri ? (
                     <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
                   ) : (

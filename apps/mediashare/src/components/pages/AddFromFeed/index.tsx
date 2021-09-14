@@ -60,9 +60,7 @@ export const AddFromFeedContainer = () => {
         {(!items || items.length === 0) && loaded && (
           <Card>
             <Card.Content>
-              <Subheading style={{ textAlign: "center" }}>
-                Your media collection is in sync!
-              </Subheading>
+              <Subheading style={{ textAlign: 'center' }}>Your media collection is in sync!</Subheading>
             </Card.Content>
           </Card>
         )}

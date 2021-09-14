@@ -25,7 +25,7 @@ const ShareWithContainer = () => {
   const viewPlaylists = useRouteName(ROUTES.playlists);
   const [loaded, setLoaded] = React.useState(false);
   const actionCb = async function () {
-    const res = await dispatch(
+    await dispatch(
       shareUserPlaylist({
         userIds: selectedUsers.map((user) => user._id),
         playlistIds: playlists.map((playlist) => playlist._id),

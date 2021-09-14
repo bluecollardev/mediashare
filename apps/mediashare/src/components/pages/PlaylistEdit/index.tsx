@@ -18,20 +18,12 @@ import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
 
 import PageContainer from '../../layout/PageContainer';
 import { useSpinner } from '../../../hooks/useSpinner';
-import AppContent from '../../layout/AppContent';
-
-export interface PlaylistEditProps {
-  navigation: any;
-  list: any;
-}
 
 export interface PlaylistEditContainerProps {
   navigation: any;
   fetchList: Function;
   data: Object;
 }
-
-export interface PlaylistEditContainerState {}
 
 const PlaylistEditContainer = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -96,21 +88,19 @@ const PlaylistEditContainer = ({ navigation, route }) => {
     );
   };
   const save = async function () {
-    const result = await withIds(selectedPlaylist.mediaIds);
+    await withIds(selectedPlaylist.mediaIds);
     setLoaded(false);
     await loadData();
   };
   const saveMediaUpdates = async function () {
     const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
 
-    const result = await withIds(filtered);
+    await withIds(filtered);
     setLoaded(false);
     startLoad();
     await loadData();
   };
   const onViewMediaItemClicked = useViewMediaItem();
-
-  // const {username} = useAppSelector((state) => state.user)
 
   const items = selectedPlaylist?.mediaItems || [];
   const author = '';
@@ -124,7 +114,7 @@ const PlaylistEditContainer = ({ navigation, route }) => {
   };
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
-  const showCardMenu = function (count: number) {
+  const showCardMenu = function () {
     ActionSheet.show(
       {
         options: ['Cancel', 'Remove'],
@@ -177,8 +167,6 @@ const PlaylistEditContainer = ({ navigation, route }) => {
         addItem={onAddItem}
         showThumbnail={true}
       />
-
-
       <ActionButtons rightIcon={'check-circle'} actionCb={() => save()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
     </PageContainer>
   );

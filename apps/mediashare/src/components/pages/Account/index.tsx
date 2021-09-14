@@ -1,33 +1,28 @@
 import React from 'react';
-import { Container, View } from 'native-base';
 
+import { View } from 'react-native';
+import PageContainer from '../../layout/PageContainer';
 import { AccountForm } from '../../layout/AccountForm';
 
-import styles from '../../../styles';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 
-// import { Accordion } from '../../layout/Accordion';
+import styles from '../../../styles';
 
 export interface AccountContainerProps {
   navigation: any;
-  fetchList: Function;
-  data: Object;
 }
-
-export interface AccountContainerState {}
 
 export const AccountContainer = ({ navigation }: AccountContainerProps) => {
   return (
-    <Container style={styles.container}>
+    <PageContainer>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View>
+          <View style={{ flex: 1 }}>
             <AccountForm navigation={navigation} />
-            {/* <Accordion /> */}
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </Container>
+    </PageContainer>
   );
 };
 

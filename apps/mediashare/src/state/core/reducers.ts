@@ -28,6 +28,7 @@ export const rejectedReducer = (state) => ({ ...state, loading: true });
 export const addItems = (stateKey: string) => <T>(state: RootState, action: PayloadAction<T>): RootState => {
   const items = state[stateKey];
   // TODO: Maybe we can do something better
+  // @ts-ignore
   const createCount = action.payload.count;
   const startIndex = items.length > 0 ? Math.max(...items.map((item) => item.order)) + 1 : 0;
   const maxIndex = startIndex + createCount;
@@ -51,6 +52,7 @@ export const updateItem = (stateKey: string) => <T>(state: RootState, action: Pa
   if (!action.payload.id) {
     return { ...state };
   } // We could throw an error here...
+  // @ts-ignore
   const item = items.find((item) => item.id === action.payload.id);
   if (!item) {
     return { ...state };
