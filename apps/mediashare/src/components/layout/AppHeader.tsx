@@ -23,7 +23,7 @@ export const AppHeader = (props: AppHeaderProps) => {
       {showBack && <Appbar.BackAction onPress={navigation.goBack} />}
 
       <Appbar.Content title={title} />
-      {showSort && <Appbar.Action icon={'filter'} onPress={() => {}} />}
+      {/* showSort && <Appbar.Action icon={'filter'} onPress={() => {}} /> */}
     </Appbar.Header>
   );
 };
