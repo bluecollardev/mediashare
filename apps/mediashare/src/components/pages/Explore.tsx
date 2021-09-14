@@ -89,7 +89,7 @@ export const Explore = ({ navigation }: PageProps) => {
   // Set up the loader
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = useDispatch();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setIsLoaded] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
   const loadData = async function () {
@@ -104,7 +104,7 @@ export const Explore = ({ navigation }: PageProps) => {
   // Load our data right before rendering
   useEffect(() => {
     if (!loaded) {
-      loadData().then(() => setLoaded(true));
+      loadData().then(() => setIsLoaded(true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);

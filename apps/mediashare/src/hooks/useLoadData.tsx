@@ -3,12 +3,13 @@ import { useDispatch } from 'react-redux';
 import { CombinedState } from 'redux';
 
 import { RootState, useAppSelector } from '../state';
-import { findUserPlaylists } from '../state/modules/playlists';
-import { getPlaylistById } from '../state/modules/playlists/index';
+import { findUserPlaylists, getPlaylistById } from '../state/modules/playlists';
+
 interface LoadDataResult {
   loaded: boolean;
   state: CombinedState<RootState>;
 }
+
 export function useLoadData({ action }: { action: any }) {
   // const [{ startLoad, endLoad, AppSpinner }] = useSpinner();
   const dispatch = useDispatch();
@@ -16,11 +17,7 @@ export function useLoadData({ action }: { action: any }) {
   const state = useAppSelector((state) => state);
   useEffect(() => {
     const loadData = async function () {
-      // startLoad();
-
       await dispatch(action({}));
-
-      // setTimeout(() => endLoad(), 1000);
     };
     if (!loaded) {
       loadData();

@@ -24,7 +24,7 @@ export interface ShareWithContainerProps {
 
 const ShareWith = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setIsLoaded] = useState(false);
   const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
   const loadData = async function () {
     await dispatch(findUserPlaylists({}));
@@ -39,7 +39,7 @@ const ShareWith = ({ navigation }: PageProps) => {
         playlistIds: playlists.map((playlist) => playlist._id),
       })
     );
-    setLoaded(false);
+    setIsLoaded(false);
 
     viewPlaylists();
   };
@@ -54,13 +54,13 @@ const ShareWith = ({ navigation }: PageProps) => {
   useEffect(() => {
     if (!loaded) {
       dispatch(loadUsers());
-      setLoaded(true);
+      setIsLoaded(true);
     }
   }, [loaded, dispatch]);
 
   useEffect(() => {
     if (!loaded) {
-      loadData().then(() => setLoaded(true));
+      loadData().then(() => setIsLoaded(true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);

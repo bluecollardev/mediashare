@@ -22,8 +22,8 @@ export const addItemToObj = <S extends string, T>(stateKey: S) => {
   };
   return reducer;
 };
-export const pendingReducer = (state) => ({ ...state, loading: true });
-export const rejectedReducer = (state) => ({ ...state, loading: true });
+export const pendingReducer = (state) => ({ ...state });
+export const rejectedReducer = (state) => ({ ...state });
 
 export const addItems = (stateKey: string) => <T>(state: RootState, action: PayloadAction<T>): RootState => {
   const items = state[stateKey];

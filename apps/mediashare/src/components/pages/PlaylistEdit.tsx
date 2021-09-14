@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../state';
-import { findUserPlaylists, getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
+import { getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
 
 import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 
@@ -10,7 +10,6 @@ import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { ActionSheet } from 'native-base';
 
 import { useViewMediaItem } from '../../hooks/NavigationHooks';
-import { useSpinner } from '../../hooks/useSpinner';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
@@ -19,43 +18,27 @@ import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { ListActionButton } from '../layout/ListActionButton';
 
-export interface PlaylistEditContainerProps {
-  navigation: any;
-  fetchList: Function;
-  data: Object;
-}
-
-const PlaylistEdit = ({ navigation, route }: PageProps) => {
+const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
   const dispatch = useDispatch();
 
   const { playlistId } = route.params;
 
-  const [loaded, setLoaded] = useState(false);
-  const playlist = useAppSelector((state) => state.playlist);
-  const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
-  const { selectedPlaylist } = playlist;
+  const { loaded, selectedPlaylist } = useAppSelector((state) => state.playlist);
+  const [isLoaded, setIsLoaded] = useState(loaded);
+  // const [refreshing, setRefreshing] = useState(false);
+
   const [title, setTitle] = useState(selectedPlaylist?.title);
   const [description, setDescription] = useState(selectedPlaylist?.description);
   const [category, setCategory] = useState(selectedPlaylist?.category);
-
   const [selectedItems, setSelectedItems] = useState([]);
 
-  // const [selectedItems] = useState(new Set<string>());
-
   useEffect(() => {
-    async function loadData() {
-      await dispatch(getPlaylistById(playlistId));
-      endLoad();
+    if (!isLoaded) {
+      loadData().then(onDataLoaded);
     }
-    if (!loaded) {
-      loadData();
-      setLoaded(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaded, dispatch, playlistId]);
+  }, [isLoaded, dispatch, onDataLoaded]);
 
   const options = [];
-
   for (const value in UpdatePlaylistDtoCategoryEnum) {
     options.push(value);
   }
@@ -116,7 +99,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
 
   async function loadData() {
     await dispatch(getPlaylistById(playlistId));
-    setLoaded(true);
+    setIsLoaded(true);
   }
 
   // const [selected, setSelected] = useState(selectedItems.size);
@@ -133,7 +116,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
 
   async function save() {
     await withIds(selectedPlaylist.mediaIds);
-    setLoaded(false);
+    setIsLoaded(false);
     await loadData();
   }
 
@@ -141,7 +124,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
     const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
 
     await withIds(filtered);
-    setLoaded(false);
+    setIsLoaded(false);
     startLoad();
     await loadData();
   }

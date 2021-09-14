@@ -49,7 +49,7 @@ const PlaylistItemDetail = ({ route }: PageProps) => {
 
   useEffect(() => {
     if (!loaded) {
-      // loadData().then(() => setLoaded(true));
+      // loadData().then(() => setIsLoaded(true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);

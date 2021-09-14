@@ -29,12 +29,12 @@ const initialState: UsersState = {
 export const usersReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(loadUsers.fulfilled, (state, action) => {
-      return { ...state, loading: false, entities: action.payload };
+      return { ...state, entities: action.payload };
     })
     .addCase(loadUsers.rejected, (state) => {
-      return { ...state, loading: false };
+      return { ...state };
     })
-    .addCase(loadUsers.pending, (state) => ({ ...state, loading: true }));
+    .addCase(loadUsers.pending, (state) => ({ ...state }));
   // .addCase(UsersActions.loadUsers, genericListReducers.addItems(USERS_STATE_KEY))
   // .addCase(UsersActions.addUser, genericListReducers.addItems(USERS_STATE_KEY))
   // .addCase(UsersActions.addUsers, genericListReducers.addItems(USERS_STATE_KEY))

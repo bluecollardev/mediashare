@@ -31,7 +31,7 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
     selectedItems.delete(id);
   };
 
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setIsLoaded] = useState(false);
   const items = useAppSelector((state) => state.mediaItem.feed);
   const [{ AppSpinner, startLoad, endLoad }] = useSpinner();
 
@@ -47,7 +47,7 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
     const loadData = async function () {
       startLoad();
       await dispatch(getFeedMediaItems());
-      setLoaded(true);
+      setIsLoaded(true);
       endLoad();
     };
 

@@ -49,10 +49,10 @@ const slice = createSlice({
         return { ...user, mediaIds: [] };
       })
       .addCase(createPlaylist.rejected, (state) => {
-        return { ...state, loading: false };
+        return { ...state };
       })
       .addCase(createPlaylist.pending, (state) => {
-        return { ...state, loading: true };
+        return { ...state };
       });
   },
 });

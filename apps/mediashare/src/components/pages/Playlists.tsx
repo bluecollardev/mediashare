@@ -95,7 +95,8 @@ export const Playlists = ({ navigation, onDataLoaded }: PageProps) => {
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
     { icon: 'ios-share', onPress: shareWithAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'playlist-add', onPress: createPlaylistAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'share', onPress: createPlaylistAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'playlist-add', onPress: createPlaylistAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
   return (

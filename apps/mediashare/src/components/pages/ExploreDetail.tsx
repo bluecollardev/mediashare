@@ -20,10 +20,10 @@ export const ExploreDetail = ({ route }: PageProps) => {
   const loadData = async function () {
     await dispatch(getPlaylistById(playlistId));
 
-    setLoaded(true);
+    setIsLoaded(true);
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setIsLoaded] = useState(false);
   const playlist = useAppSelector((state) => state.playlist);
 
   const { playlistId = '' } = route?.params;

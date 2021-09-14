@@ -67,9 +67,9 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
 
   const [fabState, setState] = useState({ open: false });
   const fabActions = [
-    { icon: 'delete', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
     { icon: 'cloud-upload', onPress: addFromFeed, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
     { icon: 'library-add', onPress: addMedia, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'edit', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
   return (

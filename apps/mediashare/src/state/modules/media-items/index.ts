@@ -199,12 +199,12 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
       loading: false,
       loaded: true,
     }))
-    .addCase(getMediaItemById.rejected, (state) => ({ ...state, loading: false, loaded: true, mediaItem: null }))
+    .addCase(getMediaItemById.rejected, (state) => ({ ...state, mediaItem: null }))
     .addCase(addMediaItem.pending, (state) => {
-      return { ...state, loading: true };
+      return { ...state };
     })
     .addCase(addMediaItem.rejected, (state) => {
-      return { ...state, loading: false };
+      return { ...state };
     })
 
     .addCase(addMediaItem.fulfilled, (state, action) => {
@@ -217,14 +217,14 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
       };
     })
     .addCase(getFeedMediaItems.pending, (state) => {
-      return { ...state, loading: true };
+      return { ...state };
     })
     .addCase(getFeedMediaItems.rejected, (state) => {
-      return { ...state, loading: false };
+      return { ...state };
     })
 
     .addCase(getFeedMediaItems.fulfilled, (state, action) => {
-      return { ...state, loading: false, feed: action.payload };
+      return { ...state, feed: action.payload };
     })
 
     .addCase(selectMediaItem, (state, action) => {
@@ -238,11 +238,11 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
 const mediaItemsReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(findMediaItems.rejected, (state) => {
-      return { ...state, loading: false, loaded: false };
+      return { ...state };
     })
 
     .addCase(findMediaItems.pending, (state) => {
-      return { ...state, loading: true, loaded: false };
+      return { ...state };
     })
     .addCase(findMediaItems.fulfilled, (state, action) => {
       return {
@@ -257,14 +257,14 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
     })
 
     .addCase(saveFeedMediaItems.pending, (state) => {
-      return { ...state, loading: true };
+      return { ...state };
     })
     .addCase(saveFeedMediaItems.rejected, (state) => {
-      return { ...state, loading: false };
+      return { ...state };
     })
 
     .addCase(saveFeedMediaItems.fulfilled, (state) => {
-      return { ...state, loading: false, loaded: false };
+      return { ...state };
     });
 });
 

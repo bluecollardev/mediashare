@@ -9,8 +9,6 @@ import { CreatePlaylistResponseDto } from '../../../api/models/create-playlist-r
 import { PlaylistResponseDto } from '../../../rxjs-api/models/PlaylistResponseDto';
 import { flattenDeep } from 'remeda';
 import { merge } from 'rxjs';
-import { useDispatch } from 'react-redux';
-import { loading } from '../app-state';
 
 const PLAYLIST_ACTIONS = [
   'GET_USER_PLAYLIST',
@@ -39,7 +37,6 @@ export const getUserPlaylistById = createAsyncThunk(playlistActionTypes.getUserP
 
 export const addUserPlaylist = createAsyncThunk(playlistActionTypes.addUserPlaylist, async (playlist: CreatePlaylistDto, { extra }) => {
   const response = await apis.playlists.playlistControllerCreate({ createPlaylistDto: playlist }).toPromise();
-
   return response;
 });
 
@@ -101,7 +98,6 @@ export const removeUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.r
 export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: string, { extra }) => {
   // @ts-ignore - TODO: Add playlistControllerRemoveItem to API service!
   const response = await apis.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
-
   return response;
 });
 
@@ -122,23 +118,22 @@ const initialPlaylistState: { createdPlaylist: CreatePlaylistResponseDto; loadin
 const playlistReducer = createReducer(initialPlaylistState, (builder) => {
   builder
     .addCase(addUserPlaylist.pending, (state) => {
-      return { ...state, loading: true };
+      return { ...state };
     })
     .addCase(addUserPlaylist.fulfilled, (state, action) => {
-      return { ...state, createdPlaylist: action.payload, loading: false };
+      return { ...state, createdPlaylist: action.payload };
     })
-
     .addCase(clearPlaylistAction, (state) => {
       return { ...state, createdPlaylist: null };
     })
     .addCase(getPlaylistById.pending, (state) => {
-      return { ...state, selectedPlaylist: null, loading: true };
+      return { ...state, selectedPlaylist: null };
     })
     .addCase(getPlaylistById.rejected, (state) => {
-      return { ...state, loading: false };
+      return { ...state };
     })
     .addCase(getPlaylistById.fulfilled, (state, action) => {
-      return { ...state, selectedPlaylist: action.payload, loading: false };
+      return { ...state, selectedPlaylist: action.payload };
     });
 });
 // .addCase(addUserPlaylist.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
@@ -148,11 +143,11 @@ const playlistReducer = createReducer(initialPlaylistState, (builder) => {
 
 const playlistsReducer = createReducer(initialState, (builder) => {
   builder.addCase(findUserPlaylists.pending, (state, action) => {
-    return { ...state, userPlaylists: action.payload, loading: true, loaded: false };
+    return { ...state, userPlaylists: action.payload };
   });
   builder
     .addCase(findUserPlaylists.fulfilled, (state, action) => {
-      return { ...state, userPlaylists: action.payload, loading: false, loaded: true };
+      return { ...state, userPlaylists: action.payload };
     })
     .addCase(selectPlaylistAction, (state, action) => {
       const updateSelection = function (bool: boolean, item: PlaylistResponseDto) {

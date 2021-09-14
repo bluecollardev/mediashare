@@ -33,7 +33,7 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
   const [category, setCategory] = useState(CreatePlaylistDtoCategoryEnum.Builder);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setIsLoaded] = useState(false);
 
   const [selected, setSelected] = useState([]);
   const goBack = useGoBack();
@@ -44,7 +44,7 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
     setCategory(CreatePlaylistDtoCategoryEnum.Builder);
     // @ts-ignore
     setDescription('');
-    setLoaded(false);
+    setIsLoaded(false);
     goBack();
   };
 
@@ -77,7 +77,7 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
   useEffect(() => {
     if (!loaded) {
       dispatch(findMediaItems());
-      setLoaded(true);
+      setIsLoaded(true);
     }
   }, [loaded, dispatch]);
 

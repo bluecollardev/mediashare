@@ -27,7 +27,7 @@ export const AddToPlaylist = ({ route }: PageProps) => {
 
   const mediaItemState: MediaListType[] = useAppSelector((state) => state.mediaItems.mediaItems);
 
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setIsLoaded] = useState(false);
   const [mediaItems, setMediaItems] = useState((playlist?.mediaItems as MediaListType[]) || []);
 
   const { playlistId } = route.params;
@@ -36,7 +36,7 @@ export const AddToPlaylist = ({ route }: PageProps) => {
     if (!loaded) {
       dispatch(getPlaylistById(playlistId));
       dispatch(findMediaItems());
-      setLoaded(true);
+      setIsLoaded(true);
     }
   }, [loaded, dispatch, playlistId]);
 
@@ -67,12 +67,12 @@ export const AddToPlaylist = ({ route }: PageProps) => {
       _id: playlistId,
     };
     await dispatch(updateUserPlaylist(dto));
-    setLoaded(false);
+    setIsLoaded(false);
     viewPlaylist({ playlistId });
   }
 
   function cancelCb() {
-    setLoaded(false);
+    setIsLoaded(false);
     goBack();
   }
 
