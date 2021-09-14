@@ -28,7 +28,7 @@ export const AddToPlaylist = ({ route }) => {
   const mediaItemState: MediaListType[] = useAppSelector((state) => state.mediaItems.mediaItems);
 
   const [loaded, setLoaded] = useState(false);
-  const [mediaItems, setMediaItems] = useState(playlist?.mediaItems as MediaListType[]);
+  const [mediaItems, setMediaItems] = useState((playlist?.mediaItems as MediaListType[]) || []);
 
   const { playlistId } = route.params;
 

@@ -18,7 +18,7 @@ import { PageContainer } from '../layout/PageContainer';
 import { RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { theme } from '../../styles';
-import { FAB, Subheading } from 'react-native-paper';
+import { Card, FAB, Subheading } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { findUserPlaylists } from '../../state/modules/playlists';
 
@@ -89,7 +89,11 @@ export const Media = (props: { navigation: any }) => {
         {mediaItems.length > 0 ? (
           <MediaComponent navigation={props.navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />
         ) : (
-          <Subheading style={{ padding: 3 }}>There are no items in your collection</Subheading>
+          <Card>
+            <Card.Content>
+              <Subheading style={{ textAlign: 'center' }}>There are no items in your collection.</Subheading>
+            </Card.Content>
+          </Card>
         )}
       </ScrollView>
       {/* <Portal> */}
