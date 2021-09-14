@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { View, Text } from 'react-native';
-import { Button, Container, Icon } from 'native-base';
+import { ScrollView, Text } from 'react-native';
+import { Button, Icon } from 'native-base';
 
-import { routeConfig } from '../../../routes';
+import { routeConfig } from '../../routes';
 
-import { useViewSharedMediaItem } from '../../../hooks/NavigationHooks';
+import { useViewSharedMediaItem } from '../../hooks/NavigationHooks';
 
-import { useAppSelector } from '../../../state';
-import { getPlaylistById } from '../../../state/modules/playlists';
+import { useAppSelector } from '../../state';
+import { findUserPlaylists, getPlaylistById } from '../../state/modules/playlists';
 
-import { PlaylistCard } from '../../layout/PlaylistCard';
-import { MediaList } from '../../layout/MediaList';
+import { PlaylistCard } from '../layout/PlaylistCard';
+import { MediaList } from '../layout/MediaList';
+import { PageContainer } from '../layout/PageContainer';
 
-import styles from '../../../styles';
+import { useSpinner } from '../../hooks/useSpinner';
 
 export interface ExploreDetailProps {
   navigation: any;
@@ -53,8 +54,9 @@ export interface ExploreDetailContainerProps {
 export interface ExploreDetailContainerState {}
 
 export const ExploreDetailContainer = ({ route }) => {
-  const onViewMediaItemClicked = useViewSharedMediaItem();
   const dispatch = useDispatch();
+
+  const onViewMediaItemClicked = useViewSharedMediaItem();
 
   const loadData = async function () {
     await dispatch(getPlaylistById(playlistId));
@@ -83,12 +85,12 @@ export const ExploreDetailContainer = ({ route }) => {
   const author = user?.username;
 
   return (
-    <Container style={styles.container}>
-      <View>
+    <PageContainer>
+      <ScrollView>
         <PlaylistCard title={title} author={author} description={description} showSocial={false} showActions={false} />
-      </View>
-      <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
-    </Container>
+        <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
+      </ScrollView>
+    </PageContainer>
   );
 };
 

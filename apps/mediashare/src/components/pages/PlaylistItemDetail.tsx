@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../../state';
-import { getMediaItemById } from '../../../state/modules/media-items';
+import { useAppSelector } from '../../state';
+import { getMediaItemById } from '../../state/modules/media-items';
 
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { FAB } from 'react-native-paper';
-import { MediaItemCard } from '../../layout/MediaItemCard';
-import PageContainer from '../../layout/PageContainer';
+import { MediaItemCard } from '../layout/MediaItemCard';
+import { PageContainer } from '../layout/PageContainer';
 
-import { theme } from '../../../styles';
+import { theme } from '../../styles';
+import { useSpinner } from '../../hooks/useSpinner';
+import { findUserPlaylists } from '../../state/modules/playlists';
 
 export interface PlaylistItemDetailContainerProps {
   navigation: any;
@@ -54,31 +56,33 @@ const PlaylistItemDetailContainer = ({ route }) => {
 
   const { title, description, category, author } = mediaItem || {};
 
+  useEffect(() => {
+    if (!loaded) {
+      loadData().then(() => setLoaded(true));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded]);
+
   return (
     <PageContainer>
-      <View>
-        <MediaItemCard
-          title={title}
-          description={description}
-          image={mediaItemSrc}
-          showActions={false}
-          category={category}
-          author={author}
+      <ScrollView>
+        <View>
+          <MediaItemCard title={title} description={description} image={mediaItemSrc} showActions={false} category={category} author={author} />
+        </View>
+        <FAB.Group
+          visible={true}
+          open={fabState.open}
+          icon={fabState.open ? 'close' : 'more-vert'}
+          actions={fabActions}
+          color={theme.colors.primaryTextLighter}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          onStateChange={(open) => {
+            // open && setOpen(!open);
+            setState(open);
+          }}
+          // onPress={() => setOpen(!open)}
         />
-      </View>
-      <FAB.Group
-        visible={true}
-        open={fabState.open}
-        icon={fabState.open ? 'close' : 'more-vert'}
-        actions={fabActions}
-        color={theme.colors.primaryTextLighter}
-        fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
-        onStateChange={(open) => {
-          // open && setOpen(!open);
-          setState(open);
-        }}
-        // onPress={() => setOpen(!open)}
-      />
+      </ScrollView>
     </PageContainer>
   );
 };

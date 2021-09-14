@@ -1,32 +1,35 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useGoBack, useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
+import { useGoBack, useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
 
-import { ROUTES } from '../../../routes';
+import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../../state';
-import { findMediaItems } from '../../../state/modules/media-items';
-import { addUserPlaylist, findUserPlaylists } from '../../../state/modules/playlists';
+import { useAppSelector } from '../../state';
+import { findMediaItems } from '../../state/modules/media-items';
+import { addUserPlaylist, findUserPlaylists } from '../../state/modules/playlists';
 
-import { ActionButtons } from '../../layout/ActionButtons';
-import { MediaCard } from '../../layout/MediaCard';
-import { MediaList, MediaListType } from '../../layout/MediaList';
+import { ActionButtons } from '../layout/ActionButtons';
+import { MediaCard } from '../layout/MediaCard';
+import { MediaList, MediaListType } from '../layout/MediaList';
 
-import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
+import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 
-import styles from '../../../styles';
-import { titleValidator, descriptionValidator, categoryValidator } from '../../layout/formConfig';
-import { minLength } from '../Login';
-import PageContainer from '../../layout/PageContainer';
+import styles from '../../styles';
+import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
+import { minLength } from './Login';
+import { PageContainer } from '../layout/PageContainer';
 import { KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { useSpinner } from '../../hooks/useSpinner';
 
 interface PlaylistAddContainerProps {
   children: ReactNode;
 }
 
 function PlaylistAddContainer({}: PlaylistAddContainerProps) {
+  const dispatch = useDispatch();
+
   const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
@@ -53,8 +56,6 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
   const cancelCb = clearAndGoBack;
-
-  const dispatch = useDispatch();
 
   const onMediaItemClick = (e) => {
     goToItem({ mediaId: e._id });
@@ -99,7 +100,6 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
   };
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     <PageContainer>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -131,7 +131,7 @@ function PlaylistAddContainer({}: PlaylistAddContainerProps) {
       </ScrollView>
 
       <ActionButtons
-        rightIcon={'add'}
+        rightIcon="check-circle"
         actionCb={() => saveItem()}
         cancelCb={cancelCb}
         actionLabel={actionLabel}

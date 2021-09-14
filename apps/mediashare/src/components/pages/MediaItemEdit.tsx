@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../../state';
-import { createThumbnail, getMediaItemById, updateMediaItem } from '../../../state/modules/media-items';
+import { useAppSelector } from '../../state';
+import { createThumbnail, getMediaItemById, updateMediaItem } from '../../state/modules/media-items';
 
-import { CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum, UpdateMediaItemDto, UpdateMediaItemDtoCategoryEnum } from '../../../rxjs-api';
+import { CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum, UpdateMediaItemDto, UpdateMediaItemDtoCategoryEnum } from '../../rxjs-api';
 
-import { ROUTES } from '../../../routes';
-import { useRouteWithParams } from '../../../hooks/NavigationHooks';
+import { ROUTES } from '../../routes';
+import { useRouteWithParams } from '../../hooks/NavigationHooks';
 
 import { View, ScrollView, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
-import { ActionButtons } from '../../layout/ActionButtons';
-import { MediaCard } from '../../layout/MediaCard';
-import PageContainer from '../../layout/PageContainer';
+import { ActionButtons } from '../layout/ActionButtons';
+import { MediaCard } from '../layout/MediaCard';
+import { PageContainer } from '../layout/PageContainer';
 
-import styles from '../../../styles';
+import styles from '../../styles';
+import { useSpinner } from '../../hooks/useSpinner';
+import { findUserPlaylists } from '../../state/modules/playlists';
 
 export interface MediaItemEditContainerProps {
   navigation: any;

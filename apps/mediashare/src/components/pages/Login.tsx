@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { LoginDto } from '../../../api';
-import { loginAction } from '../../../state/modules/user';
-import { RootState } from '../../../state';
+import { LoginDto } from '../../api';
+import { loginAction } from '../../state/modules/user';
+import { RootState } from '../../state';
 
 import Spinner from 'react-native-loading-spinner-overlay';
-import { SPINNER_DEFAULTS, useSpinner } from '../../../hooks/useSpinner';
+import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
 import { Button, Card, TextInput } from 'react-native-paper';
-import PageContainer from '../../layout/PageContainer';
+import { PageContainer } from '../layout/PageContainer';
+import { findUserPlaylists } from '../../state/modules/playlists';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -34,9 +35,11 @@ export interface LoginProps {
 export interface LoginState extends Pick<RootState, never> {}
 
 const LoginComponent = () => {
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState('test@example.com');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch();
+
   const [{ startLoad, endLoad, AppSpinner }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
 
   const onLogin = async (loginDto: LoginDto) => {
@@ -48,9 +51,9 @@ const LoginComponent = () => {
     }
     endLoad();
   };
+
   return (
     <PageContainer>
-      <AppSpinner />
       <Card elevation={0}>
         <Card.Cover style={{ backgroundColor: '#fff' }} resizeMode={'contain'} source={require('./logo.png')} />
       </Card>

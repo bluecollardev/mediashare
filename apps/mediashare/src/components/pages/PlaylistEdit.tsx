@@ -3,21 +3,21 @@ import { useDispatch } from 'react-redux';
 import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { ActionSheet } from 'native-base';
 
-import { ActionButtons } from '../../layout/ActionButtons';
+import { ActionButtons } from '../layout/ActionButtons';
 
-import { MediaList } from '../../layout/MediaList';
-import { useViewMediaItem } from '../../../hooks/NavigationHooks';
-import { MediaCard } from '../../layout/MediaCard';
+import { MediaList } from '../layout/MediaList';
+import { useViewMediaItem } from '../../hooks/NavigationHooks';
+import { MediaCard } from '../layout/MediaCard';
 
-import { useAppSelector } from '../../../state';
-import { getPlaylistById, updateUserPlaylist } from '../../../state/modules/playlists';
+import { useAppSelector } from '../../state';
+import { findUserPlaylists, getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
 
-import { ListActionButton } from '../../layout/ListActionButton';
+import { ListActionButton } from '../layout/ListActionButton';
 
-import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
+import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 
-import PageContainer from '../../layout/PageContainer';
-import { useSpinner } from '../../../hooks/useSpinner';
+import { PageContainer } from '../layout/PageContainer';
+import { useSpinner } from '../../hooks/useSpinner';
 
 export interface PlaylistEditContainerProps {
   navigation: any;
@@ -27,6 +27,7 @@ export interface PlaylistEditContainerProps {
 
 const PlaylistEditContainer = ({ navigation, route }) => {
   const dispatch = useDispatch();
+
   const { playlistId } = route.params;
 
   const [loaded, setLoaded] = useState(false);
@@ -41,30 +42,6 @@ const PlaylistEditContainer = ({ navigation, route }) => {
 
   // const [selectedItems] = useState(new Set<string>());
 
-  const loadData = async function () {
-    await dispatch(getPlaylistById(playlistId));
-
-    setLoaded(true);
-  };
-
-  // const [selected, setSelected] = useState(selectedItems.size);
-  const onAddItem = (item: MediaItem) => {
-    // setSelected(selectedItems.size);
-    const updatedItems = selectedItems.concat([item._id]);
-    setSelectedItems(updatedItems);
-  };
-
-  const onRemoveItem = (selected: MediaItem) => {
-    const updatedItems = selectedItems.filter((item) => item !== selected._id);
-
-    setSelectedItems(updatedItems);
-  };
-
-  const options = [];
-  for (const value in UpdatePlaylistDtoCategoryEnum) {
-    options.push(value);
-  }
-
   useEffect(() => {
     async function loadData() {
       await dispatch(getPlaylistById(playlistId));
@@ -76,69 +53,22 @@ const PlaylistEditContainer = ({ navigation, route }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded, dispatch, playlistId]);
-  const withIds = function (mediaIds: string[]) {
-    return dispatch(
-      updateUserPlaylist({
-        title: title,
-        mediaIds,
-        description: description,
-        category: category as any,
-        _id: selectedPlaylist._id,
-      })
-    );
-  };
-  const save = async function () {
-    await withIds(selectedPlaylist.mediaIds);
-    setLoaded(false);
-    await loadData();
-  };
-  const saveMediaUpdates = async function () {
-    const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
 
-    await withIds(filtered);
-    setLoaded(false);
-    startLoad();
-    await loadData();
-  };
+  const options = [];
+  for (const value in UpdatePlaylistDtoCategoryEnum) {
+    options.push(value);
+  }
+
   const onViewMediaItemClicked = useViewMediaItem();
 
   const items = selectedPlaylist?.mediaItems || [];
   const author = '';
 
-  const resetData = () => {
-    setSelectedItems([]);
-  };
-  const cancelCb = () => {
-    navigation.goBack();
-    resetData();
-  };
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
-  const showCardMenu = function () {
-    ActionSheet.show(
-      {
-        options: ['Cancel', 'Remove'],
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-      },
-      (buttonIdx) => {
-        switch (buttonIdx) {
-          case 0:
-            console.log(1);
-            break;
-          case 1:
-            saveMediaUpdates();
-            break;
-        }
-      }
-    );
-  };
-  if (isLoading || !loaded) {
-    return <AppSpinner />;
-  }
+
   return (
     <PageContainer>
-      <AppSpinner />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
           <MediaCard
@@ -170,6 +100,79 @@ const PlaylistEditContainer = ({ navigation, route }) => {
       <ActionButtons rightIcon={'check-circle'} actionCb={() => save()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
     </PageContainer>
   );
+
+  function withIds(mediaIds: string[]) {
+    return dispatch(
+      updateUserPlaylist({
+        title: title,
+        mediaIds,
+        description: description,
+        category: category as any,
+        _id: selectedPlaylist._id,
+      })
+    );
+  }
+
+  async function loadData() {
+    await dispatch(getPlaylistById(playlistId));
+    setLoaded(true);
+  }
+
+  // const [selected, setSelected] = useState(selectedItems.size);
+  function onAddItem(item: MediaItem) {
+    // setSelected(selectedItems.size);
+    const updatedItems = selectedItems.concat([item._id]);
+    setSelectedItems(updatedItems);
+  }
+
+  function onRemoveItem(selected: MediaItem) {
+    const updatedItems = selectedItems.filter((item) => item !== selected._id);
+    setSelectedItems(updatedItems);
+  }
+
+  async function save() {
+    await withIds(selectedPlaylist.mediaIds);
+    setLoaded(false);
+    await loadData();
+  }
+
+  async function saveMediaUpdates() {
+    const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
+
+    await withIds(filtered);
+    setLoaded(false);
+    startLoad();
+    await loadData();
+  }
+
+  function resetData() {
+    setSelectedItems([]);
+  }
+
+  function cancelCb() {
+    navigation.goBack();
+    resetData();
+  }
+
+  function showCardMenu() {
+    ActionSheet.show(
+      {
+        options: ['Cancel', 'Remove'],
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+      },
+      (buttonIdx) => {
+        switch (buttonIdx) {
+          case 0:
+            console.log(1);
+            break;
+          case 1:
+            saveMediaUpdates().then(() => {});
+            break;
+        }
+      }
+    );
+  };
 };
 
 export default PlaylistEditContainer;

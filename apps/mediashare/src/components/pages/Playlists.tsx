@@ -1,25 +1,26 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ROUTES } from '../../../routes';
+import { ROUTES } from '../../routes';
 
-import { findUserPlaylists, selectPlaylistAction } from '../../../state/modules/playlists';
+import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/playlists';
 
-import { useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
+import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
+
+
+
+import { PlaylistResponseDto } from '../../api';
+import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
+import { FAB, Subheading } from 'react-native-paper';
+import { RefreshControl, ScrollView } from 'react-native';
+import { useLoadData, useLoadPlaylistData } from '../../hooks/useLoadData';
 
 import { View } from 'react-native';
 import { List, Text } from 'native-base';
-import { MediaListItem } from '../../layout/MediaListItem';
-import PageContainer from '../../layout/PageContainer';
+import { MediaListItem } from '../layout/MediaListItem';
+import { PageContainer } from '../layout/PageContainer';
 
-import { PlaylistResponseDto } from '../../../api';
-import AppContent from '../../layout/AppContent';
-import { SPINNER_DEFAULTS, useSpinner } from '../../../hooks/useSpinner';
-import { RefreshControl, ScrollView } from 'react-native';
-import { useLoadData, useLoadPlaylistData } from '../../../hooks/useLoadData';
-import AppRefresher from '../../layout/AppRefresher';
-import { theme } from '../../../styles';
-import { FAB, Subheading } from 'react-native-paper';
+import { theme } from '../../styles';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
@@ -83,6 +84,12 @@ export interface PlaylistsContainerProps {
 
 export const PlaylistsContainer = () => {
   const dispatch = useDispatch();
+  const [loaded, setLoaded] = useState(false);
+  const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
+  const loadData = async function () {
+    await dispatch(findUserPlaylists({}));
+  };
+
   const shareWithAction = useRouteName(ROUTES.shareWith);
   const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
   const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
@@ -106,7 +113,14 @@ export const PlaylistsContainer = () => {
     { icon: 'ios-share', onPress: shareWithAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
     { icon: 'playlist-add', onPress: createPlaylistAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
   ];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!loaded) {
+      loadData().then(() => setLoaded(true));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded]);
+
   return (
     <PageContainer>
       {/* <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" /> */}

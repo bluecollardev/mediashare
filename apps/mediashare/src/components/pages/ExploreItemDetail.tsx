@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Container } from 'native-base';
 
-import { useAppSelector } from '../../../state';
-import { getMediaItemById } from '../../../state/modules/media-items';
+import { useAppSelector } from '../../state';
+import { getMediaItemById } from '../../state/modules/media-items';
 
-import { ExploreItemCard } from '../../layout/ExploreItemCard';
+import { ExploreItemCard } from '../layout/ExploreItemCard';
+import { PageContainer } from '../layout/PageContainer';
 
-import styles from '../../../styles';
+import styles from '../../styles';
+import { useSpinner } from '../../hooks/useSpinner';
+import { findUserPlaylists } from '../../state/modules/playlists';
 
 export interface ExploreItemDetailContainerProps {
   navigation: any;
@@ -50,8 +53,8 @@ const ExploreItemDetailContainer = ({ route }) => {
   const { title, description, category, author } = mediaItem || {};
 
   return (
-    <Container style={styles.container}>
-      <View>
+    <PageContainer>
+      <ScrollView>
         <ExploreItemCard
           title={title}
           description={description}
@@ -62,8 +65,8 @@ const ExploreItemDetailContainer = ({ route }) => {
           onDeleteClicked={onDeleteClicked}
           author={author}
         />
-      </View>
-    </Container>
+      </ScrollView>
+    </PageContainer>
   );
 };
 

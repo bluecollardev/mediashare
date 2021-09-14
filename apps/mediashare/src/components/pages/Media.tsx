@@ -3,22 +3,24 @@ import { useDispatch } from 'react-redux';
 import { View } from 'react-native';
 import { List } from 'native-base';
 
-import { ROUTES } from '../../../routes';
+import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../../state';
-import { findMediaItems } from '../../../state/modules/media-items';
+import { useAppSelector } from '../../state';
+import { findMediaItems } from '../../state/modules/media-items';
 
-import { useRouteName, useRouteWithParams } from '../../../hooks/NavigationHooks';
+import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
 // import { TopActionButtons } from '../../layout/TopActionButtons';
-import { MediaListItem } from '../../layout/MediaListItem';
+import { MediaListItem } from '../layout/MediaListItem';
 
-import { MediaItem, MediaItemDto } from '../../../rxjs-api';
+import { MediaItem, MediaItemDto } from '../../rxjs-api';
 
-import PageContainer from '../../layout/PageContainer';
+import { PageContainer } from '../layout/PageContainer';
 import { RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { theme } from '../../../styles';
+import { theme } from '../../styles';
 import { FAB, Subheading } from 'react-native-paper';
+import { useSpinner } from '../../hooks/useSpinner';
+import { findUserPlaylists } from '../../state/modules/playlists';
 
 export interface MediaContainerProps {
   navigation: any;
@@ -56,6 +58,7 @@ export const Media = ({ onViewDetail, list, selectable }: { navigation: any; lis
 
 export const MediaContainer = (props: { navigation: any }) => {
   const dispatch = useDispatch();
+
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
   const addMedia = useRouteName(ROUTES.addMediaItem);
   const editMedia = useRouteWithParams(ROUTES.mediaItemEdit);
@@ -89,8 +92,6 @@ export const MediaContainer = (props: { navigation: any }) => {
 
   return (
     <PageContainer>
-      {/* <TopActionButtons leftAction={addFromFeed} rightAction={addMedia} leftLabel="Add from Feed" rightLabel="Upload" /> */}
-
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {mediaItems.length > 0 ? (
           <Media navigation={props.navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />

@@ -5,24 +5,26 @@ import { View, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Touc
 import { Button, CardItem, Icon, Text } from 'native-base';
 import * as DocumentPicker from 'expo-document-picker';
 
-import { ROUTES } from '../../../routes';
+import { ROUTES } from '../../routes';
 
-import { useGoBack, useRouteWithParams } from '../../../hooks/NavigationHooks';
+import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
 
-import { useAppSelector } from '../../../state';
-import { addMediaItem, createThumbnail } from '../../../state/modules/media-items';
+import { useAppSelector } from '../../state';
+import { addMediaItem, createThumbnail } from '../../state/modules/media-items';
 
-import { ActionButtons } from '../../layout/ActionButtons';
-import { MediaCard } from '../../layout/MediaCard';
+import { ActionButtons } from '../layout/ActionButtons';
+import { MediaCard } from '../layout/MediaCard';
 
-import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum } from '../../../rxjs-api';
-import PageContainer from '../../layout/PageContainer';
-import { categoryValidator, descriptionValidator, titleValidator } from '../../layout/formConfig';
-import { minLength } from '../../../lib/Validators';
-import { useSpinner, SPINNER_DEFAULTS } from '../../../hooks/useSpinner';
+import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
+import { PageContainer } from '../layout/PageContainer';
+import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
+import { minLength } from '../../lib/Validators';
+import { useSpinner, SPINNER_DEFAULTS } from '../../hooks/useSpinner';
+import { findUserPlaylists } from '../../state/modules/playlists';
 
 export const AddMediaContainer = () => {
   const dispatch = useDispatch();
+
   const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -38,13 +40,6 @@ export const AddMediaContainer = () => {
     return test;
   };
 
-  const clearAndGoBack = () => {
-    setTitle('');
-    setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
-    setDescription('');
-    setThumbnail('');
-    goBack();
-  };
   const options = [];
   for (const value in CreateMediaItemDtoCategoryEnum) {
     options.push(value);
@@ -60,44 +55,8 @@ export const AddMediaContainer = () => {
   const cancelLabel = 'Cancel';
   const cancelCb = clearAndGoBack;
 
-  async function getDocument() {
-    const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
-    if (!document) {
-      return;
-    }
-    setDocumentUri(document?.uri || '');
-    startLoad();
-
-    await dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
-    endLoad();
-  }
-
-  const saveItem = async function () {
-    startLoad();
-    const dto: CreateMediaItemDto = {
-      title,
-      category: CreatePlaylistDtoCategoryEnum[category],
-      description,
-      summary: '',
-      isPlayable: true,
-      uri: documentUri,
-      thumbnail: thumbnail,
-      key: title,
-      eTag: '',
-    };
-    const res = await dispatch(addMediaItem(dto));
-    const item = res as any;
-
-    setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
-    setDescription('');
-    setThumbnail('');
-    endLoad();
-    goToItem({ mediaId: item.payload._id, uri: item.payload.uri });
-  };
-
   return (
     <PageContainer>
-      <AppSpinner />
       <View style={{ flex: 1 }}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -144,6 +103,49 @@ export const AddMediaContainer = () => {
       />
     </PageContainer>
   );
+
+  async function getDocument() {
+    const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
+    if (!document) {
+      return;
+    }
+    setDocumentUri(document?.uri || '');
+    startLoad();
+
+    await dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
+    endLoad();
+  }
+
+  async function saveItem() {
+    startLoad();
+    const dto: CreateMediaItemDto = {
+      title,
+      category: CreatePlaylistDtoCategoryEnum[category],
+      description,
+      summary: '',
+      isPlayable: true,
+      uri: documentUri,
+      thumbnail: thumbnail,
+      key: title,
+      eTag: '',
+    };
+    const res = await dispatch(addMediaItem(dto));
+    const item = res as any;
+
+    setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
+    setDescription('');
+    setThumbnail('');
+    endLoad();
+    goToItem({ mediaId: item.payload._id, uri: item.payload.uri });
+  }
+
+  function clearAndGoBack() {
+    setTitle('');
+    setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
+    setDescription('');
+    setThumbnail('');
+    goBack();
+  };
 };
 
 export default AddMediaContainer;

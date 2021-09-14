@@ -9,7 +9,7 @@ interface PageContainerProps {
   children: ReactNode;
 }
 
-function PageContainer({ children }: PageContainerProps) {
+export function PageContainer({ children }: PageContainerProps) {
   const dispatch = useDispatch();
   const app = useAppSelector((state) => state.app);
   // const [visible, setVisible] = useState(false);

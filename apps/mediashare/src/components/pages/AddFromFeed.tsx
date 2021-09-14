@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ROUTES } from '../../../routes';
+import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../../state';
-import { getFeedMediaItems, saveFeedMediaItems } from '../../../state/modules/media-items';
+import { useAppSelector } from '../../state';
+import { getFeedMediaItems, saveFeedMediaItems } from '../../state/modules/media-items';
 
-import { useRouteName } from '../../../hooks/NavigationHooks';
-import { ActionButtons } from '../../layout/ActionButtons';
-import { MediaListItem } from '../../layout/MediaListItem';
+import { useRouteName } from '../../hooks/NavigationHooks';
+import { ActionButtons } from '../layout/ActionButtons';
+import { MediaListItem } from '../layout/MediaListItem';
 
-import PageContainer from '../../layout/PageContainer';
-import { useSpinner } from '../../../hooks/useSpinner';
+import { PageContainer } from '../layout/PageContainer';
+import { useSpinner } from '../../hooks/useSpinner';
 import { ScrollView, View } from 'react-native';
 import { Subheading, Card } from 'react-native-paper';
+import { findUserPlaylists } from '../../state/modules/playlists';
 
 export const AddFromFeedContainer = () => {
   const dispatch = useDispatch();
+
   const goToMediaItems = useRouteName(ROUTES.media);
   const selectedItems = new Set<string>();
 
@@ -55,7 +57,6 @@ export const AddFromFeedContainer = () => {
 
   return (
     <PageContainer>
-      <AppSpinner />
       <View style={{ flex: 1 }}>
         {(!items || items.length === 0) && loaded && (
           <Card>

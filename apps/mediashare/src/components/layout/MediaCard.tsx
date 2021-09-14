@@ -69,7 +69,6 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
             onPress={(value) => onCategoryChange(value as string)}
           />
           <TextInput
-            style={{ height: 200 }}
             multiline={true}
             mode={'outlined'}
             textAlign={'left'}
