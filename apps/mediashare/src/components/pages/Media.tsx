@@ -29,14 +29,14 @@ export const MediaComponent = ({ onViewDetail, list = [], selectable }: { naviga
     <View>
       <List>
         {sortedList.map((item, idx) => {
-          const { title, description, thumbnail } = item;
+          const { title, description, thumbnail, uri } = item;
           return (
             <MediaListItem
               key={`item-${idx}`}
               title={title}
               description={description}
               showThumbnail={true}
-              image={thumbnail}
+              image={thumbnail || uri}
               selectable={selectable}
               onViewDetail={() => onViewDetail(item)}
             />
