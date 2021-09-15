@@ -1,17 +1,38 @@
 // type MediaKeyUnionType<K, L> = KeyLabelType<K>
+
+import Config from 'react-native-config'
+
 // declare function MakeVideoKey<K, L>(label: L, key: K): MediaKeyType<L>
+const root = Config.ROOT
 
-function KeyFactory<A extends string>(title: A) {
-  const makeKey = <K extends string>(key: K) => `${key}/${title}`;
-  const thumbnail = 'thumbnail' as const;
-  const video = 'video' as const;
+const videoRoot =Config.VIDEO_ROOT
+const thumbnailRoot =  Config.THUMBNAIL_ROOT
+const uploadRoot = Config.UPLOAD_ROOT
+export interface KeyFactoryProps  {root: string, thumbnailRoot: string, videoRoot: string, uploadRoot: string}
 
-  const labelledVideo = makeKey(video) + '.mp4';
-  const labelledThumbnail = makeKey(thumbnail) + '.jpeg';
+function createKeyFactory({root, thumbnailRoot, videoRoot, uploadRoot}: KeyFactoryProps) {
+
+  return function (title: string) {
+  const makeKey = <K extends string>(key: K) => `${root}${key}/${title}`;
+
+
+  const labelledVideo = makeKey(videoRoot) + '.mp4';
+  const labelledThumbnail = makeKey(thumbnailRoot) + '.jpeg';
+  const uploadKey = makeKey(uploadRoot);
+
   return {
     videoKey: labelledVideo,
     thumbnailKey: labelledThumbnail,
+    uploadKey
   };
 }
+}
+ const KeyFactory = createKeyFactory({root, videoRoot, thumbnailRoot, uploadRoot})
+export {KeyFactory,
 
-export { KeyFactory };
+  root,
+  videoRoot,
+  thumbnailRoot,
+  uploadRoot,
+
+} ;

@@ -12,7 +12,9 @@ import {
   UserApi,
   UsersApi,
 } from '../rxjs-api';
-import { loading } from './modules/app-state';
+import Config from "react-native-config";
+
+console.log('dotenv config', Config.API_SERVER)
 
 let TOKEN = '';
 let COOKIE = '';
@@ -72,7 +74,7 @@ function apiFactory() {
   }
 
   const configuration = new Configuration({
-    basePath: servers[1].getUrl(),
+    basePath: servers[Config.API_SERVER].getUrl(),
     accessToken: TOKEN,
     middleware: middlewareFactory(),
   });
@@ -89,7 +91,7 @@ function apiFactory() {
 }
 
 const apis = apiFactory();
-
+console.log(Config.API_SERVER)
 export type ApiService = typeof apis;
 
 const { mediaItems, shareItems, playlists, user, users, configuration } = apis;
