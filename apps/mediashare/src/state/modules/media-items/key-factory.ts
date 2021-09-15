@@ -3,7 +3,7 @@
 import Config from 'react-native-config';
 
 // declare function MakeVideoKey<K, L>(label: L, key: K): MediaKeyType<L>
-const root = Config.AWS_ROOT;
+const mediaRoot = Config.AWS_ROOT;
 
 const videoRoot = Config.VIDEO_ROOT;
 const thumbnailRoot = Config.THUMBNAIL_ROOT;
@@ -30,5 +30,5 @@ function createKeyFactory({ root, thumbnailRoot, videoRoot, uploadRoot }: KeyFac
     };
   };
 }
-const KeyFactory = createKeyFactory({ root, videoRoot, thumbnailRoot, uploadRoot });
-export { KeyFactory, root, videoRoot, thumbnailRoot, uploadRoot };
+const KeyFactory = createKeyFactory({ root: mediaRoot, videoRoot, thumbnailRoot, uploadRoot });
+export { KeyFactory, mediaRoot, videoRoot, thumbnailRoot, uploadRoot };

@@ -5,7 +5,7 @@ import { makeEnum } from '../../core/factory';
 import { apis, ApiService } from '../../apis';
 import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
 import { copyStorage, deleteStorage, getStorage, listStorage, sanitizeFoldername, uploadMedia, uploadThumbnail } from './storage';
-import { KeyFactory, uploadRoot } from './key-factory';
+import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './key-factory';
 import { getAllMedia } from './media-items';
 import { AwsMediaItem } from './aws-media-item.model';
 import { concat, forkJoin, merge } from 'rxjs';
@@ -96,13 +96,13 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
   const dtos: CreateMediaItemDto[] = keys.map((key) => ({
     description: `Uploaded to bucket on ${new Date()}`,
     title: key,
-    thumbnail: 'thumbnail/' + key,
-    video: 'video/' + key,
-    uri: 'video/' + key,
+    thumbnail: mediaRoot + thumbnailRoot + key,
+    video: mediaRoot + videoRoot + key,
+    uri: mediaRoot + videoRoot + key,
     isPlayable: false,
     category: CreateMediaItemDtoCategoryEnum.Endurance,
     eTag: '',
-    key: key,
+    key: mediaRoot + videoRoot + key,
     summary: '',
   }));
 

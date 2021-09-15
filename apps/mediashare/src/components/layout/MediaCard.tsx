@@ -37,7 +37,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     showSocial = false,
     buttons = false,
     showActions = false,
-    showThumbnail = false,
+    showThumbnail = true,
     onActionsClicked = () => {},
     children,
     category = 'None',

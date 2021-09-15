@@ -11,7 +11,6 @@ const errorMiddleware: Middleware = function exampleMiddleware(store) {
   return function wrapDispatch(next) {
     return function handleAction(action) {
       if (action.type.includes('rejected')) {
-        console.log('rejected error', action);
         return store.dispatch(setError(action.error));
       }
       return next(action);
@@ -23,7 +22,7 @@ const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
-      .concat(thunk.withExtraArgument({ api: apis }))
+      .prepend(thunk.withExtraArgument({ api: apis }))
       .concat(errorMiddleware),
 });
 

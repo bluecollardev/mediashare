@@ -7,7 +7,7 @@ import { useAppSelector } from '../../state';
 import { updateMediaItem } from '../../state/modules/media-items';
 
 import { CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum, UpdateMediaItemDto } from '../../rxjs-api';
-import { useRouteWithParams } from '../../hooks/NavigationHooks';
+import { useRouteWithParams, useMediaItems } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -46,7 +46,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
   const [description, setDescription] = useState(mediaItem?.description);
   const [category, setCategory] = useState();
 
-  const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
+  const mediaItems = useMediaItems();
 
   const resetData = () => {};
   const cancelCb = () => {
@@ -63,7 +63,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
     };
 
     await dispatch(updateMediaItem(dto));
-    goToItem({ mediaId, uri });
+    mediaItems();
   };
 
   useEffect(() => {

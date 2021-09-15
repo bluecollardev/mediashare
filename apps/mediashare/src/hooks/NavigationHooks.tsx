@@ -2,7 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { EnumLiteralsOf } from '../lib/Generics';
 import { routeConfig, ROUTES } from '../routes';
-import { getMediaItemById } from '../state/modules/media-items';
+import { findMediaItems, getMediaItemById } from '../state/modules/media-items';
+import { findUserPlaylists } from '../state/modules/playlists/index';
 
 type RouteConfigKeyType = EnumLiteralsOf<typeof ROUTES>;
 // @ts-ignore
@@ -50,5 +51,23 @@ export function useEditMediaItem() {
   return async ({ mediaId, uri }) => {
     await dispatch(getMediaItemById({ uri, mediaId }));
     nav.navigate(ROUTES.mediaItemEdit, { mediaId, uri });
+  };
+}
+
+export function usePlaylists() {
+  const nav = useRouteName(ROUTES.playlists);
+  const dispatch = useDispatch();
+  return async function () {
+    await dispatch(findUserPlaylists({}));
+    nav();
+  };
+}
+
+export function useMediaItems() {
+  const nav = useRouteName(ROUTES.media);
+  const dispatch = useDispatch();
+  return async function () {
+    await dispatch(findMediaItems());
+    nav();
   };
 }
