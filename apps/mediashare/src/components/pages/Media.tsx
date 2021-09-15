@@ -32,7 +32,7 @@ export const MediaComponent = ({ onViewDetail, list = [], selectable }: { naviga
           const { title, description, thumbnail, uri } = item;
           return (
             <MediaListItem
-              key={`item-${idx}`}
+              key={`item_${idx}`}
               title={title}
               description={description}
               showThumbnail={true}

@@ -153,7 +153,6 @@ export const deleteMediaItem = createAsyncThunk(mediaItemActionTypes.removeMedia
 
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async () => {
   const response = await getAllMedia();
-
   return response;
 });
 
@@ -212,7 +211,6 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
     .addCase(addMediaItem.rejected, (state) => {
       return { ...state };
     })
-
     .addCase(addMediaItem.fulfilled, (state, action) => {
       return {
         ...state,
@@ -228,11 +226,9 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
     .addCase(getFeedMediaItems.rejected, (state) => {
       return { ...state };
     })
-
     .addCase(getFeedMediaItems.fulfilled, (state, action) => {
       return { ...state, feed: action.payload };
     })
-
     .addCase(selectMediaItem, (state, action) => {
       return { ...state, mediaItem: action.payload };
     })

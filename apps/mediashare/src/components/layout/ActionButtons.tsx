@@ -29,7 +29,7 @@ export const ActionButtons = ({
   loading = false,
 }: Props) => {
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', height: 60, borderTopWidth: 1, borderColor: '#cccccc' }}>
       <Button
         icon={leftIcon}
         loading={loading}

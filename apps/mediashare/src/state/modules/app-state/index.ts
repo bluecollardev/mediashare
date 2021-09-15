@@ -25,7 +25,7 @@ const appStateSlice = createSlice({
         ...state,
         loading: false,
         hasError: true,
-        error: { name: `Error: ${name}`, message: `Message: ${message}` },
+        error: { name: `${name}`, message: `${message}` },
       };
     },
     clearError: (state) => {

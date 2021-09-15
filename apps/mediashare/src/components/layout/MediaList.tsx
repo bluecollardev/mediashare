@@ -26,7 +26,7 @@ export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, add
           return (
             <>
               <MediaListItem
-                key={`item-${idx}`}
+                key={`item_${idx}`}
                 title={title}
                 description={description}
                 image={thumbnail}

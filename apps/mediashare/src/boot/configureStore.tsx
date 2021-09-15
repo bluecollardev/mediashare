@@ -3,7 +3,7 @@ import { rootReducer as reducer } from '../state/reducers';
 import { bindActionCreators, configureStore } from '@reduxjs/toolkit';
 // import { loggerMiddleware } from '../state/middlewares';
 import { apis } from '../state/apis';
-import { clearMediaItemSelection } from '../state/modules/media-items/index';
+import { clearMediaItemSelection } from '../state/modules/media-items';
 import { loading, setError } from '../state/modules/app-state';
 import { Middleware } from 'redux';
 
@@ -11,6 +11,9 @@ const errorMiddleware: Middleware = function exampleMiddleware(store) {
   return function wrapDispatch(next) {
     return function handleAction(action) {
       if (action.type.includes('rejected')) {
+        const msg = `${JSON.stringify(action, null, 2)}`;
+        action.error.name = `Ajax request was rejected`;
+        action.error.message = `Action [${action.type}] failed.\nAPI returned ${action.error.message}.\n\n${msg}`;
         return store.dispatch(setError(action.error));
       }
       return next(action);
