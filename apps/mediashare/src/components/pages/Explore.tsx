@@ -47,11 +47,11 @@ export const ExploreArticlesComponent = ({ list = [] }: ExploreProps) => {
     <View>
       <List.Section>
         <List.Subheader>Latest Articles</List.Subheader>
-        {sortedList.slice(0, 1).map((item) => {
+        {sortedList.slice(0, 2).map((item) => {
           const { title, description } = item;
           return (
             <View style={{ padding: 15, paddingTop: 0 }}>
-              <PlaylistCard title={title} author={'Admin'} description={description} category={''} showSocial={true} showActions={false} showThumbnail={true} />
+              <PlaylistCard title={title} author={'Admin'} description={description} category={'General'} showSocial={true} showActions={false} showThumbnail={true} />
             </View>
           );
         })}
@@ -69,7 +69,7 @@ export const ExplorePlaylistsComponent = ({ onViewDetailClicked, list = [] }: Ex
     <View>
       <List.Section>
         <List.Subheader>Playlists by Adam Fehr</List.Subheader>
-        {sortedList.slice(0, 1).map((item) => {
+        {sortedList.slice(0, 2).map((item) => {
           const { title, mediaIds } = item;
           return (
             <MediaListItem
@@ -88,7 +88,7 @@ export const ExplorePlaylistsComponent = ({ onViewDetailClicked, list = [] }: Ex
 
       <List.Section>
         <List.Subheader>Popular</List.Subheader>
-        {sortedList.slice(2, 5).map((item) => {
+        {sortedList.slice(3, 6).map((item) => {
           const { title, mediaIds } = item;
           return (
             <MediaListItem
@@ -136,8 +136,6 @@ export const Explore = ({ navigation }: PageProps) => {
       <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />
       <ScrollView>
         <ExploreArticlesComponent list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
-      </ScrollView>
-      <ScrollView>
         <ExplorePlaylistsComponent list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
       </ScrollView>
     </PageContainer>

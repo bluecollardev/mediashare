@@ -38,7 +38,7 @@ export const ExploreDetail = ({ route, onDataLoaded }: PageProps) => {
   return (
     <PageContainer>
       <ScrollView>
-        <PlaylistCard title={title} author={author} description={description} showSocial={false} showActions={false} category={''} />
+        <PlaylistCard title={title} author={author} description={description} showSocial={true} showActions={false} category={'General'} />
         <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
       </ScrollView>
     </PageContainer>

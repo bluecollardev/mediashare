@@ -28,11 +28,11 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
     title,
     author,
     description,
-    showSocial,
     buttons,
     children,
     isEdit = false,
     showActions = false,
+    showSocial = false,
     showThumbnail = false,
     onEditClicked = () => {},
     onDeleteClicked = () => {},
@@ -64,10 +64,10 @@ export const PlaylistCard: React.FC<PlaylistCardProps> = (props) => {
       title={title}
       author={author}
       description={description}
-      showSocial={showSocial}
       buttons={buttons}
       children={children}
       showActions={showActions}
+      showSocial={showSocial}
       showThumbnail={showThumbnail}
       onActionsClicked={showCardMenu}
       isEdit={isEdit}
