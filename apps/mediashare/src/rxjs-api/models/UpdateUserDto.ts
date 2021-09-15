@@ -20,7 +20,7 @@ export interface UpdateUserDto {
    * @type {string}
    * @memberof UpdateUserDto
    */
-  _id?: string;
+  readonly _id?: string;
   /**
    * @type {string}
    * @memberof UpdateUserDto

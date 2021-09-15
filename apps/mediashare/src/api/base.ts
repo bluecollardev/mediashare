@@ -15,7 +15,7 @@
 import { Configuration } from './configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
+import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 
 export const BASE_PATH = 'http://localhost:5000'.replace(/\/+$/, '');
 
@@ -27,7 +27,7 @@ export const COLLECTION_FORMATS = {
   csv: ',',
   ssv: ' ',
   tsv: '\t',
-  pipes: '|'
+  pipes: '|',
 };
 
 /**
@@ -64,7 +64,6 @@ export class BaseAPI {
  */
 export class RequiredError extends Error {
   name: 'RequiredError' = 'RequiredError';
-
   constructor(public field: string, msg?: string) {
     super(msg);
   }

@@ -12,11 +12,10 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, encodeURI, HttpHeaders, OperationOpts, RawAjaxResponse, throwIfNullOrUndefined } from '../runtime';
+import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, OperationOpts, RawAjaxResponse } from '../runtime';
 import { LoginDto, LoginResponseDto, MediaItemDto, PlaylistResponseDto, ShareItem, TokenDto, UserDto } from '../models';
 
 export interface UserControllerAuthorizeRequest {
-  id: string;
   tokenDto: TokenDto;
 }
 
@@ -30,10 +29,9 @@ export interface UserControllerLoginRequest {
 export class UserApi extends BaseAPI {
   /**
    */
-  userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest): Observable<void>;
-  userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
-  userControllerAuthorize({ id, tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
-    throwIfNullOrUndefined(id, 'id', 'userControllerAuthorize');
+  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest): Observable<void>;
+  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
+  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     throwIfNullOrUndefined(tokenDto, 'tokenDto', 'userControllerAuthorize');
 
     const headers: HttpHeaders = {
@@ -42,7 +40,7 @@ export class UserApi extends BaseAPI {
 
     return this.request<void>(
       {
-        url: '/api/user/authorize'.replace('{:id}', encodeURI(id)),
+        url: '/api/user/authorize',
         method: 'POST',
         headers,
         body: tokenDto,

@@ -22,7 +22,7 @@ export interface PlaylistResponseDto {
    * @type {string}
    * @memberof PlaylistResponseDto
    */
-  _id: string;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof PlaylistResponseDto
@@ -59,7 +59,7 @@ export interface PlaylistResponseDto {
    * @type {Array<string>}
    * @memberof PlaylistResponseDto
    */
-  mediaIds: Array<string>;
+  mediaIds: Array<string> | null;
   /**
    * @type {string}
    * @memberof PlaylistResponseDto
@@ -82,7 +82,7 @@ export interface PlaylistResponseDto {
  * @enum {string}
  */
 export enum PlaylistResponseDtoCategoryEnum {
-  Rehab = 'rehab',
-  Builder = 'builder',
-  Warmup = 'warmup',
+  Rehab = 'Rehab',
+  Builder = 'Builder',
+  Warmup = 'Warmup',
 }

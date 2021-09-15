@@ -20,7 +20,7 @@ export interface UpdatePlaylistDto {
    * @type {string}
    * @memberof UpdatePlaylistDto
    */
-  _id: string;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof UpdatePlaylistDto
@@ -48,7 +48,7 @@ export interface UpdatePlaylistDto {
  * @enum {string}
  */
 export enum UpdatePlaylistDtoCategoryEnum {
-  Rehab = 'rehab',
-  Builder = 'builder',
-  Warmup = 'warmup',
+  Rehab = 'Rehab',
+  Builder = 'Builder',
+  Warmup = 'Warmup',
 }

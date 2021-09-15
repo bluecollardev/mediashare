@@ -14,7 +14,7 @@ export type DeepPartial<T> = {
 
 export abstract class BcBaseEntity<M> implements BcBaseInterface {
   @ObjectIdColumn()
-  _id: ObjectId;
+  _id: ObjectId | string;
 
   constructor(model?: Partial<M>) {
     Object.assign(this, model);

@@ -12,16 +12,15 @@ import {
   UserApi,
   UsersApi,
 } from '../rxjs-api';
-import Config from "react-native-config";
+import Config from 'react-native-config';
 
-console.log('dotenv config', Config.API_SERVER)
-
-let TOKEN = '';
-let COOKIE = '';
+console.log('dotenv config', Config.API_SERVER);
 
 export const basePath = 'http://localhost:5000';
 
 function apiFactory() {
+  let TOKEN = '';
+  let COOKIE = '';
   function middlewareFactory() {
     const sessionMiddleWare: Middleware = {
       pre: (request: RequestArgs) => {
@@ -33,6 +32,7 @@ function apiFactory() {
           cookie: COOKIE,
           // cookie: 'connect.sid=s%3A2yl00r3D18IP6bGsdOvZpk87hskZIJZX.D31vWBjfaejkKUqqPNpP2zfDuZMt1%2Bf6FcXOKXK%2B9y0',
         };
+        console.log(headers);
         return { headers, ...rest };
       },
     };
@@ -46,7 +46,8 @@ function apiFactory() {
     };
     const loginMiddleware: Middleware = {
       post: (response: ResponseArgs) => {
-        if (response.request.url.includes('login')) {
+        if (response.request.url.includes('login') || response.request.url.includes('authorize')) {
+          console.log('token validation', response);
           const { accessToken } = response.response as any;
 
           TOKEN = accessToken;
@@ -91,7 +92,6 @@ function apiFactory() {
 }
 
 const apis = apiFactory();
-console.log(Config.API_SERVER)
 export type ApiService = typeof apis;
 
 const { mediaItems, shareItems, playlists, user, users, configuration } = apis;

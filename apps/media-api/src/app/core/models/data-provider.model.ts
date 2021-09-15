@@ -57,7 +57,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
     const _id = StringIdGuard(id);
     try {
       const document = await this.repository.findOne(_id);
-      this.logger.info('${this.constructor.name}findOne result', document);
+      this.logger.info(`${this.constructor.name} findOne result`, document);
       return R.clone(document);
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findOne ${error}`);

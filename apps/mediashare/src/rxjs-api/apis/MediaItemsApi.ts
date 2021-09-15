@@ -12,7 +12,7 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, encodeURI, HttpHeaders, OperationOpts, RawAjaxResponse, throwIfNullOrUndefined } from '../runtime';
+import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
 import { CreateMediaItemDto, MediaItem, MediaItemDto, ShareItem, UpdateMediaItemDto } from '../models';
 
 export interface MediaItemControllerCreateRequest {

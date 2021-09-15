@@ -12,52 +12,54 @@
  * Do not edit the class manually.
  */
 
-import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
+import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-  assertParamExists,
-  createRequestFunction,
   DUMMY_BASE_URL,
-  serializeDataIfNeeded,
+  assertParamExists,
   setApiKeyToObject,
   setBasicAuthToObject,
   setBearerAuthToObject,
   setOAuthToObject,
   setSearchParams,
-  toPathString
+  serializeDataIfNeeded,
+  toPathString,
+  createRequestFunction,
 } from '../common';
 // @ts-ignore
-import { BASE_PATH, BaseAPI, COLLECTION_FORMATS, RequestArgs, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { LoginDto } from '../models';
 // @ts-ignore
+import { LoginResponseDto } from '../models';
 // @ts-ignore
+import { MediaItemDto } from '../models';
 // @ts-ignore
+import { PlaylistResponseDto } from '../models';
 // @ts-ignore
+import { ShareItem } from '../models';
 // @ts-ignore
+import { TokenDto } from '../models';
 // @ts-ignore
-import { LoginDto, LoginResponseDto, MediaItemDto, PlaylistResponseDto, ShareItem, TokenDto, UserDto } from '../models';
-
+import { UserDto } from '../models';
 /**
  * UserApi - axios parameter creator
  * @export
  */
-export const UserApiAxiosParamCreator = function(configuration?: Configuration) {
+export const UserApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @param {string} id
      * @param {TokenDto} tokenDto
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerAuthorize: async (id: string, tokenDto: TokenDto, options: any = {}): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('userControllerAuthorize', 'id', id);
+    userControllerAuthorize: async (tokenDto: TokenDto, options: any = {}): Promise<RequestArgs> => {
       // verify required parameter 'tokenDto' is not null or undefined
       assertParamExists('userControllerAuthorize', 'tokenDto', tokenDto);
-      const localVarPath = `/api/user/authorize`.replace(`{${':id'}}`, encodeURIComponent(String(id)));
+      const localVarPath = `/api/user/authorize`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -78,7 +80,7 @@ export const UserApiAxiosParamCreator = function(configuration?: Configuration) 
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
+        options: localVarRequestOptions,
       };
     },
     /**
@@ -105,7 +107,7 @@ export const UserApiAxiosParamCreator = function(configuration?: Configuration) 
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
+        options: localVarRequestOptions,
       };
     },
     /**
@@ -132,7 +134,7 @@ export const UserApiAxiosParamCreator = function(configuration?: Configuration) 
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
+        options: localVarRequestOptions,
       };
     },
     /**
@@ -159,7 +161,7 @@ export const UserApiAxiosParamCreator = function(configuration?: Configuration) 
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
+        options: localVarRequestOptions,
       };
     },
     /**
@@ -186,7 +188,7 @@ export const UserApiAxiosParamCreator = function(configuration?: Configuration) 
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
+        options: localVarRequestOptions,
       };
     },
     /**
@@ -213,7 +215,7 @@ export const UserApiAxiosParamCreator = function(configuration?: Configuration) 
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
+        options: localVarRequestOptions,
       };
     },
     /**
@@ -246,7 +248,7 @@ export const UserApiAxiosParamCreator = function(configuration?: Configuration) 
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
+        options: localVarRequestOptions,
       };
     },
     /**
@@ -277,9 +279,9 @@ export const UserApiAxiosParamCreator = function(configuration?: Configuration) 
 
       return {
         url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions
+        options: localVarRequestOptions,
       };
-    }
+    },
   };
 };
 
@@ -287,18 +289,17 @@ export const UserApiAxiosParamCreator = function(configuration?: Configuration) 
  * UserApi - functional programming interface
  * @export
  */
-export const UserApiFp = function(configuration?: Configuration) {
+export const UserApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = UserApiAxiosParamCreator(configuration);
   return {
     /**
      *
-     * @param {string} id
      * @param {TokenDto} tokenDto
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userControllerAuthorize(id: string, tokenDto: TokenDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerAuthorize(id, tokenDto, options);
+    async userControllerAuthorize(tokenDto: TokenDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerAuthorize(tokenDto, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -364,7 +365,7 @@ export const UserApiFp = function(configuration?: Configuration) {
     async userControllerLogout(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerLogout(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    }
+    },
   };
 };
 
@@ -372,18 +373,17 @@ export const UserApiFp = function(configuration?: Configuration) {
  * UserApi - factory interface
  * @export
  */
-export const UserApiFactory = function(configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+export const UserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
   const localVarFp = UserApiFp(configuration);
   return {
     /**
      *
-     * @param {string} id
      * @param {TokenDto} tokenDto
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerAuthorize(id: string, tokenDto: TokenDto, options?: any): AxiosPromise<void> {
-      return localVarFp.userControllerAuthorize(id, tokenDto, options).then((request) => request(axios, basePath));
+    userControllerAuthorize(tokenDto: TokenDto, options?: any): AxiosPromise<void> {
+      return localVarFp.userControllerAuthorize(tokenDto, options).then((request) => request(axios, basePath));
     },
     /**
      *
@@ -441,7 +441,7 @@ export const UserApiFactory = function(configuration?: Configuration, basePath?:
      */
     userControllerLogout(options?: any): AxiosPromise<void> {
       return localVarFp.userControllerLogout(options).then((request) => request(axios, basePath));
-    }
+    },
   };
 };
 
@@ -451,13 +451,6 @@ export const UserApiFactory = function(configuration?: Configuration, basePath?:
  * @interface UserApiUserControllerAuthorizeRequest
  */
 export interface UserApiUserControllerAuthorizeRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof UserApiUserControllerAuthorize
-   */
-  readonly id: string;
-
   /**
    *
    * @type {TokenDto}
@@ -496,8 +489,8 @@ export class UserApi extends BaseAPI {
    */
   public userControllerAuthorize(requestParameters: UserApiUserControllerAuthorizeRequest, options?: any) {
     return UserApiFp(this.configuration)
-    .userControllerAuthorize(requestParameters.id, requestParameters.tokenDto, options)
-    .then((request) => request(this.axios, this.basePath));
+      .userControllerAuthorize(requestParameters.tokenDto, options)
+      .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -508,8 +501,8 @@ export class UserApi extends BaseAPI {
    */
   public userControllerGetMediaItems(options?: any) {
     return UserApiFp(this.configuration)
-    .userControllerGetMediaItems(options)
-    .then((request) => request(this.axios, this.basePath));
+      .userControllerGetMediaItems(options)
+      .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -520,8 +513,8 @@ export class UserApi extends BaseAPI {
    */
   public userControllerGetMyShareItems(options?: any) {
     return UserApiFp(this.configuration)
-    .userControllerGetMyShareItems(options)
-    .then((request) => request(this.axios, this.basePath));
+      .userControllerGetMyShareItems(options)
+      .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -532,8 +525,8 @@ export class UserApi extends BaseAPI {
    */
   public userControllerGetSharedMediaItems(options?: any) {
     return UserApiFp(this.configuration)
-    .userControllerGetSharedMediaItems(options)
-    .then((request) => request(this.axios, this.basePath));
+      .userControllerGetSharedMediaItems(options)
+      .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -544,8 +537,8 @@ export class UserApi extends BaseAPI {
    */
   public userControllerGetUser(options?: any) {
     return UserApiFp(this.configuration)
-    .userControllerGetUser(options)
-    .then((request) => request(this.axios, this.basePath));
+      .userControllerGetUser(options)
+      .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -556,8 +549,8 @@ export class UserApi extends BaseAPI {
    */
   public userControllerGetUserPlaylists(options?: any) {
     return UserApiFp(this.configuration)
-    .userControllerGetUserPlaylists(options)
-    .then((request) => request(this.axios, this.basePath));
+      .userControllerGetUserPlaylists(options)
+      .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -569,8 +562,8 @@ export class UserApi extends BaseAPI {
    */
   public userControllerLogin(requestParameters: UserApiUserControllerLoginRequest, options?: any) {
     return UserApiFp(this.configuration)
-    .userControllerLogin(requestParameters.loginDto, options)
-    .then((request) => request(this.axios, this.basePath));
+      .userControllerLogin(requestParameters.loginDto, options)
+      .then((request) => request(this.axios, this.basePath));
   }
 
   /**
@@ -581,7 +574,7 @@ export class UserApi extends BaseAPI {
    */
   public userControllerLogout(options?: any) {
     return UserApiFp(this.configuration)
-    .userControllerLogout(options)
-    .then((request) => request(this.axios, this.basePath));
+      .userControllerLogout(options)
+      .then((request) => request(this.axios, this.basePath));
   }
 }

@@ -14,19 +14,17 @@ export class AuthService {
 
     return {
       ...userFields,
+      // _id: userFields,
       accessToken: this.jwtService.sign(payload)
     };
   }
 
   validateToken(jwt: string) {
-    const jwtResult = this.jwtService.verify(jwt).user;
+    const { username, _id } = this.jwtService.verify(jwt).user.userFields;
+    console.log('🚀 -----------------------------------------------------------------------------------------');
+    console.log('🚀 ~ file: auth.service.ts ~ line 23 ~ AuthService ~ validateToken ~ jwtResult', username);
+    console.log('🚀 -----------------------------------------------------------------------------------------');
 
-    const {
-      user: { username = null, _id = null }
-    } = jwtResult;
-
-    const hasUser = !!jwtResult;
-
-    return hasUser ? { username, _id } : null;
+    return username ? { username, _id } : null;
   }
 }

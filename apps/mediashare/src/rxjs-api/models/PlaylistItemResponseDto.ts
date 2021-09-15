@@ -20,7 +20,7 @@ export interface PlaylistItemResponseDto {
    * @type {string}
    * @memberof PlaylistItemResponseDto
    */
-  _id: string;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof PlaylistItemResponseDto

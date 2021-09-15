@@ -20,7 +20,7 @@ export interface MediaItem {
    * @type {string}
    * @memberof MediaItem
    */
-  _id: string;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof MediaItem

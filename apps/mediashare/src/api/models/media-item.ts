@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * Mediashare
  * Media Share API

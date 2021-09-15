@@ -68,7 +68,7 @@ export interface PlaylistResponseDto {
    * @type {Array<string>}
    * @memberof PlaylistResponseDto
    */
-  mediaIds: Array<string>;
+  mediaIds: Array<string> | null;
   /**
    *
    * @type {string}
@@ -94,7 +94,7 @@ export interface PlaylistResponseDto {
  * @enum {string}
  */
 export enum PlaylistResponseDtoCategoryEnum {
-  Rehab = 'rehab',
-  Builder = 'builder',
-  Warmup = 'warmup',
+  Rehab = 'Rehab',
+  Builder = 'Builder',
+  Warmup = 'Warmup',
 }

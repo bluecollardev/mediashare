@@ -20,7 +20,7 @@ export interface MediaItemDto {
    * @type {string}
    * @memberof MediaItemDto
    */
-  _id: string;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof MediaItemDto

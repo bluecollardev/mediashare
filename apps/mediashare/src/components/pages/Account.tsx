@@ -10,10 +10,18 @@ import { AccountForm } from '../layout/AccountForm';
 import styles from '../../styles';
 import { useRouteName } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
+import { logoutAction } from '../../state/modules/user';
+import { useDispatch } from 'react-redux';
 
 export const Account = ({ navigation }: PageProps) => {
   const onManageContactsClicked = useRouteName(ROUTES.contacts);
-  const onSignoutClicked = useRouteName(ROUTES.login);
+  const dispatch = useDispatch();
+  // const loginRoute = usePageRoute(ROUTES.login);
+
+  const onSignoutClicked = () => {
+    dispatch(logoutAction());
+    // loginRoute();
+  };
 
   return (
     <PageContainer>
