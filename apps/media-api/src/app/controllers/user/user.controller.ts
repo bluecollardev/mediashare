@@ -60,7 +60,6 @@ export class UserController {
   @ApiBearerAuth()
   @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
   async getUserPlaylists(@GetUser() user: SessionUserInterface, @GetUserId() userId: ObjectId) {
-    console.log('the user', userId);
     const result = await this.playlistService.getPlaylistByUserId({ userId: user._id });
     return result;
   }
@@ -91,13 +90,15 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Post('authorize')
   @ApiResponse({ type: LoginResponseDto, status: 200 })
-  async authorize(@Body() body: TokenDto) {
-    const { token = null } = body;
+  async authorize(@Req() req: Request) {
+    console.log(req);
+    const { token = null } = req.body as any;
+
     const valid = await this.userService.validateToken({ token });
 
     if (!valid) throw new UnauthorizedException();
     const user = await this.userService.findOne(valid._id);
 
-    return { ...user, accessToken: token };
+    return { ...user };
   }
 }

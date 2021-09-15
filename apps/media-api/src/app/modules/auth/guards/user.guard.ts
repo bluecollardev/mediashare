@@ -13,15 +13,8 @@ export class UserGuard implements CanActivate {
     console.log(req.headers);
 
     const { authorization } = req.headers;
-    console.log('🚀 -------------------------------------------------------------------------------------------');
-    console.log('🚀 ~ file: user.guard.ts ~ line 15 ~ UserGuard ~ canActivate ~ authorization', authorization.replace('Bearer', '').replace(' ', ''));
-    console.log('🚀 -------------------------------------------------------------------------------------------');
-    console.log(req.isAuthenticated(authorization.replace('Bearer', '').replace(' ', '')));
 
     const res = this.authSvc.validateToken(authorization);
-    console.log('🚀 -----------------------------------------------------------------------');
-    console.log('🚀 ~ file: user.guard.ts ~ line 19 ~ UserGuard ~ canActivate ~ res', res);
-    console.log('🚀 -----------------------------------------------------------------------');
 
     req.session.user = res;
 

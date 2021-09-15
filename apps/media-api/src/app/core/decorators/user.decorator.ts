@@ -5,6 +5,9 @@ import { ObjectId } from 'mongodb';
 export const GetUser = createParamDecorator((data, context: ExecutionContext) => {
   console.log(context.switchToHttp());
   const ctx = context.switchToHttp().getRequest();
+  console.log('🚀 ----------------------------------------------------------');
+  console.log('🚀 ~ file: user.decorator.ts ~ line 8 ~ GetUser ~ ctx', ctx.session);
+  console.log('🚀 ----------------------------------------------------------');
   const user = ctx.session?.passport?.user ?? null;
 
   return user ? { ...user, _id: new ObjectId(user._id) } : {};

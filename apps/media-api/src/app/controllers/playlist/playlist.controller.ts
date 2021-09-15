@@ -31,7 +31,6 @@ export class PlaylistController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() getUserId: ObjectId) {
-    console.log('dto', getUserId);
     const { mediaIds } = createPlaylistDto;
     return await this.playlistService.createPlaylistWithItems({
       ...createPlaylistDto,
