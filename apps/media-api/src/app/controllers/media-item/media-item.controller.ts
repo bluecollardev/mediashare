@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
@@ -37,8 +37,10 @@ export class MediaItemController {
   @Post()
   @MediaPostResponse()
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUserId() createdBy: ObjectId) {
     const mediaItem: Omit<MediaItem, '_id'> = { ...createMediaItemDto, userId: createdBy };
+
     return this.mediaItemService.create(mediaItem);
   }
 
@@ -98,7 +100,7 @@ export class MediaItemController {
       createdBy,
       userId,
       mediaId,
-      title,
+      title
     });
     response.status(HttpStatus.CREATED);
 

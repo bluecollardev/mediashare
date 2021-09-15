@@ -32,7 +32,7 @@ export function useGoBack() {
 
 export function useViewPlaylist() {
   const nav = useNavigation();
-  return ({ playlistId }) => nav.navigate(ROUTES.playlistDetail, { playlistId });
+  return ({ playlistId }) => nav.navigate(ROUTES?.playlistDetail, { playlistId });
 }
 
 export function useViewPlaylistItem() {
@@ -54,19 +54,23 @@ export function useEditMediaItem() {
   };
 }
 
-function createPlaylistByIdFactory(route: RouteConfigKeyType) {
-  return function () {
-    const nav = useNavigation();
-    const dispatch = useDispatch();
-    return async ({ playlistId }) => {
-      await dispatch(getPlaylistById(playlistId));
-      nav.navigate(route, { playlistId });
-    };
+export function useEditPlaylistById() {
+  const nav = useNavigation();
+  const dispatch = useDispatch();
+  return async ({ playlistId }) => {
+    await dispatch(getPlaylistById(playlistId));
+    nav.navigate(ROUTES.playlistEdit, { playlistId });
   };
 }
-export const useViewPlaylistById = createPlaylistByIdFactory(ROUTES.playlistDetail);
-export const useEditPlaylistById = createPlaylistByIdFactory(ROUTES.playlistEdit);
 
+export function useViewPlaylistById() {
+  const nav = useNavigation();
+  const dispatch = useDispatch();
+  return async ({ playlistId }) => {
+    await dispatch(getPlaylistById(playlistId));
+    nav.navigate(ROUTES.playlistDetail, { playlistId });
+  };
+}
 export function usePlaylists() {
   const nav = useRouteName(ROUTES.playlists);
   const dispatch = useDispatch();

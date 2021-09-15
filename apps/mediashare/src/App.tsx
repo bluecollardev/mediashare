@@ -26,9 +26,6 @@ import { theme } from './styles';
 import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black, useFonts } from '@expo-google-fonts/roboto';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { getKeyPair } from './state/modules/user/keypair-store';
-import { validateTokenAction } from './state/modules/user';
-declare const global: { HermesInternal: null | {} };
 
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
@@ -165,15 +162,17 @@ function App() {
 
   const user = useAppSelector((state) => state.user);
 
-  useEffect(() => {
-    const checkToken = async function () {
-      const token = await getKeyPair('token');
-      if (token) {
-        const user = await dispatch(validateTokenAction(token));
-      }
-    };
-    checkToken();
-  }, []);
+  /* This is disabled until I figure out what causes the session to be wack
+   */
+  // useEffect(() => {
+  //   const checkToken = async function () {
+  //     const storedToken = await getKeyPair('token');
+  //     if (storedToken) {
+  //       const user = await dispatch(validateTokenAction(storedToken));
+  //     }
+  //   };
+  //   checkToken();
+  // }, []);
   useEffect(() => {
     setIsLoggedIn(user?._id?.length > 0);
   }, [user]);

@@ -53,7 +53,15 @@ export const ExploreArticlesComponent = ({ list = [] }: ExploreProps) => {
           const { title, description } = item;
           return (
             <View style={{ padding: 15, paddingTop: 0 }}>
-              <PlaylistCard title={title} author={'Admin'} description={description} category={'General'} showSocial={true} showActions={false} showThumbnail={true} />
+              <PlaylistCard
+                title={title}
+                author={'Admin'}
+                description={description}
+                category={'General'}
+                showSocial={true}
+                showActions={false}
+                showThumbnail={true}
+              />
             </View>
           );
         })}
@@ -121,7 +129,7 @@ export const Explore = ({ navigation }: PageProps) => {
   };
   // Do other stuff
 
-  const viewPlaylistAction = useRouteWithParams(ROUTES.sharedPlaylistDetail);
+  const viewPlaylistAction = useRouteWithParams(ROUTES?.sharedPlaylistDetail);
 
   const playlists = useAppSelector((state) => state.playlists);
 

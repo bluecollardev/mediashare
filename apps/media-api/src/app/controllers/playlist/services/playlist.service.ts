@@ -39,8 +39,8 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
    * @param {{ mediaIds: string[]; userId: ObjectId }} { userId, mediaIds }
    * @memberof PlaylistService
    */
-  async createPlaylistWithItems(dto: CreatePlaylistDto) {
-    const playlist = await this.create(dto);
+  async createPlaylistWithItems(dto: CreatePlaylistDto & { createdBy: ObjectId }) {
+    const playlist = await this.create({ ...dto, mediaIds: dto.mediaIds.map((id) => new ObjectId(id)) });
     return { playlist };
   }
 
@@ -87,18 +87,67 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
 
   /* FIXME: hack-around for getting a user when one doesn't exist */
   async getPlaylistByUserId({ userId }: OptionalObjectIdParameters = { userId: null }) {
-    if (userId === null || !userId) {
-      const defaultUsername = 'admin@example.com';
-      const user = await this.userService.findByQuery({ username: defaultUsername });
-      return await this.playlistItemService.aggregatePlaylistAndItemByIdField({ userId: user._id });
-    }
-    return await this.findAllByQuery({ userId });
+    return this.repository
+      .aggregate([
+        {
+          $match: { createdBy: userId }
+        },
+        // // {
+        // //   $lookup: {
+        // //     from: 'playlist',
+        // //     localField: 'playlistId',
+        // //     foreignField: '_id',
+        // //     as: 'playlist'
+        // //   }
+        // // },
+        // {
+        //   $unwind: { path: '$playlist' }
+        // },
+
+        {
+          $lookup: {
+            from: 'media_item',
+            localField: 'mediaIds',
+            foreignField: '_id',
+            as: 'mediaItems'
+          }
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'createdBy',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        // {
+        //   $lookup: {
+        //     from: 'mediaItems',
+        //     localField: 'mediaItems.createdBy',
+        //     foreignField: '_id',
+        //     as: 'user'
+        //   }
+        // },
+        // { $unwind: { path: '$mediaItems' } },
+        { $unwind: { path: '$user' } }
+        // {
+        //   $group: {
+        //     _id: '$playlist._id',
+        //     title: { $first: '$playlist.title' },
+        //     userId: { $first: '$playlist.userId' },
+        //     mediaItems: {
+        //       $push: { $mergeObjects: ['$mediaItems', { playlistItemId: '$_id' }] }
+        //     }
+        //   }
+        // }
+      ])
+      .toArray();
   }
   getPlaylistById({ playlistId }: OptionalObjectIdParameters) {
     return this.repository
       .aggregate([
         {
-          $match: { _id: new ObjectId(playlistId) }
+          $match: { _id: playlistId }
         },
 
         {

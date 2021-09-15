@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
@@ -16,6 +16,8 @@ import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { PlaylistItemResponseDto, PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
+import { UserGuard } from '../../modules/auth/guards/user.guard';
 
 const PLAYLIST_ID_TOKEN = ':playlistId';
 @ApiTags('playlists')
@@ -26,13 +28,14 @@ export class PlaylistController {
   @Post()
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   @ApiBody({ type: CreatePlaylistDto })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() getUserId: ObjectId) {
-    console.log('dto', createPlaylistDto);
     const { mediaIds } = createPlaylistDto;
     return await this.playlistService.createPlaylistWithItems({
       ...createPlaylistDto,
-      userId: getUserId,
-      mediaIds: mediaIds.map((id) => new ObjectId(id))
+      createdBy: getUserId,
+      mediaIds
     });
   }
 
@@ -72,7 +75,6 @@ export class PlaylistController {
       ...rest,
       mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => new ObjectId(id)) : []
     });
-
     return result;
   }
 

@@ -17,10 +17,10 @@ import Config from 'react-native-config';
 console.log('dotenv config', Config.API_SERVER);
 
 export const basePath = 'http://localhost:5000';
-
+let TOKEN = '';
+export { TOKEN };
+let COOKIE = '';
 function apiFactory() {
-  let TOKEN = '';
-  let COOKIE = '';
   function middlewareFactory() {
     const sessionMiddleWare: Middleware = {
       pre: (request: RequestArgs) => {
@@ -29,7 +29,9 @@ function apiFactory() {
         const headers = {
           ...prevHeaders,
           Authorization: `Bearer ${TOKEN}`,
-          cookie: COOKIE,
+          cookie: COOKIE.split(';')[0],
+          connection: 'keep-alive',
+
           // cookie: 'connect.sid=s%3A2yl00r3D18IP6bGsdOvZpk87hskZIJZX.D31vWBjfaejkKUqqPNpP2zfDuZMt1%2Bf6FcXOKXK%2B9y0',
         };
         console.log(headers);
