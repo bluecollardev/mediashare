@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ROUTES } from '../../routes';
-
 import { useAppSelector } from '../../state';
-import { updateMediaItem } from '../../state/modules/media-items';
+import { deleteMediaItem, updateMediaItem } from '../../state/modules/media-items';
 
 import { CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum, UpdateMediaItemDto } from '../../rxjs-api';
-import { useRouteWithParams, useMediaItems } from '../../hooks/NavigationHooks';
+import { useMediaItems } from '../../hooks/NavigationHooks';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-
-import { View, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
-import styles from '../../styles';
-import { FAB, Paragraph } from 'react-native-paper';
+import styles, { theme } from '../../styles';
+import { Avatar, Card, Dialog, FAB, Paragraph, Portal, Button } from 'react-native-paper';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 export interface MediaItemEditContainerProps {
   navigation: any;
@@ -45,6 +42,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
   const [title, setTitle] = useState(mediaItem?.title);
   const [description, setDescription] = useState(mediaItem?.description);
   const [category, setCategory] = useState();
+  const [showDialog, setShowDialog] = useState(false);
 
   const mediaItems = useMediaItems();
 
@@ -65,6 +63,11 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
     await dispatch(updateMediaItem(dto));
     mediaItems();
   };
+  const onDelete = async function () {
+    console.log('deleting');
+    await dispatch(deleteMediaItem({ id: mediaId, key: mediaItem.uri }));
+    mediaItems();
+  };
 
   useEffect(() => {
     if (mediaItem) {
@@ -80,7 +83,31 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
     <PageContainer>
       <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-          <FAB style={{ position: 'absolute', margin: 16, right: 0, bottom: 0 }} small icon="plus" onPress={() => console.log('Pressed')} />
+          <FAB
+            color={theme.colors.primaryTextLighter}
+            style={{ backgroundColor: theme.colors.error, position: 'absolute', right: 15, bottom: 15 }}
+            icon={'delete'}
+            onPress={() => setShowDialog(true)}
+          />
+          <Portal>
+            <Dialog visible={showDialog} onDismiss={() => setShowDialog(false)}>
+              <Card.Title
+                title={'Are you sure you wante to delete?'}
+                subtitle={'This action is not reversable'}
+                left={(props) => (
+                  <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="warning" />
+                )}
+              />
+              <Dialog.Actions style={{ paddingTop: 0 }}>
+                <Button mode={'text'} color={theme.colors.primaryText} onPress={() => setShowDialog(false)}>
+                  Cancel
+                </Button>
+                <Button mode={'contained'} dark color={theme.colors.error} onPress={() => onDelete()}>
+                  Confirm
+                </Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <MediaCard
               title={title}

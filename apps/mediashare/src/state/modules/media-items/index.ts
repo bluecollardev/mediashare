@@ -141,11 +141,14 @@ export const shareMediaItem = createAsyncThunk(
   }
 );
 
-export const removeMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async function (id: string, { extra }) {
+export const deleteMediaItem = createAsyncThunk(mediaItemActionTypes.removeMediaItem, async function (args: { id: string; key: string }, { extra }) {
   const { api } = extra as { api: ApiService };
-  const response = await api.mediaItems.mediaItemControllerRemove({ mediaId: id });
+  const { id, key } = args;
+  const response = await api.mediaItems.mediaItemControllerRemove({ mediaId: id }).toPromise();
+  await deleteStorage(key);
+
   // @ts-ignore
-  return response && response.status === 200 ? response.data : undefined;
+  return response;
 });
 
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async () => {
