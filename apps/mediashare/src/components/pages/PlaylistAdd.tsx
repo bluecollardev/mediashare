@@ -139,6 +139,6 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
       />
     </PageContainer>
   );
-}
+};
 
 export default withLoadingSpinner(PlaylistAdd);

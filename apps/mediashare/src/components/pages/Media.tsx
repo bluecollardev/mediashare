@@ -20,6 +20,7 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
+import { shortenText } from '../../utils';
 
 export const MediaComponent = ({ onViewDetail, list = [], selectable }: { navigation: any; list: MediaItemDto[]; onViewDetail: any; selectable: boolean }) => {
   const sortedList = list.map((item) => item);
@@ -34,7 +35,7 @@ export const MediaComponent = ({ onViewDetail, list = [], selectable }: { naviga
             <MediaListItem
               key={`item_${idx}`}
               title={title}
-              description={description}
+              description={`${shortenText(description, 40)}`}
               showThumbnail={true}
               image={thumbnail || uri}
               selectable={selectable}
@@ -74,7 +75,7 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
-      <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />
+      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {loaded && mediaItems.length > 0 ? (
           <MediaComponent navigation={navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />
