@@ -125,7 +125,7 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
 
     await withIds(filtered);
     setIsLoaded(false);
-    startLoad();
+    // startLoad();
     await loadData();
   }
 
@@ -138,17 +138,23 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
     resetData();
   }
 
-  function showCardMenu() {
+  /**
+   * Deprecated, as is... no ActionSheets!
+   * @param buttonIdx
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function showCardMenu(buttonIdx) {
     ActionSheet.show(
       {
         options: ['Cancel', 'Remove'],
         cancelButtonIndex: 0,
         destructiveButtonIndex: 1,
       },
-      (buttonIdx) => {
-        switch (buttonIdx) {
+      (selectIdx) => {
+        // Allow override
+        const selectedIdx = buttonIdx || selectIdx
+        switch (selectedIdx) {
           case 0:
-            console.log(1);
             break;
           case 1:
             saveMediaUpdates().then(() => {});

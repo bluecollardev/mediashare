@@ -8,12 +8,11 @@ import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/pla
 import { PlaylistResponseDto } from '../../api';
 
 import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
-import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { FAB, Searchbar, Subheading } from 'react-native-paper';
+import { FAB, Searchbar } from 'react-native-paper';
 import { RefreshControl, ScrollView } from 'react-native';
-import { useLoadData, useLoadPlaylistData } from '../../hooks/useLoadData';
+import { useLoadPlaylistData } from '../../hooks/useLoadData';
 
 import { View } from 'react-native';
 import { List } from 'native-base';
@@ -21,7 +20,6 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
-import { findMediaItems } from '../../state/modules/media-items';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
@@ -29,7 +27,7 @@ export interface PlaylistsProps {
   onChecked?: (checked: boolean, item?: any) => void;
 }
 
-export function mapPlaylists(playlist: PlaylistResponseDto[]) {
+/* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
   const list = playlist.map((item) => {
     const keyed = {
       id: item._id,
@@ -41,7 +39,7 @@ export function mapPlaylists(playlist: PlaylistResponseDto[]) {
     return keyed;
   });
   return list;
-}
+} */
 
 export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked = () => {} }: PlaylistsProps) => {
   const sortedList = list.map((item) => item);
@@ -70,7 +68,7 @@ export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked =
   );
 };
 
-export const Playlists = ({ navigation, onDataLoaded }: PageProps) => {
+export const Playlists = ({ onDataLoaded }: PageProps) => {
   const shareWithAction = useRouteName(ROUTES.shareWith);
   const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
   const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
@@ -94,14 +92,12 @@ export const Playlists = ({ navigation, onDataLoaded }: PageProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    // { icon: 'ios-share', onPress: shareWithAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
     { icon: 'share', onPress: shareWithAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
     { icon: 'add', onPress: createPlaylistAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
   return (
     <PageContainer>
-      {/* <TopActionButtons leftAction={createPlaylistAction} rightAction={shareWithAction} leftLabel="Create Playlist" rightLabel="Share Playlist" /> */}
       <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <PlaylistsComponent
@@ -118,12 +114,9 @@ export const Playlists = ({ navigation, onDataLoaded }: PageProps) => {
         color={theme.colors.primaryTextLighter}
         fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
         onStateChange={(open) => {
-          // open && setOpen(!open);
           setFabState(open);
         }}
-        // onPress={() => setOpen(!open)}
       />
-      {/* <ListActionButton actionCb={shareWithAction} label="Share With User" icon="share" /> */}
     </PageContainer>
   );
 

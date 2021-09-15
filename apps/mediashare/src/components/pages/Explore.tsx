@@ -8,7 +8,6 @@ import { findUserPlaylists } from '../../state/modules/playlists';
 import { PlaylistResponseDto } from '../../api';
 
 import { useRouteWithParams } from '../../hooks/NavigationHooks';
-import { useSpinner } from '../../hooks/useSpinner';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -39,7 +38,7 @@ export interface ExploreProps {
   onViewDetailClicked: Function;
 }
 
-export const ExploreArticlesComponent = ({ onViewDetailClicked, list = [] }: ExploreProps) => {
+export const ExploreArticlesComponent = ({ list = [] }: ExploreProps) => {
   let sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
   sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
@@ -114,8 +113,7 @@ export const Explore = ({ navigation }: PageProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = useDispatch();
   const [loaded, setIsLoaded] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
+
   const loadData = async function () {
     await dispatch(findUserPlaylists({}));
   };
