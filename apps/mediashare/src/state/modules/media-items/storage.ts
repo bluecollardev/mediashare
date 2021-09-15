@@ -1,6 +1,6 @@
 import { Storage } from 'aws-amplify';
 import { createThumbnail } from 'react-native-create-thumbnail';
-import { KeyFactory, KeyFactoryProps, root, uploadRoot, videoRoot } from './key-factory';
+import { KeyFactory, KeyFactoryProps, mediaRoot, uploadRoot, videoRoot } from './key-factory';
 
 export interface StorageOptions {
   title?: string;
@@ -16,12 +16,15 @@ export interface PutStorageParams {
 }
 
 export function sanitizeFoldername(key: string, folder: string) {
-  const regex = new RegExp(folder + '/');
-  const test = key.replace(regex, '');
+  const test = key.replace(new RegExp(folder), '');
   return test;
 }
 
 export function getStorage(key: string) {
+  return Storage.get(key);
+}
+
+export function downloadStorage(key: string): Promise<Object> {
   return Storage.get(key);
 }
 
@@ -30,14 +33,19 @@ export function deleteStorage(key: string) {
 }
 
 export function listStorage(key: string) {
-  return Storage.list(key);
+  return Storage.list(key, { download: true });
 }
 
 function copyStorageFactory({ root, uploadRoot, videoRoot }: Pick<KeyFactoryProps, 'root' | 'uploadRoot' | 'videoRoot'>) {
-  return (key: string) => Storage.copy({ key: root + uploadRoot + key }, { key: videoRoot + key });
+  return (key: string) => {
+    const from = root + uploadRoot + key;
+
+    const to = root + videoRoot + key;
+    return Storage.copy({ key: from }, { key: to });
+  };
 }
 
-export const copyStorage = copyStorageFactory({ root, uploadRoot, videoRoot });
+export const copyStorage = copyStorageFactory({ root: mediaRoot, uploadRoot, videoRoot });
 
 export function putToS3({ key, file, options = {} }: PutStorageParams) {
   const { title = '', description = '', summary = '', contentType = 'video/mp4' } = options;
@@ -61,10 +69,11 @@ export async function fetchAndPutToS3({ fileUri, key, options }: { fileUri: stri
 
 export async function uploadThumbnail({ fileUri, key }) {
   const { thumbnailKey } = KeyFactory(key);
-  const { path } = await createThumbnail({ url: fileUri });
+  const item = await createThumbnail({ url: fileUri });
+
   const thumbnailResponse = (await fetchAndPutToS3({
     key: thumbnailKey,
-    fileUri: path,
+    fileUri: item.path,
     options: { contentType: 'image/jpeg' },
   })) as any;
   const getItem = await getStorage(thumbnailResponse.key);

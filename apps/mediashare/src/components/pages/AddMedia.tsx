@@ -25,7 +25,7 @@ import { minLength } from '../../lib/Validators';
 
 import { findUserPlaylists } from '../../state/modules/playlists';
 
-export const AddMedia = ({ navigation }: PageProps) => {
+export const AddMedia = ({ navigation, startLoad, endLoad }: PageProps) => {
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);
@@ -47,7 +47,7 @@ export const AddMedia = ({ navigation }: PageProps) => {
   for (const value in CreateMediaItemDtoCategoryEnum) {
     options.push(value);
   }
-  const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
+  // const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
 
   const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
   const onTitleChange = setTitle;
@@ -112,10 +112,12 @@ export const AddMedia = ({ navigation }: PageProps) => {
     if (!document) {
       return;
     }
+    console.log(document);
     setDocumentUri(document?.uri || '');
     startLoad();
 
-    await dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
+    const thumbnail = await dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
+    console.log(thumbnail);
     endLoad();
   }
 
@@ -148,7 +150,7 @@ export const AddMedia = ({ navigation }: PageProps) => {
     setDescription('');
     setThumbnail('');
     goBack();
-  };
+  }
 };
 
 export default withLoadingSpinner(AddMedia);

@@ -7,7 +7,7 @@ import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/pla
 
 import { PlaylistResponseDto } from '../../api';
 
-import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { useRouteName, useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { FAB, Searchbar } from 'react-native-paper';
@@ -74,7 +74,7 @@ export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked =
 export const Playlists = ({ onDataLoaded }: PageProps) => {
   const shareWithAction = useRouteName(ROUTES.shareWith);
   const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
-  const viewPlaylistAction = useRouteWithParams(ROUTES.playlistDetail);
+  const viewPlaylistAction = useViewPlaylistById();
 
   const dispatch = useDispatch();
 

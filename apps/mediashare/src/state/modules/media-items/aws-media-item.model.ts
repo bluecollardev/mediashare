@@ -1,6 +1,6 @@
 export interface AwsMediaItem {
   key: string;
-  size: number;
+  size: number | string;
   lastModified: string;
   etag: string;
 }

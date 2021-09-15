@@ -6,7 +6,7 @@ import { ROUTES } from '../../routes';
 import { useAppSelector } from '../../state';
 import { getFeedMediaItems, saveFeedMediaItems } from '../../state/modules/media-items';
 
-import { useRouteName } from '../../hooks/NavigationHooks';
+import { useRouteName, useMediaItems } from '../../hooks/NavigationHooks';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaListItem } from '../layout/MediaListItem';
 
@@ -17,18 +17,19 @@ import { PageContainer, PageProps } from '../layout/PageContainer';
 import { ScrollView, View } from 'react-native';
 import { Subheading, Card } from 'react-native-paper';
 import { findUserPlaylists } from '../../state/modules/playlists';
+import { AwsMediaItem } from '../../state/modules/media-items/aws-media-item.model';
 
 export const AddFromFeed = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
 
-  const goToMediaItems = useRouteName(ROUTES.media);
-  const selectedItems = new Set<string>();
+  const goToMediaItems = useMediaItems();
+  const selectedItems = new Set<AwsMediaItem>();
 
-  const addItemCb = function (id: string) {
-    selectedItems.add(id);
+  const addItemCb = function (item: AwsMediaItem) {
+    selectedItems.add(item);
   };
-  const removeItemCb = function (id: string) {
-    selectedItems.delete(id);
+  const removeItemCb = function (item: AwsMediaItem) {
+    selectedItems.delete(item);
   };
 
   const [loaded, setIsLoaded] = useState(false);
@@ -40,7 +41,7 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
       return;
     }
     const items = Array.from(selectedItems.values());
-    await dispatch(saveFeedMediaItems({ keys: items }));
+    await dispatch(saveFeedMediaItems({ items }));
     goToMediaItems();
   };
   useEffect(() => {
@@ -75,9 +76,9 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
                 showActions={false}
                 key={idx}
                 title={key}
-                description={size + lastModified}
+                description={`${size} - ${lastModified}`}
                 checked={false}
-                onChecked={(v) => (v ? addItemCb(key) : removeItemCb(key))}
+                onChecked={(v) => (v ? addItemCb(item) : removeItemCb(item))}
               />
             );
           })}

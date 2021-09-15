@@ -16,7 +16,7 @@ export const withLoadingSpinner = (WrapperComponent) => (props) => {
 
   return (
     <PageContainer>
-      {/* {isLoading || !loaded ? <AppSpinner /> : null} */}
+      {isLoading || !loaded ? <AppSpinner /> : null}
       <WrapperComponent {...props} onDataLoaded={onDataLoaded} startLoad={startLoad} endLoad={endLoad} />
     </PageContainer>
   );

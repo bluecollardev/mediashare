@@ -79,36 +79,39 @@ export const addMediaItem = createAsyncThunk(
 );
 
 export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
-  const mediaItems = (await listStorage(uploadRoot)) as AwsMediaItem[];
+  const mediaItems = (await listStorage(mediaRoot + uploadRoot)) as AwsMediaItem[];
   const items = mediaItems
-    .filter((item) => item.key !== 'uploads/')
+    .filter((item) => item.key !== mediaRoot + uploadRoot)
     .map((item) => ({
-      ...item,
-      key: sanitizeFoldername(item.key, uploadRoot),
+      etag: item.etag,
+      size: typeof item.size === 'number' ? `${(item.size / (1024 * 1024)).toFixed(2)} MB` : '',
+      lastModified: new Date(Date.parse(item.lastModified)).toDateString(),
+      key: sanitizeFoldername(item.key, mediaRoot + uploadRoot),
     }));
+
   return items;
 });
 
-export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ keys }: { keys: string[] }) => {
+export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ items }: { items: AwsMediaItem[] }) => {
   // const promises = ;
-  const copy = keys.map((key) => copyStorage(key));
+  const copy = items.map((item) => copyStorage(item.key));
 
-  const dtos: CreateMediaItemDto[] = keys.map((key) => ({
-    description: `Uploaded to bucket on ${new Date()}`,
-    title: key,
-    thumbnail: mediaRoot + thumbnailRoot + key,
-    video: mediaRoot + videoRoot + key,
-    uri: mediaRoot + videoRoot + key,
-    isPlayable: false,
+  const dtos: CreateMediaItemDto[] = items.map((item) => ({
+    description: `${item.size} - ${item.lastModified}`,
+    title: item.key,
+    thumbnail: mediaRoot + thumbnailRoot + item.key,
+    video: mediaRoot + videoRoot + item.key,
+    uri: mediaRoot + videoRoot + item.key,
+    isPlayable: true,
     category: CreateMediaItemDtoCategoryEnum.Endurance,
-    eTag: '',
-    key: mediaRoot + videoRoot + key,
+    eTag: item.etag,
+    key: mediaRoot + videoRoot + item.key,
     summary: '',
   }));
 
   const dtoPromises = dtos.map((dto) => apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto: dto }));
   const save = merge(...dtoPromises).pipe(tap((res) => console.log(res)));
-  const deleted = keys.map((key) => deleteStorage('uploads/' + key));
+  const deleted = items.map((item) => deleteStorage(mediaRoot + uploadRoot + item.key));
 
   const result = await concat(copy, save, deleted).toPromise();
   return result;

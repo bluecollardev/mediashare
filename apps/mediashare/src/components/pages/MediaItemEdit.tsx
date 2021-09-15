@@ -11,13 +11,13 @@ import { useRouteWithParams, useMediaItems } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { View, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
+import { View, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import styles from '../../styles';
-import { Paragraph } from 'react-native-paper';
+import { FAB, Paragraph } from 'react-native-paper';
 
 export interface MediaItemEditContainerProps {
   navigation: any;
@@ -78,9 +78,10 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
   }
   return (
     <PageContainer>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+          <FAB style={{ position: 'absolute', margin: 16, right: 0, bottom: 0 }} small icon="plus" onPress={() => console.log('Pressed')} />
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <MediaCard
               title={title}
               description={description}
@@ -94,12 +95,12 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
               onDescriptionChange={setDescription}
               isEdit={true}
             />
-            <View>
-              <ActionButtons actionCb={saveItem} cancelCb={cancelCb} rightIcon="check-circle" actionLabel={actionLabel} cancelLabel={cancelLabel} />
-            </View>
+          </TouchableWithoutFeedback>
+          <View>
+            <ActionButtons actionCb={saveItem} cancelCb={cancelCb} rightIcon="check-circle" actionLabel={actionLabel} cancelLabel={cancelLabel} />
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </View>
     </PageContainer>
   );
 };

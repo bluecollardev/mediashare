@@ -17,7 +17,7 @@ export interface KeyFactoryProps {
 
 function createKeyFactory({ root, thumbnailRoot, videoRoot, uploadRoot }: KeyFactoryProps) {
   return function (title: string) {
-    const makeKey = <K extends string>(key: K) => `${root}${key}/${title}`;
+    const makeKey = <K extends string>(key: K) => `${root}${key}${title}`;
 
     const labelledVideo = makeKey(videoRoot) + '.mp4';
     const labelledThumbnail = makeKey(thumbnailRoot) + '.jpeg';
