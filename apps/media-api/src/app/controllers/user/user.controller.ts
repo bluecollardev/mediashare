@@ -48,20 +48,20 @@ export class UserController {
     return { accessToken: expressUser.accessToken.accessToken, ...user };
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('logout')
+  @UseGuards(JwtAuthGuard)
   logout(@Req() req: Request, @Res() res: Response) {
     req.logout();
     return res.status(HttpStatus.OK).send();
   }
 
   @Get('playlists')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
-  async getUserPlaylists(@GetUser() user: SessionUserInterface) {
-    console.log(user);
-    const result = user._id ? await this.playlistService.getPlaylistByUserId({ userId: user._id }) : await this.playlistService.findAll();
-
-    console.log(result);
+  async getUserPlaylists(@GetUser() user: SessionUserInterface, @GetUserId() userId: ObjectId) {
+    console.log('the user', userId);
+    const result = await this.playlistService.getPlaylistByUserId({ userId: user._id });
     return result;
   }
 
@@ -96,7 +96,8 @@ export class UserController {
     const valid = await this.userService.validateToken({ token });
 
     if (!valid) throw new UnauthorizedException();
-    const user = await this.userService.findByQuery({ _id: valid._id });
+    const user = await this.userService.findOne(valid._id);
+
     return { ...user, accessToken: token };
   }
 }

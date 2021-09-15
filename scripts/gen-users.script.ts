@@ -26,7 +26,7 @@ const piped = R.pipe(
     makeFieldFunctor('username')(userTuple[1][1]),
     makeFieldFunctor('email')(userTuple[1][1]),
     makeFieldFunctor('roles')([userTuple[0].toString()]),
-    makeFieldFunctor('_id')(new ObjectId().toHexString()),
+    makeFieldFunctor('_id')(new ObjectId()),
   ]),
   R.map((userTuple) => R.mergeAll(userTuple))
 );

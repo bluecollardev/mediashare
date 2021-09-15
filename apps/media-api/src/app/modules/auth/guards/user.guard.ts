@@ -1,27 +1,30 @@
-import { CanActivate, Inject, ExecutionContext, Logger } from '@nestjs/common';
+import { CanActivate, Inject, ExecutionContext, Logger, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { timeout } from 'rxjs/operators';
-import { AuthService } from '../../../../../../media-auth/src/app/auth/auth.service';
+import { AuthService } from '../auth.service';
 
+@Injectable()
 export class UserGuard implements CanActivate {
   constructor(private authSvc: AuthService) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
 
     console.log(req.headers);
 
     const { authorization } = req.headers;
+    console.log('🚀 -------------------------------------------------------------------------------------------');
+    console.log('🚀 ~ file: user.guard.ts ~ line 15 ~ UserGuard ~ canActivate ~ authorization', authorization.replace('Bearer', '').replace(' ', ''));
+    console.log('🚀 -------------------------------------------------------------------------------------------');
     console.log(req.isAuthenticated(authorization.replace('Bearer', '').replace(' ', '')));
 
-    try {
-      const res = this.authSvc.validateToken;
+    const res = this.authSvc.validateToken(authorization);
+    console.log('🚀 -----------------------------------------------------------------------');
+    console.log('🚀 ~ file: user.guard.ts ~ line 19 ~ UserGuard ~ canActivate ~ res', res);
+    console.log('🚀 -----------------------------------------------------------------------');
 
-      req.session.user = res;
+    req.session.user = res;
 
-      return res as any;
-    } catch (err) {
-      return false;
-    }
+    return res as any;
   }
 }

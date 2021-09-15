@@ -7,7 +7,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromHeader('Authorization'),
       ignoreExpiration: true,
-      secretOrKey: configService.get('auth.secretSession'),
+      secretOrKey: configService.get('auth.secretSession')
     });
   }
 

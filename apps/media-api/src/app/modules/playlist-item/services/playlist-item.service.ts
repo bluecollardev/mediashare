@@ -15,35 +15,35 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
           from: 'media_item',
           localField: 'mediaId',
           foreignField: '_id',
-          as: 'mediaItems',
-        },
+          as: 'mediaItems'
+        }
       },
       {
         $unwind: {
           path: '$mediaItems',
-          preserveNullAndEmptyArrays: false,
-        },
+          preserveNullAndEmptyArrays: false
+        }
       },
       {
         $replaceRoot: {
           newRoot: {
-            $mergeObjects: [{ playlistItemId: '$_id', mediaId: '$mediaId', playlistId: '$playlistId', userId: 0 }, '$mediaItems'],
-          },
-        },
+            $mergeObjects: [{ playlistItemId: '$_id', mediaId: '$mediaId', playlistId: '$playlistId', userId: 0 }, '$mediaItems']
+          }
+        }
       },
       {
         $lookup: {
           from: 'playlist',
           localField: 'playlistId',
           foreignField: '_id',
-          as: 'playlist',
-        },
+          as: 'playlist'
+        }
       },
       {
         $unwind: {
           path: '$playlist',
-          preserveNullAndEmptyArrays: false,
-        },
+          preserveNullAndEmptyArrays: false
+        }
       },
       {
         $replaceRoot: {
@@ -57,13 +57,13 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
             description: '$description',
             category: '$category',
             title: '$title',
-            playlistTitle: '$playlist.title',
-          },
-        },
+            playlistTitle: '$playlist.title'
+          }
+        }
       },
       {
-        $group: { _id: '$playlistId', title: { $first: '$playlistTitle' }, mediaItems: { $push: '$$ROOT' } },
-      },
+        $group: { _id: '$playlistId', title: { $first: '$playlistTitle' }, mediaItems: { $push: '$$ROOT' } }
+      }
     ];
   }
   constructor(
@@ -78,48 +78,48 @@ export class PlaylistItemService extends DataService<PlaylistItem, MongoReposito
     return this.repository
       .aggregate([
         {
-          $match: { ...params },
-        },
-        {
-          $lookup: {
-            from: 'playlist',
-            localField: 'playlistId',
-            foreignField: '_id',
-            as: 'playlist',
-          },
-        },
-        {
-          $unwind: { path: '$playlist' },
-        },
+          $match: { createdBy: params.userId.toHexString() }
+        }
+        // {
+        //   $lookup: {
+        //     from: 'playlist',
+        //     localField: 'playlistId',
+        //     foreignField: '_id',
+        //     as: 'playlist'
+        //   }
+        // },
+        // {
+        //   $unwind: { path: '$playlist' }
+        // },
 
-        {
-          $lookup: {
-            from: 'media_item',
-            localField: 'mediaIds',
-            foreignField: '_id',
-            as: 'mediaItems',
-          },
-        },
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'user',
-          },
-        },
-        { $unwind: { path: '$mediaItems' } },
-        { $unwind: { path: '$user' } },
-        {
-          $group: {
-            _id: '$playlist._id',
-            title: { $first: '$playlist.title' },
-            userId: { $first: '$playlist.userId' },
-            mediaItems: {
-              $push: { $mergeObjects: ['$mediaItems', { playlistItemId: '$_id' }] },
-            },
-          },
-        },
+        // {
+        //   $lookup: {
+        //     from: 'media_item',
+        //     localField: 'mediaIds',
+        //     foreignField: '_id',
+        //     as: 'mediaItems'
+        //   }
+        // },
+        // {
+        //   $lookup: {
+        //     from: 'user',
+        //     localField: 'userId',
+        //     foreignField: '_id',
+        //     as: 'user'
+        //   }
+        // },
+        // { $unwind: { path: '$mediaItems' } },
+        // { $unwind: { path: '$user' } },
+        // {
+        //   $group: {
+        //     _id: '$playlist._id',
+        //     title: { $first: '$playlist.title' },
+        //     userId: { $first: '$playlist.userId' },
+        //     mediaItems: {
+        //       $push: { $mergeObjects: ['$mediaItems', { playlistItemId: '$_id' }] }
+        //     }
+        //   }
+        // }
       ])
       .toArray();
   }
