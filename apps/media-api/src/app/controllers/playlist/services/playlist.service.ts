@@ -153,7 +153,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         {
           $lookup: {
             from: 'user',
-            localField: 'userId',
+            localField: 'createdBy',
             foreignField: '_id',
             as: 'user'
           }

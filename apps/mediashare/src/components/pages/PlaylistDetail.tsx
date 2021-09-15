@@ -30,16 +30,17 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
 
   const dispatch = useDispatch();
 
-  const { selectedPlaylist, loaded } = useAppSelector((state) => state.playlist);
+  const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
+  const loaded = useAppSelector((state) => state.loaded);
   const [isLoaded, setIsLoaded] = useState(loaded);
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(refresh, [dispatch, playlistId]);
   useEffect(() => {
     if (!isLoaded) {
       loadData().then(onDataLoaded);
+      console.log(selectedPlaylist);
     }
-  }, [isLoaded, dispatch, onDataLoaded]);
+  }, [isLoaded, dispatch, onDataLoaded, loaded, selectedPlaylist]);
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
@@ -105,12 +106,6 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   async function loadData() {
     await dispatch(getPlaylistById(playlistId));
     setIsLoaded(true);
-  }
-
-  async function refresh() {
-    setRefreshing(true);
-    await dispatch(getPlaylistById(playlistId));
-    setRefreshing(false);
   }
 };
 
