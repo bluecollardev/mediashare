@@ -37,7 +37,7 @@ export function useViewPlaylist() {
 
 export function useViewPlaylistItem() {
   const nav = useNavigation();
-  return ({ mediaId, uri }) => nav.navigate(ROUTES.playlistItemDetail, { mediaId, uri });
+  return ({ playlistId, uri }) => nav.navigate(ROUTES.playlistItemDetail, { playlistId, uri });
 }
 
 export function useViewSharedMediaItem() {
@@ -53,7 +53,14 @@ export function useEditMediaItem() {
     nav.navigate(ROUTES.mediaItemEdit, { mediaId, uri });
   };
 }
-
+export function useViewMediaItem() {
+  const nav = useNavigation();
+  const dispatch = useDispatch();
+  return async ({ mediaId, uri }) => {
+    await dispatch(getMediaItemById({ uri, mediaId }));
+    nav.navigate(ROUTES.mediaItemEdit, { mediaId, uri });
+  };
+}
 export function useEditPlaylistById() {
   const nav = useNavigation();
   const dispatch = useDispatch();

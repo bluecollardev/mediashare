@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
-import { getPlaylistById } from '../../state/modules/playlists';
+import { getPlaylistById, removeUserPlaylist } from '../../state/modules/playlists';
 
-import { useRouteWithParams, useViewPlaylistItem } from '../../hooks/NavigationHooks';
+import { usePlaylists, useRouteWithParams, useViewMediaItem, useViewPlaylistItem } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -19,19 +19,26 @@ import { ListActionButton } from '../layout/ListActionButton';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
+import AppDialog from '../layout/AppDialog';
 
 export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
 
   const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
   const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
-  const onViewPlaylistItemClicked = useViewPlaylistItem();
-  const onDeleteClicked = ({ playlistId }) => playlistId;
+  const onViewMediaItem = useViewMediaItem();
+  const playlists = usePlaylists();
+  const onDelete = async ({ playlistId }) => {
+    console.log('dispatch', playlistId);
+    await dispatch(removeUserPlaylist(playlistId));
+    playlists();
+  };
 
   const dispatch = useDispatch();
 
   const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
   const loaded = useAppSelector((state) => state);
+  const [showDialog, setShowDialog] = useState(false);
   const [isLoaded, setIsLoaded] = useState(loaded);
 
   useEffect(() => {
@@ -43,7 +50,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    { icon: 'delete', onPress: () => onDeleteClicked({ playlistId }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
+    { icon: 'delete', onPress: () => setShowDialog(true), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
     { icon: 'edit', onPress: () => onEditClicked({ playlistId }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
     {
       icon: 'playlist-add',
@@ -74,13 +81,18 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
               // onDeleteClicked={onDeleteClicked}
               category={category}
             />
-            <MediaList
-              onViewDetail={(item) => onViewPlaylistItemClicked({ mediaId: item._id, uri: item.uri })}
-              list={items}
-              isSelectable={false}
-              showThumbnail={true}
-            />
+            <MediaList onViewDetail={(item) => onViewMediaItem({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} showThumbnail={true} />
           </ScrollView>
+          <AppDialog
+            leftActionLabel={'Cancel'}
+            rightActionLabel={'Delete'}
+            leftActionCb={() => setShowDialog(false)}
+            rightActionCb={() => onDelete({ playlistId })}
+            onDismiss={() => setShowDialog(false)}
+            showDialog={showDialog}
+            title={'Are you sure?'}
+            subtitle={'This action cannot be undone'}
+          />
           <View>
             <ListActionButton icon="playlist-add" label="Add From Collection" actionCb={() => onAddToPlaylistClicked({ playlistId })} />
           </View>
