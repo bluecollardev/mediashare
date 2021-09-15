@@ -15,6 +15,7 @@ import { PageContainer, PageProps } from '../layout/PageContainer';
 import styles, { theme } from '../../styles';
 import { Avatar, Card, Dialog, FAB, Paragraph, Portal, Button } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import AppDialog from '../layout/AppDialog';
 
 export interface MediaItemEditContainerProps {
   navigation: any;
@@ -89,7 +90,17 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
             icon={'delete'}
             onPress={() => setShowDialog(true)}
           />
-          <Portal>
+          <AppDialog
+            leftActionLabel={'Cancel'}
+            rightActionLabel={'Delete'}
+            leftActionCb={() => setShowDialog(false)}
+            rightActionCb={() => onDelete()}
+            onDismiss={() => setShowDialog(false)}
+            showDialog={showDialog}
+            title={'Are you sure?'}
+            subtitle={'This action cannot be undone'}
+          />
+          {/* <Portal>
             <Dialog visible={showDialog} onDismiss={() => setShowDialog(false)}>
               <Card.Title
                 title={'Are you sure you wante to delete?'}
@@ -107,7 +118,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
                 </Button>
               </Dialog.Actions>
             </Dialog>
-          </Portal>
+          </Portal> */}
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <MediaCard
               title={title}

@@ -31,9 +31,8 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const dispatch = useDispatch();
 
   const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
-  const loaded = useAppSelector((state) => state.loaded);
+  const loaded = useAppSelector((state) => state);
   const [isLoaded, setIsLoaded] = useState(loaded);
-  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (!isLoaded) {
