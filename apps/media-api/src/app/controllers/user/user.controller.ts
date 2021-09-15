@@ -50,13 +50,9 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Post('logout')
-  @ApiBearerAuth()
-  async logout(@Req() req: Request, @Res() res: Response) {
-    try {
-      req.logout();
-    } catch {
-      return res.status(HttpStatus.OK).send();
-    }
+  logout(@Req() req: Request, @Res() res: Response) {
+    req.logout();
+    return res.status(HttpStatus.OK).send();
   }
 
   @Get('playlists')
@@ -98,9 +94,6 @@ export class UserController {
   async authorize(@Body() body: TokenDto) {
     const { token = null } = body;
     const valid = await this.userService.validateToken({ token });
-    console.log('🚀 ------------------------------------------------------------------------------------');
-    console.log('🚀 ~ file: user.controller.ts ~ line 101 ~ UserController ~ authorize ~ valid', valid);
-    console.log('🚀 ------------------------------------------------------------------------------------');
 
     if (!valid) throw new UnauthorizedException();
     const user = await this.userService.findByQuery({ _id: valid._id });
