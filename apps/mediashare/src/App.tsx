@@ -170,19 +170,11 @@ function App() {
       const token = await getKeyPair('token');
       if (token) {
         const user = await dispatch(validateTokenAction(token));
-        console.log('🚀 -------------------------------------------------------');
-        console.log('🚀 ~ file: App.tsx ~ line 173 ~ checkToken ~ user', user);
-        console.log('🚀 -------------------------------------------------------');
-        // if (user) {
-        //   setIsLoggedIn(!!token);
-        // }
       }
     };
     checkToken();
   }, []);
   useEffect(() => {
-    console.log(user);
-    console.log(user);
     setIsLoggedIn(user?._id?.length > 0);
   }, [user]);
 

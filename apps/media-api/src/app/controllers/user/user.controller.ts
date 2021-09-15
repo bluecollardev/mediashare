@@ -97,6 +97,6 @@ export class UserController {
 
     if (!valid) throw new UnauthorizedException();
     const user = await this.userService.findByQuery({ _id: valid._id });
-    return user;
+    return { ...user, accessToken: token };
   }
 }
