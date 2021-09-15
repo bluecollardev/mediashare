@@ -21,6 +21,7 @@ export interface MediaListItemProps {
 const AvatarComponent = (uri: any) => {
   return <Avatar.Image size={24} source={{ uri: uri.uri }} />;
 };
+
 export const MediaListItem: React.FC<MediaListItemProps> = ({
   checked,
   image,

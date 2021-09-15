@@ -21,3 +21,14 @@ export const validate = (values) => {
   }
   return error;
 };
+
+// TODO: Move out! Is there a good util lib that does this?
+// Shorten a string to less than maxLen characters without truncating words.
+export function shortenText(str, maxLen, separator: RegExp = undefined) {
+  separator = separator || /\W/;
+  if (str.length <= maxLen) {
+    return str;
+  }
+  const idx = str.slice(maxLen).search(separator);
+  return `${str.substring(0, idx < 0 ? idx : idx + maxLen)}...`;
+}

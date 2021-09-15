@@ -19,6 +19,8 @@ import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
 import { PlaylistCard } from '../layout/PlaylistCard';
 
+import { shortenText } from '../../utils';
+
 /* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
   const list = playlist.map((item) => {
     const keyed = {
@@ -70,14 +72,14 @@ export const ExplorePlaylistsComponent = ({ onViewDetailClicked, list = [] }: Ex
       <List.Section>
         <List.Subheader>Playlists by Adam Fehr</List.Subheader>
         {sortedList.slice(0, 2).map((item) => {
-          const { title, mediaIds } = item;
+          const { title, description, mediaIds } = item;
           return (
             <MediaListItem
               key={`user_${item._id}`}
               title={title}
               selectable={false}
               showThumbnail={true}
-              description={`${mediaIds.length || 0} videos`}
+              description={`${shortenText(description, 40)}\n${mediaIds.length || 0} videos`}
               onViewDetail={() => {
                 onViewDetailClicked(item);
               }}

@@ -19,6 +19,8 @@ import { List } from 'native-base';
 import { MediaListItem } from '../layout/MediaListItem';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
+import { shortenText } from '../../utils';
+
 import { theme } from '../../styles';
 
 export interface PlaylistsProps {
@@ -41,17 +43,6 @@ export interface PlaylistsProps {
   return list;
 } */
 
-// TODO: Move out! Is there a good util lib that does this?
-// Shorten a string to less than maxLen characters without truncating words.
-function shorten(str, maxLen, separator: RegExp = undefined) {
-  separator = separator || /\W/;
-  if (str.length <= maxLen) {
-    return str;
-  }
-  const idx = str.slice(maxLen).search(separator);
-  return `${str.substring(0, idx < 0 ? idx : idx + maxLen)}...`;
-}
-
 export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked = () => {} }: PlaylistsProps) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
@@ -66,7 +57,7 @@ export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked =
             <MediaListItem
               key={item._id}
               title={title}
-              description={`${shorten(description, 70)}\n${mediaIds.length || 0} videos`}
+              description={`${shortenText(description, 40)}\n${mediaIds.length || 0} videos`}
               showThumbnail={true}
               onViewDetail={() => {
                 onViewDetailClicked(item);
