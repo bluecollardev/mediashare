@@ -41,6 +41,17 @@ export interface PlaylistsProps {
   return list;
 } */
 
+// TODO: Move out! Is there a good util lib that does this?
+// Shorten a string to less than maxLen characters without truncating words.
+function shorten(str, maxLen, separator: RegExp = undefined) {
+  separator = separator || /\W/;
+  if (str.length <= maxLen) {
+    return str;
+  }
+  const idx = str.slice(maxLen).search(separator);
+  return `${str.substring(0, idx < 0 ? idx : idx + maxLen)}...`;
+}
+
 export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked = () => {} }: PlaylistsProps) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
@@ -50,12 +61,12 @@ export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked =
       <List>
         {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
         {sortedList.map((item, idx) => {
-          const { title, mediaIds } = item;
+          const { title, description, mediaIds } = item;
           return (
             <MediaListItem
               key={item._id}
               title={title}
-              description={`${mediaIds.length || 0} videos`}
+              description={`${shorten(description, 90)}\n${mediaIds.length || 0} videos`}
               onViewDetail={() => {
                 onViewDetailClicked(item);
               }}

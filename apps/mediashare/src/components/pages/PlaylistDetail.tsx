@@ -67,7 +67,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
               title={title}
               author={author}
               description={description}
-              showSocial={false}
+              showSocial={true}
               showActions={false}
               showThumbnail={true}
               onEditClicked={() => onEditClicked({ playlistId })}
