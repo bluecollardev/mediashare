@@ -66,7 +66,8 @@ export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked =
             <MediaListItem
               key={item._id}
               title={title}
-              description={`${shorten(description, 90)}\n${mediaIds.length || 0} videos`}
+              description={`${shorten(description, 70)}\n${mediaIds.length || 0} videos`}
+              showThumbnail={true}
               onViewDetail={() => {
                 onViewDetailClicked(item);
               }}

@@ -65,8 +65,14 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
             />
             {showThumbnail ? source ? <Avatar.Image size={36} source={source} /> : <Avatar.Image size={36} source={{ uri: DEFAULT_IMAGE }} /> : <></>}
           </>
+        ) : showThumbnail ? (
+          source ? (
+            <Avatar.Image size={36} source={source} />
+          ) : (
+            <Avatar.Image size={36} source={{ uri: DEFAULT_IMAGE }} />
+          )
         ) : (
-          showThumbnail && source && <Avatar.Image size={36} source={source} />
+          <></>
         )
       }
       right={() => showActions === true && <IconButton icon="chevron-right" color={theme.colors.accent} onPress={onViewDetail} />}
