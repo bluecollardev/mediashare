@@ -21,7 +21,7 @@ import { PageContainer, PageProps } from '../layout/PageContainer';
 import { theme } from '../../styles';
 
 export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
-  const { playlistId = '' } = route?.params;
+  const { playlistId = '' } = route?.params || {};
 
   const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
   const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);

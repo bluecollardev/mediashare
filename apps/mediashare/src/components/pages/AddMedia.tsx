@@ -5,15 +5,12 @@ import { View, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Touc
 import { Button, CardItem, Icon, Text } from 'native-base';
 import * as DocumentPicker from 'expo-document-picker';
 
-import { ROUTES } from '../../routes';
-
 import { useAppSelector } from '../../state';
 import { addMediaItem, createThumbnail } from '../../state/modules/media-items';
 
 import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 
-import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
-import { useSpinner, SPINNER_DEFAULTS } from '../../hooks/useSpinner';
+import { useMediaItems } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -23,9 +20,7 @@ import { PageContainer, PageProps } from '../layout/PageContainer';
 import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
 import { minLength } from '../../lib/Validators';
 
-import { findUserPlaylists } from '../../state/modules/playlists';
-
-export const AddMedia = ({ navigation, startLoad, endLoad }: PageProps) => {
+export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);
@@ -37,7 +32,6 @@ export const AddMedia = ({ navigation, startLoad, endLoad }: PageProps) => {
   const mediaSrc =
     useAppSelector((state) => state.mediaItem.getMediaItem) ||
     'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
-  const goBack = useGoBack();
   const isValid = function () {
     const test = !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !minLength(1)(documentUri);
     return test;
@@ -49,7 +43,6 @@ export const AddMedia = ({ navigation, startLoad, endLoad }: PageProps) => {
   }
   // const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
 
-  const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
   const onTitleChange = setTitle;
   const onDescriptionChange = setDescription;
   const onCategoryChange = setCategory;
@@ -57,6 +50,7 @@ export const AddMedia = ({ navigation, startLoad, endLoad }: PageProps) => {
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
   const cancelCb = clearAndGoBack;
+  const mediaItems = useMediaItems();
 
   return (
     <PageContainer>
@@ -134,14 +128,13 @@ export const AddMedia = ({ navigation, startLoad, endLoad }: PageProps) => {
       key: title,
       eTag: '',
     };
-    const res = await dispatch(addMediaItem(dto));
-    const item = res as any;
+    await dispatch(addMediaItem(dto));
 
     setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
     setDescription('');
     setThumbnail('');
     endLoad();
-    goToItem({ mediaId: item.payload._id, uri: item.payload.uri });
+    mediaItems();
   }
 
   function clearAndGoBack() {
@@ -149,7 +142,7 @@ export const AddMedia = ({ navigation, startLoad, endLoad }: PageProps) => {
     setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
     setDescription('');
     setThumbnail('');
-    goBack();
+    mediaItems();
   }
 };
 

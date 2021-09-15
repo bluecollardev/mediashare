@@ -32,7 +32,7 @@ export function useGoBack() {
 
 export function useViewPlaylist() {
   const nav = useNavigation();
-  return ({ playlistId }) => nav.navigate(ROUTES.playlistDetail, { playlistId });
+  return ({ playlistId }) => nav.navigate(ROUTES?.playlistDetail, { playlistId });
 }
 
 export function useViewPlaylistItem() {
@@ -54,7 +54,7 @@ export function useEditMediaItem() {
   };
 }
 
-function createPlaylistByIdFactory(route: RouteConfigKeyType) {
+function createPlaylistByIdFactory(route) {
   return function () {
     const nav = useNavigation();
     const dispatch = useDispatch();
@@ -64,8 +64,8 @@ function createPlaylistByIdFactory(route: RouteConfigKeyType) {
     };
   };
 }
-export const useViewPlaylistById = createPlaylistByIdFactory(ROUTES.playlistDetail);
-export const useEditPlaylistById = createPlaylistByIdFactory(ROUTES.playlistEdit);
+export const useViewPlaylistById = () => createPlaylistByIdFactory(ROUTES.playlistDetail);
+export const useEditPlaylistById = () => createPlaylistByIdFactory(ROUTES.playlistEdit);
 
 export function usePlaylists() {
   const nav = useRouteName(ROUTES.playlists);
