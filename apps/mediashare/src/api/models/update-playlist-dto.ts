@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * Mediashare
  * Media Share API
@@ -56,7 +55,7 @@ export interface UpdatePlaylistDto {
  * @enum {string}
  */
 export enum UpdatePlaylistDtoCategoryEnum {
-  Rehab = 'rehab',
-  Builder = 'builder',
-  Warmup = 'warmup',
+  Rehab = 'Rehab',
+  Builder = 'Builder',
+  Warmup = 'Warmup',
 }

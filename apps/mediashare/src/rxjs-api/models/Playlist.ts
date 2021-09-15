@@ -20,7 +20,7 @@ export interface Playlist {
    * @type {string}
    * @memberof Playlist
    */
-  _id: string;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof Playlist
@@ -57,7 +57,7 @@ export interface Playlist {
    * @type {Array<string>}
    * @memberof Playlist
    */
-  mediaIds: Array<string>;
+  mediaIds: Array<string> | null;
   /**
    * @type {string}
    * @memberof Playlist
@@ -70,7 +70,7 @@ export interface Playlist {
  * @enum {string}
  */
 export enum PlaylistCategoryEnum {
-  Rehab = 'rehab',
-  Builder = 'builder',
-  Warmup = 'warmup',
+  Rehab = 'Rehab',
+  Builder = 'Builder',
+  Warmup = 'Warmup',
 }

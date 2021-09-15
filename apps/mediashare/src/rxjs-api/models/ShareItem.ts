@@ -20,7 +20,7 @@ export interface ShareItem {
    * @type {string}
    * @memberof ShareItem
    */
-  _id: string;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof ShareItem

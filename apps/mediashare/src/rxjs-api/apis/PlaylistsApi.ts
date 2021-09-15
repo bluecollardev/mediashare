@@ -12,7 +12,7 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, encodeURI, HttpHeaders, OperationOpts, RawAjaxResponse, throwIfNullOrUndefined } from '../runtime';
+import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
 import { CreatePlaylistDto, CreatePlaylistResponseDto, Playlist, PlaylistItemResponseDto, PlaylistResponseDto, ShareItem, UpdatePlaylistDto } from '../models';
 
 export interface PlaylistControllerCreateRequest {
@@ -72,7 +72,7 @@ export class PlaylistsApi extends BaseAPI {
   /**
    */
   playlistControllerFindAll(): Observable<Array<PlaylistItemResponseDto>>;
-  playlistControllerFindAll(opts?: { headers: {}; query: {} }): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
+  playlistControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
   playlistControllerFindAll(opts?: OperationOpts): Observable<Array<PlaylistItemResponseDto> | RawAjaxResponse<Array<PlaylistItemResponseDto>>> {
     return this.request<Array<PlaylistItemResponseDto>>(
       {

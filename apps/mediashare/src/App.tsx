@@ -19,15 +19,16 @@ import { routeConfig } from './routes';
 
 import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { store } from './boot/configureStore';
 import { useAppSelector } from './state/index';
 import { theme } from './styles';
 import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black, useFonts } from '@expo-google-fonts/roboto';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { getKeyPair } from './state/modules/user/keypair-store';
+import { validateTokenAction } from './state/modules/user';
 declare const global: { HermesInternal: null | {} };
-
 
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
@@ -148,7 +149,7 @@ fakeLogin().then();
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const dispatch = useDispatch();
 
   const [fontsLoaded] = useFonts({
     Roboto_500Medium,
@@ -164,8 +165,22 @@ function App() {
   const loading = useAppSelector((state) => state.app.loading);
 
   const user = useAppSelector((state) => state.user);
+
   useEffect(() => {
-    setIsLoggedIn(user._id.length > 0);
+    const checkToken = async function () {
+      const token = await getKeyPair('token');
+      if (token) {
+        const user = await dispatch(validateTokenAction(token));
+        if (user) {
+          setIsLoggedIn(!!token);
+        }
+      }
+    };
+    checkToken();
+  }, []);
+  useEffect(() => {
+    console.log(user);
+    setIsLoggedIn(user?._id?.length > 0);
   }, [user]);
 
   const customTheme = {

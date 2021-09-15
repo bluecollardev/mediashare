@@ -7,11 +7,12 @@ import { apis } from '../../apis';
 import { loadStateAction } from '../../../boot/configureStore';
 import * as SecureStore from 'expo-secure-store';
 import { getKeyPair, setKeyPair } from './keypair-store';
+import { UserControllerAuthorizeRequest } from '../../../rxjs-api/apis/UserApi';
 
 export const USER_STATE_KEY = 'user';
 
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
-const USER_ACTIONS = ['LOGIN', 'LOGOUT', 'UPDATE_ACCOUNT', 'DELETE_ACCOUNT'] as const;
+const USER_ACTIONS = ['LOGIN', 'LOGOUT', 'UPDATE_ACCOUNT', 'DELETE_ACCOUNT', 'VALIDATE'] as const;
 const initialState: LoginResponseDto = {
   username: '',
   firstName: '',
@@ -26,10 +27,12 @@ export const loginAction = createAsyncThunk(UserActions.login.type, async (login
   const response = await apis.user.userControllerLogin({ loginDto }).toPromise();
 
   await setKeyPair('token', response.accessToken);
-  const token = await getKeyPair('token');
-  console.log('🚀 ----------------------------------------------------------');
-  console.log('🚀 ~ file: index.ts ~ line 30 ~ loginAction ~ token', token);
-  console.log('🚀 ----------------------------------------------------------');
+
+  return response;
+});
+
+export const validateTokenAction = createAsyncThunk(UserActions.validate.type, async (token: string) => {
+  const response = await apis.user.userControllerAuthorize({ tokenDto: { token } }).toPromise();
   return response;
 });
 
@@ -48,6 +51,16 @@ const userReducer = createReducer(initialState, (builder) =>
       return { ...state };
     })
     .addCase(loginAction.rejected, (state, action) => {
+      console.log('error: ', action);
+      return { ...state };
+    })
+    .addCase(validateTokenAction.fulfilled, (state, action) => {
+      return action.payload;
+    })
+    .addCase(validateTokenAction.pending, (state, action) => {
+      return { ...state };
+    })
+    .addCase(validateTokenAction.rejected, (state, action) => {
       console.log('error: ', action);
       return { ...state };
     })

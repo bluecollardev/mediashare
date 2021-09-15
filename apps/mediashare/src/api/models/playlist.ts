@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * Mediashare
  * Media Share API
@@ -66,7 +65,7 @@ export interface Playlist {
    * @type {Array<string>}
    * @memberof Playlist
    */
-  mediaIds: Array<string>;
+  mediaIds: Array<string> | null;
   /**
    *
    * @type {string}
@@ -80,7 +79,7 @@ export interface Playlist {
  * @enum {string}
  */
 export enum PlaylistCategoryEnum {
-  Rehab = 'rehab',
-  Builder = 'builder',
-  Warmup = 'warmup',
+  Rehab = 'Rehab',
+  Builder = 'Builder',
+  Warmup = 'Warmup',
 }
