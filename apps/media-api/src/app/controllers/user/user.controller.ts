@@ -98,8 +98,12 @@ export class UserController {
   async authorize(@Body() body: TokenDto) {
     const { token = null } = body;
     const valid = await this.userService.validateToken({ token });
+    console.log('🚀 ------------------------------------------------------------------------------------');
+    console.log('🚀 ~ file: user.controller.ts ~ line 101 ~ UserController ~ authorize ~ valid', valid);
+    console.log('🚀 ------------------------------------------------------------------------------------');
 
     if (!valid) throw new UnauthorizedException();
     const user = await this.userService.findByQuery({ _id: valid._id });
+    return user;
   }
 }

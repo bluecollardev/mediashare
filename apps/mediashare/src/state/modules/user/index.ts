@@ -36,9 +36,9 @@ export const validateTokenAction = createAsyncThunk(UserActions.validate.type, a
   return response;
 });
 
-export const logoutAction = createAsyncThunk(UserActions.login.type, async () => {
+export const logoutAction = createAsyncThunk(UserActions.logout.type, async () => {
   const response = await apis.user.userControllerLogout().toPromise();
-
+  await setKeyPair('token', '');
   return response;
 });
 
@@ -61,6 +61,16 @@ const userReducer = createReducer(initialState, (builder) =>
       return { ...state };
     })
     .addCase(validateTokenAction.rejected, (state, action) => {
+      console.log('error: ', action);
+      return { ...state };
+    })
+    .addCase(logoutAction.fulfilled, (state, action) => {
+      return { username: '', _id: '', firstName: '', accessToken: '', lastName: '' };
+    })
+    .addCase(logoutAction.pending, (state, action) => {
+      return { ...state };
+    })
+    .addCase(logoutAction.rejected, (state, action) => {
       console.log('error: ', action);
       return { ...state };
     })

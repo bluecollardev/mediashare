@@ -12,9 +12,9 @@ import {
   UserApi,
   UsersApi,
 } from '../rxjs-api';
-import Config from "react-native-config";
+import Config from 'react-native-config';
 
-console.log('dotenv config', Config.API_SERVER)
+console.log('dotenv config', Config.API_SERVER);
 
 let TOKEN = '';
 let COOKIE = '';
@@ -91,7 +91,6 @@ function apiFactory() {
 }
 
 const apis = apiFactory();
-console.log(Config.API_SERVER)
 export type ApiService = typeof apis;
 
 const { mediaItems, shareItems, playlists, user, users, configuration } = apis;
