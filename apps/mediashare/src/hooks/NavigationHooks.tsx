@@ -54,14 +54,19 @@ export function useEditMediaItem() {
   };
 }
 
-export function useViewPlaylistById() {
-  const nav = useNavigation();
-  const dispatch = useDispatch();
-  return async ({ playlistId }) => {
-    await dispatch(getPlaylistById(playlistId));
-    nav.navigate(ROUTES.playlistEdit, { playlistId });
+function createPlaylistByIdFactory(route: RouteConfigKeyType) {
+  return function () {
+    const nav = useNavigation();
+    const dispatch = useDispatch();
+    return async ({ playlistId }) => {
+      await dispatch(getPlaylistById(playlistId));
+      nav.navigate(route, { playlistId });
+    };
   };
 }
+export const useViewPlaylistById = createPlaylistByIdFactory(ROUTES.playlistDetail);
+export const useEditPlaylistById = createPlaylistByIdFactory(ROUTES.playlistEdit);
+
 export function usePlaylists() {
   const nav = useRouteName(ROUTES.playlists);
   const dispatch = useDispatch();

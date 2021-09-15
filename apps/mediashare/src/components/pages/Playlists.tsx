@@ -7,7 +7,7 @@ import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/pla
 
 import { PlaylistResponseDto } from '../../api';
 
-import { useRouteName, useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
+import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { FAB, Searchbar } from 'react-native-paper';
@@ -102,7 +102,7 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
-      <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />
+      {/* <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} /> */}
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <PlaylistsComponent
           onChecked={updateSelection}

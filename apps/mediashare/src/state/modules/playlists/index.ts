@@ -70,7 +70,6 @@ export const removeUserPlaylist = createAsyncThunk(playlistActionTypes.removeUse
 });
 
 export const findUserPlaylists = createAsyncThunk(playlistsActionTypes.findUserPlaylists, async (opts: {} | undefined, { extra }) => {
-  // @ts-ignore
   const response = await apis.user.userControllerGetUserPlaylists().toPromise();
   return response;
 });
@@ -89,14 +88,8 @@ export const updateUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.u
   return response;
 });
 
-export const removeUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.removeUserPlaylistItem, async (id: string, { extra }) => {
-  // @ts-ignore - TODO: Add playlistControllerRemoveItem to API service!
-  const response = await apis.playlists.playlistControllerRemoveItem({ playlistId: id });
-  return response && response.status === 200 ? response.data : undefined;
-});
-
 export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: string, { extra }) => {
-  // @ts-ignore - TODO: Add playlistControllerRemoveItem to API service!
+  console.log(id);
   const response = await apis.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
   return response;
 });
@@ -135,6 +128,15 @@ const playlistReducer = createReducer(initialPlaylistState, (builder) => {
     })
     .addCase(getPlaylistById.fulfilled, (state, action) => {
       return { ...state, selectedPlaylist: action.payload };
+    })
+    .addCase(removeUserPlaylist.pending, (state) => {
+      return { ...state, selectedPlaylist: null };
+    })
+    .addCase(removeUserPlaylist.rejected, (state) => {
+      return { ...state };
+    })
+    .addCase(removeUserPlaylist.fulfilled, (state, action) => {
+      return { ...state, selectedPlaylist: null };
     });
 });
 // .addCase(addUserPlaylist.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))

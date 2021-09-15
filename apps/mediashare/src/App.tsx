@@ -109,7 +109,7 @@ const PrivateNavigator = createBottomTabNavigator();
 function PrivateNavigation() {
   return (
     <PrivateNavigator.Navigator
-      initialRouteName={'Media'}
+      initialRouteName={'Playlists'}
       activeColor={theme.colors.primaryTextLighter}
       inactiveColor={theme.colors.accentLighter}
       barStyle={{ backgroundColor: theme.colors.accent }}
