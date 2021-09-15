@@ -5,6 +5,7 @@ import { StyleSheet } from 'react-native';
 import { MediaListItem } from './MediaListItem';
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
 import { Divider } from 'react-native-paper';
+import { shortenText } from '../../utils';
 
 export type MediaListType = Omit<Pick<MediaItemDto, keyof MediaItem>, 'category'>;
 
@@ -26,9 +27,9 @@ export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, add
           return (
             <>
               <MediaListItem
-                key={`item-${idx}`}
+                key={`item_${idx}`}
                 title={title}
-                description={description}
+                description={`${shortenText(description, 40)}`}
                 image={thumbnail}
                 selectable={isSelectable}
                 showThumbnail={showThumbnail}

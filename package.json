@@ -30,6 +30,7 @@
     "nx": "nx",
     "seed:users": "ts-node --project scripts/tsconfig.json -r tsconfig-paths/register scripts/gen-users.script.ts",
     "start:api": "nest start --path apps/media-api/tsconfig.json --watch",
+    "debug:api": "nest start --path apps/media-api/tsconfig.json --watch --debug",
     "build:api": "nest build --path apps/media-api/tsconfig.json --watch",
     "build:auth": "nest build --path apps/media-auth/tsconfig.json --watch",
     "start:auth": "nest start --path apps/media-auth/tsconfig.json --watch",

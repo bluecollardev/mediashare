@@ -135,7 +135,7 @@ export const Explore = ({ navigation }: PageProps) => {
 
   return (
     <PageContainer>
-      <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />
+      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
       <ScrollView>
         <ExploreArticlesComponent list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
         <ExplorePlaylistsComponent list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />

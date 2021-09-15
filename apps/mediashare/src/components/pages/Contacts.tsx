@@ -64,7 +64,7 @@ export const Contacts = ({ navigation }: PageProps) => {
 
   return (
     <PageContainer>
-      <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />
+      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
       <ScrollView>
         <View>
           <ContactList showGroups={true} items={users} onChecked={updateSelectedUsers} />

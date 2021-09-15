@@ -102,7 +102,7 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
-      {/* <Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} /> */}
+      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <PlaylistsComponent
           onChecked={updateSelection}

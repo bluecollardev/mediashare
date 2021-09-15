@@ -59,7 +59,6 @@ export class MediaItemController {
   @ApiParam({ name: 'mediaId', type: String, required: true })
   async findOne(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId) {
     const mediaItem = await this.mediaItemService.findMediaItemWithDetail(mediaId);
-
     if (!mediaItem) throw notFoundResponse('mediaItem', { args: { mediaId } });
     return mediaItem;
   }
@@ -77,9 +76,7 @@ export class MediaItemController {
   @ApiParam({ name: 'mediaId', type: String, required: true })
   async remove(@Param('mediaId') mediaId: string) {
     const deleted = await this.mediaItemService.remove(mediaId);
-
     if (!deleted) throw notFoundResponse(mediaId);
-
     return deleted;
   }
 

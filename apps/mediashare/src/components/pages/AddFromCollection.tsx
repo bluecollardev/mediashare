@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { MediaItem } from '../../rxjs-api';
-
 import { findUserPlaylists } from '../../state/modules/playlists';
 import { useAppSelector } from '../../state';
 
@@ -38,7 +36,7 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
           const { title, description } = item;
           return (
             <MediaListItem
-              key={`item-${idx}`}
+              key={`item_${idx}`}
               title={title}
               description={description}
               showThumbnail={false}

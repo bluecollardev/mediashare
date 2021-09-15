@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import themeStyles, { theme } from '../../styles';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
 import { useAppSelector } from '../../state';
 import { useDispatch } from 'react-redux';
@@ -31,13 +31,15 @@ export function PageContainer({ children }: PageContainerProps) {
           <Dialog visible={app.hasError} onDismiss={hideDialog}>
             <Card.Title
               title={app.error.name}
-              subtitle={app.error.message}
               left={(props) => <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="error" />}
               // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
             />
+            <Card.Content>
+              <Text style={{ fontSize: 11 }}>{app.error.message}</Text>
+            </Card.Content>
             <Dialog.Actions style={{ paddingTop: 0 }}>
               <Button mode={'text'} dark color={theme.colors.primary} onPress={hideDialog}>
-                Cancel
+                Dismiss
               </Button>
             </Dialog.Actions>
           </Dialog>
