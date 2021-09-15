@@ -52,7 +52,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return null;
   }
 
-  async validateToken({ token, _id }: { token: string; _id: string }) {
+  async validateToken({ token }: { token: string }) {
     return this.authSvc.validateToken(token);
   }
 
@@ -72,8 +72,8 @@ export class UserService extends DataService<User, MongoRepository<User>> {
   }
 
   async login(user, _id) {
-    const payload = { user, sub: _id };
     const { password, ...userFields } = user;
+    const payload = { userFields, sub: _id };
 
     return {
       ...userFields,

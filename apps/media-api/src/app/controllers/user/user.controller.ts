@@ -94,10 +94,12 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Post('authorize')
-  async authorize(@Param(':id') id: string, @Body() body: TokenDto) {
+  @ApiResponse({ type: LoginResponseDto, status: 200 })
+  async authorize(@Body() body: TokenDto) {
     const { token = null } = body;
-    const valid = await this.userService.validateToken({ token, _id: id });
+    const valid = await this.userService.validateToken({ token });
+
     if (!valid) throw new UnauthorizedException();
-    return valid;
+    const user = await this.userService.findByQuery({ _id: valid._id });
   }
 }

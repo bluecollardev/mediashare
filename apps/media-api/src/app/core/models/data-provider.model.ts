@@ -54,10 +54,10 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
    */
   async findOne(id: IdType): Promise<E> {
     this.logger.info(`${this.constructor.name}findOne props`, id);
-    const _id = StringIdGuard(id);
+    const _id = ObjectIdGuard(id);
     try {
-      const document = await this.repository.findOne(_id);
-      this.logger.info('${this.constructor.name}findOne result', document);
+      const document = await this.repository.findOne({ _id: _id.toHexString() });
+      this.logger.info(`${this.constructor.name} findOne result`, document);
       return R.clone(document);
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findOne ${error}`);
