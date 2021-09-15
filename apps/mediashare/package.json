@@ -5,7 +5,8 @@
   "scripts": {
     "android": "react-native run-android",
     "pre-ios": "cd ios; pod install; cd ..",
-    "ios": "react-native run-ios",
+    "ios:dev": "react-native run-ios --scheme MediashareTechnology",
+    "ios:prod": "react-native run-ios --scheme MediaShareTechnologyProduction",
     "ios-iphone11": "react-native run-ios --simulator \"iPhone 11 14.1\"",
     "start": "react-native start",
     "test": "jest",
@@ -45,6 +46,8 @@
     "react": "16.13.1",
     "react-final-form": "6.5.2",
     "react-native": "0.63.3",
+    "react-native-clean-project": "^3.6.7",
+    "react-native-config": "^1.4.4",
     "react-native-create-thumbnail": "^1.4.1",
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "1.9.0",

@@ -27,6 +27,9 @@ import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, R
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 declare const global: { HermesInternal: null | {} };
+import Config from "react-native-config";
+
+console.log('dotenv config', Config.API_SERVER)
 
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
