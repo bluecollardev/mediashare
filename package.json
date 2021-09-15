@@ -33,7 +33,7 @@
     "build:api": "nest build --path apps/media-api/tsconfig.json --watch",
     "build:auth": "nest build --path apps/media-auth/tsconfig.json --watch",
     "start:auth": "nest start --path apps/media-auth/tsconfig.json --watch",
-    "start:db": "docker-compose up mediapostgres db",
+    "start:db": "docker-compose up db",
     "start:debug": "nodemon --config nodemon-debug.json",
     "start:dev": "docker-compose up -V",
     "start:ts": "ts-node -r tsconfig-paths/register --project tsconfig.base.json apps/media-api/src/main.ts",

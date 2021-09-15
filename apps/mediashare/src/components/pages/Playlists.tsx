@@ -8,12 +8,11 @@ import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/pla
 import { PlaylistResponseDto } from '../../api';
 
 import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
-import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { FAB, Searchbar, Subheading } from 'react-native-paper';
+import { FAB, Searchbar } from 'react-native-paper';
 import { RefreshControl, ScrollView } from 'react-native';
-import { useLoadData, useLoadPlaylistData } from '../../hooks/useLoadData';
+import { useLoadPlaylistData } from '../../hooks/useLoadData';
 
 import { View } from 'react-native';
 import { List } from 'native-base';
@@ -21,7 +20,6 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
-import { findMediaItems } from '../../state/modules/media-items';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
@@ -86,6 +84,7 @@ export const Playlists = ({ navigation, onDataLoaded }: PageProps) => {
     if (!isLoaded) {
       loadData().then(onDataLoaded);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, dispatch, onDataLoaded]);
 
   const updateSelection = function (bool, item) {
