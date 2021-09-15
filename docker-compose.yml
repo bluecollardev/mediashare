@@ -1,20 +1,20 @@
 version: '3.8'
 services:
-  mediapostgres:
-    image: postgres
-    container_name: mediapostgres
-    environment:
-      - POSTGRES_USER=msuser
-      - POSTGRES_PASSWORD=msuserpass
-      - POSTGRES_DB=msuser
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    volumes:
-      - ms-postgres-data:/var/lib/postgres/data
-    ports:
-      - 5432:5432
-    networks:
-      - mediashare
-    command: ['postgres']
+  # mediapostgres:
+  #   image: postgres
+  #   container_name: mediapostgres
+  #   environment:
+  #     - POSTGRES_USER=msuser
+  #     - POSTGRES_PASSWORD=msuserpass
+  #     - POSTGRES_DB=msuser
+  #     - POSTGRES_HOST_AUTH_METHOD=trust
+  #   volumes:
+  #     - ms-postgres-data:/var/lib/postgres/data
+  #   ports:
+  #     - 5432:5432
+  #   networks:
+  #     - mediashare
+  #   command: ['postgres']
 
   api:
     container_name: api
@@ -58,39 +58,39 @@ services:
     networks:
       - mediashareapi
 
-  auth:
-    # image is provided by docker build of local app using Dockerfile
-    container_name: auth
-    build:
-      context: .
-      target: development
-    working_dir: /usr/src/app
-    environment:
-      - POSTGRES_PORT=5432
-      - POSTGRES_USERNAME=msuser
-      - POSTGRES_PASSWORD=msuserpass
-      - POSTGRES_DB=msuser
-      - POSTGRES_HOST=mediapostgres
-      - NODE_ENV=docker
-      - SESSION_SECRET=this-is-my-secret-key
-      - MS_PORT=4000
-      - MS_HOST=auth
-      - MS_API_PORT=4444
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-      - /usr/src/dist
-    tty: true
-    command: npm run start:auth
-    depends_on:
-      - mediapostgres
-    links:
-      - mediapostgres:db
-    networks:
-      - mediashare
-      - mediashareapi
-    ports:
-      - 4000
+  # auth:
+  #   # image is provided by docker build of local app using Dockerfile
+  #   container_name: auth
+  #   build:
+  #     context: .
+  #     target: development
+  #   working_dir: /usr/src/app
+  #   environment:
+  #     - POSTGRES_PORT=5432
+  #     - POSTGRES_USERNAME=msuser
+  #     - POSTGRES_PASSWORD=msuserpass
+  #     - POSTGRES_DB=msuser
+  #     - POSTGRES_HOST=mediapostgres
+  #     - NODE_ENV=docker
+  #     - SESSION_SECRET=this-is-my-secret-key
+  #     - MS_PORT=4000
+  #     - MS_HOST=auth
+  #     - MS_API_PORT=4444
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #     - /usr/src/dist
+  #   tty: true
+  #   command: npm run start:auth
+  #   depends_on:
+  #     - mediapostgres
+  #   links:
+  #     - mediapostgres:db
+  #   networks:
+  #     - mediashare
+  #     - mediashareapi
+  #   ports:
+  #     - 4000
 
   db:
     image: mongo:4.0.4

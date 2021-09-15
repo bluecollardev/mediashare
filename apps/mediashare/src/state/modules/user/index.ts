@@ -5,6 +5,8 @@ import { LoginResponseDto } from '../../../api/models/login-response-dto';
 import { LoginDto } from '../../../api/models/login-dto';
 import { apis } from '../../apis';
 import { loadStateAction } from '../../../boot/configureStore';
+import * as SecureStore from 'expo-secure-store';
+import { getKeyPair, setKeyPair } from './keypair-store';
 
 export const USER_STATE_KEY = 'user';
 
@@ -22,6 +24,12 @@ export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 
 export const loginAction = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => {
   const response = await apis.user.userControllerLogin({ loginDto }).toPromise();
+
+  await setKeyPair('token', response.accessToken);
+  const token = await getKeyPair('token');
+  console.log('🚀 ----------------------------------------------------------');
+  console.log('🚀 ~ file: index.ts ~ line 30 ~ loginAction ~ token', token);
+  console.log('🚀 ----------------------------------------------------------');
   return response;
 });
 

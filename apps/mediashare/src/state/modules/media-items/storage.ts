@@ -1,6 +1,6 @@
 import { Storage } from 'aws-amplify';
 import { createThumbnail } from 'react-native-create-thumbnail';
-import { KeyFactory } from './key-factory';
+import { KeyFactory, KeyFactoryProps, root, uploadRoot, videoRoot } from './key-factory';
 
 export interface StorageOptions {
   title?: string;
@@ -15,8 +15,9 @@ export interface PutStorageParams {
   options?: StorageOptions;
 }
 
-export function sanitizeFoldername(key: string) {
-  const test = key.replace(/(uploads\/)/, '');
+export function sanitizeFoldername(key: string, folder: string) {
+  const regex = new RegExp(folder + '/');
+  const test = key.replace(regex, '');
   return test;
 }
 
@@ -32,9 +33,11 @@ export function listStorage(key: string) {
   return Storage.list(key);
 }
 
-export function copyStorage(key) {
-  return Storage.copy({ key: 'uploads/' + key }, { key: 'video/' + key });
+function copyStorageFactory({ root, uploadRoot, videoRoot }: Pick<KeyFactoryProps, 'root' | 'uploadRoot' | 'videoRoot'>) {
+  return (key: string) => Storage.copy({ key: root + uploadRoot + key }, { key: videoRoot + key });
 }
+
+export const copyStorage = copyStorageFactory({ root, uploadRoot, videoRoot });
 
 export function putToS3({ key, file, options = {} }: PutStorageParams) {
   const { title = '', description = '', summary = '', contentType = 'video/mp4' } = options;

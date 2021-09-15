@@ -12,6 +12,10 @@ import { Button, Card, TextInput } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { useRouteName } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
+import Config from 'react-native-config';
+
+const testUser = Config.TEST_USER;
+const testPassword = Config.TEST_PASSWORD;
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -41,8 +45,8 @@ const LoginComponent = ({ navigation }: PageProps) => {
   const onSignupClicked = useRouteName(ROUTES.signup);
   const onForgotPasswordClicked = useRouteName(ROUTES.resetPassword);
 
-  const [username, setUsername] = useState('test@example.com');
-  const [password, setPassword] = useState('string12345');
+  const [username, setUsername] = useState(testUser || '');
+  const [password, setPassword] = useState(testPassword || '');
 
   const [{ startLoad, endLoad, AppSpinner }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
 

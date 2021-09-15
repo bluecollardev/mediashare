@@ -92,7 +92,6 @@ export class UserController {
     return await this.shareItemService.aggregateSharedPlaylists({ userId });
   }
 
-  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('authorize')
   async authorize(@Param(':id') id: string, @Body() body: TokenDto) {

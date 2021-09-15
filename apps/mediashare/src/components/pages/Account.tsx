@@ -28,14 +28,10 @@ export const Account = ({ navigation }: PageProps) => {
         </KeyboardAvoidingView>
       </ScrollView>
       <View>
-        <Button
-          onPress={onManageContactsClicked}
-          dark mode={'outlined'} style={{ marginTop: 10 }}>
+        <Button onPress={onManageContactsClicked} dark mode={'outlined'} style={{ marginTop: 10 }}>
           Manage Contacts
         </Button>
-        <Button
-          onPress={onSignoutClicked}
-          dark mode={'contained'} style={{ marginTop: 0 }}>
+        <Button onPress={onSignoutClicked} dark mode={'contained'} style={{ marginTop: 0 }}>
           Sign Out
         </Button>
       </View>

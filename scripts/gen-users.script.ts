@@ -93,42 +93,42 @@ const insertData = async function (data) {
 
   const getRepos = (key: string) => connection.getRepository(key);
 
-  const repoFns = R.map(['user', PLAYLIST_ENTITY, MEDIA_ITEM_ENTITY, 'playlist_item'], (key) => getRepos(key));
+  const repoFns = R.map(['user'], (key) => getRepos(key));
 
-  const [userRepo, playlistRepo, mediaRepo, playlistItemRepo] = await Promise.all(repoFns);
+  const [userRepo] = await Promise.all(repoFns);
 
-  const users = data.map((data) => data.user);
+  // const users = data.map((data) => data.user);
 
-  const userResults = await userRepo.save(users);
+  const userResults = await userRepo.save(data.users);
 
-  const playlistAndMediaDto = R.map(userResults, (user: any) => {
-    const factory = new UserFactory(user._id.toHexString().trim());
+  // const playlistAndMediaDto = R.map(userResults, (user: any) => {
+  //   const factory = new UserFactory(user._id.toHexString().trim());
 
-    const mediaItems = R.map(R.range(1, 10), () => factory.createMediaDto());
+  //   const mediaItems = R.map(R.range(1, 10), () => factory.createMediaDto());
 
-    const playlist = R.map(R.range(1, 3), () => factory.createPlaylistDto());
+  //   const playlist = R.map(R.range(1, 3), () => factory.createPlaylistDto());
 
-    return [mediaItems, playlist];
-  });
+  //   return [mediaItems, playlist];
+  // });
 
-  const mediaItemDtos = R.flatten(playlistAndMediaDto.map((dtoObj) => dtoObj[0]));
-  const playlistDtos = R.flatten(playlistAndMediaDto.map((dtoObj) => dtoObj[1]));
+  // const mediaItemDtos = R.flatten(playlistAndMediaDto.map((dtoObj) => dtoObj[0]));
+  // const playlistDtos = R.flatten(playlistAndMediaDto.map((dtoObj) => dtoObj[1]));
 
-  const mediaItemResults = await mediaRepo.save(mediaItemDtos);
+  // const mediaItemResults = await mediaRepo.save(mediaItemDtos);
 
-  const playlistResults = await playlistRepo.save(playlistDtos);
+  // const playlistResults = await playlistRepo.save(playlistDtos);
 
-  const playlistItemDtos = playlistResults.map((playlist: any) => {
-    const { userId, _id: playlistId } = playlist;
+  // const playlistItemDtos = playlistResults.map((playlist: any) => {
+  //   const { userId, _id: playlistId } = playlist;
 
-    const playlistItems = mediaItemResults.map((item: any) => ({ playlistId, userId, mediaId: item._id }));
+  //   const playlistItems = mediaItemResults.map((item: any) => ({ playlistId, userId, mediaId: item._id }));
 
-    return playlistItems;
-  });
+  //   return playlistItems;
+  // });
 
-  const playlistItemResults = await playlistItemRepo.save(R.flatten(playlistItemDtos));
+  // const playlistItemResults = await playlistItemRepo.save(R.flatten(playlistItemDtos));
 
   await connection.close();
   return userResults;
 };
-insertData(R.map(piped, (user) => createUserData(user))).then((users) => insertUsers(piped, users));
+insertData({ users: piped }).then((result) => console.log(result));

@@ -19,7 +19,8 @@ export class AuthService {
   }
 
   validateToken(jwt: string) {
-    const jwtResult = this.jwtService.verify(jwt);
+    const jwtResult = this.jwtService.verify(jwt).user;
+
     const {
       user: { username = null, _id = null }
     } = jwtResult;

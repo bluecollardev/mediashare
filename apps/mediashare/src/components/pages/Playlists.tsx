@@ -96,6 +96,7 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
     if (!isLoaded) {
       loadData().then(onDataLoaded);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, dispatch, onDataLoaded]);
 
   const updateSelection = function (bool, item) {

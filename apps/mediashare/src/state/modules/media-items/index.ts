@@ -5,7 +5,7 @@ import { makeEnum } from '../../core/factory';
 import { apis, ApiService } from '../../apis';
 import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
 import { copyStorage, deleteStorage, getStorage, listStorage, sanitizeFoldername, uploadMedia, uploadThumbnail } from './storage';
-import { KeyFactory } from './key-factory';
+import { KeyFactory, uploadRoot } from './key-factory';
 import { getAllMedia } from './media-items';
 import { AwsMediaItem } from './aws-media-item.model';
 import { concat, forkJoin, merge } from 'rxjs';
@@ -79,12 +79,12 @@ export const addMediaItem = createAsyncThunk(
 );
 
 export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
-  const mediaItems = (await listStorage('uploads/')) as AwsMediaItem[];
+  const mediaItems = (await listStorage(uploadRoot)) as AwsMediaItem[];
   const items = mediaItems
     .filter((item) => item.key !== 'uploads/')
     .map((item) => ({
       ...item,
-      key: sanitizeFoldername(item.key),
+      key: sanitizeFoldername(item.key, uploadRoot),
     }));
   return items;
 });
