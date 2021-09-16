@@ -45,7 +45,12 @@ export function KeyboardAvoidingPageContent({ refreshControl, children }: PageCo
   );
 }
 
-export function PageActions({ children, style }) {
+export interface PageActionsProps {
+  children?: any;
+  style?: any;
+}
+
+export function PageActions({ children, style }: PageActionsProps) {
   const mergedStyles = Object.assign({}, styles.pageActions, style);
   return <View style={mergedStyles}>{children}</View>;
 }
