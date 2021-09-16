@@ -30,7 +30,14 @@ export const AccountForm: React.FC<AccountFormProps> = (props: PropsWithChildren
         <Input value="" placeholder="Mobile Phone (SMS)" />
       </Item>
       <View>
-        <ActionButtons rightIcon="check-circle" actionLabel={actionLabel} cancelLabel={cancelLabel} actionCb={() => {}} cancelCb={() => {}} />
+        <ActionButtons
+          style={{ borderTopWidth: 0 }}
+          rightIcon="check-circle"
+          actionLabel={actionLabel}
+          cancelLabel={cancelLabel}
+          actionCb={() => {}}
+          cancelCb={() => {}}
+        />
       </View>
     </>
   );

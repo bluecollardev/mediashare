@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Storage } from 'aws-amplify';
 
 import { usePreviewImage } from '../../hooks/UsePreviewImage';
+import { View } from 'react-native';
 import { Avatar, Caption, Checkbox, IconButton, List } from 'react-native-paper';
-import { theme } from '../../styles';
+import styles, { theme } from '../../styles';
 
 export interface MediaListItemProps {
   navigation?: any;
@@ -17,10 +18,6 @@ export interface MediaListItemProps {
   onViewDetail?: () => void;
   onChecked?: (bool: boolean) => void;
 }
-
-const AvatarComponent = (uri: any) => {
-  return <Avatar.Image size={24} source={{ uri: uri.uri }} />;
-};
 
 export const MediaListItem: React.FC<MediaListItemProps> = ({
   checked,
@@ -45,6 +42,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       });
     }
   }, [image]);
+  // TODO: Why is this here, it's not used?
   useEffect(() => {}, [source]);
   return (
     <List.Item
@@ -54,7 +52,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       }}
       left={() =>
         selectable ? (
-          <>
+          <View style={styles.mediaListItem}>
             <Checkbox
               status={!isChecked ? 'indeterminate' : 'checked'}
               onPress={() => {
@@ -64,17 +62,27 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
               }}
               color={isChecked ? theme.colors.success : theme.colors.disabled}
             />
-            {showThumbnail ? source ? <Avatar.Image size={36} source={source} /> : <Avatar.Image size={36} source={{ uri: DEFAULT_IMAGE }} /> : <></>}
-          </>
+            {showThumbnail ? (
+              source ? (
+                <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={source} />
+              ) : (
+                <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={{ uri: DEFAULT_IMAGE }} />
+              )
+            ) : (
+              <></>
+            )}
+          </View>
         ) : showThumbnail ? (
           source ? (
-            <Avatar.Image size={36} source={source} />
+            <View style={styles.mediaListItem}>
+              <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={source} />
+            </View>
           ) : (
-            <Avatar.Image size={36} source={{ uri: DEFAULT_IMAGE }} />
+            <View style={styles.mediaListItem}>
+              <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={{ uri: DEFAULT_IMAGE }} />
+            </View>
           )
-        ) : (
-          <></>
-        )
+        ) : null
       }
       right={() => showActions === true && <IconButton icon="chevron-right" color={theme.colors.accent} onPress={onViewDetail} />}
     />

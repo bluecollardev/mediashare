@@ -15,6 +15,7 @@ interface Props {
   leftIcon?: string;
   loading?: boolean;
   disabled?: boolean;
+  style?: any;
 }
 
 export const ActionButtons = ({
@@ -27,9 +28,11 @@ export const ActionButtons = ({
   rightIcon = 'share',
   leftIcon = 'cancel',
   loading = false,
+  style = undefined,
 }: Props) => {
+  const mergedStyles = Object.assign({}, styles.actionButtons, style);
   return (
-    <View style={styles.actionButtons}>
+    <View style={mergedStyles}>
       <Button icon={leftIcon} loading={loading} onPress={() => cancelCb()} style={styles.actionButton} disabled={disableCancel} color={theme.colors.error}>
         {cancelLabel}
       </Button>

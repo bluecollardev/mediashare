@@ -30,6 +30,15 @@ const styles: any = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
   },
+  mediaListItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  mediaListItemThumbnail: {
+    marginLeft: 5,
+    marginRight: 10,
+  },
   container: {
     height: '100%',
   },
