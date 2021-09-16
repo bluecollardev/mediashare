@@ -51,16 +51,16 @@ const LoginComponent = ({ navigation }: PageProps) => {
   const [username, setUsername] = useState(testUser || '');
   const [password, setPassword] = useState(testPassword || '');
 
-  const [{ startLoad, endLoad, AppSpinner }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
-
+  // const [{ startLoad, endLoad, AppSpinner }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });Z
+  // TODO: startLoad and endLoad need to be cleaned up in useEffect within the spinner
   const onLogin = async (loginDto: LoginDto) => {
-    startLoad();
+    // startLoad();
     try {
       await dispatch(loginAction(loginDto));
     } catch (err) {
       console.log(err);
     }
-    endLoad();
+    // endLoad();
   };
 
   return (
