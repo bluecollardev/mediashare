@@ -23,11 +23,10 @@ export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, add
     <Content>
       <View>
         {list.map((item, idx, arr) => {
-          const { title, description, thumbnail } = item;
+          const { _id, title, description, thumbnail } = item;
           return (
-            <>
+            <View key={`item_${_id}`}>
               <MediaListItem
-                key={`item_${idx}`}
                 title={title}
                 description={`${shortenText(description, 40)}`}
                 image={thumbnail}
@@ -37,7 +36,7 @@ export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, add
                 onViewDetail={() => onViewDetail(item)}
               />
               {idx !== arr.length && <Divider />}
-            </>
+            </View>
           );
         })}
       </View>

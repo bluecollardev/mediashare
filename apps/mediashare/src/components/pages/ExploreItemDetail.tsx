@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useAppSelector } from '../../state';
 import { getMediaItemById } from '../../state/modules/media-items';
 
 import { ExploreItemCard } from '../layout/ExploreItemCard';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -44,7 +44,7 @@ const ExploreItemDetail = ({ route }: PageProps) => {
 
   return (
     <PageContainer>
-      <ScrollView>
+      <PageContent>
         <ExploreItemCard
           title={title}
           description={description}
@@ -55,7 +55,7 @@ const ExploreItemDetail = ({ route }: PageProps) => {
           onDeleteClicked={onDeleteClicked}
           author={author}
         />
-      </ScrollView>
+      </PageContent>
     </PageContainer>
   );
 };

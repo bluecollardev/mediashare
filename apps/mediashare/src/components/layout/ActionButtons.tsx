@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 
 import React from 'react';
-import { theme } from '../../styles';
+import styles, { theme } from '../../styles';
 
 interface Props {
   actionLabel?: string;
@@ -29,33 +29,11 @@ export const ActionButtons = ({
   loading = false,
 }: Props) => {
   return (
-    <View style={{ flexDirection: 'row', height: 60, borderTopWidth: 1, borderColor: '#cccccc' }}>
-      <Button
-        icon={leftIcon}
-        loading={loading}
-        onPress={() => cancelCb()}
-        style={{
-          flex: 1,
-          marginRight: 10,
-          justifyContent: 'center',
-        }}
-        disabled={disableCancel}
-        color={theme.colors.error}
-      >
+    <View style={styles.actionButtons}>
+      <Button icon={leftIcon} loading={loading} onPress={() => cancelCb()} style={styles.actionButton} disabled={disableCancel} color={theme.colors.error}>
         {cancelLabel}
       </Button>
-      <Button
-        loading={loading}
-        icon={rightIcon}
-        onPress={() => actionCb()}
-        disabled={disableAction}
-        style={{
-          flex: 1,
-          marginRight: 10,
-          justifyContent: 'center',
-        }}
-        color={theme.colors.primary}
-      >
+      <Button loading={loading} icon={rightIcon} onPress={() => actionCb()} disabled={disableAction} style={styles.actionButton} color={theme.colors.primary}>
         {actionLabel}
       </Button>
     </View>

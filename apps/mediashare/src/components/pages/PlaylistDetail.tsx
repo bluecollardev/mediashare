@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
@@ -6,17 +6,16 @@ import { ROUTES } from '../../routes';
 import { useAppSelector } from '../../state';
 import { getPlaylistById, removeUserPlaylist } from '../../state/modules/playlists';
 
-import { usePlaylists, useRouteWithParams, useViewMediaItem, useViewPlaylistItem } from '../../hooks/NavigationHooks';
+import { usePlaylists, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { ScrollView, View } from 'react-native';
 import { FAB } from 'react-native-paper';
 
 import { PlaylistCard } from '../layout/PlaylistCard';
 import { MediaList } from '../layout/MediaList';
 import { ListActionButton } from '../layout/ListActionButton';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
 import AppDialog from '../layout/AppDialog';
@@ -39,7 +38,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
   const loaded = useAppSelector((state) => state);
   const [showDialog, setShowDialog] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(loaded);
+  const [isLoaded, setIsLoaded] = useState(!!loaded);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -66,23 +65,9 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const author = user?.username;
 
   return (
-    <PageContainer>
-      <ScrollView>
-        <View style={{ flex: 1 }}>
-          <ScrollView>
-            <PlaylistCard
-              title={title}
-              author={author}
-              description={description}
-              showSocial={true}
-              showActions={false}
-              showThumbnail={true}
-              onEditClicked={() => onEditClicked({ playlistId })}
-              // onDeleteClicked={onDeleteClicked}
-              category={category}
-            />
-            <MediaList onViewDetail={(item) => onViewMediaItem({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} showThumbnail={true} />
-          </ScrollView>
+    <>
+      <PageContainer>
+        <PageContent>
           <AppDialog
             leftActionLabel={'Cancel'}
             rightActionLabel={'Delete'}
@@ -93,25 +78,37 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
             title={'Are you sure?'}
             subtitle={'This action cannot be undone'}
           />
-          <View>
-            <ListActionButton icon="playlist-add" label="Add From Collection" actionCb={() => onAddToPlaylistClicked({ playlistId })} />
-          </View>
-        </View>
-      </ScrollView>
-      <FAB.Group
-        visible={true}
-        open={fabState.open}
-        icon={fabState.open ? 'close' : 'more-vert'}
-        actions={fabActions}
-        color={theme.colors.primaryTextLighter}
-        fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
-        onStateChange={(open) => {
-          // open && setOpen(!open);
-          setFabState(open);
-        }}
-        // onPress={() => setOpen(!open)}
-      />
-    </PageContainer>
+          <PlaylistCard
+            title={title}
+            author={author}
+            description={description}
+            showSocial={true}
+            showActions={false}
+            showThumbnail={true}
+            onEditClicked={() => onEditClicked({ playlistId })}
+            // onDeleteClicked={onDeleteClicked}
+            category={category}
+          />
+          <MediaList onViewDetail={(item) => onViewMediaItem({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} showThumbnail={true} />
+        </PageContent>
+        <PageActions>
+          <ListActionButton icon="playlist-add" label="Add From Collection" actionCb={() => onAddToPlaylistClicked({ playlistId })} />
+        </PageActions>
+        <FAB.Group
+          visible={true}
+          open={fabState.open}
+          icon={fabState.open ? 'close' : 'more-vert'}
+          actions={fabActions}
+          color={theme.colors.primaryTextLighter}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          onStateChange={(open) => {
+            // open && setOpen(!open);
+            setFabState(open);
+          }}
+          // onPress={() => setOpen(!open)}
+        />
+      </PageContainer>
+    </>
   );
 
   async function loadData() {

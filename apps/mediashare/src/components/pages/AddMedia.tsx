@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { View, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { Image } from 'react-native';
 import { Button, CardItem, Icon, Text } from 'native-base';
 import * as DocumentPicker from 'expo-document-picker';
 
@@ -16,7 +16,7 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
 import { minLength } from '../../lib/Validators';
 
@@ -54,50 +54,45 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
 
   return (
     <PageContainer>
-      <View style={{ flex: 1 }}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ScrollView>
-              <MediaCard
-                title={title}
-                author={author}
-                description={description}
-                category={category}
-                categoryOptions={options}
-                onCategoryChange={onCategoryChange as any}
-                onTitleChange={onTitleChange}
-                onDescriptionChange={onDescriptionChange}
-                isEdit={true}
-              >
-                <CardItem
-                  button
-                  onPress={getDocument}
-                  cardBody
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 15, marginBottom: 0 }}
-                >
-                  {documentUri ? (
-                    <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
-                  ) : (
-                    <Button bordered style={{ width: '100%' }} hasText={true} onPress={getDocument} full={true}>
-                      <Icon name="cloud-upload" />
-                      <Text style={{ textAlign: 'center' }}>Upload From Device</Text>
-                    </Button>
-                  )}
-                </CardItem>
-              </MediaCard>
-            </ScrollView>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </View>
-
-      <ActionButtons
-        actionCb={() => saveItem()}
-        cancelCb={cancelCb}
-        actionLabel={actionLabel}
-        cancelLabel={cancelLabel}
-        disableAction={!isValid()}
-        rightIcon="check-circle"
-      />
+      <KeyboardAvoidingPageContent>
+        <MediaCard
+          title={title}
+          author={author}
+          description={description}
+          category={category}
+          categoryOptions={options}
+          onCategoryChange={onCategoryChange as any}
+          onTitleChange={onTitleChange}
+          onDescriptionChange={onDescriptionChange}
+          isEdit={true}
+        >
+          <CardItem
+            button
+            onPress={getDocument}
+            cardBody
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 15, marginBottom: 0 }}
+          >
+            {documentUri ? (
+              <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
+            ) : (
+              <Button bordered style={{ width: '100%' }} hasText={true} onPress={getDocument} full={true}>
+                <Icon name="cloud-upload" />
+                <Text style={{ textAlign: 'center' }}>Upload From Device</Text>
+              </Button>
+            )}
+          </CardItem>
+        </MediaCard>
+      </KeyboardAvoidingPageContent>
+      <PageActions>
+        <ActionButtons
+          actionCb={() => saveItem()}
+          cancelCb={cancelCb}
+          actionLabel={actionLabel}
+          cancelLabel={cancelLabel}
+          disableAction={!isValid()}
+          rightIcon="check-circle"
+        />
+      </PageActions>
     </PageContainer>
   );
 

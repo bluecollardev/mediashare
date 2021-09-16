@@ -2,19 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../state';
-import { findUserPlaylists, getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
+import { getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
 import { findMediaItems } from '../../state/modules/media-items';
 
 import { UpdatePlaylistDto } from '../../rxjs-api';
-
-import { ScrollView, View } from 'react-native';
 
 import { useGoBack, useEditMediaItem, useViewPlaylist } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList, MediaListType } from '../layout/MediaList';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 
 export const AddToPlaylist = ({ route }: PageProps) => {
   const dispatch = useDispatch();
@@ -42,7 +40,7 @@ export const AddToPlaylist = ({ route }: PageProps) => {
 
   return (
     <PageContainer>
-      <ScrollView>
+      <PageContent>
         <MediaList
           list={mediaItemState}
           isSelectable={true}
@@ -50,10 +48,10 @@ export const AddToPlaylist = ({ route }: PageProps) => {
           addItem={(e) => updateMediaItemsList(true, e)}
           removeItem={(e) => updateMediaItemsList(false, e)}
         />
-      </ScrollView>
-      <View>
+      </PageContent>
+      <PageActions>
         <ActionButtons actionCb={actionCb} rightIcon="check-circle" actionLabel="Save" cancelLabel="Back" cancelCb={cancelCb} />
-      </View>
+      </PageActions>
     </PageContainer>
   );
 

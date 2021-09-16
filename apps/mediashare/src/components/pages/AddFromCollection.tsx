@@ -4,14 +4,13 @@ import { useDispatch } from 'react-redux';
 import { findUserPlaylists } from '../../state/modules/playlists';
 import { useAppSelector } from '../../state';
 
-import { ScrollView } from 'react-native';
 // import { ActivityIndicator } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { MediaListItem } from '../layout/MediaListItem';
 import { ActionButtons } from '../layout/ActionButtons';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 
 export interface AddFromCollectionProps extends PageProps {
   onViewDetail: () => void;
@@ -31,12 +30,12 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
 
   return (
     <PageContainer>
-      <ScrollView>
-        {items?.map((item, idx) => {
-          const { title, description } = item;
+      <PageContent>
+        {items?.map((item) => {
+          const { _id, title, description } = item;
           return (
             <MediaListItem
-              key={`item_${idx}`}
+              key={`item_${_id}`}
               title={title}
               description={description}
               showThumbnail={false}
@@ -46,8 +45,10 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
             />
           );
         })}
-      </ScrollView>
-      <ActionButtons actionCb={() => {}} cancelCb={() => {}} />
+      </PageContent>
+      <PageActions>
+        <ActionButtons actionCb={() => {}} cancelCb={() => {}} />
+      </PageActions>
     </PageContainer>
   );
 

@@ -7,17 +7,17 @@ import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/pla
 
 import { PlaylistResponseDto } from '../../api';
 
+import { useLoadPlaylistData } from '../../hooks/useLoadData';
 import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { FAB, Searchbar } from 'react-native-paper';
-import { RefreshControl, ScrollView } from 'react-native';
-import { useLoadPlaylistData } from '../../hooks/useLoadData';
+import { FAB } from 'react-native-paper';
+import { RefreshControl } from 'react-native';
 
 import { View } from 'react-native';
 import { List } from 'native-base';
 import { MediaListItem } from '../layout/MediaListItem';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 
 import { shortenText } from '../../utils';
 
@@ -102,14 +102,13 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
-      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
-      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+      <PageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <PlaylistsComponent
           onChecked={updateSelection}
           list={state.playlists.userPlaylists}
           onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })}
         />
-      </ScrollView>
+      </PageContent>
       <FAB.Group
         visible={true}
         open={fabState.open}

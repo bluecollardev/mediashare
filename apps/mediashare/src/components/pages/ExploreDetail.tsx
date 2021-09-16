@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ScrollView } from 'react-native';
 
 import { useAppSelector } from '../../state';
 import { getPlaylistById } from '../../state/modules/playlists';
@@ -10,7 +9,7 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { PlaylistCard } from '../layout/PlaylistCard';
 import { MediaList } from '../layout/MediaList';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 
 export const ExploreDetail = ({ route, onDataLoaded }: PageProps) => {
   const { playlistId = '' } = route?.params;
@@ -37,10 +36,10 @@ export const ExploreDetail = ({ route, onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
-      <ScrollView>
+      <PageContent>
         <PlaylistCard title={title} author={author} description={description} showSocial={true} showActions={false} category={'General'} />
         <MediaList onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })} list={items} isSelectable={false} />
-      </ScrollView>
+      </PageContent>
     </PageContainer>
   );
 

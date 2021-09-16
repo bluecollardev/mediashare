@@ -9,9 +9,8 @@ import { getMediaItemById } from '../../state/modules/media-items';
 import { useRouteWithParams } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { ScrollView, View } from 'react-native';
 import { FAB } from 'react-native-paper';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 import { MediaItemCard } from '../layout/MediaItemCard';
 
 import { theme } from '../../styles';
@@ -52,20 +51,18 @@ const MediaItemDetail = ({ route, onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
-      <ScrollView>
-        <View>
-          <MediaItemCard
-            title={title}
-            description={description}
-            image={mediaItemSrc}
-            showActions={false}
-            category={category}
-            onEditClicked={() => onEditClicked({ mediaId })}
-            onDeleteClicked={onDeleteClicked}
-            author={author}
-          />
-        </View>
-      </ScrollView>
+      <PageContent>
+        <MediaItemCard
+          title={title}
+          description={description}
+          image={mediaItemSrc}
+          showActions={false}
+          category={category}
+          onEditClicked={() => onEditClicked({ mediaId })}
+          onDeleteClicked={onDeleteClicked}
+          author={author}
+        />
+      </PageContent>
       <FAB.Group
         visible={true}
         open={fabState.open}

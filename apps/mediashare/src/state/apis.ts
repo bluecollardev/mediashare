@@ -1,4 +1,4 @@
-import { loadStateAction, store } from '../boot/configureStore';
+import { loadStateAction } from '../boot/configureStore';
 import {
   Configuration,
   DefaultApi,

@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ROUTES } from '../../routes';
-
 import { useAppSelector } from '../../state';
 import { getFeedMediaItems, saveFeedMediaItems } from '../../state/modules/media-items';
 
-import { useRouteName, useMediaItems } from '../../hooks/NavigationHooks';
+import { useMediaItems } from '../../hooks/NavigationHooks';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaListItem } from '../layout/MediaListItem';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useSpinner } from '../../hooks/useSpinner';
 
-import { PageContainer, PageProps } from '../layout/PageContainer';
-import { ScrollView, View } from 'react-native';
+import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { Subheading, Card } from 'react-native-paper';
-import { findUserPlaylists } from '../../state/modules/playlists';
 import { AwsMediaItem } from '../../state/modules/media-items/aws-media-item.model';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const AddFromFeed = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
 
@@ -60,7 +57,7 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
 
   return (
     <PageContainer>
-      <View style={{ flex: 1 }}>
+      <PageContent>
         {(!items || items.length === 0) && loaded && (
           <Card>
             <Card.Content>
@@ -68,25 +65,23 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
             </Card.Content>
           </Card>
         )}
-        <ScrollView>
-          {items?.map((item, idx) => {
-            const { key, size, lastModified } = item;
-            return (
-              <MediaListItem
-                showActions={false}
-                key={idx}
-                title={key}
-                description={`${size} - ${lastModified}`}
-                checked={false}
-                onChecked={(v) => (v ? addItemCb(item) : removeItemCb(item))}
-              />
-            );
-          })}
-        </ScrollView>
-        <View>
-          <ActionButtons actionCb={saveMedia} rightIcon="check-circle" actionLabel="Add" cancelLabel="Back" cancelCb={goToMediaItems} />
-        </View>
-      </View>
+        {items?.map((item, idx) => {
+          const { key, size, lastModified } = item;
+          return (
+            <MediaListItem
+              showActions={false}
+              key={idx}
+              title={key}
+              description={`${size} - ${lastModified}`}
+              checked={false}
+              onChecked={(v) => (v ? addItemCb(item) : removeItemCb(item))}
+            />
+          );
+        })}
+      </PageContent>
+      <PageActions>
+        <ActionButtons actionCb={saveMedia} rightIcon="check-circle" actionLabel="Add" cancelLabel="Back" cancelCb={goToMediaItems} />
+      </PageActions>
     </PageContainer>
   );
 };

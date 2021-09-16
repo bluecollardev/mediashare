@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { EnumLiteralsOf } from '../lib/Generics';
 import { routeConfig, ROUTES } from '../routes';
 import { findMediaItems, getMediaItemById } from '../state/modules/media-items';
-import { findUserPlaylists, getPlaylistById } from '../state/modules/playlists/index';
+import { findUserPlaylists, getPlaylistById } from '../state/modules/playlists';
 
 type RouteConfigKeyType = EnumLiteralsOf<typeof ROUTES>;
 // @ts-ignore
@@ -35,6 +35,7 @@ export function useViewPlaylist() {
   return ({ playlistId }) => nav.navigate(ROUTES?.playlistDetail, { playlistId });
 }
 
+// TODO: Why does this also just take playlistId, the old version used a mediaId, which may not also be correct, maybe both?
 export function useViewPlaylistItem() {
   const nav = useNavigation();
   return ({ playlistId, uri }) => nav.navigate(ROUTES.playlistItemDetail, { playlistId, uri });

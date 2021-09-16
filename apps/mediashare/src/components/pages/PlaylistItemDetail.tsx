@@ -4,13 +4,11 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../state';
 import { getMediaItemById } from '../../state/modules/media-items';
 
-import { ScrollView, View } from 'react-native';
-import { FAB } from 'react-native-paper';
-
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
+import { FAB } from 'react-native-paper';
 import { MediaItemCard } from '../layout/MediaItemCard';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 
 import { theme } from '../../styles';
 
@@ -56,11 +54,9 @@ const PlaylistItemDetail = ({ route }: PageProps) => {
 
   return (
     <PageContainer>
-      <ScrollView>
-        <View>
-          <MediaItemCard title={title} description={description} image={mediaItemSrc} showActions={false} category={category} author={author} />
-        </View>
-      </ScrollView>
+      <PageContent>
+        <MediaItemCard title={title} description={description} image={mediaItemSrc} showActions={false} category={category} author={author} />
+      </PageContent>
       <FAB.Group
         visible={true}
         open={fabState.open}

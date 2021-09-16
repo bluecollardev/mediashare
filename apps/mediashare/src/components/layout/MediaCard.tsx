@@ -1,11 +1,10 @@
 import React from 'react';
 
-import { Button, Card, Chip, IconButton, Paragraph, TextInput, Title } from 'react-native-paper';
+import { Button, Card, IconButton, Paragraph, TextInput, Title } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import Video from 'react-native-video';
 import SwitchSelector from 'react-native-switch-selector';
-import { categoryValidator, descriptionValidator, titleValidator } from './formConfig';
-import { theme } from '../../styles';
+import { descriptionValidator, titleValidator } from './formConfig';
 
 export interface MediaListItemProps {
   mediaSrc?: string | null;

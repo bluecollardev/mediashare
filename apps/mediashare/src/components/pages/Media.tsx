@@ -8,16 +8,15 @@ import { ROUTES } from '../../routes';
 import { useAppSelector } from '../../state';
 import { findMediaItems } from '../../state/modules/media-items';
 
-import { useRouteName, useRouteWithParams, useEditMediaItem } from '../../hooks/NavigationHooks';
-import { MediaListItem } from '../layout/MediaListItem';
+import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
 
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
 
 import { RefreshControl } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { Card, FAB, Searchbar, Subheading } from 'react-native-paper';
+import { Card, FAB, Subheading } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageProps, KeyboardAvoidingPageContent } from '../layout/PageContainer';
+import { MediaListItem } from '../layout/MediaListItem';
 
 import { theme } from '../../styles';
 import { shortenText } from '../../utils';
@@ -29,11 +28,11 @@ export const MediaComponent = ({ onViewDetail, list = [], selectable }: { naviga
   return (
     <View>
       <List>
-        {sortedList.map((item, idx) => {
-          const { title, description, thumbnail, uri } = item;
+        {sortedList.map((item) => {
+          const { _id, title, description, thumbnail, uri } = item;
           return (
             <MediaListItem
-              key={`item_${idx}`}
+              key={`item_${_id}`}
               title={title}
               description={`${shortenText(description, 40)}`}
               showThumbnail={true}
@@ -75,8 +74,7 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
-      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
-      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+      <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {loaded && mediaItems.length > 0 ? (
           <MediaComponent navigation={navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />
         ) : (
@@ -86,7 +84,7 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
             </Card.Content>
           </Card>
         )}
-      </ScrollView>
+      </KeyboardAvoidingPageContent>
       <FAB.Group
         visible={true}
         open={fabState.open}

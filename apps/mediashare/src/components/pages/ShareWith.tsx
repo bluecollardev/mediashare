@@ -12,20 +12,18 @@ import { UserDto } from '../../rxjs-api';
 import { useGoBack, useRouteName } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { ScrollView, View } from 'react-native';
 import { ActionButtons } from '../layout/ActionButtons';
 import { ContactList } from '../layout/ContactList';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { useSpinner } from '../../hooks/useSpinner';
 
-export interface ShareWithContainerProps {
-  navigation: any;
-}
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ShareWith = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
   const [loaded, setIsLoaded] = useState(false);
+
   const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
+
   const loadData = async function () {
     await dispatch(findUserPlaylists({}));
   };
@@ -67,14 +65,12 @@ const ShareWith = ({ navigation }: PageProps) => {
 
   return (
     <PageContainer>
-      <ScrollView>
-        <View>
-          <ContactList showGroups={true} items={users} onChecked={updateSelectedUsers} />
-        </View>
-      </ScrollView>
-      <View>
+      <PageContent>
+        <ContactList showGroups={true} items={users} onChecked={updateSelectedUsers} />
+      </PageContent>
+      <PageActions>
         <ActionButtons cancelCb={goBack} actionCb={actionCb} actionLabel="Share" cancelLabel="Cancel" />
-      </View>
+      </PageActions>
     </PageContainer>
   );
 };
