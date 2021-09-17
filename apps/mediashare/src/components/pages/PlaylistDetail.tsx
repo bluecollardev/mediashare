@@ -29,7 +29,6 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const onViewMediaItem = useViewMediaItem();
   const playlists = usePlaylists();
   const onDelete = async ({ playlistId }) => {
-    console.log('dispatch', playlistId);
     await dispatch(removeUserPlaylist(playlistId));
     playlists();
   };

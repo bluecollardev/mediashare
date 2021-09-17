@@ -9,7 +9,7 @@ import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { ActionSheet } from 'native-base';
 
-import { useEditMediaItem } from '../../hooks/NavigationHooks';
+import { useEditMediaItem, usePlaylists } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
@@ -25,13 +25,12 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
 
   const { loaded, selectedPlaylist } = useAppSelector((state) => state.playlist);
   const [isLoaded, setIsLoaded] = useState(loaded);
-  // const [refreshing, setRefreshing] = useState(false);
 
   const [title, setTitle] = useState(selectedPlaylist?.title);
   const [description, setDescription] = useState(selectedPlaylist?.description);
   const [category, setCategory] = useState(selectedPlaylist?.category);
   const [selectedItems, setSelectedItems] = useState([]);
-
+  const playlists = usePlaylists();
   useEffect(() => {
     if (!isLoaded) {
       loadData().then(onDataLoaded);
@@ -118,6 +117,7 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
     await withIds(selectedPlaylist.mediaIds);
     setIsLoaded(false);
     await loadData();
+    playlists();
   }
 
   async function saveMediaUpdates() {
@@ -152,7 +152,7 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
       },
       (selectIdx) => {
         // Allow override
-        const selectedIdx = buttonIdx || selectIdx
+        const selectedIdx = buttonIdx || selectIdx;
         switch (selectedIdx) {
           case 0:
             break;

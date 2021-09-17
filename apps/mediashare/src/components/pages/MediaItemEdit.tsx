@@ -100,25 +100,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
             title={'Are you sure?'}
             subtitle={'This action cannot be undone'}
           />
-          {/* <Portal>
-            <Dialog visible={showDialog} onDismiss={() => setShowDialog(false)}>
-              <Card.Title
-                title={'Are you sure you wante to delete?'}
-                subtitle={'This action is not reversable'}
-                left={(props) => (
-                  <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="warning" />
-                )}
-              />
-              <Dialog.Actions style={{ paddingTop: 0 }}>
-                <Button mode={'text'} color={theme.colors.primaryText} onPress={() => setShowDialog(false)}>
-                  Cancel
-                </Button>
-                <Button mode={'contained'} dark color={theme.colors.error} onPress={() => onDelete()}>
-                  Confirm
-                </Button>
-              </Dialog.Actions>
-            </Dialog>
-          </Portal> */}
+
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <MediaCard
               title={title}

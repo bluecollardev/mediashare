@@ -58,7 +58,7 @@ export function useViewMediaItem() {
   const dispatch = useDispatch();
   return async ({ mediaId, uri }) => {
     await dispatch(getMediaItemById({ uri, mediaId }));
-    nav.navigate(ROUTES.mediaItemEdit, { mediaId, uri });
+    nav.navigate(ROUTES.mediaItemDetail, { mediaId, uri });
   };
 }
 export function useEditPlaylistById() {
