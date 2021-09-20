@@ -86,11 +86,7 @@ export const Account = ({ navigation }: PageProps) => {
       {
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', flex: 1, marginLeft: 15 }}>
           {state.highlights.map((highlight) => {
-            return (
-              <LabelledElement label={'highlight'}>
-                <Avatar.Image source={{ uri: highlight.thumbnail }} />;
-              </LabelledElement>
-            );
+            return <Avatar.Image source={{ uri: highlight.thumbnail }} />;
           })}
         </View>
         //  <View style={{display: 'flex', flexDirection: 'column'}}>

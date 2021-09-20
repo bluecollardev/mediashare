@@ -16,9 +16,7 @@ import Config from 'react-native-config';
 
 console.log('dotenv config', Config.API_SERVER);
 
-export const basePath = 'http://localhost:5000';
 let TOKEN = '';
-export { TOKEN };
 let COOKIE = '';
 function apiFactory() {
   function middlewareFactory() {
@@ -30,7 +28,6 @@ function apiFactory() {
           ...prevHeaders,
           Authorization: `Bearer ${TOKEN}`,
           cookie: COOKIE.split(';')[0],
-          connection: 'keep-alive',
 
           // cookie: 'connect.sid=s%3A2yl00r3D18IP6bGsdOvZpk87hskZIJZX.D31vWBjfaejkKUqqPNpP2zfDuZMt1%2Bf6FcXOKXK%2B9y0',
         };
