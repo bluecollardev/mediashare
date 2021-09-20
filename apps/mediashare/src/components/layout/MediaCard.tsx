@@ -87,7 +87,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
       {showThumbnail && mediaSrc && (
         <Video source={{ uri: mediaSrc }} poster={DEFAULT_IMAGE} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />
       )}
-      <View style={{ paddingTop: 20, paddingBottom: 40, height: 210 }}>
+      <View style={{ paddingTop: 20, paddingBottom: 40 }}>
         <TextInput
           dense
           mode={'outlined'}
