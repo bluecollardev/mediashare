@@ -98,13 +98,13 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
               <Button
                 color={theme.colors.primary}
                 bordered
-                style={{ width: '100%', borderColor: theme.colors.primary }}
+                style={{ width: '100%', borderColor: '#333333', borderWidth: 1 }}
                 hasText={true}
                 onPress={getDocument}
                 full={true}
               >
-                <Icon name="cloud-upload" color={theme.colors.primary} style={{ color: theme.colors.primary }} />
-                <Text style={{ textAlign: 'center', color: theme.colors.primary }}>Upload From Device</Text>
+                <Icon name="cloud-upload" style={{ color: '#333333' }} />
+                <Text style={{ textAlign: 'center', color: '#333333' }}>Upload Cover Photo</Text>
               </Button>
             )}
           </CardItem>

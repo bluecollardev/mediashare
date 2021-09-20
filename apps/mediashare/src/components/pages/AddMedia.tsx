@@ -19,6 +19,7 @@ import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
 import { minLength } from '../../lib/Validators';
+import { theme } from '../../styles';
 
 export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   const dispatch = useDispatch();
@@ -70,14 +71,45 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
             button
             onPress={getDocument}
             cardBody
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 15, marginBottom: 0 }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             {documentUri ? (
               <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
             ) : (
-              <Button bordered style={{ width: '100%' }} hasText={true} onPress={getDocument} full={true}>
-                <Icon name="cloud-upload" />
-                <Text style={{ textAlign: 'center' }}>Upload From Device</Text>
+              <Button
+                color={theme.colors.primary}
+                bordered
+                style={{ width: '100%', borderColor: '#333333', borderWidth: 1 }}
+                hasText={true}
+                onPress={getDocument}
+                full={true}
+              >
+                <Icon name="cloud-upload" style={{ color: '#333333' }} />
+                <Text style={{ textAlign: 'center', color: '#333333' }}>Upload From Device</Text>
+              </Button>
+            )}
+          </CardItem>
+          <CardItem
+            button
+            onPress={getDocument}
+            cardBody
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 15 }}
+          >
+            {documentUri ? (
+              {
+                /*<Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />*/
+              }
+            ) : (
+              <Button
+                color={theme.colors.primary}
+                bordered
+                style={{ width: '100%', borderColor: '#333333', borderWidth: 1 }}
+                hasText={true}
+                onPress={getDocument}
+                full={true}
+              >
+                <Icon name="image" style={{ color: '#333333' }} />
+                <Text style={{ textAlign: 'center', color: '#333333' }}>Upload Preview Image</Text>
               </Button>
             )}
           </CardItem>
