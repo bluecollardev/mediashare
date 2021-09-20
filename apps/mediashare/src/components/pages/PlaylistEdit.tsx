@@ -9,14 +9,12 @@ import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 import { useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
+import { Button } from 'react-native-paper';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
 import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { ListActionButton } from '../layout/ListActionButton';
 import { ROUTES } from '../../routes';
-import { Image } from 'react-native';
-import { Button, CardItem, Icon, Text } from 'native-base';
 import * as DocumentPicker from 'expo-document-picker';
 import { createThumbnail } from '../../state/modules/media-items';
 import { theme } from '../../styles';
@@ -35,13 +33,16 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
   const [title, setTitle] = useState(selectedPlaylist?.title);
   const [description, setDescription] = useState(selectedPlaylist?.description);
   const [category, setCategory] = useState(selectedPlaylist?.category);
-  // const [thumbnail, setThumbnail] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
+
   const [documentUri, setDocumentUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
+
   const mediaSrc =
     useAppSelector((state) => state.mediaItem.getMediaItem) ||
     'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
+  const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
+  const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -74,6 +75,7 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
           title={title}
           author={author}
           description={description}
+          mediaSrc={mediaItemSrc}
           category={category}
           categoryOptions={options}
           onCategoryChange={(e: any) => {
@@ -86,33 +88,31 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
           isEdit={true}
           isReadOnly={selectedItems && selectedItems.length > 0}
         >
-          <CardItem
-            button
+          <Button
+            icon="cloud-upload"
+            color={theme.colors.primary}
+            dark
+            mode={'contained'}
+            style={{ width: '100%', marginBottom: 10 }}
             onPress={getDocument}
-            cardBody
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            compact
           >
-            {documentUri ? (
-              <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
-            ) : (
-              <Button
-                color={theme.colors.primary}
-                bordered
-                style={{ width: '100%', borderColor: '#333333', borderWidth: 1 }}
-                hasText={true}
-                onPress={getDocument}
-                full={true}
-              >
-                <Icon name="cloud-upload" style={{ color: '#333333' }} />
-                <Text style={{ textAlign: 'center', color: '#333333' }}>Upload Cover Photo</Text>
-              </Button>
-            )}
-          </CardItem>
+            Upload Cover Image / Video
+          </Button>
         </MediaCard>
 
         {!selectedItems ||
           (selectedItems.length === 0 && (
-            <ListActionButton mode="outlined" icon="playlist-add" label="Add To Playlist" actionCb={() => onAddToPlaylistClicked({ playlistId })} />
+            <Button
+              icon="playlist-add"
+              color={theme.colors.primary}
+              mode={'outlined'}
+              style={{ width: '100%', marginTop: 10 }}
+              onPress={() => onAddToPlaylistClicked({ playlistId })}
+              compact
+            >
+              Add To Playlist
+            </Button>
           ))}
         <MediaList
           key={clearSelectionKey}

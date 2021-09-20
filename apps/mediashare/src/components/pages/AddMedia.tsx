@@ -79,13 +79,13 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
               <Button
                 color={theme.colors.primary}
                 bordered
-                style={{ width: '100%', borderColor: '#333333', borderWidth: 1 }}
+                style={{ width: '100%', borderColor: theme.colors.primary, borderWidth: 1 }}
                 hasText={true}
                 onPress={getDocument}
                 full={true}
               >
-                <Icon name="cloud-upload" style={{ color: '#333333' }} />
-                <Text style={{ textAlign: 'center', color: '#333333' }}>Upload From Device</Text>
+                <Icon name="cloud-upload" style={{ color: theme.colors.primary }} />
+                <Text style={{ textAlign: 'center', color: theme.colors.primary }}>Upload From Device</Text>
               </Button>
             )}
           </CardItem>
@@ -103,13 +103,13 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
               <Button
                 color={theme.colors.primary}
                 bordered
-                style={{ width: '100%', borderColor: '#333333', borderWidth: 1 }}
+                style={{ width: '100%', borderColor: theme.colors.primary, borderWidth: 1 }}
                 hasText={true}
                 onPress={getDocument}
                 full={true}
               >
-                <Icon name="image" style={{ color: '#333333' }} />
-                <Text style={{ textAlign: 'center', color: '#333333' }}>Upload Preview Image</Text>
+                <Icon name="image" style={{ color: theme.colors.primary }} />
+                <Text style={{ textAlign: 'center', color: theme.colors.primary }}>Upload Preview Image</Text>
               </Button>
             )}
           </CardItem>

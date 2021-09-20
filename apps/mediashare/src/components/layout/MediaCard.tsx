@@ -85,9 +85,16 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
   return isEdit ? (
     <View>
       {showThumbnail && mediaSrc && (
-        <Video source={{ uri: mediaSrc }} poster={DEFAULT_IMAGE} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />
+        <Video paused={true} source={{ uri: mediaSrc }} poster={DEFAULT_IMAGE} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />
       )}
       <View style={{ paddingTop: 20, paddingBottom: 40 }}>
+        <SwitchSelector
+          style={{ marginTop: 0, padding: 10 }}
+          options={categoryOptions.map((option) => ({ value: option, label: option }))}
+          initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
+          onPress={(value) => onCategoryChange(value as string)}
+          disabled={isReadOnly}
+        />
         <TextInput
           dense
           mode={'outlined'}
@@ -97,13 +104,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           error={titleValidator(title)}
           onChangeText={(text) => onTitleChange(text)}
           disabled={isReadOnly}
-        />
-        <SwitchSelector
-          style={{ marginTop: 0, padding: 10 }}
-          options={categoryOptions.map((option) => ({ value: option, label: option }))}
-          initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
-          onPress={(value) => onCategoryChange(value as string)}
-          disabled={isReadOnly}
+          style={{ marginBottom: 10 }}
         />
         <TextInput
           multiline={true}
@@ -116,13 +117,13 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           onChangeText={(text) => onDescriptionChange(text)}
           disabled={isReadOnly}
         />
-        <View style={{ marginTop: 20, marginBottom: 40 }}>{children}</View>
+        <View style={{ marginTop: 5, marginBottom: 40 }}>{children}</View>
       </View>
     </View>
   ) : (
     <Card style={styles.card} mode="elevated">
       {showThumbnail && mediaSrc && (
-        <Video source={{ uri: mediaSrc }} poster={DEFAULT_IMAGE} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />
+        <Video paused={true} source={{ uri: mediaSrc }} poster={DEFAULT_IMAGE} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />
       )}
       <Card.Title
         title={<Title>{title}</Title>}
