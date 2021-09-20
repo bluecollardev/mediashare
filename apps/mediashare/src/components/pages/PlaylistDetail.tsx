@@ -10,7 +10,7 @@ import { usePlaylists, useRouteWithParams, useViewMediaItem } from '../../hooks/
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { FAB } from 'react-native-paper';
+import { Button, FAB } from 'react-native-paper';
 
 import { PlaylistCard } from '../layout/PlaylistCard';
 import { MediaList } from '../layout/MediaList';
@@ -84,7 +84,11 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
           onEditClicked={() => onEditClicked({ playlistId })}
           // onDeleteClicked={onDeleteClicked}
           category={category}
-        />
+        >
+          <Button icon="live-tv" color={theme.colors.primary} mode={'outlined'} style={{ width: '100%', marginBottom: 10 }} compact>
+            Play From Beginning
+          </Button>
+        </PlaylistCard>
         <MediaList
           key={clearSelectionKey}
           onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}

@@ -39,7 +39,7 @@ export const SocialButtons = () => {
   }, []);
 
   return (
-    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, marginBottom: 15 }}>
+    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
       <View style={{ marginRight: 3 }}>
         <Button icon="visibility" mode="text">
           {views}
@@ -131,16 +131,18 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
         right={(props: any) => showActions && <IconButton {...props} icon="more-vert" onPress={onActionsClicked} />}
       />
       {!showSocial && (
-        <Card.Content style={{ marginTop: 0, marginBottom: 40 }}>
+        <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
+          <Paragraph style={{ marginBottom: 15 }}>{description}</Paragraph>
           {children}
-          <Paragraph style={{ marginTop: 2, marginBottom: 5 }}>{description}</Paragraph>
         </Card.Content>
       )}
       {showSocial && (
         <Card.Content style={{ marginTop: 0, marginBottom: 10 }}>
+          <Paragraph style={{ marginBottom: 15 }}>{description}</Paragraph>
           {children}
-          <Paragraph style={{ marginTop: 2, marginBottom: 5 }}>{description}</Paragraph>
-          <SocialButtons />
+          <View style={{ marginBottom: 0 }}>
+            <SocialButtons />
+          </View>
         </Card.Content>
       )}
     </Card>
