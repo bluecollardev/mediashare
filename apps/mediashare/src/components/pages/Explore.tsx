@@ -97,7 +97,7 @@ export const ExplorePlaylistsComponent = ({ onViewDetailClicked, list = [] }: Ex
 
       <List.Section>
         <List.Subheader>Popular</List.Subheader>
-        {sortedList.slice(3, 6).map((item) => {
+        {sortedList.slice(1, 6).map((item) => {
           const { _id, title, mediaIds } = item;
           return (
             <MediaListItem
