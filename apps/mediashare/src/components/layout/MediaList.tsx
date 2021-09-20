@@ -13,12 +13,13 @@ interface MediaListProps {
   list: MediaListType[];
   onViewDetail?: (item: MediaListType) => void;
   isSelectable?: boolean;
+  showActions?: boolean;
   showThumbnail?: boolean;
   addItem?: (item?: MediaListType) => void;
   removeItem?: (item?: MediaListType) => void;
 }
 
-export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, addItem = () => {}, removeItem = () => {} }: MediaListProps) => {
+export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, showActions = true, addItem = () => {}, removeItem = () => {} }: MediaListProps) => {
   return (
     <Content>
       <View>
@@ -32,6 +33,7 @@ export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, add
                 image={thumbnail}
                 selectable={isSelectable}
                 showThumbnail={showThumbnail}
+                showActions={showActions}
                 onChecked={(v) => (v ? addItem(item) : removeItem(item))}
                 onViewDetail={() => onViewDetail(item)}
               />

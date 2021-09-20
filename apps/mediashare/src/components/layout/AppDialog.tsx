@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { StyleSheet } from 'react-native';
-import { Avatar, Button, Card, Dialog, Portal } from 'react-native-paper';
+import { Avatar, Button, Card, Dialog, Portal, Text } from 'react-native-paper';
 import { theme } from '../../styles';
 
 interface AppDialogProps {
@@ -21,9 +21,11 @@ function AppDialog({ leftActionLabel, rightActionLabel, leftActionCb, rightActio
       <Dialog visible={showDialog} onDismiss={onDismiss}>
         <Card.Title
           title={title}
-          subtitle={subtitle}
           left={(props) => <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="warning" />}
         />
+        <Card.Content style={{ marginBottom: 15 }}>
+          <Text>{subtitle}</Text>
+        </Card.Content>
         <Dialog.Actions style={{ paddingTop: 0 }}>
           <Button mode={'text'} color={theme.colors.primaryText} onPress={leftActionCb}>
             {leftActionLabel}

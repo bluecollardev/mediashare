@@ -15,13 +15,25 @@ import { MediaItem, MediaItemDto } from '../../rxjs-api';
 import { RefreshControl } from 'react-native';
 import { Card, FAB, Subheading } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { PageContainer, PageProps, KeyboardAvoidingPageContent } from '../layout/PageContainer';
+import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
 
 import { theme } from '../../styles';
 import { shortenText } from '../../utils';
+import { ActionButtons } from '../layout/ActionButtons';
 
-export const MediaComponent = ({ onViewDetail, list = [], selectable }: { navigation: any; list: MediaItemDto[]; onViewDetail: any; selectable: boolean }) => {
+export const MediaComponent = ({
+  onViewDetail,
+  list = [],
+  isSelectable,
+  showActions = true,
+}: {
+  navigation: any;
+  list: MediaItemDto[];
+  onViewDetail: any;
+  isSelectable: boolean;
+  showActions?: boolean;
+}) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
@@ -36,8 +48,11 @@ export const MediaComponent = ({ onViewDetail, list = [], selectable }: { naviga
               title={title}
               description={`${shortenText(description, 40)}`}
               showThumbnail={true}
+              showActions={showActions}
               image={thumbnail || uri}
-              selectable={selectable}
+              iconRight="edit"
+              iconRightColor={theme.colors.accentDarker}
+              selectable={isSelectable}
               onViewDetail={() => onViewDetail(item)}
             />
           );
@@ -46,6 +61,8 @@ export const MediaComponent = ({ onViewDetail, list = [], selectable }: { naviga
     </View>
   );
 };
+
+const actionModes = { delete: 'delete', default: 'default' };
 
 export const Media = ({ navigation, onDataLoaded }: PageProps) => {
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
@@ -56,6 +73,8 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
 
   const { loaded, mediaItems } = useAppSelector((state) => state.mediaItems);
   const [isLoaded, setIsLoaded] = useState(loaded);
+  const [isSelectable, setIsSelectable] = useState(false);
+  const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(refresh, [dispatch]);
@@ -67,16 +86,21 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
 
   const [fabState, setState] = useState({ open: false });
   const fabActions = [
-    { icon: 'cloud-upload', onPress: addFromFeed, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'library-add', onPress: addMedia, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'edit', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+    { icon: 'delete', onPress: activateDeleteMode, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
+    { icon: 'cloud-download', onPress: addFromFeed, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+    { icon: 'library-add', onPress: addMedia, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
+
+  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
 
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {loaded && mediaItems.length > 0 ? (
-          <MediaComponent navigation={navigation} list={mediaItems} onViewDetail={onEditItem} selectable={false} />
+          <MediaComponent key={clearSelectionKey} navigation={navigation} list={mediaItems} onViewDetail={onEditItem} isSelectable={isSelectable} showActions={!isSelectable} />
         ) : (
           <Card>
             <Card.Content>
@@ -85,19 +109,26 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
           </Card>
         )}
       </KeyboardAvoidingPageContent>
-      <FAB.Group
-        visible={true}
-        open={fabState.open}
-        icon={fabState.open ? 'close' : 'more-vert'}
-        actions={fabActions}
-        color={theme.colors.primaryTextLighter}
-        fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
-        onStateChange={(open) => {
-          // open && setOpen(!open);
-          setState(open);
-        }}
-        // onPress={() => setOpen(!open)}
-      />
+      {isSelectable && actionMode === actionModes.delete && (
+        <PageActions>
+          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Delete" cancelLabel="Cancel" rightIcon="delete" />
+        </PageActions>
+      )}
+      {!isSelectable && (
+        <FAB.Group
+          visible={true}
+          open={fabState.open}
+          icon={fabState.open ? 'close' : 'more-vert'}
+          actions={fabActions}
+          color={theme.colors.primaryTextLighter}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          onStateChange={(open) => {
+            // open && setOpen(!open);
+            setState(open);
+          }}
+          // onPress={() => setOpen(!open)}
+        />
+      )}
     </PageContainer>
   );
 
@@ -114,6 +145,28 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
 
   async function onEditItem(item: MediaItem) {
     editMedia({ mediaId: item._id, uri: item.uri });
+  }
+
+  async function activateDeleteMode() {
+    setActionMode(actionModes.delete);
+    setIsSelectable(true);
+  }
+
+  async function confirmDelete() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  async function cancelDelete() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  function clearCheckboxSelection() {
+    const randomKey = Math.random();
+    setClearSelectionKey(randomKey);
   }
 };
 

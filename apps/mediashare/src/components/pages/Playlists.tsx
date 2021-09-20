@@ -17,14 +17,18 @@ import { RefreshControl } from 'react-native';
 import { View } from 'react-native';
 import { List } from 'native-base';
 import { MediaListItem } from '../layout/MediaListItem';
-import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
+import { PageActions, PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 
 import { shortenText } from '../../utils';
 
 import { theme } from '../../styles';
+import { ActionButtons } from '../layout/ActionButtons';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
+  isSelectable: boolean;
+  clearSelection?: boolean;
+  showActions?: boolean;
   onViewDetailClicked: Function;
   onChecked?: (checked: boolean, item?: any) => void;
 }
@@ -43,7 +47,7 @@ export interface PlaylistsProps {
   return list;
 } */
 
-export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked = () => {} }: PlaylistsProps) => {
+export const PlaylistsComponent = ({ list = [], onViewDetailClicked, isSelectable = false, showActions = true, onChecked = () => {} }: PlaylistsProps) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
@@ -59,6 +63,8 @@ export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked =
               title={title}
               description={`${shortenText(description, 40)}\n${mediaIds.length || 0} videos`}
               showThumbnail={true}
+              showActions={showActions}
+              selectable={isSelectable}
               onViewDetail={() => {
                 onViewDetailClicked(item);
               }}
@@ -71,6 +77,8 @@ export const PlaylistsComponent = ({ onViewDetailClicked, list = [], onChecked =
   );
 };
 
+const actionModes = { share: 'share', delete: 'delete', default: 'default' };
+
 export const Playlists = ({ onDataLoaded }: PageProps) => {
   const shareWithAction = useRouteName(ROUTES.shareWith);
   const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
@@ -80,6 +88,8 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
 
   const [{ state, loaded }] = useLoadPlaylistData();
   const [isLoaded, setIsLoaded] = useState(loaded);
+  const [isSelectable, setIsSelectable] = useState(false);
+  const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(refresh, [dispatch]);
@@ -90,36 +100,53 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, dispatch, onDataLoaded]);
 
-  const updateSelection = function (bool, item) {
-    dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
-  };
-
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    { icon: 'share', onPress: shareWithAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'add', onPress: createPlaylistAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+    { icon: 'delete', onPress: activateDeleteMode, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
+    { icon: 'share', onPress: activateShareMode, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
+    { icon: 'library-add', onPress: createPlaylistAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
+
+  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
 
   return (
     <PageContainer>
       <PageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <PlaylistsComponent
-          onChecked={updateSelection}
+          key={clearSelectionKey}
           list={state.playlists.userPlaylists}
           onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })}
+          isSelectable={isSelectable}
+          showActions={!isSelectable}
+          onChecked={updateSelection}
         />
       </PageContent>
-      <FAB.Group
-        visible={true}
-        open={fabState.open}
-        icon={fabState.open ? 'close' : 'more-vert'}
-        actions={fabActions}
-        color={theme.colors.primaryTextLighter}
-        fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
-        onStateChange={(open) => {
-          setFabState(open);
-        }}
-      />
+      {isSelectable && actionMode === actionModes.share && (
+        <PageActions>
+          <ActionButtons actionCb={confirmPlaylistsToShare} cancelCb={cancelPlaylistsToShare} actionLabel="Share With" cancelLabel="Cancel" rightIcon="group" />
+        </PageActions>
+      )}
+      {isSelectable && actionMode === actionModes.delete && (
+        <PageActions>
+          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Delete" cancelLabel="Cancel" rightIcon="delete" />
+        </PageActions>
+      )}
+      {!isSelectable && (
+        <FAB.Group
+          visible={true}
+          open={fabState.open}
+          icon={fabState.open ? 'close' : 'more-vert'}
+          actions={fabActions}
+          color={theme.colors.primaryTextLighter}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          onStateChange={(open) => {
+            setFabState(open);
+          }}
+        />
+      )}
     </PageContainer>
   );
 
@@ -132,6 +159,50 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
     setRefreshing(true);
     await dispatch(findUserPlaylists({}));
     setRefreshing(false);
+  }
+
+  async function updateSelection(bool, item) {
+    dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
+  }
+
+  async function activateShareMode() {
+    setActionMode(actionModes.share);
+    setIsSelectable(true);
+  }
+
+  async function confirmPlaylistsToShare() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+    shareWithAction();
+  }
+
+  async function cancelPlaylistsToShare() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  async function activateDeleteMode() {
+    setActionMode(actionModes.delete);
+    setIsSelectable(true);
+  }
+
+  async function confirmDelete() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  async function cancelDelete() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  function clearCheckboxSelection() {
+    const randomKey = Math.random();
+    setClearSelectionKey(randomKey);
   }
 };
 

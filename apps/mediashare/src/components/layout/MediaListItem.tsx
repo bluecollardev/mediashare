@@ -17,6 +17,8 @@ export interface MediaListItemProps {
   checked?: boolean;
   onViewDetail?: () => void;
   onChecked?: (bool: boolean) => void;
+  iconRight?: string;
+  iconRightColor?: string;
 }
 
 export const MediaListItem: React.FC<MediaListItemProps> = ({
@@ -29,6 +31,8 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   selectable = true,
   showActions = true,
   showThumbnail = false,
+  iconRight = 'chevron-right',
+  iconRightColor = theme.colors.accent,
 }: MediaListItemProps) => {
   const [isChecked, setIsChecked] = useState(checked);
   const DEFAULT_IMAGE = usePreviewImage();
@@ -54,9 +58,8 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
         selectable ? (
           <View style={styles.mediaListItem}>
             <Checkbox
-              status={!isChecked ? 'indeterminate' : 'checked'}
+              status={isChecked ? 'checked' : 'indeterminate'}
               onPress={() => {
-                console.log('checked status', isChecked);
                 setIsChecked(!isChecked);
                 onChecked(!isChecked);
               }}
@@ -84,7 +87,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
           )
         ) : null
       }
-      right={() => showActions === true && <IconButton icon="chevron-right" color={theme.colors.accent} onPress={onViewDetail} />}
+      right={() => showActions === true && <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} />}
     />
   );
 };

@@ -6,19 +6,19 @@ import { getPlaylistById, updateUserPlaylist } from '../../state/modules/playlis
 
 import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 
-import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { ActionSheet } from 'native-base';
-
-import { useEditMediaItem } from '../../hooks/NavigationHooks';
+import { useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
 import { MediaCard } from '../layout/MediaCard';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { ListActionButton } from '../layout/ListActionButton';
+import { ROUTES } from '../../routes';
 
 const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
+  const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
+
   const dispatch = useDispatch();
 
   const { playlistId } = route.params;
@@ -43,7 +43,12 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
     options.push(value);
   }
 
-  const onViewMediaItemClicked = useEditMediaItem();
+  const onViewMediaItemClicked = useViewMediaItem();
+
+  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
 
   const items = selectedPlaylist?.mediaItems || [];
   const author = '';
@@ -53,35 +58,51 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View>
-          <MediaCard
-            title={title}
-            author={author}
-            description={description}
-            category={category}
-            categoryOptions={options}
-            onCategoryChange={(e: any) => {
-              setCategory(e);
-            }}
-            onTitleChange={setTitle}
-            onDescriptionChange={setDescription}
-            isEdit={true}
-          />
-        </View>
-      </TouchableWithoutFeedback>
-      {selectedItems.length > 0 && (
-        <ListActionButton danger={false} icon="delete-outline" actionCb={() => showCardMenu(selectedItems.length)} label={'Remove Items from Playlist'} />
-      )}
-      <MediaList
-        onViewDetail={(itm) => onViewMediaItemClicked({ mediaId: itm._id, uri: itm.uri })}
-        list={items}
-        isSelectable={true}
-        removeItem={onRemoveItem}
-        addItem={onAddItem}
-        showThumbnail={true}
-      />
-      <ActionButtons rightIcon={'check-circle'} actionCb={() => save()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} />
+      <PageContent>
+        <MediaCard
+          title={title}
+          author={author}
+          description={description}
+          category={category}
+          categoryOptions={options}
+          onCategoryChange={(e: any) => {
+            setCategory(e);
+          }}
+          onTitleChange={setTitle}
+          onDescriptionChange={setDescription}
+          isEdit={true}
+          isReadOnly={selectedItems && selectedItems.length > 0}
+        />
+        {!selectedItems ||
+          (selectedItems.length === 0 && (
+            <ListActionButton mode="outlined" icon="playlist-add" label="Add To Playlist" actionCb={() => onAddToPlaylistClicked({ playlistId })} />
+          ))}
+        <MediaList
+          key={clearSelectionKey}
+          onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}
+          list={items}
+          isSelectable={true}
+          showActions={!selectedItems || selectedItems.length === 0}
+          removeItem={onRemoveItem}
+          addItem={onAddItem}
+          showThumbnail={true}
+        />
+      </PageContent>
+      <PageActions>
+        {!selectedItems ||
+          (selectedItems.length === 0 && (
+            <ActionButtons
+              actionCb={() => saveMediaUpdates()}
+              cancelCb={cancelCb}
+              actionLabel={actionLabel}
+              cancelLabel={cancelLabel}
+              rightIcon={'check-circle'}
+            />
+          ))}
+        {selectedItems && selectedItems.length > 0 && (
+          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Remove" cancelLabel="Cancel" rightIcon="delete" />
+        )}
+      </PageActions>
     </PageContainer>
   );
 
@@ -102,6 +123,11 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
     setIsLoaded(true);
   }
 
+  function clearCheckboxSelection() {
+    const randomKey = Math.random();
+    setClearSelectionKey(randomKey);
+  }
+
   // const [selected, setSelected] = useState(selectedItems.size);
   function onAddItem(item: MediaItem) {
     // setSelected(selectedItems.size);
@@ -112,6 +138,17 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
   function onRemoveItem(selected: MediaItem) {
     const updatedItems = selectedItems.filter((item) => item !== selected._id);
     setSelectedItems(updatedItems);
+  }
+
+  async function confirmDelete() {
+    await saveMediaUpdates();
+    clearCheckboxSelection();
+    resetData();
+  }
+
+  async function cancelDelete() {
+    clearCheckboxSelection();
+    resetData();
   }
 
   async function save() {
@@ -136,32 +173,6 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded }: PageProps) => {
   function cancelCb() {
     navigation.goBack();
     resetData();
-  }
-
-  /**
-   * Deprecated, as is... no ActionSheets!
-   * @param buttonIdx
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function showCardMenu(buttonIdx) {
-    ActionSheet.show(
-      {
-        options: ['Cancel', 'Remove'],
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-      },
-      (selectIdx) => {
-        // Allow override
-        const selectedIdx = buttonIdx || selectIdx
-        switch (selectedIdx) {
-          case 0:
-            break;
-          case 1:
-            saveMediaUpdates().then(() => {});
-            break;
-        }
-      }
-    );
   }
 };
 

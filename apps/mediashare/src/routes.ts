@@ -101,7 +101,7 @@ const routeConfig = {
   addFromFeed: {
     name: 'addFromFeed',
     component: AddFromFeed,
-    options: { title: 'Add From Feed + Cloud', header: AppScreenHeader },
+    options: { title: 'Download From Cloud', header: AppScreenHeader },
   },
   addFromMedia: {
     name: 'addFromMedia',

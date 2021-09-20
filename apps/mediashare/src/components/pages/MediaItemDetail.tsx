@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ROUTES } from '../../routes';
-
 import { useAppSelector } from '../../state';
 import { getMediaItemById } from '../../state/modules/media-items';
 
-import { useRouteWithParams } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-
-import { FAB } from 'react-native-paper';
 import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 import { MediaItemCard } from '../layout/MediaItemCard';
-
-import { theme } from '../../styles';
 
 const MediaItemDetail = ({ route, onDataLoaded }: PageProps) => {
   const dispatch = useDispatch();
@@ -25,15 +18,6 @@ const MediaItemDetail = ({ route, onDataLoaded }: PageProps) => {
 
   const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const { _id } = mediaItem || {};
-
-  const onEditClicked = useRouteWithParams(ROUTES.mediaItemEdit);
-  const onDeleteClicked = () => {};
-
-  const [fabState, setState] = useState({ open: false });
-  const fabActions = [
-    { icon: 'delete', onPress: () => onDeleteClicked(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-    { icon: 'edit', onPress: () => onEditClicked({ mediaId }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-  ];
 
   useEffect(() => {
     async function loadData() {
@@ -58,24 +42,9 @@ const MediaItemDetail = ({ route, onDataLoaded }: PageProps) => {
           image={mediaItemSrc}
           showActions={false}
           category={category}
-          onEditClicked={() => onEditClicked({ mediaId })}
-          onDeleteClicked={onDeleteClicked}
           author={author}
         />
       </PageContent>
-      <FAB.Group
-        visible={true}
-        open={fabState.open}
-        icon={fabState.open ? 'close' : 'more-vert'}
-        actions={fabActions}
-        color={theme.colors.primaryTextLighter}
-        fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
-        onStateChange={(open) => {
-          // open && setOpen(!open);
-          setState(open);
-        }}
-        // onPress={() => setOpen(!open)}
-      />
     </PageContainer>
   );
 };

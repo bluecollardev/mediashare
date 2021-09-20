@@ -69,7 +69,7 @@ const ShareWith = ({ navigation }: PageProps) => {
         <ContactList showGroups={true} items={users} onChecked={updateSelectedUsers} />
       </PageContent>
       <PageActions>
-        <ActionButtons cancelCb={goBack} actionCb={actionCb} actionLabel="Share" cancelLabel="Cancel" />
+        <ActionButtons cancelCb={goBack} actionCb={actionCb} actionLabel="Confirm" cancelLabel="Cancel" rightIcon="check-circle" />
       </PageActions>
     </PageContainer>
   );

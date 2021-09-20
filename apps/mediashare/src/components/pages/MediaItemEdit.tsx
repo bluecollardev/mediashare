@@ -9,7 +9,7 @@ import { useMediaItems } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { FAB, Paragraph } from 'react-native-paper';
+import { Button, Paragraph } from 'react-native-paper';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
@@ -64,11 +64,6 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
     await dispatch(updateMediaItem(dto));
     mediaItems();
   };
-  const onDelete = async function () {
-    console.log('deleting');
-    await dispatch(deleteMediaItem({ id: mediaId, key: mediaItem.uri }));
-    mediaItems();
-  };
 
   useEffect(() => {
     if (mediaItem) {
@@ -87,11 +82,11 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
           leftActionLabel={'Cancel'}
           rightActionLabel={'Delete'}
           leftActionCb={() => setShowDialog(false)}
-          rightActionCb={() => onDelete()}
+          rightActionCb={() => deleteItem()}
           onDismiss={() => setShowDialog(false)}
           showDialog={showDialog}
-          title={'Are you sure?'}
-          subtitle={'This action cannot be undone'}
+          title={'Delete Media Item'}
+          subtitle={'Are you sure you want to do this? This action is final and cannot be undone.'}
         />
         <MediaCard
           title={title}
@@ -105,19 +100,23 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
           onTitleChange={setTitle}
           onDescriptionChange={setDescription}
           isEdit={true}
-        />
+        >
+          <Button icon={'delete'} mode={'outlined'} dark color={theme.colors.error} onPress={() => setShowDialog(true)} compact>
+            Delete Media Item
+          </Button>
+        </MediaCard>
       </KeyboardAvoidingPageContent>
       <PageActions>
         <ActionButtons actionCb={saveItem} cancelCb={cancelCb} rightIcon="check-circle" actionLabel={actionLabel} cancelLabel={cancelLabel} />
       </PageActions>
-      <FAB
-        color={theme.colors.primaryTextLighter}
-        style={{ backgroundColor: theme.colors.error, position: 'absolute', right: 15, bottom: 15 }}
-        icon={'delete'}
-        onPress={() => setShowDialog(true)}
-      />
     </PageContainer>
   );
+
+  async function deleteItem() {
+    console.log('deleting');
+    await dispatch(deleteMediaItem({ id: mediaId, key: mediaItem.uri }));
+    mediaItems();
+  }
 };
 
 export default withLoadingSpinner(MediaItemEdit);

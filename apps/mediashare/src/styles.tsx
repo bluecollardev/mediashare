@@ -12,6 +12,7 @@ const styles: any = StyleSheet.create({
     paddingHorizontal: 5,
     height: '100%',
     flex: 1,
+    backgroundColor: '#ffffff',
   },
   pageActions: {
     display: 'flex',
@@ -29,6 +30,12 @@ const styles: any = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
+  },
+  deleteActionButton: {
+    flex: 0,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+    width: 30,
   },
   mediaListItem: {
     display: 'flex',

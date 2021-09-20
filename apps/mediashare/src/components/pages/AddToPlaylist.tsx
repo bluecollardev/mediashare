@@ -50,7 +50,7 @@ export const AddToPlaylist = ({ route }: PageProps) => {
         />
       </PageContent>
       <PageActions>
-        <ActionButtons actionCb={actionCb} rightIcon="check-circle" actionLabel="Save" cancelLabel="Back" cancelCb={cancelCb} />
+        <ActionButtons actionCb={actionCb} rightIcon="check-circle" actionLabel="Save" cancelLabel="Cancel" cancelCb={cancelCb} />
       </PageActions>
     </PageContainer>
   );
