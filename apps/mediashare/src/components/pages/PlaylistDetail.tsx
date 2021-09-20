@@ -89,11 +89,11 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
           key={clearSelectionKey}
           onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}
           list={items}
+          showThumbnail={true}
           isSelectable={true}
           showActions={!selectedItems || selectedItems.length === 0}
           removeItem={onRemoveItem}
           addItem={onAddItem}
-          showThumbnail={true}
         />
       </PageContent>
       <PageActions>

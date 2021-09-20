@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button, Card, IconButton, Paragraph, TextInput, Title } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
@@ -27,21 +27,32 @@ export interface MediaListItemProps {
 }
 
 export const SocialButtons = () => {
+  const [views, setViews] = useState(0);
+  const [shares, setShares] = useState(0);
+  const [comments, setComments] = useState(0);
+
+  useEffect(() => {
+    const getRand = () => Math.floor(Math.random() * 10);
+    setViews(getRand());
+    setShares(getRand());
+    setComments(0);
+  }, []);
+
   return (
     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, marginBottom: 15 }}>
       <View style={{ marginRight: 3 }}>
-        <Button icon="thumb-up" mode="text">
-          12
+        <Button icon="visibility" mode="text">
+          {views}
         </Button>
       </View>
       <View style={{ marginRight: 3 }}>
-        <Button icon="comment" mode="text">
-          0
+        <Button icon="share" mode="text">
+          {shares}
         </Button>
       </View>
       <View style={{}}>
-        <Button icon="share" mode="text">
-          3
+        <Button icon="comment" mode="text">
+          {comments}
         </Button>
       </View>
     </View>
