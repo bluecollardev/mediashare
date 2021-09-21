@@ -5,15 +5,28 @@ import { Avatar, Button } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { UserDto } from '../../rxjs-api';
 import { useAppSelector } from '../../state';
-import { loadUser } from '../../state/modules/user/index';
+import { loadUser, updateAccount } from '../../state/modules/user/index';
 import TextField from '../form/TextField';
-import PageContainer from '../layout/PageContainer';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import PageContainer, { PageProps } from '../layout/PageContainer';
+import * as DocumentPicker from 'expo-document-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { fetchAndPutToS3, putToS3, uploadMedia, uploadThumbnail } from '../../state/modules/media-items/storage';
+import Config from 'react-native-config';
+import { KeyFactory, thumbnailRoot } from '../../state/modules/media-items/key-factory';
+import { useRouteName } from '../../hooks/NavigationHooks';
+import { ROUTES } from '../../routes';
+import { ActionButtons } from '../layout/ActionButtons';
 
-interface AccountEditProps {}
+const awsUrl = Config.AWS_URL;
+console.log(awsUrl);
 
-function AccountEdit({}: AccountEditProps) {
+interface AccountEditProps extends PageProps {}
+
+function AccountEdit({ startLoad, endLoad }: AccountEditProps) {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  const account = useRouteName(ROUTES.account);
   useEffect(() => {
     const loadData = async function () {
       const dispatched = await dispatch(loadUser());
@@ -27,13 +40,45 @@ function AccountEdit({}: AccountEditProps) {
   const [state, setState] = useState(user);
 
   const onUpdate = (user: Partial<UserDto>) => {
-    setState({ ...user, ...state });
+    setState({ ...state, ...user });
+  };
+
+  async function getDocument() {
+    const document = launchImageLibrary({ mediaType: 'photo', includeBase64: true, quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
+      if (!res) {
+        return;
+      }
+      const image = res.assets[0];
+      console.log(image);
+      const thumbnailKey = thumbnailRoot + image.fileName;
+      startLoad();
+      fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
+        const image = awsUrl + res.key;
+
+        setState({ ...state, imageSrc: image });
+        endLoad();
+      });
+    });
+  }
+  const save = async function () {
+    const updateUserDto = state;
+    console.log('🚀 ---------------------------------------------------------------------------------');
+    console.log('🚀 ~ file: AccountEdit.tsx ~ line 64 ~ saveChanges ~ userUpdateDto', updateUserDto);
+    console.log('🚀 ---------------------------------------------------------------------------------');
+    const updated = await dispatch(updateAccount({ updateUserDto }));
+    console.log('🚀 ---------------------------------------------------------------------');
+    console.log('🚀 ~ file: AccountEdit.tsx ~ line 68 ~ saveChanges ~ updated', updated);
+    console.log('🚀 ---------------------------------------------------------------------');
+    await dispatch(loadUser());
+    account();
   };
   return (
     <PageContainer>
       <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
-        <Avatar.Image source={{ uri: state._id }} />
-        <Button mode={'text'}>Upload a Profile Picture</Button>
+        <Avatar.Image source={{ uri: state.imageSrc }} size={128} />
+        <Button mode={'text'} onPress={() => getDocument()}>
+          Upload a Profile Picture
+        </Button>
       </View>
       <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.container}>
         <TextField onChangeText={(text) => onUpdate({ firstName: text })} label={'firstName'} value={state.firstName} disabled={!isLoaded} />
@@ -41,6 +86,7 @@ function AccountEdit({}: AccountEditProps) {
         <TextField onChangeText={(text) => onUpdate({ email: text })} label={'email'} value={state.email} disabled={!isLoaded} />
         <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label={'phoneNumber'} value={state.phoneNumber} disabled={!isLoaded} />
       </ScrollView>
+      <ActionButtons cancelCb={account} actionCb={save} actionLabel={'Save'} />
     </PageContainer>
   );
 }
@@ -56,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AccountEdit;
+export default withLoadingSpinner(AccountEdit);

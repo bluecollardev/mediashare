@@ -18,6 +18,8 @@ target 'MediashareTechnology' do
 
   pod 'react-native-create-thumbnail', :path => '../node_modules/react-native-create-thumbnail'
 
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+
   target 'MediashareTechnologyTests' do
     inherit! :complete
     # Pods for testing

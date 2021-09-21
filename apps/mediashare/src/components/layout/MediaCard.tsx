@@ -16,7 +16,7 @@ export interface MediaListItemProps {
   content?: any;
   showActions?: boolean;
   showThumbnail?: boolean;
-  thumbnail: string;
+  thumbnail?: string;
   category?: string;
   isEdit?: boolean;
   isReadOnly?: boolean;

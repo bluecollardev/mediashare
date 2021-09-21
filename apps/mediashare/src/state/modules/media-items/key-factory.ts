@@ -8,6 +8,7 @@ const mediaRoot = Config.AWS_ROOT;
 const videoRoot = Config.VIDEO_ROOT;
 const thumbnailRoot = Config.THUMBNAIL_ROOT;
 const uploadRoot = Config.UPLOAD_ROOT;
+const awsUrl = Config.AWS_URL;
 export interface KeyFactoryProps {
   root: string;
   thumbnailRoot: string;
@@ -31,4 +32,4 @@ function createKeyFactory({ root, thumbnailRoot, videoRoot, uploadRoot }: KeyFac
   };
 }
 const KeyFactory = createKeyFactory({ root: mediaRoot, videoRoot, thumbnailRoot, uploadRoot });
-export { KeyFactory, mediaRoot, videoRoot, thumbnailRoot, uploadRoot };
+export { KeyFactory, mediaRoot, videoRoot, thumbnailRoot, uploadRoot, awsUrl };

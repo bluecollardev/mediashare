@@ -62,7 +62,7 @@ const userReducer = createReducer(initialState, (builder) =>
       return pickUser(action.payload);
     })
     .addCase(loadUser.fulfilled, (state, action) => {
-      return pickUser(action.payload);
+      return { ...state, ...pickUser(action.payload) };
     })
     .addCase(loginAction.pending, (state) => {
       return { ...state };

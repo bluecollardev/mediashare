@@ -24,13 +24,11 @@ const cancel_idx = 2;
 
 export const MediaItemCard: React.FC<MediaItemCardProps> = (props) => {
   const {
-    navigation,
     title = '',
     author = '',
     description = '',
     image,
     buttons,
-    content,
     mediaSrc = '',
     children,
     showActions = true,
