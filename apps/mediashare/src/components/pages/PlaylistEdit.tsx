@@ -18,6 +18,7 @@ import { ROUTES } from '../../routes';
 import * as DocumentPicker from 'expo-document-picker';
 import { createThumbnail } from '../../state/modules/media-items';
 import { theme } from '../../styles';
+import AppUpload from '../layout/AppUpload';
 
 const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: PageProps) => {
   const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
@@ -33,14 +34,10 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
   const [description, setDescription] = useState(selectedPlaylist?.description);
   const [category, setCategory] = useState(selectedPlaylist?.category);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [imageSrc, setImageSrc] = useState(selectedPlaylist?.imageSrc);
 
   const [documentUri, setDocumentUri] = useState('');
-  const [thumbnail, setThumbnail] = useState(null);
 
-  const mediaSrc =
-    useAppSelector((state) => state.mediaItem.getMediaItem) ||
-    'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
-  const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
   const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
 
   useEffect(() => {
@@ -57,6 +54,12 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
   const onViewMediaItemClicked = useViewMediaItem();
 
   const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+
+  const onUpload = (uri: string) => {
+    console.log(uri);
+    setImageSrc(uri);
+  };
+
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
@@ -74,7 +77,8 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
           title={title}
           author={author}
           description={description}
-          mediaSrc={mediaItemSrc}
+          thumbnail={imageSrc}
+          showThumbnail={true}
           category={category}
           categoryOptions={options}
           onCategoryChange={(e: any) => {
@@ -87,17 +91,7 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
           isEdit={true}
           isReadOnly={selectedItems && selectedItems.length > 0}
         >
-          <Button
-            icon="cloud-upload"
-            color={theme.colors.primary}
-            dark
-            mode={'contained'}
-            style={{ width: '100%', marginBottom: 10 }}
-            onPress={getDocument}
-            compact
-          >
-            Upload Cover Image / Video
-          </Button>
+          <AppUpload startLoad={startLoad} endLoad={endLoad} onUpload={onUpload} />
         </MediaCard>
 
         {!selectedItems ||
@@ -150,6 +144,7 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
         description: description,
         category: category as any,
         _id: selectedPlaylist._id,
+        imageSrc,
       })
     );
   }
@@ -186,14 +181,6 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
     clearCheckboxSelection();
     resetData();
   }
-
-  // async function save() {
-  //   await withIds(selectedPlaylist.mediaIds);
-  //   setIsLoaded(false);
-  //   await loadData();
-  //   playlists();
-  // }
-
   async function saveMediaUpdates() {
     const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
 
@@ -210,20 +197,6 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
   function cancelCb() {
     navigation.goBack();
     resetData();
-  }
-
-  async function getDocument() {
-    const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
-    if (!document) {
-      return;
-    }
-    console.log(document);
-    setDocumentUri(document?.uri || '');
-    startLoad();
-
-    const thumbnail = await dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
-    console.log(thumbnail);
-    endLoad();
   }
 };
 

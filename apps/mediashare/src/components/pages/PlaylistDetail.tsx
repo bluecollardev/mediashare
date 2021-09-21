@@ -56,10 +56,10 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
     clearCheckboxSelection();
   }, []);
 
-  const { description = '', title = '', user, category, mediaItems = [] } = selectedPlaylist || {};
+  const { description = '', title = '', imageSrc, category, mediaItems = [] } = selectedPlaylist || {};
 
   const items = mediaItems || [];
-  const author = user?.username;
+  // const author = user?.username;
 
   return (
     <PageContainer>
@@ -76,11 +76,11 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
         />
         <PlaylistCard
           title={title}
-          author={author}
           description={description}
           showSocial={true}
           showActions={false}
           showThumbnail={true}
+          image={imageSrc}
           onEditClicked={() => onEditClicked({ playlistId })}
           // onDeleteClicked={onDeleteClicked}
           category={category}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Button, Card, IconButton, Paragraph, TextInput, Title } from 'react-native-paper';
+import { Avatar, Button, Card, IconButton, Paragraph, TextInput, Title } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import Video from 'react-native-video';
 import SwitchSelector from 'react-native-switch-selector';
@@ -72,7 +72,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     buttons = false,
     showActions = false,
     showThumbnail = true,
-    thumbnail = DEFAULT_IMAGE,
+    thumbnail = null,
     onActionsClicked = () => {},
     children,
     category = 'None',
@@ -89,6 +89,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
       {showThumbnail && mediaSrc && (
         <Video paused={true} source={{ uri: mediaSrc }} poster={DEFAULT_IMAGE} style={{ width: '100%', height: 300 }} resizeMode="cover" controls={true} />
       )}
+      {showThumbnail && thumbnail && <Card.Cover source={{ uri: thumbnail }} />}
       <View style={{ paddingTop: 20, paddingBottom: 40 }}>
         <SwitchSelector
           style={{ marginTop: 0, padding: 10 }}
@@ -130,6 +131,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
       <Card.Title
         title={<Title>{title}</Title>}
         // subtitle={`Tags: ${category ?? 'None'}`}
+        left={(props) => showThumbnail && thumbnail && <Avatar.Image source={{ uri: thumbnail }} size={52} />}
         right={(props: any) => showActions && <IconButton {...props} icon="more-vert" onPress={onActionsClicked} />}
       />
       {!showSocial && (

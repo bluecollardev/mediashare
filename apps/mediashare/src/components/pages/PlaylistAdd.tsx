@@ -61,7 +61,7 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
   };
 
   const isValid = function () {
-    const test = !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !(selected.length < 1);
+    const test = !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !(selected.length < 1) && imageSrc.length > 0;
     return test;
   };
   const updateSelection = function (bool: boolean, item: MediaListType) {

@@ -41,6 +41,12 @@ export interface UpdatePlaylistDto {
    * @type {string}
    * @memberof UpdatePlaylistDto
    */
+  imageSrc: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdatePlaylistDto
+   */
   category: UpdatePlaylistDtoCategoryEnum;
   /**
    *
