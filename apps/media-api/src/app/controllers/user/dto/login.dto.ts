@@ -21,7 +21,7 @@ export class LoginDto {
   password: string;
 }
 
-export class LoginResponseDto implements Omit<User, '_id' | 'sharedMediaItems' | 'sharedPlaylists' | 'userId'> {
+export class LoginResponseDto implements Omit<User, '_id' | 'sharedMediaItems' | 'sharedPlaylists' | 'userId' | 'phoneNumber' | 'sub' | 'email'> {
   @ApiString()
   username: string;
   @ApiName()
@@ -32,7 +32,7 @@ export class LoginResponseDto implements Omit<User, '_id' | 'sharedMediaItems' |
   @ApiProperty({
     type: String,
     pattern: '^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$',
-    example: exampleToken,
+    example: exampleToken
   })
   accessToken;
 
@@ -44,8 +44,7 @@ export class TokenDto {
   @ApiProperty({
     type: String,
     example: exampleToken,
-    pattern: '^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$',
+    pattern: '^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$'
   })
-  @IsJWT()
-  token: string;
+  accessToken: string;
 }

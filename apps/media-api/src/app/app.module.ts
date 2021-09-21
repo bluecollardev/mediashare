@@ -52,7 +52,10 @@ import { JwtModule } from '@nestjs/jwt';
     MediaItemModule,
     ProfileModule,
     PlaylistModule,
-    PassportModule,
+    PassportModule.register({
+      defaultStrategy: 'jwt'
+    }),
+
     ShareItemsModule
   ],
   controllers: [AppController],

@@ -1,5 +1,5 @@
 import * as jwkToPem from 'jwk-to-pem';
-export const accessKey = jwkToPem({
+export const idKey = jwkToPem({
   // alg: 'RS256',
   e: 'AQAB',
   // kid: 'YAdhKEBqfI39XUppuTw2OQgUzEuKVq6TxJYmYt/r5/A=',
@@ -9,7 +9,7 @@ export const accessKey = jwkToPem({
   // use: 'sig'
 });
 
-export const idKey = jwkToPem({
+export const accessKey = jwkToPem({
   e: 'AQAB',
   kty: 'RSA',
   n:

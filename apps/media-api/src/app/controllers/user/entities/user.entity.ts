@@ -8,13 +8,13 @@ import { hash } from 'bcrypt';
 @Entity()
 export class User extends BcEntity {
   @Column() username: string;
+  @Column() phoneNumber: string;
+  @Column() email: string;
+  @Column() sub: string;
 
   @Column() firstName: string;
   @Column() lastName: string;
 
-  @Column({ nullable: true })
-  @Min(8)
-  password?: string;
   @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
   @Column({ array: true, nullable: true }) sharedMediaItems?: ObjectId[];
 }

@@ -15,6 +15,7 @@ import { LocalStrategy } from './local.strategy';
 import { SessionSerializer } from './session.serializer';
 import { UserService } from './user.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { accessKey } from './keys';
 
 @Module({
   imports: [
@@ -35,8 +36,12 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
       }
     ]),
     JwtModule.register({
-      secret: 'this-is-my-secret-key',
-      signOptions: { expiresIn: '10h' }
+      publicKey: accessKey,
+      signOptions: { expiresIn: '10h' },
+      verifyOptions: {
+        // algorithms: ['RS256'],
+        ignoreExpiration: true
+      }
     }),
     TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
     ShareItemModule

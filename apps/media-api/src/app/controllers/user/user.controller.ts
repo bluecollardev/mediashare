@@ -90,15 +90,19 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Post('authorize')
   @ApiResponse({ type: LoginResponseDto, status: 200 })
+  @ApiBody({ type: TokenDto })
   async authorize(@Req() req: Request) {
     console.log(req);
-    const { token = null } = req.body as any;
+    const { accessToken = null, idToken = null } = req.body as any;
 
-    const valid = await this.userService.validateToken({ token });
+    const valid = this.userService.validateToken({ token: accessToken, idToken });
 
     if (!valid) throw new UnauthorizedException();
-    const user = await this.userService.findOne(valid._id);
+    const user = await this.userService.findByQuery({ sub: valid.sub });
+    if (!user) {
+      return await this.userService.create(valid);
+    }
 
-    return { ...user };
+    return user;
   }
 }

@@ -52,8 +52,11 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return null;
   }
 
-  async validateToken({ token }: { token: string }) {
-    return this.authSvc.validateToken(token);
+  validateToken({ token, idToken }: { token: string; idToken: string }) {
+    const { email, phone_number } = this.authSvc.decodeIdToken(idToken);
+
+    const { username, sub } = this.authSvc.validateToken(token);
+    return { email, phone_number, username, sub };
   }
 
   setRoles(_id: string, roles: BcRolesType[]) {
@@ -64,7 +67,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return this.client.send({ role: 'auth', cmd: 'get' }, user).toPromise();
   }
 
-  async createUser(user: CreateUserDto): Promise<User> {
+  async createUser(user: Pick<User, 'sub' | 'email' | 'phoneNumber' | 'username'>): Promise<User> {
     const { username, ...rest } = user;
     const userEntity = await this.create({ username: username.toLowerCase(), ...rest });
 

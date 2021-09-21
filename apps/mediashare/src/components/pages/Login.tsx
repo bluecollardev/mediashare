@@ -53,7 +53,12 @@ export interface LoginProps {
   loginForm: any;
   onLogin: any;
 }
+const sectionFooterLink = Object.assign({}, AmplifyTheme.sectionFooterLink, { color: theme.colors.primary, fontFamily: theme.fonts.medium.fontFamily });
 
+const sectionFooterLinkDisabled = Object.assign({}, AmplifyTheme.sectionFooterLinkDisabled, {
+  color: theme.colors.disabled,
+  fontFamily: theme.fonts.medium.fontFamily,
+});
 const MyTheme = Object.assign({}, AmplifyTheme, {
   button: {
     backgroundColor: theme.colors.primary,
@@ -95,6 +100,8 @@ const MyTheme = Object.assign({}, AmplifyTheme, {
     textAlign: 'center',
     width: '100%',
   },
+  sectionFooterLink,
+  sectionFooterLinkDisabled,
 });
 export interface LoginState extends Pick<RootState, never> {}
 
