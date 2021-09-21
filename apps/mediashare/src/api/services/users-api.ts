@@ -31,8 +31,6 @@ import {
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
-import { CreateUserDto } from '../models';
-// @ts-ignore
 import { PlaylistResponseDto } from '../models';
 // @ts-ignore
 import { UpdateUserDto } from '../models';
@@ -44,39 +42,6 @@ import { UserDto } from '../models';
  */
 export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
-    /**
-     *
-     * @param {CreateUserDto} createUserDto
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    usersControllerCreate: async (createUserDto: CreateUserDto, options: any = {}): Promise<RequestArgs> => {
-      // verify required parameter 'createUserDto' is not null or undefined
-      assertParamExists('usersControllerCreate', 'createUserDto', createUserDto);
-      const localVarPath = `/api/users`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      localVarHeaderParameter['Content-Type'] = 'application/json';
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-      localVarRequestOptions.data = serializeDataIfNeeded(createUserDto, localVarRequestOptions, configuration);
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
     /**
      *
      * @param {*} [options] Override http request option.
@@ -308,16 +273,6 @@ export const UsersApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @param {CreateUserDto} createUserDto
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async usersControllerCreate(createUserDto: CreateUserDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.usersControllerCreate(createUserDto, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
-    /**
-     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -410,15 +365,6 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
   return {
     /**
      *
-     * @param {CreateUserDto} createUserDto
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    usersControllerCreate(createUserDto: CreateUserDto, options?: any): AxiosPromise<UserDto> {
-      return localVarFp.usersControllerCreate(createUserDto, options).then((request) => request(axios, basePath));
-    },
-    /**
-     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -483,20 +429,6 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
     },
   };
 };
-
-/**
- * Request parameters for usersControllerCreate operation in UsersApi.
- * @export
- * @interface UsersApiUsersControllerCreateRequest
- */
-export interface UsersApiUsersControllerCreateRequest {
-  /**
-   *
-   * @type {CreateUserDto}
-   * @memberof UsersApiUsersControllerCreate
-   */
-  readonly createUserDto: CreateUserDto;
-}
 
 /**
  * Request parameters for usersControllerFindOne operation in UsersApi.
@@ -603,19 +535,6 @@ export interface UsersApiUsersControllerUpdateRequest {
  * @extends {BaseAPI}
  */
 export class UsersApi extends BaseAPI {
-  /**
-   *
-   * @param {UsersApiUsersControllerCreateRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof UsersApi
-   */
-  public usersControllerCreate(requestParameters: UsersApiUsersControllerCreateRequest, options?: any) {
-    return UsersApiFp(this.configuration)
-      .usersControllerCreate(requestParameters.createUserDto, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
   /**
    *
    * @param {*} [options] Override http request option.

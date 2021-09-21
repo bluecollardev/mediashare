@@ -37,18 +37,6 @@ export class UserController {
     return { ...authUser, ...mongoUser };
   }
 
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(LocalGuard)
-  @Post('login')
-  @ApiBody({ type: LoginDto, required: true })
-  @ApiResponse({ type: LoginResponseDto, status: 200 })
-  async login(@Req() req: Request) {
-    const expressUser = req.user as any;
-
-    const user = await this.userService.findByQuery({ username: req.body.username.toLowerCase() });
-    return { accessToken: expressUser.accessToken.accessToken, ...user };
-  }
-
   @Post('logout')
   @UseGuards(JwtAuthGuard)
   logout(@Req() req: Request, @Res() res: Response) {
@@ -57,7 +45,7 @@ export class UserController {
   }
 
   @Get('playlists')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(UserGuard)
   @ApiBearerAuth()
   @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
   async getUserPlaylists(@GetUser() user: SessionUserInterface, @GetUserId() userId: ObjectId) {
@@ -67,8 +55,12 @@ export class UserController {
 
   @Get('media-items')
   @UseGuards(UserGuard)
+  @ApiBearerAuth()
   @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getMediaItems(@GetUserId() userId: ObjectId) {
+    console.log('🚀 -----------------------------------------------------------------------------------------');
+    console.log('🚀 ~ file: user.controller.ts ~ line 61 ~ UserController ~ getMediaItems ~ userId', userId);
+    console.log('🚀 -----------------------------------------------------------------------------------------');
     const result = await this.mediaItemService.findMediaItemsByUserId(userId);
 
     return result;

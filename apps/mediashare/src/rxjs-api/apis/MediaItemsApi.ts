@@ -54,6 +54,9 @@ export class MediaItemsApi extends BaseAPI {
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
     };
 
     return this.request<MediaItem>(

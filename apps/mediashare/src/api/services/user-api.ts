@@ -31,8 +31,6 @@ import {
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
-import { LoginDto } from '../models';
-// @ts-ignore
 import { LoginResponseDto } from '../models';
 // @ts-ignore
 import { MediaItemDto } from '../models';
@@ -209,42 +207,13 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     *
-     * @param {LoginDto} loginDto
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    userControllerLogin: async (loginDto: LoginDto, options: any = {}): Promise<RequestArgs> => {
-      // verify required parameter 'loginDto' is not null or undefined
-      assertParamExists('userControllerLogin', 'loginDto', loginDto);
-      const localVarPath = `/api/user/login`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      localVarHeaderParameter['Content-Type'] = 'application/json';
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-      localVarRequestOptions.data = serializeDataIfNeeded(loginDto, localVarRequestOptions, configuration);
 
       return {
         url: toPathString(localVarUrlObj),
@@ -268,10 +237,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
       const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
-
-      // authentication bearer required
-      // http bearer authentication required
-      await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -298,7 +263,7 @@ export const UserApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userControllerAuthorize(tokenDto: TokenDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    async userControllerAuthorize(tokenDto: TokenDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponseDto>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerAuthorize(tokenDto, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -349,16 +314,6 @@ export const UserApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @param {LoginDto} loginDto
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async userControllerLogin(loginDto: LoginDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponseDto>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerLogin(loginDto, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
-    /**
-     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -382,7 +337,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerAuthorize(tokenDto: TokenDto, options?: any): AxiosPromise<void> {
+    userControllerAuthorize(tokenDto: TokenDto, options?: any): AxiosPromise<LoginResponseDto> {
       return localVarFp.userControllerAuthorize(tokenDto, options).then((request) => request(axios, basePath));
     },
     /**
@@ -427,15 +382,6 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
     },
     /**
      *
-     * @param {LoginDto} loginDto
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    userControllerLogin(loginDto: LoginDto, options?: any): AxiosPromise<LoginResponseDto> {
-      return localVarFp.userControllerLogin(loginDto, options).then((request) => request(axios, basePath));
-    },
-    /**
-     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -457,20 +403,6 @@ export interface UserApiUserControllerAuthorizeRequest {
    * @memberof UserApiUserControllerAuthorize
    */
   readonly tokenDto: TokenDto;
-}
-
-/**
- * Request parameters for userControllerLogin operation in UserApi.
- * @export
- * @interface UserApiUserControllerLoginRequest
- */
-export interface UserApiUserControllerLoginRequest {
-  /**
-   *
-   * @type {LoginDto}
-   * @memberof UserApiUserControllerLogin
-   */
-  readonly loginDto: LoginDto;
 }
 
 /**
@@ -550,19 +482,6 @@ export class UserApi extends BaseAPI {
   public userControllerGetUserPlaylists(options?: any) {
     return UserApiFp(this.configuration)
       .userControllerGetUserPlaylists(options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   *
-   * @param {UserApiUserControllerLoginRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof UserApi
-   */
-  public userControllerLogin(requestParameters: UserApiUserControllerLoginRequest, options?: any) {
-    return UserApiFp(this.configuration)
-      .userControllerLogin(requestParameters.loginDto, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

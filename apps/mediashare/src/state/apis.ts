@@ -16,12 +16,29 @@ import Config from 'react-native-config';
 
 console.log('dotenv config', Config.API_SERVER);
 
-let TOKEN = '';
-let COOKIE = '';
-let ID_TOKEN = '';
 function apiFactory() {
   function middlewareFactory() {
-    const sessionMiddleWare: Middleware = {
+    let TOKEN = '';
+    let COOKIE = '';
+    let ID_TOKEN = '';
+    // const sessionMiddleWare: Middleware = {
+
+    // };
+    const cookieMiddleware: Middleware = {
+      post: (response: ResponseArgs) => {
+        const originalEvent = response.xhr as any;
+        // console.log('🚀 -------------------------------------------------------------------------------');
+        // console.log('🚀 ~ file: apis.ts ~ line 43 ~ middlewareFactory ~ originalEvent', originalEvent);
+        // console.log('🚀 -------------------------------------------------------------------------------');
+        const cookie = originalEvent.responseHeaders['Set-Cookie'];
+        const token = originalEvent.responseHeaders.Authorization;
+        const idToken = originalEvent.responseHeaders.Id;
+        COOKIE = cookie ? cookie : COOKIE;
+        TOKEN = token ? token : TOKEN;
+        ID_TOKEN = idToken ? idToken : ID_TOKEN;
+        console.log(TOKEN);
+        return response;
+      },
       pre: (request: RequestArgs) => {
         const { headers: prevHeaders, ...rest } = request;
 
@@ -30,58 +47,44 @@ function apiFactory() {
           Authorization: `Bearer ${TOKEN}`,
           cookie: COOKIE.split(';')[0],
           id: ID_TOKEN,
-
-          // cookie: 'connect.sid=s%3A2yl00r3D18IP6bGsdOvZpk87hskZIJZX.D31vWBjfaejkKUqqPNpP2zfDuZMt1%2Bf6FcXOKXK%2B9y0',
         };
         console.log(headers);
         return { headers, ...rest };
       },
     };
-    const cookieMiddleware: Middleware = {
-      post: (response: ResponseArgs) => {
-        const originalEvent = response.xhr as any;
-        const cookie = originalEvent.responseHeaders['Set-Cookie'];
-        const token = originalEvent.responseHeaders.authorization;
-        const idToken = originalEvent.responseHeaders.id;
-        COOKIE = cookie ? cookie : COOKIE;
-        TOKEN = token ? token : TOKEN;
-        ID_TOKEN = idToken ? idToken : ID_TOKEN;
-        return response;
-      },
-    };
-    const loginMiddleware: Middleware = {
-      post: (response: ResponseArgs) => {
-        if (response.request.url.includes('login') || response.request.url.includes('authorize')) {
-          console.log('token validation', response);
-          const { accessToken } = response.response;
+    // const loginMiddleware: Middleware = {
+    //   post: (response: ResponseArgs) => {
+    //     if (response.request.url.includes('login') || response.request.url.includes('authorize')) {
+    //       console.log('token validation', response);
+    //       const { accessToken } = response.response;
 
-          // TOKEN = accessToken;
-        }
-        return response;
-      },
-    };
-    const loaderMiddleware: Middleware = {
-      pre: (request) => {
-        loadStateAction(true);
-        setTimeout(() => {
-          loadStateAction(false);
-        }, 3000);
-        return request;
-      },
-      post: (response: ResponseArgs) => {
-        // setTimeout(function () {
-        loadStateAction(false);
-        // }, 1000);
-        console.log('rejected ', response);
-        return response;
-      },
-    };
-    return [sessionMiddleWare, loginMiddleware, cookieMiddleware, loaderMiddleware];
+    //       // TOKEN = accessToken;
+    //     }
+    //     return response;
+    //   },
+    // };
+    // const loaderMiddleware: Middleware = {
+    //   pre: (request) => {
+    //     loadStateAction(true);
+    //     setTimeout(() => {
+    //       loadStateAction(false);
+    //     }, 3000);
+    //     return request;
+    //   },
+    //   post: (response: ResponseArgs) => {
+    //     // setTimeout(function () {
+    //     loadStateAction(false);
+    //     // }, 1000);
+    //     console.log('rejected ', response);
+    //     return response;
+    //   },
+    // };
+
+    return [cookieMiddleware];
   }
 
   const configuration = new Configuration({
     basePath: servers[Config.API_SERVER].getUrl(),
-    accessToken: TOKEN,
     middleware: middlewareFactory(),
   });
 

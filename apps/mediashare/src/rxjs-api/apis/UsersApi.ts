@@ -13,11 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { CreateUserDto, PlaylistResponseDto, UpdateUserDto, UserDto } from '../models';
-
-export interface UsersControllerCreateRequest {
-  createUserDto: CreateUserDto;
-}
+import { PlaylistResponseDto, UpdateUserDto, UserDto } from '../models';
 
 export interface UsersControllerFindOneRequest {
   userId: string;
@@ -49,28 +45,6 @@ export interface UsersControllerUpdateRequest {
  * no description
  */
 export class UsersApi extends BaseAPI {
-  /**
-   */
-  usersControllerCreate({ createUserDto }: UsersControllerCreateRequest): Observable<UserDto>;
-  usersControllerCreate({ createUserDto }: UsersControllerCreateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerCreate({ createUserDto }: UsersControllerCreateRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
-    throwIfNullOrUndefined(createUserDto, 'createUserDto', 'usersControllerCreate');
-
-    const headers: HttpHeaders = {
-      'Content-Type': 'application/json',
-    };
-
-    return this.request<UserDto>(
-      {
-        url: '/api/users',
-        method: 'POST',
-        headers,
-        body: createUserDto,
-      },
-      opts?.responseOpts
-    );
-  }
-
   /**
    */
   usersControllerFindAll(): Observable<Array<UserDto>>;

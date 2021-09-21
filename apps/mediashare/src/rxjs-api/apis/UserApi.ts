@@ -13,14 +13,10 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, OperationOpts, RawAjaxResponse } from '../runtime';
-import { LoginDto, LoginResponseDto, MediaItemDto, PlaylistResponseDto, ShareItem, TokenDto, UserDto } from '../models';
+import { LoginResponseDto, MediaItemDto, PlaylistResponseDto, ShareItem, TokenDto, UserDto } from '../models';
 
 export interface UserControllerAuthorizeRequest {
   tokenDto: TokenDto;
-}
-
-export interface UserControllerLoginRequest {
-  loginDto: LoginDto;
 }
 
 /**
@@ -29,16 +25,19 @@ export interface UserControllerLoginRequest {
 export class UserApi extends BaseAPI {
   /**
    */
-  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest): Observable<void>;
-  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
-  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
+  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest): Observable<LoginResponseDto>;
+  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<RawAjaxResponse<LoginResponseDto>>;
+  userControllerAuthorize(
+    { tokenDto }: UserControllerAuthorizeRequest,
+    opts?: OperationOpts
+  ): Observable<LoginResponseDto | RawAjaxResponse<LoginResponseDto>> {
     throwIfNullOrUndefined(tokenDto, 'tokenDto', 'userControllerAuthorize');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
     };
 
-    return this.request<void>(
+    return this.request<LoginResponseDto>(
       {
         url: '/api/user/authorize',
         method: 'POST',
@@ -110,32 +109,17 @@ export class UserApi extends BaseAPI {
   userControllerGetUserPlaylists(): Observable<Array<PlaylistResponseDto>>;
   userControllerGetUserPlaylists(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistResponseDto>>>;
   userControllerGetUserPlaylists(opts?: OperationOpts): Observable<Array<PlaylistResponseDto> | RawAjaxResponse<Array<PlaylistResponseDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<Array<PlaylistResponseDto>>(
       {
         url: '/api/user/playlists',
         method: 'GET',
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  userControllerLogin({ loginDto }: UserControllerLoginRequest): Observable<LoginResponseDto>;
-  userControllerLogin({ loginDto }: UserControllerLoginRequest, opts?: OperationOpts): Observable<RawAjaxResponse<LoginResponseDto>>;
-  userControllerLogin({ loginDto }: UserControllerLoginRequest, opts?: OperationOpts): Observable<LoginResponseDto | RawAjaxResponse<LoginResponseDto>> {
-    throwIfNullOrUndefined(loginDto, 'loginDto', 'userControllerLogin');
-
-    const headers: HttpHeaders = {
-      'Content-Type': 'application/json',
-    };
-
-    return this.request<LoginResponseDto>(
-      {
-        url: '/api/user/login',
-        method: 'POST',
         headers,
-        body: loginDto,
       },
       opts?.responseOpts
     );
@@ -146,17 +130,10 @@ export class UserApi extends BaseAPI {
   userControllerLogout(): Observable<void>;
   userControllerLogout(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
   userControllerLogout(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
-    const headers: HttpHeaders = {
-      ...(this.configuration.username != null && this.configuration.password != null
-        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
-        : undefined),
-    };
-
     return this.request<void>(
       {
         url: '/api/user/logout',
         method: 'POST',
-        headers,
       },
       opts?.responseOpts
     );

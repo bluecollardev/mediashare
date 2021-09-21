@@ -59,7 +59,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
 
     return {
       ...userFields,
-      accessToken: this.authSvc.sign(payload, _id)
+      accessToken: this.authSvc.sign(payload, _id),
     };
   }
 }

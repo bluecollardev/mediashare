@@ -20,5 +20,10 @@ export interface TokenDto {
    * @type {string}
    * @memberof TokenDto
    */
-  token: string;
+  accessToken: string;
+  /**
+   * @type {string}
+   * @memberof TokenDto
+   */
+  idToken: string;
 }

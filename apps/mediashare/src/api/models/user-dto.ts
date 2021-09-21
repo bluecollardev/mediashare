@@ -23,6 +23,36 @@ export interface UserDto {
    * @type {string}
    * @memberof UserDto
    */
+  phoneNumber: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDto
+   */
+  email: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDto
+   */
+  sub: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDto
+   */
+  createdBy: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDto
+   */
+  userId: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDto
+   */
   username: string;
   /**
    *

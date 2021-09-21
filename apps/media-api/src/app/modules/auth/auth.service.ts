@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
 import * as jwtoken from 'jsonwebtoken';
-import * as jwkToPem from 'jwk-to-pem';
 import { idKey } from './keys';
 
 @Injectable()

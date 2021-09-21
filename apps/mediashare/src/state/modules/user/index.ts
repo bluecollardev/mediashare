@@ -8,6 +8,7 @@ import { loadStateAction } from '../../../boot/configureStore';
 import * as SecureStore from 'expo-secure-store';
 import { getKeyPair, setKeyPair } from './keypair-store';
 import { UserControllerAuthorizeRequest } from '../../../rxjs-api/apis/UserApi';
+import { TokenDto } from '../../../rxjs-api/models/TokenDto';
 
 export const USER_STATE_KEY = 'user';
 
@@ -23,10 +24,10 @@ const initialState: LoginResponseDto = {
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 // const login = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => await apis.user.userControllerLogin({ loginDto }));
 
-export const loginAction = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => {
-  const response = await apis.user.userControllerLogin({ loginDto }).toPromise();
+export const loginAction = createAsyncThunk(UserActions.login.type, async (tokenDto: TokenDto) => {
+  const response = await apis.user.userControllerAuthorize({ tokenDto }).toPromise();
 
-  await setKeyPair('token', response.accessToken);
+  // await setKeyPair('token', response.accessToken);
 
   return response;
 });
