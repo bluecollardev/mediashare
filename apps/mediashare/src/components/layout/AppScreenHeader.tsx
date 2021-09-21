@@ -12,6 +12,7 @@ export interface AppScreenHeaderProps {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const AppScreenHeader = (props) => {
   const { scene, previous, navigation } = props;
+
   const { options } = scene.descriptor;
   const title = options.headerTitle !== undefined ? options.headerTitle : options.title !== undefined ? options.title : '';
   return (

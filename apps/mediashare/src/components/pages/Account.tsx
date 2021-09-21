@@ -8,7 +8,7 @@ import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView } f
 import { Button, Card, Title } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
-import { usePageRoute, useRouteName, useViewMediaItem } from '../../hooks/NavigationHooks';
+import { usePageRoute, useRouteName, useViewMediaItem, useEditMediaItem } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { useDispatch } from 'react-redux';
 import { SceneMap, TabView } from 'react-native-tab-view';
@@ -23,7 +23,7 @@ import { shortenText } from '../../utils';
 
 const FirstRoute = () => {
   const dispatch = useDispatch();
-  const viewMediaItem = usePageRoute('Media', ROUTES.mediaItemEdit);
+  const viewMediaItem = useEditMediaItem();
   const mediaItems = useAppSelector((state) => state.user.mediaItems) || [];
   const onViewMediaItem = async function (mediaId: string, uri: string) {
     await dispatch(getMediaItemById({ uri, mediaId }));
