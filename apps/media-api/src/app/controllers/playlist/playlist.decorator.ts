@@ -9,19 +9,11 @@ function PlaylistPostResponse({ isArray = false, type = Playlist, description }:
 }
 
 const PlaylistGetResponse = function ({ isArray = false, type = Playlist }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(
-    ApiResponse({ type, isArray, status: 200 }),
-    UseJwtGuard()
-    // UseJwtGuard()
-  );
+  return applyDecorators(ApiResponse({ type, isArray, status: 200 }), UseJwtGuard());
 };
 
 function PlaylistPutResponse({ isArray = false, type = Playlist, description }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(
-    ApiResponse({ description, type, status: 200, isArray }),
-    UseJwtGuard()
-    // UseJwtGuard()
-  );
+  return applyDecorators(ApiResponse({ description, type, status: 200, isArray }), UseJwtGuard());
 }
 
 export { PlaylistPostResponse, PlaylistGetResponse, PlaylistPutResponse };

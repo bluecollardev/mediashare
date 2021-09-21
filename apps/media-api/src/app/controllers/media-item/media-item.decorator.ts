@@ -7,18 +7,11 @@ import { MediaItemDto } from './dto/media-item.dto';
 import { MediaItem } from './entities/media-item.entity';
 
 function MediaPostResponse({ isArray = false, type = MediaItem, description }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(
-    ApiResponse({ description, type, status: 201, isArray }),
-    ApiBody({ type: CreateMediaItemDto })
-    // UseJwtGuard()
-  );
+  return applyDecorators(ApiResponse({ description, type, status: 201, isArray }), ApiBody({ type: CreateMediaItemDto }), UseJwtGuard());
 }
 
 const MediaGetResponse = function ({ isArray = false, type = MediaItemDto }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(
-    ApiResponse({ type, isArray, status: 200 })
-    // UseJwtGuard()
-  );
+  return applyDecorators(ApiResponse({ type, isArray, status: 200 }), UseJwtGuard());
 };
 
 export { MediaGetResponse, MediaPostResponse };
