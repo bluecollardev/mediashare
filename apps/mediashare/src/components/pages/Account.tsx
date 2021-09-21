@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { logoutAction } from '../../state/modules/user';
 
@@ -26,10 +26,15 @@ import { useDispatch } from 'react-redux';
 import LabelledAvatar from '../layout/LabelledAvatar';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import { TabBar } from 'react-native-tab-view';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { theme } from '../../styles';
+import { findMediaItems } from '../../state/modules/media-items/index';
+import AccountCard from '../layout/AccountCard';
+import Highlights from '../layout/Highlights';
 
-const FirstRoute = () => <View style={{ flex: 1, backgroundColor: '#ff4081' }} />;
+const FirstRoute = () => <View style={{ flex: 1, backgroundColor: theme.colors.background }} />;
 
-const SecondRoute = () => <View style={{ flex: 1, backgroundColor: '#673ab7' }} />;
+const SecondRoute = () => <View style={{ flex: 1, backgroundColor: theme.colors.background }} />;
 
 const renderScene = SceneMap({
   first: FirstRoute,
@@ -40,26 +45,32 @@ export const Account = ({ navigation }: PageProps) => {
   const onManageContactsClicked = useRouteName(ROUTES.contacts);
   const layout = useWindowDimensions();
 
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [routes] = React.useState([
-    { key: 'first', title: 'First' },
-    { key: 'second', title: 'Second' },
+    { key: 'first', title: 'First', icon: 'movie' },
+    { key: 'second', title: 'Second', icon: 'assignment-ind' },
   ]);
+  useEffect(() => {
+    async function loadData() {
+      await dispatch(findMediaItems());
+      setIsLoaded(true);
+    }
+    if (!isLoaded) {
+      loadData().then();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded]);
 
   const _renderTabBar = (props) => {
     const inputRange = props.navigationState.routes.map((x, i) => i);
-
+    console.log(props);
     return (
       <View style={styles.tabBar}>
         {props.navigationState.routes.map((route, i) => {
-          const opacity = props.position.interpolate({
-            inputRange,
-            outputRange: inputRange.map((inputIndex) => (inputIndex === i ? 1 : 0.5)),
-          });
-
           return (
-            <TouchableOpacity style={styles.tabItem} onPress={() => setIndex(i)}>
-              <Animated.Text style={{ opacity }}>{route.title}</Animated.Text>
+            <TouchableOpacity style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem} onPress={() => setIndex(i)}>
+              <MaterialIcons name={route.icon} color={props.navigationState.index === i ? theme.colors.primaryText : theme.colors.disabled} size={26} />
             </TouchableOpacity>
           );
         })}
@@ -67,6 +78,7 @@ export const Account = ({ navigation }: PageProps) => {
     );
   };
   const dispatch = useDispatch();
+
   // const loginRoute = usePageRoute(ROUTES.login);
   const [state, setState] = useState({
     firstname: 'Lucas',
@@ -109,45 +121,22 @@ export const Account = ({ navigation }: PageProps) => {
 
   return (
     <PageContainer>
-      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', padding: 15 }}>
-        <Avatar.Image source={{ uri: state.profile }} />
-        <View style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center', flexDirection: 'column' }}>
-          <Subheading>39</Subheading>
-          <Caption>Likes</Caption>
-        </View>
-        <View style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center', flexDirection: 'column' }}>
-          <Subheading>400</Subheading>
-          <Caption>Shares</Caption>
-        </View>
-        <View style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center', flexDirection: 'column' }}>
-          <Subheading>527</Subheading>
-          <Caption>Shared</Caption>
-        </View>
-      </View>
-      <List.Item
+      <AccountCard
+        image={state.profile}
+        likes={49}
+        shared={30}
+        shares={300}
         title={`${state.firstname} ${state.lastname}`}
-        description={() => {
-          return (
-            <View style={{ flexDirection: 'column' }}>
-              <Text>{state.company}</Text>
-              <Caption>{state.contact}</Caption>
-            </View>
-          );
-        }}
+        company={state.company}
+        contact={state.contact}
       />
+      <Highlights highlights={state.highlights} />
 
-      <View style={{ display: 'flex', flexDirection: 'column', height: 150 }}>
-        <View style={{ display: 'flex', flexDirection: 'row', flex: 1, marginLeft: 15, height: 150 }}>
-          {state.highlights.map((highlight) => {
-            return <LabelledAvatar label={highlight.title} uri={highlight.thumbnail} />;
-          })}
-        </View>
-      </View>
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={setIndex}
-        renderTabBar={_renderTabBar}
+        renderTabBar={(props) => _renderTabBar(props)}
         initialLayout={{ width: layout.width, height: layout.height }}
       />
     </PageContainer>
@@ -165,6 +154,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 16,
+    borderBottomColor: theme.colors.disabled,
+    borderBottomWidth: 1,
+  },
+  tabItemActive: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 16,
+    borderBottomColor: theme.colors.primaryText,
+    borderBottomWidth: 1,
   },
 });
 export default withLoadingSpinner(Account);

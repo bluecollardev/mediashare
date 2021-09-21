@@ -18,10 +18,10 @@ function LabelledElement({ children, label }: LabelledElementProps) {
 }
 
 const styles = StyleSheet.create({
-  container: { display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center', flexDirection: 'column', height: 100 },
+  container: { display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center', flexDirection: 'column', height: 75 },
   title: {
     fontWeight: 'bold',
-    fontSize: 22,
+    fontSize: 18,
     color: '#fff',
   },
 });
