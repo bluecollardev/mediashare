@@ -31,10 +31,26 @@ import { theme } from '../../styles';
 import { findMediaItems } from '../../state/modules/media-items/index';
 import AccountCard from '../layout/AccountCard';
 import Highlights from '../layout/Highlights';
+import { loadUsers } from '../../state/modules/users';
+import { useAppSelector } from '../../state';
 
 const FirstRoute = () => <View style={{ flex: 1, backgroundColor: theme.colors.background }} />;
 
-const SecondRoute = () => <View style={{ flex: 1, backgroundColor: theme.colors.background }} />;
+const SecondRoute = () => {
+  const users = useAppSelector((state) => state.users.entities);
+  console.log(users);
+  return (
+    <View style={{ flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap' }}>
+      {users.map((user) => {
+        return (
+          <Card style={{ flexBasis: '50%', padding: 5 }}>
+            <Card.Cover source={{ uri: user.imageSrc || 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg' }} />
+          </Card>
+        );
+      })}
+    </View>
+  );
+};
 
 const renderScene = SceneMap({
   first: FirstRoute,
@@ -54,6 +70,7 @@ export const Account = ({ navigation }: PageProps) => {
   useEffect(() => {
     async function loadData() {
       await dispatch(findMediaItems());
+      await dispatch(loadUsers());
       setIsLoaded(true);
     }
     if (!isLoaded) {
@@ -130,8 +147,8 @@ export const Account = ({ navigation }: PageProps) => {
         company={state.company}
         contact={state.contact}
       />
-      <Highlights highlights={state.highlights} />
-
+      {/* <Highlights highlights={state.highlights} /> */}
+      <Button mode={'outlined'}>Edit Profile</Button>
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}

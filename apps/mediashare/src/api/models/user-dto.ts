@@ -26,6 +26,12 @@ export interface UserDto {
    * @type {string}
    * @memberof UserDto
    */
+  imageSrc: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDto
+   */
   _id: string;
   /**
    *

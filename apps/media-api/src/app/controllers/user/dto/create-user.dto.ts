@@ -22,6 +22,8 @@ export class UserDto implements User {
   constructor(user: Partial<User>) {
     Object.assign(this, user);
   }
+  @ApiString()
+  imageSrc: string;
 
   @ApiObjectId()
   _id: ObjectId;
