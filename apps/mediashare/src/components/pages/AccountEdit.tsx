@@ -43,9 +43,9 @@ function AccountEdit({ startLoad, endLoad }: AccountEditProps) {
     setState({ ...state, ...user });
   };
 
-  async function getDocument() {
-    const document = launchImageLibrary({ mediaType: 'photo', includeBase64: true, quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
-      if (!res) {
+  const getDocument = async function () {
+    launchImageLibrary({ mediaType: 'photo', includeBase64: true, quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
+      if (!res.assets) {
         return;
       }
       const image = res.assets[0];
@@ -59,16 +59,17 @@ function AccountEdit({ startLoad, endLoad }: AccountEditProps) {
         endLoad();
       });
     });
-  }
+  };
+  const cancel = () => {
+    setState(user);
+    account();
+  };
+
   const save = async function () {
     const updateUserDto = state;
-    console.log('🚀 ---------------------------------------------------------------------------------');
-    console.log('🚀 ~ file: AccountEdit.tsx ~ line 64 ~ saveChanges ~ userUpdateDto', updateUserDto);
-    console.log('🚀 ---------------------------------------------------------------------------------');
-    const updated = await dispatch(updateAccount({ updateUserDto }));
-    console.log('🚀 ---------------------------------------------------------------------');
-    console.log('🚀 ~ file: AccountEdit.tsx ~ line 68 ~ saveChanges ~ updated', updated);
-    console.log('🚀 ---------------------------------------------------------------------');
+
+    await dispatch(updateAccount({ updateUserDto }));
+
     await dispatch(loadUser());
     account();
   };
@@ -86,7 +87,7 @@ function AccountEdit({ startLoad, endLoad }: AccountEditProps) {
         <TextField onChangeText={(text) => onUpdate({ email: text })} label={'email'} value={state.email} disabled={!isLoaded} />
         <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label={'phoneNumber'} value={state.phoneNumber} disabled={!isLoaded} />
       </ScrollView>
-      <ActionButtons cancelCb={account} actionCb={save} actionLabel={'Save'} />
+      <ActionButtons cancelCb={cancel} actionCb={save} actionLabel={'Save'} />
     </PageContainer>
   );
 }
