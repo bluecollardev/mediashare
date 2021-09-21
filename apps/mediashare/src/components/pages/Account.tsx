@@ -4,33 +4,18 @@ import { logoutAction } from '../../state/modules/user';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import {
-  ScrollView,
-  View,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Animated,
-  useWindowDimensions,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import { Avatar, Button, Caption, Card, Text, Subheading, List } from 'react-native-paper';
+import { View, useWindowDimensions, TouchableOpacity, StyleSheet } from 'react-native';
+import { Button, Card } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
-import { AccountForm } from '../layout/AccountForm';
 
 import { useRouteName } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { useDispatch } from 'react-redux';
-import LabelledAvatar from '../layout/LabelledAvatar';
 import { SceneMap, TabView } from 'react-native-tab-view';
-import { TabBar } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { theme } from '../../styles';
 import { findMediaItems } from '../../state/modules/media-items/index';
 import AccountCard from '../layout/AccountCard';
-import Highlights from '../layout/Highlights';
 import { loadUsers } from '../../state/modules/users';
 import { useAppSelector } from '../../state';
 
