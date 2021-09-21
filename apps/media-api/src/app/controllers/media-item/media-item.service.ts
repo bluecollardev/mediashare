@@ -21,9 +21,9 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
     return this.repository.find({
       where: {
         $or: R.map(idStrings, (id) => ({
-          _id: id,
-        })),
-      },
+          _id: id
+        }))
+      }
     });
   }
 
@@ -37,8 +37,8 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
             from: 'user',
             localField: 'userId',
             foreignField: '_id',
-            as: 'user',
-          },
+            as: 'user'
+          }
         },
         {
           $replaceRoot: {
@@ -48,15 +48,40 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
               description: '$description',
               category: '$category',
               title: '$title',
-              userId: '$userId',
-            },
-          },
-        },
+              userId: '$userId'
+            }
+          }
+        }
       ])
       .next();
   }
 
   findMediaItemsByUserId(userId: ObjectId) {
-    return this.repository.find({ userId });
+    return this.repository
+      .aggregate([
+        { $match: { userId: userId } },
+
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              _id: '$_id',
+              author: '$user.username',
+              description: '$description',
+              category: '$category',
+              title: '$title',
+              userId: '$userId'
+            }
+          }
+        }
+      ])
+      .next();
   }
 }

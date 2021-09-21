@@ -17,6 +17,7 @@ import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { PlaylistGetResponse } from '../playlist/playlist.decorator';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 import { UserGuard } from '../../modules/auth/guards/user.guard';
+import { User } from './entities/user.entity';
 
 @ApiTags('user')
 @Controller({ path: ['user'] })
@@ -30,11 +31,13 @@ export class UserController {
 
   @Get()
   @UserGetResponse()
-  async getUser(@GetUser() user: SessionUserInterface) {
-    const { _id = null } = user;
+  async getUser(@GetUserId() userId: ObjectId, @GetUser() user: User) {
+    // const { _id = null } = user;
 
-    const [mongoUser, authUser] = await Promise.all([this.userService.findOne(_id), this.userService.getAuthUser({ _id })]);
-    return { ...authUser, ...mongoUser };
+    const playlists = await this.playlistService.getPlaylistByUserId({ userId });
+    const mediaItems = await this.mediaItemService.findMediaItemsByUserId(userId);
+
+    return { ...user, playlists, mediaItems };
   }
 
   @Post('logout')
@@ -58,9 +61,6 @@ export class UserController {
   @ApiBearerAuth()
   @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getMediaItems(@GetUserId() userId: ObjectId) {
-    console.log('🚀 -----------------------------------------------------------------------------------------');
-    console.log('🚀 ~ file: user.controller.ts ~ line 61 ~ UserController ~ getMediaItems ~ userId', userId);
-    console.log('🚀 -----------------------------------------------------------------------------------------');
     const result = await this.mediaItemService.findMediaItemsByUserId(userId);
 
     return result;
