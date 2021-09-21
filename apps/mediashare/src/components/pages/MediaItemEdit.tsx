@@ -40,8 +40,6 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
   const { mediaId } = route?.params || {};
 
   const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
-  const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
-  const mediaSrc = useAppSelector((state) => state.mediaItem.getMediaItem);
 
   const [title, setTitle] = useState(mediaItem?.title);
   const [description, setDescription] = useState(mediaItem?.description);
@@ -49,7 +47,6 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
   const [showDialog, setShowDialog] = useState(false);
 
   const [documentUri, setDocumentUri] = useState('');
-  const [thumbnail, setThumbnail] = useState(null);
 
   const mediaItems = useMediaItems();
 

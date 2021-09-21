@@ -8,13 +8,13 @@ import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView } f
 import { Button, Card, Title } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
-import { useRouteName, useViewMediaItem } from '../../hooks/NavigationHooks';
+import { usePageRoute, useRouteName, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { useDispatch } from 'react-redux';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { theme } from '../../styles';
-import { findMediaItems } from '../../state/modules/media-items/index';
+import { findMediaItems, getMediaItemById } from '../../state/modules/media-items/index';
 import AccountCard from '../layout/AccountCard';
 import { loadUsers } from '../../state/modules/users';
 import { useAppSelector } from '../../state';
@@ -22,8 +22,13 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { shortenText } from '../../utils';
 
 const FirstRoute = () => {
-  const viewMediaItem = useViewMediaItem();
+  const dispatch = useDispatch();
+  const viewMediaItem = usePageRoute('Media', ROUTES.mediaItemEdit);
   const mediaItems = useAppSelector((state) => state.user.mediaItems) || [];
+  const onViewMediaItem = async function (mediaId: string, uri: string) {
+    await dispatch(getMediaItemById({ uri, mediaId }));
+    viewMediaItem({ mediaId, uri });
+  };
   return (
     <ScrollView>
       {mediaItems.length > 0 ? (
@@ -38,7 +43,7 @@ const FirstRoute = () => {
               iconRight="edit"
               iconRightColor={theme.colors.accentDarker}
               selectable={false}
-              onViewDetail={() => viewMediaItem({ mediaId: item._id, uri: item.uri })}
+              onViewDetail={() => onViewMediaItem(item._id, item.uri)}
             />
           );
         })
