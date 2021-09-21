@@ -14,6 +14,7 @@ export class User extends BcEntity {
 
   @Column() firstName: string;
   @Column() lastName: string;
+  @Column() imageSrc: string;
 
   @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
   @Column({ array: true, nullable: true }) sharedMediaItems?: ObjectId[];
