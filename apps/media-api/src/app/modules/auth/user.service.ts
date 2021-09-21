@@ -31,27 +31,6 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return !!user;
   }
 
-  async loginUser(login: { username: string; password: string }) {
-    const { username, password } = login;
-    const user = await this.validateUser({ username, password });
-
-    if (!user) return null;
-
-    return await this.login(user, user._id);
-  }
-
-  async validateUser({ username, password }: { username: string; password: string }) {
-    console.log(username);
-    const user = await this.findByQuery({ username: username.toLowerCase() });
-    if (!user) throw new Error('No user found');
-    if (user?.password === password) return user;
-    if (compareSync(password, user?.password)) {
-      return user;
-    }
-
-    return null;
-  }
-
   validateToken({ token, idToken }: { token: string; idToken: string }) {
     const { email, phone_number } = this.authSvc.decodeIdToken(idToken);
 

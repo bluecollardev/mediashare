@@ -26,22 +26,6 @@ import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 export class UsersController {
   constructor(private readonly userService: UserService, private playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
-  @Post()
-  @ApiResponse({ type: UserDto, status: 201, isArray: false })
-  @ApiBody({ type: CreateUserDto, required: true })
-  async create(@CreateDto() createUserDto: CreateUserDto) {
-    const { username } = createUserDto;
-    const existingUser = await this.userService.checkIfUserExists(username);
-    if (existingUser) {
-      console.log(existingUser, 'exists already');
-      throw conflictResponse(username);
-    }
-
-    const mongoUser = await this.userService.createUser(createUserDto);
-
-    return mongoUser;
-  }
-
   @UserGetResponse({ isArray: true })
   @Get()
   findAll(): Promise<User[]> {

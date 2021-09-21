@@ -16,6 +16,7 @@ import { ObjectId } from 'mongodb';
 import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { PlaylistGetResponse } from '../playlist/playlist.decorator';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
+import { UserGuard } from '../../modules/auth/guards/user.guard';
 
 @ApiTags('user')
 @Controller({ path: ['user'] })
@@ -65,6 +66,7 @@ export class UserController {
   }
 
   @Get('media-items')
+  @UseGuards(UserGuard)
   @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getMediaItems(@GetUserId() userId: ObjectId) {
     const result = await this.mediaItemService.findMediaItemsByUserId(userId);
@@ -91,7 +93,7 @@ export class UserController {
   @Post('authorize')
   @ApiResponse({ type: LoginResponseDto, status: 200 })
   @ApiBody({ type: TokenDto })
-  async authorize(@Req() req: Request) {
+  async authorize(@Req() req: Request, @Res() res: Response) {
     console.log(req);
     const { accessToken = null, idToken = null } = req.body as any;
 
@@ -99,10 +101,13 @@ export class UserController {
 
     if (!valid) throw new UnauthorizedException();
     const user = await this.userService.findByQuery({ sub: valid.sub });
+    res.setHeader('Authorization', accessToken);
+    res.setHeader('Id', idToken);
     if (!user) {
-      return await this.userService.create(valid);
+      const newUser = await this.userService.create(valid);
+      return res.send(newUser);
     }
 
-    return user;
+    return res.send(user);
   }
 }

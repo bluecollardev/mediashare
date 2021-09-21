@@ -18,6 +18,7 @@ console.log('dotenv config', Config.API_SERVER);
 
 let TOKEN = '';
 let COOKIE = '';
+let ID_TOKEN = '';
 function apiFactory() {
   function middlewareFactory() {
     const sessionMiddleWare: Middleware = {
@@ -28,6 +29,7 @@ function apiFactory() {
           ...prevHeaders,
           Authorization: `Bearer ${TOKEN}`,
           cookie: COOKIE.split(';')[0],
+          id: ID_TOKEN,
 
           // cookie: 'connect.sid=s%3A2yl00r3D18IP6bGsdOvZpk87hskZIJZX.D31vWBjfaejkKUqqPNpP2zfDuZMt1%2Bf6FcXOKXK%2B9y0',
         };
@@ -39,7 +41,11 @@ function apiFactory() {
       post: (response: ResponseArgs) => {
         const originalEvent = response.xhr as any;
         const cookie = originalEvent.responseHeaders['Set-Cookie'];
+        const token = originalEvent.responseHeaders.authorization;
+        const idToken = originalEvent.responseHeaders.id;
         COOKIE = cookie ? cookie : COOKIE;
+        TOKEN = token ? token : TOKEN;
+        ID_TOKEN = idToken ? idToken : ID_TOKEN;
         return response;
       },
     };
@@ -47,9 +53,9 @@ function apiFactory() {
       post: (response: ResponseArgs) => {
         if (response.request.url.includes('login') || response.request.url.includes('authorize')) {
           console.log('token validation', response);
-          const { accessToken } = response.response as any;
+          const { accessToken } = response.response;
 
-          TOKEN = accessToken;
+          // TOKEN = accessToken;
         }
         return response;
       },

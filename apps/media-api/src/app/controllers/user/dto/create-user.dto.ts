@@ -16,37 +16,23 @@ export class CreateUserDto extends LoginDto {
   lastName: string;
 }
 
-export class UserAuthFieldsDto {
-  @ApiObjectId({ required: true })
-  _id: Readonly<ObjectId>;
-
-  @ApiProperty({
-    type: String,
-    readOnly: true,
-    example: uuidExample,
-    maxLength: uuidExample.length,
-    minLength: uuidExample.length
-  })
-  @IsUUID()
-  authId: Readonly<string>;
-
-  @ApiEmail()
-  email: Readonly<string>;
-
-  @ApiPastDate({ readOnly: false })
-  createdAt: Readonly<Date>;
-
-  @ApiProperty({ enum: BC_ROLES })
-  @IsArray()
-  roles: BcRolesType[];
-}
-
 export class UserDto implements User {
-  @ApiHideProperty()
-  password: string;
   constructor(user: Partial<User>) {
     Object.assign(this, user);
   }
+  @ApiString()
+  phoneNumber: string;
+  @ApiString()
+  email: string;
+
+  @ApiString()
+  sub: string;
+
+  @ApiString()
+  createdBy?: Readonly<ObjectId>;
+
+  @ApiString()
+  userId?: ObjectId;
 
   @ApiString()
   username: string;
@@ -59,9 +45,6 @@ export class UserDto implements User {
   sharedPlaylists?: ObjectId[];
   @ApiProperty()
   sharedMediaItems?: ObjectId[];
-  hashPassword(): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
 
   @ApiObjectId()
   _id: ObjectId;
