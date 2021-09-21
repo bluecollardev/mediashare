@@ -7,6 +7,4 @@ apps:
       PORT: 5000
       NODE_ENV: development
     env_production:
-      PORT: ${PORT}
-      APP_PORT: ${PORT}
       NODE_ENV: production
