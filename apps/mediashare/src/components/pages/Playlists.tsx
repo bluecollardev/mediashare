@@ -56,13 +56,14 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, isSelectabl
       <List>
         {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
         {sortedList.map((item, idx) => {
-          const { title, description, mediaIds } = item;
+          const { title, description, mediaIds, imageSrc } = item;
           return (
             <MediaListItem
               key={item._id}
               title={title}
               description={`${shortenText(description, 40)}\n${mediaIds.length || 0} videos`}
               showThumbnail={true}
+              image={imageSrc}
               showActions={showActions}
               selectable={isSelectable}
               onViewDetail={() => {

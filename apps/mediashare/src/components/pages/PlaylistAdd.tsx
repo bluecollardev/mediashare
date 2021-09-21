@@ -11,19 +11,21 @@ import { addUserPlaylist, findUserPlaylists } from '../../state/modules/playlist
 
 import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner, LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { MediaList, MediaListType } from '../layout/MediaList';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
+import AppUpload from '../layout/AppUpload';
+import { Card } from 'react-native-paper';
 
-interface PlaylistAddContainerProps extends PageProps {
+interface PlaylistAddContainerProps extends LoadingSpinnerProps {
   children: ReactNode;
 }
 
-const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
+const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);
@@ -31,6 +33,7 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
   const [description, setDescription] = useState();
   const [category, setCategory] = useState(CreatePlaylistDtoCategoryEnum.Builder);
   const [loaded, setIsLoaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState('');
 
   const [selected, setSelected] = useState([]);
   const goBack = useGoBack();
@@ -70,7 +73,10 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
     options.push(value);
   }
   const list = useAppSelector((state) => state.mediaItems.mediaItems);
-
+  const onUpload = (uri: string) => {
+    console.log(uri);
+    setImageSrc(uri);
+  };
   useEffect(() => {
     if (!loaded) {
       dispatch(findMediaItems());
@@ -84,7 +90,7 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
       category: category,
       description,
       mediaIds: selected,
-      createdBy: '',
+      imageSrc,
     };
     // const res = await dispatch(addUserPlaylist(dto));
     await dispatch(addUserPlaylist(dto));
@@ -98,6 +104,9 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent>
+        <AppUpload onUpload={onUpload} endLoad={endLoad} startLoad={startLoad} />
+        {imageSrc.length > 0 && <Card.Cover source={{ uri: imageSrc }} />}
+
         <MediaCard
           title={title}
           author={author}

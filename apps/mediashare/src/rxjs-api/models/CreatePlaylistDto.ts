@@ -30,6 +30,11 @@ export interface CreatePlaylistDto {
    * @type {string}
    * @memberof CreatePlaylistDto
    */
+  imageSrc: string;
+  /**
+   * @type {string}
+   * @memberof CreatePlaylistDto
+   */
   category: CreatePlaylistDtoCategoryEnum;
   /**
    * @type {Array<string>}

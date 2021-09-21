@@ -56,6 +56,11 @@ export interface PlaylistResponseDto {
    */
   description: string;
   /**
+   * @type {string}
+   * @memberof PlaylistResponseDto
+   */
+  imageSrc: string;
+  /**
    * @type {Array<string>}
    * @memberof PlaylistResponseDto
    */

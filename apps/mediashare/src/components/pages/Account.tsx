@@ -8,7 +8,7 @@ import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView } f
 import { Button, Card, Title } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
-import { usePageRoute, useRouteName, useViewMediaItem, useEditMediaItem } from '../../hooks/NavigationHooks';
+import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { useDispatch } from 'react-redux';
 import { SceneMap, TabView } from 'react-native-tab-view';

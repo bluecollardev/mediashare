@@ -17,7 +17,6 @@ import { PlaylistItemResponseDto, PlaylistResponseDto } from './dto/playlist-res
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
-import { UserGuard } from '../../modules/auth/guards/user.guard';
 
 const PLAYLIST_ID_TOKEN = ':playlistId';
 @ApiTags('playlists')
@@ -35,7 +34,7 @@ export class PlaylistController {
     return await this.playlistService.createPlaylistWithItems({
       ...createPlaylistDto,
       createdBy: getUserId,
-      mediaIds
+      mediaIds,
     });
   }
 
@@ -55,7 +54,7 @@ export class PlaylistController {
     name: 'playlistId',
     required: true,
     type: 'string',
-    example: new ObjectId().toHexString()
+    example: new ObjectId().toHexString(),
   })
   @ApiParam({ name: 'playlistId', type: String, required: true })
   @PlaylistGetResponse({ type: PlaylistResponseDto })
@@ -73,7 +72,7 @@ export class PlaylistController {
 
     const result = await this.playlistService.update(playlistId, {
       ...rest,
-      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => new ObjectId(id)) : []
+      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => new ObjectId(id)) : [],
     });
     return result;
   }

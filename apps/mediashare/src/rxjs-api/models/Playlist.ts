@@ -54,6 +54,11 @@ export interface Playlist {
    */
   description: string;
   /**
+   * @type {string}
+   * @memberof Playlist
+   */
+  imageSrc: string;
+  /**
    * @type {Array<string>}
    * @memberof Playlist
    */
