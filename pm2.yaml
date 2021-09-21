@@ -1,0 +1,12 @@
+apps:
+  - script: ./dist/apps/media-api/main.js
+    name: media-api
+    watch: true
+    instances: max
+    exec_mode: cluster
+    env:
+      PORT: 5000
+      NODE_ENV: development
+    env_production:
+      NODE_PORT: ${PORT}
+      NODE_ENV: production
