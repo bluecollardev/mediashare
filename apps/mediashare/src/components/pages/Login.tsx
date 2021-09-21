@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
@@ -9,13 +9,27 @@ import { RootState } from '../../state';
 import { LoginDto } from '../../api';
 
 import { useRouteName } from '../../hooks/NavigationHooks';
-import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
+
+import {
+  Authenticator,
+  SignIn,
+  SignUp,
+  Greetings,
+  VerifyContact,
+  ForgotPassword,
+  TOTPSetup,
+  Loading,
+  AmplifyTheme,
+  ConfirmSignIn,
+} from 'aws-amplify-react-native';
+
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { Text } from 'react-native';
 import { Button, Card, TextInput } from 'react-native-paper';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent } from '../layout/PageContainer';
 
 import Config from 'react-native-config';
+import { theme } from '../../styles';
 
 const testUser = Config.TEST_USER;
 const testPassword = Config.TEST_PASSWORD;
@@ -40,6 +54,48 @@ export interface LoginProps {
   onLogin: any;
 }
 
+const MyTheme = Object.assign({}, AmplifyTheme, {
+  button: {
+    backgroundColor: theme.colors.primary,
+    fontFamily: theme.fonts.medium.fontFamily,
+
+    paddingVertical: 6,
+    // paddingHorizontal: variables.buttonPadding + 10,
+    borderRadius: 5,
+    borderColor: '#2874F0',
+    borderWidth: null,
+    height: 45,
+    elevation: 2,
+    shadowColor: undefined,
+    shadowOffset: undefined,
+    shadowOpacity: undefined,
+    shadowRadius: undefined,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    textAlign: 'center',
+    width: '100%',
+  },
+  buttonDisabled: {
+    backgroundColor: theme.colors.disabled,
+    fontFamily: theme.fonts.medium.fontFamily,
+
+    paddingVertical: 6,
+    // paddingHorizontal: variables.buttonPadding + 10,
+    borderRadius: 5,
+    borderColor: '#2874F0',
+    borderWidth: null,
+    height: 45,
+    elevation: 2,
+    shadowColor: undefined,
+    shadowOffset: undefined,
+    shadowOpacity: undefined,
+    shadowRadius: undefined,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    textAlign: 'center',
+    width: '100%',
+  },
+});
 export interface LoginState extends Pick<RootState, never> {}
 
 const LoginComponent = ({ navigation }: PageProps) => {
@@ -63,54 +119,77 @@ const LoginComponent = ({ navigation }: PageProps) => {
     // endLoad();
   };
 
+  function updateAuthState(authState, data) {
+    console.log('🚀 ------------------------------------------------------------------------');
+    console.log('🚀 ~ file: Login.tsx ~ line 123 ~ updateAuthState ~ authState', authState);
+    console.log('🚀 ------------------------------------------------------------------------');
+    console.log('🚀 ------------------------------------------------------------------------');
+    console.log('🚀 ~ file: Login.tsx ~ line 123 ~ updateAuthState ~ authState', data);
+    console.log('🚀 ------------------------------------------------------------------------');
+    if (authState === 'signedIn') {
+      const accessToken = data.signInUserSession.accessToken.jwtToken;
+      console.log('🚀 ----------------------------------------------------------------------------');
+      console.log('🚀 ~ file: Login.tsx ~ line 131 ~ updateAuthState ~ accessToken', accessToken);
+      console.log('🚀 ----------------------------------------------------------------------------');
+      const idToken = data.signInUserSession.idToken.jwtToken;
+      console.log('🚀 --------------------------------------------------------------------');
+      console.log('🚀 ~ file: Login.tsx ~ line 135 ~ updateAuthState ~ idToken', idToken);
+      console.log('🚀 --------------------------------------------------------------------');
+      const refreshToken = data.signInUserSession.refreshToken.token;
+    }
+    if (authState === 'signedIn') {
+      // dispatch(createUser(data.attributes.email));
+      // dispatch(UserActions.login({ ...data, username: data.attributes.email }));
+    }
+  }
+
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent>
         <Card elevation={0}>
           <Card.Cover style={{ backgroundColor: '#fff' }} resizeMode={'contain'} source={require('./logo.png')} />
         </Card>
-        <Card elevation={0}>
-          <Card.Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
-            <TextInput
-              mode="outlined"
-              dense
-              error={validateUsername(username)}
-              label="Username"
-              value={username}
-              style={{ marginTop: 10 }}
-              onChange={(e) => setUsername(e.nativeEvent.text)}
-            />
+        <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={true}>
+          {/* <MyCustomSignUp override={'SignUp'} /> */}
+          <SignIn />
+          <SignUp />
+          <Greetings />
+          <ConfirmSignIn />
 
-            <TextInput
-              dense
-              mode="outlined"
-              error={validatePassword(password)}
-              label="Password"
-              secureTextEntry={true}
-              value={password}
-              style={{ marginTop: 10 }}
-              onChange={(e) => setPassword(e.nativeEvent.text)}
-            />
-            <Button compact onPress={onForgotPasswordClicked} style={{ marginTop: 5, display: 'flex', alignItems: 'flex-end' }}>
-              <Text style={{ color: 'grey', fontSize: 12, textTransform: 'none' }}>Forgot Password</Text>
-            </Button>
-            <Button
-              dark
-              mode={'contained'}
-              style={{ marginTop: 10 }}
-              onPress={() => onLogin({ username, password })}
-              disabled={validateUsername(username) || validatePassword(password)}
-            >
-              Login
-            </Button>
-            <Button style={{ marginTop: 15, display: 'flex', justifyContent: 'flex-end' }} onPress={onSignupClicked}>
-              Sign Up
-            </Button>
-          </Card.Content>
-        </Card>
+          <VerifyContact />
+          <ForgotPassword />
+          {/* <TOTPSetup /> */}
+          <Loading />
+          <CustomVerify override={'ConfirmSignUp'} />
+        </Authenticator>
       </KeyboardAvoidingPageContent>
     </PageContainer>
   );
 };
+
+class CustomVerify extends Component<any> {
+  constructor(props: any) {
+    super(props);
+    this.gotoSignIn = this.gotoSignIn.bind(this);
+  }
+
+  gotoSignIn() {
+    // to switch the authState to 'signIn'
+    this.props.onStateChange('signIn', {});
+  }
+
+  render() {
+    return (
+      <>
+        {/* only render this component when the authState is 'signUp' */}
+        {this.props.authState === 'confirmSignUp' && (
+          <Button onPress={this.gotoSignIn} style={{ width: '100%' }} mode={'contained'}>
+            <Text>Goto SignIn</Text>
+          </Button>
+        )}
+      </>
+    );
+  }
+}
 
 export default withLoadingSpinner(LoginComponent);
