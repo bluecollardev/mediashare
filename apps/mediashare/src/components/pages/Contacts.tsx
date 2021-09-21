@@ -11,18 +11,17 @@ import { UserDto } from '../../rxjs-api';
 
 import { useGoBack, useRouteName } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-
-import { ScrollView, View } from 'react-native';
-// import { ActionButtons } from '../layout/ActionButtons';
-import { ContactList } from '../layout/ContactList';
-import { PageContainer, PageProps } from '../layout/PageContainer';
 import { useSpinner } from '../../hooks/useSpinner';
-import { Searchbar } from 'react-native-paper';
+
+import { ContactList } from '../layout/ContactList';
+import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 
 export const Contacts = ({ navigation }: PageProps) => {
   const dispatch = useDispatch();
+
   const [loaded, setIsLoaded] = useState(false);
   const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
+
   const loadData = async function () {
     await dispatch(findUserPlaylists({}));
   };
@@ -64,12 +63,9 @@ export const Contacts = ({ navigation }: PageProps) => {
 
   return (
     <PageContainer>
-      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
-      <ScrollView>
-        <View>
-          <ContactList showGroups={true} items={users} onChecked={updateSelectedUsers} />
-        </View>
-      </ScrollView>
+      <PageContent>
+        <ContactList showGroups={true} items={users} onChecked={updateSelectedUsers} />
+      </PageContent>
     </PageContainer>
   );
 };

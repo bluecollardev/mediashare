@@ -11,11 +11,10 @@ import { useRouteWithParams } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { ScrollView, View } from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import { View } from 'react-native';
 import { List } from 'react-native-paper';
 
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
 import { PlaylistCard } from '../layout/PlaylistCard';
 
@@ -50,9 +49,9 @@ export const ExploreArticlesComponent = ({ list = [] }: ExploreProps) => {
       <List.Section>
         <List.Subheader>Latest Articles</List.Subheader>
         {sortedList.slice(0, 2).map((item) => {
-          const { title, description } = item;
+          const { _id, title, description } = item;
           return (
-            <View style={{ padding: 15, paddingTop: 0 }}>
+            <View style={{ padding: 15, paddingTop: 0 }} key={`article_${_id}`}>
               <PlaylistCard
                 title={title}
                 author={'Admin'}
@@ -80,10 +79,10 @@ export const ExplorePlaylistsComponent = ({ onViewDetailClicked, list = [] }: Ex
       <List.Section>
         <List.Subheader>Playlists by Adam Fehr</List.Subheader>
         {sortedList.slice(0, 2).map((item) => {
-          const { title, description, mediaIds } = item;
+          const { _id, title, description, mediaIds } = item;
           return (
             <MediaListItem
-              key={`user_${item._id}`}
+              key={`user_pl_${_id}`}
               title={title}
               selectable={false}
               showThumbnail={true}
@@ -98,11 +97,11 @@ export const ExplorePlaylistsComponent = ({ onViewDetailClicked, list = [] }: Ex
 
       <List.Section>
         <List.Subheader>Popular</List.Subheader>
-        {sortedList.slice(3, 6).map((item) => {
-          const { title, mediaIds } = item;
+        {sortedList.slice(1, 6).map((item) => {
+          const { _id, title, mediaIds } = item;
           return (
             <MediaListItem
-              key={`popular_${item._id}`}
+              key={`popular_${_id}`}
               title={title}
               selectable={false}
               showThumbnail={true}
@@ -118,9 +117,9 @@ export const ExplorePlaylistsComponent = ({ onViewDetailClicked, list = [] }: Ex
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const Explore = ({ navigation }: PageProps) => {
   // Set up the loader
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = useDispatch();
   const [loaded, setIsLoaded] = useState(false);
 
@@ -143,11 +142,10 @@ export const Explore = ({ navigation }: PageProps) => {
 
   return (
     <PageContainer>
-      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
-      <ScrollView>
+      <PageContent>
         <ExploreArticlesComponent list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
         <ExplorePlaylistsComponent list={playlists.userPlaylists} onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })} />
-      </ScrollView>
+      </PageContent>
     </PageContainer>
   );
 };

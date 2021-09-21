@@ -11,16 +11,13 @@ import { addUserPlaylist, findUserPlaylists } from '../../state/modules/playlist
 
 import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 
-import { KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
-import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { MediaList, MediaListType } from '../layout/MediaList';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 
 interface PlaylistAddContainerProps extends PageProps {
   children: ReactNode;
@@ -100,43 +97,37 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
 
   return (
     <PageContainer>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView>
-            <MediaCard
-              title={title}
-              author={author}
-              description={description}
-              category={category}
-              categoryOptions={options}
-              onCategoryChange={setCategory as any}
-              onTitleChange={setTitle as any}
-              onDescriptionChange={setDescription as any}
-              isEdit={true}
-            />
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-
-      <ScrollView>
+      <KeyboardAvoidingPageContent>
+        <MediaCard
+          title={title}
+          author={author}
+          description={description}
+          category={category}
+          categoryOptions={options}
+          onCategoryChange={setCategory as any}
+          onTitleChange={setTitle as any}
+          onDescriptionChange={setDescription as any}
+          isEdit={true}
+        />
         <MediaList
-          isSelectable={true}
           list={list}
+          isSelectable={true}
           showThumbnail={true}
           onViewDetail={onMediaItemClick}
           addItem={(item) => updateSelection(true, item)}
           removeItem={(item) => updateSelection(false, item)}
         />
-      </ScrollView>
-
-      <ActionButtons
-        rightIcon="check-circle"
-        actionCb={() => saveItem()}
-        cancelCb={cancelCb}
-        actionLabel={actionLabel}
-        cancelLabel={cancelLabel}
-        disableAction={!isValid()}
-      />
+      </KeyboardAvoidingPageContent>
+      <PageActions>
+        <ActionButtons
+          rightIcon="check-circle"
+          actionCb={() => saveItem()}
+          cancelCb={cancelCb}
+          actionLabel={actionLabel}
+          cancelLabel={cancelLabel}
+          disableAction={!isValid()}
+        />
+      </PageActions>
     </PageContainer>
   );
 };

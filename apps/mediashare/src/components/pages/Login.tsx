@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { LoginDto } from '../../api';
+import { ROUTES } from '../../routes';
+
 import { loginAction } from '../../state/modules/user';
 import { RootState } from '../../state';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
-import { Text, View } from 'react-native';
-import { Button, Card, TextInput } from 'react-native-paper';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { LoginDto } from '../../api';
+
 import { useRouteName } from '../../hooks/NavigationHooks';
-import { ROUTES } from '../../routes';
+import { SPINNER_DEFAULTS, useSpinner } from '../../hooks/useSpinner';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { Text } from 'react-native';
+import { Button, Card, TextInput } from 'react-native-paper';
+import { PageContainer, PageProps, KeyboardAvoidingPageContent } from '../layout/PageContainer';
+
 import Config from 'react-native-config';
 
 const testUser = Config.TEST_USER;
@@ -48,62 +51,64 @@ const LoginComponent = ({ navigation }: PageProps) => {
   const [username, setUsername] = useState(testUser || '');
   const [password, setPassword] = useState(testPassword || '');
 
-  const [{ startLoad, endLoad, AppSpinner }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
-
+  // const [{ startLoad, endLoad, AppSpinner }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });Z
+  // TODO: startLoad and endLoad need to be cleaned up in useEffect within the spinner
   const onLogin = async (loginDto: LoginDto) => {
-    startLoad();
+    // startLoad();
     try {
       await dispatch(loginAction(loginDto));
     } catch (err) {
       console.log(err);
     }
-    endLoad();
+    // endLoad();
   };
 
   return (
     <PageContainer>
-      <Card elevation={0}>
-        <Card.Cover style={{ backgroundColor: '#fff' }} resizeMode={'contain'} source={require('./logo.png')} />
-      </Card>
-      <Card elevation={0}>
-        <Card.Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
-          <TextInput
-            mode="outlined"
-            dense
-            error={validateUsername(username)}
-            label="Username"
-            value={username}
-            style={{ marginTop: 10 }}
-            onChange={(e) => setUsername(e.nativeEvent.text)}
-          />
+      <KeyboardAvoidingPageContent>
+        <Card elevation={0}>
+          <Card.Cover style={{ backgroundColor: '#fff' }} resizeMode={'contain'} source={require('./logo.png')} />
+        </Card>
+        <Card elevation={0}>
+          <Card.Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
+            <TextInput
+              mode="outlined"
+              dense
+              error={validateUsername(username)}
+              label="Username"
+              value={username}
+              style={{ marginTop: 10 }}
+              onChange={(e) => setUsername(e.nativeEvent.text)}
+            />
 
-          <TextInput
-            dense
-            mode="outlined"
-            error={validatePassword(password)}
-            label="Password"
-            secureTextEntry={true}
-            value={password}
-            style={{ marginTop: 10 }}
-            onChange={(e) => setPassword(e.nativeEvent.text)}
-          />
-          <Button compact onPress={onForgotPasswordClicked} style={{ marginTop: 5, display: 'flex', alignItems: 'flex-end' }}>
-            <Text style={{ color: 'grey', fontSize: 12, textTransform: 'none' }}>Forgot Password</Text>
-          </Button>
-          <Button
-            dark
-            mode={'contained'}
-            style={{ marginTop: 10 }}
-            onPress={() => onLogin({ username, password })}
-            disabled={validateUsername(username) || validatePassword(password)}
-          >
-            Login
-          </Button>
-          <Button style={{ marginTop: 15, display: 'flex', justifyContent: 'flex-end' }} onPress={onSignupClicked}>
-            Sign Up
-          </Button>
-        </Card.Content>
-      </Card>
+            <TextInput
+              dense
+              mode="outlined"
+              error={validatePassword(password)}
+              label="Password"
+              secureTextEntry={true}
+              value={password}
+              style={{ marginTop: 10 }}
+              onChange={(e) => setPassword(e.nativeEvent.text)}
+            />
+            <Button compact onPress={onForgotPasswordClicked} style={{ marginTop: 5, display: 'flex', alignItems: 'flex-end' }}>
+              <Text style={{ color: 'grey', fontSize: 12, textTransform: 'none' }}>Forgot Password</Text>
+            </Button>
+            <Button
+              dark
+              mode={'contained'}
+              style={{ marginTop: 10 }}
+              onPress={() => onLogin({ username, password })}
+              disabled={validateUsername(username) || validatePassword(password)}
+            >
+              Login
+            </Button>
+            <Button style={{ marginTop: 15, display: 'flex', justifyContent: 'flex-end' }} onPress={onSignupClicked}>
+              Sign Up
+            </Button>
+          </Card.Content>
+        </Card>
+      </KeyboardAvoidingPageContent>
     </PageContainer>
   );
 };

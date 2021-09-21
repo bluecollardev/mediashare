@@ -13,31 +13,32 @@ interface MediaListProps {
   list: MediaListType[];
   onViewDetail?: (item: MediaListType) => void;
   isSelectable?: boolean;
+  showActions?: boolean;
   showThumbnail?: boolean;
   addItem?: (item?: MediaListType) => void;
   removeItem?: (item?: MediaListType) => void;
 }
 
-export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, addItem = () => {}, removeItem = () => {} }: MediaListProps) => {
+export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, showActions = true, addItem = () => {}, removeItem = () => {} }: MediaListProps) => {
   return (
     <Content>
       <View>
         {list.map((item, idx, arr) => {
-          const { title, description, thumbnail } = item;
+          const { _id, title, description, thumbnail } = item;
           return (
-            <>
+            <View key={`item_${_id}`}>
               <MediaListItem
-                key={`item_${idx}`}
                 title={title}
                 description={`${shortenText(description, 40)}`}
                 image={thumbnail}
                 selectable={isSelectable}
                 showThumbnail={showThumbnail}
+                showActions={showActions}
                 onChecked={(v) => (v ? addItem(item) : removeItem(item))}
                 onViewDetail={() => onViewDetail(item)}
               />
               {idx !== arr.length && <Divider />}
-            </>
+            </View>
           );
         })}
       </View>

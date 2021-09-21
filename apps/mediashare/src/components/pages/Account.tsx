@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { logoutAction } from '../../state/modules/user';
+
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ScrollView, View, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
@@ -10,7 +12,6 @@ import { AccountForm } from '../layout/AccountForm';
 import styles from '../../styles';
 import { useRouteName } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
-import { logoutAction } from '../../state/modules/user';
 import { useDispatch } from 'react-redux';
 import Subtitle from '../../theme/components/Subtitle';
 import LabelledElement from '../layout/LabelledElement';
@@ -53,6 +54,9 @@ export const Account = ({ navigation }: PageProps) => {
     dispatch(logoutAction());
     // loginRoute();
   };
+
+  const actionLabel = 'Save';
+  const cancelLabel = 'Cancel';
 
   return (
     <PageContainer>

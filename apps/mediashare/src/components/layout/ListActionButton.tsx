@@ -1,40 +1,25 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 
-import { View } from 'react-native';
 import { Button } from 'react-native-paper';
-import { theme } from '../../styles';
+import styles, { theme } from '../../styles';
 
 interface ListActionButtonProps {
   // children: ReactNode;
   actionCb: () => void;
   label: string;
   icon: string;
-  danger?: boolean;
+  loading?: boolean;
   dark?: boolean;
+  mode?: 'text' | 'outlined' | 'contained';
+  color?: string;
 }
 
-const ListActionButton = ({ danger = false, actionCb, label, icon }: ListActionButtonProps) => {
+const ListActionButton = ({ loading = false, actionCb, label, icon, mode = 'contained', color = theme.colors.primary }: ListActionButtonProps) => {
   return (
-    <View style={styles.container}>
-      <Button mode="contained" dark color={theme.colors.primary} loading={danger} style={styles.button} onPress={() => actionCb()} icon={icon}>
-        {label}
-      </Button>
-    </View>
+    <Button mode={mode} dark color={color} loading={loading} style={styles.actionButton} onPress={() => actionCb()} icon={icon}>
+      {label}
+    </Button>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-  },
-  button: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  text: {
-    paddingRight: 30,
-  },
-});
 
 export { ListActionButton };

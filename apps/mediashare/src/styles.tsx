@@ -3,8 +3,50 @@ import { DefaultTheme } from 'react-native-paper';
 import variable from '../src/theme/variables/platform';
 
 const styles: any = StyleSheet.create({
+  pageContainer: {
+    margin: 0,
+    height: '100%',
+  },
+  pageContent: {
+    paddingTop: 5,
+    paddingHorizontal: 5,
+    height: '100%',
+    flex: 1,
+    backgroundColor: '#ffffff',
+  },
+  pageActions: {
+    display: 'flex',
+    width: '100%',
+    height: 50, // Make sure actionButtons is the same height!
+  },
+  actionButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: 50, // Make sure this is the same height as pageActions!
+    borderTopWidth: 1,
+    borderColor: '#cccccc',
+  },
+  actionButton: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  deleteActionButton: {
+    flex: 0,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+    width: 30,
+  },
+  mediaListItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  mediaListItemThumbnail: {
+    marginLeft: 5,
+    marginRight: 10,
+  },
   container: {
-    backgroundColor: '#FBFAFA',
     height: '100%',
   },
   row: {

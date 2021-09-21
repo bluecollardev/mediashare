@@ -1,11 +1,13 @@
 import React, { ReactNode } from 'react';
 import themeStyles, { theme } from '../../styles';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, SafeAreaView, ScrollView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
 import { useAppSelector } from '../../state';
 import { useDispatch } from 'react-redux';
 import { clearError } from '../../state/modules/app-state';
 import { LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
+
+import styles from '../../styles';
 
 export interface PageProps extends LoadingSpinnerProps {
   navigation: any;
@@ -14,6 +16,43 @@ export interface PageProps extends LoadingSpinnerProps {
 
 export interface PageContainerProps {
   children: ReactNode;
+}
+
+export interface PageContentProps {
+  refreshControl?: any;
+  children?: any;
+  style?: any;
+}
+
+export function PageContent({ refreshControl, children }: PageContentProps) {
+  return (
+    <View style={styles.pageContent}>
+      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
+      <ScrollView refreshControl={refreshControl}>{children}</ScrollView>
+    </View>
+  );
+}
+
+export function KeyboardAvoidingPageContent({ refreshControl, children }: PageContentProps) {
+  return (
+    <View style={styles.pageContent}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.pageContent}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView refreshControl={refreshControl}>{children}</ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </View>
+  );
+}
+
+export interface PageActionsProps {
+  children?: any;
+  style?: any;
+}
+
+export function PageActions({ children, style }: PageActionsProps) {
+  const mergedStyles = Object.assign({}, styles.pageActions, style);
+  return <View style={mergedStyles}>{children}</View>;
 }
 
 export function PageContainer({ children }: PageContainerProps) {
@@ -25,7 +64,7 @@ export function PageContainer({ children }: PageContainerProps) {
     // setVisible(false);
   };
   return (
-    <SafeAreaView style={themeStyles.container}>
+    <SafeAreaView style={themeStyles.pageContainer}>
       <View>
         <Portal>
           <Dialog visible={app.hasError} onDismiss={hideDialog}>
@@ -45,24 +84,9 @@ export function PageContainer({ children }: PageContainerProps) {
           </Dialog>
         </Portal>
       </View>
-
       {children}
     </SafeAreaView>
   );
 }
-
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#312e38',
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: '#fff',
-  },
-});
 
 export default PageContainer;
