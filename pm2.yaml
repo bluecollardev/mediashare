@@ -1,7 +1,7 @@
 apps:
   - script: ./dist/apps/media-api/main.js
     name: media-api
-    watch: true
+    watch: false
     instances: max
     exec_mode: cluster
     env:
