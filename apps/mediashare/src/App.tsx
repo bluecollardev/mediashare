@@ -21,7 +21,7 @@ import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
 import { Provider, useDispatch } from 'react-redux';
 import { store } from './boot/configureStore';
-import { useAppSelector } from './state/index';
+import { useAppSelector } from './state';
 import { theme } from './styles';
 import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black, useFonts } from '@expo-google-fonts/roboto';
 import Spinner from 'react-native-loading-spinner-overlay';
