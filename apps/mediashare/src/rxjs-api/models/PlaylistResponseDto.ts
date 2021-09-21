@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { MediaItem, UserDto } from './';
+import { MediaItem } from './';
 
 /**
  * @export
@@ -70,11 +70,6 @@ export interface PlaylistResponseDto {
    * @memberof PlaylistResponseDto
    */
   mediaItems: Array<MediaItem>;
-  /**
-   * @type {UserDto}
-   * @memberof PlaylistResponseDto
-   */
-  user: UserDto;
 }
 
 /**

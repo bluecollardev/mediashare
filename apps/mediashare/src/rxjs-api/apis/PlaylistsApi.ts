@@ -77,10 +77,17 @@ export class PlaylistsApi extends BaseAPI {
   playlistControllerFindAll(): Observable<Array<PlaylistItemResponseDto>>;
   playlistControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
   playlistControllerFindAll(opts?: OperationOpts): Observable<Array<PlaylistItemResponseDto> | RawAjaxResponse<Array<PlaylistItemResponseDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<Array<PlaylistItemResponseDto>>(
       {
         url: '/api/playlists',
         method: 'GET',
+        headers,
       },
       opts?.responseOpts
     );
@@ -96,10 +103,17 @@ export class PlaylistsApi extends BaseAPI {
   ): Observable<PlaylistResponseDto | RawAjaxResponse<PlaylistResponseDto>> {
     throwIfNullOrUndefined(playlistId, 'playlistId', 'playlistControllerFindOne');
 
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<PlaylistResponseDto>(
       {
         url: '/api/playlists/{playlistId}'.replace('{playlistId}', encodeURI(playlistId)),
         method: 'GET',
+        headers,
       },
       opts?.responseOpts
     );
@@ -146,10 +160,17 @@ export class PlaylistsApi extends BaseAPI {
     throwIfNullOrUndefined(playlistId, 'playlistId', 'playlistControllerShare');
     throwIfNullOrUndefined(userId, 'userId', 'playlistControllerShare');
 
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<Array<ShareItem>>(
       {
         url: '/api/playlists/{playlistId}/share/{userId}'.replace('{playlistId}', encodeURI(playlistId)).replace('{userId}', encodeURI(userId)),
         method: 'POST',
+        headers,
       },
       opts?.responseOpts
     );
@@ -168,6 +189,9 @@ export class PlaylistsApi extends BaseAPI {
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
     };
 
     return this.request<Playlist>(

@@ -75,10 +75,17 @@ export class MediaItemsApi extends BaseAPI {
   mediaItemControllerFindAll(): Observable<Array<MediaItemDto>>;
   mediaItemControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
   mediaItemControllerFindAll(opts?: OperationOpts): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<Array<MediaItemDto>>(
       {
         url: '/api/media-items',
         method: 'GET',
+        headers,
       },
       opts?.responseOpts
     );
@@ -91,10 +98,17 @@ export class MediaItemsApi extends BaseAPI {
   mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<MediaItemDto | RawAjaxResponse<MediaItemDto>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerFindOne');
 
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<MediaItemDto>(
       {
         url: '/api/media-items/{mediaId}'.replace('{mediaId}', encodeURI(mediaId)),
         method: 'GET',
+        headers,
       },
       opts?.responseOpts
     );
@@ -147,6 +161,9 @@ export class MediaItemsApi extends BaseAPI {
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
     };
 
     return this.request<ShareItem>(
@@ -173,6 +190,9 @@ export class MediaItemsApi extends BaseAPI {
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
     };
 
     return this.request<MediaItem>(

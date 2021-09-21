@@ -30,9 +30,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   const [category, setCategory] = useState(CreateMediaItemDtoCategoryEnum.Endurance);
   const [documentUri, setDocumentUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
-  const mediaSrc =
-    useAppSelector((state) => state.mediaItem.getMediaItem) ||
-    'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
+  const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const isValid = function () {
     const test = !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !minLength(1)(documentUri);
     return test;
@@ -67,12 +65,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
           onDescriptionChange={onDescriptionChange}
           isEdit={true}
         >
-          <CardItem
-            button
-            onPress={getDocument}
-            cardBody
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
+          <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {documentUri ? (
               <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
             ) : (
@@ -89,16 +82,9 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
               </Button>
             )}
           </CardItem>
-          <CardItem
-            button
-            onPress={getDocument}
-            cardBody
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 15 }}
-          >
+          {/* <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 15 }}>
             {documentUri ? (
-              {
-                /*<Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />*/
-              }
+              <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
             ) : (
               <Button
                 color={theme.colors.primary}
@@ -112,7 +98,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
                 <Text style={{ textAlign: 'center', color: theme.colors.primary }}>Upload Preview Image</Text>
               </Button>
             )}
-          </CardItem>
+          </CardItem> */}
         </MediaCard>
       </KeyboardAvoidingPageContent>
       <PageActions>
@@ -134,11 +120,12 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
       return;
     }
     console.log(document);
-    setDocumentUri(document?.uri || '');
     startLoad();
 
     const thumbnail = await dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
     console.log(thumbnail);
+    setDocumentUri(document?.uri || '');
+
     endLoad();
   }
 

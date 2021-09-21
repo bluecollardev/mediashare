@@ -43,6 +43,9 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
 
 export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {
   const thumb = await uploadThumbnail({ fileUri, key });
+  console.log('🚀 --------------------------------------------------------------');
+  console.log('🚀 ~ file: index.ts ~ line 46 ~ createThumbnail ~ thumb', thumb);
+  console.log('🚀 --------------------------------------------------------------');
   return thumb;
 });
 export const addMediaItem = createAsyncThunk(
@@ -188,7 +191,7 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
   builder
     .addCase(createThumbnail.fulfilled, (state, action) => ({
       ...state,
-      getMediaItem: action.payload as string,
+      mediaSrc: action.payload as string,
     }))
     .addCase(getMediaItemById.pending, (state) => ({
       ...state,

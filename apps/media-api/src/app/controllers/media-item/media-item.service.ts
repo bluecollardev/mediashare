@@ -59,16 +59,17 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
   findMediaItemsByUserId(userId: ObjectId) {
     return this.repository
       .aggregate([
-        { $match: { userId: userId } },
+        { $match: { createdBy: userId } },
 
         {
           $lookup: {
             from: 'user',
-            localField: 'userId',
+            localField: 'createdBy',
             foreignField: '_id',
             as: 'user'
           }
         },
+        { $unwind: { path: '$user' } },
         {
           $replaceRoot: {
             newRoot: {
@@ -77,7 +78,9 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
               description: '$description',
               category: '$category',
               title: '$title',
-              userId: '$userId'
+              userId: '$userId',
+              createdAt: '$createdAt',
+              updatedAt: '$updatedAt'
             }
           }
         }

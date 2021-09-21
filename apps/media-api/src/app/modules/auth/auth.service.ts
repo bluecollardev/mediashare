@@ -16,7 +16,7 @@ export class AuthService {
 
     return {
       ...userFields,
-      accessToken: this.jwtService.sign(payload)
+      accessToken: this.jwtService.sign(payload),
     };
   }
 

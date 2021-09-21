@@ -13,7 +13,6 @@
  */
 
 import { MediaItem } from './media-item';
-import { UserDto } from './user-dto';
 
 /**
  *
@@ -81,12 +80,6 @@ export interface PlaylistResponseDto {
    * @memberof PlaylistResponseDto
    */
   mediaItems: Array<MediaItem>;
-  /**
-   *
-   * @type {UserDto}
-   * @memberof PlaylistResponseDto
-   */
-  user: UserDto;
 }
 
 /**

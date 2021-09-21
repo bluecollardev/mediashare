@@ -50,10 +50,17 @@ export class UsersApi extends BaseAPI {
   usersControllerFindAll(): Observable<Array<UserDto>>;
   usersControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<UserDto>>>;
   usersControllerFindAll(opts?: OperationOpts): Observable<Array<UserDto> | RawAjaxResponse<Array<UserDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<Array<UserDto>>(
       {
         url: '/api/users',
         method: 'GET',
+        headers,
       },
       opts?.responseOpts
     );
@@ -66,10 +73,17 @@ export class UsersApi extends BaseAPI {
   usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerFindOne');
 
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<UserDto>(
       {
         url: '/api/users/{userId}'.replace('{userId}', encodeURI(userId)),
         method: 'GET',
+        headers,
       },
       opts?.responseOpts
     );
@@ -85,10 +99,17 @@ export class UsersApi extends BaseAPI {
   ): Observable<Array<PlaylistResponseDto> | RawAjaxResponse<Array<PlaylistResponseDto>>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerGetPlaylists');
 
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<Array<PlaylistResponseDto>>(
       {
         url: '/api/users/{userId}/playlists'.replace('{userId}', encodeURI(userId)),
         method: 'GET',
+        headers,
       },
       opts?.responseOpts
     );
@@ -136,6 +157,9 @@ export class UsersApi extends BaseAPI {
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
     };
 
     return this.request<UserDto>(
@@ -159,6 +183,9 @@ export class UsersApi extends BaseAPI {
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
     };
 
     return this.request<UserDto>(

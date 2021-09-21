@@ -39,7 +39,7 @@ export class MediaItemController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUserId() createdBy: ObjectId) {
-    const mediaItem: Omit<MediaItem, '_id'> = { ...createMediaItemDto, userId: createdBy };
+    const mediaItem: Omit<MediaItem, '_id'> = { ...createMediaItemDto, userId: createdBy, createdBy };
 
     return this.mediaItemService.create(mediaItem);
   }

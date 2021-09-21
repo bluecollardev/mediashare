@@ -12,6 +12,9 @@
  * Do not edit the class manually.
  */
 
+import { MediaItemDto } from './media-item-dto';
+import { PlaylistResponseDto } from './playlist-response-dto';
+
 /**
  *
  * @export
@@ -23,7 +26,25 @@ export interface UserDto {
    * @type {string}
    * @memberof UserDto
    */
-  phoneNumber: string;
+  _id: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDto
+   */
+  username: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDto
+   */
+  firstName: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDto
+   */
+  lastName: string;
   /**
    *
    * @type {string}
@@ -53,19 +74,19 @@ export interface UserDto {
    * @type {string}
    * @memberof UserDto
    */
-  username: string;
+  phoneNumber: string;
   /**
    *
-   * @type {string}
+   * @type {Array<MediaItemDto>}
    * @memberof UserDto
    */
-  firstName: string;
+  mediaItems: Array<MediaItemDto>;
   /**
    *
-   * @type {string}
+   * @type {Array<PlaylistResponseDto>}
    * @memberof UserDto
    */
-  lastName: string;
+  playlists: Array<PlaylistResponseDto>;
   /**
    *
    * @type {Array<string>}
@@ -78,12 +99,6 @@ export interface UserDto {
    * @memberof UserDto
    */
   sharedMediaItems: Array<string>;
-  /**
-   *
-   * @type {string}
-   * @memberof UserDto
-   */
-  _id: string;
   /**
    *
    * @type {string}
