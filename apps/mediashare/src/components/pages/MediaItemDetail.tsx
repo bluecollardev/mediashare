@@ -17,7 +17,6 @@ const MediaItemDetail = ({ route, onDataLoaded }: PageProps) => {
 
   const [isLoaded, setIsLoaded] = useState(loaded);
 
-  const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const { _id } = mediaItem || {};
 
   useEffect(() => {

@@ -32,11 +32,11 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   aggregateSharedPlaylistItems({ userId }: { userId: ObjectId }) {
     const query = this.repository.aggregate([
       {
-        $match: { where: { userId, playlistId: { $exists: true } } },
+        $match: { where: { userId, playlistId: { $exists: true } } }
       },
       {
-        $lookup: { from: 'playlist_item', localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' },
-      },
+        $lookup: { from: 'playlist_item', localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' }
+      }
     ]);
     return query.toArray();
   }
@@ -54,17 +54,17 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
           from: 'user',
           localField: 'createdBy',
           foreignField: '_id',
-          as: 'createdBy',
-        },
+          as: 'createdBy'
+        }
       },
       { $unwind: { path: '$createdBy' } },
       {
         $replaceRoot: {
           newRoot: {
-            $mergeObjects: [{ userId: 0, playlistId: 0, mediaId: 0 }, '$mediaItem', { createdBy: '$createdBy' }],
-          },
-        },
-      },
+            $mergeObjects: [{ userId: 0, playlistId: 0, mediaId: 0 }, '$mediaItem', { createdBy: '$createdBy' }]
+          }
+        }
+      }
     ]);
 
     return query.toArray();
@@ -81,20 +81,17 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
             from: 'playlist_item',
             localField: 'playlistId',
             foreignField: 'playlistId',
-            as: 'playlistItems',
-          },
+            as: 'playlistItems'
+          }
         },
         { $unwind: '$playlistItems' },
         { $unwind: '$createdByUser' },
         {
           $replaceRoot: {
             newRoot: {
-              $mergeObjects: [
-                { shareItem: { _id: '$_id', createdBy: '$createdByUser', userId: '$userId' } },
-                '$playlistItems',
-              ],
-            },
-          },
+              $mergeObjects: [{ shareItem: { _id: '$_id', createdBy: '$createdByUser', userId: '$userId' } }, '$playlistItems']
+            }
+          }
         },
         { $lookup: { from: 'media_item', localField: 'mediaId', foreignField: '_id', as: 'mediaItems' } },
         { $unwind: '$mediaItems' },
@@ -108,9 +105,9 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
             title: { $first: '$playlist.title' },
             category: { $first: '$playlist.category' },
             createdBy: { $first: '$shareItem.createdBy' },
-            mediaItems: { $push: { $mergeObjects: ['$mediaItems', { playlistItemId: 'playlistItem._id' }] } },
-          },
-        },
+            mediaItems: { $push: { $mergeObjects: ['$mediaItems', { playlistItemId: 'playlistItem._id' }] } }
+          }
+        }
       ])
       .toArray();
   }
@@ -123,10 +120,10 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
             from: 'user',
             localField: 'createdBy',
             foreignField: '_id',
-            as: 'createdBy',
-          },
+            as: 'createdBy'
+          }
         },
-        { $unwind: { path: '$createdBy' } },
+        { $unwind: { path: '$createdBy' } }
       ])
       .toArray();
   }
@@ -145,7 +142,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       mediaId: new ObjectId(mediaIdStr),
       createdBy: new ObjectId(createdByStr),
       title,
-      read: false,
+      read: false
     });
 
     return item;
@@ -156,7 +153,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       userId,
       playlistId,
       createdBy,
-      read: false,
+      read: false
     });
   }
 }

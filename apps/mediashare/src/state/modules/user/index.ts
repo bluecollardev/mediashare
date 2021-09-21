@@ -11,18 +11,18 @@ export const USER_STATE_KEY = 'user';
 
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
 const USER_ACTIONS = ['LOGIN', 'LOGOUT', 'UPDATE_ACCOUNT', 'DELETE_ACCOUNT', 'VALIDATE', 'LOAD_USER'] as const;
-const initialState: Pick<UserDto, 'username' | 'firstName' | 'lastName' | '_id' | 'phoneNumber' | 'imageSrc' | 'email'> = {
+const initialState: Pick<UserDto, 'username' | 'firstName' | 'lastName' | '_id' | 'phoneNumber' | 'imageSrc' | 'email' | 'mediaItems'> = {
   username: '',
   firstName: '',
   lastName: '',
   _id: '',
-
+  mediaItems: [],
   phoneNumber: '',
   imageSrc: '',
   email: '',
 };
 
-const pickUser = (user: UserDto) => R.pick(user, ['username', 'email', '_id', 'firstName', 'lastName', 'phoneNumber', 'imageSrc']);
+const pickUser = (user: UserDto) => R.pick(user, ['username', 'email', '_id', 'firstName', 'lastName', 'phoneNumber', 'imageSrc', 'mediaItems']);
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 // const login = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => await apis.user.userControllerLogin({ loginDto }));
 

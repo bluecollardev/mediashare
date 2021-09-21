@@ -4,11 +4,11 @@ import { loadUser, logout } from '../../state/modules/user';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { View, useWindowDimensions, TouchableOpacity, StyleSheet } from 'react-native';
-import { Button, Card } from 'react-native-paper';
+import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { Button, Card, Title } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
-import { useRouteName } from '../../hooks/NavigationHooks';
+import { useRouteName, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { useDispatch } from 'react-redux';
 import { SceneMap, TabView } from 'react-native-tab-view';
@@ -18,22 +18,54 @@ import { findMediaItems } from '../../state/modules/media-items/index';
 import AccountCard from '../layout/AccountCard';
 import { loadUsers } from '../../state/modules/users';
 import { useAppSelector } from '../../state';
+import { MediaListItem } from '../layout/MediaListItem';
+import { shortenText } from '../../utils';
 
-const FirstRoute = () => <View style={{ flex: 1, backgroundColor: theme.colors.background }} />;
+const FirstRoute = () => {
+  const viewMediaItem = useViewMediaItem();
+  const mediaItems = useAppSelector((state) => state.user.mediaItems) || [];
+  return (
+    <ScrollView>
+      {mediaItems.length > 0 ? (
+        mediaItems.map((item) => {
+          return (
+            <MediaListItem
+              key={`item_${item._id}`}
+              title={item.title}
+              description={`${shortenText(item.description, 40)}`}
+              showThumbnail={true}
+              image={item.thumbnail}
+              iconRight="edit"
+              iconRightColor={theme.colors.accentDarker}
+              selectable={false}
+              onViewDetail={() => viewMediaItem({ mediaId: item._id, uri: item.uri })}
+            />
+          );
+        })
+      ) : (
+        <Title>No Items</Title>
+      )}
+    </ScrollView>
+  );
+};
 
 const SecondRoute = () => {
   const users = useAppSelector((state) => state.users.entities);
   console.log(users);
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap' }}>
+    <ScrollView
+      contentInset={{ bottom: 120 }}
+      contentContainerStyle={{ flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap' }}
+    >
       {users.map((user) => {
         return (
           <Card style={{ flexBasis: '50%', padding: 5 }}>
+            <Card.Title title={user.username} titleStyle={{ fontSize: 14 }} />
             <Card.Cover source={{ uri: user.imageSrc || 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg' }} />
           </Card>
         );
       })}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -84,13 +116,10 @@ export const Account = ({ navigation }: PageProps) => {
 
   // const loginRoute = usePageRoute(ROUTES.login);
 
-  const onSignoutClicked = () => {
-    dispatch(logout());
+  const onSignoutClicked = async function () {
+    await dispatch(logout());
     // loginRoute();
   };
-
-  const actionLabel = 'Save';
-  const cancelLabel = 'Cancel';
 
   return (
     <PageContainer>

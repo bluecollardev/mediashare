@@ -61,32 +61,32 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
   findMediaItemsByUserId(userId: ObjectId) {
     return this.repository
       .aggregate([
-        { $match: { createdBy: userId } },
+        { $match: { createdBy: userId } }
 
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'createdBy',
-            foreignField: '_id',
-            as: 'user'
-          }
-        },
-        { $unwind: { path: '$user' } },
-        {
-          $replaceRoot: {
-            newRoot: {
-              _id: '$_id',
-              author: '$user.username',
-              description: '$description',
-              category: '$category',
-              title: '$title',
-              userId: '$userId',
-              createdAt: '$createdAt',
-              updatedAt: '$updatedAt'
-            }
-          }
-        }
+        // {
+        //   $lookup: {
+        //     from: 'user',
+        //     localField: 'createdBy',
+        //     foreignField: '_id',
+        //     as: 'user'
+        //   }
+        // }
+        // { $unwind: { path: '$user' } }
+        // {
+        //   $replaceRoot: {
+        //     newRoot: {
+        //       _id: '$_id',
+        //       author: '$user.username',
+        //       description: '$description',
+        //       category: '$category',
+        //       title: '$title',
+        //       userId: '$userId',
+        //       createdAt: '$createdAt',
+        //       updatedAt: '$updatedAt'
+        //     }
+        //   }
+        // }
       ])
-      .next();
+      .toArray();
   }
 }

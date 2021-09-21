@@ -9,11 +9,10 @@ import { loadUser, updateAccount } from '../../state/modules/user/index';
 import TextField from '../form/TextField';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import PageContainer, { PageProps } from '../layout/PageContainer';
-import * as DocumentPicker from 'expo-document-picker';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { fetchAndPutToS3, putToS3, uploadMedia, uploadThumbnail } from '../../state/modules/media-items/storage';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
 import Config from 'react-native-config';
-import { KeyFactory, thumbnailRoot } from '../../state/modules/media-items/key-factory';
+import { thumbnailRoot } from '../../state/modules/media-items/key-factory';
 import { useRouteName } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -29,7 +28,7 @@ function AccountEdit({ startLoad, endLoad }: AccountEditProps) {
   const account = useRouteName(ROUTES.account);
   useEffect(() => {
     const loadData = async function () {
-      const dispatched = await dispatch(loadUser());
+      await dispatch(loadUser());
       setIsLoaded(true);
     };
     if (!isLoaded) {
@@ -44,12 +43,11 @@ function AccountEdit({ startLoad, endLoad }: AccountEditProps) {
   };
 
   const getDocument = async function () {
-    launchImageLibrary({ mediaType: 'photo', includeBase64: true, quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
+    launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
       if (!res.assets) {
         return;
       }
       const image = res.assets[0];
-      console.log(image);
       const thumbnailKey = thumbnailRoot + image.fileName;
       startLoad();
       fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {

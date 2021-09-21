@@ -10,7 +10,7 @@ export interface TextFieldProps {
   disabled?: boolean;
 }
 
-export default function TextField({ value = '', validator = (val) => true, onChangeText, disabled = false, label = '' }: TextFieldProps) {
+export default function TextField({ value = '', validator = (val) => false, onChangeText, disabled = false, label = '' }: TextFieldProps) {
   return (
     <TextInput
       dense
