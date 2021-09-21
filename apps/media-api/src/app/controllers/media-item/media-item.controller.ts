@@ -19,11 +19,12 @@ import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.c
 import { GetUserId } from '../../core/decorators/user.decorator';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { MediaItem } from './entities/media-item.entity';
+import { AppConfigService } from '../../modules/app-config.module.ts/app-config.provider';
 
 @ApiTags('media-items')
 @Controller('media-items')
 export class MediaItemController {
-  constructor(private readonly mediaItemService: MediaItemService, private shareItemService: ShareItemService) {}
+  constructor(private readonly mediaItemService: MediaItemService, private shareItemService: ShareItemService, private configSvc: AppConfigService) {}
 
   /**
    * Create a new user
@@ -40,8 +41,9 @@ export class MediaItemController {
   @ApiBearerAuth()
   create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUserId() createdBy: ObjectId) {
     const mediaItem: Omit<MediaItem, '_id'> = { ...createMediaItemDto, userId: createdBy, createdBy };
+    const s3Prefix = this.configSvc.get('awsUrl');
 
-    return this.mediaItemService.create(mediaItem);
+    return this.mediaItemService.create({ ...mediaItem, uri: s3Prefix + mediaItem.uri, thumbnail: s3Prefix + mediaItem.thumbnail });
   }
 
   /* TODO: findout what this needs to be */
@@ -100,7 +102,7 @@ export class MediaItemController {
       createdBy,
       userId,
       mediaId,
-      title,
+      title
     });
     response.status(HttpStatus.CREATED);
 

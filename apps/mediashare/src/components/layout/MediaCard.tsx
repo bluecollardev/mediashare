@@ -16,6 +16,7 @@ export interface MediaListItemProps {
   content?: any;
   showActions?: boolean;
   showThumbnail?: boolean;
+  thumbnail: string;
   category?: string;
   isEdit?: boolean;
   isReadOnly?: boolean;
@@ -71,6 +72,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     buttons = false,
     showActions = false,
     showThumbnail = true,
+    thumbnail = DEFAULT_IMAGE,
     onActionsClicked = () => {},
     children,
     category = 'None',

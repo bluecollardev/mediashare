@@ -32,10 +32,10 @@ export class UserService extends DataService<User, MongoRepository<User>> {
   }
 
   validateToken({ token, idToken }: { token: string; idToken: string }) {
-    const { email, phone_number } = this.authSvc.decodeIdToken(idToken);
+    const { email, phone_number: phoneNumber } = this.authSvc.decodeIdToken(idToken);
 
     const { username, sub } = this.authSvc.validateToken(token);
-    return { email, phone_number, username, sub };
+    return { email, phoneNumber, username, sub };
   }
 
   setRoles(_id: string, roles: BcRolesType[]) {
@@ -59,7 +59,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
 
     return {
       ...userFields,
-      accessToken: this.authSvc.sign(payload, _id),
+      accessToken: this.authSvc.sign(payload, _id)
     };
   }
 }

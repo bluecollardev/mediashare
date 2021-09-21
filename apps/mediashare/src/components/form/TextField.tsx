@@ -1,42 +1,27 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Input, Item, Label } from 'native-base';
-import { WrappedFieldProps } from 'redux-form';
 
-export interface TextFieldProps extends WrappedFieldProps {
+import { TextInput } from 'react-native-paper';
+
+export interface TextFieldProps {
   label?: string;
+  value?: string;
+  validator?: (val: string) => boolean;
+  onChangeText: (val: string) => void;
+  disabled?: boolean;
 }
 
-export default function TextField(props: TextFieldProps) {
-  const { touched, error } = props.meta;
-  const { input, label } = props;
-
-  let hasError = false;
-  if (error !== undefined) {
-    hasError = true;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let isTouched = false;
-  if (touched !== undefined) {
-    isTouched = true;
-  }
-
-  const onFocus = (event) => {
-    return input.onFocus({ ...event, relatedTarget: null });
-  };
-
+export default function TextField({ value = '', validator = (val) => true, onChangeText, disabled = false, label = '' }: TextFieldProps) {
   return (
-    <View>
-      <Item error={hasError} stackedLabel>
-        {label && (
-          <Label>
-            <Text>{label}</Text>
-          </Label>
-        )}
-        <Input {...input} onFocus={onFocus} style={{ borderColor: 'lightgrey', borderWidth: 1, borderRadius: 3 }} />
-        {hasError ? <Text>{error}</Text> : <Text />}
-      </Item>
-    </View>
+    <TextInput
+      dense
+      mode={'outlined'}
+      textAlign={'left'}
+      label={label}
+      value={value}
+      error={validator(value)}
+      onChangeText={onChangeText}
+      disabled={disabled}
+      style={{ marginBottom: 10 }}
+    />
   );
 }

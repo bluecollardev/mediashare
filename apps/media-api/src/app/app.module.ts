@@ -33,10 +33,10 @@ import { JwtModule } from '@nestjs/jwt';
         synchronize: configService.db('synchronize'),
         ssl: configService.db('ssl'),
         useUnifiedTopology: true,
-        useNewUrlParser: true,
+        useNewUrlParser: true
       }),
 
-      inject: [AppConfigService],
+      inject: [AppConfigService]
     }),
     UserModule,
     LoggerModule.forRoot({
@@ -44,22 +44,23 @@ import { JwtModule } from '@nestjs/jwt';
         prettyPrint: {
           colorize: true,
           levelFirst: true,
-          translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z',
-        },
-      },
+          translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z'
+        }
+      }
     }),
 
     MediaItemModule,
     ProfileModule,
     PlaylistModule,
     PassportModule.register({
-      defaultStrategy: 'jwt',
+      defaultStrategy: 'jwt'
     }),
 
-    ShareItemsModule,
+    ShareItemsModule
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports: []
 })
 export class AppModule {
   constructor(private appConfigService: AppConfigService) {}

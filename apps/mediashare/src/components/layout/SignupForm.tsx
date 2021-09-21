@@ -1,7 +1,8 @@
+import { Input, Item } from 'native-base';
 import React, { PropsWithChildren } from 'react';
 
-import { Input, Item } from 'native-base';
 import { Button } from 'react-native-paper';
+import { ScrollView, TextInput } from 'react-native';
 
 export interface SignupFormProps {
   navigation?: any;
@@ -12,10 +13,20 @@ export interface SignupFormProps {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const SignupForm: React.FC<SignupFormProps> = (props: PropsWithChildren<any>) => {
   return (
-    <>
-      <Item regular style={{ marginBottom: 10 }}>
-        <Input value="" placeholder="E-mail Address*" />
-      </Item>
+    <ScrollView>
+      <TextInput
+        value=""
+        placeholder="E-mail Address*"
+        dense
+        mode={'outlined'}
+        textAlign={'left'}
+        label={'Title'}
+        value={title}
+        error={titleValidator(title)}
+        onChangeText={(text) => onTitleChange(text)}
+        disabled={isReadOnly}
+        style={{ marginBottom: 10 }}
+      />
       <Item regular style={{ marginBottom: 10 }}>
         <Input value="" placeholder="First Name*" />
       </Item>
@@ -34,6 +45,6 @@ export const SignupForm: React.FC<SignupFormProps> = (props: PropsWithChildren<a
       >
         Sign Up
       </Button>
-    </>
+    </ScrollView>
   );
 };

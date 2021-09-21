@@ -15,6 +15,7 @@ export interface MediaItemCardProps {
   onEditClicked?: () => void;
   onDeleteClicked?: () => void;
   category?: string;
+  mediaSrc?: string;
 }
 
 const mediaCardButtons = ['Edit', 'Delete', 'Cancel'];
@@ -30,6 +31,7 @@ export const MediaItemCard: React.FC<MediaItemCardProps> = (props) => {
     image,
     buttons,
     content,
+    mediaSrc = '',
     children,
     showActions = true,
     onEditClicked = () => {},
@@ -62,13 +64,14 @@ export const MediaItemCard: React.FC<MediaItemCardProps> = (props) => {
       title={title}
       author={author}
       description={description}
-      mediaSrc={image}
+      mediaSrc={mediaSrc}
       category={category}
       showActions={showActions}
       onActionsClicked={showCardMenu}
       buttons={buttons}
       showSocial={false}
       children={children}
+      thumbnail={image}
     />
   );
 };

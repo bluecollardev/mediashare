@@ -29,25 +29,25 @@ import { accessKey } from './keys';
           transport: Transport.TCP,
           options: {
             host: configService.get('authHost'),
-            port: configService.get('authPort'),
-          },
+            port: configService.get('authPort')
+          }
         }),
-        inject: [AppConfigService],
-      },
+        inject: [AppConfigService]
+      }
     ]),
     JwtModule.register({
       publicKey: accessKey,
       signOptions: { expiresIn: '10h' },
       verifyOptions: {
         // algorithms: ['RS256'],
-        ignoreExpiration: true,
-      },
+        ignoreExpiration: true
+      }
     }),
     TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
-    ShareItemModule,
+    ShareItemModule
   ],
   controllers: [],
   providers: [LocalStrategy, SessionSerializer, AuthService, UserService],
-  exports: [ClientsModule, SessionSerializer, LocalStrategy, AuthService, UserService],
+  exports: [ClientsModule, SessionSerializer, LocalStrategy, AuthService, UserService, AppConfigModule]
 })
 export class AuthModule {}

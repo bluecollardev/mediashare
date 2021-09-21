@@ -41,7 +41,7 @@ export const MediaComponent = ({
     <View>
       <List>
         {sortedList.map((item) => {
-          const { _id, title, description, thumbnail, uri } = item;
+          const { _id, title, description, thumbnail } = item;
           return (
             <MediaListItem
               key={`item_${_id}`}
@@ -49,7 +49,7 @@ export const MediaComponent = ({
               description={`${shortenText(description, 40)}`}
               showThumbnail={true}
               showActions={showActions}
-              image={thumbnail || uri}
+              image={thumbnail}
               iconRight="edit"
               iconRightColor={theme.colors.accentDarker}
               selectable={isSelectable}
@@ -100,7 +100,14 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {loaded && mediaItems.length > 0 ? (
-          <MediaComponent key={clearSelectionKey} navigation={navigation} list={mediaItems} onViewDetail={onEditItem} isSelectable={isSelectable} showActions={!isSelectable} />
+          <MediaComponent
+            key={clearSelectionKey}
+            navigation={navigation}
+            list={mediaItems}
+            onViewDetail={onEditItem}
+            isSelectable={isSelectable}
+            showActions={!isSelectable}
+          />
         ) : (
           <Card>
             <Card.Content>

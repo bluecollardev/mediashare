@@ -1,23 +1,25 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UnauthorizedException, UseGuards, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UnauthorizedException, UseGuards, Req, Res, Put } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser, GetUserId } from '../../core/decorators/user.decorator';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { PlaylistService } from '../playlist/services/playlist.service';
-import { UserGetResponse } from './decorators/user-response.decorator';
-import { LoginDto, LoginResponseDto, TokenDto } from './dto/login.dto';
+import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
+import { TokenDto } from './dto/login.dto';
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';
-import { LocalGuard } from '../../modules/auth/guards/local.guard';
 import { PlaylistGetResponse } from '../playlist/playlist.decorator';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 import { UserGuard } from '../../modules/auth/guards/user.guard';
 import { User } from './entities/user.entity';
+import { UserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { ObjectIdPipe } from '@mediashare/shared';
 
 @ApiTags('user')
 @Controller({ path: ['user'] })
@@ -40,10 +42,23 @@ export class UserController {
     return { ...user, playlists, mediaItems };
   }
 
+  @Put()
+  @UserPostResponse()
+  @ApiBody({ type: UpdateUserDto })
+  async update(@GetUserId() userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+    const user = await this.userService.update(userId, updateUserDto);
+    const playlists = await this.playlistService.getPlaylistByUserId({ userId });
+    const mediaItems = await this.mediaItemService.findMediaItemsByUserId(userId);
+
+    return { ...user, playlists, mediaItems };
+  }
+
   @Post('logout')
   @UseGuards(JwtAuthGuard)
   logout(@Req() req: Request, @Res() res: Response) {
     req.logout();
+    res.setHeader('Authorization', '');
+    res.setHeader('Id', '');
     return res.status(HttpStatus.OK).send();
   }
 
@@ -51,8 +66,8 @@ export class UserController {
   @UseGuards(UserGuard)
   @ApiBearerAuth()
   @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
-  async getUserPlaylists(@GetUser() user: SessionUserInterface, @GetUserId() userId: ObjectId) {
-    const result = await this.playlistService.getPlaylistByUserId({ userId: user._id });
+  async getUserPlaylists(@GetUserId() userId: ObjectId) {
+    const result = await this.playlistService.getPlaylistByUserId({ userId });
     return result;
   }
 
@@ -83,7 +98,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Post('authorize')
-  @ApiResponse({ type: LoginResponseDto, status: 200 })
+  @ApiResponse({ type: UserDto, status: 200, isArray: false })
   @ApiBody({ type: TokenDto })
   async authorize(@Req() req: Request, @Res() res: Response) {
     console.log(req);
@@ -98,7 +113,7 @@ export class UserController {
     if (!user) {
       const newUser = await this.userService.create({
         ...valid,
-        imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
+        imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg'
       });
       return res.send(newUser);
     }

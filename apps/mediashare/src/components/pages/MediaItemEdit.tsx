@@ -41,9 +41,7 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
 
   const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
   const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
-  const mediaSrc =
-    useAppSelector((state) => state.mediaItem.getMediaItem) ||
-    'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg';
+  const mediaSrc = useAppSelector((state) => state.mediaItem.getMediaItem);
 
   const [title, setTitle] = useState(mediaItem?.title);
   const [description, setDescription] = useState(mediaItem?.description);
@@ -99,9 +97,10 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
         <MediaCard
           title={title}
           description={description}
-          mediaSrc={mediaItemSrc}
+          mediaSrc={mediaItem.uri}
           category={category}
           categoryOptions={options}
+          thumbnail={mediaItem.thumbnail}
           onCategoryChange={(e: any) => {
             setCategory(e);
           }}

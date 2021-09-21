@@ -1,26 +1,28 @@
 import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 
 import { ActionsFactory } from '../../core/factory';
-import { LoginResponseDto } from '../../../api/models/login-response-dto';
-import { LoginDto } from '../../../api/models/login-dto';
 import { apis } from '../../apis';
-import { loadStateAction } from '../../../boot/configureStore';
-import * as SecureStore from 'expo-secure-store';
-import { getKeyPair, setKeyPair } from './keypair-store';
-import { UserControllerAuthorizeRequest } from '../../../rxjs-api/apis/UserApi';
+import { setKeyPair } from './keypair-store';
 import { TokenDto } from '../../../rxjs-api/models/TokenDto';
-
+import { UpdateUserDto, UserDto } from '../../../rxjs-api';
+import * as R from 'remeda';
+import { signOut } from './auth';
 export const USER_STATE_KEY = 'user';
 
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
-const USER_ACTIONS = ['LOGIN', 'LOGOUT', 'UPDATE_ACCOUNT', 'DELETE_ACCOUNT', 'VALIDATE'] as const;
-const initialState: LoginResponseDto = {
+const USER_ACTIONS = ['LOGIN', 'LOGOUT', 'UPDATE_ACCOUNT', 'DELETE_ACCOUNT', 'VALIDATE', 'LOAD_USER'] as const;
+const initialState: Pick<UserDto, 'username' | 'firstName' | 'lastName' | '_id' | 'phoneNumber' | 'imageSrc' | 'email'> = {
   username: '',
   firstName: '',
   lastName: '',
   _id: '',
-  accessToken: '',
+
+  phoneNumber: '',
+  imageSrc: '',
+  email: '',
 };
+
+const pickUser = (user: UserDto) => R.pick(user, ['username', 'email', '_id', 'firstName', 'lastName', 'phoneNumber', 'imageSrc']);
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 // const login = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => await apis.user.userControllerLogin({ loginDto }));
 
@@ -32,46 +34,51 @@ export const loginAction = createAsyncThunk(UserActions.login.type, async (token
   return response;
 });
 
-export const validateTokenAction = createAsyncThunk(UserActions.validate.type, async (token: string) => {
-  const response = await apis.user.userControllerAuthorize({ tokenDto: { token } }).toPromise();
-  return response;
+export const loadUser = createAsyncThunk(UserActions.loadUser.type, async () => {
+  const user = await apis.user.userControllerGetUser().toPromise();
+
+  return user;
 });
 
-export const logoutAction = createAsyncThunk(UserActions.logout.type, async () => {
+export const updateAccount = createAsyncThunk(UserActions.updateAccount.type, async ({ updateUserDto }: { updateUserDto: UpdateUserDto }) => {
+  const user = await apis.user.userControllerUpdate({ updateUserDto }).toPromise();
+  return user;
+});
+
+export const logout = createAsyncThunk(UserActions.logout.type, async () => {
   const response = await apis.user.userControllerLogout().toPromise();
   await setKeyPair('token', '');
+  const signout = await signOut();
+  console.log(signout);
   return response;
 });
 
 const userReducer = createReducer(initialState, (builder) =>
   builder
     .addCase(loginAction.fulfilled, (state, action) => {
-      return action.payload;
+      return pickUser(action.payload);
     })
-    .addCase(loginAction.pending, (state, action) => {
+    .addCase(updateAccount.fulfilled, (state, action) => {
+      return pickUser(action.payload);
+    })
+    .addCase(loadUser.fulfilled, (state, action) => {
+      return pickUser(action.payload);
+    })
+    .addCase(loginAction.pending, (state) => {
       return { ...state };
     })
     .addCase(loginAction.rejected, (state, action) => {
       console.log('error: ', action);
       return { ...state };
     })
-    .addCase(validateTokenAction.fulfilled, (state, action) => {
-      return action.payload;
+
+    .addCase(logout.fulfilled, () => {
+      return initialState;
     })
-    .addCase(validateTokenAction.pending, (state, action) => {
+    .addCase(logout.pending, (state) => {
       return { ...state };
     })
-    .addCase(validateTokenAction.rejected, (state, action) => {
-      console.log('error: ', action);
-      return { ...state };
-    })
-    .addCase(logoutAction.fulfilled, (state, action) => {
-      return { username: '', _id: '', firstName: '', accessToken: '', lastName: '' };
-    })
-    .addCase(logoutAction.pending, (state, action) => {
-      return { ...state };
-    })
-    .addCase(logoutAction.rejected, (state, action) => {
+    .addCase(logout.rejected, (state, action) => {
       console.log('error: ', action);
       return { ...state };
     })

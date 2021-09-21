@@ -21,6 +21,7 @@ import Account from './components/pages/Account';
 import Contacts from './components/pages/Contacts';
 
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
+import AccountEdit from './components/pages/AccountEdit';
 
 const routeConfig = {
   login: {
@@ -132,6 +133,11 @@ const routeConfig = {
     name: 'account',
     component: Account,
     options: { title: 'Account', header: AppScreenHeader },
+  },
+  accountEdit: {
+    name: 'accountEdit',
+    component: AccountEdit,
+    options: { title: 'Update Your Profile', header: AppScreenHeader },
   },
   contacts: {
     name: 'contacts',

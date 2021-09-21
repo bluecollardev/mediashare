@@ -31,8 +31,6 @@ import {
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
-import { LoginResponseDto } from '../models';
-// @ts-ignore
 import { MediaItemDto } from '../models';
 // @ts-ignore
 import { PlaylistResponseDto } from '../models';
@@ -40,6 +38,8 @@ import { PlaylistResponseDto } from '../models';
 import { ShareItem } from '../models';
 // @ts-ignore
 import { TokenDto } from '../models';
+// @ts-ignore
+import { UpdateUserDto } from '../models';
 // @ts-ignore
 import { UserDto } from '../models';
 /**
@@ -263,6 +263,43 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
         options: localVarRequestOptions,
       };
     },
+    /**
+     *
+     * @param {UpdateUserDto} updateUserDto
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    userControllerUpdate: async (updateUserDto: UpdateUserDto, options: any = {}): Promise<RequestArgs> => {
+      // verify required parameter 'updateUserDto' is not null or undefined
+      assertParamExists('userControllerUpdate', 'updateUserDto', updateUserDto);
+      const localVarPath = `/api/user`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+      localVarRequestOptions.data = serializeDataIfNeeded(updateUserDto, localVarRequestOptions, configuration);
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -279,7 +316,7 @@ export const UserApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userControllerAuthorize(tokenDto: TokenDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponseDto>> {
+    async userControllerAuthorize(tokenDto: TokenDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerAuthorize(tokenDto, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -337,6 +374,16 @@ export const UserApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerLogout(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
+    /**
+     *
+     * @param {UpdateUserDto} updateUserDto
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async userControllerUpdate(updateUserDto: UpdateUserDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerUpdate(updateUserDto, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
   };
 };
 
@@ -353,7 +400,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerAuthorize(tokenDto: TokenDto, options?: any): AxiosPromise<LoginResponseDto> {
+    userControllerAuthorize(tokenDto: TokenDto, options?: any): AxiosPromise<UserDto> {
       return localVarFp.userControllerAuthorize(tokenDto, options).then((request) => request(axios, basePath));
     },
     /**
@@ -404,6 +451,15 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
     userControllerLogout(options?: any): AxiosPromise<void> {
       return localVarFp.userControllerLogout(options).then((request) => request(axios, basePath));
     },
+    /**
+     *
+     * @param {UpdateUserDto} updateUserDto
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    userControllerUpdate(updateUserDto: UpdateUserDto, options?: any): AxiosPromise<UserDto> {
+      return localVarFp.userControllerUpdate(updateUserDto, options).then((request) => request(axios, basePath));
+    },
   };
 };
 
@@ -419,6 +475,20 @@ export interface UserApiUserControllerAuthorizeRequest {
    * @memberof UserApiUserControllerAuthorize
    */
   readonly tokenDto: TokenDto;
+}
+
+/**
+ * Request parameters for userControllerUpdate operation in UserApi.
+ * @export
+ * @interface UserApiUserControllerUpdateRequest
+ */
+export interface UserApiUserControllerUpdateRequest {
+  /**
+   *
+   * @type {UpdateUserDto}
+   * @memberof UserApiUserControllerUpdate
+   */
+  readonly updateUserDto: UpdateUserDto;
 }
 
 /**
@@ -510,6 +580,19 @@ export class UserApi extends BaseAPI {
   public userControllerLogout(options?: any) {
     return UserApiFp(this.configuration)
       .userControllerLogout(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @param {UserApiUserControllerUpdateRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UserApi
+   */
+  public userControllerUpdate(requestParameters: UserApiUserControllerUpdateRequest, options?: any) {
+    return UserApiFp(this.configuration)
+      .userControllerUpdate(requestParameters.updateUserDto, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }

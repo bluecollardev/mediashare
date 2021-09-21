@@ -11,7 +11,6 @@ models/create-playlist-dto.ts
 models/create-playlist-item-response-dto.ts
 models/create-playlist-response-dto.ts
 models/index.ts
-models/login-response-dto.ts
 models/media-item-dto.ts
 models/media-item.ts
 models/playlist-item-response-dto.ts

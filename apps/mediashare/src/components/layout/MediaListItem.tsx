@@ -37,17 +37,6 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   const [isChecked, setIsChecked] = useState(checked);
   const DEFAULT_IMAGE = usePreviewImage();
 
-  const [source, setSource] = useState(null);
-
-  useEffect(() => {
-    if (image) {
-      Storage.get(image, { download: false }).then((res: string) => {
-        setSource({ uri: res });
-      });
-    }
-  }, [image]);
-  // TODO: Why is this here, it's not used?
-  useEffect(() => {}, [source]);
   return (
     <List.Item
       title={title}
@@ -66,8 +55,8 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
               color={isChecked ? theme.colors.success : theme.colors.disabled}
             />
             {showThumbnail ? (
-              source ? (
-                <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={source} />
+              image ? (
+                <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={{ uri: image }} />
               ) : (
                 <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={{ uri: DEFAULT_IMAGE }} />
               )
@@ -76,9 +65,9 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
             )}
           </View>
         ) : showThumbnail ? (
-          source ? (
+          image ? (
             <View style={styles.mediaListItem}>
-              <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={source} />
+              <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={{ uri: image }} />
             </View>
           ) : (
             <View style={styles.mediaListItem}>

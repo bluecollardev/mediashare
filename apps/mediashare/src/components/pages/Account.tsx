@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { logoutAction } from '../../state/modules/user';
+import { loadUser, logout } from '../../state/modules/user';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -45,17 +45,20 @@ const renderScene = SceneMap({
 export const Account = ({ navigation }: PageProps) => {
   const onManageContactsClicked = useRouteName(ROUTES.contacts);
   const layout = useWindowDimensions();
-
+  const editProfile = useRouteName(ROUTES.accountEdit);
   const [index, setIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [routes] = React.useState([
     { key: 'first', title: 'First', icon: 'movie' },
     { key: 'second', title: 'Second', icon: 'assignment-ind' },
   ]);
+
+  const user = useAppSelector((state) => state.user);
   useEffect(() => {
     async function loadData() {
       await dispatch(findMediaItems());
       await dispatch(loadUsers());
+      await dispatch(loadUser());
       setIsLoaded(true);
     }
     if (!isLoaded) {
@@ -65,8 +68,6 @@ export const Account = ({ navigation }: PageProps) => {
   }, [isLoaded]);
 
   const _renderTabBar = (props) => {
-    const inputRange = props.navigationState.routes.map((x, i) => i);
-    console.log(props);
     return (
       <View style={styles.tabBar}>
         {props.navigationState.routes.map((route, i) => {
@@ -83,11 +84,11 @@ export const Account = ({ navigation }: PageProps) => {
 
   // const loginRoute = usePageRoute(ROUTES.login);
   const [state, setState] = useState({
-    firstname: 'Lucas',
-    lastname: 'Lopatka',
-    contact: '305-499-2121',
-    company: 'technologycompany.io',
-    profile: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
+    firstname: user.firstName,
+    lastname: user.lastName,
+    contact: user.email,
+    company: user.username,
+    profile: user.imageSrc,
     highlights: [
       {
         thumbnail: 'https://cdn.iconscout.com/icon/premium/png-256-thumb/medical-88-113680.png',
@@ -114,7 +115,7 @@ export const Account = ({ navigation }: PageProps) => {
   });
 
   const onSignoutClicked = () => {
-    dispatch(logoutAction());
+    dispatch(logout());
     // loginRoute();
   };
 
@@ -133,7 +134,9 @@ export const Account = ({ navigation }: PageProps) => {
         contact={state.contact}
       />
       {/* <Highlights highlights={state.highlights} /> */}
-      <Button mode={'outlined'}>Edit Profile</Button>
+      <Button mode={'outlined'} style={{ margin: 15 }} onPress={editProfile}>
+        Edit Profile
+      </Button>
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}

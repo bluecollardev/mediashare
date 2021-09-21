@@ -12,12 +12,14 @@ import { MediaItem } from '../media-item/entities/media-item.entity';
 import { ShareItemModule } from '../../modules/share-item/share-item.module';
 import { JwtDecodeMiddleware } from '../../core/middleware/jwt-decode.middleware';
 import { AuthModule } from '../../modules/auth/auth.module';
+import { AppConfigModule } from '../../modules/app-config.module.ts/app-config.module';
+import { AppConfigService } from '../../modules/app-config.module.ts/app-config.provider';
 
 @Module({
-  imports: [AuthModule, TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]), ShareItemModule],
+  imports: [AuthModule, TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]), ShareItemModule, AppConfigModule],
   controllers: [UserController, UsersController],
-  providers: [PlaylistService, PlaylistItemService, MediaItemService],
-  exports: [],
+  providers: [PlaylistService, PlaylistItemService, MediaItemService, AppConfigService],
+  exports: []
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

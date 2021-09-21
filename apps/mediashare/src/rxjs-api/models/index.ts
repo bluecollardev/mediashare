@@ -2,7 +2,6 @@ export * from './CreateMediaItemDto';
 export * from './CreatePlaylistDto';
 export * from './CreatePlaylistItemResponseDto';
 export * from './CreatePlaylistResponseDto';
-export * from './LoginResponseDto';
 export * from './MediaItem';
 export * from './MediaItemDto';
 export * from './Playlist';

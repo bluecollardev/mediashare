@@ -43,7 +43,7 @@ const PlaylistItemDetail = ({ route }: PageProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isLoaded, uri, mediaId, _id]);
 
-  const { title, description, category, author } = mediaItem || {};
+  const { title, description, category, author, uri: mediaSrc } = mediaItem || {};
 
   useEffect(() => {
     if (!loaded) {
@@ -55,7 +55,7 @@ const PlaylistItemDetail = ({ route }: PageProps) => {
   return (
     <PageContainer>
       <PageContent>
-        <MediaItemCard title={title} description={description} image={mediaItemSrc} showActions={false} category={category} author={author} />
+        <MediaItemCard title={title} description={description} image={mediaSrc} showActions={false} category={category} author={author} />
       </PageContent>
       <FAB.Group
         visible={true}
