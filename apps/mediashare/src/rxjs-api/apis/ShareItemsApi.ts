@@ -19,6 +19,10 @@ export interface ShareItemsControllerFindOneRequest {
   shareId: string;
 }
 
+export interface ShareItemsControllerReadSharedItemRequest {
+  shareId: string;
+}
+
 export interface ShareItemsControllerRemoveRequest {
   shareId: string;
 }
@@ -66,6 +70,25 @@ export class ShareItemsApi extends BaseAPI {
         url: '/api/share-items/{shareId}'.replace('{shareId}', encodeURI(shareId)),
         method: 'GET',
         headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  shareItemsControllerReadSharedItem({ shareId }: ShareItemsControllerReadSharedItemRequest): Observable<ShareItem>;
+  shareItemsControllerReadSharedItem({ shareId }: ShareItemsControllerReadSharedItemRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
+  shareItemsControllerReadSharedItem(
+    { shareId }: ShareItemsControllerReadSharedItemRequest,
+    opts?: OperationOpts
+  ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
+    throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerReadSharedItem');
+
+    return this.request<ShareItem>(
+      {
+        url: '/api/share-items/read/{shareId}'.replace('{shareId}', encodeURI(shareId)),
+        method: 'POST',
       },
       opts?.responseOpts
     );

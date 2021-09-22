@@ -143,36 +143,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
     },
     /**
      *
-     * @param {string} shareId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    usersControllerReadSharedItem: async (shareId: string, options: any = {}): Promise<RequestArgs> => {
-      // verify required parameter 'shareId' is not null or undefined
-      assertParamExists('usersControllerReadSharedItem', 'shareId', shareId);
-      const localVarPath = `/api/users/shared-items/{shareId}`.replace(`{${'shareId'}}`, encodeURIComponent(String(shareId)));
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     *
      * @param {string} userId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -325,16 +295,6 @@ export const UsersApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @param {string} shareId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async usersControllerReadSharedItem(shareId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.usersControllerReadSharedItem(shareId, options);
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-    },
-    /**
-     *
      * @param {string} userId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -411,15 +371,6 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
     },
     /**
      *
-     * @param {string} shareId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    usersControllerReadSharedItem(shareId: string, options?: any): AxiosPromise<UserDto> {
-      return localVarFp.usersControllerReadSharedItem(shareId, options).then((request) => request(axios, basePath));
-    },
-    /**
-     *
      * @param {string} userId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -476,20 +427,6 @@ export interface UsersApiUsersControllerGetPlaylistsRequest {
    * @memberof UsersApiUsersControllerGetPlaylists
    */
   readonly userId: string;
-}
-
-/**
- * Request parameters for usersControllerReadSharedItem operation in UsersApi.
- * @export
- * @interface UsersApiUsersControllerReadSharedItemRequest
- */
-export interface UsersApiUsersControllerReadSharedItemRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof UsersApiUsersControllerReadSharedItem
-   */
-  readonly shareId: string;
 }
 
 /**
@@ -590,19 +527,6 @@ export class UsersApi extends BaseAPI {
   public usersControllerGetPlaylists(requestParameters: UsersApiUsersControllerGetPlaylistsRequest, options?: any) {
     return UsersApiFp(this.configuration)
       .usersControllerGetPlaylists(requestParameters.userId, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   *
-   * @param {UsersApiUsersControllerReadSharedItemRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof UsersApi
-   */
-  public usersControllerReadSharedItem(requestParameters: UsersApiUsersControllerReadSharedItemRequest, options?: any) {
-    return UsersApiFp(this.configuration)
-      .usersControllerReadSharedItem(requestParameters.shareId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

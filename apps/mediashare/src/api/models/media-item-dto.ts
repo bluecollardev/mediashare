@@ -83,7 +83,7 @@ export interface MediaItemDto {
    * @type {string}
    * @memberof MediaItemDto
    */
-  category: MediaItemDtoCategoryEnum;
+  category: string;
   /**
    *
    * @type {string}
@@ -96,14 +96,4 @@ export interface MediaItemDto {
    * @memberof MediaItemDto
    */
   author: string;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum MediaItemDtoCategoryEnum {
-  Strength = 'strength',
-  Flexibility = 'flexibility',
-  Endurance = 'endurance',
 }

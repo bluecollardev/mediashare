@@ -8,6 +8,6 @@ import { AuthModule } from '../../modules/auth/auth.module';
 @Module({
   imports: [TypeOrmModule.forFeature([ViewItem]), AuthModule],
   controllers: [ViewsController],
-  providers: [ViewsService]
+  providers: [ViewsService],
 })
 export class ViewsModule {}

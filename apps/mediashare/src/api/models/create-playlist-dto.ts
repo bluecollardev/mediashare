@@ -41,21 +41,11 @@ export interface CreatePlaylistDto {
    * @type {string}
    * @memberof CreatePlaylistDto
    */
-  category: CreatePlaylistDtoCategoryEnum;
+  category: string;
   /**
    *
    * @type {Array<string>}
    * @memberof CreatePlaylistDto
    */
   mediaIds: Array<string>;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum CreatePlaylistDtoCategoryEnum {
-  Rehab = 'Rehab',
-  Builder = 'Builder',
-  Warmup = 'Warmup',
 }

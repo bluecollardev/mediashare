@@ -109,6 +109,36 @@ export const ShareItemsApiAxiosParamCreator = function (configuration?: Configur
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
+    shareItemsControllerReadSharedItem: async (shareId: string, options: any = {}): Promise<RequestArgs> => {
+      // verify required parameter 'shareId' is not null or undefined
+      assertParamExists('shareItemsControllerReadSharedItem', 'shareId', shareId);
+      const localVarPath = `/api/share-items/read/{shareId}`.replace(`{${'shareId'}}`, encodeURIComponent(String(shareId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @param {string} shareId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
     shareItemsControllerRemove: async (shareId: string, options: any = {}): Promise<RequestArgs> => {
       // verify required parameter 'shareId' is not null or undefined
       assertParamExists('shareItemsControllerRemove', 'shareId', shareId);
@@ -172,6 +202,16 @@ export const ShareItemsApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
+    async shareItemsControllerReadSharedItem(shareId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShareItem>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.shareItemsControllerReadSharedItem(shareId, options);
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+    },
+    /**
+     *
+     * @param {string} shareId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
     async shareItemsControllerRemove(shareId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShareItem>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.shareItemsControllerRemove(shareId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -209,6 +249,15 @@ export const ShareItemsApiFactory = function (configuration?: Configuration, bas
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
+    shareItemsControllerReadSharedItem(shareId: string, options?: any): AxiosPromise<ShareItem> {
+      return localVarFp.shareItemsControllerReadSharedItem(shareId, options).then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @param {string} shareId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
     shareItemsControllerRemove(shareId: string, options?: any): AxiosPromise<ShareItem> {
       return localVarFp.shareItemsControllerRemove(shareId, options).then((request) => request(axios, basePath));
     },
@@ -225,6 +274,20 @@ export interface ShareItemsApiShareItemsControllerFindOneRequest {
    *
    * @type {string}
    * @memberof ShareItemsApiShareItemsControllerFindOne
+   */
+  readonly shareId: string;
+}
+
+/**
+ * Request parameters for shareItemsControllerReadSharedItem operation in ShareItemsApi.
+ * @export
+ * @interface ShareItemsApiShareItemsControllerReadSharedItemRequest
+ */
+export interface ShareItemsApiShareItemsControllerReadSharedItemRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof ShareItemsApiShareItemsControllerReadSharedItem
    */
   readonly shareId: string;
 }
@@ -272,6 +335,19 @@ export class ShareItemsApi extends BaseAPI {
   public shareItemsControllerFindOne(requestParameters: ShareItemsApiShareItemsControllerFindOneRequest, options?: any) {
     return ShareItemsApiFp(this.configuration)
       .shareItemsControllerFindOne(requestParameters.shareId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @param {ShareItemsApiShareItemsControllerReadSharedItemRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ShareItemsApi
+   */
+  public shareItemsControllerReadSharedItem(requestParameters: ShareItemsApiShareItemsControllerReadSharedItemRequest, options?: any) {
+    return ShareItemsApiFp(this.configuration)
+      .shareItemsControllerReadSharedItem(requestParameters.shareId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

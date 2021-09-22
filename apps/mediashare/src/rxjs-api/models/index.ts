@@ -13,3 +13,4 @@ export * from './UpdateMediaItemDto';
 export * from './UpdatePlaylistDto';
 export * from './UpdateUserDto';
 export * from './UserDto';
+export * from './ViewItem';

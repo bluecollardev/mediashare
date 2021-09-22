@@ -83,21 +83,11 @@ export interface UpdateMediaItemDto {
    * @type {string}
    * @memberof UpdateMediaItemDto
    */
-  category?: UpdateMediaItemDtoCategoryEnum;
+  category?: string;
   /**
    *
    * @type {string}
    * @memberof UpdateMediaItemDto
    */
   thumbnail?: string;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum UpdateMediaItemDtoCategoryEnum {
-  Strength = 'strength',
-  Flexibility = 'flexibility',
-  Endurance = 'endurance',
 }

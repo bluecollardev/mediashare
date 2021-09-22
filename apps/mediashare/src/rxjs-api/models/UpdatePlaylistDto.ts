@@ -40,20 +40,10 @@ export interface UpdatePlaylistDto {
    * @type {string}
    * @memberof UpdatePlaylistDto
    */
-  category: UpdatePlaylistDtoCategoryEnum;
+  category: string;
   /**
    * @type {Array<string>}
    * @memberof UpdatePlaylistDto
    */
   mediaIds?: Array<string>;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum UpdatePlaylistDtoCategoryEnum {
-  Rehab = 'Rehab',
-  Builder = 'Builder',
-  Warmup = 'Warmup',
 }

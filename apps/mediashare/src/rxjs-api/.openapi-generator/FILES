@@ -5,6 +5,7 @@ apis/PlaylistsApi.ts
 apis/ShareItemsApi.ts
 apis/UserApi.ts
 apis/UsersApi.ts
+apis/ViewsApi.ts
 apis/index.ts
 index.ts
 models/CreateMediaItemDto.ts
@@ -22,6 +23,7 @@ models/UpdateMediaItemDto.ts
 models/UpdatePlaylistDto.ts
 models/UpdateUserDto.ts
 models/UserDto.ts
+models/ViewItem.ts
 models/index.ts
 runtime.ts
 servers.ts

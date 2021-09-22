@@ -9,6 +9,7 @@ import { CreatePlaylistResponseDto } from '../../../api/models/create-playlist-r
 import { PlaylistResponseDto } from '../../../rxjs-api/models/PlaylistResponseDto';
 import { flattenDeep } from 'remeda';
 import { merge } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 const PLAYLIST_ACTIONS = [
   'GET_USER_PLAYLIST',
@@ -30,10 +31,6 @@ export const clearPlaylistAction = createAction('clearPlaylist');
 export const selectPlaylistAction = createAction<{ isChecked: boolean; plist: PlaylistResponseDto }, typeof playlistsActionTypes.selectPlaylist>(
   playlistsActionTypes.selectPlaylist
 );
-export const getUserPlaylistById = createAsyncThunk(playlistActionTypes.getUserPlaylist, async (id: string, { extra }) => {
-  const response = await apis.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
-  return response;
-});
 
 export const addUserPlaylist = createAsyncThunk(playlistActionTypes.addUserPlaylist, async (playlist: CreatePlaylistDto, { extra }) => {
   const response = await apis.playlists.playlistControllerCreate({ createPlaylistDto: playlist }).toPromise();
@@ -91,6 +88,7 @@ export const updateUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.u
 export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: string, { extra }) => {
   console.log(id);
   const response = await apis.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
+  apis.views.viewsControllerCreatePlaylistView({ playlistId: id }).pipe(take(1)).subscribe();
   return response;
 });
 

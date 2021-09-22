@@ -18,3 +18,4 @@ export * from './services/playlists-api';
 export * from './services/share-items-api';
 export * from './services/user-api';
 export * from './services/users-api';
+export * from './services/views-api';

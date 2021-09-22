@@ -32,11 +32,11 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   aggregateSharedPlaylistItems({ userId }: { userId: ObjectId }) {
     const query = this.repository.aggregate([
       {
-        $match: { where: { userId, playlistId: { $exists: true } } }
+        $match: { where: { userId, playlistId: { $exists: true } } },
       },
       {
-        $lookup: { from: 'playlist_item', localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' }
-      }
+        $lookup: { from: 'playlist_item', localField: 'playlistId', foreignField: 'playlistId', as: 'playlistItems' },
+      },
     ]);
     return query.toArray();
   }
@@ -54,17 +54,17 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
           from: 'user',
           localField: 'createdBy',
           foreignField: '_id',
-          as: 'createdBy'
-        }
+          as: 'createdBy',
+        },
       },
       { $unwind: { path: '$createdBy' } },
       {
         $replaceRoot: {
           newRoot: {
-            $mergeObjects: [{ userId: 0, playlistId: 0, mediaId: 0 }, '$mediaItem', { createdBy: '$createdBy' }]
-          }
-        }
-      }
+            $mergeObjects: [{ userId: 0, playlistId: 0, mediaId: 0 }, '$mediaItem', { createdBy: '$createdBy' }],
+          },
+        },
+      },
     ]);
 
     return query.toArray();
@@ -82,8 +82,8 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
             from: 'playlist',
             localField: 'playlistId',
             foreignField: '_id',
-            as: 'playlist'
-          }
+            as: 'playlist',
+          },
         },
         { $lookup: { from: 'user', localField: 'playlist.createdBy', foreignField: '_id', as: 'playlistAuthor' } },
         { $unwind: '$playlist' },
@@ -105,15 +105,15 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
                   playlistAuthor: '$playlistAuthor.username',
                   playlistAuthorId: '$playlistAuthor._id',
                   read: '$read',
-                  createdAt: '$createdAt'
+                  createdAt: '$createdAt',
                 },
-                '$playlist'
-              ]
-            }
-          }
+                '$playlist',
+              ],
+            },
+          },
         },
 
-        { $lookup: { from: 'media_item', localField: 'mediaIds', foreignField: '_id', as: 'mediaItems' } }
+        { $lookup: { from: 'media_item', localField: 'mediaIds', foreignField: '_id', as: 'mediaItems' } },
       ])
       .toArray();
   }
@@ -126,10 +126,10 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
             from: 'user',
             localField: 'createdBy',
             foreignField: '_id',
-            as: 'createdBy'
-          }
+            as: 'createdBy',
+          },
         },
-        { $unwind: { path: '$createdBy' } }
+        { $unwind: { path: '$createdBy' } },
       ])
       .toArray();
   }
@@ -148,7 +148,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       mediaId: new ObjectId(mediaIdStr),
       createdBy: new ObjectId(createdByStr),
       title,
-      read: false
+      read: false,
     });
 
     return item;
@@ -159,7 +159,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       userId,
       playlistId,
       createdBy,
-      read: false
+      read: false,
     });
   }
 }

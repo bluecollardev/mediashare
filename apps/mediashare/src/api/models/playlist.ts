@@ -77,15 +77,5 @@ export interface Playlist {
    * @type {string}
    * @memberof Playlist
    */
-  category: PlaylistCategoryEnum;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum PlaylistCategoryEnum {
-  Rehab = 'Rehab',
-  Builder = 'Builder',
-  Warmup = 'Warmup',
+  category: string;
 }

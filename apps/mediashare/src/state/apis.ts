@@ -1,4 +1,3 @@
-import { loadStateAction } from '../boot/configureStore';
 import {
   Configuration,
   DefaultApi,
@@ -11,6 +10,7 @@ import {
   ShareItemsApi,
   UserApi,
   UsersApi,
+  ViewsApi,
 } from '../rxjs-api';
 import Config from 'react-native-config';
 
@@ -93,6 +93,7 @@ function apiFactory() {
     playlists: new PlaylistsApi(configuration),
     user: new UserApi(configuration),
     users: new UsersApi(configuration),
+    views: new ViewsApi(configuration),
     configuration,
   };
 }

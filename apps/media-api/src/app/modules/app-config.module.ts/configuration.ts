@@ -24,7 +24,7 @@ export const appValidationSchema = Joi.object({
   DB_PASSWORD: Joi.string().default(''),
   AUTH_PORT: Joi.number().default(4000),
   AUTH_HOST: Joi.string().default('localhost'),
-  AWS_URL: Joi.string().default('')
+  AWS_URL: Joi.string().default(''),
 });
 
 export default registerAs('app', () => ({
@@ -41,5 +41,5 @@ export default registerAs('app', () => ({
   authPort: process.env.AUTH_PORT,
   authHost: process.env.AUTH_HOST,
   awsUrl: process.env.AWS_URL,
-  synchronize: process.env.DB_SYNCHRONIZE
+  synchronize: process.env.DB_SYNCHRONIZE,
 }));

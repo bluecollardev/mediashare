@@ -79,21 +79,11 @@ export interface PlaylistResponseDto {
    * @type {string}
    * @memberof PlaylistResponseDto
    */
-  category: PlaylistResponseDtoCategoryEnum;
+  category: string;
   /**
    *
    * @type {Array<MediaItem>}
    * @memberof PlaylistResponseDto
    */
   mediaItems: Array<MediaItem>;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum PlaylistResponseDtoCategoryEnum {
-  Rehab = 'Rehab',
-  Builder = 'Builder',
-  Warmup = 'Warmup',
 }

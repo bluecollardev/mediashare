@@ -23,10 +23,6 @@ export interface UsersControllerGetPlaylistsRequest {
   userId: string;
 }
 
-export interface UsersControllerReadSharedItemRequest {
-  shareId: string;
-}
-
 export interface UsersControllerRemoveRequest {
   userId: string;
 }
@@ -110,22 +106,6 @@ export class UsersApi extends BaseAPI {
         url: '/api/users/{userId}/playlists'.replace('{userId}', encodeURI(userId)),
         method: 'GET',
         headers,
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
-  usersControllerReadSharedItem({ shareId }: UsersControllerReadSharedItemRequest): Observable<UserDto>;
-  usersControllerReadSharedItem({ shareId }: UsersControllerReadSharedItemRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerReadSharedItem({ shareId }: UsersControllerReadSharedItemRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
-    throwIfNullOrUndefined(shareId, 'shareId', 'usersControllerReadSharedItem');
-
-    return this.request<UserDto>(
-      {
-        url: '/api/users/shared-items/{shareId}'.replace('{shareId}', encodeURI(shareId)),
-        method: 'POST',
       },
       opts?.responseOpts
     );

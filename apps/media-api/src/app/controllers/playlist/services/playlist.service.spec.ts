@@ -37,21 +37,21 @@ describe('PlaylistService', () => {
           ssl: false,
           useUnifiedTopology: true,
           useNewUrlParser: true,
-          logging: true
-        })
+          logging: true,
+        }),
       ],
       providers: [
         {
           provide: getRepositoryToken(Playlist),
-          useClass: MongoRepository
+          useClass: MongoRepository,
         },
         {
           provide: getRepositoryToken(MediaItem),
-          useValue: mediaRepository
+          useValue: mediaRepository,
         },
         { provide: getRepositoryToken(PlaylistItem), useValue: playlistItemRepository },
-        { provide: PinoLogger, useValue: mockLoggerFactory() }
-      ]
+        { provide: PinoLogger, useValue: mockLoggerFactory() },
+      ],
     }).compile();
 
     mediaRepository = getMongoRepository(MediaItem);
@@ -85,7 +85,7 @@ describe('PlaylistService', () => {
 
       const {
         playlistItems,
-        playlist: { _id: playlistId }
+        playlist: { _id: playlistId },
       } = inserted;
 
       const aggregated = await service.getPlaylistById({ playlistId });

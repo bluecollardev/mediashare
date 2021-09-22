@@ -66,7 +66,7 @@ export interface PlaylistItemResponseDto {
    * @type {string}
    * @memberof PlaylistItemResponseDto
    */
-  category: PlaylistItemResponseDtoCategoryEnum;
+  category: string;
   /**
    * @type {string}
    * @memberof PlaylistItemResponseDto
@@ -82,14 +82,4 @@ export interface PlaylistItemResponseDto {
    * @memberof PlaylistItemResponseDto
    */
   playlistItemId: string;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum PlaylistItemResponseDtoCategoryEnum {
-  Strength = 'strength',
-  Flexibility = 'flexibility',
-  Endurance = 'endurance',
 }

@@ -9,7 +9,7 @@ import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './k
 import { getAllMedia } from './media-items';
 import { AwsMediaItem } from './aws-media-item.model';
 import { concat, forkJoin, merge } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { MediaItemDto } from '../../../rxjs-api/models/MediaItemDto';
 import { CreateMediaItemDtoCategoryEnum } from '../../../rxjs-api/models/CreateMediaItemDto';
 
@@ -37,15 +37,13 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
     mediaItem: apis.mediaItems.mediaItemControllerFindOne({ mediaId }).toPromise(),
     src: getStorage(uri),
   }).toPromise();
-
+  apis.views.viewsControllerCreateMediaView({ mediaId }).pipe(take(1)).subscribe();
   return { mediaItem: result.mediaItem as MediaItemDto, src: result.src };
 });
 
 export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {
   const thumb = await uploadThumbnail({ fileUri, key });
-  console.log('🚀 --------------------------------------------------------------');
-  console.log('🚀 ~ file: index.ts ~ line 46 ~ createThumbnail ~ thumb', thumb);
-  console.log('🚀 --------------------------------------------------------------');
+
   return thumb;
 });
 export const addMediaItem = createAsyncThunk(

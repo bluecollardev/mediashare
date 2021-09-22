@@ -83,21 +83,11 @@ export interface MediaItem {
    * @type {string}
    * @memberof MediaItem
    */
-  category: MediaItemCategoryEnum;
+  category: string;
   /**
    *
    * @type {string}
    * @memberof MediaItem
    */
   thumbnail: string;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum MediaItemCategoryEnum {
-  Strength = 'strength',
-  Flexibility = 'flexibility',
-  Endurance = 'endurance',
 }
