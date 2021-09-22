@@ -4,9 +4,11 @@ import { useDispatch } from 'react-redux';
 import { Image } from 'react-native';
 import { Button, CardItem, Icon, Text } from 'native-base';
 import * as DocumentPicker from 'expo-document-picker';
+import Config from 'react-native-config';
 
 import { useAppSelector } from '../../state';
 import { addMediaItem, createThumbnail } from '../../state/modules/media-items';
+import { setError } from '../../state/modules/app-state/';
 
 import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 
@@ -15,11 +17,13 @@ import { useMediaItems } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
-
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
+
 import { minLength } from '../../lib/Validators';
 import { theme } from '../../styles';
+
+const maxUpload = parseInt(Config.MAX_UPLOAD, 10) || 104857600;
 
 export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   const dispatch = useDispatch();
@@ -117,6 +121,10 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   async function getDocument() {
     const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
     if (!document) {
+      return;
+    }
+    if (document.size > maxUpload) {
+      dispatch(setError({ name: 'File too big', message: `Files must be under ${maxUpload / 1024 / 1024} Mb` }));
       return;
     }
     console.log(document);
