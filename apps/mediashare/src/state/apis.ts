@@ -27,9 +27,7 @@ function apiFactory() {
     const cookieMiddleware: Middleware = {
       post: (response: ResponseArgs) => {
         const originalEvent = response.xhr as any;
-        // console.log('🚀 -------------------------------------------------------------------------------');
-        // console.log('🚀 ~ file: apis.ts ~ line 43 ~ middlewareFactory ~ originalEvent', originalEvent);
-        // console.log('🚀 -------------------------------------------------------------------------------');
+
         const cookie = originalEvent.responseHeaders['Set-Cookie'];
         const token = originalEvent.responseHeaders.Authorization;
         const idToken = originalEvent.responseHeaders.Id;

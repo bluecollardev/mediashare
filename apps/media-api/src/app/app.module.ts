@@ -14,6 +14,7 @@ import { ShareItemsModule } from './controllers/share-items/share-items.module';
 import { AppConfigModule } from './modules/app-config.module.ts/app-config.module';
 import { AppConfigService } from './modules/app-config.module.ts/app-config.provider';
 import { JwtModule } from '@nestjs/jwt';
+import { ViewsModule } from './controllers/views/views.module';
 
 @Module({
   imports: [
@@ -55,7 +56,7 @@ import { JwtModule } from '@nestjs/jwt';
     PassportModule.register({
       defaultStrategy: 'jwt'
     }),
-
+    ViewsModule,
     ShareItemsModule
   ],
   controllers: [AppController],

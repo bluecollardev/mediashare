@@ -68,15 +68,19 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
     const filtered = bool ? selected.concat([item._id]) : selected.filter((key) => key !== item._id);
     setSelected(filtered);
   };
+
   const options = [];
+
   for (const value in CreatePlaylistDtoCategoryEnum) {
     options.push(value);
   }
   const list = useAppSelector((state) => state.mediaItems.mediaItems);
+
   const onUpload = (uri: string) => {
     console.log(uri);
     setImageSrc(uri);
   };
+
   useEffect(() => {
     if (!loaded) {
       dispatch(findMediaItems());

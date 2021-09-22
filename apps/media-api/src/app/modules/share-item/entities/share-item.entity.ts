@@ -1,9 +1,8 @@
 import { BcEntity } from '@api';
 import { ApiObjectId, ApiString } from '@mediashare/shared';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, isNotEmpty } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 import { ObjectId } from 'mongodb';
-import { Column, Entity, Index, Check } from 'typeorm';
+import { Column, Entity, Index } from 'typeorm';
 
 @Entity()
 export class ShareItem extends BcEntity {

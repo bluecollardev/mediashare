@@ -8,16 +8,12 @@ import { PlaylistService } from '../playlist/services/playlist.service';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
 
 import { ObjectId } from 'mongodb';
-import { conflictResponse } from '../../core/functors/http-errors.functor';
+
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { BcRolesType, BC_ROLES } from '@core-lib';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
-import { createUserResponseDto } from './dto/create-user-response.dto';
-import { SessionUserInterface } from '../../core/models/auth-user.model';
-import { GetUser } from '../../core/decorators/user.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
-import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.constants';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 
@@ -70,14 +66,4 @@ export class UsersController {
   }
 
   /* shared with others */
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(JwtAuthGuard)
-  @Post('shared-items/:shareId')
-  @ApiParam({ name: 'shareId', type: String, required: true })
-  @ApiResponse({ type: UserDto, status: 200 })
-  async readSharedItem(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {
-    const sharedItem = await this.shareItemService.update(shareId, { read: true });
-
-    return sharedItem;
-  }
 }

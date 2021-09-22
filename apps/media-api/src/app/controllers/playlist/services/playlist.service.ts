@@ -167,7 +167,39 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
           }
         },
         {
+          $lookup: {
+            from: 'share_item',
+            localField: '_id',
+            foreignField: 'playlistId',
+            as: 'shareItems'
+          }
+        },
+
+        {
           $unwind: { path: '$user' }
+        },
+
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: [
+                {
+                  mediaItems: '$mediaItems',
+                  author: '$user.username',
+                  createdBy: '$user._id',
+                  _id: '$_id',
+                  title: '$title',
+                  description: '$description',
+                  createdAt: '$createdAt',
+                  category: '$category',
+                  sharedCount: { $size: '$shareItems' },
+                  imageSrc: '$imageSrc'
+                  // shared: { $count: '$shareItems' }
+                },
+                '$playlist'
+              ]
+            }
+          }
         }
       ])
       .next();

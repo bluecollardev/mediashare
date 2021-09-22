@@ -40,5 +40,6 @@ export default registerAs('app', () => ({
   sessionCollection: process.env.SESSION_DB_COLLECTION,
   authPort: process.env.AUTH_PORT,
   authHost: process.env.AUTH_HOST,
-  awsUrl: process.env.AWS_URL
+  awsUrl: process.env.AWS_URL,
+  synchronize: process.env.DB_SYNCHRONIZE
 }));
