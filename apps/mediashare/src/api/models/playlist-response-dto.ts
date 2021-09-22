@@ -86,4 +86,28 @@ export interface PlaylistResponseDto {
    * @memberof PlaylistResponseDto
    */
   mediaItems: Array<MediaItem>;
+  /**
+   *
+   * @type {string}
+   * @memberof PlaylistResponseDto
+   */
+  author: string;
+  /**
+   *
+   * @type {number}
+   * @memberof PlaylistResponseDto
+   */
+  shareCount: number;
+  /**
+   *
+   * @type {number}
+   * @memberof PlaylistResponseDto
+   */
+  viewCount: number;
+  /**
+   *
+   * @type {number}
+   * @memberof PlaylistResponseDto
+   */
+  likesCount: number;
 }
