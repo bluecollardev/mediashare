@@ -43,7 +43,7 @@ export class MediaItemController {
     const mediaItem: Omit<MediaItem, '_id'> = { ...createMediaItemDto, userId: createdBy, createdBy };
     const s3Prefix = this.configSvc.get('awsUrl');
 
-    return this.mediaItemService.create({ ...mediaItem, uri: s3Prefix + mediaItem.uri, thumbnail: s3Prefix + mediaItem.thumbnail });
+    return this.mediaItemService.create({ ...mediaItem, uri: s3Prefix + mediaItem.uri.replace(/\s/g, '%20'), thumbnail: s3Prefix + mediaItem.thumbnail });
   }
 
   /* TODO: findout what this needs to be */

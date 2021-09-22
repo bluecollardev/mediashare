@@ -18,6 +18,7 @@ import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } fr
 import AppDialog from '../layout/AppDialog';
 
 import { theme } from '../../styles';
+import AppUpload from '../layout/AppUpload';
 
 export interface MediaItemEditContainerProps {
   navigation: any;
@@ -46,7 +47,8 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
   const [category, setCategory] = useState();
   const [showDialog, setShowDialog] = useState(false);
 
-  const [documentUri, setDocumentUri] = useState('');
+  const [documentUri, setDocumentUri] = useState(mediaItem?.uri);
+  const [thumbnail, setThumbnail] = useState(mediaItem?.thumbnail);
 
   const mediaItems = useMediaItems();
 
@@ -61,6 +63,7 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
       category: CreatePlaylistDtoCategoryEnum[category as any],
       description,
       isPlayable: true,
+      thumbnail,
       _id: mediaId,
     };
 
@@ -94,10 +97,11 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
         <MediaCard
           title={title}
           description={description}
-          mediaSrc={mediaItem.uri}
+          mediaSrc={documentUri}
           category={category}
           categoryOptions={options}
-          thumbnail={mediaItem.thumbnail}
+          thumbnail={thumbnail}
+          showThumbnail={true}
           onCategoryChange={(e: any) => {
             setCategory(e);
           }}
@@ -105,26 +109,8 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
           onDescriptionChange={setDescription}
           isEdit={true}
         >
-          <Button
-            icon="cloud-upload"
-            color={theme.colors.primary}
-            dark
-            mode={'contained'}
-            style={{ width: '100%', marginTop: 5, marginBottom: 10 }}
-            onPress={getDocument}
-            compact
-          >
-            Upload Media
-          </Button>
-          {documentUri ? (
-            {
-              /*<Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />*/
-            }
-          ) : (
-            <Button icon="add-a-photo" color={theme.colors.primary} mode={'outlined'} style={{ width: '100%', marginBottom: 10 }} onPress={getDocument} compact>
-              Set Preview Image
-            </Button>
-          )}
+          <AppUpload startLoad={startLoad} endLoad={endLoad} onUpload={setThumbnail} />
+
           <Button
             icon="delete"
             mode="outlined"
