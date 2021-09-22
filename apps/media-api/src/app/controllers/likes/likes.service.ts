@@ -4,8 +4,6 @@ import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { DataService } from '../../core';
 import { ViewItem } from '../views/entities/view-item.entity';
-import { CreateLikeDto } from './dto/create-like.dto';
-import { UpdateLikeDto } from './dto/update-like.dto';
 import { Like } from './entities/like.entity';
 
 @Injectable()
