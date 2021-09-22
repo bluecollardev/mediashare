@@ -15,6 +15,7 @@ import { AppConfigModule } from './modules/app-config.module.ts/app-config.modul
 import { AppConfigService } from './modules/app-config.module.ts/app-config.provider';
 import { JwtModule } from '@nestjs/jwt';
 import { ViewsModule } from './controllers/views/views.module';
+import { LikesModule } from './controllers/likes/likes.module';
 
 @Module({
   imports: [
@@ -34,34 +35,35 @@ import { ViewsModule } from './controllers/views/views.module';
         synchronize: configService.db('synchronize'),
         ssl: configService.db('ssl'),
         useUnifiedTopology: true,
-        useNewUrlParser: true,
+        useNewUrlParser: true
       }),
 
-      inject: [AppConfigService],
+      inject: [AppConfigService]
     }),
-    UserModule,
     LoggerModule.forRoot({
       pinoHttp: {
         prettyPrint: {
           colorize: true,
           levelFirst: true,
-          translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z',
-        },
-      },
+          translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z'
+        }
+      }
     }),
 
+    PassportModule.register({
+      defaultStrategy: 'jwt'
+    }),
+    UserModule,
     MediaItemModule,
     ProfileModule,
     PlaylistModule,
-    PassportModule.register({
-      defaultStrategy: 'jwt',
-    }),
     ViewsModule,
     ShareItemsModule,
+    LikesModule
   ],
   controllers: [AppController],
   providers: [AppService],
-  exports: [],
+  exports: []
 })
 export class AppModule {
   constructor(private appConfigService: AppConfigService) {}

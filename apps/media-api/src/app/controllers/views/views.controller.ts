@@ -1,7 +1,5 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Param } from '@nestjs/common';
 import { ViewsService } from './views.service';
-import { CreateViewDto } from './dto/create-view.dto';
-import { UpdateViewDto } from './dto/update-view.dto';
 import { ViewsPostResponse } from './decorators/views.decorator';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { ObjectIdPipe } from '@mediashare/shared';
@@ -23,7 +21,7 @@ export class ViewsController {
   @Post('mediaItem/:mediaId')
   @ViewsPostResponse()
   @ApiParam({ name: 'mediaId', type: String, required: true })
-  createMediaView(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() createdBy: ObjectId) {
-    return this.viewsService.create({ playlistId, createdBy });
+  createMediaView(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId, @GetUserId() createdBy: ObjectId) {
+    return this.viewsService.create({ mediaId, createdBy });
   }
 }
