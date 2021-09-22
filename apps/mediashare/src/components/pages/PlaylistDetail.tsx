@@ -56,7 +56,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
     clearCheckboxSelection();
   }, []);
 
-  const { description = '', title = '', imageSrc, category, mediaItems = [] } = selectedPlaylist || {};
+  const { description = '', title = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } = selectedPlaylist || {};
 
   const items = mediaItems || [];
   // const author = user?.username;
@@ -81,6 +81,9 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
           showActions={false}
           showThumbnail={true}
           image={imageSrc}
+          likes={likesCount}
+          shares={shareCount}
+          views={viewCount}
           onEditClicked={() => onEditClicked({ playlistId })}
           // onDeleteClicked={onDeleteClicked}
           category={category}
@@ -139,6 +142,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
         description: description,
         category: category as any,
         _id: selectedPlaylist._id,
+        imageSrc,
       })
     );
   }

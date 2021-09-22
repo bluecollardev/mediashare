@@ -13,6 +13,7 @@
  */
 
 export * from './services/default-api';
+export * from './services/likes-api';
 export * from './services/media-items-api';
 export * from './services/playlists-api';
 export * from './services/share-items-api';

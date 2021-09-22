@@ -35,23 +35,23 @@ import { LikesModule } from './controllers/likes/likes.module';
         synchronize: configService.db('synchronize'),
         ssl: configService.db('ssl'),
         useUnifiedTopology: true,
-        useNewUrlParser: true
+        useNewUrlParser: true,
       }),
 
-      inject: [AppConfigService]
+      inject: [AppConfigService],
     }),
     LoggerModule.forRoot({
       pinoHttp: {
         prettyPrint: {
           colorize: true,
           levelFirst: true,
-          translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z'
-        }
-      }
+          translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z',
+        },
+      },
     }),
 
     PassportModule.register({
-      defaultStrategy: 'jwt'
+      defaultStrategy: 'jwt',
     }),
     UserModule,
     MediaItemModule,
@@ -59,11 +59,11 @@ import { LikesModule } from './controllers/likes/likes.module';
     PlaylistModule,
     ViewsModule,
     ShareItemsModule,
-    LikesModule
+    LikesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
-  exports: []
+  exports: [],
 })
 export class AppModule {
   constructor(private appConfigService: AppConfigService) {}

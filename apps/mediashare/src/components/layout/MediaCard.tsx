@@ -25,20 +25,12 @@ export interface MediaListItemProps {
   onDescriptionChange?: (v: string) => void;
   onCategoryChange?: (v: string) => void;
   categoryOptions?: any[];
+  likes?: number;
+  views?: number;
+  shares?: number;
 }
 
-export const SocialButtons = () => {
-  const [views, setViews] = useState(0);
-  const [shares, setShares] = useState(0);
-  const [comments, setComments] = useState(0);
-
-  useEffect(() => {
-    const getRand = () => Math.floor(Math.random() * 10);
-    setViews(getRand());
-    setShares(getRand());
-    setComments(0);
-  }, []);
-
+export const SocialButtons = ({ likes, shares, views }: { likes: number; shares: number; views: number }) => {
   return (
     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
       <View style={{ marginRight: 3 }}>
@@ -52,8 +44,8 @@ export const SocialButtons = () => {
         </Button>
       </View>
       <View style={{}}>
-        <Button icon="comment" mode="text">
-          {comments}
+        <Button icon="favorite" mode="text">
+          {likes}
         </Button>
       </View>
     </View>
@@ -82,6 +74,9 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
     onDescriptionChange = (v: string) => {},
     onCategoryChange = (v: string) => {},
     categoryOptions = [],
+    likes = 0,
+    views = 0,
+    shares = 0,
   } = props;
 
   return isEdit ? (
@@ -145,7 +140,7 @@ export const MediaCard: React.FC<MediaListItemProps> = (props) => {
           <Paragraph style={{ marginBottom: 15 }}>{description}</Paragraph>
           {children}
           <View style={{ marginBottom: 0 }}>
-            <SocialButtons />
+            <SocialButtons likes={likes} shares={shares} views={views} />
           </View>
         </Card.Content>
       )}

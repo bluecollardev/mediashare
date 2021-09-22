@@ -66,11 +66,11 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
           $match: {
             where: {
               $or: R.map(ObjectIds, (id) => ({
-                _id: id
-              }))
-            }
-          }
-        }
+                _id: id,
+              })),
+            },
+          },
+        },
       ])
       .toArray();
   }
@@ -79,9 +79,9 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.repository.find({
       where: {
         $or: R.map(playlistIds, (id) => ({
-          _id: id
-        }))
-      }
+          _id: id,
+        })),
+      },
     });
   }
 
@@ -90,7 +90,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.repository
       .aggregate([
         {
-          $match: { createdBy: userId }
+          $match: { createdBy: userId },
         },
         // // {
         // //   $lookup: {
@@ -109,16 +109,16 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             from: 'media_item',
             localField: 'mediaIds',
             foreignField: '_id',
-            as: 'mediaItems'
-          }
+            as: 'mediaItems',
+          },
         },
         {
           $lookup: {
             from: 'user',
             localField: 'createdBy',
             foreignField: '_id',
-            as: 'user'
-          }
+            as: 'user',
+          },
         },
         // {
         //   $lookup: {
@@ -129,7 +129,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         //   }
         // },
         // { $unwind: { path: '$mediaItems' } },
-        { $unwind: { path: '$user' } }
+        { $unwind: { path: '$user' } },
         // {
         //   $group: {
         //     _id: '$playlist._id',
@@ -147,15 +147,15 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.repository
       .aggregate([
         {
-          $match: { _id: playlistId }
+          $match: { _id: playlistId },
         },
         {
           $lookup: {
             from: 'media_item',
             localField: 'mediaIds',
             foreignField: '_id',
-            as: 'mediaItems'
-          }
+            as: 'mediaItems',
+          },
         },
 
         {
@@ -163,28 +163,36 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             from: 'user',
             localField: 'createdBy',
             foreignField: '_id',
-            as: 'user'
-          }
+            as: 'user',
+          },
         },
         {
           $lookup: {
             from: 'share_item',
             localField: '_id',
             foreignField: 'playlistId',
-            as: 'shareItems'
-          }
+            as: 'shareItems',
+          },
         },
         {
           $lookup: {
             from: 'view_item',
             localField: '_id',
             foreignField: 'playlistId',
-            as: 'viewItems'
-          }
+            as: 'viewItems',
+          },
+        },
+        {
+          $lookup: {
+            from: 'like_item',
+            localField: '_id',
+            foreignField: 'playlistId',
+            as: 'likeItems',
+          },
         },
 
         {
-          $unwind: { path: '$user' }
+          $unwind: { path: '$user' },
         },
 
         {
@@ -192,24 +200,24 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             newRoot: {
               $mergeObjects: [
                 {
-                  mediaItems: '$mediaItems',
-                  author: '$user.username',
-                  createdBy: '$user._id',
                   _id: '$_id',
-                  title: '$title',
-                  description: '$description',
-                  createdAt: '$createdAt',
+                  author: '$user.username',
                   category: '$category',
+                  createdAt: '$createdAt',
+                  createdBy: '$user._id',
+                  description: '$description',
+                  imageSrc: '$imageSrc',
+                  mediaItems: '$mediaItems',
+                  title: '$title',
                   shareCount: { $size: '$shareItems' },
+                  likesCount: { $size: '$likeItems' },
                   viewCount: { $size: '$viewItems' },
-                  imageSrc: '$imageSrc'
                   // shared: { $count: '$shareItems' }
                 },
-                '$playlist'
-              ]
-            }
-          }
-        }
+              ],
+            },
+          },
+        },
       ])
       .next();
   }

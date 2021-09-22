@@ -9,6 +9,7 @@ class PlaylistResponseDto extends Playlist {
   author: string;
   shareCount?: number;
   viewCount?: number;
+  likesCount?: number;
 }
 
 export { PlaylistItemResponseDto, PlaylistResponseDto };

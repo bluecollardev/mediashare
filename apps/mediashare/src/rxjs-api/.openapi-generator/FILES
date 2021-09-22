@@ -1,5 +1,6 @@
 .gitignore
 apis/DefaultApi.ts
+apis/LikesApi.ts
 apis/MediaItemsApi.ts
 apis/PlaylistsApi.ts
 apis/ShareItemsApi.ts
@@ -12,6 +13,7 @@ models/CreateMediaItemDto.ts
 models/CreatePlaylistDto.ts
 models/CreatePlaylistItemResponseDto.ts
 models/CreatePlaylistResponseDto.ts
+models/Like.ts
 models/MediaItem.ts
 models/MediaItemDto.ts
 models/Playlist.ts

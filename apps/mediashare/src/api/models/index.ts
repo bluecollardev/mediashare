@@ -2,6 +2,7 @@ export * from './create-media-item-dto';
 export * from './create-playlist-dto';
 export * from './create-playlist-item-response-dto';
 export * from './create-playlist-response-dto';
+export * from './like';
 export * from './media-item';
 export * from './media-item-dto';
 export * from './playlist';

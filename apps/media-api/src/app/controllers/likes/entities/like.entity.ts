@@ -8,7 +8,7 @@ export class Like extends BcEntity {
   @Column({ name: 'playlistId', unique: false })
   @ApiObjectId()
   @Index('playlistId', { unique: false })
-  playlistId?: ObjectId;
+  playlistId: ObjectId;
 
   @Column({ name: 'mediaId', unique: false })
   @ApiObjectId()

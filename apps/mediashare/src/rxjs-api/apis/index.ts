@@ -1,4 +1,5 @@
 export * from './DefaultApi';
+export * from './LikesApi';
 export * from './MediaItemsApi';
 export * from './PlaylistsApi';
 export * from './ShareItemsApi';
