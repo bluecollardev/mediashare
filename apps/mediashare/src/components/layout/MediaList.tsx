@@ -19,7 +19,15 @@ interface MediaListProps {
   removeItem?: (item?: MediaListType) => void;
 }
 
-export const MediaList = ({ list, onViewDetail, isSelectable, showThumbnail, showActions = true, addItem = () => {}, removeItem = () => {} }: MediaListProps) => {
+export const MediaList = ({
+  list,
+  onViewDetail,
+  isSelectable,
+  showThumbnail,
+  showActions = true,
+  addItem = () => {},
+  removeItem = () => {},
+}: MediaListProps) => {
   return (
     <Content>
       <View>

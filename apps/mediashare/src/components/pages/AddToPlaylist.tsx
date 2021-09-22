@@ -64,6 +64,7 @@ export const AddToPlaylist = ({ route }: PageProps) => {
       title: playlist.title,
       category: category,
       _id: playlistId,
+      imageSrc: playlist.imageSrc,
     };
     await dispatch(updateUserPlaylist(dto));
     setIsLoaded(false);

@@ -41,19 +41,20 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
     <List.Item
       title={title}
       description={() => {
-        return <Caption onPress={onViewDetail}>{description}</Caption>;
+        return <Caption>{description}</Caption>;
+      }}
+      onPress={() => {
+        if (selectable) {
+          setIsChecked(!isChecked);
+          onChecked(!isChecked);
+        } else {
+          onViewDetail();
+        }
       }}
       left={() =>
         selectable ? (
           <View style={styles.mediaListItem}>
-            <Checkbox
-              status={isChecked ? 'checked' : 'indeterminate'}
-              onPress={() => {
-                setIsChecked(!isChecked);
-                onChecked(!isChecked);
-              }}
-              color={isChecked ? theme.colors.success : theme.colors.disabled}
-            />
+            <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.success : theme.colors.disabled} />
             {showThumbnail ? (
               image ? (
                 <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={{ uri: image }} />

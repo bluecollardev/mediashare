@@ -39,8 +39,7 @@ export class MediaItem extends BcEntity {
   uri: string;
 
   @Column()
-  @ApiProperty({ enum: MEDIA_CATEGORY })
-  @IsIn(MEDIA_CATEGORY)
+  @ApiString()
   category: MediaCategoryType;
 
   @Column()

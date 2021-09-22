@@ -149,6 +149,14 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         {
           $match: { _id: playlistId }
         },
+        {
+          $lookup: {
+            from: 'media_item',
+            localField: 'mediaIds',
+            foreignField: '_id',
+            as: 'mediaItems'
+          }
+        },
 
         {
           $lookup: {
@@ -160,14 +168,6 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         },
         {
           $unwind: { path: '$user' }
-        },
-        {
-          $lookup: {
-            from: 'media_item',
-            localField: 'mediaIds',
-            foreignField: '_id',
-            as: 'mediaItems'
-          }
         }
       ])
       .next();
