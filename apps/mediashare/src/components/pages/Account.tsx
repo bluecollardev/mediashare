@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { loadUser, logout } from '../../state/modules/user';
-
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView, FlatList } from 'react-native';
-import { Avatar, Button, Card, List, Title } from 'react-native-paper';
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { Avatar, Button, List, Title } from 'react-native-paper';
+import { PageProps } from '../layout/PageContainer';
+import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-material-cards';
 
 import { useRouteName, useEditMediaItem, useViewProfileById } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
@@ -14,16 +13,12 @@ import { useDispatch } from 'react-redux';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { theme } from '../../styles';
-import { findMediaItems, getMediaItemById } from '../../state/modules/media-items/index';
+import { getMediaItemById } from '../../state/modules/media-items/index';
 import AccountCard from '../layout/AccountCard';
-import { loadUsers } from '../../state/modules/users';
 import { useAppSelector } from '../../state';
 import { MediaListItem } from '../layout/MediaListItem';
 import { shortenText } from '../../utils';
-import { profile } from 'console';
-import { loadProfile } from '../../state/modules/profile';
-import { forkJoin, from, merge } from 'rxjs';
-import { concat } from 'rxjs/operators';
+
 import SharedList from '../../api/models/SharedList';
 import { useProfile } from '../../hooks/useProfile';
 import { User } from '../../rxjs-api';
@@ -71,18 +66,27 @@ const FirstRoute = () => {
   console.log(users);
   const renderItem = function ({ user }) {
     return (
-      <Card style={{ width: '49%' }} onPress={() => viewProfile({ userId: user._id })}>
-        <List.Item
-          left={() => (
-            <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-              <Avatar.Image source={user?.imageSrc ? { uri: user.imageSrc } : undefined} size={30} />
-            </View>
-          )}
-          key={user._id}
-          title={`${user.firstName} ${user.lastName}`}
-          description={`${user.username}`}
-        />
+      <Card>
+        <CardImage source={{ uri: 'http://placehold.it/480x270' }} title="Above all i am here" />
+        <CardTitle title="This is a title" subtitle="This is subtitle" />
+        <CardContent text="Your device will reboot in few seconds once successful, be patient meanwhile" />
+        <CardAction separator={true} inColumn={false}>
+          <CardButton onPress={() => {}} title="Push" color="blue" />
+          <CardButton onPress={() => {}} title="Later" color="blue" />
+        </CardAction>
       </Card>
+      // <Card style={{ width: '49%' }} onPress={() => viewProfile({ userId: user._id })}>
+      //   <List.Item
+      //     left={() => (
+      //       <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+      //         <Avatar.Image source={user?.imageSrc ? { uri: user.imageSrc } : undefined} size={30} />
+      //       </View>
+      //     )}
+      //     key={user._id}
+      //     title={`${user.firstName} ${user.lastName}`}
+      //     description={`${user.username}`}
+      //   />
+      // </Card>
     );
   };
   return (

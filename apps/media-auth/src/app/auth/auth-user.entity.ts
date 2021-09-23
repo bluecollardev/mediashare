@@ -1,14 +1,6 @@
 import { hash } from 'bcrypt';
 import { Min, IsEmail } from 'class-validator';
-import {
-  Entity,
-  Unique,
-  UpdateDateColumn,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  BeforeInsert,
-} from 'typeorm';
+import { Entity, Unique, UpdateDateColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, BeforeInsert } from 'typeorm';
 
 import { bcRoles, BcRolesType, BC_ROLES } from '@core-lib';
 
@@ -44,6 +36,6 @@ export class AuthUser {
     this.password = await hash(this.password, 10);
   }
 
-  @Column('enum', { default: [bcRoles.guest], array: true, enum: BC_ROLES })
+  @Column('enum', { enum: BC_ROLES })
   roles: BcRolesType[];
 }

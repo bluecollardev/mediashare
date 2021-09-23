@@ -3,10 +3,10 @@ import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import { ActionsFactory } from '../../core/factory';
 import { apis } from '../../apis';
 import { setKeyPair } from './keypair-store';
-import { TokenDto } from '../../../rxjs-api/models/TokenDto';
-import { BcRoles, ProfileDto, UpdateUserDto, UserDto } from '../../../rxjs-api';
+import { AuthorizeDto, ProfileDto, UpdateUserDto, UserDto } from '../../../rxjs-api';
 import * as R from 'remeda';
 import { signOut } from './auth';
+import { BcRolesType } from '../../../api/models/bc-roles-type';
 export const USER_STATE_KEY = 'user';
 
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
@@ -19,16 +19,14 @@ const initialState: Pick<UserDto, 'username' | 'firstName' | 'lastName' | '_id' 
   phoneNumber: '',
   imageSrc: '',
   email: '',
-  role: BcRoles.Guest,
+  role: BcRolesType.Guest,
 };
 
 const pickUser = (user: UserDto | ProfileDto) => R.pick(user, ['username', 'email', '_id', 'firstName', 'lastName', 'phoneNumber', 'imageSrc', 'role']);
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 
-export const loginAction = createAsyncThunk(UserActions.login.type, async (tokenDto: TokenDto) => {
-  const response = await apis.user.userControllerAuthorize({ tokenDto }).toPromise();
-
-  // await setKeyPair('token', response.accessToken);
+export const loginAction = createAsyncThunk(UserActions.login.type, async (authorizeDto: AuthorizeDto) => {
+  const response = await apis.user.userControllerAuthorize({ authorizeDto }).toPromise();
 
   return response;
 });

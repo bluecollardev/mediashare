@@ -1,5 +1,5 @@
 export * from './AuthorizeDto';
-export * from './BcRoles';
+export * from './BcRolesType';
 export * from './CreateMediaItemDto';
 export * from './CreatePlaylistDto';
 export * from './CreatePlaylistItemResponseDto';
@@ -16,6 +16,5 @@ export * from './ShareItem';
 export * from './UpdateMediaItemDto';
 export * from './UpdatePlaylistDto';
 export * from './UpdateUserDto';
-export * from './User';
 export * from './UserDto';
 export * from './ViewItem';

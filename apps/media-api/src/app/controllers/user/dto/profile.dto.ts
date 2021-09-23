@@ -24,8 +24,6 @@ class ProfileShareItem {
 
   @ApiProperty({ type: 'boolean' })
   read: boolean;
-  @ApiProperty({ enum: BC_ROLES })
-  role: BcRolesType;
 
   @ApiString()
   title: string;
@@ -46,7 +44,7 @@ export class ProfileDto {
   lastName: string;
   @ApiString()
   email: string;
-  @ApiProperty({ enum: BC_ROLES })
+  @ApiProperty({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType' })
   role: BcRolesType;
   @ApiString()
   phoneNumber: string;

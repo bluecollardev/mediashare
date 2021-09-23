@@ -89,9 +89,6 @@ const LoginComponent = ({ navigation }: PageProps) => {
       console.log('🚀 ~ file: Login.tsx ~ line 131 ~ updateAuthState ~ accessToken', accessToken);
       console.log('🚀 ----------------------------------------------------------------------------');
       const idToken = data.signInUserSession.idToken.jwtToken;
-      console.log('🚀 --------------------------------------------------------------------');
-      console.log('🚀 ~ file: Login.tsx ~ line 135 ~ updateAuthState ~ idToken', idToken);
-      console.log('🚀 --------------------------------------------------------------------');
       // const refreshToken = data.signInUserSession.refreshToken.token;
       dispatch(loginAction({ accessToken, idToken }));
     }

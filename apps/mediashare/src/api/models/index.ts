@@ -1,5 +1,5 @@
 export * from './authorize-dto';
-export * from './bc-roles';
+export * from './bc-roles-type';
 export * from './create-media-item-dto';
 export * from './create-playlist-dto';
 export * from './create-playlist-item-response-dto';
@@ -16,6 +16,5 @@ export * from './share-item';
 export * from './update-media-item-dto';
 export * from './update-playlist-dto';
 export * from './update-user-dto';
-export * from './user';
 export * from './user-dto';
 export * from './view-item';

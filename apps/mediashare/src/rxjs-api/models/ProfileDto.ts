@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { ProfileShareItem } from './';
+import { BcRolesType, ProfileShareItem } from './';
 
 /**
  * @export
@@ -49,10 +49,10 @@ export interface ProfileDto {
    */
   email: string;
   /**
-   * @type {string}
+   * @type {BcRolesType}
    * @memberof ProfileDto
    */
-  role: ProfileDtoRoleEnum;
+  role: BcRolesType;
   /**
    * @type {string}
    * @memberof ProfileDto
@@ -83,14 +83,4 @@ export interface ProfileDto {
    * @memberof ProfileDto
    */
   likesCount: number;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum ProfileDtoRoleEnum {
-  Guest = 'guest',
-  User = 'user',
-  Admin = 'admin',
 }

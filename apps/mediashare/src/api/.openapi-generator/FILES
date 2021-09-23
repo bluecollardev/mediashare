@@ -7,7 +7,7 @@ configuration.ts
 git_push.sh
 index.ts
 models/authorize-dto.ts
-models/bc-roles.ts
+models/bc-roles-type.ts
 models/create-media-item-dto.ts
 models/create-playlist-dto.ts
 models/create-playlist-item-response-dto.ts
@@ -26,7 +26,6 @@ models/update-media-item-dto.ts
 models/update-playlist-dto.ts
 models/update-user-dto.ts
 models/user-dto.ts
-models/user.ts
 models/view-item.ts
 services/default-api.ts
 services/likes-api.ts

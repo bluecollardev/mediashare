@@ -15,5 +15,5 @@ export class User extends BcEntity {
 
   @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
   @Column({ array: true, nullable: true }) sharedMediaItems?: ObjectId[];
-  @Column({ enum: BC_ROLES }) role: BcRolesType;
+  @Column({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType' }) role: BcRolesType;
 }

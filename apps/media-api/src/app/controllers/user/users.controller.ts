@@ -45,7 +45,7 @@ export class UsersController {
     return this.userService.remove(userId);
   }
   @Put(RouteTokens.USER_ID)
-  @UserPostResponse({ type: User })
+  @UserPostResponse({ type: UserDto })
   @ApiBody({ type: UpdateUserDto })
   @ApiParam({ name: 'userId', type: String, required: true })
   update(@Param('userId', new ObjectIdPipe()) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
@@ -61,7 +61,7 @@ export class UsersController {
 
   @Put(':userId/roles')
   @UserPostResponse({ type: UserDto })
-  @ApiBody({ enum: BC_ROLES, isArray: true })
+  @ApiBody({ enum: BC_ROLES })
   setRoles(@Param('userId') id: string, @Body() params: { roles: BcRolesType[] }) {
     const { roles = [] } = params;
     return this.userService.setRoles(id, roles);

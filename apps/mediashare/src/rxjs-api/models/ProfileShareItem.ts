@@ -65,20 +65,5 @@ export interface ProfileShareItem {
    * @type {string}
    * @memberof ProfileShareItem
    */
-  role: ProfileShareItemRoleEnum;
-  /**
-   * @type {string}
-   * @memberof ProfileShareItem
-   */
   title: string;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum ProfileShareItemRoleEnum {
-  Guest = 'guest',
-  User = 'user',
-  Admin = 'admin',
 }

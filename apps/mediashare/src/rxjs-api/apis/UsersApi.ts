@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { PlaylistResponseDto, ProfileDto, UpdateUserDto, User, UserDto } from '../models';
+import { PlaylistResponseDto, ProfileDto, UpdateUserDto, UserDto } from '../models';
 
 export interface UsersControllerFindOneRequest {
   userId: string;
@@ -29,7 +29,7 @@ export interface UsersControllerRemoveRequest {
 
 export interface UsersControllerSetRolesRequest {
   userId: string;
-  requestBody: Array<string>;
+  body: string;
 }
 
 export interface UsersControllerUpdateRequest {
@@ -136,11 +136,11 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerSetRoles({ userId, requestBody }: UsersControllerSetRolesRequest): Observable<UserDto>;
-  usersControllerSetRoles({ userId, requestBody }: UsersControllerSetRolesRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerSetRoles({ userId, requestBody }: UsersControllerSetRolesRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  usersControllerSetRoles({ userId, body }: UsersControllerSetRolesRequest): Observable<UserDto>;
+  usersControllerSetRoles({ userId, body }: UsersControllerSetRolesRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  usersControllerSetRoles({ userId, body }: UsersControllerSetRolesRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerSetRoles');
-    throwIfNullOrUndefined(requestBody, 'requestBody', 'usersControllerSetRoles');
+    throwIfNullOrUndefined(body, 'body', 'usersControllerSetRoles');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ export class UsersApi extends BaseAPI {
         url: '/api/users/{userId}/roles'.replace('{userId}', encodeURI(userId)),
         method: 'PUT',
         headers,
-        body: requestBody,
+        body: body as any,
       },
       opts?.responseOpts
     );
@@ -162,9 +162,9 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest): Observable<User>;
-  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<User>>;
-  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest, opts?: OperationOpts): Observable<User | RawAjaxResponse<User>> {
+  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest): Observable<UserDto>;
+  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerUpdate');
     throwIfNullOrUndefined(updateUserDto, 'updateUserDto', 'usersControllerUpdate');
 
@@ -175,7 +175,7 @@ export class UsersApi extends BaseAPI {
         : undefined),
     };
 
-    return this.request<User>(
+    return this.request<UserDto>(
       {
         url: '/api/users/{userId}'.replace('{userId}', encodeURI(userId)),
         method: 'PUT',
