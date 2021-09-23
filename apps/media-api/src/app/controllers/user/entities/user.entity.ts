@@ -1,10 +1,7 @@
-import { IsEmail, Min } from 'class-validator';
 import { ObjectId } from 'mongodb';
-import { Entity, Column, BeforeInsert, CreateDateColumn, UpdateDateColumn, Unique } from 'typeorm';
-import { BcBaseEntity, BcEntity } from '../../../core';
-import { bcRoles, BcRolesType, BC_ROLES } from '@core-lib';
-import { hash } from 'bcrypt';
-
+import { Entity, Column } from 'typeorm';
+import { BcEntity } from '../../../core';
+export type UserRoleType = 'admin' | 'user';
 @Entity()
 export class User extends BcEntity {
   @Column() username: string;
@@ -18,4 +15,5 @@ export class User extends BcEntity {
 
   @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
   @Column({ array: true, nullable: true }) sharedMediaItems?: ObjectId[];
+  @Column() role: UserRoleType;
 }
