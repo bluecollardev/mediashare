@@ -46,50 +46,67 @@ export class UserService extends DataService<User, MongoRepository<User>> {
       .aggregate([
         {
           $match: {
-            _id: id
-          }
+            _id: id,
+          },
         },
         {
           $lookup: {
             from: 'share_item',
             localField: '_id',
             foreignField: 'userId',
-            as: 'shareItems'
-          }
+            as: 'shareItems',
+          },
+        },
+        {
+          $lookup: {
+            from: 'share_item',
+            localField: '_id',
+            foreignField: 'createdBy',
+            as: 'shares',
+          },
         },
         {
           $unwind: {
             path: '$shareItems',
-            preserveNullAndEmptyArrays: false
-          }
+            preserveNullAndEmptyArrays: false,
+          },
         },
         {
           $lookup: {
             from: 'user',
             localField: 'shareItems.createdBy',
             foreignField: '_id',
-            as: 'author'
-          }
+            as: 'author',
+          },
         },
         {
           $unwind: {
             path: '$author',
-            preserveNullAndEmptyArrays: false
-          }
+            preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $lookup: {
+            from: 'likes',
+            localField: '_id',
+            foreignField: 'createdBy',
+            as: 'likes',
+          },
         },
         {
           $lookup: {
             from: 'playlist',
             localField: 'shareItems.playlistId',
             foreignField: '_id',
-            as: 'playlist'
-          }
+            as: 'playlist',
+          },
         },
+
         {
           $unwind: {
             path: '$playlist',
-            preserveNullAndEmptyArrays: false
-          }
+            preserveNullAndEmptyArrays: false,
+          },
         },
         {
           $replaceRoot: {
@@ -110,15 +127,17 @@ export class UserService extends DataService<User, MongoRepository<User>> {
                   firstName: '$firstName',
                   lastName: '$lastName',
                   email: '$email',
-
+                  sharedCount: { $size: '$shareItems' },
+                  sharesCount: { $size: '$shares' },
+                  likesCount: { $size: '$likes' },
                   role: '$role',
                   phoneNumber: '$phoneNumber',
                   shareItemId: '$shareItems._id',
-                  username: '$username'
-                }
-              ]
-            }
-          }
+                  username: '$username',
+                },
+              ],
+            },
+          },
         },
 
         {
@@ -131,11 +150,14 @@ export class UserService extends DataService<User, MongoRepository<User>> {
             role: { $first: '$role' },
             phoneNumber: { $first: '$phoneNumber' },
             username: { $first: '$username' },
+            sharedCount: '$sharedCount',
+            sharesCount: '$sharesCount',
+            likesCount: '$likesCount',
             sharedItems: {
-              $push: '$$ROOT'
-            }
-          }
-        }
+              $push: '$$ROOT',
+            },
+          },
+        },
       ])
       .next();
   }

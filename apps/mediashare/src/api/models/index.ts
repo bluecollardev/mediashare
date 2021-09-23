@@ -1,3 +1,4 @@
+export * from './authorize-dto';
 export * from './bc-roles';
 export * from './create-media-item-dto';
 export * from './create-playlist-dto';
@@ -12,7 +13,6 @@ export * from './playlist-response-dto';
 export * from './profile-dto';
 export * from './profile-share-item';
 export * from './share-item';
-export * from './token-dto';
 export * from './update-media-item-dto';
 export * from './update-playlist-dto';
 export * from './update-user-dto';

@@ -110,7 +110,7 @@ export class UserController {
       const newUser = await this.userService.create({
         ...valid,
         role: 'user',
-        imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg'
+        imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
       });
       return res.send(newUser);
     }

@@ -20,12 +20,32 @@ export interface ProfileShareItem {
    * @type {string}
    * @memberof ProfileShareItem
    */
-  imageSrc: string;
+  createdAt: string;
+  /**
+   * @type {string}
+   * @memberof ProfileShareItem
+   */
+  authorImage: string;
+  /**
+   * @type {string}
+   * @memberof ProfileShareItem
+   */
+  authorName: string;
   /**
    * @type {string}
    * @memberof ProfileShareItem
    */
   author: string;
+  /**
+   * @type {string}
+   * @memberof ProfileShareItem
+   */
+  authorId: string;
+  /**
+   * @type {string}
+   * @memberof ProfileShareItem
+   */
+  imageSrc: string;
   /**
    * @type {string}
    * @memberof ProfileShareItem
@@ -45,20 +65,20 @@ export interface ProfileShareItem {
    * @type {string}
    * @memberof ProfileShareItem
    */
-  createdAt: string;
+  role: ProfileShareItemRoleEnum;
   /**
    * @type {string}
    * @memberof ProfileShareItem
    */
   title: string;
-  /**
-   * @type {string}
-   * @memberof ProfileShareItem
-   */
-  authorImage: string;
-  /**
-   * @type {string}
-   * @memberof ProfileShareItem
-   */
-  authorName: string;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum ProfileShareItemRoleEnum {
+  Guest = 'guest',
+  User = 'user',
+  Admin = 'admin',
 }

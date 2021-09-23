@@ -31,6 +31,8 @@ import {
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { AuthorizeDto } from '../models';
+// @ts-ignore
 import { MediaItemDto } from '../models';
 // @ts-ignore
 import { PlaylistResponseDto } from '../models';
@@ -38,8 +40,6 @@ import { PlaylistResponseDto } from '../models';
 import { ProfileDto } from '../models';
 // @ts-ignore
 import { ShareItem } from '../models';
-// @ts-ignore
-import { TokenDto } from '../models';
 // @ts-ignore
 import { UpdateUserDto } from '../models';
 // @ts-ignore
@@ -52,13 +52,13 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
   return {
     /**
      *
-     * @param {TokenDto} tokenDto
+     * @param {AuthorizeDto} authorizeDto
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerAuthorize: async (tokenDto: TokenDto, options: any = {}): Promise<RequestArgs> => {
-      // verify required parameter 'tokenDto' is not null or undefined
-      assertParamExists('userControllerAuthorize', 'tokenDto', tokenDto);
+    userControllerAuthorize: async (authorizeDto: AuthorizeDto, options: any = {}): Promise<RequestArgs> => {
+      // verify required parameter 'authorizeDto' is not null or undefined
+      assertParamExists('userControllerAuthorize', 'authorizeDto', authorizeDto);
       const localVarPath = `/api/user/authorize`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -76,7 +76,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
       setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers };
-      localVarRequestOptions.data = serializeDataIfNeeded(tokenDto, localVarRequestOptions, configuration);
+      localVarRequestOptions.data = serializeDataIfNeeded(authorizeDto, localVarRequestOptions, configuration);
 
       return {
         url: toPathString(localVarUrlObj),
@@ -314,12 +314,12 @@ export const UserApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @param {TokenDto} tokenDto
+     * @param {AuthorizeDto} authorizeDto
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userControllerAuthorize(tokenDto: TokenDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerAuthorize(tokenDto, options);
+    async userControllerAuthorize(authorizeDto: AuthorizeDto, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerAuthorize(authorizeDto, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
     /**
@@ -398,12 +398,12 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
   return {
     /**
      *
-     * @param {TokenDto} tokenDto
+     * @param {AuthorizeDto} authorizeDto
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerAuthorize(tokenDto: TokenDto, options?: any): AxiosPromise<UserDto> {
-      return localVarFp.userControllerAuthorize(tokenDto, options).then((request) => request(axios, basePath));
+    userControllerAuthorize(authorizeDto: AuthorizeDto, options?: any): AxiosPromise<UserDto> {
+      return localVarFp.userControllerAuthorize(authorizeDto, options).then((request) => request(axios, basePath));
     },
     /**
      *
@@ -473,10 +473,10 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
 export interface UserApiUserControllerAuthorizeRequest {
   /**
    *
-   * @type {TokenDto}
+   * @type {AuthorizeDto}
    * @memberof UserApiUserControllerAuthorize
    */
-  readonly tokenDto: TokenDto;
+  readonly authorizeDto: AuthorizeDto;
 }
 
 /**
@@ -509,7 +509,7 @@ export class UserApi extends BaseAPI {
    */
   public userControllerAuthorize(requestParameters: UserApiUserControllerAuthorizeRequest, options?: any) {
     return UserApiFp(this.configuration)
-      .userControllerAuthorize(requestParameters.tokenDto, options)
+      .userControllerAuthorize(requestParameters.authorizeDto, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

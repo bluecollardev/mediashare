@@ -13,10 +13,10 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, OperationOpts, RawAjaxResponse } from '../runtime';
-import { MediaItemDto, PlaylistResponseDto, ProfileDto, ShareItem, TokenDto, UpdateUserDto, UserDto } from '../models';
+import { AuthorizeDto, MediaItemDto, PlaylistResponseDto, ProfileDto, ShareItem, UpdateUserDto, UserDto } from '../models';
 
 export interface UserControllerAuthorizeRequest {
-  tokenDto: TokenDto;
+  authorizeDto: AuthorizeDto;
 }
 
 export interface UserControllerUpdateRequest {
@@ -29,10 +29,10 @@ export interface UserControllerUpdateRequest {
 export class UserApi extends BaseAPI {
   /**
    */
-  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest): Observable<UserDto>;
-  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
-    throwIfNullOrUndefined(tokenDto, 'tokenDto', 'userControllerAuthorize');
+  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest): Observable<UserDto>;
+  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+    throwIfNullOrUndefined(authorizeDto, 'authorizeDto', 'userControllerAuthorize');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export class UserApi extends BaseAPI {
         url: '/api/user/authorize',
         method: 'POST',
         headers,
-        body: tokenDto,
+        body: authorizeDto,
       },
       opts?.responseOpts
     );

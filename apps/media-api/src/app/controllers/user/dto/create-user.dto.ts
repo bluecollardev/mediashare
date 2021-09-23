@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { ApiEmail, ApiName, ApiObjectId, ApiPastDate, ApiString } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
-import { LoginDto } from './login.dto';
 import { MediaItemDto } from '../../media-item/dto/media-item.dto';
 import { PlaylistResponseDto } from '../../playlist/dto/playlist-response.dto';
 import { User } from '../entities/user.entity';

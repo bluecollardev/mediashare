@@ -55,4 +55,10 @@ export class ProfileDto {
 
   @ApiProperty({ type: () => ProfileShareItem, isArray: true })
   sharedItems: ProfileShareItem;
+  @ApiProperty({ type: Number })
+  sharedCount: number;
+  @ApiProperty({ type: Number })
+  sharesCount: number;
+  @ApiProperty({ type: Number })
+  likesCount: number;
 }

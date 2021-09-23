@@ -52,7 +52,7 @@ export interface ProfileDto {
    * @type {string}
    * @memberof ProfileDto
    */
-  role: string;
+  role: ProfileDtoRoleEnum;
   /**
    * @type {string}
    * @memberof ProfileDto
@@ -68,4 +68,29 @@ export interface ProfileDto {
    * @memberof ProfileDto
    */
   sharedItems: Array<ProfileShareItem>;
+  /**
+   * @type {number}
+   * @memberof ProfileDto
+   */
+  sharedCount: number;
+  /**
+   * @type {number}
+   * @memberof ProfileDto
+   */
+  sharesCount: number;
+  /**
+   * @type {number}
+   * @memberof ProfileDto
+   */
+  likesCount: number;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum ProfileDtoRoleEnum {
+  Guest = 'guest',
+  User = 'user',
+  Admin = 'admin',
 }

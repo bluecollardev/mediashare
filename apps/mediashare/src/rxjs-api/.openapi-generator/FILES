@@ -9,6 +9,7 @@ apis/UsersApi.ts
 apis/ViewsApi.ts
 apis/index.ts
 index.ts
+models/AuthorizeDto.ts
 models/BcRoles.ts
 models/CreateMediaItemDto.ts
 models/CreatePlaylistDto.ts
@@ -23,7 +24,6 @@ models/PlaylistResponseDto.ts
 models/ProfileDto.ts
 models/ProfileShareItem.ts
 models/ShareItem.ts
-models/TokenDto.ts
 models/UpdateMediaItemDto.ts
 models/UpdatePlaylistDto.ts
 models/UpdateUserDto.ts

@@ -18,7 +18,6 @@ import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.c
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 import { ProfileDto } from './dto/profile.dto';
 import { UserGuard } from '../../modules/auth/guards/user.guard';
-import { GetUserId } from '../../core/decorators/user.decorator';
 
 @ApiTags('users')
 @Controller('users')

@@ -1,3 +1,4 @@
+export * from './AuthorizeDto';
 export * from './BcRoles';
 export * from './CreateMediaItemDto';
 export * from './CreatePlaylistDto';
@@ -12,7 +13,6 @@ export * from './PlaylistResponseDto';
 export * from './ProfileDto';
 export * from './ProfileShareItem';
 export * from './ShareItem';
-export * from './TokenDto';
 export * from './UpdateMediaItemDto';
 export * from './UpdatePlaylistDto';
 export * from './UpdateUserDto';
