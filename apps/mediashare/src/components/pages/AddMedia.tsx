@@ -123,7 +123,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
     if (!document) {
       return;
     }
-    if (document.size > maxUpload) {
+    if (!document || document.size > maxUpload) {
       dispatch(setError({ name: 'File too big', message: `Files must be under ${maxUpload / 1024 / 1024} Mb` }));
       return;
     }

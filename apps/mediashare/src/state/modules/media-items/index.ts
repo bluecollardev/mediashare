@@ -98,13 +98,23 @@ export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMedia
 
 export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ items }: { items: AwsMediaItem[] }) => {
   // const promises = ;
-  const copy = items.map((item) => copyStorage(item.key));
-  const thumbnailPromises = items.map((item) =>
-    from(VideoThumbnails.getThumbnailAsync(s3Url + item.key, { time: 100 })).pipe(
+  console.log(items);
+
+  const createThumbnailFactory = (item: CreateMediaItemDto) =>
+    from(VideoThumbnails.getThumbnailAsync(s3Url + mediaRoot + videoRoot + item.title.replace(/\s/g, '%20'), { time: 100 })).pipe(
+      tap((res) => {
+        console.log(item.key);
+        console.log(res);
+      }),
       switchMap((thumbnail) => from(fetchMedia(thumbnail.uri))),
-      switchMap((file) => from(putToS3({ key: mediaRoot + thumbnailRoot + item.key, file, options: { contentType: 'image/jpeg' } })).toPromise())
-    )
-  );
+      tap((res) => {
+        console.log(res);
+      }),
+
+      switchMap((file) => from(putToS3({ key: mediaRoot + videoRoot + item.title, file, options: { contentType: 'image/jpeg' } })))
+    );
+  const copy = items.map((item) => copyStorage(item.key));
+
   const dtos: CreateMediaItemDto[] = items.map((item) => ({
     description: `${item.size} - ${item.lastModified}`,
     title: item.key,
@@ -118,11 +128,18 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
     summary: '',
   }));
 
-  const dtoPromises = dtos.map((dto) => apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto: dto }));
-  const save = merge(...dtoPromises).pipe(tap((res) => console.log(res)));
-  const deleted = items.map((item) => deleteStorage(mediaRoot + uploadRoot + item.key));
+  const dtoPromises = dtos.map((dto) =>
+    from(copyStorage(dto.title)).pipe(
+      switchMap(() => createThumbnailFactory(dto)),
 
-  const result = await concat(thumbnailPromises, copy, save, deleted).toPromise();
+      switchMap(() => deleteStorage(dto.title)),
+      switchMap((_) => apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto: dto }))
+    )
+  );
+  // const save = merge(...dtoPromises).pipe(tap((res) => console.log(res)));
+  // const deleted = items.map((item) => deleteStorage(mediaRoot + uploadRoot + item.key));
+  // await Promise.all(thumbnailPromises);
+  const result = await merge(...dtoPromises).toPromise();
   return result;
 });
 
