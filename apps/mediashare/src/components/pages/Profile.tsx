@@ -27,7 +27,7 @@ function Profile({ onDataLoaded }: ProfileProps) {
   console.log('🚀 ---------------------------------------------------------------');
   const profile = useAppSelector((state) => state.profile.entity);
   const accountEdit = useRouteWithParams(ROUTES.accountEdit);
-  const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [] } = profile || {};
+  const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
 
   const playlist = useViewPlaylistById();
 
@@ -58,9 +58,9 @@ function Profile({ onDataLoaded }: ProfileProps) {
         email={email}
         phoneNumber={phoneNumber}
         image={imageSrc}
-        likes={profile.likesCount}
-        shares={profile.sharesCount}
-        shared={profile.sharedCount}
+        likes={likesCount}
+        shares={sharesCount}
+        shared={sharedCount}
       />
       {isAdmin && (
         <Button mode={'outlined'} style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
