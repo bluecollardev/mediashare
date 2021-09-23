@@ -79,8 +79,8 @@ const AccountNavigation = () => {
     <AccountStackNavigator.Navigator>
       <AccountStackNavigator.Screen {...routeConfig.account} />
       <AccountStackNavigator.Screen {...routeConfig.contacts} />
-      <AccountStackNavigator.Screen {...routeConfig.accountEdit} />
-      <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} />
+      <AccountStackNavigator.Screen {...routeConfig.accountEdit}  />
+      <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit}  />
     </AccountStackNavigator.Navigator>
   );
 };

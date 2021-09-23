@@ -16,7 +16,7 @@ target 'MediashareTechnology' do
 
   pod 'RNAWSCognito', :path => '../node_modules/amazon-cognito-identity-js'
 
-  pod 'react-native-create-thumbnail', :path => '../node_modules/react-native-create-thumbnail'
+
 
   target 'MediashareTechnologyTests' do
     inherit! :complete

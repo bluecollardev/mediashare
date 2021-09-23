@@ -4,14 +4,18 @@ import { makeEnum } from '../../core/factory';
 
 import { apis, ApiService } from '../../apis';
 import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
-import { copyStorage, deleteStorage, getStorage, listStorage, sanitizeFoldername, uploadMedia, uploadThumbnail } from './storage';
+import { copyStorage, deleteStorage, fetchMedia, getStorage, listStorage, sanitizeFoldername, uploadMedia, uploadThumbnail, putToS3 } from './storage';
 import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './key-factory';
 import { getAllMedia } from './media-items';
 import { AwsMediaItem } from './aws-media-item.model';
-import { concat, forkJoin, merge } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { concat, forkJoin, from, merge } from 'rxjs';
+import { switchMap, take, tap } from 'rxjs/operators';
 import { MediaItemDto } from '../../../rxjs-api/models/MediaItemDto';
 import { CreateMediaItemDtoCategoryEnum } from '../../../rxjs-api/models/CreateMediaItemDto';
+import * as VideoThumbnails from 'expo-video-thumbnails';
+import Config from 'react-native-config';
+
+const s3Url = Config.AWS_URL;
 
 const MEDIA_ITEMS_ACTIONS = ['FIND_MEDIA_ITEMS'] as const;
 const MEDIA_ITEM_ACTIONS = [
@@ -26,7 +30,6 @@ const MEDIA_ITEM_ACTIONS = [
 ] as const;
 export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
 export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
-
 export const selectMediaItem = createAction<MediaItemDto, 'selectMediaItem'>('selectMediaItem');
 export const toggleMediaItem = createAction<number, 'selectMediaItem'>('selectMediaItem');
 export const clearMediaItemSelection = createAction('clearMediaItems');
@@ -53,7 +56,7 @@ export const addMediaItem = createAsyncThunk(
     try {
       const options = { description: dto.description, summary: dto.summary, contentType: 'video/mp4' };
 
-      const { video, thumb } = await uploadMedia({ fileUri, key: title, options });
+      const { video } = await uploadMedia({ fileUri, key: title, options });
       if (!video) {
         throw new Error('no response in add media  item');
       }
@@ -96,7 +99,12 @@ export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMedia
 export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ items }: { items: AwsMediaItem[] }) => {
   // const promises = ;
   const copy = items.map((item) => copyStorage(item.key));
-
+  const thumbnailPromises = items.map((item) =>
+    from(VideoThumbnails.getThumbnailAsync(s3Url + item.key, { time: 100 })).pipe(
+      switchMap((thumbnail) => from(fetchMedia(thumbnail.uri))),
+      switchMap((file) => from(putToS3({ key: mediaRoot + thumbnailRoot + item.key, file, options: { contentType: 'image/jpeg' } })).toPromise())
+    )
+  );
   const dtos: CreateMediaItemDto[] = items.map((item) => ({
     description: `${item.size} - ${item.lastModified}`,
     title: item.key,
@@ -114,7 +122,7 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
   const save = merge(...dtoPromises).pipe(tap((res) => console.log(res)));
   const deleted = items.map((item) => deleteStorage(mediaRoot + uploadRoot + item.key));
 
-  const result = await concat(copy, save, deleted).toPromise();
+  const result = await concat(thumbnailPromises, copy, save, deleted).toPromise();
   return result;
 });
 

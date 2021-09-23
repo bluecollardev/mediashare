@@ -24,7 +24,7 @@ const initialState: Pick<UserDto, 'username' | 'firstName' | 'lastName' | '_id' 
 
 const pickUser = (user: UserDto) => R.pick(user, ['username', 'email', '_id', 'firstName', 'lastName', 'phoneNumber', 'imageSrc', 'mediaItems']);
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
-// const login = createAsyncThunk(UserActions.login.type, async (loginDto: LoginDto) => await apis.user.userControllerLogin({ loginDto }));
+
 
 export const loginAction = createAsyncThunk(UserActions.login.type, async (tokenDto: TokenDto) => {
   const response = await apis.user.userControllerAuthorize({ tokenDto }).toPromise();

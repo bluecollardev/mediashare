@@ -5834,6 +5834,13 @@ expo-secure-store@^10.2.0:
   resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-10.2.0.tgz#561dfea4d6b4d05a738643d80a15403ebe0e515d"
   integrity sha512-yNahMY3qzEotAYdsE02ps4yGfDay2twasHfsI/7gJB9SrwXYFx5bJuCDk8uTo8jsm6psvDjO+9VMM2DSPHik2A==
 
+expo-video-thumbnails@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/expo-video-thumbnails/-/expo-video-thumbnails-5.2.1.tgz#d7f9853117671a09acc24e70df84b6c7c3e38114"
+  integrity sha512-0ttnCbQJrhqs0sFLHjIXb7wZ/z4hfT6GGkmfWOoNiNYcgY9mShASv5domn82llz8/S4lLE9KpNUl9rrt90JsJg==
+  dependencies:
+    expo-modules-core "~0.2.0"
+
 express@^4.13.3:
   version "4.17.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
@@ -9447,11 +9454,6 @@ react-native-config@^1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.4.4.tgz#e0e10802d1e61ef051040c84dfd19f85a5984620"
   integrity sha512-bu47sJHn/HrB7COAWBI8DieAhrbFLINHFE2HBCcVkDu0Y5ScrMs6vL+jhIm+pMSgxouseLhXG8h7xYYpxE38PA==
-
-react-native-create-thumbnail@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/react-native-create-thumbnail/-/react-native-create-thumbnail-1.4.1.tgz#bd5d6c23a73373602b6795901ac3f78ea4ad8a53"
-  integrity sha512-JcxVsoA5u53xilWn67AvRVVtqR8Pz21uCSBxwlmqeqByecsPw414eqrnbfD1NUy6CzBVJXYmyq3hljUUV0pGCw==
 
 react-native-drawer@2.5.1:
   version "2.5.1"

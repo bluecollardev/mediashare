@@ -1,5 +1,6 @@
 import { Storage } from 'aws-amplify';
-import { createThumbnail } from 'react-native-create-thumbnail';
+import * as VideoThumbnails from 'expo-video-thumbnails';
+
 import { KeyFactory, KeyFactoryProps, mediaRoot, uploadRoot, videoRoot } from './key-factory';
 
 export interface StorageOptions {
@@ -69,11 +70,11 @@ export async function fetchAndPutToS3({ fileUri, key, options }: { fileUri: stri
 
 export async function uploadThumbnail({ fileUri, key }) {
   const { thumbnailKey } = KeyFactory(key);
-  const item = await createThumbnail({ url: fileUri });
+  const item = await VideoThumbnails.getThumbnailAsync(fileUri);
 
   const thumbnailResponse = (await fetchAndPutToS3({
     key: thumbnailKey,
-    fileUri: item.path,
+    fileUri: item.uri,
     options: { contentType: 'image/jpeg' },
   })) as any;
   const getItem = await getStorage(thumbnailResponse.key);
@@ -86,10 +87,10 @@ export async function uploadThumbnail({ fileUri, key }) {
 export async function uploadMedia({ key, fileUri, options }: { key: string; fileUri: string; options: StorageOptions }) {
   const { videoKey, thumbnailKey } = KeyFactory(key);
 
-  const { path } = await createThumbnail({ url: fileUri });
+  const { uri: thumbUri } = await VideoThumbnails.getThumbnailAsync(fileUri);
   const thumbnailResponse = await fetchAndPutToS3({
     key: thumbnailKey,
-    fileUri: path,
+    fileUri: thumbUri,
     options: { contentType: 'image/jpeg' },
   });
   const videoResponse = await fetchAndPutToS3({ fileUri, key: videoKey, options });
