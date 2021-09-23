@@ -16,7 +16,9 @@ import { thumbnailRoot } from '../../state/modules/media-items/key-factory';
 import { useRouteName } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { ActionButtons } from '../layout/ActionButtons';
-import { getUserById } from '../../state/modules/profile';
+import { getUserById, loadProfile } from '../../state/modules/profile';
+import { from } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 
 const awsUrl = Config.AWS_URL;
 console.log(awsUrl);
@@ -26,23 +28,20 @@ interface AccountEditProps extends PageProps {}
 function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
   const { userId = null } = route.params;
   console.log('🚀 -------------------------------------------------------------------');
-  console.log('🚀 ~ file: AccountEdit.tsx ~ line 28 ~ AccountEdit ~ userId', userId);
+  console.log('🚀 ~ file: AccountEdit.tsx ~ line 29 ~ AccountEdit ~ userId', userId);
   console.log('🚀 -------------------------------------------------------------------');
+
   const dispatch = useDispatch();
   const account = useRouteName(ROUTES.account);
 
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const loadData = async function () {
-      await dispatch(userId ? getUserById({ userId }) : loadUser());
-      setIsLoaded(true);
-    };
     if (!isLoaded) {
-      loadData().then();
+      from(dispatch(loadProfile({ userId: userId }))).subscribe(() => setIsLoaded(true));
     }
-  }, [isLoaded]);
-  const user = useAppSelector((state) => state.user);
+  }, [isLoaded, userId, dispatch]);
+  const user = useAppSelector((state) => state.profile.entity);
   const [state, setState] = useState(user);
 
   const onUpdate = (user: Partial<UserDto>) => {
@@ -73,10 +72,13 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
   const save = async function () {
     const updateUserDto = state;
 
-    await dispatch(updateAccount({ updateUserDto }));
-
-    await dispatch(loadUser());
-    account();
+    from(dispatch(updateAccount({ updateUserDto })))
+      .pipe(
+        switchMap(() => dispatch(loadProfile({ userId }))),
+        switchMap(() => dispatch(loadUser({}))),
+        take(1)
+      )
+      .subscribe(() => account());
   };
   return (
     <PageContainer>

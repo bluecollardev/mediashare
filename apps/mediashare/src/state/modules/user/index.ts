@@ -33,8 +33,8 @@ export const loginAction = createAsyncThunk(UserActions.login.type, async (token
   return response;
 });
 
-export const loadUser = createAsyncThunk(UserActions.loadUser.type, async ({ userId }: { userId: string }) => {
-  const req = userId ? apis.users.usersControllerFindOne({ userId }) : apis.user.userControllerGetUser();
+export const loadUser = createAsyncThunk(UserActions.loadUser.type, async () => {
+  const req = apis.user.userControllerGetUser();
   const user = await req.toPromise();
   return user;
 });

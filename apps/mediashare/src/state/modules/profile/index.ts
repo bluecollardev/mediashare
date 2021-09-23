@@ -10,9 +10,12 @@ const INITIAL_STATE: InitialState = {
   entity: null,
 };
 
-const getUserById = createAsyncThunk('getUserById', async function ({ userId }: { userId: string }) {
-  const user = await apis.users.usersControllerFindOne({ userId }).toPromise();
-  return user;
+const loadProfile = createAsyncThunk('getUserById', async function ({ userId }: { userId?: string }) {
+  console.log('🚀 ------------------------------------------------------------');
+  console.log('🚀 ~ file: index.ts ~ line 14 ~ loadProfile ~ userId', userId);
+  console.log('🚀 ------------------------------------------------------------');
+  const req = userId ? apis.users.usersControllerFindOne({ userId }) : apis.user.userControllerGetUser();
+  return await req.toPromise();
 });
 
 const profileSlice = createSlice({
@@ -20,7 +23,7 @@ const profileSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getUserById.fulfilled, (state, action) => {
+    builder.addCase(loadProfile.fulfilled, (state, action) => {
       return { ...state, entity: action.payload };
     });
   },
@@ -28,4 +31,4 @@ const profileSlice = createSlice({
 
 const { reducer } = profileSlice;
 
-export { reducer, getUserById };
+export { reducer, loadProfile };

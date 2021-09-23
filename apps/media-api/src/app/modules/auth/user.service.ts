@@ -11,6 +11,8 @@ import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
 import { CreateUserDto } from '../../controllers/user/dto/create-user.dto';
 import { compareSync } from 'bcrypt';
 import { AuthService } from './auth.service';
+import { UpdateUserDto } from '../../controllers/user/dto/update-user.dto';
+import * as R from 'remeda';
 
 @Injectable()
 export class UserService extends DataService<User, MongoRepository<User>> {
@@ -35,56 +37,59 @@ export class UserService extends DataService<User, MongoRepository<User>> {
   setRoles(_id: string, roles: BcRolesType[]) {
     return this.client.send({ role: 'auth', cmd: 'setRoles' }, { _id, roles }).toPromise();
   }
+  updateUser({ userId, updateUserDto }: { userId: ObjectId; updateUserDto: UpdateUserDto }) {
+    return this.update(userId, R.omit(updateUserDto, ['role']));
+  }
 
   getUserById(id: ObjectId) {
     return this.repository
       .aggregate([
         {
           $match: {
-            _id: id,
-          },
+            _id: id
+          }
         },
         {
           $lookup: {
             from: 'share_item',
             localField: '_id',
             foreignField: 'userId',
-            as: 'shareItems',
-          },
+            as: 'shareItems'
+          }
         },
         {
           $unwind: {
             path: '$shareItems',
-            preserveNullAndEmptyArrays: false,
-          },
+            preserveNullAndEmptyArrays: false
+          }
         },
         {
           $lookup: {
             from: 'user',
             localField: 'shareItems.createdBy',
             foreignField: '_id',
-            as: 'author',
-          },
+            as: 'author'
+          }
         },
         {
           $unwind: {
             path: '$author',
-            preserveNullAndEmptyArrays: false,
-          },
+            preserveNullAndEmptyArrays: false
+          }
         },
         {
           $lookup: {
             from: 'playlist',
             localField: 'shareItems.playlistId',
             foreignField: '_id',
-            as: 'playlist',
-          },
+            as: 'playlist'
+          }
         },
         {
           $unwind: {
             path: '$playlist',
-            preserveNullAndEmptyArrays: false,
-          },
+            preserveNullAndEmptyArrays: false
+          }
         },
         {
           $replaceRoot: {
@@ -109,11 +114,11 @@ export class UserService extends DataService<User, MongoRepository<User>> {
                   role: '$role',
                   phoneNumber: '$phoneNumber',
                   shareItemId: '$shareItems._id',
-                  username: '$username',
-                },
-              ],
-            },
-          },
+                  username: '$username'
+                }
+              ]
+            }
+          }
         },
 
         {
@@ -127,10 +132,10 @@ export class UserService extends DataService<User, MongoRepository<User>> {
             phoneNumber: { $first: '$phoneNumber' },
             username: { $first: '$username' },
             sharedItems: {
-              $push: '$$ROOT',
-            },
-          },
-        },
+              $push: '$$ROOT'
+            }
+          }
+        }
       ])
       .next();
   }
