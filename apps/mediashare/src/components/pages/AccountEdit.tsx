@@ -16,19 +16,26 @@ import { thumbnailRoot } from '../../state/modules/media-items/key-factory';
 import { useRouteName } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { ActionButtons } from '../layout/ActionButtons';
+import { getUserById } from '../../state/modules/profile';
 
 const awsUrl = Config.AWS_URL;
 console.log(awsUrl);
 
 interface AccountEditProps extends PageProps {}
 
-function AccountEdit({ startLoad, endLoad }: AccountEditProps) {
+function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
+  const { userId = null } = route.params;
+  console.log('🚀 -------------------------------------------------------------------');
+  console.log('🚀 ~ file: AccountEdit.tsx ~ line 28 ~ AccountEdit ~ userId', userId);
+  console.log('🚀 -------------------------------------------------------------------');
   const dispatch = useDispatch();
-  const [isLoaded, setIsLoaded] = useState(false);
   const account = useRouteName(ROUTES.account);
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
     const loadData = async function () {
-      await dispatch(loadUser());
+      await dispatch(userId ? getUserById({ userId }) : loadUser());
       setIsLoaded(true);
     };
     if (!isLoaded) {

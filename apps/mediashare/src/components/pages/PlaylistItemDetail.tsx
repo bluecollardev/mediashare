@@ -16,11 +16,10 @@ const PlaylistItemDetail = ({ route }: PageProps) => {
   const dispatch = useDispatch();
 
   const { mediaId, uri } = route?.params || {};
-  const { mediaItem, loading, loaded } = useAppSelector((state) => state.mediaItem);
+  const { mediaItem, loaded } = useAppSelector((state) => state.mediaItem);
 
   const [isLoaded, setIsLoaded] = useState(loaded);
 
-  const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const { _id } = mediaItem || {};
 
   const onDeleteClicked = () => {};

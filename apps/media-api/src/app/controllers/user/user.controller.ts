@@ -20,6 +20,8 @@ import { User } from './entities/user.entity';
 import { UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ObjectIdPipe } from '@mediashare/shared';
+import { ProfileDto } from './dto/profile.dto';
+import * as R from 'remeda';
 
 @ApiTags('user')
 @Controller({ path: ['user'] })
@@ -32,25 +34,18 @@ export class UserController {
   ) {}
 
   @Get()
-  @UserGetResponse()
-  async getUser(@GetUserId() userId: ObjectId, @GetUser() user: User) {
-    // const { _id = null } = user;
+  @UserGetResponse({ type: ProfileDto })
+  async getUser(@GetUserId() userId: ObjectId) {
+    const user = await this.userService.getUserById(userId);
 
-    const playlists = await this.playlistService.getPlaylistByUserId({ userId });
-    const mediaItems = await this.mediaItemService.findMediaItemsByUserId(userId);
-
-    return { ...user, playlists, mediaItems };
+    return user;
   }
 
   @Put()
   @UserPostResponse()
   @ApiBody({ type: UpdateUserDto })
-  async update(@GetUserId() userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
-    const user = await this.userService.update(userId, updateUserDto);
-    const playlists = await this.playlistService.getPlaylistByUserId({ userId });
-    const mediaItems = await this.mediaItemService.findMediaItemsByUserId(userId);
-
-    return { ...user, playlists, mediaItems };
+  update(@GetUserId() userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(userId, R.omit(updateUserDto, ['role']));
   }
 
   @Post('logout')
@@ -114,7 +109,7 @@ export class UserController {
       const newUser = await this.userService.create({
         ...valid,
         role: 'user',
-        imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
+        imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg'
       });
       return res.send(newUser);
     }

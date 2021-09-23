@@ -17,6 +17,12 @@ class ProfileShareItem {
   read: boolean;
   @ApiString()
   createdAt: string;
+  @ApiString()
+  title: string;
+  @ApiString()
+  authorImage;
+  @ApiString()
+  authorName;
 }
 
 export class ProfileDto {

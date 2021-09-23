@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, HttpStatus, UseGuards, HttpCode, Request } from '@nestjs/common';
 import { CreateUserDto, UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBody, ApiHideProperty, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/services/playlist.service';
@@ -16,6 +16,8 @@ import { UserGetResponse, UserPostResponse } from './decorators/user-response.de
 import { ObjectIdPipe } from '@mediashare/shared';
 import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.constants';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
+import { ProfileDto } from './dto/profile.dto';
+import { UserGuard } from '../../modules/auth/guards/user.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -30,21 +32,15 @@ export class UsersController {
 
   @Get(RouteTokens.USER_ID)
   @ApiParam({ name: 'userId', type: String, required: true })
-  @UserGetResponse()
+  @UserGetResponse({ type: ProfileDto })
   findOne(@Param('userId', new ObjectIdPipe()) userId: ObjectId): Promise<User> {
     return this.userService.getUserById(userId);
   }
 
-  @Put(RouteTokens.USER_ID)
-  @ApiParam({ name: 'userId', type: String, required: true })
-  @UserPostResponse()
-  update(@Param('userId', new ObjectIdPipe()) userId: ObjectId, @Body() updateUserDto: UpdateUserDto): Promise<Partial<User>> {
-    return this.userService.update(userId, updateUserDto);
-  }
-
   @Delete(RouteTokens.USER_ID)
   @ApiParam({ name: 'userId', type: String, required: true })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(UserGuard)
+  @ApiBearerAuth()
   remove(@Param('userId') userId: string): Promise<DeleteResult> {
     return this.userService.remove(userId);
   }

@@ -76,12 +76,13 @@ function MediaNavigation() {
 const AccountStackNavigator = createStackNavigator();
 const AccountNavigation = () => {
   return (
-    <AccountStackNavigator.Navigator initialRouteName={'profile'}>
+    <AccountStackNavigator.Navigator>
+      <AccountStackNavigator.Screen {...routeConfig.profile} />
       <AccountStackNavigator.Screen {...routeConfig.account} />
       <AccountStackNavigator.Screen {...routeConfig.contacts} />
       <AccountStackNavigator.Screen {...routeConfig.accountEdit} />
       <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} />
-      <AccountStackNavigator.Screen {...routeConfig.profile} />
+      <AccountStackNavigator.Screen {...routeConfig.playlistDetail} />
     </AccountStackNavigator.Navigator>
   );
 };

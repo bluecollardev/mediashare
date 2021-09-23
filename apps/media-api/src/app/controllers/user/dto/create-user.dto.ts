@@ -5,7 +5,8 @@ import { ObjectId } from 'mongodb';
 import { LoginDto } from './login.dto';
 import { MediaItemDto } from '../../media-item/dto/media-item.dto';
 import { PlaylistResponseDto } from '../../playlist/dto/playlist-response.dto';
-import { User, UserRoleType } from '../entities/user.entity';
+import { User } from '../entities/user.entity';
+import { BC_ROLES } from '@core-lib';
 
 const uuidExample = '1731ee8a-8f27-53af-805d-2ee2e705f0e2';
 export class CreateUserDto extends LoginDto {
@@ -32,7 +33,7 @@ export class UserDto implements User {
   firstName: string;
   @ApiString()
   lastName: string;
-  @ApiProperty() role: UserRoleType;
+  @ApiProperty({ enum: BC_ROLES, enumName: 'BcRoles', name: 'role' }) role: typeof BC_ROLES[number];
 
   @ApiString()
   email: string;

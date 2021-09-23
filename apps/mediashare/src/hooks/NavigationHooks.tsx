@@ -74,7 +74,7 @@ export function useEditPlaylistById() {
 export function useViewPlaylistById() {
   const nav = useNavigation();
   const dispatch = useDispatch();
-  return async ({ playlistId }) => {
+  return async ({ playlistId }: { playlistId: string }) => {
     await dispatch(getPlaylistById(playlistId));
     nav.navigate(ROUTES.playlistDetail, { playlistId });
   };

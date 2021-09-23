@@ -41,50 +41,50 @@ export class UserService extends DataService<User, MongoRepository<User>> {
       .aggregate([
         {
           $match: {
-            _id: id,
-          },
+            _id: id
+          }
         },
         {
           $lookup: {
             from: 'share_item',
             localField: '_id',
             foreignField: 'userId',
-            as: 'shareItems',
-          },
+            as: 'shareItems'
+          }
         },
         {
           $unwind: {
             path: '$shareItems',
-            preserveNullAndEmptyArrays: false,
-          },
+            preserveNullAndEmptyArrays: false
+          }
         },
         {
           $lookup: {
             from: 'user',
             localField: 'shareItems.createdBy',
             foreignField: '_id',
-            as: 'author',
-          },
+            as: 'author'
+          }
         },
         {
           $unwind: {
             path: '$author',
-            preserveNullAndEmptyArrays: false,
-          },
+            preserveNullAndEmptyArrays: false
+          }
         },
         {
           $lookup: {
             from: 'playlist',
             localField: 'shareItems.playlistId',
             foreignField: '_id',
-            as: 'playlist',
-          },
+            as: 'playlist'
+          }
         },
         {
           $unwind: {
             path: '$playlist',
-            preserveNullAndEmptyArrays: false,
-          },
+            preserveNullAndEmptyArrays: false
+          }
         },
         {
           $replaceRoot: {
@@ -95,22 +95,25 @@ export class UserService extends DataService<User, MongoRepository<User>> {
                   _id: '$shareItems.userId',
                   playlistId: '$playlist._id',
                   createdBy: '$shareItems.createdBy',
-                  read: '$read',
-                  createdAt: '$createdAt',
+                  read: '$shareItems.read',
+                  createdAt: '$shareItems.createdAt',
                   author: '$author.username',
                   authorId: '$author._id',
+                  authorImage: '$author.imageSrc',
+                  authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
                   userImg: '$imageSrc',
                   firstName: '$firstName',
                   lastName: '$lastName',
                   email: '$email',
+
                   role: '$role',
                   phoneNumber: '$phoneNumber',
-                  shareItemId: 'shareItems.shareId',
-                  username: '$username',
-                },
-              ],
-            },
-          },
+                  shareItemId: '$shareItems._id',
+                  username: '$username'
+                }
+              ]
+            }
+          }
         },
 
         {
@@ -124,10 +127,10 @@ export class UserService extends DataService<User, MongoRepository<User>> {
             phoneNumber: { $first: '$phoneNumber' },
             username: { $first: '$username' },
             sharedItems: {
-              $push: '$$ROOT',
-            },
-          },
-        },
+              $push: '$$ROOT'
+            }
+          }
+        }
       ])
       .next();
   }

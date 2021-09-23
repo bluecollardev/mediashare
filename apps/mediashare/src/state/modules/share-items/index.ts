@@ -30,6 +30,7 @@ export const findItemsSharedWithMe = createAsyncThunk(shareItemsActionTypes.find
 export const readShareItem = createAsyncThunk(shareItemsActionTypes.removeShareItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   api.shareItems.shareItemsControllerReadSharedItem({ shareId: id }).subscribe();
+  return {};
 });
 
 export const removeShareItem = createAsyncThunk(shareItemsActionTypes.removeShareItem, async (id: string, { extra }) => {

@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { Entity, Column } from 'typeorm';
 import { BcEntity } from '../../../core';
-export type UserRoleType = 'admin' | 'user';
+import { BC_ROLES } from '@core-lib';
 @Entity()
 export class User extends BcEntity {
   @Column() username: string;
@@ -15,5 +15,5 @@ export class User extends BcEntity {
 
   @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
   @Column({ array: true, nullable: true }) sharedMediaItems?: ObjectId[];
-  @Column() role: UserRoleType;
+  @Column({ enum: BC_ROLES }) role: typeof BC_ROLES[number];
 }
