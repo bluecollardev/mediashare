@@ -37,6 +37,8 @@ import { ProfileDto } from '../models';
 // @ts-ignore
 import { UpdateUserDto } from '../models';
 // @ts-ignore
+import { User } from '../models';
+// @ts-ignore
 import { UserDto } from '../models';
 /**
  * UsersApi - axios parameter creator
@@ -163,6 +165,10 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
       const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options };
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
+
+      // authentication bearer required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
       setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -331,7 +337,7 @@ export const UsersApiFp = function (configuration?: Configuration) {
       userId: string,
       updateUserDto: UpdateUserDto,
       options?: any
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.usersControllerUpdate(userId, updateUserDto, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -397,7 +403,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    usersControllerUpdate(userId: string, updateUserDto: UpdateUserDto, options?: any): AxiosPromise<UserDto> {
+    usersControllerUpdate(userId: string, updateUserDto: UpdateUserDto, options?: any): AxiosPromise<User> {
       return localVarFp.usersControllerUpdate(userId, updateUserDto, options).then((request) => request(axios, basePath));
     },
   };

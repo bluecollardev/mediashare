@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { PlaylistResponseDto, ProfileDto, UpdateUserDto, UserDto } from '../models';
+import { PlaylistResponseDto, ProfileDto, UpdateUserDto, User, UserDto } from '../models';
 
 export interface UsersControllerFindOneRequest {
   userId: string;
@@ -118,10 +118,17 @@ export class UsersApi extends BaseAPI {
   usersControllerRemove({ userId }: UsersControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerRemove');
 
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<void>(
       {
         url: '/api/users/{userId}'.replace('{userId}', encodeURI(userId)),
         method: 'DELETE',
+        headers,
       },
       opts?.responseOpts
     );
@@ -155,9 +162,9 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest): Observable<UserDto>;
-  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest): Observable<User>;
+  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<User>>;
+  usersControllerUpdate({ userId, updateUserDto }: UsersControllerUpdateRequest, opts?: OperationOpts): Observable<User | RawAjaxResponse<User>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerUpdate');
     throwIfNullOrUndefined(updateUserDto, 'updateUserDto', 'usersControllerUpdate');
 
@@ -168,7 +175,7 @@ export class UsersApi extends BaseAPI {
         : undefined),
     };
 
-    return this.request<UserDto>(
+    return this.request<User>(
       {
         url: '/api/users/{userId}'.replace('{userId}', encodeURI(userId)),
         method: 'PUT',

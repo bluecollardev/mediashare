@@ -85,10 +85,17 @@ export class ShareItemsApi extends BaseAPI {
   ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
     throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerReadSharedItem');
 
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<ShareItem>(
       {
         url: '/api/share-items/read/{shareId}'.replace('{shareId}', encodeURI(shareId)),
         method: 'POST',
+        headers,
       },
       opts?.responseOpts
     );

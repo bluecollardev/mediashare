@@ -35,6 +35,8 @@ import { MediaItemDto } from '../models';
 // @ts-ignore
 import { PlaylistResponseDto } from '../models';
 // @ts-ignore
+import { ProfileDto } from '../models';
+// @ts-ignore
 import { ShareItem } from '../models';
 // @ts-ignore
 import { TokenDto } from '../models';
@@ -352,7 +354,7 @@ export const UserApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userControllerGetUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+    async userControllerGetUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileDto>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUser(options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -432,7 +434,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userControllerGetUser(options?: any): AxiosPromise<UserDto> {
+    userControllerGetUser(options?: any): AxiosPromise<ProfileDto> {
       return localVarFp.userControllerGetUser(options).then((request) => request(axios, basePath));
     },
     /**

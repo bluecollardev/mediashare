@@ -27,6 +27,7 @@ models/TokenDto.ts
 models/UpdateMediaItemDto.ts
 models/UpdatePlaylistDto.ts
 models/UpdateUserDto.ts
+models/User.ts
 models/UserDto.ts
 models/ViewItem.ts
 models/index.ts

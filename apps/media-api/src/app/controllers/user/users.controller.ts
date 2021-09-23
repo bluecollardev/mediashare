@@ -18,6 +18,7 @@ import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.c
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 import { ProfileDto } from './dto/profile.dto';
 import { UserGuard } from '../../modules/auth/guards/user.guard';
+import { GetUserId } from '../../core/decorators/user.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -44,7 +45,13 @@ export class UsersController {
   remove(@Param('userId') userId: string): Promise<DeleteResult> {
     return this.userService.remove(userId);
   }
-
+  @Put(RouteTokens.USER_ID)
+  @UserPostResponse({ type: User })
+  @ApiBody({ type: UpdateUserDto })
+  @ApiParam({ name: 'userId', type: String, required: true })
+  update(@GetUserId() userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateUser({ userId, updateUserDto });
+  }
   @Get(':userId/playlists')
   @UserGetResponse({ type: PlaylistResponseDto, isArray: true })
   @ApiParam({ name: 'userId', type: String, required: true })

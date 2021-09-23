@@ -26,6 +26,7 @@ models/update-media-item-dto.ts
 models/update-playlist-dto.ts
 models/update-user-dto.ts
 models/user-dto.ts
+models/user.ts
 models/view-item.ts
 services/default-api.ts
 services/likes-api.ts

@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, OperationOpts, RawAjaxResponse } from '../runtime';
-import { MediaItemDto, PlaylistResponseDto, ShareItem, TokenDto, UpdateUserDto, UserDto } from '../models';
+import { MediaItemDto, PlaylistResponseDto, ProfileDto, ShareItem, TokenDto, UpdateUserDto, UserDto } from '../models';
 
 export interface UserControllerAuthorizeRequest {
   tokenDto: TokenDto;
@@ -114,16 +114,16 @@ export class UserApi extends BaseAPI {
 
   /**
    */
-  userControllerGetUser(): Observable<UserDto>;
-  userControllerGetUser(opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  userControllerGetUser(opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  userControllerGetUser(): Observable<ProfileDto>;
+  userControllerGetUser(opts?: OperationOpts): Observable<RawAjaxResponse<ProfileDto>>;
+  userControllerGetUser(opts?: OperationOpts): Observable<ProfileDto | RawAjaxResponse<ProfileDto>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
     };
 
-    return this.request<UserDto>(
+    return this.request<ProfileDto>(
       {
         url: '/api/user',
         method: 'GET',
