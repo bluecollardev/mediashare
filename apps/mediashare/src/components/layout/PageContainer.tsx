@@ -65,25 +65,23 @@ export function PageContainer({ children }: PageContainerProps) {
   };
   return (
     <SafeAreaView style={themeStyles.pageContainer}>
-      <View>
-        <Portal>
-          <Dialog visible={app.hasError} onDismiss={hideDialog}>
-            <Card.Title
-              title={app.error.name}
-              left={(props) => <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="error" />}
-              // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
-            />
-            <Card.Content>
-              <Text style={{ fontSize: 11 }}>{app.error.message}</Text>
-            </Card.Content>
-            <Dialog.Actions style={{ paddingTop: 0 }}>
-              <Button mode={'text'} dark color={theme.colors.primary} onPress={hideDialog}>
-                Dismiss
-              </Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-      </View>
+      <Portal>
+        <Dialog visible={app.hasError} onDismiss={hideDialog}>
+          <Card.Title
+            title={app.error.name}
+            left={(props) => <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="error" />}
+            // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
+          />
+          <Card.Content>
+            <Text style={{ fontSize: 11 }}>{app.error.message}</Text>
+          </Card.Content>
+          <Dialog.Actions style={{ paddingTop: 0 }}>
+            <Button mode={'text'} dark color={theme.colors.primary} onPress={hideDialog}>
+              Dismiss
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
       {children}
     </SafeAreaView>
   );

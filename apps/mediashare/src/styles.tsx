@@ -4,7 +4,6 @@ import variable from '../src/theme/variables/platform';
 
 const styles: any = StyleSheet.create({
   pageContainer: {
-    margin: 0,
     height: '100%',
   },
   pageContent: {

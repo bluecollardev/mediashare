@@ -1,11 +1,9 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 
 import { View, Text, StyleSheet } from 'react-native';
-import { Paragraph, Caption, IconButton, Card } from 'react-native-paper';
+import { Paragraph, Caption, IconButton, Card, Divider, Menu, Button } from 'react-native-paper';
 import { theme } from '../../styles';
-import FastImage from 'react-native-fast-image';
-import ImagedCardView from 'react-native-imaged-card-view';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 interface ShareItemCardProps {
   date: string;
   title: string;
@@ -16,22 +14,40 @@ interface ShareItemCardProps {
 }
 
 function ShareItemCard({ date, title, onDelete, onView, image, read }: ShareItemCardProps) {
+  const [visible, setVisible] = useState(false);
   return (
-    <Card mode={'outlined'} style={{ borderColor: read ? theme.colors.disabled : theme.colors.error }}>
-      <Card.Title
-        title={title}
-        titleStyle={{ fontSize: 16 }}
-        subtitle={new Date(date).toDateString()}
-        right={() => (
-          <View style={styles.buttonContainer}>
-            <IconButton icon="delete-outline" color={theme.colors.primaryText} size={20} onPress={onDelete} />
-            <IconButton icon="play-circle-filled" color={theme.colors.primaryText} size={20} onPress={onView} />
-          </View>
-        )}
-      >
-        {/* </View> */}
-      </Card.Title>
-    </Card>
+    <View>
+      <Card mode={'elevated'} onPress={() => setVisible(!visible)}>
+        <Card.Title
+          title={title}
+          left={() => <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />}
+          titleStyle={{ fontSize: 16 }}
+          subtitle={new Date(date).toDateString()}
+          right={() => (
+            // <View style={styles.buttonContainer}>
+            //   <IconButton icon="delete-outline" color={theme.colors.primaryText} size={20} onPress={onDelete} />
+            //   <IconButton icon="play-circle-filled" color={theme.colors.primaryText} size={20} onPress={onView} />
+            // </View>
+            <Menu
+              visible={visible}
+              onDismiss={() => setVisible(false)}
+              anchor={
+                <IconButton icon={'more-vert'} onPress={() => setVisible(!visible)}>
+                  Show menu
+                </IconButton>
+              }
+            >
+              <Menu.Item icon={'play-circle-filled'} onPress={onView} title="Watch" />
+              <Divider />
+              <Menu.Item icon={'delete'} onPress={onDelete} title="Delete" />
+            </Menu>
+          )}
+        >
+          {/* </View> */}
+        </Card.Title>
+      </Card>
+      <Divider />
+    </View>
   );
 }
 

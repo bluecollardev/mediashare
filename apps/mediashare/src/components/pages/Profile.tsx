@@ -1,4 +1,3 @@
-import { Card } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { SectionList, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
@@ -7,11 +6,16 @@ import { useAppSelector } from '../../state';
 import { getUserById } from '../../state/modules/profile';
 import { LoadingSpinnerProps, withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import AccountCard from '../layout/AccountCard';
-import { Subheading, Title, Paragraph, Caption, Colors, IconButton, Chip, List, Banner } from 'react-native-paper';
+import { Subheading, Title, Paragraph, Caption, Colors, IconButton, Chip, List, Banner, Appbar, Card, Headline } from 'react-native-paper';
 import { theme } from '../../styles';
 import * as R from 'remeda';
 import ShareItemCard from '../layout/ShareItemCard';
 import { ProfileShareItem } from '../../api/models/profile-share-item';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import LabelledElement from '../layout/LabelledElement';
+import { sectionHeaderContent } from 'aws-amplify';
+import { usePlaylists, useViewPlaylistById } from '../../hooks/NavigationHooks';
+import { removeShareItem } from '../../state/modules/share-items/index';
 interface ProfileProps extends LoadingSpinnerProps {}
 
 function Profile({ onDataLoaded }: ProfileProps) {
@@ -22,9 +26,15 @@ function Profile({ onDataLoaded }: ProfileProps) {
   const profile = useAppSelector((state) => state.profile.entity);
   const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [] } = profile || {};
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
-  const data = R.map(R.keys(mappedSharedItems), (key) => ({ title: mappedSharedItems[key][0].authorName, data: mappedSharedItems[key] }));
-  const onDelete = function (itemId: string) {
+  const data = R.map(R.keys(mappedSharedItems), (key) => ({
+    title: `${mappedSharedItems[key][0].authorName}`,
+    count: mappedSharedItems[key].length,
+    data: mappedSharedItems[key],
+  }));
+  const onDelete = async function (itemId: string) {
     console.log(itemId);
+    const res = await dispatch(removeShareItem(itemId));
+    setLoaded(false);
   };
   useEffect(() => {
     const loadData = async function () {
@@ -33,35 +43,37 @@ function Profile({ onDataLoaded }: ProfileProps) {
     };
     from(loadData()).subscribe(onDataLoaded);
   }, [loaded, dispatch, onDataLoaded]);
+  const playlist = useViewPlaylistById();
 
   return (
     <View style={styles.container}>
       <AccountCard fullName={`${firstName} ${lastName}`} email={email} phoneNumber={phoneNumber} image={imageSrc} likes={0} shares={0} shared={0} />
-
-      <SectionList
-        sections={data}
-        ListHeaderComponent={() => (
-          <Banner visible={true} actions={[]} style={{ backgroundColor: theme.colors.primary }}>
-            My Share Items
-          </Banner>
-        )}
-        keyExtractor={(item, index) => item.shareItemId}
-        renderItem={({ item }) => {
-          console.log(item);
-          return (
-            <View style={{ marginBottom: 15 }}>
-              <ShareItemCard
-                title={item.title}
-                date={item.createdAt}
-                read={item.read}
-                image={item.imageSrc}
-                onDelete={() => onDelete(item.shareItemId)}
-                onView={() => console.log(item)}
-              />
-            </View>
-          );
-        }}
-      />
+      <List.Section>
+        <SectionList
+          sections={data}
+          renderSectionHeader={({ section }) => (
+            <Card mode={'outlined'} style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}>
+              <Card.Title title={section.title} subtitle={`${section.count.toString()} items`} />
+            </Card>
+          )}
+          keyExtractor={(item, index) => item.shareItemId}
+          renderItem={({ item }) => {
+            console.log(item);
+            return (
+              <View style={{}}>
+                <ShareItemCard
+                  title={item.title}
+                  date={item.createdAt}
+                  read={item.read}
+                  image={item.imageSrc}
+                  onDelete={() => onDelete(item.shareItemId)}
+                  onView={() => playlist({ playlistId: item.playlistId })}
+                />
+              </View>
+            );
+          }}
+        />
+      </List.Section>
 
       {/* <View style={styles.listContainer}>
         {R.keys(mappedSharedItems).map((key) => {

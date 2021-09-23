@@ -1,4 +1,4 @@
-import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import { createAsyncThunk, createReducer, createSlice } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { makeEnum } from '../../core/factory';
@@ -27,25 +27,21 @@ export const findItemsSharedWithMe = createAsyncThunk(shareItemsActionTypes.find
   const response = await api.shareItems.shareItemsControllerFindAll(opts);
   return response && response.status === 200 ? response.data : undefined;
 });
+export const readShareItem = createAsyncThunk(shareItemsActionTypes.removeShareItem, async (id: string, { extra }) => {
+  const { api } = extra as { api: ApiService };
+  api.shareItems.shareItemsControllerReadSharedItem({ shareId: id }).subscribe();
+});
 
 export const removeShareItem = createAsyncThunk(shareItemsActionTypes.removeShareItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = await api.shareItems.shareItemsControllerRemove({ shareId: id });
-  return response && response.status === 200 ? response.data : undefined;
+  const response = await api.shareItems.shareItemsControllerRemove({ shareId: id }).toPromise();
+  return response;
 });
 
 const initialState = {};
 
 export const SHARE_ITEMS_STATE_KEY = 'shareItems';
 
-const shareItemsReducer = createReducer(
-  initialState,
-  (builder) =>
-    builder
-      .addCase(getShareItemById.fulfilled, reducers.addItem(SHARE_ITEMS_STATE_KEY))
-      .addCase(findItemsSharedWithMe.fulfilled, reducers.loadItems(SHARE_ITEMS_STATE_KEY))
-      .addCase(findItemsIAmSharing.fulfilled, reducers.loadItems(SHARE_ITEMS_STATE_KEY))
-  // .addCase(removeShareItem.fulfilled, reducers.removeItem(SHARE_ITEMS_STATE_KEY))
-);
+const shareItemSlice = createSlice({ name: 'SHARE_ITEMS', initialState, reducers: {} });
 
-export { shareItemsReducer };
+export {};
