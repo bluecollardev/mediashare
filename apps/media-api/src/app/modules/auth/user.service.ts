@@ -25,12 +25,6 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     super(repository, logger);
   }
 
-  async checkIfUserExists(username: string) {
-    const user = await this.findByQuery({ username });
-
-    return !!user;
-  }
-
   validateToken({ token, idToken }: { token: string; idToken: string }) {
     const { email, phone_number: phoneNumber } = this.authSvc.decodeIdToken(idToken);
 
@@ -42,24 +36,99 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return this.client.send({ role: 'auth', cmd: 'setRoles' }, { _id, roles }).toPromise();
   }
 
-  getAuthUser(user: { _id: ObjectId }) {
-    return this.client.send({ role: 'auth', cmd: 'get' }, user).toPromise();
-  }
+  getUserById(id: ObjectId) {
+    return this.repository
+      .aggregate([
+        {
+          $match: {
+            _id: id,
+          },
+        },
+        {
+          $lookup: {
+            from: 'share_item',
+            localField: '_id',
+            foreignField: 'userId',
+            as: 'shareItems',
+          },
+        },
+        {
+          $unwind: {
+            path: '$shareItems',
+            preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'shareItems.createdBy',
+            foreignField: '_id',
+            as: 'author',
+          },
+        },
+        {
+          $unwind: {
+            path: '$author',
+            preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $lookup: {
+            from: 'playlist',
+            localField: 'shareItems.playlistId',
+            foreignField: '_id',
+            as: 'playlist',
+          },
+        },
+        {
+          $unwind: {
+            path: '$playlist',
+            preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: [
+                '$playlist',
+                {
+                  _id: '$shareItems.userId',
+                  playlistId: '$playlist._id',
+                  createdBy: '$shareItems.createdBy',
+                  read: '$read',
+                  createdAt: '$createdAt',
+                  author: '$author.username',
+                  authorId: '$author._id',
+                  userImg: '$imageSrc',
+                  firstName: '$firstName',
+                  lastName: '$lastName',
+                  email: '$email',
+                  role: '$role',
+                  phoneNumber: '$phoneNumber',
+                  shareItemId: 'shareItems.shareId',
+                  username: '$username',
+                },
+              ],
+            },
+          },
+        },
 
-  async createUser(user: Pick<User, 'sub' | 'email' | 'phoneNumber' | 'username'>): Promise<User> {
-    const { username, ...rest } = user;
-    const userEntity = await this.create({ username: username.toLowerCase(), ...rest });
-
-    return userEntity;
-  }
-
-  async login(user, _id) {
-    const { password, ...userFields } = user;
-    const payload = { userFields, sub: _id };
-
-    return {
-      ...userFields,
-      accessToken: this.authSvc.sign(payload, _id)
-    };
+        {
+          $group: {
+            _id: '$_id',
+            imageSrc: { $first: '$userImg' },
+            firstName: { $first: '$firstName' },
+            lastName: { $first: '$lastName' },
+            email: { $first: '$email' },
+            role: { $first: '$role' },
+            phoneNumber: { $first: '$phoneNumber' },
+            username: { $first: '$username' },
+            sharedItems: {
+              $push: '$$ROOT',
+            },
+          },
+        },
+      ])
+      .next();
   }
 }

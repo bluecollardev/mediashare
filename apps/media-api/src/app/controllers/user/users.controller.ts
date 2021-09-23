@@ -32,7 +32,7 @@ export class UsersController {
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserGetResponse()
   findOne(@Param('userId', new ObjectIdPipe()) userId: ObjectId): Promise<User> {
-    return this.userService.findOne(userId);
+    return this.userService.getUserById(userId);
   }
 
   @Put(RouteTokens.USER_ID)

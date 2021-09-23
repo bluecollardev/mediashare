@@ -1,6 +1,4 @@
-import { CaseReducer, createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import * as R from 'remeda';
-import { makeEnum } from '../../core/factory';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const INITIAL_STATE = {
   loading: false,
@@ -10,10 +8,6 @@ const INITIAL_STATE = {
   },
   hasError: false,
 };
-
-export type ValuesWithKeys<T, K extends keyof T> = T[K];
-
-export type InitialStateUnion<T extends object> = { [P in keyof T]: ValuesWithKeys<T, P> };
 
 const appStateSlice = createSlice({
   name: 'appState',

@@ -4,7 +4,7 @@ import { loadUser, logout } from '../../state/modules/user';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView, ImageBackground, FlatList, ListRenderItem } from 'react-native';
+import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { Avatar, Button, Card, List, Title } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
@@ -20,7 +20,6 @@ import { loadUsers } from '../../state/modules/users';
 import { useAppSelector } from '../../state';
 import { MediaListItem } from '../layout/MediaListItem';
 import { shortenText } from '../../utils';
-import { UserDto } from '../../rxjs-api';
 
 const SecondRoute = () => {
   const dispatch = useDispatch();
@@ -65,7 +64,7 @@ const FirstRoute = () => {
     return (
       <Card style={{ width: '49%' }}>
         <List.Item
-          left={(props) => (
+          left={() => (
             <View style={{ justifyContent: 'center', alignContent: 'center' }}>
               <Avatar.Image source={user?.imageSrc ? { uri: user.imageSrc } : undefined} size={30} />
             </View>
@@ -88,18 +87,6 @@ const FirstRoute = () => {
       renderItem={({ item }) => renderItem({ user: item })}
       keyExtractor={(item) => item._id}
     />
-    // <ScrollView
-    //   contentInset={{ bottom: 120 }}
-    //   contentContainerStyle={{ flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-evenly' }}
-    // >
-    //   {users.map((user) => {
-    //     return (
-    //       <Card style={{ flexBasis: '48%', padding: 5 }}>
-    //         <Card.Title title={user.username} titleStyle={{ fontSize: 14 }} />
-    //       </Card>
-    //     );
-    //   })}
-    // </ScrollView>
   );
 };
 
