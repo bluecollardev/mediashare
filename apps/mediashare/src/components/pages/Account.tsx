@@ -4,8 +4,8 @@ import { loadUser, logout } from '../../state/modules/user';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { Button, Card, Title } from 'react-native-paper';
+import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView, ImageBackground, FlatList, ListRenderItem } from 'react-native';
+import { Avatar, Button, Card, List, Title } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
 import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
@@ -20,8 +20,9 @@ import { loadUsers } from '../../state/modules/users';
 import { useAppSelector } from '../../state';
 import { MediaListItem } from '../layout/MediaListItem';
 import { shortenText } from '../../utils';
+import { UserDto } from '../../rxjs-api';
 
-const FirstRoute = () => {
+const SecondRoute = () => {
   const dispatch = useDispatch();
   const viewMediaItem = useEditMediaItem();
   const mediaItems = useAppSelector((state) => state.user.mediaItems) || [];
@@ -54,23 +55,51 @@ const FirstRoute = () => {
   );
 };
 
-const SecondRoute = () => {
+const FirstRoute = () => {
+  const onPressContact = function (contact: User) {
+    console.log(contact);
+  };
   const users = useAppSelector((state) => state.users.entities);
   console.log(users);
+  const renderItem = function ({ user }) {
+    return (
+      <Card style={{ width: '49%' }}>
+        <List.Item
+          left={(props) => (
+            <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+              <Avatar.Image source={user?.imageSrc ? { uri: user.imageSrc } : undefined} size={30} />
+            </View>
+          )}
+          key={user._id}
+          title={`${user.firstName} ${user.lastName}`}
+          description={`${user.username}`}
+          onPress={() => onPressContact(user)}
+        />
+      </Card>
+    );
+  };
   return (
-    <ScrollView
-      contentInset={{ bottom: 120 }}
-      contentContainerStyle={{ flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap' }}
-    >
-      {users.map((user) => {
-        return (
-          <Card style={{ flexBasis: '50%', padding: 5 }}>
-            <Card.Title title={user.username} titleStyle={{ fontSize: 14 }} />
-            <Card.Cover source={{ uri: user.imageSrc || 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg' }} />
-          </Card>
-        );
-      })}
-    </ScrollView>
+    <FlatList
+      style={{ height: '100%' }}
+      contentContainerStyle={{ justifyContent: 'space-between', width: '100%' }}
+      columnWrapperStyle={{ margin: 5, justifyContent: 'space-between' }}
+      numColumns={2}
+      data={users}
+      renderItem={({ item }) => renderItem({ user: item })}
+      keyExtractor={(item) => item._id}
+    />
+    // <ScrollView
+    //   contentInset={{ bottom: 120 }}
+    //   contentContainerStyle={{ flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-evenly' }}
+    // >
+    //   {users.map((user) => {
+    //     return (
+    //       <Card style={{ flexBasis: '48%', padding: 5 }}>
+    //         <Card.Title title={user.username} titleStyle={{ fontSize: 14 }} />
+    //       </Card>
+    //     );
+    //   })}
+    // </ScrollView>
   );
 };
 
@@ -86,8 +115,8 @@ export const Account = ({ navigation }: PageProps) => {
   const [index, setIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [routes] = React.useState([
-    { key: 'first', title: 'First', icon: 'movie' },
-    { key: 'second', title: 'Second', icon: 'assignment-ind' },
+    { key: 'first', title: 'First', icon: 'contacts' },
+    { key: 'second', title: 'Second', icon: 'movie' },
   ]);
 
   const user = useAppSelector((state) => state.user);

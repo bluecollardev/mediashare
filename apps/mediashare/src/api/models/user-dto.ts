@@ -53,6 +53,12 @@ export interface UserDto {
   lastName: string;
   /**
    *
+   * @type {object}
+   * @memberof UserDto
+   */
+  role: object;
+  /**
+   *
    * @type {string}
    * @memberof UserDto
    */

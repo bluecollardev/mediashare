@@ -79,8 +79,8 @@ const AccountNavigation = () => {
     <AccountStackNavigator.Navigator>
       <AccountStackNavigator.Screen {...routeConfig.account} />
       <AccountStackNavigator.Screen {...routeConfig.contacts} />
-      <AccountStackNavigator.Screen {...routeConfig.accountEdit}  />
-      <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit}  />
+      <AccountStackNavigator.Screen {...routeConfig.accountEdit} />
+      <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} />
     </AccountStackNavigator.Navigator>
   );
 };
@@ -109,7 +109,7 @@ const PrivateNavigator = createBottomTabNavigator();
 function PrivateNavigation() {
   return (
     <PrivateNavigator.Navigator
-      initialRouteName={'Playlists'}
+      initialRouteName={'Account'}
       activeColor={theme.colors.primaryTextLighter}
       inactiveColor={theme.colors.accentLighter}
       barStyle={{ backgroundColor: theme.colors.accent }}
