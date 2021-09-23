@@ -1,28 +1,34 @@
-import { ApiString } from '@mediashare/shared';
+import { ApiObjectId, ApiString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
+import { BC_ROLES } from '@core-lib';
+import { BcRolesType } from '../../../core/types/roles.type';
 
 class ProfileShareItem {
-  authorId: string;
-  @ApiString()
-  imageSrc: string;
-  @ApiString()
-  @ApiString()
-  author: string;
-  @ApiString()
-  playlistId;
-  @ApiString()
-  shareItemId: string;
-
-  @ApiProperty({ type: 'boolean' })
-  read: boolean;
   @ApiString()
   createdAt: string;
-  @ApiString()
-  title: string;
   @ApiString()
   authorImage;
   @ApiString()
   authorName;
+  @ApiString()
+  author: string;
+  @ApiObjectId()
+  authorId: string;
+  @ApiString()
+  imageSrc: string;
+
+  @ApiObjectId()
+  playlistId;
+  @ApiObjectId()
+  shareItemId: string;
+
+  @ApiProperty({ type: 'boolean' })
+  read: boolean;
+  @ApiProperty({ enum: BC_ROLES })
+  role: BcRolesType;
+
+  @ApiString()
+  title: string;
 }
 
 export class ProfileDto {
@@ -40,8 +46,8 @@ export class ProfileDto {
   lastName: string;
   @ApiString()
   email: string;
-  @ApiString()
-  role: string;
+  @ApiProperty({ enum: BC_ROLES })
+  role: BcRolesType;
   @ApiString()
   phoneNumber: string;
   @ApiString()

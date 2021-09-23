@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, HttpStatus, UseGuards, HttpCode, Request } from '@nestjs/common';
-import { CreateUserDto, UserDto } from './dto/create-user.dto';
+import { UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
@@ -49,7 +49,7 @@ export class UsersController {
   @UserPostResponse({ type: User })
   @ApiBody({ type: UpdateUserDto })
   @ApiParam({ name: 'userId', type: String, required: true })
-  update(@GetUserId() userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('userId', new ObjectIdPipe()) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser({ userId, updateUserDto });
   }
   @Get(':userId/playlists')

@@ -43,16 +43,6 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
     return this.user._id.toHexString();
   }
 
-  createUserDto() {
-    return {
-      username: Faker.internet.email(),
-      firstName: Faker.name.firstName(),
-      lastName: Faker.name.lastName(),
-      authId: Faker.random.uuid(),
-      password: 'welcome1',
-    };
-  }
-
   createSessionUser(): SessionUserInterface {
     const { username, _id: idObject } = this.user;
 
@@ -63,7 +53,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
       _id: ObjectIdGuard(_id),
       createdAt: new Date(),
       email,
-      roles: ['user'],
+      roles: ['user']
     };
   }
 
@@ -80,7 +70,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
   createPlaylistDto(items = []) {
     return {
       userId: this.user._id,
-      title: DataFn.title(),
+      title: DataFn.title()
     };
   }
 
@@ -106,7 +96,7 @@ export class UserFactory extends DataFn implements ConcretePlaylistFactory {
       category: 'flexibility',
       key: '',
       thumbnail: '',
-      uri: '',
+      uri: ''
     };
   }
 

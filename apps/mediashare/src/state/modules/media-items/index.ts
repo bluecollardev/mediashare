@@ -27,6 +27,7 @@ const MEDIA_ITEM_ACTIONS = [
   'UPLOAD_MEDIA_ITEM',
   'FEED_MEDIA_ITEMS',
   'SAVE_FEED_MEDIA_ITEMS',
+  'LOAD_USER_MEDIA_ITEMS',
 ] as const;
 export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
 export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
@@ -141,6 +142,10 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
   // await Promise.all(thumbnailPromises);
   const result = await merge(...dtoPromises).toPromise();
   return result;
+});
+export const loadUserMediaItems = createAsyncThunk(mediaItemActionTypes.loadUserMediaItems, async () => {
+  const mediaItems = await apis.user.userControllerGetMediaItems().toPromise();
+  return mediaItems;
 });
 
 export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (item: UpdateMediaItemDto, { extra }) => {
@@ -279,6 +284,9 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
         loading: false,
         loaded: true,
       };
+    })
+    .addCase(loadUserMediaItems.fulfilled, (state, action) => {
+      return { ...state, mediaItems: action.payload };
     })
     .addCase(clearMediaItemSelection, (state) => {
       return { ...state, mediaItems: [] };

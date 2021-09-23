@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { SectionList, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { from } from 'rxjs';
 import { useAppSelector } from '../../state';
 import { LoadingSpinnerProps, withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import AccountCard from '../layout/AccountCard';
-import { List, Banner, Appbar, Card, Headline, Button, FAB } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { theme } from '../../styles';
-import * as R from 'remeda';
-import ShareItemCard from '../layout/ShareItemCard';
-import { ProfileShareItem } from '../../api/models/profile-share-item';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import LabelledElement from '../layout/LabelledElement';
-import { sectionHeaderContent } from 'aws-amplify';
-import { usePlaylists, useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
+
+import { useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { removeShareItem, readShareItem } from '../../state/modules/share-items/index';
 import { ROUTES } from '../../routes';
 import { loadProfile } from '../../state/modules/profile';
@@ -26,6 +21,10 @@ function Profile({ onDataLoaded }: ProfileProps) {
   const userId = '6149b54a19531dd4c6b0df59';
   const dispatch = useDispatch();
   const userRole = useAppSelector((state) => state.user.role);
+  const isAdmin = userRole === 'admin';
+  console.log('🚀 ---------------------------------------------------------------');
+  console.log('🚀 ~ file: Profile.tsx ~ line 24 ~ Profile ~ userRole', isAdmin);
+  console.log('🚀 ---------------------------------------------------------------');
   const profile = useAppSelector((state) => state.profile.entity);
   const accountEdit = useRouteWithParams(ROUTES.accountEdit);
   const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [] } = profile || {};
@@ -55,23 +54,13 @@ function Profile({ onDataLoaded }: ProfileProps) {
   return (
     <View style={styles.container}>
       <AccountCard fullName={`${firstName} ${lastName}`} email={email} phoneNumber={phoneNumber} image={imageSrc} likes={0} shares={0} shared={0} />
-      <Button mode={'outlined'} style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
-        Edit Profile
-      </Button>
+      {isAdmin && (
+        <Button mode={'outlined'} style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
+          Edit Profile
+        </Button>
+      )}
 
       <SharedList onDelete={onDelete} onView={onView} sharedItems={sharedItems} />
-      {/* <View style={styles.listContainer}>
-        {R.keys(mappedSharedItems).map((key) => {
-          const items = mappedSharedItems[key];
-          return (
-            <>
-              {items.map((item) => {
-                return <ShareItemCard title={item.title} />;
-              })}
-            </>
-          );
-        })}
-      </View> */}
     </View>
   );
 }

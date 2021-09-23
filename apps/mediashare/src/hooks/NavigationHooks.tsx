@@ -79,6 +79,13 @@ export function useViewPlaylistById() {
     nav.navigate(ROUTES.playlistDetail, { playlistId });
   };
 }
+
+export function useViewProfileById() {
+  const nav = useRouteWithParams(ROUTES.profile);
+  return function ({ userId }) {
+    nav({ userId });
+  };
+}
 export function usePlaylists() {
   const nav = useRouteName(ROUTES.playlists);
   const dispatch = useDispatch();

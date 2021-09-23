@@ -30,7 +30,6 @@ function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
         )}
         keyExtractor={(item) => item.shareItemId}
         renderItem={({ item }) => {
-          console.log(item);
           return (
             <View style={{}}>
               <ShareItemCard

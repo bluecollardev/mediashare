@@ -11,7 +11,7 @@ export const USER_STATE_KEY = 'user';
 
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
 const USER_ACTIONS = ['LOGIN', 'LOGOUT', 'UPDATE_ACCOUNT', 'DELETE_ACCOUNT', 'VALIDATE', 'LOAD_USER'] as const;
-const initialState: Pick<ProfileDto, 'username' | 'firstName' | 'lastName' | '_id' | 'phoneNumber' | 'imageSrc' | 'email' | 'role'> = {
+const initialState: Pick<UserDto, 'username' | 'firstName' | 'lastName' | '_id' | 'phoneNumber' | 'imageSrc' | 'email' | 'role'> = {
   username: '',
   firstName: '',
   lastName: '',
@@ -22,7 +22,7 @@ const initialState: Pick<ProfileDto, 'username' | 'firstName' | 'lastName' | '_i
   role: BcRoles.Guest,
 };
 
-const pickUser = (user: ProfileDto) => R.pick(user, ['username', 'email', '_id', 'firstName', 'lastName', 'phoneNumber', 'imageSrc', 'role']);
+const pickUser = (user: UserDto | ProfileDto) => R.pick(user, ['username', 'email', '_id', 'firstName', 'lastName', 'phoneNumber', 'imageSrc', 'role']);
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 
 export const loginAction = createAsyncThunk(UserActions.login.type, async (tokenDto: TokenDto) => {
@@ -59,10 +59,10 @@ export const logout = createAsyncThunk(UserActions.logout.type, async () => {
 const userReducer = createReducer(initialState, (builder) =>
   builder
     .addCase(loginAction.fulfilled, (state, action) => {
-      return pickUser(action.payload);
+      return { ...state, ...pickUser(action.payload) };
     })
     .addCase(updateAccount.fulfilled, (state, action) => {
-      return pickUser(action.payload);
+      return { ...state, ...pickUser(action.payload) };
     })
     .addCase(loadUser.fulfilled, (state, action) => {
       return { ...state, ...pickUser(action.payload) };

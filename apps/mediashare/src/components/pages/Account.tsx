@@ -8,7 +8,7 @@ import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView, Fl
 import { Avatar, Button, Card, List, Title } from 'react-native-paper';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 
-import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
+import { useRouteName, useEditMediaItem, useViewProfileById } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { useDispatch } from 'react-redux';
 import { SceneMap, TabView } from 'react-native-tab-view';
@@ -20,11 +20,18 @@ import { loadUsers } from '../../state/modules/users';
 import { useAppSelector } from '../../state';
 import { MediaListItem } from '../layout/MediaListItem';
 import { shortenText } from '../../utils';
+import { profile } from 'console';
+import { loadProfile } from '../../state/modules/profile';
+import { forkJoin, from, merge } from 'rxjs';
+import { concat } from 'rxjs/operators';
+import SharedList from '../../api/models/SharedList';
+import { useProfile } from '../../hooks/useProfile';
+import { User } from '../../rxjs-api';
 
 const SecondRoute = () => {
   const dispatch = useDispatch();
   const viewMediaItem = useEditMediaItem();
-  const mediaItems = useAppSelector((state) => state.user.mediaItems) || [];
+  const mediaItems = useAppSelector((state) => state.mediaItems.mediaItems) || [];
   const onViewMediaItem = async function (mediaId: string, uri: string) {
     await dispatch(getMediaItemById({ uri, mediaId }));
     viewMediaItem({ mediaId, uri });
@@ -58,11 +65,13 @@ const FirstRoute = () => {
   const onPressContact = function (contact: User) {
     console.log(contact);
   };
+  const viewProfile = useViewProfileById();
+
   const users = useAppSelector((state) => state.users.entities);
   console.log(users);
   const renderItem = function ({ user }) {
     return (
-      <Card style={{ width: '49%' }}>
+      <Card style={{ width: '49%' }} onPress={() => viewProfile({ userId: user._id })}>
         <List.Item
           left={() => (
             <View style={{ justifyContent: 'center', alignContent: 'center' }}>
@@ -72,7 +81,6 @@ const FirstRoute = () => {
           key={user._id}
           title={`${user.firstName} ${user.lastName}`}
           description={`${user.username}`}
-          onPress={() => onPressContact(user)}
         />
       </Card>
     );
@@ -96,10 +104,11 @@ const renderScene = SceneMap({
 });
 
 export const Account = ({ navigation }: PageProps) => {
-  const onManageContactsClicked = useRouteName(ROUTES.contacts);
+  const onManageContacts = useRouteName(ROUTES.contacts);
   const layout = useWindowDimensions();
   const editProfile = useRouteName(ROUTES.accountEdit);
   const [index, setIndex] = useState(0);
+  const { setLoaded, onView, onDelete } = useProfile();
   const [isLoaded, setIsLoaded] = useState(false);
   const [routes] = React.useState([
     { key: 'first', title: 'First', icon: 'contacts' },
@@ -107,18 +116,11 @@ export const Account = ({ navigation }: PageProps) => {
   ]);
 
   const user = useAppSelector((state) => state.user);
+  const sharedItems = useAppSelector((state) => state.profile.entity.sharedItems);
+  const dispatch = useDispatch();
   useEffect(() => {
-    async function loadData() {
-      await dispatch(findMediaItems());
-      await dispatch(loadUsers());
-      await dispatch(loadUser());
-      setIsLoaded(true);
-    }
-    if (!isLoaded) {
-      loadData().then();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded]);
+  }, []);
 
   const _renderTabBar = (props) => {
     return (
@@ -133,17 +135,20 @@ export const Account = ({ navigation }: PageProps) => {
       </View>
     );
   };
-  const dispatch = useDispatch();
 
   // const loginRoute = usePageRoute(ROUTES.login);
 
-  const onSignoutClicked = async function () {
+  const onSignout = async function () {
+    await dispatch(logout());
+    // loginRoute();
+  };
+  const onViewProfile = async function () {
     await dispatch(logout());
     // loginRoute();
   };
 
   return (
-    <PageContainer>
+    <View>
       <AccountCard
         image={user.imageSrc}
         likes={49}
@@ -157,14 +162,18 @@ export const Account = ({ navigation }: PageProps) => {
       <Button mode={'outlined'} style={{ margin: 15 }} onPress={editProfile}>
         Edit Profile
       </Button>
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        renderTabBar={(props) => _renderTabBar(props)}
-        initialLayout={{ width: layout.width, height: layout.height }}
-      />
-    </PageContainer>
+      {user.role === 'admin' ? (
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          renderTabBar={(props) => _renderTabBar(props)}
+          initialLayout={{ width: layout.width, height: layout.height }}
+        />
+      ) : (
+        <SharedList sharedItems={sharedItems} onView={onView} onDelete={onDelete} />
+      )}
+    </View>
   );
 };
 

@@ -34,7 +34,6 @@ function apiFactory() {
         COOKIE = cookie ? cookie : COOKIE;
         TOKEN = token ? token : TOKEN;
         ID_TOKEN = idToken ? idToken : ID_TOKEN;
-        console.log(TOKEN);
         return response;
       },
       pre: (request: RequestArgs) => {
@@ -46,37 +45,9 @@ function apiFactory() {
           cookie: COOKIE.split(';')[0],
           id: ID_TOKEN,
         };
-        console.log(headers);
         return { headers, ...rest };
       },
     };
-    // const loginMiddleware: Middleware = {
-    //   post: (response: ResponseArgs) => {
-    //     if (response.request.url.includes('login') || response.request.url.includes('authorize')) {
-    //       console.log('token validation', response);
-    //       const { accessToken } = response.response;
-
-    //       // TOKEN = accessToken;
-    //     }
-    //     return response;
-    //   },
-    // };
-    // const loaderMiddleware: Middleware = {
-    //   pre: (request) => {
-    //     loadStateAction(true);
-    //     setTimeout(() => {
-    //       loadStateAction(false);
-    //     }, 3000);
-    //     return request;
-    //   },
-    //   post: (response: ResponseArgs) => {
-    //     // setTimeout(function () {
-    //     loadStateAction(false);
-    //     // }, 1000);
-    //     console.log('rejected ', response);
-    //     return response;
-    //   },
-    // };
 
     return [cookieMiddleware];
   }

@@ -13,12 +13,13 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
 import Config from 'react-native-config';
 import { thumbnailRoot } from '../../state/modules/media-items/key-factory';
-import { useRouteName } from '../../hooks/NavigationHooks';
+import { useRouteName, useViewProfileById } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { ActionButtons } from '../layout/ActionButtons';
 import { getUserById, loadProfile } from '../../state/modules/profile';
 import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
+import * as R from 'remeda';
 
 const awsUrl = Config.AWS_URL;
 console.log(awsUrl);
@@ -42,7 +43,7 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
     }
   }, [isLoaded, userId, dispatch]);
   const user = useAppSelector((state) => state.profile.entity);
-  const [state, setState] = useState(user);
+  const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
   const onUpdate = (user: Partial<UserDto>) => {
     setState({ ...state, ...user });
@@ -68,17 +69,21 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
     setState(user);
     account();
   };
+  const profile = useViewProfileById();
 
-  const save = async function () {
+  const save = function () {
     const updateUserDto = state;
+    console.log('🚀 --------------------------------------------------------------------------');
+    console.log('🚀 ~ file: AccountEdit.tsx ~ line 75 ~ save ~ updateUserDto', updateUserDto);
+    console.log('🚀 --------------------------------------------------------------------------');
 
-    from(dispatch(updateAccount({ updateUserDto })))
+    from(dispatch(updateAccount({ updateUserDto, userId })))
       .pipe(
         switchMap(() => dispatch(loadProfile({ userId }))),
         switchMap(() => dispatch(loadUser({}))),
         take(1)
       )
-      .subscribe(() => account());
+      .subscribe(() => profile({ userId }));
   };
   return (
     <PageContainer>

@@ -6,7 +6,7 @@ import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { PlaylistService } from '../playlist/services/playlist.service';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
-import { TokenDto } from './dto/login.dto';
+
 import { SessionUserInterface } from '../../core/models/auth-user.model';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
 import { ShareItemService } from '../../modules/share-item/services/share-item.service';
@@ -22,6 +22,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ProfileDto } from './dto/profile.dto';
 import * as R from 'remeda';
+import { AuthorizeDto } from './dto/authorize.dto';
 
 @ApiTags('user')
 @Controller({ path: ['user'] })
@@ -94,7 +95,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Post('authorize')
   @ApiResponse({ type: UserDto, status: 200, isArray: false })
-  @ApiBody({ type: TokenDto })
+  @ApiBody({ type: AuthorizeDto })
   async authorize(@Req() req: Request, @Res() res: Response) {
     console.log(req);
     const { accessToken = null, idToken = null } = req.body as any;
@@ -109,7 +110,7 @@ export class UserController {
       const newUser = await this.userService.create({
         ...valid,
         role: 'user',
-        imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
+        imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg'
       });
       return res.send(newUser);
     }
