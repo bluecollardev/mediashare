@@ -33,6 +33,8 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { PlaylistResponseDto } from '../models';
 // @ts-ignore
+import { ProfileDto } from '../models';
+// @ts-ignore
 import { UpdateUserDto } from '../models';
 // @ts-ignore
 import { UserDto } from '../models';
@@ -276,7 +278,7 @@ export const UsersApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async usersControllerFindOne(userId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+    async usersControllerFindOne(userId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileDto>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.usersControllerFindOne(userId, options);
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
     },
@@ -357,7 +359,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    usersControllerFindOne(userId: string, options?: any): AxiosPromise<UserDto> {
+    usersControllerFindOne(userId: string, options?: any): AxiosPromise<ProfileDto> {
       return localVarFp.usersControllerFindOne(userId, options).then((request) => request(axios, basePath));
     },
     /**

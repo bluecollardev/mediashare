@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { PlaylistResponseDto, UpdateUserDto, UserDto } from '../models';
+import { PlaylistResponseDto, ProfileDto, UpdateUserDto, UserDto } from '../models';
 
 export interface UsersControllerFindOneRequest {
   userId: string;
@@ -64,9 +64,9 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerFindOne({ userId }: UsersControllerFindOneRequest): Observable<UserDto>;
-  usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  usersControllerFindOne({ userId }: UsersControllerFindOneRequest): Observable<ProfileDto>;
+  usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ProfileDto>>;
+  usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<ProfileDto | RawAjaxResponse<ProfileDto>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerFindOne');
 
     const headers: HttpHeaders = {
@@ -75,7 +75,7 @@ export class UsersApi extends BaseAPI {
         : undefined),
     };
 
-    return this.request<UserDto>(
+    return this.request<ProfileDto>(
       {
         url: '/api/users/{userId}'.replace('{userId}', encodeURI(userId)),
         method: 'GET',

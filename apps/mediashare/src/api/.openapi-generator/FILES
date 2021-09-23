@@ -6,6 +6,7 @@ common.ts
 configuration.ts
 git_push.sh
 index.ts
+models/bc-roles.ts
 models/create-media-item-dto.ts
 models/create-playlist-dto.ts
 models/create-playlist-item-response-dto.ts
@@ -17,6 +18,8 @@ models/media-item.ts
 models/playlist-item-response-dto.ts
 models/playlist-response-dto.ts
 models/playlist.ts
+models/profile-dto.ts
+models/profile-share-item.ts
 models/share-item.ts
 models/token-dto.ts
 models/update-media-item-dto.ts

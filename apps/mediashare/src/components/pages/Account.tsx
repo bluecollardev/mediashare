@@ -149,9 +149,9 @@ export const Account = ({ navigation }: PageProps) => {
         likes={49}
         shared={30}
         shares={300}
-        title={`${user.firstName} ${user.lastName}`}
-        company={user.email}
-        contact={user.phoneNumber}
+        fullName={`${user.firstName} ${user.lastName}`}
+        email={user.email}
+        phoneNumber={user.phoneNumber}
       />
       {/* <Highlights highlights={state.highlights} /> */}
       <Button mode={'outlined'} style={{ margin: 15 }} onPress={editProfile}>

@@ -8,12 +8,12 @@ interface AccountCardProps {
   likes: number;
   shares: number;
   shared: number;
-  title: string;
-  company: string;
-  contact: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
 }
 
-function AccountCard({ image, likes, shares, shared, title, contact, company }: AccountCardProps) {
+function AccountCard({ image, likes, shares, shared, fullName: title, phoneNumber: contact, email: company }: AccountCardProps) {
   return (
     <View>
       <View style={styles.container}>
