@@ -10,7 +10,7 @@ import { useAppSelector } from '../../state';
 import { addMediaItem, createThumbnail } from '../../state/modules/media-items';
 import { setError } from '../../state/modules/app-state/';
 
-import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
+import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum } from '../../rxjs-api';
 
 import { useMediaItems } from '../../hooks/NavigationHooks';
 
@@ -74,15 +74,15 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
               <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
             ) : (
               <Button
-                color={theme.colors.primary}
+                color={theme.colors.accentDarker}
                 bordered
-                style={{ width: '100%', borderColor: theme.colors.primary, borderWidth: 1 }}
+                style={{ width: '100%', borderColor: theme.colors.accentDarker, borderWidth: 1 }}
                 hasText={true}
                 onPress={getDocument}
                 full={true}
               >
-                <Icon name="cloud-upload" style={{ color: theme.colors.primary }} />
-                <Text style={{ textAlign: 'center', color: theme.colors.primary }}>Upload From Device</Text>
+                <Icon name="cloud-upload" style={{ color: theme.colors.accentDarker }} />
+                <Text style={{ textAlign: 'center', color: theme.colors.accentDarker }}>Upload From Device</Text>
               </Button>
             )}
           </CardItem>
@@ -119,21 +119,27 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   );
 
   async function getDocument() {
+    startLoad();
     const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
     if (!document) {
+      endLoad();
       return;
     }
     if (!document || document.size > maxUpload) {
       dispatch(setError({ name: 'File too big', message: `Files must be under ${maxUpload / 1024 / 1024} Mb` }));
+      endLoad();
       return;
     }
+
+    console.log('Document upload response');
     console.log(document);
-    startLoad();
-
-    const thumbnail = await dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
-    console.log(thumbnail);
-    setDocumentUri(document?.uri || '');
-
+    try {
+      console.log('Dispatching createThumbnail action');
+      await dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
+    } catch (err) {
+      console.log(err);
+    }
+    setDocumentUri(document.uri || '');
     endLoad();
   }
 
@@ -141,7 +147,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
     startLoad();
     const dto: CreateMediaItemDto = {
       title,
-      category: CreatePlaylistDtoCategoryEnum[category],
+      category: CreateMediaItemDtoCategoryEnum[category],
       description,
       summary: '',
       isPlayable: true,
@@ -152,7 +158,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
     };
     await dispatch(addMediaItem(dto));
 
-    setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
+    setCategory(CreateMediaItemDtoCategoryEnum.Free);
     setDescription('');
     setThumbnail('');
     endLoad();
@@ -161,7 +167,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
 
   function clearAndGoBack() {
     setTitle('');
-    setCategory(CreateMediaItemDtoCategoryEnum.Endurance);
+    setCategory(CreateMediaItemDtoCategoryEnum.Free);
     setDescription('');
     setThumbnail('');
     mediaItems();

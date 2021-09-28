@@ -17,7 +17,7 @@ import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { MediaList, MediaListType } from '../layout/MediaList';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
-import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 import AppUpload from '../layout/AppUpload';
 import { Card } from 'react-native-paper';
 
@@ -41,7 +41,7 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
   const clearAndGoBack = function () {
     // @ts-ignore
     setTitle('');
-    setCategory(CreatePlaylistDtoCategoryEnum.Builder);
+    setCategory(CreatePlaylistDtoCategoryEnum.Free);
     // @ts-ignore
     setDescription('');
     setIsLoaded(false);

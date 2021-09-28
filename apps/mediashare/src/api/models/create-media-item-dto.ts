@@ -79,7 +79,6 @@ export interface CreateMediaItemDto {
  * @enum {string}
  */
 export enum CreateMediaItemDtoCategoryEnum {
-  Strength = 'strength',
-  Flexibility = 'flexibility',
-  Endurance = 'endurance',
+  Paid = 'paid',
+  Free = 'free',
 }

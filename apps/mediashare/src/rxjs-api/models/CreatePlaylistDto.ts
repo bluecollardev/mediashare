@@ -42,3 +42,12 @@ export interface CreatePlaylistDto {
    */
   mediaIds: Array<string>;
 }
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum CreatePlaylistDtoCategoryEnum {
+  Paid = 'paid',
+  Free = 'free',
+}

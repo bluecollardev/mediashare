@@ -45,8 +45,10 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
 });
 
 export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {
+  console.log('Creating thumbnail...');
   const thumb = await uploadThumbnail({ fileUri, key });
-
+  console.log('Thumbnail creation response');
+  console.log(thumb);
   return thumb;
 });
 export const addMediaItem = createAsyncThunk(

@@ -70,7 +70,16 @@ export async function fetchAndPutToS3({ fileUri, key, options }: { fileUri: stri
 
 export async function uploadThumbnail({ fileUri, key }) {
   const { thumbnailKey } = KeyFactory(key);
-  const item = await VideoThumbnails.getThumbnailAsync(fileUri);
+  let item;
+  try {
+    console.log(`Get thumbnail [getThumbnailAsync] for file at URI: ${fileUri}`);
+    item = await VideoThumbnails.getThumbnailAsync(fileUri);
+    console.log('getThumbnailAsync response');
+    console.log(item);
+  } catch (err) {
+    console.log('Error getting thumbnail [getThumbnailAsync]');
+    console.log('You probably need to run yarn pre-ios to link the expo module');
+  }
 
   const thumbnailResponse = (await fetchAndPutToS3({
     key: thumbnailKey,
