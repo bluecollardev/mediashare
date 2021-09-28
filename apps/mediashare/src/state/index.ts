@@ -10,7 +10,6 @@ export interface ErrorType {
 
 export type RootStateType = {
   userPlaylists: null;
-
   // offlineMode: null,
 };
 

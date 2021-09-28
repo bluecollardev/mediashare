@@ -31,7 +31,7 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
   const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
-  const [category, setCategory] = useState(CreatePlaylistDtoCategoryEnum.Builder);
+  const [category, setCategory] = useState(CreatePlaylistDtoCategoryEnum.Free);
   const [loaded, setIsLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
 

@@ -31,7 +31,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState(CreateMediaItemDtoCategoryEnum.Endurance);
+  const [category, setCategory] = useState(CreateMediaItemDtoCategoryEnum.Free);
   const [documentUri, setDocumentUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
   const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);

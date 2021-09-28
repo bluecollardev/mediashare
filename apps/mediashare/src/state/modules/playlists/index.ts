@@ -1,15 +1,14 @@
 import { createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import { flattenDeep } from 'remeda';
+import { merge } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { makeEnum } from '../../core/factory';
 
 import { apis, ApiService } from '../../apis';
 import { CreatePlaylistDto, UpdatePlaylistDto } from '../../../api';
-import { CreatePlaylistResponseDto } from '../../../api/models/create-playlist-response-dto';
-import { PlaylistResponseDto } from '../../../rxjs-api/models/PlaylistResponseDto';
-import { flattenDeep } from 'remeda';
-import { merge } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { CreatePlaylistResponseDto, PlaylistResponseDto } from '../../../rxjs-api';
 
 const PLAYLIST_ACTIONS = [
   'GET_USER_PLAYLIST',
@@ -33,19 +32,17 @@ export const selectPlaylistAction = createAction<{ isChecked: boolean; plist: Pl
 );
 
 export const addUserPlaylist = createAsyncThunk(playlistActionTypes.addUserPlaylist, async (playlist: CreatePlaylistDto, { extra }) => {
-  const response = await apis.playlists.playlistControllerCreate({ createPlaylistDto: playlist }).toPromise();
-  return response;
+  return await apis.playlists.playlistControllerCreate({ createPlaylistDto: playlist }).toPromise();
 });
 
 export const updateUserPlaylist = createAsyncThunk(playlistActionTypes.updateUserPlaylist, async (playlist: UpdatePlaylistDto, { extra }) => {
   // @ts-ignore - TODO: Fix _id property on UpdatePlaylistDto!
-  const response = await apis.playlists
+  return await apis.playlists
     .playlistControllerUpdate({
       playlistId: playlist._id,
       updatePlaylistDto: playlist,
     })
     .toPromise();
-  return response;
 });
 
 export const shareUserPlaylist = createAsyncThunk(
@@ -54,39 +51,36 @@ export const shareUserPlaylist = createAsyncThunk(
     const prom = ({ playlistId, userId }) => apis.playlists.playlistControllerShare({ playlistId, userId });
     const promises = userIds.map((userId) => playlistIds.map((playlistId) => prom({ userId, playlistId })));
     const flat = flattenDeep(promises);
-    const res = await merge(...flat).toPromise();
-
-    return res;
+    return await merge(...flat).toPromise();
   }
 );
 
 export const removeUserPlaylist = createAsyncThunk(playlistActionTypes.removeUserPlaylist, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = await api.playlists.playlistControllerRemove({ playlistId: id }).toPromise();
-  return response;
+  return await api.playlists.playlistControllerRemove({ playlistId: id }).toPromise();
 });
 
 export const findUserPlaylists = createAsyncThunk(playlistsActionTypes.findUserPlaylists, async (opts: {} | undefined, { extra }) => {
-  const response = await apis.user.userControllerGetUserPlaylists().toPromise();
-  return response;
+  return await apis.user.userControllerGetUserPlaylists().toPromise();
 });
 
 export const addUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.addUserPlaylistItem, async (playlist: CreatePlaylistDto, { extra }) => {
+  // TODO: playlistControllerCreateItem does not exist!
   // @ts-ignore
   const response = await apis.playlists.playlistControllerCreateItem({ createPlaylistDto: playlist }).toPromise();
   return response.userPlaylists;
 });
 
 export const updateUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.updateUserPlaylistItem, async (playlist: UpdatePlaylistDto) => {
-  const response = await apis.playlists.playlistControllerUpdate({
-    playlistId: playlist._id,
-    updatePlaylistDto: playlist,
-  });
-  return response;
+  return await apis.playlists
+    .playlistControllerUpdate({
+      playlistId: playlist._id,
+      updatePlaylistDto: playlist,
+    })
+    .toPromise();
 });
 
-export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: string, { extra }) => {
-  console.log(id);
+export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: string) => {
   const response = await apis.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
   apis.views.viewsControllerCreatePlaylistView({ playlistId: id }).pipe(take(1)).subscribe();
   return response;
@@ -99,7 +93,6 @@ const initialState: { selectedPlaylists: PlaylistResponseDto[]; userPlaylists: P
   loaded: false,
 };
 
-export const USER_PLAYLISTS_STATE_KEY = 'userPlaylists';
 const initialPlaylistState: { createdPlaylist: CreatePlaylistResponseDto; loading: boolean; loaded: boolean; selectedPlaylist: PlaylistResponseDto } = {
   loading: false,
   loaded: false,
@@ -133,14 +126,10 @@ const playlistReducer = createReducer(initialPlaylistState, (builder) => {
     .addCase(removeUserPlaylist.rejected, (state) => {
       return { ...state };
     })
-    .addCase(removeUserPlaylist.fulfilled, (state, action) => {
+    .addCase(removeUserPlaylist.fulfilled, (state) => {
       return { ...state, selectedPlaylist: null };
     });
 });
-// .addCase(addUserPlaylist.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
-// .addCase(updateUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
-// .addCase(shareUserPlaylist.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
-// .addCase(removeUserPlaylist.fulfilled, reducers.removeItem(USER_PLAYLISTS_STATE_KEY))
 
 const playlistsReducer = createReducer(initialState, (builder) => {
   builder.addCase(findUserPlaylists.pending, (state, action) => {
@@ -153,20 +142,11 @@ const playlistsReducer = createReducer(initialState, (builder) => {
     .addCase(selectPlaylistAction, (state, action) => {
       const updateSelection = function (bool: boolean, item: PlaylistResponseDto) {
         const { selectedPlaylists } = state;
-
-        const filtered = bool ? selectedPlaylists.concat([item]) : selectedPlaylists.filter((plist) => plist._id !== item._id);
-        return filtered;
+        // Is it filtered?
+        return bool ? selectedPlaylists.concat([item]) : selectedPlaylists.filter((plist) => plist._id !== item._id);
       };
       return { ...state, selectedPlaylists: updateSelection(action.payload.isChecked, action.payload.plist) };
     });
 });
 
-const playlistItemsReducer = createReducer(
-  initialState,
-  (builder) => builder
-  // .addCase(addUserPlaylistItem.fulfilled, reducers.addItem(USER_PLAYLISTS_STATE_KEY))
-  // .addCase(updateUserPlaylistItem.fulfilled, reducers.updateItem(USER_PLAYLISTS_STATE_KEY))
-  // .addCase(removeUserPlaylistItem.fulfilled, reducers.removeItem(USER_PLAYLISTS_STATE_KEY))
-);
-
-export { playlistReducer, playlistsReducer, playlistItemsReducer };
+export { playlistReducer, playlistsReducer };

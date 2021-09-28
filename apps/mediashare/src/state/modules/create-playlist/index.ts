@@ -1,12 +1,12 @@
-import { CreatePlaylistDto } from '../../../rxjs-api';
-import { CreatePlaylistDtoCategoryEnum } from '../../../api/models/create-playlist-dto';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { savePlaylist } from './playlist-api';
-import { store } from '../../../boot/index';
+
+import { CreatePlaylistDto } from '../../../rxjs-api';
 
 function initialStateFactory(): CreatePlaylistDto & { loading: boolean } {
   return {
     description: '',
+    // @ts-ignore
     createdBy: '',
     title: '',
     mediaIds: [],
@@ -20,9 +20,7 @@ const CREATE_PLAYLIST_KEY = 'createPlaylist' as const;
 // const actions = makeActions(['addItem', 'removeItem', 'setDescription', 'setCreatedBy', 'setTitle', 'setCategory']);
 
 const createPlaylist = createAsyncThunk('createPlaylist', async function (createPlaylistDto: CreatePlaylistDto) {
-  const playlist = await savePlaylist(createPlaylistDto);
-
-  return playlist;
+  return await savePlaylist(createPlaylistDto);
 });
 
 const slice = createSlice({
@@ -42,10 +40,9 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .addCase(createPlaylist.fulfilled, (state, action) => {
-        console.log('submitted', action);
         const user = initialStateFactory();
-        console.log(user);
         return { ...user, mediaIds: [] };
       })
       .addCase(createPlaylist.rejected, (state) => {
