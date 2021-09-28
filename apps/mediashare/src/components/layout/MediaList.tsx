@@ -1,10 +1,10 @@
 import React from 'react';
-import { Content, View } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { View } from 'react-native';
+import { Divider } from 'react-native-paper';
 
 import { MediaListItem } from './MediaListItem';
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
-import { Divider } from 'react-native-paper';
+
 import { shortenText } from '../../utils';
 
 export type MediaListType = Omit<Pick<MediaItemDto, keyof MediaItem>, 'category'>;
@@ -29,41 +29,25 @@ export const MediaList = ({
   removeItem = () => {},
 }: MediaListProps) => {
   return (
-    <Content>
-      <View>
-        {list.map((item, idx, arr) => {
-          const { _id, title, description, thumbnail } = item;
-          return (
-            <View key={`item_${_id}`}>
-              <MediaListItem
-                title={title}
-                description={`${shortenText(description, 40)}`}
-                image={thumbnail}
-                selectable={isSelectable}
-                showThumbnail={showThumbnail}
-                showActions={showActions}
-                onChecked={(v) => (v ? addItem(item) : removeItem(item))}
-                onViewDetail={() => onViewDetail(item)}
-              />
-              {idx !== arr.length && <Divider />}
-            </View>
-          );
-        })}
-      </View>
-    </Content>
+    <View>
+      {list.map((item, idx, arr) => {
+        const { _id, title, description, thumbnail } = item;
+        return (
+          <View key={`item_${_id}`}>
+            <MediaListItem
+              title={title}
+              description={`${shortenText(description, 40)}`}
+              image={thumbnail}
+              selectable={isSelectable}
+              showThumbnail={showThumbnail}
+              showActions={showActions}
+              onChecked={(v) => (v ? addItem(item) : removeItem(item))}
+              onViewDetail={() => onViewDetail(item)}
+            />
+            {idx !== arr.length && <Divider />}
+          </View>
+        );
+      })}
+    </View>
   );
 };
-
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#312e38',
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: '#fff',
-  },
-});

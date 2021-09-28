@@ -12,7 +12,7 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { Button, FAB } from 'react-native-paper';
 
-import { PlaylistCard } from '../layout/PlaylistCard';
+import { MediaCard } from '../layout/MediaCard';
 import { MediaList } from '../layout/MediaList';
 import { ListActionButton } from '../layout/ListActionButton';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
@@ -74,30 +74,29 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
           title={'Delete Playlist'}
           subtitle={'Are you sure you want to do this? This action is final and cannot be undone.'}
         />
-        <PlaylistCard
+        <MediaCard
           title={title}
           description={description}
           showSocial={true}
           showActions={false}
           showThumbnail={true}
-          image={imageSrc}
+          thumbnail={imageSrc}
           likes={likesCount}
           shares={shareCount}
           views={viewCount}
-          onEditClicked={() => onEditClicked({ playlistId })}
-          // onDeleteClicked={onDeleteClicked}
           category={category}
         >
           <Button icon="live-tv" color={theme.colors.primary} mode={'outlined'} style={{ width: '100%', marginBottom: 10 }} compact>
             Play From Beginning
           </Button>
-        </PlaylistCard>
+        </MediaCard>
         <MediaList
           key={clearSelectionKey}
           onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}
           list={items}
           showThumbnail={true}
-          isSelectable={true}
+          // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
+          isSelectable={false}
           showActions={!selectedItems || selectedItems.length === 0}
           removeItem={onRemoveItem}
           addItem={onAddItem}
@@ -188,7 +187,8 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   } */
 
   async function saveMediaUpdates() {
-    const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
+    const mediaIds = selectedPlaylist.mediaIds || [];
+    const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
 
     await withIds(filtered);
     setIsLoaded(false);

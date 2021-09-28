@@ -16,7 +16,7 @@ import { List } from 'react-native-paper';
 
 import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
-import { PlaylistCard } from '../layout/PlaylistCard';
+import { MediaCard } from '../layout/MediaCard';
 
 import { shortenText } from '../../utils';
 
@@ -52,7 +52,7 @@ export const ExploreArticlesComponent = ({ list = [] }: ExploreProps) => {
           const { _id, title, description } = item;
           return (
             <View style={{ padding: 15, paddingTop: 0 }} key={`article_${_id}`}>
-              <PlaylistCard
+              <MediaCard
                 title={title}
                 author={'Admin'}
                 description={description}

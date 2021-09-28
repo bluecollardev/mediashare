@@ -11,7 +11,6 @@ import Playlists from './components/pages/Playlists';
 import PlaylistDetail from './components/pages/PlaylistDetail';
 import PlaylistEdit from './components/pages/PlaylistEdit';
 import PlaylistAdd from './components/pages/PlaylistAdd';
-import PlaylistItemDetail from './components/pages/PlaylistItemDetail';
 import AddToPlaylist from './components/pages/AddToPlaylist';
 import Media from './components/pages/Media';
 import MediaItemDetail from './components/pages/MediaItemDetail';
@@ -78,11 +77,6 @@ const routeConfig = {
     name: 'playlistAdd',
     component: PlaylistAdd,
     options: { title: 'Create Playlist', header: AppScreenHeader },
-  },
-  playlistItemDetail: {
-    name: 'playlistItemDetail',
-    component: PlaylistItemDetail,
-    options: { title: 'Playlist Item', header: AppScreenHeader },
   },
   media: {
     name: 'media',

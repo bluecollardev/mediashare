@@ -7,7 +7,7 @@ import { getPlaylistById } from '../../state/modules/playlists';
 import { useViewSharedMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { PlaylistCard } from '../layout/PlaylistCard';
+import { MediaCard } from '../layout/MediaCard';
 import { MediaList } from '../layout/MediaList';
 import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 
@@ -37,7 +37,7 @@ export const ExploreDetail = ({ route, onDataLoaded }: PageProps) => {
   return (
     <PageContainer>
       <PageContent>
-        <PlaylistCard title={title} author={author} description={description} showSocial={true} showActions={false} category={'General'} />
+        <MediaCard title={title} author={author} description={description} showSocial={true} showActions={false} category={'General'} />
         <MediaList
           onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}
           list={items}

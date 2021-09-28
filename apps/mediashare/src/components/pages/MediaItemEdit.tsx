@@ -39,7 +39,6 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
   const dispatch = useDispatch();
 
   const { mediaId } = route?.params || {};
-
   const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
 
   const [title, setTitle] = useState(mediaItem?.title);
@@ -47,7 +46,7 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
   const [category, setCategory] = useState();
   const [showDialog, setShowDialog] = useState(false);
 
-  const [documentUri, setDocumentUri] = useState(mediaItem?.uri);
+  const [documentUri] = useState(mediaItem?.uri);
   const [thumbnail, setThumbnail] = useState(mediaItem?.thumbnail);
 
   const mediaItems = useMediaItems();
@@ -99,25 +98,28 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
           title={title}
           description={description}
           mediaSrc={documentUri}
-          category={category}
-          categoryOptions={options}
           thumbnail={thumbnail}
           showThumbnail={true}
+          category={category}
+          categoryOptions={options}
           onCategoryChange={(e: any) => {
             setCategory(e);
           }}
           onTitleChange={setTitle}
           onDescriptionChange={setDescription}
           isEdit={true}
+          isPlayable={true}
           topDrawer={() => (
-            <View style={{ display: 'flex', flexDirection: 'row',  }}>
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
               <View style={{ flex: 1 }}>
-                <Button icon="delete" mode="text" dark color={theme.colors.error} onPress={() => setShowDialog(true)} compact />
+                <Button icon="delete" mode="text" dark color={theme.colors.error} onPress={() => setShowDialog(true)} compact>
+                  {' '}
+                </Button>
               </View>
               <View style={{ flex: 4 }}>
                 <AppUpload startLoad={startLoad} endLoad={endLoad} onUpload={setThumbnail}>
                   <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
-                    Change Cover
+                    Change Preview Image
                   </Button>
                 </AppUpload>
               </View>

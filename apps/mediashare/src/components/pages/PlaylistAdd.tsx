@@ -19,7 +19,9 @@ import { MediaList, MediaListType } from '../layout/MediaList';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 import AppUpload from '../layout/AppUpload';
-import { Card } from 'react-native-paper';
+import { Button } from 'react-native-paper';
+import { View } from 'react-native';
+import { theme } from '../../styles';
 
 interface PlaylistAddContainerProps extends LoadingSpinnerProps {
   children: ReactNode;
@@ -61,8 +63,7 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
   };
 
   const isValid = function () {
-    const test = !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !(selected.length < 1) && imageSrc.length > 0;
-    return test;
+    return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !(selected.length < 1) && imageSrc.length > 0;
   };
   const updateSelection = function (bool: boolean, item: MediaListType) {
     const filtered = bool ? selected.concat([item._id]) : selected.filter((key) => key !== item._id);
@@ -107,20 +108,30 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
 
   return (
     <PageContainer>
-      <KeyboardAvoidingPageContent>
-        <AppUpload onUpload={onUpload} endLoad={endLoad} startLoad={startLoad} />
-        {imageSrc.length > 0 && <Card.Cover source={{ uri: imageSrc }} />}
-
+      <KeyboardAvoidingPageContent style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <MediaCard
           title={title}
           author={author}
           description={description}
+          showThumbnail={true}
+          thumbnail={imageSrc}
           category={category}
           categoryOptions={options}
           onCategoryChange={setCategory as any}
           onTitleChange={setTitle as any}
           onDescriptionChange={setDescription as any}
           isEdit={true}
+          topDrawer={() => (
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <View style={{ flex: 4 }}>
+                <AppUpload startLoad={startLoad} endLoad={endLoad} onUpload={onUpload}>
+                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
+                    Add Cover Photo
+                  </Button>
+                </AppUpload>
+              </View>
+            </View>
+          )}
         />
         <MediaList
           list={list}

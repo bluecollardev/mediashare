@@ -23,6 +23,7 @@ export interface MediaCardProps {
   children?: any;
   topDrawer?: React.FC<any>;
   isEdit?: boolean;
+  isPlayable?: boolean;
   isReadOnly?: boolean;
   onActionsClicked?: () => void;
   onTitleChange?: (value: string) => void;
@@ -60,7 +61,7 @@ type MediaDisplayMode = 'preview' | 'video';
 
 export const MediaCard: React.FC<MediaCardProps> = ({
   title = '',
-  author = '',
+  author = 'Anonymous',
   description = '',
   mediaSrc,
   showSocial = false,
@@ -72,9 +73,13 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   topDrawer = undefined,
   category = 'None',
   isEdit = false,
+  isPlayable = false,
   isReadOnly = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onTitleChange = (value: string) => {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onDescriptionChange = (value: string) => {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onCategoryChange = (value: string) => {},
   categoryOptions = [],
   likes = 0,
@@ -87,11 +92,15 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   const DisplayPreviewOrVideo = () => {
     return mediaDisplayMode === 'preview' ? (
       <ImageBackground source={{ uri: thumbnail }} resizeMode="contain" style={{ width: '100%', height: 300 }}>
-        <TouchableWithoutFeedback onPress={toggleMediaMode}>
-          <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-            <Button icon="play-circle-filled" color="#ffffff" labelStyle={{ fontSize: 50 }} />
-          </View>
-        </TouchableWithoutFeedback>
+        {isPlayable && (
+          <TouchableWithoutFeedback onPress={toggleMediaMode}>
+            <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+              <Button icon="play-circle-filled" color="#ffffff" labelStyle={{ fontSize: 50 }}>
+                {' '}
+              </Button>
+            </View>
+          </TouchableWithoutFeedback>
+        )}
       </ImageBackground>
     ) : mediaDisplayMode === 'video' && mediaSrc ? (
       <Video
@@ -156,10 +165,18 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   ) : (
     <Card style={styles.card} mode="elevated">
       <DisplayPreviewOrVideo />
+      {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <Card.Title
-        title={<Title>{title}</Title>}
-        subtitle={`By: ${author ?? ''}`}
-        left={() => showThumbnail && thumbnail && <Avatar.Image source={{ uri: thumbnail }} size={52} />}
+        title={<Title>{`  ${title}`}</Title>}
+        subtitle={`   By ${author ?? 'Anonymous'}`}
+        left={() =>
+          showThumbnail &&
+          thumbnail && (
+            <>
+              <Avatar.Image source={{ uri: 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png' }} size={52} />
+            </>
+          )
+        }
         right={(buttonProps: any) => showActions && <IconButton {...buttonProps} icon="more-vert" onPress={onActionsClicked} />}
       />
       {!showSocial && (
@@ -171,7 +188,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       )}
       {showSocial && (
         <Card.Content style={{ marginTop: 0, marginBottom: 10 }}>
-          <Paragraph style={{ marginBottom: 15 }}>{description}</Paragraph>
+          <Paragraph style={{ marginTop: 15, marginBottom: 30 }}>{description}</Paragraph>
           {children}
           <View style={{ marginBottom: 0 }}>
             <SocialButtons likes={likes} shares={shares} views={views} />
