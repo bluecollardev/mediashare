@@ -26,7 +26,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   image,
   description,
   title,
-  onViewDetail = () => {},
+  onViewDetail,
   onChecked = () => {},
   selectable = true,
   showActions = true,
@@ -47,7 +47,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
         if (selectable) {
           setIsChecked(!isChecked);
           onChecked(!isChecked);
-        } else {
+        } else if (onViewDetail) {
           onViewDetail();
         }
       }}
