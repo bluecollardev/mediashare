@@ -17,6 +17,7 @@ import MediaItemDetail from './components/pages/MediaItemDetail';
 import MediaItemEdit from './components/pages/MediaItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
+import User from './components/pages/User';
 import Contacts from './components/pages/Contacts';
 
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
@@ -122,6 +123,11 @@ const routeConfig = {
     name: 'shareWith',
     component: ShareWith,
     options: { title: 'Share With', header: AppScreenHeader },
+  },
+  user: {
+    name: 'user',
+    component: User,
+    options: { title: 'Manage Contact', header: AppScreenHeader },
   },
   account: {
     name: 'account',

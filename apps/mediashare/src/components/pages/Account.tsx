@@ -7,6 +7,7 @@ import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
 import { loadUser, logout } from '../../state/modules/user';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { findMediaItems, getMediaItemById } from '../../state/modules/media-items';
 import { loadUsers } from '../../state/modules/users';
 
@@ -14,6 +15,7 @@ import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView } f
 import { Card, FAB, Title, Text } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
@@ -24,6 +26,7 @@ import { shortenText } from '../../utils';
 import { theme } from '../../styles';
 
 const Contacts = () => {
+  const manageContact = useRouteName(ROUTES.user);
   const users = useAppSelector((state) => state.users.entities);
   console.log('Dumping users');
   console.log(users);
@@ -41,7 +44,7 @@ const Contacts = () => {
             iconRight="edit"
             iconRightColor={theme.colors.accentDarker}
             selectable={true}
-            // onViewDetail={() => onViewMediaItem(item._id, item.uri)}
+            onViewDetail={() => manageContact()}
           />
         );
       })}
@@ -50,13 +53,13 @@ const Contacts = () => {
 };
 
 const SharedItems = () => {
-  const dispatch = useDispatch();
-  const viewMediaItem = useEditMediaItem();
+  // const dispatch = useDispatch();
+  // const viewMediaItem = useEditMediaItem();
   const mediaItems = useAppSelector((state) => state.user.mediaItems) || [];
-  const onViewMediaItem = async function (mediaId: string, uri: string) {
+  /* const onViewMediaItem = async function (mediaId: string, uri: string) {
     await dispatch(getMediaItemById({ uri, mediaId }));
     viewMediaItem({ mediaId, uri });
-  };
+  }; */
   return (
     <ScrollView
       contentInset={{ bottom: 120 }}
@@ -83,15 +86,14 @@ const renderScene = SceneMap({
   shared: SharedItems,
 });
 
-export const Account = ({ navigation }: PageProps) => {
-  const onManageContactsClicked = useRouteName(ROUTES.contacts);
+export const Account = ({}: PageProps) => {
   const layout = useWindowDimensions();
   const editProfile = useRouteName(ROUTES.accountEdit);
   const [index, setIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [routes] = React.useState([
     { key: 'contacts', title: 'Contacts', icon: 'assignment-ind' },
-    { key: 'shared', title: 'Shared Items', icon: 'movie' },
+    { key: 'shared', title: 'All Shared Items', icon: 'movie' },
   ]);
 
   const user = useAppSelector((state) => state.user);
@@ -133,7 +135,7 @@ export const Account = ({ navigation }: PageProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    { icon: 'logout', onPress: () => logoutUser(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
+    { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
     { icon: 'edit', onPress: () => editProfile(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
@@ -164,7 +166,7 @@ export const Account = ({ navigation }: PageProps) => {
     </PageContainer>
   );
 
-  async function logoutUser() {
+  async function accountLogout() {
     await dispatch(logout());
   }
 };
@@ -191,4 +193,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
 });
+
 export default withLoadingSpinner(Account);
