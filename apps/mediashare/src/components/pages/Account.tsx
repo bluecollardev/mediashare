@@ -40,7 +40,7 @@ const Contacts = () => {
             image={imageSrc}
             iconRight="edit"
             iconRightColor={theme.colors.accentDarker}
-            selectable={false}
+            selectable={true}
             // onViewDetail={() => onViewMediaItem(item._id, item.uri)}
           />
         );
