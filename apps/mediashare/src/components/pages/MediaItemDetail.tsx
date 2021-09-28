@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 
 import { useAppSelector } from '../../state';
-import { getMediaItemById } from '../../state/modules/media-items';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
