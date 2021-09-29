@@ -1,9 +1,7 @@
 import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
 import ResetPassword from './components/pages/ResetPassword';
-import Explore from './components/pages/Explore';
-import ExploreDetail from './components/pages/ExploreDetail';
-import ExploreItemDetail from './components/pages/ExploreItemDetail';
+import Browse from './components/pages/Browse';
 import AddFromCollection from './components/pages/AddFromCollection';
 import AddMedia from './components/pages/AddMedia';
 import AddFromFeed from './components/pages/AddFromFeed';
@@ -39,20 +37,10 @@ const routeConfig = {
     component: ResetPassword,
     options: { title: 'Reset Password', header: undefined },
   },
-  explore: {
-    name: 'explore',
-    component: Explore,
-    options: { title: 'Explore', header: AppScreenHeader },
-  },
-  sharedPlaylistDetail: {
-    name: 'sharedPlaylistDetail',
-    component: ExploreDetail,
-    options: { title: "Adam Fehr's Playlist", header: AppScreenHeader },
-  },
-  sharedItemDetail: {
-    name: 'sharedItemDetail',
-    component: ExploreItemDetail,
-    options: { title: 'Title', header: AppScreenHeader },
+  browse: {
+    name: 'browse',
+    component: Browse,
+    options: { title: 'Browse', header: AppScreenHeader },
   },
   playlists: {
     name: 'playlists',

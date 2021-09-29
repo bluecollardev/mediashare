@@ -30,14 +30,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
 
-const ExploreStackNavigator = createStackNavigator();
-const ExploreNavigation = () => {
+const BrowseStackNavigator = createStackNavigator();
+const BrowseNavigation = () => {
   return (
-    <ExploreStackNavigator.Navigator>
-      <ExploreStackNavigator.Screen {...routeConfig.explore} />
-      <ExploreStackNavigator.Screen {...routeConfig.sharedPlaylistDetail} />
-      <ExploreStackNavigator.Screen {...routeConfig.sharedItemDetail} />
-    </ExploreStackNavigator.Navigator>
+    <BrowseStackNavigator.Navigator>
+      <BrowseStackNavigator.Screen {...routeConfig.browse} />
+      <BrowseStackNavigator.Screen {...routeConfig.playlistDetail} />
+      <BrowseStackNavigator.Screen {...routeConfig.mediaItemDetail} />
+    </BrowseStackNavigator.Navigator>
   );
 };
 const PlaylistsStackNavigator = createStackNavigator();
@@ -98,7 +98,7 @@ const PublicNavigation = () => {
 
 // Map route names to icons
 export const tabNavigationIconsMap = {
-  Explore: 'explore',
+  Browse: 'explore',
   Playlists: 'play-circle-outline',
   Media: 'video-library',
   // Feeds: 'share-social-outline',
@@ -129,7 +129,7 @@ function PrivateNavigation() {
         tabBarColor: theme.colors.accent,
       }}
     >
-      <PrivateNavigator.Screen name={'Explore'} component={ExploreNavigation} />
+      <PrivateNavigator.Screen name={'Browse'} component={BrowseNavigation} />
       <PrivateNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
       <PrivateNavigator.Screen name={'Media'} component={MediaNavigation} />
       <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} />

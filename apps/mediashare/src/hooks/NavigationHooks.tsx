@@ -7,7 +7,7 @@ import { findUserPlaylists, getPlaylistById } from '../state/modules/playlists';
 
 type RouteConfigKeyType = EnumLiteralsOf<typeof ROUTES>;
 // @ts-ignore
-type RouteParentKeyType = keyof Pick<typeof routeConfig, 'Explore' | 'Media' | 'Playlists' | 'Account'>;
+type RouteParentKeyType = keyof Pick<typeof routeConfig, 'Browse' | 'Media' | 'Playlists' | 'Account'>;
 
 export function useRouteName(key: RouteConfigKeyType) {
   const nav = useNavigation();

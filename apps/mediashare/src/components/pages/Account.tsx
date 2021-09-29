@@ -8,22 +8,22 @@ import { ROUTES } from '../../routes';
 import { useAppSelector } from '../../state';
 import { loadUser, logout } from '../../state/modules/user';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { findMediaItems, getMediaItemById } from '../../state/modules/media-items';
+import { findMediaItems } from '../../state/modules/media-items';
 import { loadUsers } from '../../state/modules/users';
 
-import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { Card, FAB, Title, Text } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
+import { useRouteName } from '../../hooks/NavigationHooks';
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
 import AccountCard from '../layout/AccountCard';
 
 import { shortenText } from '../../utils';
 
-import { theme } from '../../styles';
+import styles, { theme } from '../../styles';
 
 const Contacts = () => {
   const manageContact = useRouteName(ROUTES.user);
@@ -110,27 +110,6 @@ export const Account = ({}: PageProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
-  const _renderTabBar = (props) => {
-    return (
-      <View style={styles.tabBar}>
-        {props.navigationState.routes.map((route, i) => {
-          return (
-            <TouchableOpacity style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem} onPress={() => setIndex(i)}>
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <MaterialIcons
-                  name={route.icon}
-                  color={props.navigationState.index === i ? theme.colors.primaryText : theme.colors.disabled}
-                  size={26}
-                  style={{ marginRight: 10 }}
-                />
-                <Text style={{ fontWeight: 'bold' }}>{route.title}</Text>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
-  };
   const dispatch = useDispatch();
 
   const [fabState, setFabState] = useState({ open: false });
@@ -148,7 +127,7 @@ export const Account = ({}: PageProps) => {
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={setIndex}
-        renderTabBar={(props) => _renderTabBar(props)}
+        renderTabBar={(props) => renderTabBar(props)}
         initialLayout={{ width: layout.width, height: layout.height }}
       />
       <FAB.Group
@@ -169,29 +148,28 @@ export const Account = ({}: PageProps) => {
   async function accountLogout() {
     await dispatch(logout());
   }
-};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  tabBar: {
-    flexDirection: 'row',
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 16,
-    borderBottomColor: theme.colors.disabled,
-    borderBottomWidth: 1,
-  },
-  tabItemActive: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 16,
-    borderBottomColor: theme.colors.primaryText,
-    borderBottomWidth: 1,
-  },
-});
+  function renderTabBar(props) {
+    return (
+      <View style={styles.tabBar}>
+        {props.navigationState.routes.map((route, i) => {
+          return (
+            <TouchableOpacity style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem} onPress={() => setIndex(i)}>
+              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <MaterialIcons
+                  name={route.icon}
+                  color={props.navigationState.index === i ? theme.colors.primaryText : theme.colors.disabled}
+                  size={26}
+                  style={{ marginRight: 10 }}
+                />
+                <Text style={{ fontWeight: 'bold' }}>{route.title}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    );
+  }
+};
 
 export default withLoadingSpinner(Account);

@@ -91,7 +91,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 
   const DisplayPreviewOrVideo = () => {
     return mediaDisplayMode === 'preview' ? (
-      <ImageBackground source={{ uri: thumbnail }} resizeMode="contain" style={{ width: '100%', height: 300 }}>
+      <ImageBackground source={{ uri: thumbnail }} resizeMode="cover" style={{ width: '100%', height: 300 }}>
         {isPlayable && (
           <TouchableWithoutFeedback onPress={toggleMediaMode}>
             <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
