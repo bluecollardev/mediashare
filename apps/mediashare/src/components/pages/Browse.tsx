@@ -21,7 +21,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles, { theme } from '../../styles';
 import { useViewMediaItem, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { findMediaItems } from '../../state/modules/media-items';
-import { MediaItem } from '../../rxjs-api';
 
 /* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
   const list = playlist.map((item) => {
