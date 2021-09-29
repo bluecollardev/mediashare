@@ -19,8 +19,9 @@ import { shortenText } from '../../utils';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles, { theme } from '../../styles';
-import { useViewPlaylistById } from '../../hooks/NavigationHooks';
+import { useViewMediaItem, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { findMediaItems } from '../../state/modules/media-items';
+import { MediaItem } from '../../rxjs-api';
 
 /* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
   const list = playlist.map((item) => {
@@ -120,8 +121,8 @@ export const Popular = () => {
   let sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
-  const viewPlaylistAction = useViewPlaylistById();
-  const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
+  const viewMediaItemAction = useViewMediaItem();
+  const viewMediaItem = (item) => viewMediaItemAction({ mediaId: item._id, uri: item.mediaSrc });
 
   return (
     <ScrollView
@@ -132,7 +133,7 @@ export const Popular = () => {
         const { _id, title, description, thumbnail } = item;
 
         return (
-          <Card key={`item_${_id}`} onPress={() => viewPlaylist(item)} style={{ flexBasis: '50%', padding: 5, backgroundColor: 'transparent' }}>
+          <Card key={`item_${_id}`} onPress={() => viewMediaItem(item)} style={{ flexBasis: '50%', padding: 5, backgroundColor: 'transparent' }}>
             <Card.Title title={title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(description, 40)}`} />
             <Card.Cover source={{ uri: thumbnail }} />
           </Card>
