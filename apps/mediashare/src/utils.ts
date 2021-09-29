@@ -32,3 +32,11 @@ export function shortenText(str, maxLen, separator: RegExp = undefined) {
   const idx = str.slice(maxLen).search(separator);
   return `${str.substring(0, idx < 0 ? idx : idx + maxLen)}...`;
 }
+
+export function getUserFullName({ firstName = '', lastName = '' }) {
+  return !!firstName || !!lastName ? `${firstName} ${lastName}` : 'Unknown';
+}
+
+export function findInArray(arr, fieldName, value) {
+  return arr.find((item) => item[fieldName] === value);
+}

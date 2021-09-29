@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 import { userReducer } from './modules/user';
 import { usersReducer } from './modules/users';
 import { mediaItemReducer, mediaItemsReducer } from './modules/media-items';
-import { playlistItemsReducer, playlistReducer, playlistsReducer } from './modules/playlists';
+import { playlistReducer, playlistsReducer } from './modules/playlists';
 import { reducer as createPlaylistReducer } from './modules/create-playlist';
 import { reducer as appStateReducer } from './modules/app-state/index';
 
@@ -17,13 +17,11 @@ const systemReducers = {
 const userOwnedReducers = {
   userMediaItems: mediaItemsReducer,
   userPlaylists: playlistsReducer,
-  userPlaylistItems: playlistItemsReducer,
 };
 
 const userSharedReducers = {
   sharedMediaItems: mediaItemsReducer,
   sharedPlaylists: playlistsReducer,
-  sharedPlaylistItems: playlistItemsReducer,
 };
 
 // Combine our reducers and export

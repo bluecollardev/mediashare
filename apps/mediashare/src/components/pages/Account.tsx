@@ -100,20 +100,15 @@ export const Account = ({}: PageProps) => {
   ]);
 
   const user = useAppSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    async function loadData() {
-      await dispatch(findMediaItems());
-      await dispatch(loadUsers());
-      await dispatch(loadUser());
-      setIsLoaded(true);
-    }
     if (!isLoaded) {
       loadData().then();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
-
-  const dispatch = useDispatch();
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
@@ -170,6 +165,13 @@ export const Account = ({}: PageProps) => {
       )}
     </PageContainer>
   );
+
+  async function loadData() {
+    await dispatch(findMediaItems());
+    await dispatch(loadUsers());
+    await dispatch(loadUser());
+    setIsLoaded(true);
+  }
 
   async function accountLogout() {
     await dispatch(logout());

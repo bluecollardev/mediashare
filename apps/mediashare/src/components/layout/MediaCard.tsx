@@ -7,12 +7,16 @@ import SwitchSelector from 'react-native-switch-selector';
 import { descriptionValidator, titleValidator } from './formConfig';
 
 export const DEFAULT_IMAGE = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
+export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png';
+
+import { UserDto } from '../../rxjs-api';
 
 import { theme } from '../../styles';
 
 export interface MediaCardProps {
   title?: string;
   author?: string;
+  createdBy?: UserDto;
   description?: string;
   showSocial?: any | boolean;
   showActions?: boolean;
@@ -62,6 +66,7 @@ type MediaDisplayMode = 'preview' | 'video';
 export const MediaCard: React.FC<MediaCardProps> = ({
   title = '',
   author = 'Anonymous',
+  createdBy = {} as UserDto,
   description = '',
   mediaSrc,
   showSocial = false,
@@ -173,7 +178,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           showThumbnail &&
           thumbnail && (
             <>
-              <Avatar.Image source={{ uri: 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png' }} size={52} />
+              <Avatar.Image source={{ uri: createdBy?.imageSrc || DEFAULT_AVATAR }} size={52} />
             </>
           )
         }

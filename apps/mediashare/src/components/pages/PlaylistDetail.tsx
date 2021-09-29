@@ -5,6 +5,7 @@ import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
 import { getPlaylistById, removeUserPlaylist, updateUserPlaylist } from '../../state/modules/playlists';
+import { loadUsers } from '../../state/modules/users';
 
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 
@@ -12,15 +13,17 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { Button, FAB } from 'react-native-paper';
 
+import AppDialog from '../layout/AppDialog';
 import { MediaCard } from '../layout/MediaCard';
 import { MediaList } from '../layout/MediaList';
 import { ListActionButton } from '../layout/ListActionButton';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
+import { ActionButtons } from '../layout/ActionButtons';
+
+import { MediaItem, UserDto } from '../../rxjs-api';
 
 import { theme } from '../../styles';
-import AppDialog from '../layout/AppDialog';
-import { MediaItem } from '../../rxjs-api';
-import { ActionButtons } from '../layout/ActionButtons';
+import { findInArray, getUserFullName } from '../../utils';
 
 export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
@@ -35,16 +38,29 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
 
   const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
   const loaded = useAppSelector((state) => state);
+  const users = useAppSelector((state) => state.users?.entities);
   const [showDialog, setShowDialog] = useState(false);
   const [isLoaded, setIsLoaded] = useState(!!loaded);
+  const [createdBy, setCreatedBy] = useState({} as UserDto);
   const [selectedItems, setSelectedItems] = useState([]);
 
+  const { title = '', author = '', description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } = selectedPlaylist || {};
+  const items = mediaItems || [];
+
+  console.log('Dumping users');
+  console.log(users);
   useEffect(() => {
     if (!isLoaded) {
-      loadData().then(onDataLoaded);
+      loadData().then(() => {
+        console.log('Set created by...');
+        const user = findInArray(users, 'email', author)
+        console.log(user);
+        setCreatedBy(user);
+        onDataLoaded();
+      });
       console.log(selectedPlaylist);
     }
-  }, [isLoaded, onDataLoaded, selectedPlaylist]);
+  }, [isLoaded, onDataLoaded, selectedPlaylist, users]);
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
@@ -58,10 +74,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
     clearCheckboxSelection();
   }, []);
 
-  const { description = '', title = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } = selectedPlaylist || {};
-
-  const items = mediaItems || [];
-  // const author = user?.username;
+  const fullName = getUserFullName(createdBy);
 
   return (
     <PageContainer>
@@ -78,6 +91,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
         />
         <MediaCard
           title={title}
+          author={fullName}
           description={description}
           showSocial={true}
           showActions={false}
@@ -150,6 +164,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
 
   async function loadData() {
     await dispatch(getPlaylistById(playlistId));
+    await dispatch(loadUsers());
     setIsLoaded(true);
   }
 

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { List } from 'native-base';
+import { UserDto } from '../../rxjs-api';
 import { ListItemGroup } from './ListItemGroup';
 import { MediaListItem } from './MediaListItem';
-import { UserDto } from '../../rxjs-api';
+import { getUserFullName } from '../../utils';
 
 export interface ContactListProps {
   navigation?: any;
@@ -26,8 +27,8 @@ export const ContactList: React.FC<ContactListProps> = ({
     <List>
       {showGroups && <ListItemGroup key={'all'} text={'All Contacts'} />}
       {contacts.map((contact) => {
-        const { _id, username = '', firstName = '', lastName = '', email = '', imageSrc = '' } = contact;
-        const fullName = !!firstName || !!lastName ? `${firstName} ${lastName}` : 'Unknown';
+        const { _id, username = '', email = '', imageSrc = '' } = contact;
+        const fullName = getUserFullName(contact);
 
         return (
           <MediaListItem
