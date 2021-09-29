@@ -36,15 +36,15 @@ export function useViewPlaylist() {
 }
 
 // TODO: Why does this also just take playlistId, the old version used a mediaId, which may not also be correct, maybe both?
-export function useViewPlaylistItem() {
+/* export function useViewPlaylistItem() {
   const nav = useNavigation();
   return ({ playlistId, uri }) => nav.navigate(ROUTES.playlistItemDetail, { playlistId, uri });
-}
+} */
 
-export function useViewSharedMediaItem() {
+/* export function useViewSharedMediaItem() {
   const nav = useNavigation();
   return ({ mediaId, uri }) => nav.navigate(ROUTES.sharedItemDetail, { mediaId, uri });
-}
+} */
 
 export function useEditMediaItem() {
   const nav = useNavigation();

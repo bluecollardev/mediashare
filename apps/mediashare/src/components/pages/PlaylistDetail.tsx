@@ -6,7 +6,7 @@ import { ROUTES } from '../../routes';
 import { useAppSelector } from '../../state';
 import { getPlaylistById, removeUserPlaylist, updateUserPlaylist } from '../../state/modules/playlists';
 
-import { usePlaylists, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
+import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -25,9 +25,10 @@ import { ActionButtons } from '../layout/ActionButtons';
 export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
 
-  const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
-  const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
-  const onViewMediaItemClicked = useViewMediaItem();
+  const edit = useRouteWithParams(ROUTES.playlistEdit);
+  const addToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
+  const viewMediaItem = useViewMediaItem();
+  const shareWith = useRouteName(ROUTES.shareWith);
   const playlists = usePlaylists();
 
   const dispatch = useDispatch();
@@ -43,11 +44,12 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
       loadData().then(onDataLoaded);
       console.log(selectedPlaylist);
     }
-  }, [isLoaded, dispatch, onDataLoaded, loaded, selectedPlaylist]);
+  }, [isLoaded, onDataLoaded, selectedPlaylist]);
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
     { icon: 'delete', onPress: () => setShowDialog(true), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
+    { icon: 'share', onPress: shareWith, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
     { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
@@ -92,7 +94,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
         </MediaCard>
         <MediaList
           key={clearSelectionKey}
-          onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}
+          onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
           list={items}
           showThumbnail={true}
           // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
@@ -105,7 +107,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
       <PageActions>
         {!selectedItems ||
           (selectedItems.length === 0 && (
-            <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => onAddToPlaylistClicked({ playlistId })} />
+            <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
           ))}
         {selectedItems && selectedItems.length > 0 && (
           <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Remove" cancelLabel="Cancel" rightIcon="delete" />
@@ -201,7 +203,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   }
 
   async function editPlaylist() {
-    onEditClicked({ playlistId });
+    edit({ playlistId });
   }
 
   async function deletePlaylist() {

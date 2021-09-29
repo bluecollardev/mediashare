@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ScrollView } from 'react-native';
-
 import { useAppSelector } from '../../state';
 import { findUserPlaylists } from '../../state/modules/playlists';
+import { findMediaItems } from '../../state/modules/media-items';
+
 import { PlaylistResponseDto } from '../../api';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { useViewMediaItem, useViewPlaylistById } from '../../hooks/NavigationHooks';
 
+import { ScrollView } from 'react-native';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { List, Text, Searchbar, Card } from 'react-native-paper';
+import { SceneMap, TabView } from 'react-native-tab-view';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/MediaCard';
 
 import { shortenText } from '../../utils';
-import { SceneMap, TabView } from 'react-native-tab-view';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 import styles, { theme } from '../../styles';
-import { useViewMediaItem, useViewPlaylistById } from '../../hooks/NavigationHooks';
-import { findMediaItems } from '../../state/modules/media-items';
 
 /* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
   const list = playlist.map((item) => {
@@ -56,7 +57,7 @@ export const Articles = () => {
         {sortedList.slice(0, 2).map((item) => {
           const { _id, title, description } = item;
           return (
-            <View style={{ padding: 15, paddingTop: 0 }} key={`article_${_id}`}>
+            <View key={`article_${_id}`} style={{ padding: 15, paddingTop: 0 }}>
               <MediaCard
                 title={title}
                 author={'Admin'}
@@ -193,7 +194,10 @@ export const Browse = ({}: PageProps) => {
         <View style={styles.tabBar}>
           {props.navigationState.routes.map((route, i) => {
             return (
-              <TouchableOpacity style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem} onPress={() => setIndex(i)}>
+              <TouchableOpacity
+                key={`tab_${i}-${route.name}`}
+                style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem}
+                onPress={() => setIndex(i)}>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                   <MaterialIcons
                     name={route.icon}

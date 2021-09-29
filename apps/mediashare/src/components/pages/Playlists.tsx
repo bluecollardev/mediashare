@@ -17,7 +17,7 @@ import { RefreshControl } from 'react-native';
 import { View } from 'react-native';
 import { List } from 'native-base';
 import { MediaListItem } from '../layout/MediaListItem';
-import { PageActions, PageContainer, PageContent, PageProps } from '../layout/PageContainer';
+import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
 
 import { shortenText } from '../../utils';
 
@@ -115,7 +115,7 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
-      <PageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+      <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <PlaylistsComponent
           key={clearSelectionKey}
           list={state.playlists.userPlaylists}
@@ -124,7 +124,7 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
           showActions={!isSelectable}
           onChecked={updateSelection}
         />
-      </PageContent>
+      </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>
           <ActionButtons actionCb={confirmPlaylistsToShare} cancelCb={cancelPlaylistsToShare} actionLabel="Share With" cancelLabel="Cancel" rightIcon="group" />

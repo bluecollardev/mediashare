@@ -16,7 +16,6 @@ import MediaItemEdit from './components/pages/MediaItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
 import User from './components/pages/User';
-import Contacts from './components/pages/Contacts';
 
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
 import AccountEdit from './components/pages/AccountEdit';
@@ -126,11 +125,6 @@ const routeConfig = {
     name: 'accountEdit',
     component: AccountEdit,
     options: { title: 'Update Your Profile', header: AppScreenHeader },
-  },
-  contacts: {
-    name: 'contacts',
-    component: Contacts,
-    options: { title: 'Contacts', header: AppScreenHeader },
   },
 } as const;
 type RouteEnumKeys = keyof typeof routeConfig;

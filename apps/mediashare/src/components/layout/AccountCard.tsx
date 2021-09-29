@@ -16,7 +16,7 @@ interface AccountCardProps {
   phoneNumber: string;
 }
 
-function AccountCard({ title, email, image, likes, shares, shared,  }: AccountCardProps) {
+export function AccountCard({ title, email, image, likes, shares, shared,  }: AccountCardProps) {
   return (
     <View>
       <View style={styles.container}>
