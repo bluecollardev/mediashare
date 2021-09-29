@@ -20,10 +20,10 @@ import { ListActionButton } from '../layout/ListActionButton';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { ActionButtons } from '../layout/ActionButtons';
 
-import { MediaItem, UserDto } from '../../rxjs-api';
+import { MediaItem } from '../../rxjs-api';
 
 import { theme } from '../../styles';
-import { findInArray, getUserFullName } from '../../utils';
+import { getAuthorText } from '../../utils';
 
 export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
@@ -37,30 +37,18 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const dispatch = useDispatch();
 
   const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
-  const loaded = useAppSelector((state) => state);
-  const users = useAppSelector((state) => state.users?.entities);
   const [showDialog, setShowDialog] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(!!loaded);
-  const [createdBy, setCreatedBy] = useState({} as UserDto);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const { title = '', author = '', description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } = selectedPlaylist || {};
+  const { _id, title = '', userId, author = '', description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } = selectedPlaylist || {};
   const items = mediaItems || [];
 
-  console.log('Dumping users');
-  console.log(users);
   useEffect(() => {
     if (!isLoaded) {
-      loadData().then(() => {
-        console.log('Set created by...');
-        const user = findInArray(users, 'email', author)
-        console.log(user);
-        setCreatedBy(user);
-        onDataLoaded();
-      });
-      console.log(selectedPlaylist);
+      loadData().then(onDataLoaded);
     }
-  }, [isLoaded, onDataLoaded, selectedPlaylist, users]);
+  }, [isLoaded, onDataLoaded]);
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
@@ -73,8 +61,6 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
-
-  const fullName = getUserFullName(createdBy);
 
   return (
     <PageContainer>
@@ -90,8 +76,10 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
           subtitle={'Are you sure you want to do this? This action is final and cannot be undone.'}
         />
         <MediaCard
+          id={_id}
+          userId={userId}
           title={title}
-          author={fullName}
+          author={author}
           description={description}
           showSocial={true}
           showActions={false}
@@ -164,7 +152,6 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
 
   async function loadData() {
     await dispatch(getPlaylistById(playlistId));
-    await dispatch(loadUsers());
     setIsLoaded(true);
   }
 

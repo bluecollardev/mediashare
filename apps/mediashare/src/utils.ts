@@ -37,6 +37,10 @@ export function getUserFullName({ firstName = '', lastName = '' }) {
   return !!firstName || !!lastName ? `${firstName} ${lastName}` : 'Unknown';
 }
 
+export function getAuthorText(user) {
+  return `${getUserFullName(user)} @${user.username}`;
+}
+
 export function findInArray(arr, fieldName, value) {
   return arr.find((item) => item[fieldName] === value);
 }
