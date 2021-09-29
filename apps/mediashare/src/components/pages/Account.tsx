@@ -17,7 +17,7 @@ import { Card, FAB, Title, Text } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useRouteName } from '../../hooks/NavigationHooks';
-import { PageActions, PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
 import { ContactList } from '../layout/ContactList';
 import { ActionButtons } from '../layout/ActionButtons';
 import { AccountCard } from '../layout/AccountCard';
@@ -117,8 +117,8 @@ export const Account = ({}: PageProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    { icon: 'logout', onPress: accountLogout, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-    { icon: 'person-remove', onPress: activateDeleteMode, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
+    { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
     { icon: 'edit', onPress: () => editProfile(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
@@ -130,7 +130,16 @@ export const Account = ({}: PageProps) => {
   const { firstName = 'Lucas', lastName = 'Lopatka', email, phoneNumber } = user;
   return (
     <PageContainer>
-      <AccountCard title={`${firstName} ${lastName}`} email={email} phoneNumber={phoneNumber} image={user.imageSrc} likes={49} shared={30} shares={300} />
+      <AccountCard
+        title={`${firstName} ${lastName}`}
+        email={email}
+        phoneNumber={phoneNumber}
+        image={user.imageSrc}
+        showSocial={true}
+        likes={49}
+        shared={30}
+        shares={300}
+      />
       {/* <Highlights highlights={state.highlights} /> */}
       <TabView
         key={clearSelectionKey}
@@ -196,7 +205,8 @@ export const Account = ({}: PageProps) => {
             <TouchableOpacity
               key={`tab_${i}-${route.name}`}
               style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem}
-              onPress={() => setIndex(i)}>
+              onPress={() => setIndex(i)}
+            >
               <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <MaterialIcons
                   name={route.icon}

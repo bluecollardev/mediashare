@@ -7,16 +7,17 @@ import { theme } from '../../styles';
 
 interface AccountCardProps {
   image: string;
-  likes: number;
-  shares: number;
-  shared: number;
   title: string;
   company?: string;
   email: string;
   phoneNumber: string;
+  showSocial?: boolean;
+  likes?: number;
+  shares?: number;
+  shared?: number;
 }
 
-export function AccountCard({ title, email, image, likes, shares, shared,  }: AccountCardProps) {
+export function AccountCard({ title, email, image, likes, shares, shared, showSocial = false }: AccountCardProps) {
   return (
     <View>
       <View style={styles.container}>
@@ -28,20 +29,22 @@ export function AccountCard({ title, email, image, likes, shares, shared,  }: Ac
           <Subheading style={{ fontSize: 11, color: theme.colors.accentDarker }}>{email}</Subheading>
         </View>
       </View>
-      <View style={styles.container}>
-        <View style={styles.labelledElement}>
-          <Subheading>{likes}</Subheading>
-          <Caption>Likes</Caption>
+      {showSocial && (
+        <View style={styles.container}>
+          <View style={styles.labelledElement}>
+            <Subheading>{likes}</Subheading>
+            <Caption>Likes</Caption>
+          </View>
+          <View style={styles.labelledElement}>
+            <Subheading>{shares}</Subheading>
+            <Caption>Shares</Caption>
+          </View>
+          <View style={styles.labelledElement}>
+            <Subheading>{shared}</Subheading>
+            <Caption>Shared</Caption>
+          </View>
         </View>
-        <View style={styles.labelledElement}>
-          <Subheading>{shares}</Subheading>
-          <Caption>Shares</Caption>
-        </View>
-        <View style={styles.labelledElement}>
-          <Subheading>{shared}</Subheading>
-          <Caption>Shared</Caption>
-        </View>
-      </View>
+      )}
     </View>
   );
 }

@@ -98,7 +98,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
           list={items}
           showThumbnail={true}
           // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
-          isSelectable={false}
+          selectable={false}
           showActions={!selectedItems || selectedItems.length === 0}
           removeItem={onRemoveItem}
           addItem={onAddItem}

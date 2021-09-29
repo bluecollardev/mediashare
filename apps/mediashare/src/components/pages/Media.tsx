@@ -25,13 +25,13 @@ import { ActionButtons } from '../layout/ActionButtons';
 export const MediaComponent = ({
   onViewDetail,
   list = [],
-  isSelectable,
+  selectable,
   showActions = true,
 }: {
   navigation: any;
   list: MediaItemDto[];
   onViewDetail: any;
-  isSelectable: boolean;
+  selectable: boolean;
   showActions?: boolean;
 }) => {
   const sortedList = list.map((item) => item);
@@ -52,7 +52,7 @@ export const MediaComponent = ({
               image={thumbnail}
               iconRight="edit"
               iconRightColor={theme.colors.accentDarker}
-              selectable={isSelectable}
+              selectable={selectable}
               onViewDetail={() => onViewDetail(item)}
             />
           );
@@ -105,7 +105,7 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
             navigation={navigation}
             list={mediaItems}
             onViewDetail={onEditItem}
-            isSelectable={isSelectable}
+            selectable={isSelectable}
             showActions={!isSelectable}
           />
         ) : (

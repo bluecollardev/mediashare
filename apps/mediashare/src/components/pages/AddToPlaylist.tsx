@@ -44,7 +44,7 @@ export const AddToPlaylist = ({ route }: PageProps) => {
         <MediaList
           list={mediaItemState}
           showThumbnail={true}
-          isSelectable={true}
+          selectable={true}
           onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
           addItem={(e) => updateMediaItemsList(true, e)}
           removeItem={(e) => updateMediaItemsList(false, e)}

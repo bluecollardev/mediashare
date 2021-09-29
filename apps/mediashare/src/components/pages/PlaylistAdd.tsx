@@ -135,7 +135,7 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
         />
         <MediaList
           list={list}
-          isSelectable={true}
+          selectable={true}
           showThumbnail={true}
           onViewDetail={onMediaItemClick}
           addItem={(item) => updateSelection(true, item)}

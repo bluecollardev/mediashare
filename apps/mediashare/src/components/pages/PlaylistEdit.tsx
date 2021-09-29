@@ -124,7 +124,7 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
           key={clearSelectionKey}
           onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}
           list={items}
-          isSelectable={true}
+          selectable={true}
           showActions={!selectedItems || selectedItems.length === 0}
           removeItem={onRemoveItem}
           addItem={onAddItem}
