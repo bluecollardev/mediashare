@@ -5,8 +5,8 @@ import { MediaItem } from '../../controllers/media-item/entities/media-item.enti
 import { MediaItemService } from '../../controllers/media-item/media-item.service';
 import { Playlist } from '../../controllers/playlist/entities/playlist.entity';
 import { User } from '../../controllers/user/entities/user.entity';
-import { AppConfigModule } from '../app-config.module.ts/app-config.module';
-import { AppConfigService } from '../app-config.module.ts/app-config.provider';
+import { AppConfigModule } from '../app-config/app-config.module';
+import { AppConfigService } from '../app-config/app-config.provider';
 import { PlaylistItem } from '../playlist-item/entities/playlist-item.entity';
 import { ShareItemModule } from '../share-item/share-item.module';
 import { AuthService } from './auth.service';

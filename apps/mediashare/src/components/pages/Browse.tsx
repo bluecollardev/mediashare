@@ -5,7 +5,7 @@ import { useAppSelector } from '../../state';
 import { findUserPlaylists } from '../../state/modules/playlists';
 import { findMediaItems } from '../../state/modules/media-items';
 
-import { PlaylistResponseDto } from '../../api';
+import { PlaylistResponseDto } from '../../rxjs-api';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useViewMediaItem, useViewPlaylistById } from '../../hooks/NavigationHooks';

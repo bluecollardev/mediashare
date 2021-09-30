@@ -5,7 +5,7 @@ import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ShareItemGetResponse } from './share-items.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
-import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.constants';
+import RouteTokens from '../../modules/app-config/constants/open-api.constants';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserDto } from '../user/dto/create-user.dto';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';

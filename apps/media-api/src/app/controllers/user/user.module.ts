@@ -12,8 +12,8 @@ import { MediaItem } from '../media-item/entities/media-item.entity';
 import { ShareItemModule } from '../../modules/share-item/share-item.module';
 import { JwtDecodeMiddleware } from '../../core/middleware/jwt-decode.middleware';
 import { AuthModule } from '../../modules/auth/auth.module';
-import { AppConfigModule } from '../../modules/app-config.module.ts/app-config.module';
-import { AppConfigService } from '../../modules/app-config.module.ts/app-config.provider';
+import { AppConfigModule } from '../../modules/app-config/app-config.module';
+import { AppConfigService } from '../../modules/app-config/app-config.provider';
 
 @Module({
   imports: [AuthModule, TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]), ShareItemModule, AppConfigModule],

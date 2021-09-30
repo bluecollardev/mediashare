@@ -14,7 +14,7 @@ import { UserService } from '../../modules/auth/user.service';
 import { BcRolesType, BC_ROLES } from '@core-lib';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
-import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.constants';
+import RouteTokens from '../../modules/app-config/constants/open-api.constants';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 
 @ApiTags('users')

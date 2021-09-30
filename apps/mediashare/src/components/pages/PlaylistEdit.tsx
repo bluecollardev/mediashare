@@ -9,17 +9,16 @@ import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 import { useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
+import { View } from 'react-native';
 import { Button } from 'react-native-paper';
+import { AppUpload } from '../layout/AppUpload';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
 import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { ROUTES } from '../../routes';
-import * as DocumentPicker from 'expo-document-picker';
-import { createThumbnail } from '../../state/modules/media-items';
+
 import { theme } from '../../styles';
-import AppUpload from '../layout/AppUpload';
-import { View } from 'react-native';
 
 const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: PageProps) => {
   const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
@@ -36,10 +35,6 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
   const [category, setCategory] = useState(selectedPlaylist?.category);
   const [selectedItems, setSelectedItems] = useState([]);
   const [imageSrc, setImageSrc] = useState(selectedPlaylist?.imageSrc);
-
-  const [documentUri, setDocumentUri] = useState('');
-
-  const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
 
   useEffect(() => {
     if (!isLoaded) {

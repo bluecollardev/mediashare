@@ -5,7 +5,7 @@ import { ROUTES } from '../../routes';
 
 import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/playlists';
 
-import { PlaylistResponseDto } from '../../api';
+import { PlaylistResponseDto } from '../../rxjs-api';
 
 import { useLoadPlaylistData } from '../../hooks/useLoadData';
 import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';

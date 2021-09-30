@@ -76,7 +76,6 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
         />
         <MediaCard
           id={_id}
-          userId={userId}
           title={title}
           author={author}
           description={description}

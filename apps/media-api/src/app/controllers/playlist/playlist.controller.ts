@@ -60,7 +60,6 @@ export class PlaylistController {
   @PlaylistGetResponse({ type: PlaylistResponseDto })
   async findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
     const response = await this.playlistService.getPlaylistById({ playlistId });
-
     return response;
   }
 
@@ -95,7 +94,6 @@ export class PlaylistController {
     @Res() response: Response
   ) {
     const shareItem = await this.shareItemService.createPlaylistShareItem({ createdBy, userId, playlistId });
-
     return response.status(HttpStatus.CREATED).send(shareItem);
   }
 }

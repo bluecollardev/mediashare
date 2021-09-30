@@ -15,7 +15,7 @@ interface AppUploadProps {
   children?: any;
 }
 
-function AppUpload({ startLoad, endLoad, onUpload, label = 'Upload Picture', children }: AppUploadProps) {
+export function AppUpload({ startLoad, endLoad, onUpload, label = 'Upload Picture', children }: AppUploadProps) {
   const uploadDocument = async function () {
     launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
       if (!res.assets) {
@@ -45,19 +45,5 @@ function AppUpload({ startLoad, endLoad, onUpload, label = 'Upload Picture', chi
     </Button>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#312e38',
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: '#fff',
-  },
-});
 
 export default AppUpload;

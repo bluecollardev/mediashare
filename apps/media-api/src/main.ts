@@ -12,8 +12,7 @@ import { AppModule } from './app/app.module';
 import { writeFileSync } from 'fs';
 
 import * as passport from 'passport';
-import { AppConfigService } from './app/modules/app-config.module.ts/app-config.provider';
-import { DocumentBuilderFactory } from '@mediashare/shared';
+import { AppConfigService } from './app/modules/app-config/app-config.provider';
 import * as session from 'express-session';
 import MongoStore from 'connect-mongo';
 import * as compression from 'compression';
@@ -75,7 +74,6 @@ async function bootstrap() {
     })
   );
 
-  console.log('is dev? ', isDev);
   if (isDev) {
     console.log('writing swagger definitions');
     writeFileSync('./swagger-spec.json', JSON.stringify(document, null, 2));
