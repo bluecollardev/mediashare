@@ -23,7 +23,6 @@ import { ActionButtons } from '../layout/ActionButtons';
 import { MediaItem } from '../../rxjs-api';
 
 import { theme } from '../../styles';
-import { getAuthorText } from '../../utils';
 
 export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
@@ -152,6 +151,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
 
   async function loadData() {
     await dispatch(getPlaylistById(playlistId));
+    await dispatch(loadUsers());
     setIsLoaded(true);
   }
 

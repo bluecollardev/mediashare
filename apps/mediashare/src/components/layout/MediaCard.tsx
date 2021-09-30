@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { Avatar, Button, Card, IconButton, Paragraph, TextInput, Title, Text } from 'react-native-paper';
 import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
@@ -11,7 +10,6 @@ export const DEFAULT_IMAGE = 'https://www.mapcom.com/wp-content/uploads/2015/07/
 export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png';
 
 import { UserDto } from '../../rxjs-api';
-import { loadUsers } from '../../state/modules/users';
 import { useAppSelector } from '../../state';
 import { findInArray, getAuthorText } from '../../utils';
 import { theme } from '../../styles';
@@ -19,9 +17,7 @@ import { theme } from '../../styles';
 export interface MediaCardProps {
   id?: string;
   title?: string;
-  author?: string;
-  userId?: string;
-  createdBy?: UserDto;
+  author?: string | string[];
   description?: string;
   showSocial?: any | boolean;
   showActions?: boolean;
@@ -69,10 +65,8 @@ export const SocialButtons = ({ likes, shares, views }: { likes: number; shares:
 type MediaDisplayMode = 'preview' | 'video';
 
 export const MediaCard: React.FC<MediaCardProps> = ({
-  userId,
   title = '',
   author = 'Anonymous',
-  createdBy = {} as UserDto,
   description = '',
   mediaSrc,
   showSocial = false,
@@ -97,28 +91,16 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   views = 0,
   shares = 0,
 }: MediaCardProps) => {
-  const dispatch = useDispatch();
-
   const getMediaDisplayMode = () => (showThumbnail && thumbnail ? 'preview' : 'video');
   const [mediaDisplayMode, setMediaDisplayMode] = useState(getMediaDisplayMode() as MediaDisplayMode);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   const users = useAppSelector((state) => state.users?.entities);
   const [creator, setCreator] = useState({} as UserDto);
   useEffect(() => {
-    if (!isLoaded) {
-      loadData().then(() => {
-        // TODO: Shouldn't we use id field?
-        // const user = findInArray(users, '_id', userId);
-        const user = findInArray(users, 'author', author);
-        console.log('Dumping user');
-        console.log(user);
-        setCreator(user);
-      });
-    }
-  }, [isLoaded, users, userId]);
-  const authorText = creator ? getAuthorText(creator) : '';
-  console.log(`Created by ${authorText}`);
+    const primaryAuthor = Array.isArray(author) ? author[0] : author;
+    const user = findInArray(users, 'username', primaryAuthor);
+    setCreator(user);
+  }, [users]);
 
   const DisplayPreviewOrVideo = () => {
     return mediaDisplayMode === 'preview' ? (
@@ -199,12 +181,12 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <Card.Title
         title={<Title>{`  ${title}`}</Title>}
-        subtitle={`   By ${author ?? 'Anonymous'}`}
+        subtitle={`   By ${creator ? getAuthorText(creator) : 'Anonymous'}`}
         left={() =>
           showThumbnail &&
           thumbnail && (
             <>
-              <Avatar.Image source={{ uri: createdBy?.imageSrc || DEFAULT_AVATAR }} size={52} />
+              <Avatar.Image source={{ uri: creator?.imageSrc || DEFAULT_AVATAR }} size={52} />
             </>
           )
         }
@@ -236,11 +218,6 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     } else if (current === 'preview') {
       setMediaDisplayMode('video');
     }
-  }
-
-  async function loadData() {
-    await dispatch(loadUsers());
-    setIsLoaded(true);
   }
 };
 const styles = StyleSheet.create({
