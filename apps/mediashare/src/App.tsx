@@ -149,14 +149,16 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
   const dispatch = useDispatch();
 
-  const [fontsLoaded] = useFonts({
+  // TODO: Fix font loading on Android
+  /* const [fontsLoaded] = useFonts({
     Roboto_500Medium,
     Roboto_900Black,
     Roboto_700Bold,
     Roboto_100Thin,
     Roboto_300Light,
     Roboto_400Regular,
-  });
+  }); */
+  const fontsLoaded = true;
   // Amplify.configure(awsmobile);
   // fakeLogin();
 
@@ -189,7 +191,6 @@ function App() {
     return (
       <Provider store={store}>
         <Spinner visible={loading} />
-
         <PaperProvider
           theme={customTheme}
           settings={{
