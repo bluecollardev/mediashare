@@ -150,15 +150,15 @@ function App() {
   const dispatch = useDispatch();
 
   // TODO: Fix font loading on Android
-  /* const [fontsLoaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     Roboto_500Medium,
     Roboto_900Black,
     Roboto_700Bold,
     Roboto_100Thin,
     Roboto_300Light,
     Roboto_400Regular,
-  }); */
-  const fontsLoaded = true;
+  });
+  // const fontsLoaded = true;
   // Amplify.configure(awsmobile);
   // fakeLogin();
 
