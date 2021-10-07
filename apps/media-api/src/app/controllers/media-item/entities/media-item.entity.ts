@@ -2,7 +2,7 @@ import { BcEntity } from '@api';
 import { MediaCategoryType, MEDIA_CATEGORY, MEDIA_ITEM_ENTITY } from '@core-lib';
 import { ApiLongString, ApiObjectId, ApiString, ApiUriString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsIn } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { Column, Entity, Index } from 'typeorm';
 export const MEDIA_TOKEN = MEDIA_ITEM_ENTITY;
@@ -39,7 +39,7 @@ export class MediaItem extends BcEntity {
   uri: string;
 
   @Column()
-  @ApiString()
+  @ApiProperty({ enum: MEDIA_CATEGORY, name: 'category', enumName: 'MediaCategoryType' })
   category: MediaCategoryType;
 
   @Column()

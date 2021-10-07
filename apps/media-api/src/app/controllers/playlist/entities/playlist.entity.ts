@@ -31,7 +31,7 @@ export class Playlist extends BcEntity implements PlaylistInterface {
   userId: ObjectId;
 
   @Column('category')
-  @ApiString()
+  @ApiProperty({ enum: PLAYLIST_CATEGORY, name: 'category', enumName: 'PlaylistCategoryType' })
   category: PlaylistCategoryType;
 }
 
