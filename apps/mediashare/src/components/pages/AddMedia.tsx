@@ -10,14 +10,14 @@ import { useAppSelector } from '../../state';
 import { addMediaItem, createThumbnail } from '../../state/modules/media-items';
 import { setError } from '../../state/modules/app-state/';
 
-import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum, MediaCategoryType } from '../../rxjs-api';
+import { CreateMediaItemDto, MediaCategoryType } from '../../rxjs-api';
 
 import { useMediaItems } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
+import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from '../layout/PageContainer';
 import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
 
 import { minLength } from '../../lib/Validators';
@@ -31,7 +31,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState(MediaCategoryType);
+  const [category, setCategory] = useState(MediaCategoryType.Free);
   const [documentUri, setDocumentUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
   const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
@@ -41,7 +41,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   };
 
   const options = [];
-  for (const value in CreateMediaItemDtoCategoryEnum) {
+  for (const value in MediaCategoryType) {
     options.push(value);
   }
   // const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
@@ -147,7 +147,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
     startLoad();
     const dto: CreateMediaItemDto = {
       title,
-      category: CreateMediaItemDtoCategoryEnum[category],
+      category: MediaCategoryType[category],
       description,
       summary: '',
       isPlayable: true,
@@ -158,7 +158,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
     };
     await dispatch(addMediaItem(dto));
 
-    setCategory(CreateMediaItemDtoCategoryEnum.Free);
+    setCategory(MediaCategoryType.Free);
     setDescription('');
     setThumbnail('');
     endLoad();
@@ -167,7 +167,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
 
   function clearAndGoBack() {
     setTitle('');
-    setCategory(CreateMediaItemDtoCategoryEnum.Free);
+    setCategory(MediaCategoryType.Free);
     setDescription('');
     setThumbnail('');
     mediaItems();

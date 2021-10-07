@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../state';
 import { deleteMediaItem, updateMediaItem } from '../../state/modules/media-items';
 
-import { CreateMediaItemDtoCategoryEnum, MediaCategoryType, UpdateMediaItemDto } from '../../rxjs-api';
+import { MediaCategoryType, UpdateMediaItemDto } from '../../rxjs-api';
 import { useMediaItems } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
