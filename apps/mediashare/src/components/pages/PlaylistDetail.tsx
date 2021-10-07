@@ -5,49 +5,54 @@ import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
 import { getPlaylistById, removeUserPlaylist, updateUserPlaylist } from '../../state/modules/playlists';
+import { loadUsers } from '../../state/modules/users';
 
-import { usePlaylists, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
+import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { Button, FAB } from 'react-native-paper';
 
-import { PlaylistCard } from '../layout/PlaylistCard';
+import AppDialog from '../layout/AppDialog';
+import { MediaCard } from '../layout/MediaCard';
 import { MediaList } from '../layout/MediaList';
 import { ListActionButton } from '../layout/ListActionButton';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
+import { ActionButtons } from '../layout/ActionButtons';
+
+import { MediaItem } from '../../rxjs-api';
 
 import { theme } from '../../styles';
-import AppDialog from '../layout/AppDialog';
-import { MediaItem } from '../../rxjs-api';
-import { ActionButtons } from '../layout/ActionButtons';
 
 export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
 
-  const onEditClicked = useRouteWithParams(ROUTES.playlistEdit);
-  const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
-  const onViewMediaItemClicked = useViewMediaItem();
+  const edit = useRouteWithParams(ROUTES.playlistEdit);
+  const addToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
+  const viewMediaItem = useViewMediaItem();
+  const shareWith = useRouteName(ROUTES.shareWith);
   const playlists = usePlaylists();
 
   const dispatch = useDispatch();
 
   const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
-  const loaded = useAppSelector((state) => state);
   const [showDialog, setShowDialog] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(!!loaded);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+
+  const { _id, title = '', userId, author = '', description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } = selectedPlaylist || {};
+  const items = mediaItems || [];
 
   useEffect(() => {
     if (!isLoaded) {
       loadData().then(onDataLoaded);
-      console.log(selectedPlaylist);
     }
-  }, [isLoaded, dispatch, onDataLoaded, loaded, selectedPlaylist]);
+  }, [isLoaded, onDataLoaded]);
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
     { icon: 'delete', onPress: () => setShowDialog(true), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
+    { icon: 'share', onPress: shareWith, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
     { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
@@ -55,11 +60,6 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
-
-  const { description = '', title = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } = selectedPlaylist || {};
-
-  const items = mediaItems || [];
-  // const author = user?.username;
 
   return (
     <PageContainer>
@@ -74,30 +74,31 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
           title={'Delete Playlist'}
           subtitle={'Are you sure you want to do this? This action is final and cannot be undone.'}
         />
-        <PlaylistCard
+        <MediaCard
+          id={_id}
           title={title}
+          author={author}
           description={description}
           showSocial={true}
           showActions={false}
           showThumbnail={true}
-          image={imageSrc}
+          thumbnail={imageSrc}
           likes={likesCount}
           shares={shareCount}
           views={viewCount}
-          onEditClicked={() => onEditClicked({ playlistId })}
-          // onDeleteClicked={onDeleteClicked}
           category={category}
         >
           <Button icon="live-tv" color={theme.colors.primary} mode={'outlined'} style={{ width: '100%', marginBottom: 10 }} compact>
             Play From Beginning
           </Button>
-        </PlaylistCard>
+        </MediaCard>
         <MediaList
           key={clearSelectionKey}
-          onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}
+          onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
           list={items}
           showThumbnail={true}
-          isSelectable={true}
+          // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
+          selectable={false}
           showActions={!selectedItems || selectedItems.length === 0}
           removeItem={onRemoveItem}
           addItem={onAddItem}
@@ -106,7 +107,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
       <PageActions>
         {!selectedItems ||
           (selectedItems.length === 0 && (
-            <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => onAddToPlaylistClicked({ playlistId })} />
+            <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
           ))}
         {selectedItems && selectedItems.length > 0 && (
           <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Remove" cancelLabel="Cancel" rightIcon="delete" />
@@ -149,6 +150,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
 
   async function loadData() {
     await dispatch(getPlaylistById(playlistId));
+    await dispatch(loadUsers());
     setIsLoaded(true);
   }
 
@@ -188,7 +190,8 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   } */
 
   async function saveMediaUpdates() {
-    const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
+    const mediaIds = selectedPlaylist.mediaIds || [];
+    const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
 
     await withIds(filtered);
     setIsLoaded(false);
@@ -201,7 +204,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   }
 
   async function editPlaylist() {
-    onEditClicked({ playlistId });
+    edit({ playlistId });
   }
 
   async function deletePlaylist() {

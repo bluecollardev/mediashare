@@ -1,10 +1,10 @@
 import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import * as R from 'remeda';
 
 import { ActionsFactory } from '../../core/factory';
 import { apis } from '../../apis';
 import { setKeyPair } from './keypair-store';
 import { AuthorizeDto, ProfileDto, UpdateUserDto, UserDto } from '../../../rxjs-api';
-import * as R from 'remeda';
 import { signOut } from './auth';
 import { BcRolesType } from '../../../api/models/bc-roles-type';
 export const USER_STATE_KEY = 'user';
@@ -63,7 +63,7 @@ const userReducer = createReducer(initialState, (builder) =>
       return { ...state, ...pickUser(action.payload) };
     })
     .addCase(loadUser.fulfilled, (state, action) => {
-      return { ...state, ...pickUser(action.payload) };
+      return { ...state, ...pickUser({ ...action.payload }) };
     })
     .addCase(loginAction.pending, (state) => {
       return { ...state };
@@ -84,5 +84,5 @@ const userReducer = createReducer(initialState, (builder) =>
       return { ...state };
     })
 );
-// export const;
+
 export { userReducer };

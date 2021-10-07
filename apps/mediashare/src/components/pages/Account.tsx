@@ -1,52 +1,73 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { TabView } from 'react-native-tab-view';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import { ROUTES } from '../../routes';
+
+import { useAppSelector } from '../../state';
+import { loadUser, logout } from '../../state/modules/user';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { findMediaItems } from '../../state/modules/media-items';
+import { loadUsers } from '../../state/modules/users';
+
+import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { Card, FAB, Title, Text } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useRouteName } from '../../hooks/NavigationHooks';
+import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
+import { ContactList } from '../layout/ContactList';
+import { ActionButtons } from '../layout/ActionButtons';
+import { AccountCard } from '../layout/AccountCard';
 
-import { View, useWindowDimensions, TouchableOpacity, StyleSheet, ScrollView, FlatList } from 'react-native';
-import { Avatar, Button, List, Title } from 'react-native-paper';
-import { PageProps } from '../layout/PageContainer';
-import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-material-cards';
-
-import { useRouteName, useEditMediaItem, useViewProfileById } from '../../hooks/NavigationHooks';
-import { ROUTES } from '../../routes';
-import { useDispatch } from 'react-redux';
-import { SceneMap, TabView } from 'react-native-tab-view';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { theme } from '../../styles';
-import { getMediaItemById } from '../../state/modules/media-items/index';
-import AccountCard from '../layout/AccountCard';
-import { useAppSelector } from '../../state';
-import { MediaListItem } from '../layout/MediaListItem';
 import { shortenText } from '../../utils';
 
-import SharedList from '../../api/models/SharedList';
+import styles, { theme } from '../../styles';
 import { useProfile } from '../../hooks/useProfile';
-import { User } from '../../rxjs-api';
-
-const SecondRoute = () => {
-  const dispatch = useDispatch();
-  const viewMediaItem = useEditMediaItem();
-  const mediaItems = useAppSelector((state) => state.mediaItems.mediaItems) || [];
-  const onViewMediaItem = async function (mediaId: string, uri: string) {
-    await dispatch(getMediaItemById({ uri, mediaId }));
-    viewMediaItem({ mediaId, uri });
-  };
+const Contacts = ({ selectable = false, showActions = false }) => {
+  const manageContact = useRouteName(ROUTES.user);
+  const contacts = useAppSelector((state) => state.users.entities);
+  console.log('Dumping contacts');
+  console.log(contacts);
   return (
     <ScrollView>
+      <ContactList
+        contacts={contacts}
+        showGroups={false}
+        showActions={showActions}
+        selectable={selectable}
+        listItemProps={{
+          iconRight: 'edit',
+          iconRightColor: theme.colors.accentDarker,
+          onViewDetail: () => manageContact(),
+        }}
+      />
+    </ScrollView>
+  );
+};
+
+const SharedItems = () => {
+  // const dispatch = useDispatch();
+  // const viewMediaItem = useEditMediaItem();
+  const mediaItems = useAppSelector((state) => state.profile.entity.sharedItems) || [];
+  /* const onViewMediaItem = async function (mediaId: string, uri: string) {
+    await dispatch(getMediaItemById({ uri, mediaId }));
+    viewMediaItem({ mediaId, uri });
+  }; */
+  return (
+    <ScrollView
+      contentInset={{ bottom: 120 }}
+      contentContainerStyle={{ flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap' }}
+    >
       {mediaItems.length > 0 ? (
         mediaItems.map((item) => {
           return (
-            <MediaListItem
-              key={`item_${item._id}`}
-              title={item.title}
-              description={`${shortenText(item.description, 40)}`}
-              showThumbnail={true}
-              image={item.thumbnail}
-              iconRight="edit"
-              iconRightColor={theme.colors.accentDarker}
-              selectable={false}
-              onViewDetail={() => onViewMediaItem(item._id, item.uri)}
-            />
+            <Card key={`item_${item.playlistId}`} style={{ flexBasis: '50%', padding: 5 }}>
+              <Card.Title title={item.title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(item.author, 40)}`} />
+              <Card.Cover source={{ uri: item.imageSrc }} />
+            </Card>
           );
         })
       ) : (
@@ -56,151 +77,158 @@ const SecondRoute = () => {
   );
 };
 
-const FirstRoute = () => {
-  const onPressContact = function (contact: User) {
-    console.log(contact);
-  };
-  const viewProfile = useViewProfileById();
-
-  const users = useAppSelector((state) => state.users.entities);
-  console.log(users);
-  const renderItem = function ({ user }) {
-    return (
-      <Card>
-        <CardImage source={{ uri: 'http://placehold.it/480x270' }} title="Above all i am here" />
-        <CardTitle title="This is a title" subtitle="This is subtitle" />
-        <CardContent text="Your device will reboot in few seconds once successful, be patient meanwhile" />
-        <CardAction separator={true} inColumn={false}>
-          <CardButton onPress={() => {}} title="Push" color="blue" />
-          <CardButton onPress={() => {}} title="Later" color="blue" />
-        </CardAction>
-      </Card>
-      // <Card style={{ width: '49%' }} onPress={() => viewProfile({ userId: user._id })}>
-      //   <List.Item
-      //     left={() => (
-      //       <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-      //         <Avatar.Image source={user?.imageSrc ? { uri: user.imageSrc } : undefined} size={30} />
-      //       </View>
-      //     )}
-      //     key={user._id}
-      //     title={`${user.firstName} ${user.lastName}`}
-      //     description={`${user.username}`}
-      //   />
-      // </Card>
-    );
-  };
-  return (
-    <FlatList
-      style={{ height: '100%' }}
-      contentContainerStyle={{ justifyContent: 'space-between', width: '100%' }}
-      columnWrapperStyle={{ margin: 5, justifyContent: 'space-between' }}
-      numColumns={2}
-      data={users}
-      renderItem={({ item }) => renderItem({ user: item })}
-      keyExtractor={(item) => item._id}
-    />
-  );
+const renderScene = (sceneComponentProps) => ({ route }) => {
+  switch (route.key) {
+    case 'contacts':
+      return <Contacts {...sceneComponentProps} />;
+    case 'shared':
+      return <SharedItems {...sceneComponentProps} />;
+  }
 };
 
-const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
-});
+const actionModes = { delete: 'delete', default: 'default' };
 
-export const Account = ({ navigation }: PageProps) => {
-  const onManageContacts = useRouteName(ROUTES.contacts);
+export const Account = ({}: PageProps) => {
   const layout = useWindowDimensions();
   const editProfile = useRouteName(ROUTES.accountEdit);
   const [index, setIndex] = useState(0);
   const { setLoaded, onView, onDelete } = useProfile();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isSelectable, setIsSelectable] = useState(false);
+  const [actionMode, setActionMode] = useState(actionModes.default);
   const [routes] = React.useState([
-    { key: 'first', title: 'First', icon: 'contacts' },
-    { key: 'second', title: 'Second', icon: 'movie' },
+    { key: 'contacts', title: 'Contacts', icon: 'assignment-ind' },
+    { key: 'shared', title: 'All Shared Items', icon: 'movie' },
   ]);
 
-  const user = useAppSelector((state) => state.user);
-  const sharedItems = useAppSelector((state) => state.profile.entity.sharedItems);
+  const user = useAppSelector((state) => state.profile.entity);
+
   const dispatch = useDispatch();
+
   useEffect(() => {
+    if (!isLoaded) {
+      loadData().then();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const _renderTabBar = (props) => {
+  const [fabState, setFabState] = useState({ open: false });
+  const fabActions = [
+    { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
+    { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'edit', onPress: () => editProfile(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+  ];
+
+  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
+
+  const { firstName = 'Lucas', lastName = 'Lopatka', email, phoneNumber } = user;
+
+  return (
+    <PageContainer>
+      <View>
+        <AccountCard
+          title={`${firstName} ${lastName}`}
+          email={email}
+          phoneNumber={phoneNumber}
+          image={user.imageSrc}
+          showSocial={true}
+          likes={49}
+          shared={30}
+          shares={300}
+        />
+        {/* <Highlights highlights={state.highlights} /> */}
+        <TabView
+          key={clearSelectionKey}
+          navigationState={{ index, routes }}
+          renderScene={renderScene({ selectable: isSelectable, showActions: !isSelectable })}
+          onIndexChange={setIndex}
+          renderTabBar={(props) => renderTabBar(props)}
+          initialLayout={{ width: layout.width, height: layout.height }}
+        />
+        {isSelectable && actionMode === actionModes.delete && (
+          <PageActions>
+            <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Delete" cancelLabel="Cancel" rightIcon="delete" />
+          </PageActions>
+        )}
+        {!isSelectable && (
+          <FAB.Group
+            visible={true}
+            open={fabState.open}
+            icon={fabState.open ? 'close' : 'more-vert'}
+            actions={fabActions}
+            color={theme.colors.primaryTextLighter}
+            fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+            onStateChange={(open) => {
+              // open && setOpen(!open);
+              setFabState(open);
+            }}
+          />
+        )}
+      </View>
+    </PageContainer>
+  );
+
+  async function loadData() {
+    await dispatch(findMediaItems());
+    await dispatch(loadUsers());
+    await dispatch(loadUser());
+    setIsLoaded(true);
+  }
+
+  async function accountLogout() {
+    await dispatch(logout());
+  }
+
+  async function activateDeleteMode() {
+    setActionMode(actionModes.delete);
+    setIsSelectable(true);
+  }
+
+  async function confirmDelete() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  async function cancelDelete() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  function clearCheckboxSelection() {
+    const randomKey = Math.random();
+    setClearSelectionKey(randomKey);
+  }
+
+  function renderTabBar(props) {
     return (
       <View style={styles.tabBar}>
         {props.navigationState.routes.map((route, i) => {
           return (
-            <TouchableOpacity style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem} onPress={() => setIndex(i)}>
-              <MaterialIcons name={route.icon} color={props.navigationState.index === i ? theme.colors.primaryText : theme.colors.disabled} size={26} />
+            <TouchableOpacity
+              key={`tab_${i}-${route.name}`}
+              style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem}
+              onPress={() => setIndex(i)}
+            >
+              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <MaterialIcons
+                  name={route.icon}
+                  color={props.navigationState.index === i ? theme.colors.primaryText : theme.colors.disabled}
+                  size={26}
+                  style={{ marginRight: 10 }}
+                />
+                <Text style={{ fontWeight: 'bold' }}>{route.title}</Text>
+              </View>
             </TouchableOpacity>
           );
         })}
       </View>
     );
-  };
-
-  // const loginRoute = usePageRoute(ROUTES.login);
-
-  const onSignout = async function () {
-    await dispatch(logout());
-    // loginRoute();
-  };
-  const onViewProfile = async function () {
-    await dispatch(logout());
-    // loginRoute();
-  };
-
-  return (
-    <View>
-      <AccountCard
-        image={user.imageSrc}
-        likes={49}
-        shared={30}
-        shares={300}
-        fullName={`${user.firstName} ${user.lastName}`}
-        email={user.email}
-        phoneNumber={user.phoneNumber}
-      />
-      {/* <Highlights highlights={state.highlights} /> */}
-      <Button mode={'outlined'} style={{ margin: 15 }} onPress={editProfile}>
-        Edit Profile
-      </Button>
-      {user.role === 'admin' ? (
-        <TabView
-          navigationState={{ index, routes }}
-          renderScene={renderScene}
-          onIndexChange={setIndex}
-          renderTabBar={(props) => _renderTabBar(props)}
-          initialLayout={{ width: layout.width, height: layout.height }}
-        />
-      ) : (
-        <SharedList sharedItems={sharedItems} onView={onView} onDelete={onDelete} />
-      )}
-    </View>
-  );
+  }
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  tabBar: {
-    flexDirection: 'row',
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 16,
-    borderBottomColor: theme.colors.disabled,
-    borderBottomWidth: 1,
-  },
-  tabItemActive: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 16,
-    borderBottomColor: theme.colors.primaryText,
-    borderBottomWidth: 1,
-  },
-});
 export default withLoadingSpinner(Account);

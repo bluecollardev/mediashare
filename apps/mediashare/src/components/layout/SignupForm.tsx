@@ -1,30 +1,25 @@
-import { Input, Item } from 'native-base';
 import React, { PropsWithChildren } from 'react';
-
+import { ScrollView, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
-import { ScrollView } from 'react-native';
-import { UserDto } from '../../rxjs-api/models/UserDto';
 
 export interface SignupFormProps {
   navigation?: any;
   showGroups?: boolean;
-  items?: any[];
-  user: UserDto;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const SignupForm: React.FC<SignupFormProps> = (props: PropsWithChildren<any>) => {
   return (
     <ScrollView>
-      <Item regular style={{ marginBottom: 10 }}>
-        <Input value="" placeholder="First Name*" />
-      </Item>
-      <Item regular style={{ marginBottom: 10 }}>
-        <Input value="" placeholder="Last Name*" />
-      </Item>
-      <Item regular style={{ marginBottom: 10 }}>
-        <Input value="" placeholder="Mobile Phone (SMS)" />
-      </Item>
+      <View style={{ marginBottom: 10 }}>
+        <TextInput value="" placeholder="First Name*" />
+      </View>
+      <View style={{ marginBottom: 10 }}>
+        <TextInput value="" placeholder="Last Name*" />
+      </View>
+      <View style={{ marginBottom: 10 }}>
+        <TextInput value="" placeholder="Mobile Phone (SMS)" />
+      </View>
       <Button
         dark
         mode={'contained'}

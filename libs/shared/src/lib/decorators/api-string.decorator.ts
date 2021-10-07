@@ -36,7 +36,7 @@ const ApiName: ApiDecoratorType = function ({ required } = apiDecoratorDefaults)
 };
 
 const ApiString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
-  const length = [5, 255] as const;
+  const length = [3, 255] as const;
   return applyDecorators(
     ...baseStringValidators(...length),
     ApiProperty({

@@ -47,7 +47,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
         if (selectable) {
           setIsChecked(!isChecked);
           onChecked(!isChecked);
-        } else {
+        } else if (onViewDetail) {
           onViewDetail();
         }
       }}

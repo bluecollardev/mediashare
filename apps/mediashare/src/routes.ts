@@ -1,9 +1,7 @@
 import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
 import ResetPassword from './components/pages/ResetPassword';
-import Explore from './components/pages/Explore';
-import ExploreDetail from './components/pages/ExploreDetail';
-import ExploreItemDetail from './components/pages/ExploreItemDetail';
+import Browse from './components/pages/Browse';
 import AddFromCollection from './components/pages/AddFromCollection';
 import AddMedia from './components/pages/AddMedia';
 import AddFromFeed from './components/pages/AddFromFeed';
@@ -11,14 +9,13 @@ import Playlists from './components/pages/Playlists';
 import PlaylistDetail from './components/pages/PlaylistDetail';
 import PlaylistEdit from './components/pages/PlaylistEdit';
 import PlaylistAdd from './components/pages/PlaylistAdd';
-import PlaylistItemDetail from './components/pages/PlaylistItemDetail';
 import AddToPlaylist from './components/pages/AddToPlaylist';
 import Media from './components/pages/Media';
 import MediaItemDetail from './components/pages/MediaItemDetail';
 import MediaItemEdit from './components/pages/MediaItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
-import Contacts from './components/pages/Contacts';
+import User from './components/pages/User';
 
 import { AppScreenHeader } from './components/layout/AppScreenHeader';
 import AccountEdit from './components/pages/AccountEdit';
@@ -40,20 +37,10 @@ const routeConfig = {
     component: ResetPassword,
     options: { title: 'Reset Password', header: undefined },
   },
-  explore: {
-    name: 'explore',
-    component: Explore,
-    options: { title: 'Explore', header: AppScreenHeader },
-  },
-  sharedPlaylistDetail: {
-    name: 'sharedPlaylistDetail',
-    component: ExploreDetail,
-    options: { title: "Adam Fehr's Playlist", header: AppScreenHeader },
-  },
-  sharedItemDetail: {
-    name: 'sharedItemDetail',
-    component: ExploreItemDetail,
-    options: { title: 'Title', header: AppScreenHeader },
+  browse: {
+    name: 'browse',
+    component: Browse,
+    options: { title: 'Browse', header: AppScreenHeader },
   },
   playlists: {
     name: 'playlists',
@@ -79,11 +66,6 @@ const routeConfig = {
     name: 'playlistAdd',
     component: PlaylistAdd,
     options: { title: 'Create Playlist', header: AppScreenHeader },
-  },
-  playlistItemDetail: {
-    name: 'playlistItemDetail',
-    component: PlaylistItemDetail,
-    options: { title: 'Playlist Item', header: AppScreenHeader },
   },
   media: {
     name: 'media',
@@ -130,6 +112,11 @@ const routeConfig = {
     component: ShareWith,
     options: { title: 'Share With', header: AppScreenHeader },
   },
+  user: {
+    name: 'user',
+    component: User,
+    options: { title: 'Manage Contact', header: AppScreenHeader },
+  },
   account: {
     name: 'account',
     component: Account,
@@ -144,11 +131,6 @@ const routeConfig = {
     name: 'profile',
     component: Profile,
     options: { title: 'Profile', header: AppScreenHeader },
-  },
-  contacts: {
-    name: 'contacts',
-    component: Contacts,
-    options: { title: 'Contacts', header: AppScreenHeader },
   },
 } as const;
 type RouteEnumKeys = keyof typeof routeConfig;

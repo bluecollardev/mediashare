@@ -1,52 +1,49 @@
 import React from 'react';
 import { List } from 'native-base';
+import { UserDto } from '../../rxjs-api';
 import { ListItemGroup } from './ListItemGroup';
 import { MediaListItem } from './MediaListItem';
-import { UserDto } from '../../rxjs-api/models/UserDto';
+import { getUserFullName } from '../../utils';
 
 export interface ContactListProps {
   navigation?: any;
+  contacts?: UserDto[];
   showGroups?: boolean;
-  items?: UserDto[];
+  showActions?: boolean;
+  selectable?: boolean;
   onChecked?: (b, u) => void;
+  listItemProps?: any;
 }
 
-export const ContactList: React.FC<ContactListProps> = (props) => {
-  let { items = [], showGroups = false } = props;
-
-  // TODO: Remove this when done...
-  const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
-
+export const ContactList: React.FC<ContactListProps> = ({
+  contacts = [],
+  showGroups = false,
+  showActions = false,
+  selectable = false,
+  onChecked = () => {},
+  listItemProps = {},
+}) => {
   return (
     <List>
-      {showGroups && (
-        <>
-          <ListItemGroup key={'recent'} text={'Recents'} />
-          {items.map((item, idx) => (
-            <MediaListItem
-              key={item._id}
-              title={`${item.firstName} ${item.lastName}`}
-              description={item.username}
-              image={imageSrc}
-              selectable={true}
-              onChecked={(b) => props.onChecked(b, item)}
-              showActions={false}
-            />
-          ))}
-          <ListItemGroup key={'all'} text={'All Contacts'} />
-          {items.map((item, idx) => (
-            <MediaListItem
-              key={item._id}
-              title={`${item.firstName} ${item.lastName}`}
-              description={item.username}
-              image={imageSrc}
-              selectable={true}
-              onChecked={(b) => props.onChecked(b, item)}
-              showActions={false}
-            />
-          ))}
-        </>
-      )}
+      {showGroups && <ListItemGroup key={'all'} text={'All Contacts'} />}
+      {contacts.map((contact) => {
+        const { _id, username = '', email = '', imageSrc = '' } = contact;
+        const fullName = getUserFullName(contact);
+
+        return (
+          <MediaListItem
+            key={`user_${_id}`}
+            title={fullName}
+            description={`${username} <${email}>`}
+            showThumbnail={true}
+            image={imageSrc}
+            showActions={showActions}
+            selectable={selectable}
+            onChecked={(b) => onChecked(b, contact)}
+            {...listItemProps}
+          />
+        );
+      })}
     </List>
   );
 };

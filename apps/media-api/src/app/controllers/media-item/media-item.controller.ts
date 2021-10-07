@@ -15,11 +15,11 @@ import { ObjectId } from 'mongodb';
 import { MediaGetResponse, MediaPostResponse } from './media-item.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
-import RouteTokens from '../../modules/app-config.module.ts/constants/open-api.constants';
+import RouteTokens from '../../modules/app-config/constants/open-api.constants';
 import { GetUserId } from '../../core/decorators/user.decorator';
 import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
 import { MediaItem } from './entities/media-item.entity';
-import { AppConfigService } from '../../modules/app-config.module.ts/app-config.provider';
+import { AppConfigService } from '../../modules/app-config/app-config.provider';
 
 @ApiTags('media-items')
 @Controller('media-items')

@@ -30,14 +30,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
 
-const ExploreStackNavigator = createStackNavigator();
-const ExploreNavigation = () => {
+const BrowseStackNavigator = createStackNavigator();
+const BrowseNavigation = () => {
   return (
-    <ExploreStackNavigator.Navigator>
-      <ExploreStackNavigator.Screen {...routeConfig.explore} />
-      <ExploreStackNavigator.Screen {...routeConfig.sharedPlaylistDetail} />
-      <ExploreStackNavigator.Screen {...routeConfig.sharedItemDetail} />
-    </ExploreStackNavigator.Navigator>
+    <BrowseStackNavigator.Navigator>
+      <BrowseStackNavigator.Screen {...routeConfig.browse} />
+      <BrowseStackNavigator.Screen {...routeConfig.playlistDetail} />
+      <BrowseStackNavigator.Screen {...routeConfig.mediaItemDetail} />
+    </BrowseStackNavigator.Navigator>
   );
 };
 const PlaylistsStackNavigator = createStackNavigator();
@@ -50,7 +50,6 @@ function PlaylistsNavigation() {
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemEdit} />
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromMedia} />
@@ -79,10 +78,9 @@ const AccountNavigation = () => {
     <AccountStackNavigator.Navigator>
       <AccountStackNavigator.Screen {...routeConfig.profile} />
       <AccountStackNavigator.Screen {...routeConfig.account} />
-      <AccountStackNavigator.Screen {...routeConfig.contacts} />
       <AccountStackNavigator.Screen {...routeConfig.accountEdit} />
+      <AccountStackNavigator.Screen {...routeConfig.user} />
       <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} />
-      <AccountStackNavigator.Screen {...routeConfig.playlistDetail} />
     </AccountStackNavigator.Navigator>
   );
 };
@@ -100,7 +98,7 @@ const PublicNavigation = () => {
 
 // Map route names to icons
 export const tabNavigationIconsMap = {
-  Explore: 'explore',
+  Browse: 'explore',
   Playlists: 'play-circle-outline',
   Media: 'video-library',
   // Feeds: 'share-social-outline',
@@ -131,7 +129,7 @@ function PrivateNavigation() {
         tabBarColor: theme.colors.accent,
       }}
     >
-      <PrivateNavigator.Screen name={'Explore'} component={ExploreNavigation} />
+      <PrivateNavigator.Screen name={'Browse'} component={BrowseNavigation} />
       <PrivateNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
       <PrivateNavigator.Screen name={'Media'} component={MediaNavigation} />
       <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} />
@@ -152,6 +150,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
   const dispatch = useDispatch();
 
+  // TODO: Fix font loading on Android
   const [fontsLoaded] = useFonts({
     Roboto_500Medium,
     Roboto_900Black,
@@ -160,6 +159,7 @@ function App() {
     Roboto_300Light,
     Roboto_400Regular,
   });
+  // const fontsLoaded = true;
   // Amplify.configure(awsmobile);
   // fakeLogin();
 
@@ -192,7 +192,6 @@ function App() {
     return (
       <Provider store={store}>
         <Spinner visible={loading} />
-
         <PaperProvider
           theme={customTheme}
           settings={{

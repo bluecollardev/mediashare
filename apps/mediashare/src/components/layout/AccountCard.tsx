@@ -1,47 +1,60 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
-import { View, Text, StyleSheet } from 'react-native';
-import { Avatar, Caption, List, Subheading } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Avatar, Caption, Title, Subheading } from 'react-native-paper';
+
+import { theme } from '../../styles';
 
 interface AccountCardProps {
   image: string;
   likes: number;
   shares: number;
   shared: number;
-  fullName: string;
+  title: string;
   email: string;
   phoneNumber: string;
+  showSocial: boolean;
 }
 
-function AccountCard({ image, likes, shares, shared, fullName: title, phoneNumber: contact, email: company }: AccountCardProps) {
+// function AccountCard({ image, likes, shares, shared, fullName: title, phoneNumber: contact, email: company }: AccountCardProps) {
+//   title: string;
+//   company?: string;
+//   email: string;
+//   phoneNumber: string;
+//   showSocial?: boolean;
+//   likes?: number;
+//   shares?: number;
+//   shared?: number;
+// }
+
+export function AccountCard({ title, email, image, likes, shares, shared, showSocial = false }: AccountCardProps) {
   return (
     <View>
       <View style={styles.container}>
-        <Avatar.Image source={{ uri: image }} />
-        <View style={styles.labelledElement}>
-          <Subheading>{likes}</Subheading>
-          <Caption>Likes</Caption>
+        <View style={{ flex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Avatar.Image source={{ uri: image }} />
         </View>
-        <View style={styles.labelledElement}>
-          <Subheading>{shares}</Subheading>
-          <Caption>Shares</Caption>
-        </View>
-        <View style={styles.labelledElement}>
-          <Subheading>{shared}</Subheading>
-          <Caption>Shared</Caption>
+        <View style={{ flex: 3 }}>
+          <Title style={{ color: '#222222' }}>{title}</Title>
+          <Subheading style={{ fontSize: 11, color: theme.colors.accentDarker }}>{email}</Subheading>
         </View>
       </View>
-      <List.Item
-        title={title}
-        description={() => {
-          return (
-            <View style={{ flexDirection: 'column' }}>
-              <Text>{company}</Text>
-              <Caption>{contact}</Caption>
-            </View>
-          );
-        }}
-      />
+      {showSocial && (
+        <View style={styles.container}>
+          <View style={styles.labelledElement}>
+            <Subheading>{likes}</Subheading>
+            <Caption>Likes</Caption>
+          </View>
+          <View style={styles.labelledElement}>
+            <Subheading>{shares}</Subheading>
+            <Caption>Shares</Caption>
+          </View>
+          <View style={styles.labelledElement}>
+            <Subheading>{shared}</Subheading>
+            <Caption>Shared</Caption>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
@@ -51,7 +64,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 15,
+    paddingTop: 30,
+    paddingBottom: 0,
   },
   labelledElement: { display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center', flexDirection: 'column' },
 });

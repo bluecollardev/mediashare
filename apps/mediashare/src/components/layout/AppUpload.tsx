@@ -1,20 +1,21 @@
 import React from 'react';
 
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { Button } from 'react-native-paper';
 import { thumbnailRoot, awsUrl } from '../../state/modules/media-items/key-factory';
 import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
 import { theme } from '../../styles';
-import { ListActionButton } from './ListActionButton';
+import { Button } from 'react-native-paper';
 
 interface AppUploadProps {
   startLoad: any;
   endLoad: any;
   onUpload: (uri) => any;
+  label?: string;
+  children?: any;
 }
 
-function AppUpload({ startLoad, endLoad, onUpload }: AppUploadProps) {
+export function AppUpload({ startLoad, endLoad, onUpload, label = 'Upload Picture', children }: AppUploadProps) {
   const uploadDocument = async function () {
     launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
       if (!res.assets) {
@@ -31,21 +32,18 @@ function AppUpload({ startLoad, endLoad, onUpload }: AppUploadProps) {
       });
     });
   };
-  return <ListActionButton icon={'cloud-upload'} label={'Upload Picture'} actionCb={() => uploadDocument()} />;
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#312e38',
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: '#fff',
-  },
-});
+  if (children) {
+    return React.cloneElement(React.Children.only(children), {
+      onPress: () => uploadDocument(),
+    });
+  }
+
+  return (
+    <Button icon="cloud-upload" mode="contained" dark color={theme.colors.error} onPress={() => uploadDocument()} compact>
+      {label}
+    </Button>
+  );
+}
 
 export default AppUpload;

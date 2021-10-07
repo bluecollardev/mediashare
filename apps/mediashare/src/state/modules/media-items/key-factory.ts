@@ -16,6 +16,7 @@ export interface KeyFactoryProps {
   uploadRoot: string;
 }
 
+// eslint-disable-next-line no-shadow
 function createKeyFactory({ root, thumbnailRoot, videoRoot, uploadRoot }: KeyFactoryProps) {
   return function (title: string) {
     const makeKey = <K extends string>(key: K) => `${root}${key}${title}`;

@@ -45,6 +45,8 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
   const user = useAppSelector((state) => state.profile.entity);
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
+  console.log('Dump Account Edit user');
+  console.log(user);
   const onUpdate = (user: Partial<UserDto>) => {
     setState({ ...state, ...user });
   };
@@ -89,15 +91,15 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
     <PageContainer>
       <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
         <Avatar.Image source={{ uri: state.imageSrc }} size={128} />
-        <Button mode={'text'} onPress={() => getDocument()}>
+        <Button mode={'outlined'} onPress={() => getDocument()} style={{ marginTop: 15 }}>
           Upload a Profile Picture
         </Button>
       </View>
       <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.container}>
-        <TextField onChangeText={(text) => onUpdate({ firstName: text })} label={'firstName'} value={state.firstName} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ lastName: text })} label={'lastName'} value={state.lastName} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ email: text })} label={'email'} value={state.email} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label={'phoneNumber'} value={state.phoneNumber} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ firstName: text })} label={'First Name'} value={state.firstName} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ lastName: text })} label={'Last Name'} value={state.lastName} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ email: text })} label={'Email'} value={state.email} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label={'Phone Number'} value={state.phoneNumber} disabled={!isLoaded} />
       </ScrollView>
       <ActionButtons cancelCb={cancel} actionCb={save} actionLabel={'Save'} />
     </PageContainer>

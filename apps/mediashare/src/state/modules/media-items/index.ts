@@ -1,19 +1,17 @@
 import { createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import { forkJoin, from, merge } from 'rxjs';
+import { switchMap, take, tap } from 'rxjs/operators';
+import * as VideoThumbnails from 'expo-video-thumbnails';
+import Config from 'react-native-config';
 
 import { makeEnum } from '../../core/factory';
-
 import { apis, ApiService } from '../../apis';
 import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
+import { MediaItemDto, CreateMediaItemDtoCategoryEnum } from '../../../rxjs-api';
 import { copyStorage, deleteStorage, fetchMedia, getStorage, listStorage, sanitizeFoldername, uploadMedia, uploadThumbnail, putToS3 } from './storage';
 import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './key-factory';
 import { getAllMedia } from './media-items';
 import { AwsMediaItem } from './aws-media-item.model';
-import { concat, forkJoin, from, merge } from 'rxjs';
-import { switchMap, take, tap } from 'rxjs/operators';
-import { MediaItemDto } from '../../../rxjs-api/models/MediaItemDto';
-import { CreateMediaItemDtoCategoryEnum } from '../../../rxjs-api/models/CreateMediaItemDto';
-import * as VideoThumbnails from 'expo-video-thumbnails';
-import Config from 'react-native-config';
 
 const s3Url = Config.AWS_URL;
 
@@ -46,8 +44,10 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
 });
 
 export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {
+  console.log('Creating thumbnail...');
   const thumb = await uploadThumbnail({ fileUri, key });
-
+  console.log('Thumbnail creation response');
+  console.log(thumb);
   return thumb;
 });
 export const addMediaItem = createAsyncThunk(
@@ -114,8 +114,10 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
 
       switchMap((file) => from(putToS3({ key: mediaRoot + videoRoot + item.title, file, options: { contentType: 'image/jpeg' } })))
     );
-  const copy = items.map((item) => copyStorage(item.key));
 
+  // TODO: Were we planning on doing something here?
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const copy = items.map((item) => copyStorage(item.key));
   const dtos: CreateMediaItemDto[] = items.map((item) => ({
     description: `${item.size} - ${item.lastModified}`,
     title: item.key,
@@ -123,7 +125,7 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
     video: mediaRoot + videoRoot + item.key,
     uri: mediaRoot + videoRoot + item.key,
     isPlayable: true,
-    category: CreateMediaItemDtoCategoryEnum.Endurance,
+    category: CreateMediaItemDtoCategoryEnum.Free,
     eTag: item.etag,
     key: mediaRoot + videoRoot + item.key,
     summary: '',

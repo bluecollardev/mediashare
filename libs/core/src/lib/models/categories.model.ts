@@ -1,18 +1,13 @@
-import { ConfigEnum } from '../types/configEnum.type';
+import { ConfigEnum } from '../types';
 
-const PLAYLIST_CATEGORY = ['Rehab', 'Builder', 'Warmup'] as const;
-
+const PLAYLIST_CATEGORY = ['free', 'paid'] as const;
 export type PlaylistCategoryType = ConfigEnum<typeof PLAYLIST_CATEGORY>;
-const [rehab, builder, warmup] = PLAYLIST_CATEGORY;
+const [freePlaylist, paidPlaylist] = PLAYLIST_CATEGORY;
+const playlistCategories = { free: freePlaylist, paid: paidPlaylist };
 
-const MEDIA_CATEGORY = ['strength', 'flexibility', 'endurance'] as const;
-
+const MEDIA_CATEGORY = ['free', 'paid'] as const;
 export type MediaCategoryType = ConfigEnum<typeof MEDIA_CATEGORY>;
-
-const [strength, flexibility, endurance] = MEDIA_CATEGORY;
-
-const playlistCategories = { rehab, builder, warmup };
-
-const mediaCategories = { strength, flexibility, endurance };
+const [freeMedia, paidMedia] = MEDIA_CATEGORY;
+const mediaCategories = { free: freeMedia, paid: paidMedia };
 
 export { playlistCategories, mediaCategories, MEDIA_CATEGORY, PLAYLIST_CATEGORY };

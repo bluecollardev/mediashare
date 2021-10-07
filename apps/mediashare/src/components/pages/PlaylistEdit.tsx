@@ -9,16 +9,16 @@ import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api';
 import { useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
+import { View } from 'react-native';
 import { Button } from 'react-native-paper';
+import { AppUpload } from '../layout/AppUpload';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
 import { MediaCard } from '../layout/MediaCard';
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { ROUTES } from '../../routes';
-import * as DocumentPicker from 'expo-document-picker';
-import { createThumbnail } from '../../state/modules/media-items';
+
 import { theme } from '../../styles';
-import AppUpload from '../layout/AppUpload';
 
 const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: PageProps) => {
   const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
@@ -35,10 +35,6 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
   const [category, setCategory] = useState(selectedPlaylist?.category);
   const [selectedItems, setSelectedItems] = useState([]);
   const [imageSrc, setImageSrc] = useState(selectedPlaylist?.imageSrc);
-
-  const [documentUri, setDocumentUri] = useState('');
-
-  const mediaItemSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -72,13 +68,13 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
 
   return (
     <PageContainer>
-      <PageContent>
+      <KeyboardAvoidingPageContent>
         <MediaCard
           title={title}
           author={author}
           description={description}
-          thumbnail={imageSrc}
           showThumbnail={true}
+          thumbnail={imageSrc}
           category={category}
           categoryOptions={options}
           onCategoryChange={(e: any) => {
@@ -86,13 +82,25 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
           }}
           onTitleChange={setTitle}
           onDescriptionChange={setDescription}
-          // showThumbnail={true}
-          // mediaSrc={thumbnail}
           isEdit={true}
           isReadOnly={selectedItems && selectedItems.length > 0}
-        >
-          <AppUpload startLoad={startLoad} endLoad={endLoad} onUpload={onUpload} />
-        </MediaCard>
+          topDrawer={() => (
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <View style={{ flex: 1 }}>
+                <Button icon="delete" mode="text" dark color={theme.colors.error} onPress={() => console.log('Do something!')} compact>
+                  {' '}
+                </Button>
+              </View>
+              <View style={{ flex: 4 }}>
+                <AppUpload startLoad={startLoad} endLoad={endLoad} onUpload={onUpload}>
+                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
+                    Change Cover Photo
+                  </Button>
+                </AppUpload>
+              </View>
+            </View>
+          )}
+        />
 
         {!selectedItems ||
           (selectedItems.length === 0 && (
@@ -111,13 +119,13 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
           key={clearSelectionKey}
           onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}
           list={items}
-          isSelectable={true}
+          selectable={true}
           showActions={!selectedItems || selectedItems.length === 0}
           removeItem={onRemoveItem}
           addItem={onAddItem}
           showThumbnail={true}
         />
-      </PageContent>
+      </KeyboardAvoidingPageContent>
       <PageActions>
         {!selectedItems ||
           (selectedItems.length === 0 && (
@@ -182,7 +190,8 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
     resetData();
   }
   async function saveMediaUpdates() {
-    const filtered = selectedPlaylist.mediaIds.filter((id) => !selectedItems.includes(id));
+    const mediaIds = selectedPlaylist.mediaIds || [];
+    const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
 
     await withIds(filtered);
     setIsLoaded(false);

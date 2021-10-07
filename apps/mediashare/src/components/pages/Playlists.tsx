@@ -5,7 +5,7 @@ import { ROUTES } from '../../routes';
 
 import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/playlists';
 
-import { PlaylistResponseDto } from '../../api';
+import { PlaylistResponseDto } from '../../rxjs-api';
 
 import { useLoadPlaylistData } from '../../hooks/useLoadData';
 import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
@@ -17,7 +17,7 @@ import { RefreshControl } from 'react-native';
 import { View } from 'react-native';
 import { List } from 'native-base';
 import { MediaListItem } from '../layout/MediaListItem';
-import { PageActions, PageContainer, PageContent, PageProps } from '../layout/PageContainer';
+import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
 
 import { shortenText } from '../../utils';
 
@@ -26,10 +26,10 @@ import { ActionButtons } from '../layout/ActionButtons';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
-  isSelectable: boolean;
+  selectable?: boolean;
   clearSelection?: boolean;
   showActions?: boolean;
-  onViewDetailClicked: Function;
+  onViewDetailClicked?: Function;
   onChecked?: (checked: boolean, item?: any) => void;
 }
 
@@ -47,7 +47,7 @@ export interface PlaylistsProps {
   return list;
 } */
 
-export const PlaylistsComponent = ({ list = [], onViewDetailClicked, isSelectable = false, showActions = true, onChecked = () => {} }: PlaylistsProps) => {
+export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable = false, showActions = true, onChecked = () => {} }: PlaylistsProps) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
@@ -65,7 +65,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, isSelectabl
               showThumbnail={true}
               image={imageSrc}
               showActions={showActions}
-              selectable={isSelectable}
+              selectable={selectable}
               onViewDetail={() => {
                 onViewDetailClicked(item);
               }}
@@ -81,9 +81,9 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, isSelectabl
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
 export const Playlists = ({ onDataLoaded }: PageProps) => {
-  const shareWithAction = useRouteName(ROUTES.shareWith);
-  const createPlaylistAction = useRouteName(ROUTES.playlistAdd);
-  const viewPlaylistAction = useViewPlaylistById();
+  const shareWith = useRouteName(ROUTES.shareWith);
+  const createPlaylist = useRouteName(ROUTES.playlistAdd);
+  const viewPlaylist = useViewPlaylistById();
 
   const dispatch = useDispatch();
 
@@ -103,9 +103,9 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    { icon: 'delete', onPress: activateDeleteMode, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
-    { icon: 'share', onPress: activateShareMode, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
-    { icon: 'library-add', onPress: createPlaylistAction, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+    { icon: 'delete', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
+    { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
+    { icon: 'library-add', onPress: () => createPlaylist(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
   const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
@@ -115,16 +115,16 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
 
   return (
     <PageContainer>
-      <PageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+      <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <PlaylistsComponent
           key={clearSelectionKey}
           list={state.playlists.userPlaylists}
-          onViewDetailClicked={(item) => viewPlaylistAction({ playlistId: item._id })}
-          isSelectable={isSelectable}
+          onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
+          selectable={isSelectable}
           showActions={!isSelectable}
           onChecked={updateSelection}
         />
-      </PageContent>
+      </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>
           <ActionButtons actionCb={confirmPlaylistsToShare} cancelCb={cancelPlaylistsToShare} actionLabel="Share With" cancelLabel="Cancel" rightIcon="group" />
@@ -175,7 +175,7 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
-    shareWithAction();
+    shareWith();
   }
 
   async function cancelPlaylistsToShare() {

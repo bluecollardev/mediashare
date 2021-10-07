@@ -7,7 +7,7 @@ import { findUserPlaylists, getPlaylistById } from '../state/modules/playlists';
 
 type RouteConfigKeyType = EnumLiteralsOf<typeof ROUTES>;
 // @ts-ignore
-type RouteParentKeyType = keyof Pick<typeof routeConfig, 'Explore' | 'Media' | 'Playlists' | 'Account'>;
+type RouteParentKeyType = keyof Pick<typeof routeConfig, 'Browse' | 'Media' | 'Playlists' | 'Account'>;
 
 export function useRouteName(key: RouteConfigKeyType) {
   const nav = useNavigation();
@@ -36,15 +36,15 @@ export function useViewPlaylist() {
 }
 
 // TODO: Why does this also just take playlistId, the old version used a mediaId, which may not also be correct, maybe both?
-export function useViewPlaylistItem() {
+/* export function useViewPlaylistItem() {
   const nav = useNavigation();
   return ({ playlistId, uri }) => nav.navigate(ROUTES.playlistItemDetail, { playlistId, uri });
-}
+} */
 
-export function useViewSharedMediaItem() {
+/* export function useViewSharedMediaItem() {
   const nav = useNavigation();
   return ({ mediaId, uri }) => nav.navigate(ROUTES.sharedItemDetail, { mediaId, uri });
-}
+} */
 
 export function useEditMediaItem() {
   const nav = useNavigation();
