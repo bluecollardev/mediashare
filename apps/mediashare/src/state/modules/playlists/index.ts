@@ -3,12 +3,11 @@ import { flattenDeep } from 'remeda';
 import { merge } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { makeEnum } from '../../core/factory';
 
 import { apis, ApiService } from '../../apis';
-import { CreatePlaylistDto, UpdatePlaylistDto } from '../../../api';
-import { CreatePlaylistResponseDto, PlaylistResponseDto } from '../../../rxjs-api';
+import { CreatePlaylistDto, UpdatePlaylistDto, CreatePlaylistResponseDto, PlaylistResponseDto } from '../../../rxjs-api';
+import { reducePendingState, reduceRejectedState } from '../../helpers';
 
 const PLAYLIST_ACTIONS = [
   'GET_USER_PLAYLIST',
@@ -102,9 +101,7 @@ const initialPlaylistState: { createdPlaylist: CreatePlaylistResponseDto; loadin
 
 const playlistReducer = createReducer(initialPlaylistState, (builder) => {
   builder
-    .addCase(addUserPlaylist.pending, (state) => {
-      return { ...state };
-    })
+    .addCase(addUserPlaylist.pending, reducePendingState())
     .addCase(addUserPlaylist.fulfilled, (state, action) => {
       return { ...state, createdPlaylist: action.payload };
     })
@@ -114,18 +111,14 @@ const playlistReducer = createReducer(initialPlaylistState, (builder) => {
     .addCase(getPlaylistById.pending, (state) => {
       return { ...state, selectedPlaylist: null };
     })
-    .addCase(getPlaylistById.rejected, (state) => {
-      return { ...state };
-    })
+    .addCase(getPlaylistById.rejected, reduceRejectedState())
     .addCase(getPlaylistById.fulfilled, (state, action) => {
       return { ...state, selectedPlaylist: action.payload };
     })
     .addCase(removeUserPlaylist.pending, (state) => {
       return { ...state, selectedPlaylist: null };
     })
-    .addCase(removeUserPlaylist.rejected, (state) => {
-      return { ...state };
-    })
+    .addCase(removeUserPlaylist.rejected, reduceRejectedState())
     .addCase(removeUserPlaylist.fulfilled, (state) => {
       return { ...state, selectedPlaylist: null };
     });

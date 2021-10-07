@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { savePlaylist } from './playlist-api';
 
 import { CreatePlaylistDto } from '../../../rxjs-api';
+import { playlists } from '../../apis';
+
+import { reducePendingState, reduceRejectedState } from '../../helpers';
 
 function initialStateFactory(): CreatePlaylistDto & { loading: boolean } {
   return {
@@ -20,7 +22,7 @@ const CREATE_PLAYLIST_KEY = 'createPlaylist' as const;
 // const actions = makeActions(['addItem', 'removeItem', 'setDescription', 'setCreatedBy', 'setTitle', 'setCategory']);
 
 const createPlaylist = createAsyncThunk('createPlaylist', async function (createPlaylistDto: CreatePlaylistDto) {
-  return await savePlaylist(createPlaylistDto);
+  return await playlists.playlistControllerCreate({ createPlaylistDto }).toPromise();
 });
 
 const slice = createSlice({
@@ -40,16 +42,11 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .addCase(createPlaylist.fulfilled, (state, action) => {
+      .addCase(createPlaylist.pending, reducePendingState())
+      .addCase(createPlaylist.rejected, reduceRejectedState())
+      .addCase(createPlaylist.fulfilled, () => {
         const user = initialStateFactory();
         return { ...user, mediaIds: [] };
-      })
-      .addCase(createPlaylist.rejected, (state) => {
-        return { ...state };
-      })
-      .addCase(createPlaylist.pending, (state) => {
-        return { ...state };
       });
   },
 });

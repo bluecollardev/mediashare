@@ -5,13 +5,14 @@ import * as VideoThumbnails from 'expo-video-thumbnails';
 import Config from 'react-native-config';
 
 import { makeEnum } from '../../core/factory';
-import { apis, ApiService } from '../../apis';
-import { CreateMediaItemDto, MediaItemDto } from '../../../rxjs-api';
-import { copyStorage, deleteStorage, fetchMedia, getStorage, listStorage, sanitizeFoldername, uploadMedia, uploadThumbnail, putToS3 } from './storage';
+import { copyStorage, deleteStorage, fetchMedia, getStorage, listStorage, putToS3, sanitizeFoldername, uploadMedia, uploadThumbnail } from './storage';
 import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './key-factory';
-import { getAllMedia } from './media-items';
 import { AwsMediaItem } from './aws-media-item.model';
-import { MediaCategoryType } from '../../../rxjs-api/models/MediaCategoryType';
+
+import { CreateMediaItemDto, MediaCategoryType, MediaItemDto, UpdateMediaItemDto } from '../../../rxjs-api';
+import { apis, ApiService, mediaItems } from '../../apis';
+
+import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '../../helpers';
 
 const s3Url = Config.AWS_URL;
 
@@ -59,7 +60,7 @@ export const addMediaItem = createAsyncThunk(
 
       const { video } = await uploadMedia({ fileUri, key: title, options });
       if (!video) {
-        throw new Error('no response in add media  item');
+        throw new Error('No response in add media item');
       }
       const { thumbnailKey, videoKey } = KeyFactory(title);
       const createMediaItemDto: CreateMediaItemDto = {
@@ -75,8 +76,7 @@ export const addMediaItem = createAsyncThunk(
         title,
       };
 
-      const mediaItem = await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
-      return mediaItem;
+      return await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
     } catch (err) {
       console.log(err);
     }
@@ -84,8 +84,8 @@ export const addMediaItem = createAsyncThunk(
 );
 
 export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
-  const mediaItems = (await listStorage(mediaRoot + uploadRoot)) as AwsMediaItem[];
-  const items = mediaItems
+  const feedMediaItems = (await listStorage(mediaRoot + uploadRoot)) as AwsMediaItem[];
+  return feedMediaItems
     .filter((item) => item.key !== mediaRoot + uploadRoot)
     .map((item) => ({
       etag: item.etag,
@@ -93,14 +93,9 @@ export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMedia
       lastModified: new Date(Date.parse(item.lastModified)).toDateString(),
       key: sanitizeFoldername(item.key, mediaRoot + uploadRoot),
     }));
-
-  return items;
 });
 
 export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ items }: { items: AwsMediaItem[] }) => {
-  // const promises = ;
-  console.log(items);
-
   const createThumbnailFactory = (item: CreateMediaItemDto) =>
     from(VideoThumbnails.getThumbnailAsync(s3Url + mediaRoot + videoRoot + item.title.replace(/\s/g, '%20'), { time: 100 })).pipe(
       tap((res) => {
@@ -142,51 +137,45 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
   // const save = merge(...dtoPromises).pipe(tap((res) => console.log(res)));
   // const deleted = items.map((item) => deleteStorage(mediaRoot + uploadRoot + item.key));
   // await Promise.all(thumbnailPromises);
-  const result = await merge(...dtoPromises).toPromise();
-  return result;
+  return await merge(...dtoPromises).toPromise();
 });
 export const loadUserMediaItems = createAsyncThunk(mediaItemActionTypes.loadUserMediaItems, async () => {
-  const mediaItems = await apis.user.userControllerGetMediaItems().toPromise();
-  return mediaItems;
+  return await apis.user.userControllerGetMediaItems().toPromise();
 });
 
 export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (item: UpdateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const response = await api.mediaItems
+  return await api.mediaItems
     .mediaItemControllerUpdate({
       mediaId: item._id,
       updateMediaItemDto: item,
     })
     .toPromise();
-  return response;
 });
 
 export const shareMediaItem = createAsyncThunk(
   mediaItemActionTypes.shareMediaItem,
   async (args: { id: string; userId: string; item: CreateMediaItemDto }, { extra }) => {
     const { api } = extra as { api: ApiService };
-    const response = await api.mediaItems.mediaItemControllerShare({
-      mediaId: args.id,
-      userId: args.userId,
-      createMediaItemDto: args.item,
-    });
-    return response;
+    return await api.mediaItems
+      .mediaItemControllerShare({
+        mediaId: args.id,
+        userId: args.userId,
+        createMediaItemDto: args.item,
+      })
+      .toPromise();
   }
 );
 
 export const deleteMediaItem = createAsyncThunk(mediaItemActionTypes.removeMediaItem, async function (args: { id: string; key: string }, { extra }) {
   const { api } = extra as { api: ApiService };
   const { id, key } = args;
-  const response = await api.mediaItems.mediaItemControllerRemove({ mediaId: id }).toPromise();
   await deleteStorage(key);
-
-  // @ts-ignore
-  return response;
+  return await api.mediaItems.mediaItemControllerRemove({ mediaId: id }).toPromise();
 });
 
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async () => {
-  const response = await getAllMedia();
-  return response;
+  return await mediaItems.mediaItemControllerFindAll().toPromise();
 });
 
 const initialState: { mediaItems: MediaItemDto[]; loading: boolean; loaded: boolean } = {
@@ -219,10 +208,6 @@ export const MEDIA_ITEMS_STATE_KEY = 'mediaItems';
 
 const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
   builder
-    .addCase(createThumbnail.fulfilled, (state, action) => ({
-      ...state,
-      mediaSrc: action.payload as string,
-    }))
     .addCase(getMediaItemById.pending, (state) => ({
       ...state,
       loading: true,
@@ -230,6 +215,7 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
       mediaItem: null,
       mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
     }))
+    .addCase(getMediaItemById.rejected, (state) => ({ ...state, mediaItem: null }))
     .addCase(getMediaItemById.fulfilled, (state, action) => ({
       ...state,
       mediaItem: action.payload.mediaItem,
@@ -237,13 +223,12 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
       loading: false,
       loaded: true,
     }))
-    .addCase(getMediaItemById.rejected, (state) => ({ ...state, mediaItem: null }))
-    .addCase(addMediaItem.pending, (state) => {
-      return { ...state };
-    })
-    .addCase(addMediaItem.rejected, (state) => {
-      return { ...state };
-    })
+    .addCase(createThumbnail.fulfilled, (state, action) => ({
+      ...state,
+      mediaSrc: action.payload as string,
+    }))
+    .addCase(addMediaItem.pending, reducePendingState())
+    .addCase(addMediaItem.rejected, reduceRejectedState())
     .addCase(addMediaItem.fulfilled, (state, action) => {
       return {
         ...state,
@@ -253,12 +238,8 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
         mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
       };
     })
-    .addCase(getFeedMediaItems.pending, (state) => {
-      return { ...state };
-    })
-    .addCase(getFeedMediaItems.rejected, (state) => {
-      return { ...state };
-    })
+    .addCase(getFeedMediaItems.pending, reducePendingState())
+    .addCase(getFeedMediaItems.rejected, reduceRejectedState())
     .addCase(getFeedMediaItems.fulfilled, (state, action) => {
       return { ...state, feed: action.payload };
     })
@@ -272,13 +253,8 @@ const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
 
 const mediaItemsReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(findMediaItems.rejected, (state) => {
-      return { ...state };
-    })
-
-    .addCase(findMediaItems.pending, (state) => {
-      return { ...state };
-    })
+    .addCase(findMediaItems.pending, reducePendingState())
+    .addCase(findMediaItems.rejected, reduceRejectedState())
     .addCase(findMediaItems.fulfilled, (state, action) => {
       return {
         ...state,
@@ -293,17 +269,9 @@ const mediaItemsReducer = createReducer(initialState, (builder) => {
     .addCase(clearMediaItemSelection, (state) => {
       return { ...state, mediaItems: [] };
     })
-
-    .addCase(saveFeedMediaItems.pending, (state) => {
-      return { ...state };
-    })
-    .addCase(saveFeedMediaItems.rejected, (state) => {
-      return { ...state };
-    })
-
-    .addCase(saveFeedMediaItems.fulfilled, (state) => {
-      return { ...state };
-    });
+    .addCase(saveFeedMediaItems.pending, reducePendingState())
+    .addCase(saveFeedMediaItems.rejected, reduceRejectedState())
+    .addCase(saveFeedMediaItems.fulfilled, reduceFulfilledState());
 });
 
 export { mediaItemReducer, mediaItemsReducer };

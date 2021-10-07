@@ -8,6 +8,7 @@ import { playlistReducer, playlistsReducer } from './modules/playlists';
 import { reducer as createPlaylistReducer } from './modules/create-playlist';
 import { reducer as appStateReducer } from './modules/app-state/index';
 import { reducer as profileReducer } from './modules/profile/index';
+import { reducer as shareItemsReducer } from './modules/share-items/index';
 
 // Global app flags and data
 const systemReducers = {
@@ -27,15 +28,16 @@ const userSharedReducers = {
 
 // Combine our reducers and export
 const rootReducer = combineReducers({
+  app: appStateReducer,
+  profile: profileReducer,
   user: userReducer,
-  playlists: playlistsReducer,
-  playlist: playlistReducer,
   mediaItems: mediaItemsReducer,
   mediaItem: mediaItemReducer,
   createPlaylist: createPlaylistReducer,
+  playlists: playlistsReducer,
+  playlist: playlistReducer,
+  shareItems: shareItemsReducer,
   users: usersReducer,
-  app: appStateReducer,
-  profile: profileReducer,
 });
 
 export { rootReducer };

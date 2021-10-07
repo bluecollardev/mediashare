@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ProfileDto } from '../../../api/models/profile-dto';
+
+import { ProfileDto } from '../../../rxjs-api';
 import { apis } from '../../apis';
 
 interface InitialState {
@@ -11,13 +12,12 @@ const INITIAL_STATE: InitialState = {
 };
 
 const loadProfile = createAsyncThunk('getUserById', async function ({ userId }: { userId?: string }) {
-  console.log('🚀 ------------------------------------------------------------');
-  console.log('🚀 ~ file: index.ts ~ line 14 ~ loadProfile ~ userId', userId);
-  console.log('🚀 ------------------------------------------------------------');
+  // console.log('🚀 ------------------------------------------------------------');
+  // console.log('🚀 ~ file: index.ts ~ line 14 ~ loadProfile ~ userId', userId);
+  // console.log('🚀 ------------------------------------------------------------');
   const req = userId ? apis.users.usersControllerFindOne({ userId }) : apis.user.userControllerGetUser();
   return await req.toPromise();
 });
-
 const profileSlice = createSlice({
   name: 'profile',
   initialState: INITIAL_STATE,
@@ -30,5 +30,4 @@ const profileSlice = createSlice({
 });
 
 const { reducer } = profileSlice;
-
 export { reducer, loadProfile };

@@ -4,6 +4,8 @@ import { makeEnum } from '../../core/factory';
 import { UserDto } from '../../../rxjs-api';
 import { apis } from '../../apis';
 
+import { reducePendingState, reduceRejectedState } from '../../helpers';
+
 export interface UsersState {
   entities: UserDto[];
   loading: boolean;
@@ -26,8 +28,6 @@ export const usersReducer = createReducer(initialState, (builder) => {
     .addCase(loadUsers.fulfilled, (state, action) => {
       return { ...state, entities: action.payload };
     })
-    .addCase(loadUsers.rejected, (state) => {
-      return { ...state };
-    })
-    .addCase(loadUsers.pending, (state) => ({ ...state }));
+    .addCase(loadUsers.rejected, reduceRejectedState())
+    .addCase(loadUsers.pending, reducePendingState());
 });

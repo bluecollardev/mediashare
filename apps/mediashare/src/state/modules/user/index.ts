@@ -2,12 +2,13 @@ import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import * as R from 'remeda';
 
 import { ActionsFactory } from '../../core/factory';
-import { apis } from '../../apis';
 import { setKeyPair } from './keypair-store';
-import { AuthorizeDto, ProfileDto, UpdateUserDto } from '../../../rxjs-api';
 import { signOut } from './auth';
-import { BcRolesType } from '../../../rxjs-api';
-export const USER_STATE_KEY = 'user';
+
+import { AuthorizeDto, ProfileDto, UpdateUserDto, BcRolesType } from '../../../rxjs-api';
+import { apis } from '../../apis';
+
+import { reducePendingState, reduceRejectedState } from '../../helpers';
 
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
 const USER_ACTIONS = ['LOGIN', 'LOGOUT', 'UPDATE_ACCOUNT', 'DELETE_ACCOUNT', 'VALIDATE', 'LOAD_USER'] as const;
@@ -47,23 +48,19 @@ const pickUser = (user: ProfileDto) =>
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 
 export const loginAction = createAsyncThunk(UserActions.login.type, async (authorizeDto: AuthorizeDto) => {
-  const response = await apis.user.userControllerAuthorize({ authorizeDto }).toPromise();
-
-  return response;
+  return await apis.user.userControllerAuthorize({ authorizeDto }).toPromise();
 });
 
 export const loadUser = createAsyncThunk(UserActions.loadUser.type, async () => {
   const req = apis.user.userControllerGetUser();
-  const user = await req.toPromise();
-  return user;
+  return await req.toPromise();
 });
 
 export const updateAccount = createAsyncThunk(
   UserActions.updateAccount.type,
   async ({ updateUserDto, userId }: { updateUserDto: UpdateUserDto; userId?: string }) => {
     const req = userId ? apis.users.usersControllerUpdate({ userId, updateUserDto }) : apis.user.userControllerUpdate({ updateUserDto });
-    const user = await req.toPromise();
-    return user;
+    return await req.toPromise();
   }
 );
 
@@ -87,24 +84,13 @@ const userReducer = createReducer(initialState, (builder) =>
     .addCase(loadUser.fulfilled, (state, action) => {
       return { ...state, ...pickUser({ ...action.payload }) };
     })
-    .addCase(loginAction.pending, (state) => {
-      return { ...state };
-    })
-    .addCase(loginAction.rejected, (state, action) => {
-      console.log('error: ', action);
-      return { ...state };
-    })
-
+    .addCase(loginAction.pending, reducePendingState())
+    .addCase(loginAction.rejected, reduceRejectedState())
     .addCase(logout.fulfilled, () => {
       return initialState;
     })
-    .addCase(logout.pending, (state) => {
-      return { ...state };
-    })
-    .addCase(logout.rejected, (state, action) => {
-      console.log('error: ', action);
-      return { ...state };
-    })
+    .addCase(logout.pending, reducePendingState())
+    .addCase(logout.rejected, reduceRejectedState())
 );
 
 export { userReducer };
