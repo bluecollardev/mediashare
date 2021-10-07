@@ -29,7 +29,7 @@ export const useProfile = function (userId?: string) {
     if (!loaded) {
       forkJoin([dispatch(findMediaItems()), dispatch(loadUsers()), dispatch(loadUser()), dispatch(loadProfile({ userId }))]).subscribe(() => setLoaded(true));
     }
-  }, [loaded, dispatch]);
+  }, [loaded, dispatch, userId]);
 
   return { onView, onDelete, setLoaded };
 };

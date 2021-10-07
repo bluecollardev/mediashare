@@ -7,9 +7,9 @@ import { theme } from '../../styles';
 
 interface AccountCardProps {
   image: string;
-  likes: number;
-  shares: number;
-  shared: number;
+  likes?: number;
+  shares?: number;
+  shared?: number;
   title: string;
   email: string;
   phoneNumber: string;

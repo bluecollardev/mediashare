@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
-import { loadUser, logout } from '../../state/modules/user';
+import { logout } from '../../state/modules/user';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { findMediaItems } from '../../state/modules/media-items';
 import { loadUsers } from '../../state/modules/users';
@@ -172,9 +172,9 @@ export const Account = ({}: PageProps) => {
   );
 
   async function loadData() {
-    await dispatch(findMediaItems());
+    // await dispatch(findMediaItems());
     await dispatch(loadUsers());
-    await dispatch(loadUser());
+    // await dispatch(loadUser());
     setIsLoaded(true);
   }
 

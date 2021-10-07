@@ -54,13 +54,14 @@ function Profile({ onDataLoaded }: ProfileProps) {
   return (
     <View style={styles.container}>
       <AccountCard
-        fullName={`${firstName} ${lastName}`}
+        title={`${firstName} ${lastName}`}
         email={email}
         phoneNumber={phoneNumber}
         image={imageSrc}
         likes={likesCount}
         shares={sharesCount}
         shared={sharedCount}
+        showSocial={true}
       />
       {isAdmin && (
         <Button mode={'outlined'} style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../state';
-import { loadUser } from '../../state/modules/user';
 import { findMediaItems } from '../../state/modules/media-items';
 import { loadUsers } from '../../state/modules/users';
 
@@ -82,9 +81,9 @@ export const User = ({}: PageProps) => {
   const user = useAppSelector((state) => state.user);
   useEffect(() => {
     async function loadData() {
-      await dispatch(findMediaItems());
+      // await dispatch(findMediaItems());
       await dispatch(loadUsers());
-      await dispatch(loadUser());
+      // await dispatch(loadUser());
       setIsLoaded(true);
     }
     if (!isLoaded) {

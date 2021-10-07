@@ -4,6 +4,7 @@ import { BC_ROLES } from '@core-lib';
 import { BcRolesType } from '../../../core/types/roles.type';
 
 class ProfileShareItem {
+
   @ApiString()
   createdAt: string;
   @ApiString()
