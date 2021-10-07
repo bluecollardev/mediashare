@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../state';
 import { deleteMediaItem, updateMediaItem } from '../../state/modules/media-items';
 
-import { CreateMediaItemDtoCategoryEnum, UpdateMediaItemDto } from '../../rxjs-api';
+import { CreateMediaItemDtoCategoryEnum, MediaCategoryType, UpdateMediaItemDto } from '../../rxjs-api';
 import { useMediaItems } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
@@ -32,7 +32,7 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
   const options = [];
-  for (const value in CreateMediaItemDtoCategoryEnum) {
+  for (const value in MediaCategoryType) {
     options.push(value);
   }
 
@@ -59,7 +59,7 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
   const saveItem = async function () {
     const dto: UpdateMediaItemDto & { _id } = {
       title,
-      category: CreateMediaItemDtoCategoryEnum[category as any],
+      category: MediaCategoryType[category as any],
       description,
       isPlayable: true,
       thumbnail,

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../state';
 import { getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
 
-import { MediaItem, UpdatePlaylistDtoCategoryEnum } from '../../rxjs-api';
+import { MediaItem } from '../../rxjs-api';
 
 import { useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
@@ -19,6 +19,7 @@ import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } fr
 import { ROUTES } from '../../routes';
 
 import { theme } from '../../styles';
+import { PlaylistCategoryType } from '../../rxjs-api/models/PlaylistCategoryType';
 
 const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: PageProps) => {
   const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
@@ -43,7 +44,7 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
   }, [isLoaded, dispatch, onDataLoaded]);
 
   const options = [];
-  for (const value in UpdatePlaylistDtoCategoryEnum) {
+  for (const value in PlaylistCategoryType) {
     options.push(value);
   }
 

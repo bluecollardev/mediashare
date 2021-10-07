@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { MediaItem } from './';
+import { MediaItem, PlaylistCategoryType } from './';
 
 /**
  * @export
@@ -66,10 +66,10 @@ export interface PlaylistResponseDto {
    */
   mediaIds: Array<string> | null;
   /**
-   * @type {string}
+   * @type {PlaylistCategoryType}
    * @memberof PlaylistResponseDto
    */
-  category: string;
+  category: PlaylistCategoryType;
   /**
    * @type {Array<MediaItem>}
    * @memberof PlaylistResponseDto

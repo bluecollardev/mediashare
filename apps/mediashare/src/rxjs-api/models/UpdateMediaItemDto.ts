@@ -11,6 +11,8 @@
  * Do not edit the class manually.
  */
 
+import { MediaCategoryType } from './';
+
 /**
  * @export
  * @interface UpdateMediaItemDto
@@ -69,10 +71,10 @@ export interface UpdateMediaItemDto {
    */
   uri?: string;
   /**
-   * @type {string}
+   * @type {MediaCategoryType}
    * @memberof UpdateMediaItemDto
    */
-  category?: string;
+  category?: MediaCategoryType;
   /**
    * @type {string}
    * @memberof UpdateMediaItemDto

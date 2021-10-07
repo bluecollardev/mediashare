@@ -11,6 +11,8 @@
  * Do not edit the class manually.
  */
 
+import { MediaCategoryType } from './';
+
 /**
  * @export
  * @interface MediaItem
@@ -69,10 +71,10 @@ export interface MediaItem {
    */
   uri: string;
   /**
-   * @type {string}
+   * @type {MediaCategoryType}
    * @memberof MediaItem
    */
-  category: string;
+  category: MediaCategoryType;
   /**
    * @type {string}
    * @memberof MediaItem

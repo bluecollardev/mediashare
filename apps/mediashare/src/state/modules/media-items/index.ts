@@ -6,12 +6,12 @@ import Config from 'react-native-config';
 
 import { makeEnum } from '../../core/factory';
 import { apis, ApiService } from '../../apis';
-import { CreateMediaItemDto, UpdateMediaItemDto } from '../../../api';
-import { MediaItemDto, CreateMediaItemDtoCategoryEnum } from '../../../rxjs-api';
+import { CreateMediaItemDto, MediaItemDto } from '../../../rxjs-api';
 import { copyStorage, deleteStorage, fetchMedia, getStorage, listStorage, sanitizeFoldername, uploadMedia, uploadThumbnail, putToS3 } from './storage';
 import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './key-factory';
 import { getAllMedia } from './media-items';
 import { AwsMediaItem } from './aws-media-item.model';
+import { MediaCategoryType } from '../../../rxjs-api/models/MediaCategoryType';
 
 const s3Url = Config.AWS_URL;
 
@@ -125,7 +125,7 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
     video: mediaRoot + videoRoot + item.key,
     uri: mediaRoot + videoRoot + item.key,
     isPlayable: true,
-    category: CreateMediaItemDtoCategoryEnum.Free,
+    category: MediaCategoryType.Free,
     eTag: item.etag,
     key: mediaRoot + videoRoot + item.key,
     summary: '',

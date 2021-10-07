@@ -11,6 +11,8 @@
  * Do not edit the class manually.
  */
 
+import { PlaylistCategoryType } from './';
+
 /**
  * @export
  * @interface Playlist
@@ -64,8 +66,8 @@ export interface Playlist {
    */
   mediaIds: Array<string> | null;
   /**
-   * @type {string}
+   * @type {PlaylistCategoryType}
    * @memberof Playlist
    */
-  category: string;
+  category: PlaylistCategoryType;
 }

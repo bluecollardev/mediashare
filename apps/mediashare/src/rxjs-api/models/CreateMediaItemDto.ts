@@ -11,6 +11,8 @@
  * Do not edit the class manually.
  */
 
+import { MediaCategoryType } from './';
+
 /**
  * @export
  * @interface CreateMediaItemDto
@@ -42,10 +44,10 @@ export interface CreateMediaItemDto {
    */
   uri: string;
   /**
-   * @type {string}
+   * @type {MediaCategoryType}
    * @memberof CreateMediaItemDto
    */
-  category: CreateMediaItemDtoCategoryEnum;
+  category: MediaCategoryType;
   /**
    * @type {string}
    * @memberof CreateMediaItemDto
@@ -61,13 +63,4 @@ export interface CreateMediaItemDto {
    * @memberof CreateMediaItemDto
    */
   eTag: string;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum CreateMediaItemDtoCategoryEnum {
-  Free = 'free',
-  Paid = 'paid',
 }

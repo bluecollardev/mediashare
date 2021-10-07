@@ -9,7 +9,7 @@ import { useAppSelector } from '../../state';
 import { findMediaItems } from '../../state/modules/media-items';
 import { addUserPlaylist, findUserPlaylists } from '../../state/modules/playlists';
 
-import { CreatePlaylistDto, CreatePlaylistDtoCategoryEnum } from '../../rxjs-api';
+import { CreatePlaylistDto } from '../../rxjs-api';
 
 import { withLoadingSpinner, LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
 
@@ -22,6 +22,7 @@ import AppUpload from '../layout/AppUpload';
 import { Button } from 'react-native-paper';
 import { View } from 'react-native';
 import { theme } from '../../styles';
+import { PlaylistCategoryType } from '../../rxjs-api/models/PlaylistCategoryType';
 
 interface PlaylistAddContainerProps extends LoadingSpinnerProps {
   children: ReactNode;
@@ -33,7 +34,7 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
   const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
-  const [category, setCategory] = useState(CreatePlaylistDtoCategoryEnum.Free);
+  const [category, setCategory] = useState(PlaylistCategoryType.Free);
   const [loaded, setIsLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
 
@@ -43,7 +44,7 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
   const clearAndGoBack = function () {
     // @ts-ignore
     setTitle('');
-    setCategory(CreatePlaylistDtoCategoryEnum.Free);
+    setCategory(PlaylistCategoryType.Free);
     // @ts-ignore
     setDescription('');
     setIsLoaded(false);
@@ -72,7 +73,7 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
 
   const options = [];
 
-  for (const value in CreatePlaylistDtoCategoryEnum) {
+  for (const value in PlaylistCategoryType) {
     options.push(value);
   }
   const list = useAppSelector((state) => state.mediaItems.mediaItems);

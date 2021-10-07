@@ -11,6 +11,8 @@
  * Do not edit the class manually.
  */
 
+import { MediaCategoryType } from './';
+
 /**
  * @export
  * @interface PlaylistItemResponseDto
@@ -63,10 +65,10 @@ export interface PlaylistItemResponseDto {
    */
   uri: string;
   /**
-   * @type {string}
+   * @type {MediaCategoryType}
    * @memberof PlaylistItemResponseDto
    */
-  category: string;
+  category: MediaCategoryType;
   /**
    * @type {string}
    * @memberof PlaylistItemResponseDto

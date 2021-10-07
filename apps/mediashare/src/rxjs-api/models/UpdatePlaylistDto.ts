@@ -11,6 +11,8 @@
  * Do not edit the class manually.
  */
 
+import { PlaylistCategoryType } from './';
+
 /**
  * @export
  * @interface UpdatePlaylistDto
@@ -37,10 +39,10 @@ export interface UpdatePlaylistDto {
    */
   imageSrc: string;
   /**
-   * @type {string}
+   * @type {PlaylistCategoryType}
    * @memberof UpdatePlaylistDto
    */
-  category: string;
+  category: PlaylistCategoryType;
   /**
    * @type {Array<string>}
    * @memberof UpdatePlaylistDto

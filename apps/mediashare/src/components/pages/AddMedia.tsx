@@ -10,7 +10,7 @@ import { useAppSelector } from '../../state';
 import { addMediaItem, createThumbnail } from '../../state/modules/media-items';
 import { setError } from '../../state/modules/app-state/';
 
-import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum } from '../../rxjs-api';
+import { CreateMediaItemDto, CreateMediaItemDtoCategoryEnum, MediaCategoryType } from '../../rxjs-api';
 
 import { useMediaItems } from '../../hooks/NavigationHooks';
 
@@ -31,7 +31,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState(CreateMediaItemDtoCategoryEnum.Free);
+  const [category, setCategory] = useState(MediaCategoryType);
   const [documentUri, setDocumentUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
   const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
