@@ -109,7 +109,7 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
             showActions={!isSelectable}
           />
         ) : (
-          <Card>
+          <Card style={{ width: '100%' }}>
             <Card.Content>
               <Subheading style={{ textAlign: 'center' }}>There are no items in your collection.</Subheading>
             </Card.Content>

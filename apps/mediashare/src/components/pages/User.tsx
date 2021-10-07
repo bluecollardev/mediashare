@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../state';
-import { findMediaItems } from '../../state/modules/media-items';
 import { loadUsers } from '../../state/modules/users';
 
 import { ScrollView, View } from 'react-native';
-import { FAB, Text, Title } from 'react-native-paper';
+import { Card, FAB, Subheading, Text } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from '../layout/PageContainer';
@@ -15,10 +14,10 @@ import { MediaListItem } from '../layout/MediaListItem';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { theme } from '../../styles';
 import { ActionButtons } from '../layout/ActionButtons';
-import { shortenText } from '../../utils';
+// import { shortenText } from '../../utils';
 
 const SharedItems = ({ selectable = false }) => {
-  const mediaItems = useAppSelector((state) => state.user.mediaItems) || [];
+  const sharedItems = useAppSelector((state) => state.user.sharedItems) || [];
   return (
     <View>
       <View
@@ -40,16 +39,16 @@ const SharedItems = ({ selectable = false }) => {
         <Text style={{ fontWeight: 'bold' }}>Items Shared With User</Text>
       </View>
       <ScrollView>
-        {mediaItems.length > 0 ? (
-          mediaItems.map((item) => {
-            const { _id, title, description, thumbnail } = item;
+        {sharedItems.length > 0 ? (
+          sharedItems.map((item) => {
+            const { title, imageSrc } = item;
             return (
               <MediaListItem
-                key={`item_${_id}`}
+                key={`item_${title}`}
                 title={`${title}`}
-                description={`${shortenText(description, 40)}`}
+                // description={`${shortenText(description, 40)}`}
                 showThumbnail={true}
-                image={thumbnail}
+                image={imageSrc}
                 showActions={false}
                 iconRightColor={theme.colors.accentDarker}
                 selectable={selectable}
@@ -58,7 +57,11 @@ const SharedItems = ({ selectable = false }) => {
             );
           })
         ) : (
-          <Title>No Items</Title>
+          <Card style={{ width: '100%' }}>
+            <Card.Content>
+              <Subheading style={{ textAlign: 'center' }}>You have not shared any items with this user.</Subheading>
+            </Card.Content>
+          </Card>
         )}
       </ScrollView>
     </View>

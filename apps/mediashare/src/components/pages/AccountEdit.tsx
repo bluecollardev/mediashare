@@ -5,7 +5,7 @@ import { Avatar, Button } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { UserDto } from '../../rxjs-api';
 import { useAppSelector } from '../../state';
-import { loadUser, updateAccount } from '../../state/modules/user/index';
+import { loadUser, updateAccount } from '../../state/modules/user';
 import TextField from '../form/TextField';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import PageContainer, { PageProps } from '../layout/PageContainer';
@@ -13,10 +13,10 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
 import Config from 'react-native-config';
 import { thumbnailRoot } from '../../state/modules/media-items/key-factory';
-import { useRouteName, useViewProfileById } from '../../hooks/NavigationHooks';
+import { useRouteWithParams, useViewProfileById } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { ActionButtons } from '../layout/ActionButtons';
-import { getUserById, loadProfile } from '../../state/modules/profile';
+import { loadProfile } from '../../state/modules/profile';
 import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import * as R from 'remeda';
@@ -33,7 +33,9 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
   console.log('🚀 -------------------------------------------------------------------');
 
   const dispatch = useDispatch();
-  const account = useRouteName(ROUTES.account);
+
+  const viewAccount = useRouteWithParams(ROUTES.account);
+  // const viewProfile = useViewProfileById();
 
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -69,9 +71,8 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
   };
   const cancel = () => {
     setState(user);
-    account();
+    viewAccount({ userId });
   };
-  const profile = useViewProfileById();
 
   const save = function () {
     const updateUserDto = state;
@@ -82,10 +83,10 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
     from(dispatch(updateAccount({ updateUserDto, userId })))
       .pipe(
         switchMap(() => dispatch(loadProfile({ userId }))),
-        switchMap(() => dispatch(loadUser({}))),
+        switchMap(() => dispatch(loadUser())),
         take(1)
       )
-      .subscribe(() => profile({ userId }));
+      .subscribe(() => viewAccount({ userId }));
   };
   return (
     <PageContainer>
@@ -101,7 +102,7 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
         <TextField onChangeText={(text) => onUpdate({ email: text })} label={'Email'} value={state.email} disabled={!isLoaded} />
         <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label={'Phone Number'} value={state.phoneNumber} disabled={!isLoaded} />
       </ScrollView>
-      <ActionButtons cancelCb={cancel} actionCb={save} actionLabel={'Save'} />
+      <ActionButtons cancelCb={cancel} actionCb={save} actionLabel={'Save'} rightIcon="check-circle" />
     </PageContainer>
   );
 }

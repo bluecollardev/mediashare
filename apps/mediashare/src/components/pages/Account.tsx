@@ -12,10 +12,10 @@ import { loadProfile } from '../../state/modules/profile';
 import { findMediaItems } from '../../state/modules/media-items';
 
 import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
-import { Card, FAB, Title, Text } from 'react-native-paper';
+import { Card, FAB, Title, Text, Subheading } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useRouteName } from '../../hooks/NavigationHooks';
+import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
 import { useProfile } from '../../hooks/useProfile';
 import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
 import { ContactList } from '../layout/ContactList';
@@ -39,7 +39,7 @@ const Contacts = ({ selectable = false, showActions = false }) => {
         showActions={showActions}
         selectable={selectable}
         listItemProps={{
-          iconRight: 'edit',
+          iconRight: 'visibility',
           iconRightColor: theme.colors.accentDarker,
           onViewDetail: () => manageContact(),
         }}
@@ -71,7 +71,11 @@ const SharedItems = () => {
           );
         })
       ) : (
-        <Title>No Items</Title>
+        <Card style={{ width: '100%' }}>
+          <Card.Content>
+            <Subheading style={{ textAlign: 'center' }}>There are no items in your collection.</Subheading>
+          </Card.Content>
+        </Card>
       )}
     </ScrollView>
   );
@@ -90,7 +94,7 @@ const actionModes = { delete: 'delete', default: 'default' };
 
 export const Account = ({}: PageProps) => {
   const layout = useWindowDimensions();
-  const editProfile = useRouteName(ROUTES.accountEdit);
+  const editProfile = useRouteWithParams(ROUTES.accountEdit);
   const [index, setIndex] = useState(0);
   // const { setLoaded, onView, onDelete } = useProfile();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -116,7 +120,7 @@ export const Account = ({}: PageProps) => {
   const fabActions = [
     { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
     { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'edit', onPress: () => editProfile(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+    { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
   const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
