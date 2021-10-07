@@ -13,10 +13,10 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, OperationOpts, RawAjaxResponse } from '../runtime';
-import { AuthorizeDto, MediaItemDto, PlaylistResponseDto, ProfileDto, ShareItem, UpdateUserDto, UserDto } from '../models';
+import { MediaItemDto, PlaylistResponseDto, ShareItem, TokenDto, UpdateUserDto, UserDto } from '../models';
 
 export interface UserControllerAuthorizeRequest {
-  authorizeDto: AuthorizeDto;
+  tokenDto: TokenDto;
 }
 
 export interface UserControllerUpdateRequest {
@@ -29,21 +29,21 @@ export interface UserControllerUpdateRequest {
 export class UserApi extends BaseAPI {
   /**
    */
-  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest): Observable<ProfileDto>;
-  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ProfileDto>>;
-  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<ProfileDto | RawAjaxResponse<ProfileDto>> {
-    throwIfNullOrUndefined(authorizeDto, 'authorizeDto', 'userControllerAuthorize');
+  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest): Observable<UserDto>;
+  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  userControllerAuthorize({ tokenDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+    throwIfNullOrUndefined(tokenDto, 'tokenDto', 'userControllerAuthorize');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
     };
 
-    return this.request<ProfileDto>(
+    return this.request<UserDto>(
       {
         url: '/api/user/authorize',
         method: 'POST',
         headers,
-        body: authorizeDto,
+        body: tokenDto,
       },
       opts?.responseOpts
     );
@@ -114,16 +114,16 @@ export class UserApi extends BaseAPI {
 
   /**
    */
-  userControllerGetUser(): Observable<ProfileDto>;
-  userControllerGetUser(opts?: OperationOpts): Observable<RawAjaxResponse<ProfileDto>>;
-  userControllerGetUser(opts?: OperationOpts): Observable<ProfileDto | RawAjaxResponse<ProfileDto>> {
+  userControllerGetUser(): Observable<UserDto>;
+  userControllerGetUser(opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  userControllerGetUser(opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
     };
 
-    return this.request<ProfileDto>(
+    return this.request<UserDto>(
       {
         url: '/api/user',
         method: 'GET',

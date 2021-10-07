@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { PlaylistResponseDto, ProfileDto, UpdateUserDto, UserDto } from '../models';
+import { PlaylistResponseDto, UpdateUserDto, UserDto } from '../models';
 
 export interface UsersControllerFindOneRequest {
   userId: string;
@@ -29,7 +29,7 @@ export interface UsersControllerRemoveRequest {
 
 export interface UsersControllerSetRolesRequest {
   userId: string;
-  body: string;
+  requestBody: Array<string>;
 }
 
 export interface UsersControllerUpdateRequest {
@@ -64,9 +64,9 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerFindOne({ userId }: UsersControllerFindOneRequest): Observable<ProfileDto>;
-  usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ProfileDto>>;
-  usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<ProfileDto | RawAjaxResponse<ProfileDto>> {
+  usersControllerFindOne({ userId }: UsersControllerFindOneRequest): Observable<UserDto>;
+  usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerFindOne');
 
     const headers: HttpHeaders = {
@@ -75,7 +75,7 @@ export class UsersApi extends BaseAPI {
         : undefined),
     };
 
-    return this.request<ProfileDto>(
+    return this.request<UserDto>(
       {
         url: '/api/users/{userId}'.replace('{userId}', encodeURI(userId)),
         method: 'GET',
@@ -118,17 +118,10 @@ export class UsersApi extends BaseAPI {
   usersControllerRemove({ userId }: UsersControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerRemove');
 
-    const headers: HttpHeaders = {
-      ...(this.configuration.username != null && this.configuration.password != null
-        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
-        : undefined),
-    };
-
     return this.request<void>(
       {
         url: '/api/users/{userId}'.replace('{userId}', encodeURI(userId)),
         method: 'DELETE',
-        headers,
       },
       opts?.responseOpts
     );
@@ -136,11 +129,11 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerSetRoles({ userId, body }: UsersControllerSetRolesRequest): Observable<UserDto>;
-  usersControllerSetRoles({ userId, body }: UsersControllerSetRolesRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  usersControllerSetRoles({ userId, body }: UsersControllerSetRolesRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  usersControllerSetRoles({ userId, requestBody }: UsersControllerSetRolesRequest): Observable<UserDto>;
+  usersControllerSetRoles({ userId, requestBody }: UsersControllerSetRolesRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
+  usersControllerSetRoles({ userId, requestBody }: UsersControllerSetRolesRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerSetRoles');
-    throwIfNullOrUndefined(body, 'body', 'usersControllerSetRoles');
+    throwIfNullOrUndefined(requestBody, 'requestBody', 'usersControllerSetRoles');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
@@ -154,7 +147,7 @@ export class UsersApi extends BaseAPI {
         url: '/api/users/{userId}/roles'.replace('{userId}', encodeURI(userId)),
         method: 'PUT',
         headers,
-        body: body as any,
+        body: requestBody,
       },
       opts?.responseOpts
     );

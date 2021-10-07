@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { BcRolesType, MediaItemDto, PlaylistResponseDto } from './';
+import { MediaItemDto, PlaylistResponseDto } from './';
 
 /**
  * @export
@@ -43,11 +43,6 @@ export interface UserDto {
    * @memberof UserDto
    */
   lastName: string;
-  /**
-   * @type {BcRolesType}
-   * @memberof UserDto
-   */
-  role: BcRolesType;
   /**
    * @type {string}
    * @memberof UserDto
