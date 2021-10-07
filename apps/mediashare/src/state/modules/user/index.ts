@@ -13,7 +13,7 @@ export const USER_STATE_KEY = 'user';
 const USER_ACTIONS = ['LOGIN', 'LOGOUT', 'UPDATE_ACCOUNT', 'DELETE_ACCOUNT', 'VALIDATE', 'LOAD_USER'] as const;
 const initialState: Pick<
   ProfileDto,
-  'username' | 'firstName' | 'lastName' | '_id' | 'phoneNumber' | 'imageSrc' | 'email' | 'role' | 'sharedCount' | 'sharesCount' | 'likesCount'
+  'username' | 'firstName' | 'lastName' | '_id' | 'phoneNumber' | 'imageSrc' | 'email' | 'role' | 'sharedCount' | 'sharesCount' | 'likesCount' | 'sharedItems'
 > = {
   username: '',
   firstName: '',
@@ -26,10 +26,24 @@ const initialState: Pick<
   sharedCount: 0,
   likesCount: 0,
   sharesCount: 0,
+  sharedItems: [],
 };
 
 const pickUser = (user: ProfileDto) =>
-  R.pick(user, ['username', 'email', '_id', 'firstName', 'lastName', 'phoneNumber', 'imageSrc', 'role', 'sharedCount', 'likesCount', 'sharesCount']);
+  R.pick(user, [
+    'username',
+    'email',
+    '_id',
+    'firstName',
+    'lastName',
+    'phoneNumber',
+    'imageSrc',
+    'role',
+    'sharedCount',
+    'likesCount',
+    'sharesCount',
+    'sharedItems',
+  ]);
 export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
 
 export const loginAction = createAsyncThunk(UserActions.login.type, async (authorizeDto: AuthorizeDto) => {
