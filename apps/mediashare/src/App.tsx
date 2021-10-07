@@ -76,8 +76,9 @@ const AccountStackNavigator = createStackNavigator();
 const AccountNavigation = () => {
   return (
     <AccountStackNavigator.Navigator>
-      <AccountStackNavigator.Screen {...routeConfig.profile} />
       <AccountStackNavigator.Screen {...routeConfig.account} />
+      <AccountStackNavigator.Screen {...routeConfig.profile} />
+
       <AccountStackNavigator.Screen {...routeConfig.accountEdit} />
       <AccountStackNavigator.Screen {...routeConfig.user} />
       <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} />

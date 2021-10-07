@@ -29,16 +29,16 @@ export interface UserControllerUpdateRequest {
 export class UserApi extends BaseAPI {
   /**
    */
-  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest): Observable<UserDto>;
-  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<RawAjaxResponse<UserDto>>;
-  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<UserDto | RawAjaxResponse<UserDto>> {
+  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest): Observable<ProfileDto>;
+  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ProfileDto>>;
+  userControllerAuthorize({ authorizeDto }: UserControllerAuthorizeRequest, opts?: OperationOpts): Observable<ProfileDto | RawAjaxResponse<ProfileDto>> {
     throwIfNullOrUndefined(authorizeDto, 'authorizeDto', 'userControllerAuthorize');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
     };
 
-    return this.request<UserDto>(
+    return this.request<ProfileDto>(
       {
         url: '/api/user/authorize',
         method: 'POST',

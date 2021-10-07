@@ -68,6 +68,6 @@ export interface CreateMediaItemDto {
  * @enum {string}
  */
 export enum CreateMediaItemDtoCategoryEnum {
-  Paid = 'paid',
   Free = 'free',
+  Paid = 'paid',
 }

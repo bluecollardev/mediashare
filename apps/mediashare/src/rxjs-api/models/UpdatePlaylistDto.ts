@@ -47,12 +47,3 @@ export interface UpdatePlaylistDto {
    */
   mediaIds?: Array<string>;
 }
-
-/**
- * @export
- * @enum {string}
- */
-export enum UpdatePlaylistDtoCategoryEnum {
-  Paid = 'paid',
-  Free = 'free',
-}

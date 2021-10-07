@@ -13,7 +13,7 @@ import { removeShareItem, readShareItem } from '../../state/modules/share-items/
 import { ROUTES } from '../../routes';
 import { loadProfile } from '../../state/modules/profile';
 import { take } from 'rxjs/operators';
-import SharedList from '../../api/models/SharedList';
+
 interface ProfileProps extends LoadingSpinnerProps {}
 
 function Profile({ onDataLoaded }: ProfileProps) {
@@ -69,7 +69,7 @@ function Profile({ onDataLoaded }: ProfileProps) {
         </Button>
       )}
 
-      <SharedList onDelete={onDelete} onView={onView} sharedItems={sharedItems} />
+      {/* <SharedList onDelete={onDelete} onView={onView} sharedItems={sharedItems} /> */}
     </View>
   );
 }

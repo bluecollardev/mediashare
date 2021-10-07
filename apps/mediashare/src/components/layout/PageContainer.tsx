@@ -15,7 +15,7 @@ export interface PageProps extends LoadingSpinnerProps {
 }
 
 export interface PageContainerProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export interface PageContentProps {

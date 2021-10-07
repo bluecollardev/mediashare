@@ -26,6 +26,7 @@ import { shortenText } from '../../utils';
 
 import styles, { theme } from '../../styles';
 import { useProfile } from '../../hooks/useProfile';
+import { loadProfile } from '../../state/modules/profile';
 const Contacts = ({ selectable = false, showActions = false }) => {
   const manageContact = useRouteName(ROUTES.user);
   const contacts = useAppSelector((state) => state.users.entities);
@@ -51,7 +52,7 @@ const Contacts = ({ selectable = false, showActions = false }) => {
 const SharedItems = () => {
   // const dispatch = useDispatch();
   // const viewMediaItem = useEditMediaItem();
-  const mediaItems = useAppSelector((state) => state.profile.entity.sharedItems) || [];
+  const profile = useAppSelector((state) => state.profile.entity);
   /* const onViewMediaItem = async function (mediaId: string, uri: string) {
     await dispatch(getMediaItemById({ uri, mediaId }));
     viewMediaItem({ mediaId, uri });
@@ -61,8 +62,8 @@ const SharedItems = () => {
       contentInset={{ bottom: 120 }}
       contentContainerStyle={{ flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap' }}
     >
-      {mediaItems.length > 0 ? (
-        mediaItems.map((item) => {
+      {profile?.sharedItems?.length > 0 ? (
+        profile.sharedItems.map((item) => {
           return (
             <Card key={`item_${item.playlistId}`} style={{ flexBasis: '50%', padding: 5 }}>
               <Card.Title title={item.title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(item.author, 40)}`} />
@@ -101,7 +102,7 @@ export const Account = ({}: PageProps) => {
     { key: 'shared', title: 'All Shared Items', icon: 'movie' },
   ]);
 
-  const user = useAppSelector((state) => state.profile.entity);
+  const user = useAppSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -123,8 +124,10 @@ export const Account = ({}: PageProps) => {
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
-
-  const { firstName = 'Lucas', lastName = 'Lopatka', email, phoneNumber } = user;
+  if (!user) {
+    return <PageContainer />;
+  }
+  const { firstName = 'Lucas', lastName = 'Lopatka', email, phoneNumber, likesCount, sharesCount, sharedCount } = user;
 
   return (
     <PageContainer>
@@ -135,9 +138,9 @@ export const Account = ({}: PageProps) => {
           phoneNumber={phoneNumber}
           image={user.imageSrc}
           showSocial={true}
-          likes={49}
-          shared={30}
-          shares={300}
+          likes={likesCount}
+          shared={sharedCount}
+          shares={sharesCount}
         />
         {/* <Highlights highlights={state.highlights} /> */}
         <TabView
@@ -172,9 +175,9 @@ export const Account = ({}: PageProps) => {
   );
 
   async function loadData() {
-    // await dispatch(findMediaItems());
+    await dispatch(findMediaItems());
     await dispatch(loadUsers());
-    // await dispatch(loadUser());
+    await dispatch(loadProfile({}));
     setIsLoaded(true);
   }
 

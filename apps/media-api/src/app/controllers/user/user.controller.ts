@@ -94,7 +94,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Post('authorize')
-  @ApiResponse({ type: UserDto, status: 200, isArray: false })
+  @ApiResponse({ type: ProfileDto, status: 200, isArray: false })
   @ApiBody({ type: AuthorizeDto })
   async authorize(@Req() req: Request, @Res() res: Response) {
     console.log(req);
@@ -111,11 +111,16 @@ export class UserController {
       const newUser = await this.userService.create({
         ...valid,
         role: 'user',
-        imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg'
+        imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
       });
-      return res.send(newUser);
+      const profile = await this.userService.getUserById(newUser._id);
+      if (!profile) return res.send(user);
+      return res.send(profile);
     }
+    const profile = await this.userService.getUserById(user._id);
+    console.log(profile);
+    if (!profile) return res.send(user);
 
-    return res.send(user);
+    return res.send(profile);
   }
 }
