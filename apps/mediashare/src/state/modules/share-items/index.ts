@@ -17,7 +17,7 @@ export const getShareItemById = createAsyncThunk(shareItemsActionTypes.getShareI
 
 export const findItemsIAmSharing = createAsyncThunk(shareItemsActionTypes.findItemsIAmSharing, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.user.userControllerGetMyShareItems(opts).toPromise();
+  return await api.user.userControllerGetSharesPlaylists(opts).toPromise();
 });
 
 export const findItemsSharedWithMe = createAsyncThunk(shareItemsActionTypes.findItemsSharedWithMe, async (opts: {} | undefined, { extra }) => {
