@@ -17,14 +17,6 @@ export interface ContactListProps {
 export const ContactList: React.FC<ContactListProps> = ({ contacts = [], onClick = () => {} }) => {
   console.log(contacts);
   const mappedAndKeyed = R.values(R.groupBy(contacts, (user) => (user?.firstName ? user.firstName[0].toUpperCase() : user.username[0].toUpperCase())));
-  console.log('🚀 ---------------------------------------------------------------------');
-  console.log('🚀 ~ file: ContactList.tsx ~ line 32 ~ mappedAndKeyed', mappedAndKeyed);
-  console.log('🚀 ---------------------------------------------------------------------');
-  console.log('🚀 ~ file: ContactList.tsx ~ line 32 ~ mappedAndKeyed', mappedAndKeyed);
-  // const stepped = R.pipe(
-  //   R.values(mappedAndKeyed),
-  //   R.sort((a, b) => R.first(a).firstName[0].localeCompare(R.first(b).firstName[0]))
-  // );
 
   return (
     <>

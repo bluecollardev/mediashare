@@ -15,7 +15,7 @@ interface ContactListItemProps {
 }
 
 function ContactListItem({
-  showFollow = false,
+  showFollow = true,
   description = '',
   title = '',
   avatar,
@@ -40,7 +40,7 @@ function ContactListItem({
           </View>
         )}
         right={() => (
-          <View style={{ paddingVertical: 25 }}>
+          <View style={{ paddingVertical: 5 }}>
             {showFollow && (
               <Button mode={'outlined'} style={styles.followButton}>
                 Follow
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   letterLabelWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
   headline: { marginLeft: 10, color: theme.colors.primary },
   avatarWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
-  followButton: { justifyContent: 'center', borderColor: theme.colors.primary },
+  followButton: { justifyContent: 'center', borderColor: theme.colors.primary, transform: [{ scale: 0.75 }] },
 });
 
 export default ContactListItem;

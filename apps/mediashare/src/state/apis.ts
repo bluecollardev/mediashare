@@ -34,7 +34,7 @@ function apiFactory() {
         COOKIE = cookie ? cookie : COOKIE;
         TOKEN = token ? token : TOKEN;
         ID_TOKEN = idToken ? idToken : ID_TOKEN;
-        // console.log(TOKEN);
+        console.log(TOKEN);
         return response;
       },
       pre: (request: RequestArgs) => {
