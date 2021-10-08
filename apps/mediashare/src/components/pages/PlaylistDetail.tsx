@@ -40,7 +40,8 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const { _id, title = '', userId, author = '', description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } = selectedPlaylist || {};
+  const { _id, title = '', userId, author = '', description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } =
+    selectedPlaylist || {};
   const items = mediaItems || [];
 
   useEffect(() => {
@@ -106,9 +107,7 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
       </PageContent>
       <PageActions>
         {!selectedItems ||
-          (selectedItems.length === 0 && (
-            <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
-          ))}
+          (selectedItems.length === 0 && <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />)}
         {selectedItems && selectedItems.length > 0 && (
           <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Remove" cancelLabel="Cancel" rightIcon="delete" />
         )}

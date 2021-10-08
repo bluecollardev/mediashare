@@ -82,7 +82,7 @@ export function useViewPlaylistById() {
 
 export function useViewProfileById() {
   const nav = useRouteWithParams(ROUTES.profile);
-  return function ({ userId }) {
+  return function (userId) {
     nav({ userId });
   };
 }

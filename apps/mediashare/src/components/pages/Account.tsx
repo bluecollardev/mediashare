@@ -15,7 +15,7 @@ import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-n
 import { Card, FAB, Title, Text, Subheading } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { useRouteName, useRouteWithParams, useViewProfileById } from '../../hooks/NavigationHooks';
 import { useProfile } from '../../hooks/useProfile';
 import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
 import { ContactList } from '../layout/ContactList';
@@ -29,7 +29,12 @@ import styles, { theme } from '../../styles';
 const Contacts = ({ selectable = false, showActions = false }) => {
   const manageContact = useRouteName(ROUTES.user);
   const contacts = useAppSelector((state) => state.users.entities);
+  const viewProfileById = useViewProfileById();
   console.log('Dumping contacts');
+  console.log(contacts);
+  if (!contacts) {
+    return <></>;
+  }
   console.log(contacts);
   return (
     <ScrollView>
@@ -37,6 +42,7 @@ const Contacts = ({ selectable = false, showActions = false }) => {
         contacts={contacts}
         showGroups={false}
         showActions={showActions}
+        onClick={viewProfileById}
         selectable={selectable}
         listItemProps={{
           iconRight: 'visibility',

@@ -1,9 +1,13 @@
 import React from 'react';
-import { List } from 'native-base';
 import { UserDto } from '../../rxjs-api';
 import { ListItemGroup } from './ListItemGroup';
 import { MediaListItem } from './MediaListItem';
 import { getUserFullName } from '../../utils';
+import ContactListItem from './ContactListItem';
+import * as R from 'remeda';
+import { ActivityIndicator } from 'react-native';
+import { theme } from '../../styles';
+import { List } from 'react-native-paper';
 
 export interface ContactListProps {
   navigation?: any;
@@ -11,7 +15,7 @@ export interface ContactListProps {
   showGroups?: boolean;
   showActions?: boolean;
   selectable?: boolean;
-  onChecked?: (b, u) => void;
+  onClick?: (userId) => void;
   listItemProps?: any;
 }
 
@@ -20,30 +24,40 @@ export const ContactList: React.FC<ContactListProps> = ({
   showGroups = false,
   showActions = false,
   selectable = false,
-  onChecked = () => {},
+  onClick = () => {},
   listItemProps = {},
 }) => {
-  return (
-    <List>
-      {showGroups && <ListItemGroup key={'all'} text={'All Contacts'} />}
-      {contacts.map((contact) => {
-        const { _id, username = '', email = '', imageSrc = '' } = contact;
-        const fullName = getUserFullName(contact);
+  console.log(contacts);
+  const mappedAndKeyed = R.values(R.groupBy(contacts, (user) => (user?.firstName ? user.firstName[0].toUpperCase() : user.username[0].toUpperCase())));
+  console.log('🚀 ---------------------------------------------------------------------');
+  console.log('🚀 ~ file: ContactList.tsx ~ line 32 ~ mappedAndKeyed', mappedAndKeyed);
+  console.log('🚀 ---------------------------------------------------------------------');
+  console.log('🚀 ~ file: ContactList.tsx ~ line 32 ~ mappedAndKeyed', mappedAndKeyed);
+  // const stepped = R.pipe(
+  //   R.values(mappedAndKeyed),
+  //   R.sort((a, b) => R.first(a).firstName[0].localeCompare(R.first(b).firstName[0]))
+  // );
 
+  return (
+    <>
+      {mappedAndKeyed.map((section) => {
         return (
-          <MediaListItem
-            key={`user_${_id}`}
-            title={fullName}
-            description={`${username} <${email}>`}
-            showThumbnail={true}
-            image={imageSrc}
-            showActions={showActions}
-            selectable={selectable}
-            onChecked={(b) => onChecked(b, contact)}
-            {...listItemProps}
-          />
+          <List.Section>
+            {section.map((item, i) => {
+              return (
+                <ContactListItem
+                  title={`${item.firstName} ${item.lastName}`}
+                  description={item.username}
+                  avatar={item.imageSrc}
+                  showLetterLabel={!i}
+                  userId={item._id}
+                  onClick={onClick}
+                />
+              );
+            })}
+          </List.Section>
         );
       })}
-    </List>
+    </>
   );
 };
