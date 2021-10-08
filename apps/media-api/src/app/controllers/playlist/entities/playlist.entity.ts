@@ -11,6 +11,7 @@ import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-i
 export class Playlist extends BcEntity implements PlaylistInterface {
   @Column('title')
   @ApiString()
+
   title: string;
 
   @Column('description')

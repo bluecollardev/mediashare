@@ -15,6 +15,7 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
     logger: PinoLogger
   ) {
     super(mediaRepository, logger);
+    this.repository.createCollectionIndex({ title: 'text', description: 'text' });
   }
 
   findPlaylistMedia(idStrings: ObjectId[]) {
@@ -88,5 +89,13 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
         // }
       ])
       .toArray();
+  }
+
+  searchMediaItems({ query }: { query: string }) {
+    return this.repository
+      .aggregate([{ $match: { $text: { $search: query } } }, { $sort: { score: { $meta: 'textScore' } } }])
+      .project({})
+
+      .limit(100);
   }
 }
