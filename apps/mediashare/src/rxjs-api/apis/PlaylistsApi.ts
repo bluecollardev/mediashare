@@ -12,11 +12,15 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
+import { BaseAPI, HttpHeaders, HttpQuery, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
 import { CreatePlaylistDto, CreatePlaylistResponseDto, Playlist, PlaylistItemResponseDto, PlaylistResponseDto, ShareItem, UpdatePlaylistDto } from '../models';
 
 export interface PlaylistControllerCreateRequest {
   createPlaylistDto: CreatePlaylistDto;
+}
+
+export interface PlaylistControllerFindAllRequest {
+  text?: string;
 }
 
 export interface PlaylistControllerFindOneRequest {
@@ -74,20 +78,30 @@ export class PlaylistsApi extends BaseAPI {
 
   /**
    */
-  playlistControllerFindAll(): Observable<Array<PlaylistItemResponseDto>>;
-  playlistControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
-  playlistControllerFindAll(opts?: OperationOpts): Observable<Array<PlaylistItemResponseDto> | RawAjaxResponse<Array<PlaylistItemResponseDto>>> {
+  playlistControllerFindAll({ text }: PlaylistControllerFindAllRequest): Observable<Array<PlaylistItemResponseDto>>;
+  playlistControllerFindAll({ text }: PlaylistControllerFindAllRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
+  playlistControllerFindAll(
+    { text }: PlaylistControllerFindAllRequest,
+    opts?: OperationOpts
+  ): Observable<Array<PlaylistItemResponseDto> | RawAjaxResponse<Array<PlaylistItemResponseDto>>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
     };
 
+    const query: HttpQuery = {};
+
+    if (text != null) {
+      query['text'] = text;
+    }
+
     return this.request<Array<PlaylistItemResponseDto>>(
       {
         url: '/api/playlists',
         method: 'GET',
         headers,
+        query,
       },
       opts?.responseOpts
     );

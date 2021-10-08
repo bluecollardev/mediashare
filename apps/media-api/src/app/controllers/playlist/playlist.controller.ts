@@ -34,7 +34,7 @@ export class PlaylistController {
     return await this.playlistService.createPlaylistWithItems({
       ...createPlaylistDto,
       createdBy: getUserId,
-      mediaIds
+      mediaIds,
     });
   }
 
@@ -42,18 +42,8 @@ export class PlaylistController {
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   findAll(@Query('text') query?: string) {
-    console.log('🚀 -----------------------------------------------------------------------------------------');
-    console.log('🚀 ~ file: playlist.controller.ts ~ line 45 ~ PlaylistController ~ findAll ~ query', query);
-    console.log('🚀 -----------------------------------------------------------------------------------------');
-    console.log('🚀 ~ file: playlist.controller.ts ~ line 45 ~ PlaylistController ~ findAll ~ query', query);
-    return this.playlistService.searchPlaylists({ query });
-
-    // return this.playlistService.findAll();
+    return query ? this.playlistService.searchPlaylists({ query }) : this.playlistService.findAll();
   }
-  // @Get()
-  // @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
-  // search() {
-  // }
 
   @Get('categories')
   getCategories() {
@@ -65,7 +55,7 @@ export class PlaylistController {
     name: 'playlistId',
     required: true,
     type: 'string',
-    example: new ObjectId().toHexString()
+    example: new ObjectId().toHexString(),
   })
   @ApiParam({ name: 'playlistId', type: String, required: true })
   @PlaylistGetResponse({ type: PlaylistResponseDto })
@@ -82,7 +72,7 @@ export class PlaylistController {
 
     const result = await this.playlistService.update(playlistId, {
       ...rest,
-      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => new ObjectId(id)) : []
+      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => new ObjectId(id)) : [],
     });
     return result;
   }
