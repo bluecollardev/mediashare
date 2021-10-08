@@ -47,6 +47,15 @@ export class MediaItemController {
   }
 
   /* TODO: findout what this needs to be */
+  @Get('popular')
+  @MediaGetResponse({ isArray: true })
+  @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
+  @Get()
+  @MediaGetResponse({ isArray: true })
+  findPopularMediaItems() {
+    return this.mediaItemService.findPopularMediaItems();
+  }
+
   @Get()
   @MediaGetResponse({ isArray: true })
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
@@ -103,7 +112,7 @@ export class MediaItemController {
       createdBy,
       userId,
       mediaId,
-      title,
+      title
     });
     response.status(HttpStatus.CREATED);
 

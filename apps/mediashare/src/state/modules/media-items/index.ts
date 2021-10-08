@@ -175,7 +175,7 @@ export const deleteMediaItem = createAsyncThunk(mediaItemActionTypes.removeMedia
 });
 
 export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async () => {
-  return await mediaItems.mediaItemControllerFindAll().toPromise();
+  return await mediaItems.mediaItemControllerFindAll({ text: null }).toPromise();
 });
 
 const initialState: { mediaItems: MediaItemDto[]; loading: boolean; loaded: boolean } = {
