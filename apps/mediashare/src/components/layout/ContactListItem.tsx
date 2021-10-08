@@ -35,7 +35,7 @@ function ContactListItem({
           <View style={styles.leftOuterWrapper}>
             <View style={styles.letterLabelWrapper}>{showLetterLabel && <Headline style={styles.headline}>{title[0]}</Headline>}</View>
             <View style={styles.avatarWrapper}>
-              <Avatar.Image source={avatar ? { uri: avatar } : undefined} size={50} />
+              <Avatar.Image source={avatar ? { uri: avatar } : undefined} size={40} />
             </View>
           </View>
         )}
