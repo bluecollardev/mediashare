@@ -16,6 +16,7 @@ import { ActionButtons } from '../layout/ActionButtons';
 import { ContactList } from '../layout/ContactList';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { useSpinner } from '../../hooks/useSpinner';
+import { ContactListSelectable } from '../layout/ContactListSelectable';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ShareWith = ({}: PageProps) => {
@@ -66,7 +67,7 @@ const ShareWith = ({}: PageProps) => {
   return (
     <PageContainer>
       <PageContent>
-        <ContactList contacts={users} showGroups={true} selectable={true} onChecked={updateSelectedUsers} />
+        <ContactListSelectable items={users} showGroups={true} onChecked={updateSelectedUsers} />
       </PageContent>
       <PageActions>
         <ActionButtons cancelCb={goBack} actionCb={actionCb} actionLabel="Confirm" cancelLabel="Cancel" rightIcon="check-circle" />
