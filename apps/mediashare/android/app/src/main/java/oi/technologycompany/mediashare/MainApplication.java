@@ -1,5 +1,7 @@
 package oi.technologycompany.mediashare;
 
+import oi.technologycompany.mediashare.generated.BasePackageList;
+
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
@@ -7,6 +9,11 @@ import com.facebook.react.ReactApplication;
 import com.amazonaws.RNAWSCognitoPackage;
 // TODO: Fix missing createthumbnail package!
 // import com.reactlibrary.createthumbnail.CreateThumbnailPackage;
+import java.util.Arrays;
+
+import org.unimodules.adapters.react.ModuleRegistryAdapter;
+import org.unimodules.adapters.react.ReactModuleRegistryProvider;
+
 import com.amazonaws.RNAWSCognitoPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -20,7 +27,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
-
+  private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(new BasePackageList().getPackageList(), null);
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
         @Override
@@ -35,6 +42,11 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           // packages.add(new ReactNativeConfigPackage()); // This is auto-linked?
+          // Add unimodules
+          List<ReactPackage> unimodules = Arrays.<ReactPackage>asList(
+            new ModuleRegistryAdapter(mModuleRegistryProvider)
+          );
+          packages.addAll(unimodules);
           return packages;
         }
 

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android --no-jetifier",
+    "android": "react-native run-android",
     "pre-ios": "cd ios; pod install; cd ..",
     "ios:dev": "react-native run-ios --scheme MedishareTechnologyDevelopment",
     "ios:prod": "react-native run-ios --scheme MediaShareTechnologyProduction",
