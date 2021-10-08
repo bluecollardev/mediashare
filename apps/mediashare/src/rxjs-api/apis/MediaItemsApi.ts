@@ -12,11 +12,15 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
+import { BaseAPI, HttpHeaders, HttpQuery, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
 import { CreateMediaItemDto, MediaItem, MediaItemDto, ShareItem, UpdateMediaItemDto } from '../models';
 
 export interface MediaItemControllerCreateRequest {
   createMediaItemDto: CreateMediaItemDto;
+}
+
+export interface MediaItemControllerFindAllRequest {
+  text?: string;
 }
 
 export interface MediaItemControllerFindOneRequest {
@@ -72,20 +76,30 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerFindAll(): Observable<Array<MediaItemDto>>;
-  mediaItemControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
-  mediaItemControllerFindAll(opts?: OperationOpts): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
+  mediaItemControllerFindAll({ text }: MediaItemControllerFindAllRequest): Observable<Array<MediaItemDto>>;
+  mediaItemControllerFindAll({ text }: MediaItemControllerFindAllRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
+  mediaItemControllerFindAll(
+    { text }: MediaItemControllerFindAllRequest,
+    opts?: OperationOpts
+  ): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
     };
 
+    const query: HttpQuery = {};
+
+    if (text != null) {
+      query['text'] = text;
+    }
+
     return this.request<Array<MediaItemDto>>(
       {
         url: '/api/media-items',
         method: 'GET',
         headers,
+        query,
       },
       opts?.responseOpts
     );

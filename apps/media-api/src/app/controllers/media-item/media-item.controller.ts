@@ -103,7 +103,7 @@ export class MediaItemController {
       createdBy,
       userId,
       mediaId,
-      title
+      title,
     });
     response.status(HttpStatus.CREATED);
 
