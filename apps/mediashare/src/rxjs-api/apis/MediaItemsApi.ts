@@ -130,6 +130,27 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
+  mediaItemControllerFindPopularMediaItems(): Observable<Array<MediaItemDto>>;
+  mediaItemControllerFindPopularMediaItems(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
+  mediaItemControllerFindPopularMediaItems(opts?: OperationOpts): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
+    return this.request<Array<MediaItemDto>>(
+      {
+        url: '/api/media-items/popular',
+        method: 'GET',
+        headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
   mediaItemControllerGetCategories(): Observable<void>;
   mediaItemControllerGetCategories(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>>;
   mediaItemControllerGetCategories(opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
