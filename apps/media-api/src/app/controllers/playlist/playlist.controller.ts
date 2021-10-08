@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards, Query } from '@nestjs/common';
 import { Response } from 'express';
 
-import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
@@ -34,15 +34,26 @@ export class PlaylistController {
     return await this.playlistService.createPlaylistWithItems({
       ...createPlaylistDto,
       createdBy: getUserId,
-      mediaIds,
+      mediaIds
     });
   }
 
   @Get()
+  @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
-  findAll() {
-    return this.playlistService.findAll();
+  findAll(@Query('text') query?: string) {
+    console.log('🚀 -----------------------------------------------------------------------------------------');
+    console.log('🚀 ~ file: playlist.controller.ts ~ line 45 ~ PlaylistController ~ findAll ~ query', query);
+    console.log('🚀 -----------------------------------------------------------------------------------------');
+    console.log('🚀 ~ file: playlist.controller.ts ~ line 45 ~ PlaylistController ~ findAll ~ query', query);
+    return this.playlistService.searchPlaylists({ query });
+
+    // return this.playlistService.findAll();
   }
+  // @Get()
+  // @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
+  // search() {
+  // }
 
   @Get('categories')
   getCategories() {
@@ -54,7 +65,7 @@ export class PlaylistController {
     name: 'playlistId',
     required: true,
     type: 'string',
-    example: new ObjectId().toHexString(),
+    example: new ObjectId().toHexString()
   })
   @ApiParam({ name: 'playlistId', type: String, required: true })
   @PlaylistGetResponse({ type: PlaylistResponseDto })
@@ -71,7 +82,7 @@ export class PlaylistController {
 
     const result = await this.playlistService.update(playlistId, {
       ...rest,
-      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => new ObjectId(id)) : [],
+      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => new ObjectId(id)) : []
     });
     return result;
   }
