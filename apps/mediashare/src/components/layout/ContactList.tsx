@@ -1,12 +1,7 @@
 import React from 'react';
 import { UserDto } from '../../rxjs-api';
-import { ListItemGroup } from './ListItemGroup';
-import { MediaListItem } from './MediaListItem';
-import { getUserFullName } from '../../utils';
 import ContactListItem from './ContactListItem';
 import * as R from 'remeda';
-import { ActivityIndicator } from 'react-native';
-import { theme } from '../../styles';
 import { List } from 'react-native-paper';
 
 export interface ContactListProps {
@@ -19,14 +14,7 @@ export interface ContactListProps {
   listItemProps?: any;
 }
 
-export const ContactList: React.FC<ContactListProps> = ({
-  contacts = [],
-  showGroups = false,
-  showActions = false,
-  selectable = false,
-  onClick = () => {},
-  listItemProps = {},
-}) => {
+export const ContactList: React.FC<ContactListProps> = ({ contacts = [], onClick = () => {} }) => {
   console.log(contacts);
   const mappedAndKeyed = R.values(R.groupBy(contacts, (user) => (user?.firstName ? user.firstName[0].toUpperCase() : user.username[0].toUpperCase())));
   console.log('🚀 ---------------------------------------------------------------------');
