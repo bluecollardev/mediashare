@@ -44,7 +44,7 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
       from(dispatch(loadProfile({ userId: userId }))).subscribe(() => setIsLoaded(true));
     }
   }, [isLoaded, userId, dispatch]);
-  const user = useAppSelector((state) => state.profile.entity);
+  const user = useAppSelector((state) => state.user);
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
   console.log('Dump Account Edit user');
