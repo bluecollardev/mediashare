@@ -5,6 +5,7 @@ class ObjectIdParameters {
   playlistId: ObjectId;
   mediaId: ObjectId;
   playlistItemId: ObjectId;
+  createdBy: ObjectId;
 }
 
 export type OptionalObjectIdParameters = Partial<ObjectIdParameters>;

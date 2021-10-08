@@ -86,10 +86,25 @@ export class UserController {
   }
   @Get('playlists/shared')
   @UserGetResponse({ isArray: true, type: ShareItem })
-  async getMyShareItems(@GetUser() user: SessionUserInterface = null) {
+  async getSharedPlaylists(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
 
     return await this.shareItemService.aggregateSharedPlaylists({ userId });
+  }
+
+  @Get('media-items/shares')
+  @UserGetResponse({ type: MediaItemDto, isArray: true })
+  getSharesMediaItems(@GetUser() user: SessionUserInterface = null) {
+    const { _id: userId } = user;
+
+    return this.shareItemService.aggregateSharedMediaItems({ userId });
+  }
+  @Get('playlists/shares')
+  @UserGetResponse({ isArray: true, type: ShareItem })
+  getSharesPlaylists(@GetUser() user: SessionUserInterface = null) {
+    const { _id: userId } = user;
+
+    return this.shareItemService.aggregateSharesPlaylists({ createdBy: userId });
   }
 
   @HttpCode(HttpStatus.OK)
