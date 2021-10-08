@@ -92,10 +92,6 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
   }
 
   searchMediaItems({ query }: { query: string }) {
-    return this.repository
-      .aggregate([{ $match: { $text: { $search: query } } }, { $sort: { score: { $meta: 'textScore' } } }])
-      .project({})
-
-      .limit(100);
+    return this.repository.aggregate([{ $match: { $text: { $search: query } } }, { $sort: { score: { $meta: 'textScore' } } }]).toArray();
   }
 }

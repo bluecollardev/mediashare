@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards, Query } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
@@ -49,8 +49,9 @@ export class MediaItemController {
   /* TODO: findout what this needs to be */
   @Get()
   @MediaGetResponse({ isArray: true })
-  findAll() {
-    return this.mediaItemService.findAll();
+  @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
+  findAll(@Query('text') query?: string) {
+    return query ? this.mediaItemService.searchMediaItems({ query }) : this.mediaItemService.findAll();
   }
 
   @Get('categories')
