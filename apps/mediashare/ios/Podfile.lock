@@ -292,7 +292,7 @@ PODS:
     - React-Core (= 0.63.3)
     - React-cxxreact (= 0.63.3)
     - React-jsi (= 0.63.3)
-  - RNAWSCognito (5.1.1):
+  - RNAWSCognito (5.2.0):
     - React-Core
   - RNCAsyncStorage (1.15.6):
     - React-Core
@@ -515,7 +515,7 @@ SPEC CHECKSUMS:
   React-RCTText: 65a6de06a7389098ce24340d1d3556015c38f746
   React-RCTVibration: 8e9fb25724a0805107fc1acc9075e26f814df454
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
-  RNAWSCognito: c45898aceda8822fde76c9a72f08434754465fb3
+  RNAWSCognito: 97f1dbed4b9f42d61adfbcfe58e053843df532f6
   RNCAsyncStorage: b7c6564ce662366dd44d0189456183ef7eda2d4d
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
