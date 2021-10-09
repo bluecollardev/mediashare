@@ -12,7 +12,7 @@ import { useViewMediaItem, useViewPlaylistById } from '../../hooks/NavigationHoo
 
 import { ScrollView } from 'react-native';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import { List, Text, Searchbar, Card } from 'react-native-paper';
+import { List, Text, Card } from 'react-native-paper';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -211,7 +211,6 @@ export const Browse = ({}: PageProps) => {
             );
           })}
         </View>
-        <Searchbar placeholder={`Search ${routes[index].title}`} value={''} />
       </View>
     );
   }

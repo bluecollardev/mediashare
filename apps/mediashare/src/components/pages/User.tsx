@@ -44,7 +44,7 @@ const SharedItems = ({ selectable = false }) => {
             const { title, imageSrc } = item;
             return (
               <MediaListItem
-                key={`item_${title}`}
+                key={`shared_item_${title}`}
                 title={`${title}`}
                 // description={`${shortenText(description, 40)}`}
                 showThumbnail={true}

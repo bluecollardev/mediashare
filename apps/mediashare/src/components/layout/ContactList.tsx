@@ -15,19 +15,19 @@ export interface ContactListProps {
 }
 
 export const ContactList: React.FC<ContactListProps> = ({ contacts = [], onClick = () => {} }) => {
-  console.log(contacts);
-  const mappedAndKeyed = R.values(R.groupBy(contacts, (user) => (user?.firstName ? user.firstName[0].toUpperCase() : user.username[0].toUpperCase()))).sort(
-    (a, b) => a[0]?.firstName.localeCompare(b[0]?.firstName[0] ?? b[0]?.userName[0])
-  );
+  const mappedAndKeyed = R.values(
+    R.groupBy(contacts, (user) => (user?.firstName ? user.firstName[0].toUpperCase() : user.username[0].toUpperCase()))
+  ).sort((a, b) => a[0]?.firstName.localeCompare(b[0]?.firstName[0] ?? b[0]?.username[0]));
 
   return (
     <>
-      {mappedAndKeyed.map((section) => {
+      {mappedAndKeyed.map((section, idx) => {
         return (
-          <List.Section>
+          <List.Section key={`section_${idx}`}>
             {section.map((item, i) => {
               return (
                 <ContactListItem
+                  key={`contact_${item._id}`}
                   title={`${item.firstName} ${item.lastName}`}
                   description={item.username}
                   avatar={item.imageSrc}

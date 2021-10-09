@@ -25,8 +25,6 @@ import { theme } from '../../styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const awsUrl = Config.AWS_URL;
-console.log(awsUrl);
-
 interface AccountEditProps extends PageProps {}
 
 function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps) {

@@ -31,11 +31,7 @@ const Contacts = ({ selectable = false, showActions = false }) => {
   const contacts = useAppSelector((state) => state.users.entities);
   const viewProfileById = useViewProfileById();
 
-  if (!contacts) {
-    return <></>;
-  }
-  console.log(contacts);
-  return (
+  return contacts ? (
     <ScrollView>
       <ContactList
         contacts={contacts}
@@ -50,7 +46,7 @@ const Contacts = ({ selectable = false, showActions = false }) => {
         }}
       />
     </ScrollView>
-  );
+  ) : null;
 };
 
 const SharedItems = () => {
@@ -69,7 +65,7 @@ const SharedItems = () => {
       {user?.sharedItems?.length > 0 ? (
         user.sharedItems.map((item) => {
           return (
-            <Card key={`item_${item.playlistId}`} style={{ flexBasis: '50%', padding: 5 }}>
+            <Card key={`acct_shared_item_${item.shareItemId}`} style={{ flexBasis: '50%', padding: 5 }}>
               <Card.Title title={item.title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(item.author, 40)}`} />
               <Card.Cover source={{ uri: item.imageSrc }} />
             </Card>
@@ -86,16 +82,14 @@ const SharedItems = () => {
   );
 };
 
-const renderScene =
-  (sceneComponentProps) =>
-  ({ route }) => {
-    switch (route.key) {
-      case 'contacts':
-        return <Contacts {...sceneComponentProps} />;
-      case 'shared':
-        return <SharedItems {...sceneComponentProps} />;
-    }
-  };
+const renderScene = (sceneComponentProps) => ({ route }) => {
+  switch (route.key) {
+    case 'contacts':
+      return <Contacts {...sceneComponentProps} />;
+    case 'shared':
+      return <SharedItems {...sceneComponentProps} />;
+  }
+};
 
 const actionModes = { delete: 'delete', default: 'default' };
 

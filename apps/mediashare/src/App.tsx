@@ -1,34 +1,21 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator as createBottomTabNavigator, MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
+import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
-import { routeConfig, ROUTES } from './routes';
+import { routeConfig } from './routes';
 
 import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import { store } from './boot/configureStore';
 import { useAppSelector } from './state';
 import { theme } from './styles';
 import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black, useFonts } from '@expo-google-fonts/roboto';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useRouteWithParams } from './hooks/NavigationHooks';
 import { ProfileDto } from './rxjs-api';
-import AccountEdit from './components/pages/AccountEdit';
 
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
@@ -45,7 +32,7 @@ const BrowseNavigation = () => {
 };
 const PlaylistsStackNavigator = createStackNavigator();
 
-function PlaylistsNavigation() {
+const PlaylistsNavigation = () => {
   return (
     <PlaylistsStackNavigator.Navigator>
       <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
@@ -59,11 +46,11 @@ function PlaylistsNavigation() {
       <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />
     </PlaylistsStackNavigator.Navigator>
   );
-}
+};
 
 const MediaStackNavigator = createStackNavigator();
 
-function MediaNavigation() {
+const MediaNavigation = () => {
   return (
     <MediaStackNavigator.Navigator>
       <MediaStackNavigator.Screen {...routeConfig.media} />
@@ -125,14 +112,12 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon: ({ focused, color }) => {
           return <MaterialIcons name={tabNavigationIconsMap[route.name]} color={color} size={26} />;
-
           // <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
         },
       })}
       listeners={{
         tabPress: (e) => {
           // Prevent default action
-
           if (!user.firstName) {
             e.preventDefault();
           }
@@ -145,7 +130,6 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         listeners={{
           tabPress: (e) => {
             // Prevent default action
-
             if (!user.firstName) {
               e.preventDefault();
             }
@@ -171,7 +155,6 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         listeners={{
           tabPress: (e) => {
             // Prevent default action
-
             if (!user.firstName) {
               e.preventDefault();
             }

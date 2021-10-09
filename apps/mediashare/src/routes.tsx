@@ -1,3 +1,4 @@
+import React from 'react';
 import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
 import ResetPassword from './components/pages/ResetPassword';
@@ -17,7 +18,7 @@ import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
 import User from './components/pages/User';
 
-import { AppScreenHeader } from './components/layout/AppScreenHeader';
+import { AppHeader } from './components/layout/AppHeader';
 import AccountEdit from './components/pages/AccountEdit';
 import Profile from './components/pages/Profile';
 
@@ -40,12 +41,12 @@ const routeConfig = {
   browse: {
     name: 'browse',
     component: Browse,
-    options: { title: 'Browse', header: AppScreenHeader },
+    options: { title: 'Browse', header: (props) => <AppHeader {...props} /> },
   },
   playlists: {
     name: 'playlists',
     component: Playlists,
-    options: { title: 'Playlists', header: AppScreenHeader },
+    options: { title: 'Playlists', header: (props) => <AppHeader {...props} searchable={true} /> },
   },
   addMediaItem: {
     name: 'addMediaItem',
@@ -55,82 +56,82 @@ const routeConfig = {
   playlistDetail: {
     name: 'playlistDetail',
     component: PlaylistDetail,
-    options: { title: 'Playlist', header: AppScreenHeader },
+    options: { title: 'Playlist', header: (props) => <AppHeader {...props} /> },
   },
   playlistEdit: {
     name: 'playlistEdit',
     component: PlaylistEdit,
-    options: { title: 'Edit Playlist', header: AppScreenHeader },
+    options: { title: 'Edit Playlist', header: (props) => <AppHeader {...props} /> },
   },
   playlistAdd: {
     name: 'playlistAdd',
     component: PlaylistAdd,
-    options: { title: 'Create Playlist', header: AppScreenHeader },
+    options: { title: 'Create Playlist', header: (props) => <AppHeader {...props} /> },
   },
   media: {
     name: 'media',
     component: Media,
-    options: { title: 'My Media Collection', header: AppScreenHeader },
+    options: { title: 'My Media Collection', header: (props) => <AppHeader {...props} searchable={true} /> },
   },
   mediaItemDetail: {
     name: 'mediaItemDetail',
     component: MediaItemDetail,
-    options: { title: 'View Media Item', header: AppScreenHeader },
+    options: { title: 'View Media Item', header: (props) => <AppHeader {...props} /> },
   },
   mediaItemEdit: {
     name: 'mediaItemEdit',
     component: MediaItemEdit,
-    options: { title: 'Edit Media Item', header: AppScreenHeader },
+    options: { title: 'Edit Media Item', header: (props) => <AppHeader {...props} /> },
   },
   addFromFeed: {
     name: 'addFromFeed',
     component: AddFromFeed,
-    options: { title: 'Download From Cloud', header: AppScreenHeader },
+    options: { title: 'Download From Cloud', header: (props) => <AppHeader {...props} /> },
   },
   addFromMedia: {
     name: 'addFromMedia',
     component: AddFromCollection,
-    options: { title: 'Add Existing Media Item', header: AppScreenHeader },
+    options: { title: 'Add Existing Media Item', header: (props) => <AppHeader {...props} /> },
   },
   addPlaylist: {
     name: 'addPlaylist',
     component: PlaylistEdit,
-    options: { title: 'Add Playlist', header: AppScreenHeader },
+    options: { title: 'Add Playlist', header: (props) => <AppHeader {...props} /> },
   },
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
     component: AddToPlaylist,
-    options: { title: 'Add To Playlist', header: AppScreenHeader },
+    options: { title: 'Add To Playlist', header: (props) => <AppHeader {...props} /> },
   },
   addMedia: {
     name: 'addMediaItem',
     component: AddMedia,
-    options: { title: 'Add Media', header: AppScreenHeader },
+    options: { title: 'Add Media', header: (props) => <AppHeader {...props} /> },
   },
   shareWith: {
     name: 'shareWith',
     component: ShareWith,
-    options: { title: 'Share With', header: AppScreenHeader },
+    options: { title: 'Share With', header: (props) => <AppHeader {...props} /> },
   },
   user: {
     name: 'user',
     component: User,
-    options: { title: 'Manage Contact', header: AppScreenHeader },
+    options: { title: 'Manage Contact', header: (props) => <AppHeader {...props} /> },
   },
   account: {
     name: 'account',
     component: Account,
-    options: { title: 'Account', header: AppScreenHeader },
+    options: { title: 'Account', header: (props) => <AppHeader {...props} /> },
   },
   accountEdit: {
     name: 'accountEdit',
     component: AccountEdit,
-    options: { title: 'Update Your Profile', header: AppScreenHeader },
+    options: { title: 'Update Your Profile', header: (props) => <AppHeader {...props} /> },
   },
   profile: {
     name: 'profile',
     component: Profile,
-    options: { title: 'Profile', header: AppScreenHeader },
+    options: { title: 'Profile', header: (props) => <AppHeader {...props} /> },
   },
 } as const;
 type RouteEnumKeys = keyof typeof routeConfig;
