@@ -26,6 +26,8 @@ import { shortenText } from '../../utils';
 
 import styles, { theme } from '../../styles';
 
+import * as build from '../../build';
+
 const Contacts = ({ selectable = false, showActions = false }) => {
   const manageContact = useRouteName(ROUTES.user);
   const contacts = useAppSelector((state) => state.users.entities);
@@ -101,10 +103,13 @@ export const Account = ({}: PageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
-  const [routes] = React.useState([
-    { key: 'contacts', title: 'Contacts', icon: 'assignment-ind' },
-    { key: 'shared', title: 'All Shared Items', icon: 'movie' },
-  ]);
+
+  const tabs = [{ key: 'contacts', title: 'Contacts', icon: 'assignment-ind' }];
+  if (build.forAdmin) {
+    tabs.push({ key: 'shared', title: 'All Shared Items', icon: 'movie' });
+  }
+
+  const [routes] = React.useState(tabs);
 
   const user = useAppSelector((state) => state.user);
 
@@ -131,10 +136,12 @@ export const Account = ({}: PageProps) => {
 
   const { firstName = 'Lucas', lastName = 'Lopatka', email, phoneNumber, likesCount, sharesCount, sharedCount } = user;
 
+  const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
+
   return (
     <PageContainer>
       <AccountCard
-        title={`${firstName} ${lastName}`}
+        title={fullName}
         email={email}
         phoneNumber={phoneNumber}
         image={user.imageSrc}
@@ -144,14 +151,16 @@ export const Account = ({}: PageProps) => {
         shares={sharesCount}
       />
       {/* <Highlights highlights={state.highlights} /> */}
-      <TabView
-        key={clearSelectionKey}
-        navigationState={{ index, routes }}
-        renderScene={renderScene({ selectable: isSelectable, showActions: !isSelectable })}
-        onIndexChange={setIndex}
-        renderTabBar={(props) => renderTabBar(props)}
-        initialLayout={{ width: layout.width, height: layout.height }}
-      />
+      {!build.forFreeUser && (
+        <TabView
+          key={clearSelectionKey}
+          navigationState={{ index, routes }}
+          renderScene={renderScene({ selectable: isSelectable, showActions: !isSelectable })}
+          onIndexChange={setIndex}
+          renderTabBar={(props) => renderTabBar(props)}
+          initialLayout={{ width: layout.width, height: layout.height }}
+        />
+      )}
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
           <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Delete" cancelLabel="Cancel" rightIcon="delete" />

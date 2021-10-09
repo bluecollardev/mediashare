@@ -18,6 +18,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { ProfileDto } from './rxjs-api';
 
+import * as build from './build';
+
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
 
@@ -106,10 +108,6 @@ export const tabNavigationIconsMap = {
 const BUILD_FOR = Config.BUILD_FOR || 'admin';
 console.log(`-------------- App running in ${BUILD_FOR.toUpperCase()} mode --------------`);
 
-const buildForFreeUser = BUILD_FOR === 'free';
-const buildForSubscriber = BUILD_FOR === 'subscriber';
-const buildForAdmin = BUILD_FOR === 'admin';
-
 const PrivateNavigator = createBottomTabNavigator();
 function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} }) {
   return (
@@ -136,23 +134,22 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         },
       }}
     >
-      {buildForFreeUser ||
-        (buildForSubscriber && (
-          <PrivateNavigator.Screen
-            name={'Browse'}
-            component={BrowseNavigation}
-            listeners={{
-              tabPress: (e) => {
-                // Prevent default action
-                if (!user.firstName) {
-                  e.preventDefault();
-                }
-              },
-            }}
-          />
-        ))}
+      {(build.forFreeUser || build.forSubscriber) && (
+        <PrivateNavigator.Screen
+          name={'Browse'}
+          component={BrowseNavigation}
+          listeners={{
+            tabPress: (e) => {
+              // Prevent default action
+              if (!user.firstName) {
+                e.preventDefault();
+              }
+            },
+          }}
+        />
+      )}
 
-      {(buildForSubscriber || buildForAdmin) && (
+      {(build.forSubscriber || build.forAdmin) && (
         <PrivateNavigator.Screen
           name={'Playlists'}
           component={PlaylistsNavigation}
@@ -168,7 +165,7 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         />
       )}
 
-      {buildForAdmin && (
+      {build.forAdmin && (
         <PrivateNavigator.Screen
           name={'Media'}
           component={MediaNavigation}

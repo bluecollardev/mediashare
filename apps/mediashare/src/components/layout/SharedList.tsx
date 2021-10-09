@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
-import { View, Text, StyleSheet, SectionList } from 'react-native';
-import { ProfileDto, ProfileShareItem } from '../../rxjs-api';
+import { View, StyleSheet, SectionList } from 'react-native';
+import { ProfileShareItem } from '../../rxjs-api';
 import * as R from 'remeda';
 import { Card, List } from 'react-native-paper';
 import ShareItemCard from '../../components/layout/ShareItemCard';
@@ -15,7 +15,7 @@ interface SharedListProps {
 function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
   const data = R.map(R.keys(mappedSharedItems), (key) => ({
-    title: `${mappedSharedItems[key][0].authorName}`,
+    title: `${mappedSharedItems[key][0].authorName || 'Unnamed User'}`,
     count: mappedSharedItems[key].length,
     data: mappedSharedItems[key],
   }));
@@ -25,7 +25,7 @@ function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
         sections={data}
         renderSectionHeader={({ section }) => (
           <Card mode={'outlined'} style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}>
-            <Card.Title title={section.title} subtitle={`${section.count.toString()} items`} />
+            <Card.Title titleStyle={{ fontSize: 16 }} title={`Shared by ${section.title}`} subtitle={`${section.count.toString()} items`} />
           </Card>
         )}
         keyExtractor={(item) => item.shareItemId}

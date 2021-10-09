@@ -15,7 +15,7 @@ interface ContactListItemProps {
 }
 
 function ContactListItem({
-  showFollow = false,
+  showFollow = true,
   description = '',
   title = '',
   avatar,

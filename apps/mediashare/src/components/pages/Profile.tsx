@@ -9,7 +9,7 @@ import { Button } from 'react-native-paper';
 import { theme } from '../../styles';
 
 import { useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
-import { removeShareItem, readShareItem } from '../../state/modules/share-items/index';
+import { removeShareItem, readShareItem } from '../../state/modules/share-items';
 import { ROUTES } from '../../routes';
 import { loadProfile } from '../../state/modules/profile';
 import { take } from 'rxjs/operators';
@@ -55,10 +55,12 @@ function Profile({ onDataLoaded, route }: ProfileProps) {
       });
   }, [loaded, dispatch, onDataLoaded]);
 
+  const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
+
   return (
     <View style={styles.container}>
       <AccountCard
-        title={`${firstName} ${lastName}`}
+        title={fullName}
         email={email}
         phoneNumber={phoneNumber}
         image={imageSrc}
