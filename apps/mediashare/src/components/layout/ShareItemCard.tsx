@@ -1,8 +1,7 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 
-import { View, Text, StyleSheet } from 'react-native';
-import { Paragraph, Caption, IconButton, Card, Divider, Menu, Button } from 'react-native-paper';
-import { theme } from '../../styles';
+import { View, StyleSheet } from 'react-native';
+import { IconButton, Card, Divider, Menu } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 interface ShareItemCardProps {
   date: string;
@@ -13,7 +12,7 @@ interface ShareItemCardProps {
   onView: () => void;
 }
 
-function ShareItemCard({ date, title, onDelete, onView, image, read }: ShareItemCardProps) {
+export function ShareItemCard({ date, title, onDelete, onView, image, read }: ShareItemCardProps) {
   const [visible, setVisible] = useState(false);
   return (
     <View>
@@ -75,5 +74,3 @@ const styles = StyleSheet.create({
     // justifyContent: 'space-between',
   },
 });
-
-export default ShareItemCard;

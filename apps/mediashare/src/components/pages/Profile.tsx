@@ -3,8 +3,9 @@ import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { from } from 'rxjs';
 import { useAppSelector } from '../../state';
-import { LoadingSpinnerProps, withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import AccountCard from '../layout/AccountCard';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { AccountCard } from '../layout/AccountCard';
+import { SharedList } from '../layout/SharedList';
 import { Button } from 'react-native-paper';
 import { theme } from '../../styles';
 
@@ -14,7 +15,6 @@ import { ROUTES } from '../../routes';
 import { loadProfile } from '../../state/modules/profile';
 import { take } from 'rxjs/operators';
 import { PageProps } from '../layout/PageContainer';
-import SharedList from '../layout/SharedList';
 
 interface ProfileProps extends PageProps {}
 
@@ -42,6 +42,7 @@ function Profile({ onDataLoaded, route }: ProfileProps) {
     setLoaded(false);
     playlist({ playlistId });
   };
+
   useEffect(() => {
     from(dispatch(loadProfile({ userId })))
       .pipe(take(1))

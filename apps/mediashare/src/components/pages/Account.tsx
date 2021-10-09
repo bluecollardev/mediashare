@@ -12,21 +12,19 @@ import { loadProfile } from '../../state/modules/profile';
 import { findMediaItems } from '../../state/modules/media-items';
 
 import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
-import { Card, FAB, Title, Text, Subheading } from 'react-native-paper';
+import { FAB, Text } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useRouteName, useRouteWithParams, useViewProfileById } from '../../hooks/NavigationHooks';
-import { useProfile } from '../../hooks/useProfile';
 import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
 import { ContactList } from '../layout/ContactList';
 import { ActionButtons } from '../layout/ActionButtons';
 import { AccountCard } from '../layout/AccountCard';
 
-import { shortenText } from '../../utils';
-
 import styles, { theme } from '../../styles';
 
 import * as build from '../../build';
+import { SharedList } from '../layout/SharedList';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
   const manageContact = useRouteName(ROUTES.user);
@@ -52,36 +50,8 @@ const Contacts = ({ selectable = false, showActions = false }) => {
 };
 
 const SharedItems = () => {
-  // const dispatch = useDispatch();
-  // const viewMediaItem = useEditMediaItem();
-  const user = useAppSelector((state) => state.user);
-  /* const onViewMediaItem = async function (mediaId: string, uri: string) {
-    await dispatch(getMediaItemById({ uri, mediaId }));
-    viewMediaItem({ mediaId, uri });
-  }; */
-  return (
-    <ScrollView
-      contentInset={{ bottom: 120 }}
-      contentContainerStyle={{ flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap' }}
-    >
-      {user?.sharedItems?.length > 0 ? (
-        user.sharedItems.map((item) => {
-          return (
-            <Card key={`acct_shared_item_${item.shareItemId}`} style={{ flexBasis: '50%', padding: 5 }}>
-              <Card.Title title={item.title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(item.author, 40)}`} />
-              <Card.Cover source={{ uri: item.imageSrc }} />
-            </Card>
-          );
-        })
-      ) : (
-        <Card style={{ width: '100%' }}>
-          <Card.Content>
-            <Subheading style={{ textAlign: 'center' }}>There are no items in your collection.</Subheading>
-          </Card.Content>
-        </Card>
-      )}
-    </ScrollView>
-  );
+  const { sharedItems } = useAppSelector((state) => state.profile?.entity);
+  return <SharedList sharedItems={sharedItems} />;
 };
 
 const renderScene = (sceneComponentProps) => ({ route }) => {
@@ -134,7 +104,7 @@ export const Account = ({}: PageProps) => {
     clearCheckboxSelection();
   }, []);
 
-  const { firstName = 'Lucas', lastName = 'Lopatka', email, phoneNumber, likesCount, sharesCount, sharedCount } = user;
+  const { firstName, lastName, email, phoneNumber, likesCount, sharesCount, sharedCount } = user;
 
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
 

@@ -4,15 +4,16 @@ import { View, StyleSheet, SectionList } from 'react-native';
 import { ProfileShareItem } from '../../rxjs-api';
 import * as R from 'remeda';
 import { Card, List } from 'react-native-paper';
-import ShareItemCard from '../../components/layout/ShareItemCard';
+
+import { ShareItemCard } from './ShareItemCard';
 
 interface SharedListProps {
   sharedItems: ProfileShareItem[];
-  onDelete: any;
-  onView: any;
+  onDelete?: any;
+  onView?: any;
 }
 
-function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
+export function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
   const data = R.map(R.keys(mappedSharedItems), (key) => ({
     title: `${mappedSharedItems[key][0].authorName || 'Unnamed User'}`,
@@ -61,5 +62,3 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
-
-export default SharedList;
