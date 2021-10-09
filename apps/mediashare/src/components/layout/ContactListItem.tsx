@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Avatar, Button, Divider, Headline, List } from 'react-native-paper';
 import { theme } from '../../styles';
 
