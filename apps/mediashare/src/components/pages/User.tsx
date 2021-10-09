@@ -85,7 +85,7 @@ export const User = ({}: PageProps) => {
   useEffect(() => {
     async function loadData() {
       // await dispatch(findMediaItems());
-      await dispatch(loadUsers());
+      // await dispatch(loadUsers());
       // await dispatch(loadUser());
       setIsLoaded(true);
     }

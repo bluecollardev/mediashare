@@ -18,7 +18,7 @@ import { useRouteWithParams, useViewProfileById } from '../../hooks/NavigationHo
 import { ROUTES } from '../../routes';
 import { ActionButtons } from '../layout/ActionButtons';
 import { loadProfile } from '../../state/modules/profile';
-import { from } from 'rxjs';
+import { from, of } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import * as R from 'remeda';
 import { theme } from '../../styles';
@@ -31,18 +31,10 @@ interface AccountEditProps extends PageProps {}
 
 function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps) {
   const { userId = null } = route.params;
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      // Prevent default behavior
-      // e.preventDefault();
-      // Do something manually
-      // ...
-      e.preventDefault();
-      console.log('e', e);
-      console.log(e);
-    });
-    return unsubscribe();
-  });
+  console.log('🚀 -------------------------------------------------------------------');
+  console.log('🚀 ~ file: AccountEdit.tsx ~ line 34 ~ AccountEdit ~ userId', userId);
+  console.log('🚀 -------------------------------------------------------------------');
+  console.log('🚀 ~ file: AccountEdit.tsx ~ line 34 ~ AccountEdit ~ userId', userId);
 
   const dispatch = useDispatch();
 
@@ -52,11 +44,16 @@ function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (!isLoaded) {
-      from(dispatch(loadProfile({ userId: userId }))).subscribe(() => setIsLoaded(true));
+    async function loadData() {
+      const result = (await dispatch(loadProfile({ userId }))) as any;
+      setState(result.payload);
+      setIsLoaded(true);
     }
-  }, [isLoaded, userId, dispatch]);
-  const user = useAppSelector((state) => state.user);
+    if (!isLoaded) {
+      loadData();
+    }
+  });
+  const user = useAppSelector((state) => state.profile.entity);
   const withoutName = function () {
     return state.firstName.length < 1 || state.lastName.length < 1;
   };

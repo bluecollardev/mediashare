@@ -30,8 +30,7 @@ const Contacts = ({ selectable = false, showActions = false }) => {
   const manageContact = useRouteName(ROUTES.user);
   const contacts = useAppSelector((state) => state.users.entities);
   const viewProfileById = useViewProfileById();
-  console.log('Dumping contacts');
-  console.log(contacts);
+
   if (!contacts) {
     return <></>;
   }
@@ -87,14 +86,16 @@ const SharedItems = () => {
   );
 };
 
-const renderScene = (sceneComponentProps) => ({ route }) => {
-  switch (route.key) {
-    case 'contacts':
-      return <Contacts {...sceneComponentProps} />;
-    case 'shared':
-      return <SharedItems {...sceneComponentProps} />;
-  }
-};
+const renderScene =
+  (sceneComponentProps) =>
+  ({ route }) => {
+    switch (route.key) {
+      case 'contacts':
+        return <Contacts {...sceneComponentProps} />;
+      case 'shared':
+        return <SharedItems {...sceneComponentProps} />;
+    }
+  };
 
 const actionModes = { delete: 'delete', default: 'default' };
 

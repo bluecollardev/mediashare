@@ -13,12 +13,15 @@ import { removeShareItem, readShareItem } from '../../state/modules/share-items/
 import { ROUTES } from '../../routes';
 import { loadProfile } from '../../state/modules/profile';
 import { take } from 'rxjs/operators';
+import { PageProps } from '../layout/PageContainer';
+import SharedList from '../layout/SharedList';
 
-interface ProfileProps extends LoadingSpinnerProps {}
+interface ProfileProps extends PageProps {}
 
-function Profile({ onDataLoaded }: ProfileProps) {
+function Profile({ onDataLoaded, route }: ProfileProps) {
+  const { userId } = route.params;
   const [loaded, setLoaded] = useState(false);
-  const userId = '6149b54a19531dd4c6b0df59';
+  // const userId = '6149b54a19531dd4c6b0df59';
   const dispatch = useDispatch();
   const userRole = useAppSelector((state) => state.user.role);
   const isAdmin = userRole === 'admin';
@@ -42,7 +45,11 @@ function Profile({ onDataLoaded }: ProfileProps) {
   useEffect(() => {
     from(dispatch(loadProfile({ userId })))
       .pipe(take(1))
-      .subscribe(() => {
+      .subscribe((result) => {
+        console.log('🚀 --------------------------------------------------------------');
+        console.log('🚀 ~ file: Profile.tsx ~ line 48 ~ .subscribe ~ result', result);
+        console.log('🚀 --------------------------------------------------------------');
+        console.log('🚀 ~ file: Profile.tsx ~ line 48 ~ .subscribe ~ result', result);
         onDataLoaded();
         setLoaded(true);
       });
@@ -66,7 +73,7 @@ function Profile({ onDataLoaded }: ProfileProps) {
         </Button>
       )}
 
-      {/* <SharedList onDelete={onDelete} onView={onView} sharedItems={sharedItems} /> */}
+      <SharedList onDelete={onDelete} onView={onView} sharedItems={sharedItems} />
     </View>
   );
 }

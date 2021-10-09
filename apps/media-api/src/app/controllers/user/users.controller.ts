@@ -18,6 +18,8 @@ import RouteTokens from '../../modules/app-config/constants/open-api.constants';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 import { ProfileDto } from './dto/profile.dto';
 import { UserGuard } from '../../modules/auth/guards/user.guard';
+import { from } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @ApiTags('users')
 @Controller('users')
@@ -26,8 +28,8 @@ export class UsersController {
 
   @UserGetResponse({ isArray: true })
   @Get()
-  findAll(): Promise<User[]> {
-    return this.userService.findAll();
+  findAll(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
+    return from(this.userService.findAll()).pipe(map((users) => users.filter((user) => user._id !== userId)));
   }
 
   @Get(RouteTokens.USER_ID)
