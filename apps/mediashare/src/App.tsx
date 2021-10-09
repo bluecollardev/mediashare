@@ -134,7 +134,7 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         },
       }}
     >
-      {(build.forFreeUser || build.forSubscriber) && (
+      {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
         <PrivateNavigator.Screen
           name={'Browse'}
           component={BrowseNavigation}
