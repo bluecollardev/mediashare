@@ -163,7 +163,7 @@ export const Browse = ({}: PageProps) => {
   const [index, setIndex] = useState(0);
   const [routes] = React.useState([
     { key: 'playlists', title: 'Playlists', icon: 'subscriptions' },
-    { key: 'popular', title: 'Popular', icon: 'movie-filter' },
+    { key: 'popular', title: 'Videos', icon: 'movie-filter' },
     { key: 'articles', title: 'Articles', icon: 'library-books' },
   ]);
   // Do other stuff

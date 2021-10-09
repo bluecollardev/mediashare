@@ -41,7 +41,7 @@ const routeConfig = {
   browse: {
     name: 'browse',
     component: Browse,
-    options: { title: 'Browse', header: (props) => <AppHeader {...props} searchable={true} /> },
+    options: { title: 'My Feed', header: (props) => <AppHeader {...props} searchable={true} /> },
   },
   playlists: {
     name: 'playlists',
