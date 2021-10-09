@@ -38,7 +38,7 @@ export const AppHeader = (props) => {
       {searchable && !searchIsActive && (
         <>
           {previous && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
-          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18 }} />
+          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingLeft: '15%' }} />
           <Appbar.Action icon="search" color="#ffffff" onPress={() => enableSearch()} />
         </>
       )}
