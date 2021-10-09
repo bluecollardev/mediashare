@@ -12,9 +12,6 @@ const INITIAL_STATE: InitialState = {
 };
 
 const loadProfile = createAsyncThunk('getUserById', async function ({ userId }: { userId?: string }) {
-  // console.log('🚀 ------------------------------------------------------------');
-  // console.log('🚀 ~ file: index.ts ~ line 14 ~ loadProfile ~ userId', userId);
-  // console.log('🚀 ------------------------------------------------------------');
   const req = userId ? apis.users.usersControllerFindOne({ userId }) : apis.user.userControllerGetUser();
   return await req.toPromise();
 });

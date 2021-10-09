@@ -22,9 +22,6 @@ function Profile({ onDataLoaded }: ProfileProps) {
   const dispatch = useDispatch();
   const userRole = useAppSelector((state) => state.user.role);
   const isAdmin = userRole === 'admin';
-  console.log('🚀 ---------------------------------------------------------------');
-  console.log('🚀 ~ file: Profile.tsx ~ line 24 ~ Profile ~ userRole', isAdmin);
-  console.log('🚀 ---------------------------------------------------------------');
   const profile = useAppSelector((state) => state.profile.entity);
   const accountEdit = useRouteWithParams(ROUTES.accountEdit);
   const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};

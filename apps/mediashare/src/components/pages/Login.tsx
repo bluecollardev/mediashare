@@ -79,15 +79,10 @@ const LoginComponent = ({ navigation }: PageProps) => {
   const [show, setShow] = useState(true);
 
   function updateAuthState(authState, data) {
-    console.log('🚀 -----------------------------------------------------------------------');
-    console.log('🚀 ~ file: Login.tsx ~ line 82 ~ updateAuthState ~ authState', authState);
-    console.log('🚀 -----------------------------------------------------------------------');
     if (authState === 'signedIn') {
       setShow(false);
       const accessToken = data.signInUserSession.accessToken.jwtToken;
-      console.log('🚀 ----------------------------------------------------------------------------');
-      console.log('🚀 ~ file: Login.tsx ~ line 131 ~ updateAuthState ~ accessToken', accessToken);
-      console.log('🚀 ----------------------------------------------------------------------------');
+
       const idToken = data.signInUserSession.idToken.jwtToken;
       // const refreshToken = data.signInUserSession.refreshToken.token;
       dispatch(loginAction({ accessToken, idToken }));

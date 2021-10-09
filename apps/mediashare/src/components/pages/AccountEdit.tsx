@@ -31,9 +31,6 @@ interface AccountEditProps extends PageProps {}
 
 function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps) {
   const { userId = null } = route.params;
-  console.log('🚀 -------------------------------------------------------------------');
-  console.log('🚀 ~ file: AccountEdit.tsx ~ line 29 ~ AccountEdit ~ userId', userId);
-  console.log('🚀 -------------------------------------------------------------------');
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e) => {
       // Prevent default behavior
@@ -94,9 +91,6 @@ function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps
 
   const save = function () {
     const updateUserDto = state;
-    console.log('🚀 --------------------------------------------------------------------------');
-    console.log('🚀 ~ file: AccountEdit.tsx ~ line 75 ~ save ~ updateUserDto', updateUserDto);
-    console.log('🚀 --------------------------------------------------------------------------');
 
     from(dispatch(updateAccount({ updateUserDto, userId })))
       .pipe(

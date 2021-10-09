@@ -87,9 +87,6 @@ export async function uploadThumbnail({ fileUri, key }) {
     options: { contentType: 'image/jpeg' },
   })) as any;
   const getItem = await getStorage(thumbnailResponse.key);
-  console.log('🚀 --------------------------------------------------------------------');
-  console.log('🚀 ~ file: storage.ts ~ line 80 ~ uploadThumbnail ~ getItem', getItem);
-  console.log('🚀 --------------------------------------------------------------------');
   return getItem;
 }
 

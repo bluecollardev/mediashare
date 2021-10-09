@@ -12,11 +12,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  createMaterialBottomTabNavigator as createBottomTabNavigator,
-  MaterialBottomTabNavigationProp,
-  MaterialBottomTabScreenProps,
-} from '@react-navigation/material-bottom-tabs';
+import { createMaterialBottomTabNavigator as createBottomTabNavigator, MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
 
 import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
 import { routeConfig, ROUTES } from './routes';
@@ -80,19 +76,11 @@ function MediaNavigation() {
 }
 
 const AccountStackNavigator = createStackNavigator();
-const AccountNavigation = (props: MaterialBottomTabScreenProps<any> & { user: ProfileDto }) => {
-  console.log('the user', props);
-  React.useEffect(() => {
-    props.navigation.addListener('tabPress', (e) => {
-      // Prevent default behavior
-      // e.preventDefault();
-      // Do something manually
-      // ...
-      console.log('e', e);
-    });
-  });
+const AccountNavigation = () => {
+  const user = useAppSelector((state) => state.user);
+
   return (
-    <AccountStackNavigator.Navigator initialRouteName={'accountEdit'}>
+    <AccountStackNavigator.Navigator initialRouteName={user.firstName ? 'Account' : 'accountEdit'}>
       <AccountStackNavigator.Screen {...routeConfig.account} />
       <AccountStackNavigator.Screen {...routeConfig.profile} />
 
