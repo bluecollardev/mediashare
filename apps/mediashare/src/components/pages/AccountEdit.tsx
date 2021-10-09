@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
 
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Avatar, Button } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, Image, Text } from 'react-native';
+import { Avatar, Banner, Button, Card } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { UserDto } from '../../rxjs-api';
 import { useAppSelector } from '../../state';
@@ -20,17 +21,31 @@ import { loadProfile } from '../../state/modules/profile';
 import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import * as R from 'remeda';
+import { theme } from '../../styles';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const awsUrl = Config.AWS_URL;
 console.log(awsUrl);
 
 interface AccountEditProps extends PageProps {}
 
-function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
+function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps) {
   const { userId = null } = route.params;
   console.log('🚀 -------------------------------------------------------------------');
   console.log('🚀 ~ file: AccountEdit.tsx ~ line 29 ~ AccountEdit ~ userId', userId);
   console.log('🚀 -------------------------------------------------------------------');
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+      // Prevent default behavior
+      // e.preventDefault();
+      // Do something manually
+      // ...
+      e.preventDefault();
+      console.log('e', e);
+      console.log(e);
+    });
+    return unsubscribe();
+  });
 
   const dispatch = useDispatch();
 
@@ -45,6 +60,9 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
     }
   }, [isLoaded, userId, dispatch]);
   const user = useAppSelector((state) => state.user);
+  const withoutName = function () {
+    return state.firstName.length < 1 || state.lastName.length < 1;
+  };
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
   console.log('Dump Account Edit user');
@@ -90,6 +108,15 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
   };
   return (
     <PageContainer>
+      {withoutName() && (
+        <Card>
+          <Card.Title
+            title={'A name is required'}
+            left={(props) => <MaterialIcons {...props} name="warning" color={theme.colors.error} size={30} />}
+            // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
+          />
+        </Card>
+      )}
       <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
         <Avatar.Image source={{ uri: state.imageSrc }} size={128} />
         <Button mode={'outlined'} onPress={() => getDocument()} style={{ marginTop: 15 }}>
@@ -102,7 +129,14 @@ function AccountEdit({ startLoad, endLoad, route }: AccountEditProps) {
         <TextField onChangeText={(text) => onUpdate({ email: text })} label={'Email'} value={state.email} disabled={!isLoaded} />
         <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label={'Phone Number'} value={state.phoneNumber} disabled={!isLoaded} />
       </ScrollView>
-      <ActionButtons cancelCb={cancel} actionCb={save} actionLabel={'Save'} rightIcon="check-circle" />
+      <ActionButtons
+        disableAction={withoutName()}
+        disableCancel={withoutName()}
+        cancelCb={cancel}
+        actionCb={save}
+        actionLabel={'Save'}
+        rightIcon="check-circle"
+      />
     </PageContainer>
   );
 }

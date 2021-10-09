@@ -12,10 +12,14 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import {
+  createMaterialBottomTabNavigator as createBottomTabNavigator,
+  MaterialBottomTabNavigationProp,
+  MaterialBottomTabScreenProps,
+} from '@react-navigation/material-bottom-tabs';
 
 import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
-import { routeConfig } from './routes';
+import { routeConfig, ROUTES } from './routes';
 
 import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
@@ -26,6 +30,9 @@ import { theme } from './styles';
 import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black, useFonts } from '@expo-google-fonts/roboto';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useRouteWithParams } from './hooks/NavigationHooks';
+import { ProfileDto } from './rxjs-api';
+import AccountEdit from './components/pages/AccountEdit';
 
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
@@ -73,13 +80,23 @@ function MediaNavigation() {
 }
 
 const AccountStackNavigator = createStackNavigator();
-const AccountNavigation = () => {
+const AccountNavigation = (props: MaterialBottomTabScreenProps<any> & { user: ProfileDto }) => {
+  console.log('the user', props);
+  React.useEffect(() => {
+    props.navigation.addListener('tabPress', (e) => {
+      // Prevent default behavior
+      // e.preventDefault();
+      // Do something manually
+      // ...
+      console.log('e', e);
+    });
+  });
   return (
-    <AccountStackNavigator.Navigator>
+    <AccountStackNavigator.Navigator initialRouteName={'accountEdit'}>
       <AccountStackNavigator.Screen {...routeConfig.account} />
       <AccountStackNavigator.Screen {...routeConfig.profile} />
 
-      <AccountStackNavigator.Screen {...routeConfig.accountEdit} />
+      <AccountStackNavigator.Screen {...routeConfig.accountEdit} initialParams={{ userId: null }} />
       <AccountStackNavigator.Screen {...routeConfig.user} />
       <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} />
     </AccountStackNavigator.Navigator>
@@ -107,13 +124,14 @@ export const tabNavigationIconsMap = {
 };
 
 const PrivateNavigator = createBottomTabNavigator();
-function PrivateNavigation() {
+function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} }) {
   return (
     <PrivateNavigator.Navigator
       initialRouteName={'Account'}
       activeColor={theme.colors.primaryTextLighter}
       inactiveColor={theme.colors.accentLighter}
       barStyle={{ backgroundColor: theme.colors.accent }}
+      tabPress={(e) => console.log('tab', e)}
       labeled={false}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -123,17 +141,56 @@ function PrivateNavigation() {
           // <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
         },
       })}
-      tabBarOptions={{
-        activeTintColor: 'tomato',
-        inactiveTintColor: 'gray',
-        showLabel: false,
-        tabBarColor: theme.colors.accent,
+      listeners={{
+        tabPress: (e) => {
+          // Prevent default action
+
+          if (!user.firstName) {
+            e.preventDefault();
+          }
+        },
       }}
     >
-      <PrivateNavigator.Screen name={'Browse'} component={BrowseNavigation} />
-      <PrivateNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} />
-      <PrivateNavigator.Screen name={'Media'} component={MediaNavigation} />
-      <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} />
+      <PrivateNavigator.Screen
+        name={'Browse'}
+        component={BrowseNavigation}
+        listeners={{
+          tabPress: (e) => {
+            // Prevent default action
+
+            if (!user.firstName) {
+              e.preventDefault();
+            }
+          },
+        }}
+      />
+      <PrivateNavigator.Screen
+        name={'Playlists'}
+        component={PlaylistsNavigation}
+        listeners={{
+          tabPress: (e) => {
+            // Prevent default action
+
+            if (!user.firstName) {
+              e.preventDefault();
+            }
+          },
+        }}
+      />
+      <PrivateNavigator.Screen
+        name={'Media'}
+        component={MediaNavigation}
+        listeners={{
+          tabPress: (e) => {
+            // Prevent default action
+
+            if (!user.firstName) {
+              e.preventDefault();
+            }
+          },
+        }}
+      />
+      <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} initialParams={{ userId: user._id }} />
     </PrivateNavigator.Navigator>
   );
 }
@@ -149,7 +206,6 @@ fakeLogin().then();
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
-  const dispatch = useDispatch();
 
   // TODO: Fix font loading on Android
   const [fontsLoaded] = useFonts({
@@ -201,7 +257,7 @@ function App() {
         >
           {isLoggedIn ? (
             <NavigationContainer>
-              <PrivateNavigation />
+              <PrivateNavigation user={user} />
             </NavigationContainer>
           ) : (
             <NavigationContainer>
