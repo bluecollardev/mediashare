@@ -50,7 +50,7 @@ const Contacts = ({ selectable = false, showActions = false }) => {
 };
 
 const SharedItems = () => {
-  const { sharedItems } = useAppSelector((state) => state.profile?.entity);
+  const { sharedItems = [] } = useAppSelector((state) => state.profile?.entity);
   return <SharedList sharedItems={sharedItems} />;
 };
 
