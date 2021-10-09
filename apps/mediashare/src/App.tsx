@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Config from 'react-native-config';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -60,7 +61,7 @@ const MediaNavigation = () => {
       <MediaStackNavigator.Screen {...routeConfig.addMedia} />
     </MediaStackNavigator.Navigator>
   );
-}
+};
 
 const AccountStackNavigator = createStackNavigator();
 const AccountNavigation = () => {
@@ -77,6 +78,8 @@ const AccountNavigation = () => {
     </AccountStackNavigator.Navigator>
   );
 };
+
+/* Public and Private navigation routes are split here */
 
 const PublicStackNavigator = createStackNavigator();
 const PublicNavigation = () => {
@@ -97,6 +100,15 @@ export const tabNavigationIconsMap = {
   // Feeds: 'share-social-outline',
   Account: 'account-box',
 };
+
+// Set this to [free|subscriber|admin]
+// TODO: Make a util if we need this elsewhere?
+const BUILD_FOR = Config.BUILD_FOR || 'admin';
+console.log(`-------------- App running in ${BUILD_FOR.toUpperCase()} mode --------------`);
+
+const buildForFreeUser = BUILD_FOR === 'free';
+const buildForSubscriber = BUILD_FOR === 'subscriber';
+const buildForAdmin = BUILD_FOR === 'admin';
 
 const PrivateNavigator = createBottomTabNavigator();
 function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} }) {
@@ -124,43 +136,52 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         },
       }}
     >
-      <PrivateNavigator.Screen
-        name={'Browse'}
-        component={BrowseNavigation}
-        listeners={{
-          tabPress: (e) => {
-            // Prevent default action
-            if (!user.firstName) {
-              e.preventDefault();
-            }
-          },
-        }}
-      />
-      <PrivateNavigator.Screen
-        name={'Playlists'}
-        component={PlaylistsNavigation}
-        listeners={{
-          tabPress: (e) => {
-            // Prevent default action
+      {buildForFreeUser ||
+        (buildForSubscriber && (
+          <PrivateNavigator.Screen
+            name={'Browse'}
+            component={BrowseNavigation}
+            listeners={{
+              tabPress: (e) => {
+                // Prevent default action
+                if (!user.firstName) {
+                  e.preventDefault();
+                }
+              },
+            }}
+          />
+        ))}
 
-            if (!user.firstName) {
-              e.preventDefault();
-            }
-          },
-        }}
-      />
-      <PrivateNavigator.Screen
-        name={'Media'}
-        component={MediaNavigation}
-        listeners={{
-          tabPress: (e) => {
-            // Prevent default action
-            if (!user.firstName) {
-              e.preventDefault();
-            }
-          },
-        }}
-      />
+      {(buildForSubscriber || buildForAdmin) && (
+        <PrivateNavigator.Screen
+          name={'Playlists'}
+          component={PlaylistsNavigation}
+          listeners={{
+            tabPress: (e) => {
+              // Prevent default action
+
+              if (!user.firstName) {
+                e.preventDefault();
+              }
+            },
+          }}
+        />
+      )}
+
+      {buildForAdmin && (
+        <PrivateNavigator.Screen
+          name={'Media'}
+          component={MediaNavigation}
+          listeners={{
+            tabPress: (e) => {
+              // Prevent default action
+              if (!user.firstName) {
+                e.preventDefault();
+              }
+            },
+          }}
+        />
+      )}
       <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} initialParams={{ userId: user._id }} />
     </PrivateNavigator.Navigator>
   );
