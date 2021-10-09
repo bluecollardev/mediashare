@@ -18,6 +18,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/MediaCard';
+import { PlaylistsComponent } from './Playlists';
 
 import { shortenText } from '../../utils';
 
@@ -79,7 +80,12 @@ export const Playlists = () => {
   const playlists = useAppSelector((state) => state.playlists);
   const list = playlists?.userPlaylists || [];
 
-  let sortedList = list.map((item) => item);
+  let sortedList = list.map((item) => {
+    const { mediaIds, description } = item;
+    const itemDescription = `${shortenText(description, 40)}\n${mediaIds.length || 0} videos`;
+    return Object.assign({}, item, { itemDescription });
+  });
+
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
   sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 
@@ -87,25 +93,20 @@ export const Playlists = () => {
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
 
   return (
-    <ScrollView
-      contentInset={{ bottom: 120 }}
-      contentContainerStyle={{ height: '100%', flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap' }}
-    >
-      {sortedList.map((item) => {
-        const { _id, title, description, imageSrc } = item;
-
-        return (
-          <Card key={`item_${_id}`} onPress={() => viewPlaylist(item)} style={{ flexBasis: '50%', padding: 5, backgroundColor: 'transparent' }}>
-            <Card.Title title={title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(description, 40)}`} />
-            <Card.Cover source={{ uri: imageSrc }} />
-          </Card>
-        );
-      })}
+    <ScrollView>
+      <PlaylistsComponent list={sortedList} onViewDetailClicked={viewPlaylist} />
     </ScrollView>
   );
+
+  /*
+  <Card key={`item_${_id}`} onPress={} style={{ flexBasis: '50%', padding: 5, backgroundColor: 'transparent' }}>
+    <Card.Title title={title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(description, 40)}`} />
+    <Card.Cover source={{ uri: imageSrc }} />
+  </Card>
+  */
 };
 
-export const Popular = () => {
+export const Videos = () => {
   const dispatch = useDispatch();
 
   const { loaded, mediaItems } = useAppSelector((state) => state.mediaItems);
@@ -150,7 +151,7 @@ export const Popular = () => {
 
 const renderScene = SceneMap({
   playlists: Playlists,
-  popular: Popular,
+  videos: Videos,
   articles: Articles,
 });
 
@@ -163,7 +164,7 @@ export const Browse = ({}: PageProps) => {
   const [index, setIndex] = useState(0);
   const [routes] = React.useState([
     { key: 'playlists', title: 'Playlists', icon: 'subscriptions' },
-    { key: 'popular', title: 'Videos', icon: 'movie-filter' },
+    { key: 'videos', title: 'Videos', icon: 'movie-filter' },
     { key: 'articles', title: 'Articles', icon: 'library-books' },
   ]);
   // Do other stuff
