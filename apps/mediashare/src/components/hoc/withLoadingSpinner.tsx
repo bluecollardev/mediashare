@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { useSpinner } from '../../hooks/useSpinner';
+// import { useSpinner } from '../../hooks/useSpinner';
 import { PageContainer } from '../layout/PageContainer';
 
 export interface LoadingSpinnerProps {
@@ -10,14 +10,14 @@ export interface LoadingSpinnerProps {
 }
 
 export const withLoadingSpinner = (WrapperComponent) => (props) => {
-  const [loaded, setLoaded] = useState(false);
-  const [{ AppSpinner, isLoading, startLoad, endLoad }] = useSpinner({ loadingState: true });
-  const onDataLoaded = () => setLoaded(true);
+  // const [loaded, setLoaded] = useState(false);
+  // const [{ AppSpinner, isLoading, startLoad, endLoad }] = useSpinner({ loadingState: true });
+  // const onDataLoaded = () => setLoaded(true);
 
   return (
     <PageContainer>
-      {isLoading || !loaded ? <AppSpinner /> : null}
-      <WrapperComponent {...props} onDataLoaded={onDataLoaded} startLoad={startLoad} endLoad={endLoad} />
+      {/* isLoading || !loaded ? <AppSpinner /> : null */}
+      <WrapperComponent {...props} onDataLoaded={() => {}} startLoad={() => {}} endLoad={() => {}} />
     </PageContainer>
   );
 };
