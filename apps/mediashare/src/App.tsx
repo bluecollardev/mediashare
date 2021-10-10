@@ -77,6 +77,8 @@ const AccountNavigation = () => {
       <AccountStackNavigator.Screen {...routeConfig.user} />
       <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} />
       <AccountStackNavigator.Screen {...routeConfig.playlistDetail} />
+      <AccountStackNavigator.Screen {...routeConfig.playlistEdit} />
+      <AccountStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
     </AccountStackNavigator.Navigator>
   );
 };

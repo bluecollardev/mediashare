@@ -84,9 +84,10 @@ export const Account = ({}: PageProps) => {
   const [actionMode, setActionMode] = useState(actionModes.default);
 
   const tabs = [{ key: 'contacts', title: 'Contacts', icon: 'assignment-ind' }];
-  if (build.forAdmin) {
+  // TODO: We don't want to do this it makes routing too crazy!
+  /* if (build.forAdmin) {
     tabs.push({ key: 'shared', title: 'All Shared Items', icon: 'movie' });
-  }
+  } */
 
   const [routes] = React.useState(tabs);
 

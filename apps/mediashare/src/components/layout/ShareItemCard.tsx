@@ -36,8 +36,9 @@ export function ShareItemCard({ date, title, onDelete, onView, image, read }: Sh
                 </IconButton>
               }
             >
-              <Menu.Item icon={'play-circle-filled'} onPress={onView} title="Watch" />
-              <Divider />
+              {/* TODO: If we watch from here and the user is admin or subscriber eventually the routing messes up we need to change stack navigators somehow */}
+              {/* <Menu.Item icon={'play-circle-filled'} onPress={onView} title="Watch" />
+              <Divider /> */}
               <Menu.Item icon={'delete'} onPress={onDelete} title="Delete" />
             </Menu>
           )}
