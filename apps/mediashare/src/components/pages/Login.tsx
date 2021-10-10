@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { loginAction } from '../../state/modules/user';
 import { RootState } from '../../state';
 
-import { Authenticator, SignIn, SignUp, Greetings, VerifyContact, ForgotPassword, Loading, AmplifyTheme, ConfirmSignIn } from 'aws-amplify-react-native';
+import { Authenticator, SignIn, SignUp, Greetings, VerifyContact, ForgotPassword, AmplifyTheme, ConfirmSignIn } from 'aws-amplify-react-native';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { Text } from 'react-native';
@@ -106,7 +106,7 @@ const LoginComponent = ({ navigation }: PageProps) => {
             <VerifyContact />
             <ForgotPassword />
             {/* <TOTPSetup /> */}
-            <Loading />
+            {/* <Loading /> */}
             <CustomVerify override={'ConfirmSignUp'} />
           </Authenticator>
         )}

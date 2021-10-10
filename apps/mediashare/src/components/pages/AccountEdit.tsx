@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { StackScreenProps } from '@react-navigation/stack';
 
-import { View, StyleSheet, ScrollView, Image, Text } from 'react-native';
-import { Avatar, Banner, Button, Card } from 'react-native-paper';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { Avatar, Button, Card } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { UserDto } from '../../rxjs-api';
 import { useAppSelector } from '../../state';
@@ -14,11 +13,11 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
 import Config from 'react-native-config';
 import { thumbnailRoot } from '../../state/modules/media-items/key-factory';
-import { useRouteWithParams, useViewProfileById } from '../../hooks/NavigationHooks';
+import { useRouteWithParams } from '../../hooks/NavigationHooks';
 import { ROUTES } from '../../routes';
 import { ActionButtons } from '../layout/ActionButtons';
 import { loadProfile } from '../../state/modules/profile';
-import { from, of } from 'rxjs';
+import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import * as R from 'remeda';
 import { theme } from '../../styles';
@@ -27,7 +26,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const awsUrl = Config.AWS_URL;
 interface AccountEditProps extends PageProps {}
 
-function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps) {
+function AccountEdit({ route }: AccountEditProps) {
   const { userId = null } = route.params;
 
   const dispatch = useDispatch();
@@ -53,6 +52,7 @@ function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps
   };
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
+  // eslint-disable-next-line no-shadow
   const onUpdate = (user: Partial<UserDto>) => {
     setState({ ...state, ...user });
   };
@@ -64,12 +64,10 @@ function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps
       }
       const image = res.assets[0];
       const thumbnailKey = thumbnailRoot + image.fileName;
-      startLoad();
       fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
+        // eslint-disable-next-line no-shadow
         const image = awsUrl + res.key;
-
         setState({ ...state, imageSrc: image });
-        endLoad();
       });
     });
   };

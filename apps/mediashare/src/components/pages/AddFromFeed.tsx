@@ -9,7 +9,6 @@ import { ActionButtons } from '../layout/ActionButtons';
 import { MediaListItem } from '../layout/MediaListItem';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useSpinner } from '../../hooks/useSpinner';
 
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { Subheading, Card } from 'react-native-paper';
@@ -31,7 +30,6 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
 
   const [loaded, setIsLoaded] = useState(false);
   const items = useAppSelector((state) => state.mediaItem.feed);
-  const [{ AppSpinner, startLoad, endLoad }] = useSpinner();
 
   const saveMedia = async function () {
     if (selectedItems.size < 1) {
@@ -43,10 +41,8 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
   };
   useEffect(() => {
     const loadData = async function () {
-      startLoad();
       await dispatch(getFeedMediaItems());
       setIsLoaded(true);
-      endLoad();
     };
 
     if (!loaded) {

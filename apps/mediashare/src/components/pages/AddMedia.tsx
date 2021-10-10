@@ -44,7 +44,6 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   for (const value in MediaCategoryType) {
     options.push(value);
   }
-  // const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ ...SPINNER_DEFAULTS, loadingState: false });
 
   const onTitleChange = setTitle;
   const onDescriptionChange = setDescription;
@@ -119,7 +118,6 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   );
 
   async function getDocument() {
-    startLoad();
     const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
     if (!document) {
       endLoad();

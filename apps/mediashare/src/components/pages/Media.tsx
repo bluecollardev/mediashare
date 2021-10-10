@@ -64,7 +64,7 @@ export const MediaComponent = ({
 
 const actionModes = { delete: 'delete', default: 'default' };
 
-export const Media = ({ navigation, onDataLoaded }: PageProps) => {
+export const Media = ({ navigation }: PageProps) => {
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
   const addMedia = useRouteName(ROUTES.addMediaItem);
   const editMedia = useEditMediaItem();
@@ -80,9 +80,9 @@ export const Media = ({ navigation, onDataLoaded }: PageProps) => {
   const onRefresh = useCallback(refresh, [dispatch]);
   useEffect(() => {
     if (!isLoaded) {
-      loadData().then(onDataLoaded);
+      loadData();
     }
-  }, [isLoaded, dispatch, onDataLoaded]);
+  }, [isLoaded, dispatch]);
 
   const [fabState, setState] = useState({ open: false });
   const fabActions = [

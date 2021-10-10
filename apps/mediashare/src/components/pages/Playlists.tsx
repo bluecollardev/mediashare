@@ -80,7 +80,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
 
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
-export const Playlists = ({ onDataLoaded }: PageProps) => {
+export const Playlists = ({}: PageProps) => {
   const shareWith = useRouteName(ROUTES.shareWith);
   const createPlaylist = useRouteName(ROUTES.playlistAdd);
   const viewPlaylist = useViewPlaylistById();
@@ -96,10 +96,10 @@ export const Playlists = ({ onDataLoaded }: PageProps) => {
   const onRefresh = useCallback(refresh, [dispatch]);
   useEffect(() => {
     if (!isLoaded) {
-      loadData().then(onDataLoaded);
+      loadData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, dispatch, onDataLoaded]);
+  }, [isLoaded, dispatch]);
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [

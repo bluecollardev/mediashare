@@ -11,7 +11,6 @@ import { UserDto } from '../../rxjs-api';
 
 import { useGoBack, useRouteName } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useSpinner } from '../../hooks/useSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
 // TODO: Why do we have ContactList and ContactListSelectable as separate components?
@@ -23,8 +22,6 @@ import { PageContainer, PageContent, PageActions, PageProps } from '../layout/Pa
 const ShareWith = ({}: PageProps) => {
   const dispatch = useDispatch();
   const [loaded, setIsLoaded] = useState(false);
-
-  const [{ AppSpinner, isLoading, endLoad, startLoad }] = useSpinner({ loadingState: true });
 
   const loadData = async function () {
     await dispatch(findUserPlaylists({}));

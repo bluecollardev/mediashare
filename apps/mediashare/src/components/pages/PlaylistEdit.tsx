@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../state';
 import { getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
 
-import { MediaItem } from '../../rxjs-api';
+import { PlaylistCategoryType, MediaItem } from '../../rxjs-api';
 
 import { useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
@@ -19,9 +19,8 @@ import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } fr
 import { ROUTES } from '../../routes';
 
 import { theme } from '../../styles';
-import { PlaylistCategoryType } from '../../rxjs-api/models/PlaylistCategoryType';
 
-const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: PageProps) => {
+const PlaylistEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => {
   const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
 
   const dispatch = useDispatch();
@@ -39,9 +38,9 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
 
   useEffect(() => {
     if (!isLoaded) {
-      loadData().then(onDataLoaded);
+      loadData();
     }
-  }, [isLoaded, dispatch, onDataLoaded]);
+  }, [isLoaded]);
 
   const options = [];
   for (const value in PlaylistCategoryType) {
@@ -195,7 +194,6 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
 
     await withIds(filtered);
     setIsLoaded(false);
-    // startLoad();
     await loadData();
   }
 

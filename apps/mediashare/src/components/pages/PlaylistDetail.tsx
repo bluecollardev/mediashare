@@ -26,7 +26,7 @@ import { theme } from '../../styles';
 
 import * as build from '../../build';
 
-export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
+export const PlaylistDetail = ({ route }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
 
   const edit = useRouteWithParams(ROUTES.playlistEdit);
@@ -48,9 +48,9 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
 
   useEffect(() => {
     if (!isLoaded) {
-      loadData().then(onDataLoaded);
+      loadData();
     }
-  }, [isLoaded, onDataLoaded]);
+  }, [isLoaded]);
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
@@ -196,7 +196,6 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
 
     await withIds(filtered);
     setIsLoaded(false);
-    // startLoad();
     await loadData();
   }
 

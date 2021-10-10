@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../state';
-import { loadUsers } from '../../state/modules/users';
 
 import { ScrollView, View } from 'react-native';
 import { Card, FAB, Subheading, Text } from 'react-native-paper';
@@ -71,7 +70,7 @@ const SharedItems = ({ selectable = false }) => {
 const actionModes = { delete: 'delete', default: 'default' };
 
 export const User = ({}: PageProps) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSelectable, setIsSelectable] = useState(false);

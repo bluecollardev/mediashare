@@ -18,7 +18,7 @@ import { PageProps } from '../layout/PageContainer';
 
 interface ProfileProps extends PageProps {}
 
-function Profile({ onDataLoaded, route }: ProfileProps) {
+function Profile({ route }: ProfileProps) {
   const { userId } = route.params;
   const [loaded, setLoaded] = useState(false);
   // const userId = '6149b54a19531dd4c6b0df59';
@@ -46,11 +46,10 @@ function Profile({ onDataLoaded, route }: ProfileProps) {
   useEffect(() => {
     from(dispatch(loadProfile({ userId })))
       .pipe(take(1))
-      .subscribe((result) => {
-        onDataLoaded();
+      .subscribe(() => {
         setLoaded(true);
       });
-  }, [loaded, dispatch, onDataLoaded]);
+  }, [loaded, dispatch]);
 
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
 

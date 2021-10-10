@@ -25,8 +25,8 @@ export function AppUpload({ startLoad, endLoad, onUpload, label = 'Upload Pictur
       const thumbnailKey = thumbnailRoot + image.fileName;
       startLoad();
       fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
+        // eslint-disable-next-line no-shadow
         const image = awsUrl + res.key;
-
         onUpload(image);
         endLoad();
       });
