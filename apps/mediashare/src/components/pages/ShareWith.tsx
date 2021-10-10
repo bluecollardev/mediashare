@@ -11,12 +11,13 @@ import { UserDto } from '../../rxjs-api';
 
 import { useGoBack, useRouteName } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { useSpinner } from '../../hooks/useSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
-import { ContactList } from '../layout/ContactList';
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { useSpinner } from '../../hooks/useSpinner';
+// TODO: Why do we have ContactList and ContactListSelectable as separate components?
+// import { ContactList } from '../layout/ContactList';
 import { ContactListSelectable } from '../layout/ContactListSelectable';
+import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ShareWith = ({}: PageProps) => {

@@ -14,21 +14,20 @@ export interface ContactListProps {
 export const ContactListSelectable: React.FC<ContactListProps> = (props) => {
   let { items = [], showGroups = false } = props;
 
-  // TODO: Remove this when done...
-  const imageSrc = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
-
   return (
     <List>
-      {showGroups && <ListItemGroup key={'group1'} text={'Sample Group'} />}
-      {items.map((item, idx) => {
+      {showGroups && <ListItemGroup key={'group1'} text={'All Contacts'} />}
+      {items.map((item) => {
         // const { title, description, image } = item;
         return (
           <MediaListItem
             key={item._id}
             title={`${item.firstName} ${item.lastName}`}
             description={item.username}
-            image={imageSrc}
+            image={item.imageSrc}
+            showThumbnail={true}
             selectable={true}
+            showActions={false}
             onChecked={(b) => props.onChecked(b, item)}
             // showActions={true}
           />
