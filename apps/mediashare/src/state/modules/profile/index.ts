@@ -4,11 +4,13 @@ import { ProfileDto } from '../../../rxjs-api';
 import { apis } from '../../apis';
 
 interface InitialState {
-  entity: ProfileDto;
+  entity: Partial<ProfileDto>;
 }
 
 const INITIAL_STATE: InitialState = {
-  entity: null,
+  entity: {
+    sharedItems: [],
+  } as Partial<ProfileDto>,
 };
 
 const loadProfile = createAsyncThunk('getUserById', async function ({ userId }: { userId?: string }) {

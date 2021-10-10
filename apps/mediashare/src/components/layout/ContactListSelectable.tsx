@@ -14,6 +14,12 @@ export interface ContactListProps {
 export const ContactListSelectable: React.FC<ContactListProps> = (props) => {
   let { items = [], showGroups = false } = props;
 
+  async function testFx() {
+    return null;
+  }
+
+  testFx();
+
   return (
     <List>
       {showGroups && <ListItemGroup key={'group1'} text={'All Contacts'} />}
