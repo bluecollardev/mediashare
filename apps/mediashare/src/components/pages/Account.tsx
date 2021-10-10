@@ -15,7 +15,7 @@ import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-n
 import { FAB, Text } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useRouteName, useRouteWithParams, useViewProfileById } from '../../hooks/NavigationHooks';
+import { useRouteName, useRouteWithParams, useViewPlaylistById, useViewProfileById } from '../../hooks/NavigationHooks';
 import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
 import { ContactList } from '../layout/ContactList';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -25,6 +25,7 @@ import styles, { theme } from '../../styles';
 
 import * as build from '../../build';
 import { SharedList } from '../layout/SharedList';
+import { readShareItem } from '../../state/modules/share-items';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
   const manageContact = useRouteName(ROUTES.user);
@@ -50,8 +51,16 @@ const Contacts = ({ selectable = false, showActions = false }) => {
 };
 
 const SharedItems = () => {
+  const dispatch = useDispatch();
+  const viewPlaylist = useViewPlaylistById();
   const { sharedItems = [] } = useAppSelector((state) => state?.profile?.entity);
-  return <SharedList sharedItems={sharedItems} />;
+
+  const onView = function (playlistId: string, shareItemId: string) {
+    dispatch(readShareItem(shareItemId));
+    viewPlaylist({ playlistId });
+  };
+
+  return <SharedList sharedItems={sharedItems} onView={onView} />;
 };
 
 const renderScene = (sceneComponentProps) => ({ route }) => {
