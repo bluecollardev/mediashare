@@ -10,9 +10,9 @@ import { PlaylistResponseDto } from '../../rxjs-api';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useViewMediaItem, useViewPlaylistById } from '../../hooks/NavigationHooks';
 
-import { ScrollView } from 'react-native';
+import { ImageBackground, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import { List, Text, Card } from 'react-native-paper';
+import { List, Text, Card, Button } from 'react-native-paper';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -134,9 +134,17 @@ export const Videos = () => {
         const { _id, title, description, thumbnail } = item;
 
         return (
-          <Card key={`item_${_id}`} onPress={() => viewMediaItem(item)} style={{ flexBasis: '50%', padding: 5, backgroundColor: 'transparent' }}>
+          <Card key={`item_${_id}`} onPress={() => viewMediaItem(item)} style={{ flexBasis: '50%', padding: 3, backgroundColor: 'transparent' }}>
             <Card.Title title={title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(description, 40)}`} />
-            <Card.Cover source={{ uri: thumbnail }} />
+            <Card.Content>
+              <ImageBackground source={{ uri: thumbnail }} resizeMode="cover" style={{ width: '100%', height: 100 }}>
+                <TouchableWithoutFeedback onPress={() => viewMediaItem(item)}>
+                  <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                    <Button icon="play-circle-filled" color="#ffffff" labelStyle={{ fontSize: 33 }} />
+                  </View>
+                </TouchableWithoutFeedback>
+              </ImageBackground>
+            </Card.Content>
           </Card>
         );
       })}
