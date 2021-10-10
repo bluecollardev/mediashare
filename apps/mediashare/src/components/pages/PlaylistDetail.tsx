@@ -24,6 +24,8 @@ import { MediaItem } from '../../rxjs-api';
 
 import { theme } from '../../styles';
 
+import * as build from '../../build';
+
 export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
 
@@ -106,31 +108,31 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
         />
       </PageContent>
       <PageActions>
-        {!selectedItems ||
-          (selectedItems.length === 0 && <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />)}
-        {selectedItems && selectedItems.length > 0 && (
+        {!build.forFreeUser && (!selectedItems || selectedItems.length === 0) && (
+          <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
+        )}
+        {!build.forFreeUser && selectedItems && selectedItems.length > 0 && (
           <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Remove" cancelLabel="Cancel" rightIcon="delete" />
         )}
       </PageActions>
-      {!selectedItems ||
-        (selectedItems.length === 0 && (
-          <FAB.Group
-            visible={true}
-            open={fabState.open}
-            icon={fabState.open ? 'close' : 'more-vert'}
-            actions={fabActions}
-            color={theme.colors.primaryTextLighter}
-            fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
-            onStateChange={(open) => {
-              // open && setOpen(!open);
-              setFabState(open);
-            }}
-            onPress={() => {
-              clearCheckboxSelection();
-              resetData();
-            }}
-          />
-        ))}
+      {!build.forFreeUser && (!selectedItems || selectedItems.length === 0) && (
+        <FAB.Group
+          visible={true}
+          open={fabState.open}
+          icon={fabState.open ? 'close' : 'more-vert'}
+          actions={fabActions}
+          color={theme.colors.primaryTextLighter}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          onStateChange={(open) => {
+            // open && setOpen(!open);
+            setFabState(open);
+          }}
+          onPress={() => {
+            clearCheckboxSelection();
+            resetData();
+          }}
+        />
+      )}
     </PageContainer>
   );
 

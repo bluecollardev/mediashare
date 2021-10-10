@@ -9,7 +9,7 @@ export const makeEnum = <T extends readonly string[]>(actions: T): EnumRecordTyp
 const userLevels = ['admin', 'free', 'subscriber'] as const;
 export const userTypes = makeEnum(userLevels);
 
-export const userType = userTypes.admin || Config.BUILD_FOR || userTypes.admin;
+export const userType = Config.BUILD_FOR || userTypes.admin;
 export const forFreeUser = userType === userTypes.free;
 export const forSubscriber = userType === userTypes.subscriber;
 export const forAdmin = userType === userTypes.admin;
