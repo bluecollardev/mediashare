@@ -45,7 +45,7 @@ export const AppHeader = (props) => {
       {!searchable && (
         <>
           {previous && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
-          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18 }} />
+          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingRight: previous ? '15%' : 0 }} />
         </>
       )}
     </Appbar.Header>
