@@ -209,7 +209,6 @@ export const PlaylistDetail = ({ route, onDataLoaded }: PageProps) => {
   }
 
   async function deletePlaylist() {
-    console.log('dispatch', playlistId);
     await dispatch(removeUserPlaylist(playlistId));
     await playlists();
   }

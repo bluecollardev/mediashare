@@ -106,7 +106,7 @@ export const tabNavigationIconsMap = {
 // Set this to [free|subscriber|admin]
 // TODO: Make a util if we need this elsewhere?
 const BUILD_FOR = Config.BUILD_FOR || 'admin';
-console.log(`-------------- App running in ${BUILD_FOR.toUpperCase()} mode --------------`);
+// console.log(`-------------- App running in ${BUILD_FOR.toUpperCase()} mode --------------`);
 
 const PrivateNavigator = createBottomTabNavigator();
 function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} }) {

@@ -68,7 +68,6 @@ export const logout = createAsyncThunk(UserActions.logout.type, async () => {
   const response = await apis.user.userControllerLogout().toPromise();
   await setKeyPair('token', '');
   const signout = await signOut();
-  console.log(signout);
   return response;
 });
 

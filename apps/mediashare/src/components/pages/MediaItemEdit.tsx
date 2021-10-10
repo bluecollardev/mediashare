@@ -134,7 +134,6 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
   );
 
   async function deleteItem() {
-    console.log('deleting');
     await dispatch(deleteMediaItem({ id: mediaId, key: mediaItem.uri }));
     mediaItems();
   }

@@ -53,7 +53,6 @@ const PlaylistEdit = ({ navigation, route, onDataLoaded, startLoad, endLoad }: P
   const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
 
   const onUpload = (uri: string) => {
-    console.log(uri);
     setImageSrc(uri);
   };
 

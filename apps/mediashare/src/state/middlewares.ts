@@ -11,13 +11,13 @@ function middlewareFactory(api: ApiService) {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const loggerMiddleware = (store) => (next) => (action) => {
-  console.group(action.type);
-  console.info('dispatching', action);
-  let result = next(action);
-  console.log('next state', store.getState());
-  console.groupEnd();
-  return result;
+  // console.group(action.type);
+  // console.info('dispatching', action);
+  // console.log('next state', store.getState());
+  // console.groupEnd();
+  return next(action);
 };
 
 export { loggerMiddleware, middlewareFactory };

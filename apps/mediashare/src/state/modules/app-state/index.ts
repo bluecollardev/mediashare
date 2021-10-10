@@ -26,7 +26,6 @@ const appStateSlice = createSlice({
       return { ...state, hasError: false, error: { name: '', message: '' } };
     },
     loading: (state, action: PayloadAction<boolean>) => {
-      console.log('loading', action);
       return {
         ...state,
         loading: action.payload,

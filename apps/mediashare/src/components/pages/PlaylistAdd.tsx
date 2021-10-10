@@ -79,7 +79,6 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
   const list = useAppSelector((state) => state.mediaItems.mediaItems);
 
   const onUpload = (uri: string) => {
-    console.log(uri);
     setImageSrc(uri);
   };
 

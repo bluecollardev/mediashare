@@ -47,10 +47,6 @@ function Profile({ onDataLoaded, route }: ProfileProps) {
     from(dispatch(loadProfile({ userId })))
       .pipe(take(1))
       .subscribe((result) => {
-        console.log('🚀 --------------------------------------------------------------');
-        console.log('🚀 ~ file: Profile.tsx ~ line 48 ~ .subscribe ~ result', result);
-        console.log('🚀 --------------------------------------------------------------');
-        console.log('🚀 ~ file: Profile.tsx ~ line 48 ~ .subscribe ~ result', result);
         onDataLoaded();
         setLoaded(true);
       });

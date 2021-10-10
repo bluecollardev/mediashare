@@ -29,10 +29,6 @@ interface AccountEditProps extends PageProps {}
 
 function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps) {
   const { userId = null } = route.params;
-  console.log('🚀 -------------------------------------------------------------------');
-  console.log('🚀 ~ file: AccountEdit.tsx ~ line 34 ~ AccountEdit ~ userId', userId);
-  console.log('🚀 -------------------------------------------------------------------');
-  console.log('🚀 ~ file: AccountEdit.tsx ~ line 34 ~ AccountEdit ~ userId', userId);
 
   const dispatch = useDispatch();
 
@@ -57,8 +53,6 @@ function AccountEdit({ startLoad, endLoad, route, navigation }: AccountEditProps
   };
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
-  console.log('Dump Account Edit user');
-  console.log(user);
   const onUpdate = (user: Partial<UserDto>) => {
     setState({ ...state, ...user });
   };

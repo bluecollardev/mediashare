@@ -130,11 +130,7 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
       endLoad();
       return;
     }
-
-    console.log('Document upload response');
-    console.log(document);
     try {
-      console.log('Dispatching createThumbnail action');
       await dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
     } catch (err) {
       console.log(err);

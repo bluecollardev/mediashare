@@ -5,7 +5,17 @@ import * as VideoThumbnails from 'expo-video-thumbnails';
 import Config from 'react-native-config';
 
 import { makeEnum } from '../../core/factory';
-import { copyStorage, deleteStorage, fetchMedia, getStorage, listStorage, putToS3, sanitizeFoldername, uploadMedia, uploadThumbnail } from './storage';
+import {
+  copyStorage,
+  deleteStorage,
+  fetchMedia,
+  getStorage,
+  listStorage,
+  putToS3,
+  sanitizeFoldername,
+  uploadMedia,
+  uploadThumbnail
+} from './storage';
 import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
@@ -45,11 +55,7 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
 });
 
 export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {
-  console.log('Creating thumbnail...');
-  const thumb = await uploadThumbnail({ fileUri, key });
-  console.log('Thumbnail creation response');
-  console.log(thumb);
-  return thumb;
+  return await uploadThumbnail({ fileUri, key });
 });
 export const addMediaItem = createAsyncThunk(
   mediaItemActionTypes.addMediaItem,
@@ -99,12 +105,12 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
   const createThumbnailFactory = (item: CreateMediaItemDto) =>
     from(VideoThumbnails.getThumbnailAsync(s3Url + mediaRoot + videoRoot + item.title.replace(/\s/g, '%20'), { time: 100 })).pipe(
       tap((res) => {
-        console.log(item.key);
-        console.log(res);
+        // console.log(item.key);
+        // console.log(res);
       }),
       switchMap((thumbnail) => from(fetchMedia(thumbnail.uri))),
       tap((res) => {
-        console.log(res);
+        // console.log(res);
       }),
 
       switchMap((file) => from(putToS3({ key: mediaRoot + videoRoot + item.title, file, options: { contentType: 'image/jpeg' } })))
