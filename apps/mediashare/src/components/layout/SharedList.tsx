@@ -26,7 +26,8 @@ export function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
         sections={data}
         renderSectionHeader={({ section }) => (
           <Card mode={'outlined'} style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}>
-            <Card.Title titleStyle={{ fontSize: 16 }} title={`Shared by ${section.title}`} subtitle={`${section.count.toString()} items`} />
+            <Card.Title titleStyle={{ fontSize: 16 }} title={`Shared by ${section.title}`}
+                        subtitle={`${section.count.toString()} items`} />
           </Card>
         )}
         keyExtractor={(item) => item.shareItemId}
@@ -48,17 +49,3 @@ export function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
     </List.Section>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#312e38',
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: '#fff',
-  },
-});
