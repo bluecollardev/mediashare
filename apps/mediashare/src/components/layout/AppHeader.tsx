@@ -4,12 +4,10 @@ import { Appbar, Searchbar } from 'react-native-paper';
 import { theme } from '../../styles';
 
 export const AppHeader = (props) => {
-  const { scene, previous, navigation, searchable = false } = props;
+  const { options, previous, navigation, searchable = false } = props;
 
   const [searchIsActive, setSearchIsActive] = useState(false);
-
-  const { options } = scene.descriptor;
-  const title = options.headerTitle !== undefined ? options.headerTitle : options.title !== undefined ? options.title : '';
+  const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
 
   const enableSearch = () => setSearchIsActive(true);
   const disableSearch = () => setSearchIsActive(false);

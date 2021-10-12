@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Config from 'react-native-config';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -19,6 +18,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { ProfileDto } from './rxjs-api';
 
 import * as build from './build';
+import { bottomTabSwitchActions } from './routeActions';
 
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
@@ -105,11 +105,6 @@ export const tabNavigationIconsMap = {
   Account: 'account-box',
 };
 
-// Set this to [free|subscriber|admin]
-// TODO: Make a util if we need this elsewhere?
-const BUILD_FOR = Config.BUILD_FOR || 'admin';
-// console.log(`-------------- App running in ${BUILD_FOR.toUpperCase()} mode --------------`);
-
 const PrivateNavigator = createBottomTabNavigator();
 function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} }) {
   return (
@@ -118,7 +113,6 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
       activeColor={theme.colors.primaryTextLighter}
       inactiveColor={theme.colors.accentLighter}
       barStyle={{ backgroundColor: theme.colors.accent }}
-      tabPress={(e) => console.log('tab', e)}
       labeled={false}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -127,27 +121,12 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
           // <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
         },
       })}
-      listeners={{
-        tabPress: (e) => {
-          // Prevent default action
-          if (!user.firstName) {
-            e.preventDefault();
-          }
-        },
-      }}
     >
       {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
         <PrivateNavigator.Screen
           name={'Browse'}
           component={BrowseNavigation}
-          listeners={{
-            tabPress: (e) => {
-              // Prevent default action
-              if (!user.firstName) {
-                e.preventDefault();
-              }
-            },
-          }}
+          listeners={bottomTabSwitchActions}
         />
       )}
 
@@ -155,15 +134,7 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         <PrivateNavigator.Screen
           name={'Playlists'}
           component={PlaylistsNavigation}
-          listeners={{
-            tabPress: (e) => {
-              // Prevent default action
-
-              if (!user.firstName) {
-                e.preventDefault();
-              }
-            },
-          }}
+          listeners={bottomTabSwitchActions}
         />
       )}
 
@@ -171,14 +142,7 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         <PrivateNavigator.Screen
           name={'Media'}
           component={MediaNavigation}
-          listeners={{
-            tabPress: (e) => {
-              // Prevent default action
-              if (!user.firstName) {
-                e.preventDefault();
-              }
-            },
-          }}
+          listeners={bottomTabSwitchActions}
         />
       )}
       <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} initialParams={{ userId: user._id }} />

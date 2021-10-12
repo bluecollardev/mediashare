@@ -73,7 +73,7 @@ const MyTheme = Object.assign({}, AmplifyTheme, {
 });
 export interface LoginState extends Pick<RootState, never> {}
 
-const LoginComponent = ({ navigation }: PageProps) => {
+const LoginComponent = ({}: PageProps) => {
   const dispatch = useDispatch();
 
   const [show, setShow] = useState(true);
