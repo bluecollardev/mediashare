@@ -28,7 +28,7 @@ export interface MediaItemEditContainerProps {
 
 export interface MediaItemEditContainerState {}
 
-const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => {
+const MediaItemEdit = ({ navigation, route }: PageProps) => {
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
   const options = [];
@@ -117,7 +117,7 @@ const MediaItemEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => 
                 </Button>
               </View>
               <View style={{ flex: 4 }}>
-                <AppUpload startLoad={startLoad} endLoad={endLoad} onUpload={setThumbnail}>
+                <AppUpload onUpload={setThumbnail}>
                   <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
                     Change Preview Image
                   </Button>

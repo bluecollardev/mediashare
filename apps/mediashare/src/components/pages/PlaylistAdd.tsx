@@ -15,7 +15,7 @@ import { withLoadingSpinner, LoadingSpinnerProps } from '../hoc/withLoadingSpinn
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
-import { MediaList, MediaListType } from '../layout/MediaList';
+// import { MediaList, MediaListType } from '../layout/MediaList';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 import AppUpload from '../layout/AppUpload';
@@ -28,7 +28,7 @@ interface PlaylistAddContainerProps extends LoadingSpinnerProps {
   children: ReactNode;
 }
 
-const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
+const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);
@@ -38,6 +38,7 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
   const [loaded, setIsLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selected, setSelected] = useState([]);
   const goBack = useGoBack();
 
@@ -52,31 +53,32 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
+  // const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
   const goToPlaylists = useRouteName(ROUTES.playlists);
 
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
   const cancelCb = clearAndGoBack;
 
-  const onMediaItemClick = (e) => {
-    goToItem({ mediaId: e._id });
+  const isValid = function () {
+    return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category);
   };
 
-  const isValid = function () {
-    return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !(selected.length < 1) && imageSrc.length > 0;
-  };
-  const updateSelection = function (bool: boolean, item: MediaListType) {
+  /* const updateSelection = function (bool: boolean, item: MediaListType) {
     const filtered = bool ? selected.concat([item._id]) : selected.filter((key) => key !== item._id);
     setSelected(filtered);
   };
+
+  const onMediaItemClick = (e) => {
+    goToItem({ mediaId: e._id });
+  }; */
 
   const options = [];
 
   for (const value in PlaylistCategoryType) {
     options.push(value);
   }
-  const list = useAppSelector((state) => state.mediaItems.mediaItems);
+  // const list = useAppSelector((state) => state.mediaItems.mediaItems);
 
   const onUpload = (uri: string) => {
     setImageSrc(uri);
@@ -124,7 +126,7 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
           topDrawer={() => (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
               <View style={{ flex: 4 }}>
-                <AppUpload startLoad={startLoad} endLoad={endLoad} onUpload={onUpload}>
+                <AppUpload onUpload={onUpload}>
                   <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
                     Add Cover Photo
                   </Button>
@@ -133,14 +135,14 @@ const PlaylistAdd = ({ endLoad, startLoad }: PlaylistAddContainerProps) => {
             </View>
           )}
         />
-        <MediaList
+        {/* <MediaList
           list={list}
           selectable={true}
           showThumbnail={true}
           onViewDetail={onMediaItemClick}
           addItem={(item) => updateSelection(true, item)}
           removeItem={(item) => updateSelection(false, item)}
-        />
+        /> */}
       </KeyboardAvoidingPageContent>
       <PageActions>
         <ActionButtons

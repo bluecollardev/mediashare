@@ -132,7 +132,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     <View>
       <DisplayPreviewOrVideo />
       {topDrawer && <TopDrawer />}
-      <View style={{ paddingTop: 30, paddingBottom: 40 }}>
+      <View style={{ marginTop: 10, marginBottom: 10 }}>
         <TextField
           label="Title"
           value={title}
@@ -149,24 +149,23 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           onChangeText={(text) => onDescriptionChange(text)}
           disabled={isReadOnly}
         />
-        <Card style={{ marginTop: 15, marginBottom: 15 }} elevation={0}>
-          <Card.Content>
-            <Text style={{ color: 'darkgrey', fontWeight: 'bold', fontSize: 12 }}>Select Content Type</Text>
-            <SwitchSelector
-              fontSize={13}
-              textColor={theme.colors.text}
-              selectedColor={'#ffffff'}
-              backgroundColor={'#ffffff'}
-              buttonColor={theme.colors.accentDarker}
-              style={{ marginTop: 0, padding: 10 }}
-              options={categoryOptions.map((option) => ({ value: option, label: option }))}
-              initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
-              onPress={(value) => onCategoryChange(value as string)}
-              disabled={isReadOnly}
-            />
-          </Card.Content>
+        <Card elevation={0}>
+          {/* <Text style={{ color: '#333', fontWeight: 'bold', fontSize: 13 }}>Select Content Type</Text> */}
+          <SwitchSelector
+            fontSize={13}
+            textColor={theme.colors.text}
+            selectedColor={'#ffffff'}
+            backgroundColor={'#ffffff'}
+            buttonColor={theme.colors.primary}
+            style={{ margin: 0, padding: 0, width: '100%' }}
+            options={categoryOptions.map((option) => ({ value: option, label: option }))}
+            initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
+            onPress={(value) => onCategoryChange(value as string)}
+            disabled={isReadOnly}
+            borderRadius={3}
+          />
         </Card>
-        <View style={{ marginBottom: 40 }}>{children}</View>
+        <View>{children}</View>
       </View>
     </View>
   ) : (
@@ -177,8 +176,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         title={<Title>{`  ${title}`}</Title>}
         subtitle={`   By ${creator ? getAuthorText(creator) : 'Anonymous'}`}
         left={() =>
-          showThumbnail &&
-          thumbnail && (
+          !!showThumbnail &&
+          !!thumbnail && (
             <>
               <Avatar.Image source={{ uri: creator?.imageSrc || DEFAULT_AVATAR }} size={52} />
             </>

@@ -20,7 +20,7 @@ import { ROUTES } from '../../routes';
 
 import { theme } from '../../styles';
 
-const PlaylistEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => {
+const PlaylistEdit = ({ navigation, route }: PageProps) => {
   const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
 
   const dispatch = useDispatch();
@@ -91,7 +91,7 @@ const PlaylistEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => {
                 </Button>
               </View>
               <View style={{ flex: 4 }}>
-                <AppUpload startLoad={startLoad} endLoad={endLoad} onUpload={onUpload}>
+                <AppUpload onUpload={onUpload}>
                   <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
                     Change Cover Photo
                   </Button>

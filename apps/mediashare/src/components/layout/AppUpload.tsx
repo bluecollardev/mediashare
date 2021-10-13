@@ -15,7 +15,7 @@ interface AppUploadProps {
   children?: any;
 }
 
-export function AppUpload({ startLoad, endLoad, onUpload, label = 'Upload Picture', children }: AppUploadProps) {
+export function AppUpload({ onUpload, label = 'Upload Picture', children }: AppUploadProps) {
   const uploadDocument = async function () {
     launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
       if (!res.assets) {
@@ -23,12 +23,10 @@ export function AppUpload({ startLoad, endLoad, onUpload, label = 'Upload Pictur
       }
       const image = res.assets[0];
       const thumbnailKey = thumbnailRoot + image.fileName;
-      startLoad();
       fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
         // eslint-disable-next-line no-shadow
         const image = awsUrl + res.key;
         onUpload(image);
-        endLoad();
       });
     });
   };
