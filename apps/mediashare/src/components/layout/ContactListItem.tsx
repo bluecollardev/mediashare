@@ -60,7 +60,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
         right={() => (
           <View style={{ paddingVertical: 5 }}>
             {showFollow && (
-              <Button mode={selectable ? 'text' : 'outlined'} style={styles.followButton} disabled={selectable}>
+              <Button mode={selectable ? 'contained' : 'outlined'} style={styles.followButton} disabled={selectable}>
                 Following
               </Button>
             )}
