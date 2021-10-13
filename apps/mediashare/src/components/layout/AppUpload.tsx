@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { StyleSheet } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { thumbnailRoot, awsUrl } from '../../state/modules/media-items/key-factory';
 import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
@@ -8,8 +7,8 @@ import { theme } from '../../styles';
 import { Button } from 'react-native-paper';
 
 interface AppUploadProps {
-  startLoad: any;
-  endLoad: any;
+  startLoad?: any;
+  endLoad?: any;
   onUpload: (uri) => any;
   label?: string;
   children?: any;

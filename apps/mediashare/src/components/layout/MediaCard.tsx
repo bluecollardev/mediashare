@@ -62,7 +62,7 @@ export const SocialButtons = ({ likes, shares, views }: { likes: number; shares:
   );
 };
 
-type MediaDisplayMode = 'preview' | 'video';
+type MediaDisplayMode = 'image' | 'video';
 
 export const MediaCard: React.FC<MediaCardProps> = ({
   title = '',
@@ -91,8 +91,9 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   views = 0,
   shares = 0,
 }: MediaCardProps) => {
-  const getMediaDisplayMode = () => (showThumbnail && thumbnail ? 'preview' : 'video');
-  const [mediaDisplayMode, setMediaDisplayMode] = useState(getMediaDisplayMode() as MediaDisplayMode);
+  const getMediaDisplayMode = () => (showThumbnail && thumbnail ? 'image' : 'video');
+  const initialMediaDisplayMode = isPlayable ? (getMediaDisplayMode() as MediaDisplayMode) : 'image';
+  const [mediaDisplayMode, setMediaDisplayMode] = useState(initialMediaDisplayMode);
 
   const users = useAppSelector((state) => state.users?.entities);
   const [creator, setCreator] = useState({} as UserDto);
@@ -103,8 +104,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   }, [users]);
 
   const DisplayPreviewOrVideo = () => {
-    return mediaDisplayMode === 'preview' ? (
-      <ImageBackground source={{ uri: thumbnail }} resizeMode="cover" style={{ width: '100%', height: 250 }}>
+    return mediaDisplayMode === 'image' ? (
+      <ImageBackground source={{ uri: thumbnail || DEFAULT_IMAGE }} resizeMode="cover" style={{ width: '100%', height: 250 }}>
         {isPlayable && (
           <TouchableWithoutFeedback onPress={toggleMediaMode}>
             <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
@@ -176,8 +177,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         title={<Title>{`  ${title}`}</Title>}
         subtitle={`   By ${creator ? getAuthorText(creator) : 'Anonymous'}`}
         left={() =>
-          !!showThumbnail &&
-          !!thumbnail && (
+          showThumbnail &&
+          creator?.imageSrc && (
             <>
               <Avatar.Image source={{ uri: creator?.imageSrc || DEFAULT_AVATAR }} size={52} />
             </>
@@ -207,8 +208,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   function toggleMediaMode() {
     const current = mediaDisplayMode as MediaDisplayMode;
     if (current === 'video') {
-      setMediaDisplayMode('preview');
-    } else if (current === 'preview') {
+      setMediaDisplayMode('image');
+    } else if (current === 'image') {
       setMediaDisplayMode('video');
     }
   }
