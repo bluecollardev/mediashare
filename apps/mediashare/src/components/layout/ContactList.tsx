@@ -4,6 +4,7 @@ import ContactListItem from './ContactListItem';
 import * as R from 'remeda';
 import { List } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
+import { NonEmptyArray } from 'remeda/dist/commonjs/_types';
 
 export interface ContactListProps {
   navigation?: any;
@@ -15,28 +16,29 @@ export interface ContactListProps {
   selectable?: boolean;
 }
 
-export const ContactList: React.FC<ContactListProps> = ({
-  contacts = [],
-  selectable,
-  showActions,
-  onViewDetail = () => {},
-}) => {
-  const mappedAndKeyed = R.values(R.groupBy(contacts, (user) => (user?.firstName ? user.firstName[0].toUpperCase() : user.username[0].toUpperCase()))).sort(
-    (a, b) => {
-      try {
-        return a[0]?.firstName?.localeCompare(b[0]?.firstName[0] ?? b[0]?.username[0]);
-      } catch (err) {
-        console.log(err);
-      }
+export const ContactList: React.FC<ContactListProps> = ({ contacts = [], selectable, showActions, onViewDetail = () => {} }) => {
+  const namedContacts = contacts.filter((user) => !!user.firstName || !!user.lastName);
+  const unnamedContacts = contacts.filter((user) => !user.firstName && !user.lastName);
+  const mappedAndKeyed = R.values(
+    R.groupBy(namedContacts, (user) => (user?.firstName ? user.firstName[0].toUpperCase() : user.username[0].toUpperCase()))
+  ).sort((a, b) => {
+    try {
+      return a[0]?.firstName?.localeCompare(b[0]?.firstName[0] ?? b[0]?.username[0]);
+    } catch (err) {
+      console.log(err);
     }
-  );
+  });
+
+  if (unnamedContacts.length > 0) {
+    mappedAndKeyed.push(unnamedContacts as NonEmptyArray<UserDto>);
+  }
 
   return (
     <>
       {mappedAndKeyed.map((section, idx) => {
         return (
           <List.Section key={`section_${idx}`}>
-            {section.map((item, i) => {
+            {section.map((item, idx) => {
               const { firstName, lastName } = item;
               const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
               return (
@@ -45,7 +47,7 @@ export const ContactList: React.FC<ContactListProps> = ({
                   title={fullName}
                   description={item.username}
                   avatar={item.imageSrc}
-                  showLetterLabel={!i}
+                  showLetterLabel={!idx && (!!firstName || !!lastName)}
                   userId={item._id}
                   selectable={selectable}
                   onViewDetail={onViewDetail}
