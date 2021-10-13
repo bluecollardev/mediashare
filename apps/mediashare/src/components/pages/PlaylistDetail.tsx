@@ -91,7 +91,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           views={viewCount}
           category={category}
         >
-          <Button icon="live-tv" color={theme.colors.primary} mode="outlined" style={{ width: '100%', marginBottom: 10 }} compact>
+          <Button icon="live-tv" color={theme.colors.primary} mode="contained" style={{ width: '100%', marginBottom: 10 }} compact dark>
             Play From Beginning
           </Button>
         </MediaCard>

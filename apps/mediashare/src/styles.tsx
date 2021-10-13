@@ -68,7 +68,7 @@ const styles: any = StyleSheet.create({
     flexDirection: 'row',
     height: 50, // Make sure this is the same height as pageActions!
     borderTopWidth: 1,
-    borderColor: '#cccccc',
+    borderColor: '#eeeeee',
   },
   actionButton: {
     flex: 1,
@@ -92,6 +92,11 @@ const styles: any = StyleSheet.create({
   },
   tabContent: {
     height: '100%',
+    backgroundColor: '#ffffff',
+    padding: 5,
+  },
+  tabContentQuarters: {
+    height: '100%',
     flex: 1,
     backgroundColor: '#ffffff',
     flexDirection: 'row',
@@ -105,14 +110,14 @@ const styles: any = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomColor: theme.colors.disabled,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0,
   },
   tabItemActive: {
     flex: 1,
     alignItems: 'center',
     padding: 16,
-    borderBottomColor: theme.colors.primaryText,
-    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.accent,
+    borderBottomWidth: 0,
   },
   container: {
     height: '100%',

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { View } from 'react-native';
-import { List } from 'react-native-paper';
 
 import { ROUTES } from '../../routes';
 
@@ -13,7 +12,7 @@ import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
 
 import { RefreshControl } from 'react-native';
-import { Card, FAB, Subheading } from 'react-native-paper';
+import { FAB } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
@@ -21,6 +20,7 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { theme } from '../../styles';
 import { shortenText } from '../../utils';
 import { ActionButtons } from '../layout/ActionButtons';
+import { NoItems } from '../layout/NoItems';
 
 export const MediaComponent = ({
   onViewDetail,
@@ -107,11 +107,7 @@ export const Media = ({ navigation }: PageProps) => {
             showActions={!isSelectable}
           />
         ) : (
-          <Card style={{ width: '100%' }}>
-            <Card.Content>
-              <Subheading style={{ textAlign: 'center' }}>There are no items in your collection.</Subheading>
-            </Card.Content>
-          </Card>
+          <NoItems />
         )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.delete && (

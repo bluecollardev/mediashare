@@ -10,9 +10,9 @@ import { PlaylistResponseDto } from '../../rxjs-api';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useViewMediaItem, useViewPlaylistById } from '../../hooks/NavigationHooks';
 
-import { ImageBackground, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { ScrollView } from 'react-native';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import { List, Text, Card, Button } from 'react-native-paper';
+import { List, Text, Card } from 'react-native-paper';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -23,6 +23,7 @@ import { PlaylistsComponent } from './Playlists';
 import { shortenText } from '../../utils';
 
 import styles, { theme } from '../../styles';
+import { MediaPreview } from '../layout/MediaPreview';
 
 /* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
   const list = playlist.map((item) => {
@@ -52,7 +53,7 @@ export const Articles = () => {
   sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 
   return (
-    <View>
+    <ScrollView contentContainerStyle={styles.tabContent}>
       <List.Section>
         <List.Subheader>Latest Articles</List.Subheader>
         {sortedList.slice(0, 2).map((item) => {
@@ -72,7 +73,7 @@ export const Articles = () => {
           );
         })}
       </List.Section>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -93,7 +94,7 @@ export const Playlists = () => {
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={styles.tabContent}>
       <PlaylistsComponent list={sortedList} onViewDetailClicked={viewPlaylist} />
     </ScrollView>
   );
@@ -128,7 +129,7 @@ export const Videos = () => {
   return (
     <ScrollView
       contentInset={{ bottom: 120 }}
-      contentContainerStyle={styles.tabContent}
+      contentContainerStyle={styles.tabContentQuarters}
     >
       {sortedList.map((item) => {
         const { _id, title, description, thumbnail } = item;
@@ -137,13 +138,7 @@ export const Videos = () => {
           <Card key={`item_${_id}`} onPress={() => viewMediaItem(item)} style={styles.card50} elevation={0}>
             <Card.Title title={title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(description, 40)}`} />
             <Card.Content>
-              <ImageBackground source={{ uri: thumbnail }} resizeMode="cover" style={{ width: '100%', height: 100 }}>
-                <TouchableWithoutFeedback onPress={() => viewMediaItem(item)}>
-                  <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                    <Button icon="play-circle-filled" color="#ffffff" labelStyle={{ fontSize: 33 }} />
-                  </View>
-                </TouchableWithoutFeedback>
-              </ImageBackground>
+              <MediaPreview thumbnail={thumbnail} onPress={() => viewMediaItem(item)} />
             </Card.Content>
           </Card>
         );

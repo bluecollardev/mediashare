@@ -66,7 +66,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
           return showActions ? (
             <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} />
           ) : (
-            <View style={{ paddingVertical: 5 }}>
+            <View>
               {showFollow && (
                 <Button mode={selectable ? 'contained' : 'outlined'} style={styles.followButton} disabled={selectable}>
                   Following
@@ -91,7 +91,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
 };
 
 const styles = StyleSheet.create({
-  listItem: { margin: 0, padding: 5, marginTop: 5, justifyContent: 'center', backgroundColor: '#ffffff' },
+  listItem: { margin: 0, justifyContent: 'center', backgroundColor: '#ffffff' },
   leftOuterWrapper: { flexDirection: 'row', width: 100, justifyContent: 'space-between' },
   letterLabelWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
   headline: { marginLeft: 10, color: theme.colors.primary },

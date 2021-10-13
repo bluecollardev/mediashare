@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { usePreviewImage } from '../../hooks/UsePreviewImage';
 
 import { View } from 'react-native';
-import { Avatar, Caption, Checkbox, IconButton, List } from 'react-native-paper';
+import { Caption, Checkbox, IconButton, List } from 'react-native-paper';
 
 import styles, { theme } from '../../styles';
+import { MediaPreview } from './MediaPreview';
 
 export interface MediaListItemProps {
   navigation?: any;
@@ -38,6 +39,13 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   const [isChecked, setIsChecked] = useState(checked);
   const DEFAULT_IMAGE = usePreviewImage();
 
+  const mediaPreviewProps = {
+    thumbnail: image || DEFAULT_IMAGE,
+    width: 104,
+    height: 78,
+    onPress,
+  };
+
   return (
     <List.Item
       title={title}
@@ -49,24 +57,16 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
         selectable ? (
           <View style={styles.mediaListItem}>
             <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.success : theme.colors.disabled} />
-            {showThumbnail ? (
-              image ? (
-                <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={{ uri: image }} />
-              ) : (
-                <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={{ uri: DEFAULT_IMAGE }} />
-              )
-            ) : (
-              <></>
-            )}
+            {showThumbnail ? image ? <MediaPreview {...mediaPreviewProps} /> : <MediaPreview {...mediaPreviewProps} /> : null}
           </View>
         ) : showThumbnail ? (
           image ? (
             <View style={styles.mediaListItem}>
-              <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={{ uri: image }} />
+              <MediaPreview {...mediaPreviewProps} />
             </View>
           ) : (
             <View style={styles.mediaListItem}>
-              <Avatar.Image style={styles.mediaListItemThumbnail} size={42} source={{ uri: DEFAULT_IMAGE }} />
+              <MediaPreview {...mediaPreviewProps} />
             </View>
           )
         ) : null

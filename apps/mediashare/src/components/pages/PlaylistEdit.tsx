@@ -106,10 +106,11 @@ const PlaylistEdit = ({ navigation, route, startLoad, endLoad }: PageProps) => {
             <Button
               icon="playlist-add"
               color={theme.colors.primary}
-              mode="outlined"
-              style={{ width: '100%', marginTop: 10 }}
+              mode="contained"
+              style={{ width: '100%', marginTop: 10, marginBottom: 10 }}
               onPress={() => onAddToPlaylistClicked({ playlistId })}
               compact
+              dark
             >
               Add To Playlist
             </Button>

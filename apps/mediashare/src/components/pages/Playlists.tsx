@@ -15,7 +15,6 @@ import { FAB } from 'react-native-paper';
 import { RefreshControl } from 'react-native';
 
 import { View } from 'react-native';
-import { List } from 'react-native-paper';
 import { MediaListItem } from '../layout/MediaListItem';
 import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
 
@@ -23,6 +22,7 @@ import { shortenText } from '../../utils';
 
 import { theme } from '../../styles';
 import { ActionButtons } from '../layout/ActionButtons';
+import { NoItems } from '../layout/NoItems';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
@@ -111,17 +111,23 @@ export const Playlists = ({}: PageProps) => {
     clearCheckboxSelection();
   }, []);
 
+  const { userPlaylists = [] } = state?.playlists;
+
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        <PlaylistsComponent
-          key={clearSelectionKey}
-          list={state.playlists.userPlaylists}
-          onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
-          selectable={isSelectable}
-          showActions={!isSelectable}
-          onChecked={updateSelection}
-        />
+        {loaded && userPlaylists.length > 0 ? (
+          <PlaylistsComponent
+            key={clearSelectionKey}
+            list={userPlaylists}
+            onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
+            selectable={isSelectable}
+            showActions={!isSelectable}
+            onChecked={updateSelection}
+          />
+        ) : (
+          <NoItems />
+        )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>

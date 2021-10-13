@@ -104,7 +104,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 
   const DisplayPreviewOrVideo = () => {
     return mediaDisplayMode === 'preview' ? (
-      <ImageBackground source={{ uri: thumbnail }} resizeMode="cover" style={{ width: '100%', height: 300 }}>
+      <ImageBackground source={{ uri: thumbnail }} resizeMode="cover" style={{ width: '100%', height: 250 }}>
         {isPlayable && (
           <TouchableWithoutFeedback onPress={toggleMediaMode}>
             <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
@@ -132,7 +132,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     <View>
       <DisplayPreviewOrVideo />
       {topDrawer && <TopDrawer />}
-      <View style={{ paddingTop: 20, paddingBottom: 40 }}>
+      <View style={{ paddingTop: 30, paddingBottom: 40 }}>
         <TextField
           label="Title"
           value={title}
@@ -149,7 +149,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           onChangeText={(text) => onDescriptionChange(text)}
           disabled={isReadOnly}
         />
-        <Card style={{ borderWidth: 1, borderStyle: 'solid', borderColor: 'lightgrey', marginTop: 15, marginBottom: 15 }}>
+        <Card style={{ marginTop: 15, marginBottom: 15 }} elevation={0}>
           <Card.Content>
             <Text style={{ color: 'darkgrey', fontWeight: 'bold', fontSize: 12 }}>Select Content Type</Text>
             <SwitchSelector
@@ -170,7 +170,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       </View>
     </View>
   ) : (
-    <Card style={styles.card} mode="elevated">
+    <Card style={styles.card} elevation={0}>
       <DisplayPreviewOrVideo />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <Card.Title
