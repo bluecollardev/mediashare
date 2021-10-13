@@ -82,18 +82,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#312e38',
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: '#fff',
-  },
-  listItem: { margin: 0, padding: 5, marginTop: 5, justifyContent: 'center' },
+  listItem: { margin: 0, padding: 5, marginTop: 5, justifyContent: 'center', backgroundColor: '#ffffff' },
   leftOuterWrapper: { flexDirection: 'row', width: 100, justifyContent: 'space-between' },
   letterLabelWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
   headline: { marginLeft: 10, color: theme.colors.primary },

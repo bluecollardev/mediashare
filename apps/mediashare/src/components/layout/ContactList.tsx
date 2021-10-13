@@ -3,6 +3,7 @@ import { UserDto } from '../../rxjs-api';
 import ContactListItem from './ContactListItem';
 import * as R from 'remeda';
 import { List } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 
 export interface ContactListProps {
   navigation?: any;

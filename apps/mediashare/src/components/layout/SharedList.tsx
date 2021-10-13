@@ -13,7 +13,7 @@ interface SharedListProps {
   onView?: any;
 }
 
-export function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
+export const SharedList = ({ sharedItems, onDelete, onView }: SharedListProps) => {
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
   const data = R.map(R.keys(mappedSharedItems), (key) => ({
     title: `${mappedSharedItems[key][0].authorName || 'Unnamed User'}`,
@@ -25,9 +25,8 @@ export function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
       <SectionList
         sections={data}
         renderSectionHeader={({ section }) => (
-          <Card mode="outlined" style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}>
-            <Card.Title titleStyle={{ fontSize: 16 }} title={`Shared by ${section.title}`}
-                        subtitle={`${section.count.toString()} items`} />
+          <Card mode="outlined" style={styles.sectionHeader}>
+            <Card.Title titleStyle={styles.sectionHeaderTitle} title={`Shared by ${section.title}`} subtitle={`${section.count.toString()} items`} />
           </Card>
         )}
         keyExtractor={(item) => item.shareItemId}
@@ -48,4 +47,14 @@ export function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
       />
     </List.Section>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  sectionHeader: {
+    borderColor: 'transparent',
+    backgroundColor: '#ffffff',
+  },
+  sectionHeaderTitle: {
+    fontSize: 16,
+  },
+});
