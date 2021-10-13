@@ -23,7 +23,7 @@ import { theme } from '../../styles';
 
 const maxUpload = parseInt(Config.MAX_UPLOAD, 10) || 104857600;
 
-export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
+export const AddMedia = ({}: PageProps) => {
   const dispatch = useDispatch();
 
   // const author = useAppSelector((state) => state?.user.username);
@@ -92,12 +92,10 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   async function getDocument() {
     const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
     if (!document) {
-      endLoad();
       return;
     }
     if (!document || document.size > maxUpload) {
       dispatch(setError({ name: 'File too big', message: `Files must be under ${maxUpload / 1024 / 1024} Mb` }));
-      endLoad();
       return;
     }
     try {
@@ -106,11 +104,9 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
       console.log(err);
     }
     setDocumentUri(document.uri || '');
-    endLoad();
   }
 
   async function saveItem() {
-    startLoad();
     const dto: CreateMediaItemDto = {
       title,
       category: MediaCategoryType[category],
@@ -127,7 +123,6 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
     setCategory(MediaCategoryType.Free);
     setDescription('');
     setThumbnail('');
-    endLoad();
     mediaItems();
   }
 
