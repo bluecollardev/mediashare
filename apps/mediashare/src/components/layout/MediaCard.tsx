@@ -38,6 +38,7 @@ export interface MediaCardProps {
   likes?: number;
   views?: number;
   shares?: number;
+  elevation?: number;
 }
 
 export const SocialButtons = ({ likes, shares, views }: { likes: number; shares: number; views: number }) => {
@@ -80,6 +81,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   isEdit = false,
   isPlayable = false,
   isReadOnly = false,
+  elevation = 0,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onTitleChange = (value: string) => {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -150,7 +152,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           onChangeText={(text) => onDescriptionChange(text)}
           disabled={isReadOnly}
         />
-        <Card elevation={0}>
+        <Card elevation={elevation}>
           {/* <Text style={{ color: '#333', fontWeight: 'bold', fontSize: 13 }}>Select Content Type</Text> */}
           <SwitchSelector
             fontSize={13}
@@ -170,7 +172,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       </View>
     </View>
   ) : (
-    <Card style={styles.card} elevation={0}>
+    <Card style={styles.card} elevation={elevation}>
       <DisplayPreviewOrVideo />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <Card.Title

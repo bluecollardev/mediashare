@@ -9,9 +9,9 @@ import { PlaylistResponseDto, PlaylistDto } from '../../rxjs-api';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useViewPlaylistById } from '../../hooks/NavigationHooks';
 
-import { ScrollView } from 'react-native';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import { List, Text, Card } from 'react-native-paper';
+import { List, Text, Card, IconButton, Button } from 'react-native-paper';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -76,6 +76,9 @@ export const SharedBlock = () => {
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
   // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 
+  const viewPlaylistAction = useViewPlaylistById();
+  const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item.playlistId });
+
   return (
     <ScrollView contentContainerStyle={styles.tabContent}>
       <List.Section>
@@ -85,6 +88,7 @@ export const SharedBlock = () => {
           return (
             <View key={`shared_${playlistId}`} style={{ padding: 15, paddingTop: 0 }}>
               <MediaCard
+                elevation={1}
                 title={title}
                 author={author}
                 description={description}
@@ -93,7 +97,19 @@ export const SharedBlock = () => {
                 showSocial={true}
                 showActions={false}
                 showThumbnail={true}
-              />
+              >
+                <Button
+                  icon="live-tv"
+                  color={theme.colors.primary}
+                  mode="contained"
+                  style={{ width: '100%', marginBottom: 10 }}
+                  compact
+                  dark
+                  onPress={() => viewPlaylist(item)}
+                >
+                  Watch Now
+                </Button>
+              </MediaCard>
             </View>
           );
         })}
@@ -152,7 +168,8 @@ export const Browse = ({}: PageProps) => {
               <TouchableOpacity
                 key={`tab_${i}-${route.name}`}
                 style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem}
-                onPress={() => setIndex(i)}>
+                onPress={() => setIndex(i)}
+              >
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                   <MaterialIcons
                     name={route.icon}
