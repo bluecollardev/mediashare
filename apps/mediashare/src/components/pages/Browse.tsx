@@ -85,7 +85,7 @@ export const SharedBlock = () => {
       <List.Section>
         {sortedList.map((item) => {
           // @ts-ignore
-          const { playlistId, title, description, author, imageSrc } = item;
+          const { playlistId, title, description, author, imageSrc, sharedCount, sharesCount, likesCount } = item;
           return (
             <View key={`shared_block_${playlistId}`} style={{ padding: 15, paddingTop: 0 }}>
               <MediaCard
@@ -98,6 +98,9 @@ export const SharedBlock = () => {
                 showSocial={true}
                 showActions={false}
                 showThumbnail={true}
+                shares={sharesCount}
+                views={sharedCount}
+                likes={likesCount}
               >
                 <Button
                   icon="live-tv"
