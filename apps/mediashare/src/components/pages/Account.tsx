@@ -83,7 +83,7 @@ export const Account = ({}: PageProps) => {
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
 
-  const tabs = [{ key: 'contacts', title: 'Contacts', icon: 'assignment-ind' }];
+  const tabs = [{ key: 'contacts', title: 'My Contacts', icon: 'group' }];
   // TODO: We don't want to do this it makes routing too crazy!
   /* if (build.forAdmin) {
     tabs.push({ key: 'shared', title: 'All Shared Items', icon: 'movie' });
@@ -109,7 +109,12 @@ export const Account = ({}: PageProps) => {
       { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
       { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
     ];
-  } else {
+  } else if (build.forSubscriber) {
+    fabActions = [
+      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
+      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+    ];
+  } else if (build.forAdmin) {
     fabActions = [
       { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
       { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },

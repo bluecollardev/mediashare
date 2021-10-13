@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { View, StyleSheet } from 'react-native';
-import { Avatar, Button, Checkbox, Divider, Headline, List } from 'react-native-paper';
+import { Avatar, Button, Checkbox, Divider, Headline, IconButton, List } from 'react-native-paper';
 import { theme } from '../../styles';
 
 interface ContactListItemProps {
@@ -14,8 +14,10 @@ interface ContactListItemProps {
   checked?: boolean;
   onChecked?: (bool: boolean) => void;
   onViewDetail?: (userId: any) => void;
-  showActions?: boolean;
   showLetterLabel: boolean;
+  showActions?: boolean;
+  iconRight?: string;
+  iconRightColor?: string;
 }
 
 export const ContactListItem: React.FC<ContactListItemProps> = ({
@@ -29,6 +31,9 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
   selectable,
   onChecked = () => {},
   checked,
+  showActions = true,
+  iconRight = 'chevron-right',
+  iconRightColor = theme.colors.accent,
 }: ContactListItemProps) => {
   const [isChecked, setIsChecked] = useState(checked);
 
@@ -57,15 +62,19 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
             </View>
           )
         }
-        right={() => (
-          <View style={{ paddingVertical: 5 }}>
-            {showFollow && (
-              <Button mode={selectable ? 'contained' : 'outlined'} style={styles.followButton} disabled={selectable}>
-                Following
-              </Button>
-            )}
-          </View>
-        )}
+        right={() => {
+          return showActions ? (
+            <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} />
+          ) : (
+            <View style={{ paddingVertical: 5 }}>
+              {showFollow && (
+                <Button mode={selectable ? 'contained' : 'outlined'} style={styles.followButton} disabled={selectable}>
+                  Following
+                </Button>
+              )}
+            </View>
+          );
+        }}
       />
       <Divider />
     </View>
