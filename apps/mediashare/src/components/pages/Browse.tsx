@@ -52,7 +52,8 @@ export const SharedList = () => {
   let sortedList = list.map((item) => {
     // const { mediaIds, description } = item;
     // const itemDescription = `${shortenText(description, 40)}\n${mediaIds.length || 0} videos`;
-    return Object.assign({}, item) as PlaylistDto;
+    // Hack to set playlist id as we're just casting a SharedItemDto to a PlaylistDto
+    return Object.assign({}, item, { _id: item.playlistId }) as PlaylistDto;
   });
 
   // sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
@@ -86,7 +87,7 @@ export const SharedBlock = () => {
           // @ts-ignore
           const { playlistId, title, description, author, imageSrc } = item;
           return (
-            <View key={`shared_${playlistId}`} style={{ padding: 15, paddingTop: 0 }}>
+            <View key={`shared_block_${playlistId}`} style={{ padding: 15, paddingTop: 0 }}>
               <MediaCard
                 elevation={1}
                 title={title}
