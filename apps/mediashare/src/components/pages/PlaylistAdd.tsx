@@ -17,11 +17,12 @@ import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
-import AppUpload from '../layout/AppUpload';
-import { Button } from 'react-native-paper';
-import { View } from 'react-native';
+import { AppUpload } from '../layout/AppUpload';
+import { TouchableWithoutFeedback, View } from 'react-native';
 
+import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 import { theme } from '../../styles';
+import { Button } from 'react-native-paper';
 
 interface PlaylistAddContainerProps extends LoadingSpinnerProps {
   children: ReactNode;
@@ -84,7 +85,7 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
           title={title}
           author={author}
           description={description}
-          showThumbnail={true}
+          showThumbnail={!!imageSrc}
           thumbnail={imageSrc}
           category={category}
           categoryOptions={options}
@@ -92,17 +93,19 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
           onTitleChange={setTitle as any}
           onDescriptionChange={setDescription as any}
           isEdit={true}
-          topDrawer={() => (
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <View style={{ flex: 4 }}>
-                <AppUpload onUpload={onUpload}>
-                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
-                    Add Cover Photo
-                  </Button>
-                </AppUpload>
-              </View>
-            </View>
-          )}
+          topDrawer={() =>
+            !imageSrc ? (
+              <AppUpload onUpload={onUpload}>
+                <UploadPlaceholder buttonText="Add Cover Photo" />
+              </AppUpload>
+            ) : (
+              <AppUpload onUpload={onUpload}>
+                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.primary} compact>
+                  Change Cover Photo
+                </Button>
+              </AppUpload>
+            )
+          }
         />
       </KeyboardAvoidingPageContent>
       <PageActions>

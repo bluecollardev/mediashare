@@ -21,6 +21,8 @@ import { categoryValidator, descriptionValidator, titleValidator } from '../layo
 
 import { minLength } from '../../lib/Validators';
 import { theme } from '../../styles';
+import { AppUpload } from '../layout/AppUpload';
+import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 
 const maxUpload = parseInt(Config.MAX_UPLOAD, 10) || 104857600;
 
@@ -55,8 +57,8 @@ export const AddMedia = ({}: PageProps) => {
           title={title}
           description={description}
           mediaSrc={documentUri}
+          showThumbnail={!!documentUri}
           thumbnail={thumbnail}
-          showThumbnail={true}
           category={category}
           categoryOptions={options}
           onCategoryChange={(e: any) => {
@@ -66,15 +68,19 @@ export const AddMedia = ({}: PageProps) => {
           onDescriptionChange={setDescription}
           isEdit={true}
           isPlayable={true}
-          topDrawer={() => (
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <View style={{ flex: 1 }}>
-                <Button onPress={getDocument} icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
-                  {documentUri ? 'Replace Media' : 'Upload Media'}
+          topDrawer={() =>
+            !documentUri ? (
+              <AppUpload onUpload={getDocument}>
+                <UploadPlaceholder buttonText="Upload Media" />
+              </AppUpload>
+            ) : (
+              <AppUpload onUpload={getDocument}>
+                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.primary} compact>
+                  Replace Media
                 </Button>
-              </View>
-            </View>
-          )}
+              </AppUpload>
+            )
+          }
         />
       </KeyboardAvoidingPageContent>
       <PageActions>

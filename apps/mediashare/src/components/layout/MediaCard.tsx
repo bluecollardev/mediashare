@@ -133,7 +133,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 
   return isEdit ? (
     <View>
-      <DisplayPreviewOrVideo />
+      {showThumbnail && <DisplayPreviewOrVideo />}
       {topDrawer && <TopDrawer />}
       <View style={{ marginTop: 10, marginBottom: 10 }}>
         <TextField
