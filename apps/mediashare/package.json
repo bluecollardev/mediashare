@@ -35,7 +35,6 @@
     "expo-font": "^9.2.1",
     "expo-secure-store": "^10.2.0",
     "expo-video-thumbnails": "^5.2.1",
-    "native-base": "2.13.15",
     "react": "16.13.1",
     "react-final-form": "6.5.2",
     "react-native": "0.63.3",

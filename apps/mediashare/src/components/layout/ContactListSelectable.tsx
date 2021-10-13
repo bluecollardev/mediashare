@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { List } from 'native-base';
-import { ListItemGroup } from './ListItemGroup';
+import { View } from 'react-native';
 import { MediaListItem } from './MediaListItem';
-import { UserDto } from '../../rxjs-api/models/UserDto';
+import { UserDto } from '../../rxjs-api';
 
 export interface ContactListProps {
   navigation?: any;
@@ -12,17 +11,10 @@ export interface ContactListProps {
 }
 
 export const ContactListSelectable: React.FC<ContactListProps> = (props) => {
-  let { items = [], showGroups = false } = props;
-
-  async function testFx() {
-    return null;
-  }
-
-  testFx();
+  let { items = [] } = props;
 
   return (
-    <List>
-      {showGroups && <ListItemGroup key={'group1'} text={'All Contacts'} />}
+    <View>
       {items.map((item) => {
         // const { title, description, image } = item;
         return (
@@ -39,6 +31,6 @@ export const ContactListSelectable: React.FC<ContactListProps> = (props) => {
           />
         );
       })}
-    </List>
+    </View>
   );
 };

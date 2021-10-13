@@ -16,7 +16,7 @@ export function ShareItemCard({ date, title, onDelete, onView, image, read }: Sh
   const [visible, setVisible] = useState(false);
   return (
     <View>
-      <Card mode={'elevated'} onPress={() => setVisible(!visible)}>
+      <Card mode="elevated" onPress={() => setVisible(!visible)}>
         <Card.Title
           title={title}
           left={() => <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />}

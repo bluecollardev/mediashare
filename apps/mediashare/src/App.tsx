@@ -90,8 +90,6 @@ const PublicNavigation = () => {
   return (
     <PublicStackNavigator.Navigator initialRouteName={'Login'}>
       <PublicStackNavigator.Screen {...routeConfig.login} />
-      <PublicStackNavigator.Screen {...routeConfig.resetPassword} />
-      <PublicStackNavigator.Screen {...routeConfig.signup} />
     </PublicStackNavigator.Navigator>
   );
 };

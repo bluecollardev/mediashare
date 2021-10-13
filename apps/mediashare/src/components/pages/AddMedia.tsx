@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import Config from 'react-native-config';
 import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
-import Config from 'react-native-config';
+
 import { addMediaItem, createThumbnail } from '../../state/modules/media-items';
 import { setError } from '../../state/modules/app-state/';
 

@@ -66,7 +66,7 @@ function Profile({ route }: ProfileProps) {
         showSocial={true}
       />
       {isAdmin && (
-        <Button mode={'outlined'} style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
+        <Button mode="outlined" style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
           Edit Profile
         </Button>
       )}

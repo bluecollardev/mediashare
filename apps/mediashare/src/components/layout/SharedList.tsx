@@ -25,7 +25,7 @@ export function SharedList({ sharedItems, onDelete, onView }: SharedListProps) {
       <SectionList
         sections={data}
         renderSectionHeader={({ section }) => (
-          <Card mode={'outlined'} style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}>
+          <Card mode="outlined" style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}>
             <Card.Title titleStyle={{ fontSize: 16 }} title={`Shared by ${section.title}`}
                         subtitle={`${section.count.toString()} items`} />
           </Card>

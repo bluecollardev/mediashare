@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { View } from 'react-native';
-import { List } from 'native-base';
+import { List } from 'react-native-paper';
 
 import { ROUTES } from '../../routes';
 
@@ -39,25 +39,23 @@ export const MediaComponent = ({
 
   return (
     <View>
-      <List>
-        {sortedList.map((item) => {
-          const { _id, title, description, thumbnail } = item;
-          return (
-            <MediaListItem
-              key={`item_${_id}`}
-              title={title}
-              description={`${shortenText(description, 40)}`}
-              showThumbnail={true}
-              showActions={showActions}
-              image={thumbnail}
-              iconRight="edit"
-              iconRightColor={theme.colors.accentDarker}
-              selectable={selectable}
-              onViewDetail={() => onViewDetail(item)}
-            />
-          );
-        })}
-      </List>
+      {sortedList.map((item) => {
+        const { _id, title, description, thumbnail } = item;
+        return (
+          <MediaListItem
+            key={`item_${_id}`}
+            title={title}
+            description={`${shortenText(description, 40)}`}
+            showThumbnail={true}
+            showActions={showActions}
+            image={thumbnail}
+            iconRight="edit"
+            iconRightColor={theme.colors.accentDarker}
+            selectable={selectable}
+            onViewDetail={() => onViewDetail(item)}
+          />
+        );
+      })}
     </View>
   );
 };

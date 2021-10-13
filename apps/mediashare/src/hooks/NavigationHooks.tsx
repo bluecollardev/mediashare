@@ -11,17 +11,20 @@ type RouteParentKeyType = keyof Pick<typeof routeConfig, 'Browse' | 'Media' | 'P
 
 export function useRouteName(key: RouteConfigKeyType) {
   const nav = useNavigation();
+  // @ts-ignore
   return () => nav.navigate(key);
 }
 
 export function useRouteWithParams(key: EnumLiteralsOf<typeof ROUTES>) {
   const nav = useNavigation();
 
+  // @ts-ignore
   return (params: { [x: string]: string }) => nav.navigate(key, params);
 }
 
 export function usePageRoute(key: RouteParentKeyType, child: RouteConfigKeyType) {
   const nav = useNavigation();
+  // @ts-ignore
   return (params: Record<string, string | number>) => nav.navigate(key, { screen: child, params });
 }
 
@@ -32,6 +35,7 @@ export function useGoBack() {
 
 export function useViewPlaylist() {
   const nav = useNavigation();
+  // @ts-ignore
   return ({ playlistId }) => nav.navigate(ROUTES?.playlistDetail, { playlistId });
 }
 
@@ -51,6 +55,7 @@ export function useEditMediaItem() {
   const dispatch = useDispatch();
   return async ({ mediaId, uri }) => {
     await dispatch(getMediaItemById({ uri, mediaId }));
+    // @ts-ignore
     nav.navigate(ROUTES.mediaItemEdit, { mediaId, uri });
   };
 }
@@ -59,6 +64,7 @@ export function useViewMediaItem() {
   const dispatch = useDispatch();
   return async ({ mediaId, uri }) => {
     await dispatch(getMediaItemById({ uri, mediaId }));
+    // @ts-ignore
     nav.navigate(ROUTES.mediaItemDetail, { mediaId, uri });
   };
 }
@@ -67,6 +73,7 @@ export function useEditPlaylistById() {
   const dispatch = useDispatch();
   return async ({ playlistId }) => {
     await dispatch(getPlaylistById(playlistId));
+    // @ts-ignore
     nav.navigate(ROUTES.playlistEdit, { playlistId });
   };
 }
@@ -76,6 +83,7 @@ export function useViewPlaylistById() {
   const dispatch = useDispatch();
   return async ({ playlistId }: { playlistId: string }) => {
     await dispatch(getPlaylistById(playlistId));
+    // @ts-ignore
     nav.navigate(ROUTES.playlistDetail, { playlistId });
   };
 }

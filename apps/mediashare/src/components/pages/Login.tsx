@@ -122,21 +122,17 @@ class CustomVerify extends Component<any> {
   }
 
   gotoSignIn() {
-    // to switch the authState to 'signIn'
-    this.props.onStateChange('signIn', {});
+    const { onStateChange } = this.props;
+    onStateChange('signIn', {});
   }
 
   render() {
-    return (
-      <>
-        {/* only render this component when the authState is 'signUp' */}
-        {this.props.authState === 'confirmSignUp' && (
-          <Button onPress={this.gotoSignIn} style={{ width: '100%' }} mode={'contained'}>
-            <Text>Goto SignIn</Text>
-          </Button>
-        )}
-      </>
-    );
+    const { authState } = this.props;
+    return authState === 'confirmSignUp' ? (
+      <Button onPress={this.gotoSignIn} style={{ width: '100%' }} mode="outlined">
+        Go to Sign In
+      </Button>
+    ) : null;
   }
 }
 

@@ -9,7 +9,7 @@ import { useAppSelector } from '../../state';
 import { findMediaItems } from '../../state/modules/media-items';
 import { addUserPlaylist, findUserPlaylists } from '../../state/modules/playlists';
 
-import { CreatePlaylistDto } from '../../rxjs-api';
+import { CreatePlaylistDto, PlaylistCategoryType } from '../../rxjs-api';
 
 import { withLoadingSpinner, LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
 
@@ -21,8 +21,8 @@ import { PageContainer, KeyboardAvoidingPageContent, PageActions } from '../layo
 import AppUpload from '../layout/AppUpload';
 import { Button } from 'react-native-paper';
 import { View } from 'react-native';
+
 import { theme } from '../../styles';
-import { PlaylistCategoryType } from '../../rxjs-api/models/PlaylistCategoryType';
 
 interface PlaylistAddContainerProps extends LoadingSpinnerProps {
   children: ReactNode;

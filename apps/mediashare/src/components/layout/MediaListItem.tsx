@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Storage } from 'aws-amplify';
+import React, { useState } from 'react';
 
 import { usePreviewImage } from '../../hooks/UsePreviewImage';
+
 import { View } from 'react-native';
 import { Avatar, Caption, Checkbox, IconButton, List } from 'react-native-paper';
+
 import styles, { theme } from '../../styles';
 
 export interface MediaListItemProps {

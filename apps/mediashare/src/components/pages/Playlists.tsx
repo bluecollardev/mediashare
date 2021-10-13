@@ -15,7 +15,7 @@ import { FAB } from 'react-native-paper';
 import { RefreshControl } from 'react-native';
 
 import { View } from 'react-native';
-import { List } from 'native-base';
+import { List } from 'react-native-paper';
 import { MediaListItem } from '../layout/MediaListItem';
 import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
 
@@ -53,27 +53,25 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
 
   return (
     <View>
-      <List>
-        {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-        {sortedList.map((item, idx) => {
-          const { title, description, mediaIds, imageSrc } = item;
-          return (
-            <MediaListItem
-              key={item._id}
-              title={title}
-              description={`${shortenText(description, 40)}\n${mediaIds.length || 0} videos`}
-              showThumbnail={true}
-              image={imageSrc}
-              showActions={showActions}
-              selectable={selectable}
-              onViewDetail={() => {
-                onViewDetailClicked(item);
-              }}
-              onChecked={(checked) => onChecked(checked, item)}
-            />
-          );
-        })}
-      </List>
+      {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
+      {sortedList.map((item, idx) => {
+        const { title, description, mediaIds, imageSrc } = item;
+        return (
+          <MediaListItem
+            key={item._id}
+            title={title}
+            description={`${shortenText(description, 40)}\n${mediaIds.length || 0} videos`}
+            showThumbnail={true}
+            image={imageSrc}
+            showActions={showActions}
+            selectable={selectable}
+            onViewDetail={() => {
+              onViewDetailClicked(item);
+            }}
+            onChecked={(checked) => onChecked(checked, item)}
+          />
+        );
+      })}
     </View>
   );
 };

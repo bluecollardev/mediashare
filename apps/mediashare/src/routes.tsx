@@ -1,7 +1,5 @@
 import React from 'react';
 import Login from './components/pages/Login';
-import Signup from './components/pages/Signup';
-import ResetPassword from './components/pages/ResetPassword';
 import Browse from './components/pages/Browse';
 import AddFromCollection from './components/pages/AddFromCollection';
 import AddMedia from './components/pages/AddMedia';
@@ -27,16 +25,6 @@ const routeConfig = {
     name: 'login',
     component: Login,
     options: { title: ' ', header: undefined },
-  },
-  signup: {
-    name: 'signup',
-    component: Signup,
-    options: { title: 'Account Registration', header: undefined },
-  },
-  resetPassword: {
-    name: 'resetPassword',
-    component: ResetPassword,
-    options: { title: 'Reset Password', header: undefined },
   },
   browse: {
     name: 'browse',
