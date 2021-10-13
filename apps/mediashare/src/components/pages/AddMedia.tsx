@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Image } from 'react-native';
-import { Button, CardItem, Icon, Text } from 'native-base';
+import { View } from 'react-native';
+import { Button } from 'react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
 import Config from 'react-native-config';
-
-import { useAppSelector } from '../../state';
 import { addMediaItem, createThumbnail } from '../../state/modules/media-items';
 import { setError } from '../../state/modules/app-state/';
 
@@ -28,26 +26,21 @@ const maxUpload = parseInt(Config.MAX_UPLOAD, 10) || 104857600;
 export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
   const dispatch = useDispatch();
 
-  const author = useAppSelector((state) => state?.user.username);
+  // const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState(MediaCategoryType.Free);
   const [documentUri, setDocumentUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
-  const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
+  // const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const isValid = function () {
-    const test = !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !minLength(1)(documentUri);
-    return test;
+    return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !minLength(1)(documentUri);
   };
 
   const options = [];
   for (const value in MediaCategoryType) {
     options.push(value);
   }
-
-  const onTitleChange = setTitle;
-  const onDescriptionChange = setDescription;
-  const onCategoryChange = setCategory;
 
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
@@ -59,50 +52,29 @@ export const AddMedia = ({ startLoad, endLoad }: PageProps) => {
       <KeyboardAvoidingPageContent>
         <MediaCard
           title={title}
-          author={author}
           description={description}
+          mediaSrc={documentUri}
+          thumbnail={thumbnail}
+          showThumbnail={true}
           category={category}
           categoryOptions={options}
-          onCategoryChange={onCategoryChange as any}
-          onTitleChange={onTitleChange}
-          onDescriptionChange={onDescriptionChange}
+          onCategoryChange={(e: any) => {
+            setCategory(e);
+          }}
+          onTitleChange={setTitle}
+          onDescriptionChange={setDescription}
           isEdit={true}
-        >
-          <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {documentUri ? (
-              <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
-            ) : (
-              <Button
-                color={theme.colors.accentDarker}
-                bordered
-                style={{ width: '100%', borderColor: theme.colors.accentDarker, borderWidth: 1 }}
-                hasText={true}
-                onPress={getDocument}
-                full={true}
-              >
-                <Icon name="cloud-upload" style={{ color: theme.colors.accentDarker }} />
-                <Text style={{ textAlign: 'center', color: theme.colors.accentDarker }}>Upload From Device</Text>
-              </Button>
-            )}
-          </CardItem>
-          {/* <CardItem button onPress={getDocument} cardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 15 }}>
-            {documentUri ? (
-              <Image source={{ uri: mediaSrc }} style={{ height: 200, width: '100%' }} />
-            ) : (
-              <Button
-                color={theme.colors.primary}
-                bordered
-                style={{ width: '100%', borderColor: theme.colors.primary, borderWidth: 1 }}
-                hasText={true}
-                onPress={getDocument}
-                full={true}
-              >
-                <Icon name="image" style={{ color: theme.colors.primary }} />
-                <Text style={{ textAlign: 'center', color: theme.colors.primary }}>Upload Preview Image</Text>
-              </Button>
-            )}
-          </CardItem> */}
-        </MediaCard>
+          isPlayable={true}
+          topDrawer={() => (
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <View style={{ flex: 1 }}>
+                <Button onPress={getDocument} icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
+                  {documentUri ? 'Replace Media' : 'Upload Media'}
+                </Button>
+              </View>
+            </View>
+          )}
+        />
       </KeyboardAvoidingPageContent>
       <PageActions>
         <ActionButtons

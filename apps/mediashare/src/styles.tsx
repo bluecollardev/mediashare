@@ -61,6 +61,7 @@ const styles: any = StyleSheet.create({
     display: 'flex',
     width: '100%',
     height: 50, // Make sure actionButtons is the same height!
+    backgroundColor: '#ffffff',
   },
   actionButtons: {
     display: 'flex',

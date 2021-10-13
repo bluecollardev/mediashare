@@ -77,7 +77,7 @@ export function PageContainer({ children }: PageContainerProps) {
             <Text style={{ fontSize: 11 }}>{app.error.message}</Text>
           </Card.Content>
           <Dialog.Actions style={{ paddingTop: 0 }}>
-            <Button mode={'text'} dark color={theme.colors.primary} onPress={hideDialog}>
+            <Button mode="text" dark color={theme.colors.primary} onPress={hideDialog}>
               Dismiss
             </Button>
           </Dialog.Actions>

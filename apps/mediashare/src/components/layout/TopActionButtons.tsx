@@ -15,10 +15,10 @@ export interface TopActionButtonsProps {
 export const TopActionButtons = ({ leftAction, rightAction, leftLabel, rightLabel, rightIcon = 'add-box', leftIcon = 'add-box' }: TopActionButtonsProps) => {
   return (
     <View style={{ flexDirection: 'row' }}>
-      <Button mode={'text'} color={theme.colors.primary} dark style={{ flex: 1, marginRight: 10 }} icon={leftIcon} onPress={() => leftAction()}>
+      <Button mode="text" color={theme.colors.primary} dark style={{ flex: 1, marginRight: 10 }} icon={leftIcon} onPress={() => leftAction()}>
         {leftLabel}
       </Button>
-      <Button mode={'text'} icon={rightIcon} dark color={theme.colors.primary} style={{ flex: 1 }} onPress={() => rightAction()}>
+      <Button mode="text" icon={rightIcon} dark color={theme.colors.primary} style={{ flex: 1 }} onPress={() => rightAction()}>
         {rightLabel}
       </Button>
     </View>

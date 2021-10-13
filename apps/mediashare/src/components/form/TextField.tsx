@@ -11,18 +11,19 @@ export interface TextFieldProps {
   disabled?: boolean;
 }
 
-export default function TextField({ value = '', validator = (val) => false, onChangeText, disabled = false, label = '' }: TextFieldProps) {
+export function TextField({ value = '', validator = () => false, onChangeText, disabled = false, label = '', ...rest }: TextFieldProps & any) {
   return (
     <TextInput
       dense
-      mode={'outlined'}
-      textAlign={'left'}
+      mode="outlined"
+      textAlign="left"
       label={label}
       value={value}
       error={validator(value)}
       onChangeText={onChangeText}
       disabled={disabled}
       style={styles.textField}
+      {...rest}
     />
   );
 }

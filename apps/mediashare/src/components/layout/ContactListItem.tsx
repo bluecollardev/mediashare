@@ -42,7 +42,7 @@ function ContactListItem({
         right={() => (
           <View style={{ paddingVertical: 5 }}>
             {showFollow && (
-              <Button mode={'outlined'} style={styles.followButton}>
+              <Button mode="outlined" style={styles.followButton}>
                 Follow
               </Button>
             )}

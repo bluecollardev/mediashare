@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { UserDto } from '../../rxjs-api';
 import { useAppSelector } from '../../state';
 import { loadUser, updateAccount } from '../../state/modules/user';
-import TextField from '../form/TextField';
+import { TextField } from '../form/TextField';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import PageContainer, { PageProps } from '../layout/PageContainer';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -100,7 +100,7 @@ function AccountEdit({ route }: AccountEditProps) {
       )}
       <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
         <Avatar.Image source={{ uri: state.imageSrc }} size={128} />
-        <Button mode={'outlined'} onPress={() => getDocument()} style={{ marginTop: 15 }}>
+        <Button mode="outlined" onPress={() => getDocument()} style={{ marginTop: 15 }}>
           Upload a Profile Picture
         </Button>
       </View>

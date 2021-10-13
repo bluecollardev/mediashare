@@ -5,7 +5,7 @@ import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'rea
 import Video from 'react-native-video';
 import SwitchSelector from 'react-native-switch-selector';
 import { descriptionValidator, titleValidator } from './formConfig';
-
+import { TextField } from '../form/TextField';
 export const DEFAULT_IMAGE = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png';
 
@@ -133,25 +133,19 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       <DisplayPreviewOrVideo />
       {topDrawer && <TopDrawer />}
       <View style={{ paddingTop: 20, paddingBottom: 40 }}>
-        <TextInput
-          dense
-          mode={'outlined'}
-          textAlign={'left'}
-          label={'Title'}
+        <TextField
+          label="Title"
           value={title}
-          error={titleValidator(title)}
+          error={title && titleValidator(title)}
           onChangeText={(text) => onTitleChange(text)}
           disabled={isReadOnly}
-          style={{ marginBottom: 10 }}
         />
-        <TextInput
+        <TextField
           multiline={true}
-          mode={'outlined'}
-          textAlign={'left'}
-          label={'Description'}
+          label="Description"
           value={description}
           numberOfLines={5}
-          error={descriptionValidator(description)}
+          error={title && descriptionValidator(description)}
           onChangeText={(text) => onDescriptionChange(text)}
           disabled={isReadOnly}
         />
@@ -172,7 +166,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             />
           </Card.Content>
         </Card>
-        <View style={{ marginTop: 5, marginBottom: 40 }}>{children}</View>
+        <View style={{ marginBottom: 40 }}>{children}</View>
       </View>
     </View>
   ) : (

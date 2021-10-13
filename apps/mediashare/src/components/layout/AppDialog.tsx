@@ -27,10 +27,10 @@ function AppDialog({ leftActionLabel, rightActionLabel, leftActionCb, rightActio
           <Text>{subtitle}</Text>
         </Card.Content>
         <Dialog.Actions style={{ paddingTop: 0 }}>
-          <Button mode={'text'} color={theme.colors.primaryText} onPress={leftActionCb}>
+          <Button mode="text" color={theme.colors.primaryText} onPress={leftActionCb}>
             {leftActionLabel}
           </Button>
-          <Button mode={'contained'} dark color={theme.colors.error} onPress={rightActionCb}>
+          <Button mode="contained" dark color={theme.colors.error} onPress={rightActionCb}>
             {rightActionLabel}
           </Button>
         </Dialog.Actions>
