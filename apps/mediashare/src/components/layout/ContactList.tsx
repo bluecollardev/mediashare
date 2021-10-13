@@ -6,15 +6,20 @@ import { List } from 'react-native-paper';
 
 export interface ContactListProps {
   navigation?: any;
-  contacts?: UserDto[];
-  showGroups?: boolean;
-  showActions?: boolean;
-  selectable?: boolean;
-  onClick?: (userId) => void;
   listItemProps?: any;
+  contacts?: UserDto[];
+  showActions?: boolean;
+  showGroups?: boolean;
+  onViewDetail?: (userId) => void;
+  selectable?: boolean;
 }
 
-export const ContactList: React.FC<ContactListProps> = ({ contacts = [], onClick = () => {} }) => {
+export const ContactList: React.FC<ContactListProps> = ({
+  contacts = [],
+  selectable,
+  showActions,
+  onViewDetail = () => {},
+}) => {
   const mappedAndKeyed = R.values(R.groupBy(contacts, (user) => (user?.firstName ? user.firstName[0].toUpperCase() : user.username[0].toUpperCase()))).sort(
     (a, b) => {
       try {
@@ -41,7 +46,9 @@ export const ContactList: React.FC<ContactListProps> = ({ contacts = [], onClick
                   avatar={item.imageSrc}
                   showLetterLabel={!i}
                   userId={item._id}
-                  onClick={onClick}
+                  selectable={selectable}
+                  onViewDetail={onViewDetail}
+                  showActions={showActions}
                 />
               );
             })}

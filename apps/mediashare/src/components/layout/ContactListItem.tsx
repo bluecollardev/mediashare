@@ -1,49 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { View, StyleSheet } from 'react-native';
-import { Avatar, Button, Divider, Headline, List } from 'react-native-paper';
+import { Avatar, Button, Checkbox, Divider, Headline, List } from 'react-native-paper';
 import { theme } from '../../styles';
 
 interface ContactListItemProps {
-  description: string;
+  userId: string;
   title: string;
+  description: string;
   avatar: string;
   showFollow?: boolean;
-  userId: string;
-  onClick: (userId) => void;
+  selectable?: boolean;
+  checked?: boolean;
+  onChecked?: (bool: boolean) => void;
+  onViewDetail?: (userId: any) => void;
+  showActions?: boolean;
   showLetterLabel: boolean;
 }
 
-function ContactListItem({
+export const ContactListItem: React.FC<ContactListItemProps> = ({
   showFollow = true,
   description = '',
   title = '',
   avatar,
   userId = '',
   showLetterLabel = false,
-  onClick = () => {},
-}: ContactListItemProps) {
+  onViewDetail,
+  selectable,
+  onChecked = () => {},
+  checked,
+}: ContactListItemProps) => {
+  const [isChecked, setIsChecked] = useState(checked);
+
   return (
     <View>
       <List.Item
         key={userId}
         style={styles.listItem}
-        onPress={() => onClick(userId)}
+        onPress={onPress}
         title={title}
         description={`${description}`}
-        left={() => (
-          <View style={styles.leftOuterWrapper}>
-            <View style={styles.letterLabelWrapper}>{showLetterLabel && <Headline style={styles.headline}>{title[0]}</Headline>}</View>
-            <View style={styles.avatarWrapper}>
-              <Avatar.Image source={avatar ? { uri: avatar } : undefined} size={40} />
+        left={() =>
+          selectable ? (
+            <View style={styles.leftOuterWrapper}>
+              <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.success : theme.colors.disabled} />
+              <View style={styles.avatarWrapper}>
+                <Avatar.Image source={avatar ? { uri: avatar } : undefined} size={40} />
+              </View>
             </View>
-          </View>
-        )}
+          ) : (
+            <View style={styles.leftOuterWrapper}>
+              <View style={styles.letterLabelWrapper}>{showLetterLabel && <Headline style={styles.headline}>{title[0]}</Headline>}</View>
+              <View style={styles.avatarWrapper}>
+                <Avatar.Image source={avatar ? { uri: avatar } : undefined} size={40} />
+              </View>
+            </View>
+          )
+        }
         right={() => (
           <View style={{ paddingVertical: 5 }}>
             {showFollow && (
-              <Button mode="outlined" style={styles.followButton}>
-                Follow
+              <Button mode={selectable ? 'text' : 'outlined'} style={styles.followButton} disabled={selectable}>
+                Following
               </Button>
             )}
           </View>
@@ -52,7 +70,16 @@ function ContactListItem({
       <Divider />
     </View>
   );
-}
+
+  async function onPress() {
+    if (selectable) {
+      setIsChecked(!isChecked);
+      onChecked(!isChecked);
+    } else if (onViewDetail) {
+      onViewDetail(userId);
+    }
+  }
+};
 
 const styles = StyleSheet.create({
   container: {

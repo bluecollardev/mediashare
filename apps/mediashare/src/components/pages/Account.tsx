@@ -38,7 +38,7 @@ const Contacts = ({ selectable = false, showActions = false }) => {
         contacts={contacts}
         showGroups={false}
         showActions={showActions}
-        onClick={viewProfileById}
+        onViewDetail={viewProfileById}
         selectable={selectable}
         listItemProps={{
           iconRight: 'visibility',

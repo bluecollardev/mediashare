@@ -12,12 +12,12 @@ export interface MediaListItemProps {
   title?: string;
   description?: string;
   image?: string;
-  selectable?: boolean;
-  showActions?: boolean;
   showThumbnail?: boolean;
+  selectable?: boolean;
   checked?: boolean;
-  onViewDetail?: () => void;
   onChecked?: (bool: boolean) => void;
+  onViewDetail?: () => void;
+  showActions?: boolean;
   iconRight?: string;
   iconRightColor?: string;
 }
@@ -44,14 +44,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       description={() => {
         return <Caption>{description}</Caption>;
       }}
-      onPress={() => {
-        if (selectable) {
-          setIsChecked(!isChecked);
-          onChecked(!isChecked);
-        } else if (onViewDetail) {
-          onViewDetail();
-        }
-      }}
+      onPress={onPress}
       left={() =>
         selectable ? (
           <View style={styles.mediaListItem}>
@@ -81,4 +74,13 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       right={() => showActions === true && <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} />}
     />
   );
+
+  async function onPress() {
+    if (selectable) {
+      setIsChecked(!isChecked);
+      onChecked(!isChecked);
+    } else if (onViewDetail) {
+      onViewDetail();
+    }
+  }
 };
