@@ -4,7 +4,12 @@ import { useDispatch } from 'react-redux';
 import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
-import { getPlaylistById, removeUserPlaylist, updateUserPlaylist } from '../../state/modules/playlists';
+import {
+  findUserPlaylists,
+  getPlaylistById,
+  removeUserPlaylist,
+  updateUserPlaylist
+} from '../../state/modules/playlists';
 import { loadUsers } from '../../state/modules/users';
 
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
@@ -33,7 +38,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   const addToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
   const viewMediaItem = useViewMediaItem();
   const shareWith = useRouteName(ROUTES.shareWith);
-  const playlists = usePlaylists();
+  const goToPlaylists = usePlaylists();
 
   const dispatch = useDispatch();
 
@@ -112,7 +117,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
         )}
         {!build.forFreeUser && selectedItems && selectedItems.length > 0 && (
-          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Remove" cancelLabel="Cancel" rightIcon="delete" />
+          <ActionButtons actionCb={confirmDeletePlaylistItems} cancelCb={cancelDeletePlaylistItems} actionLabel="Remove" cancelLabel="Cancel" rightIcon="delete" />
         )}
       </PageActions>
       {!build.forFreeUser && (!selectedItems || selectedItems.length === 0) && (
@@ -136,7 +141,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
     </PageContainer>
   );
 
-  function withIds(mediaIds: string[]) {
+  function saveWithIds(mediaIds: string[]) {
     return dispatch(
       updateUserPlaylist({
         title: title,
@@ -172,20 +177,20 @@ export const PlaylistDetail = ({ route }: PageProps) => {
     setSelectedItems(updatedItems);
   }
 
-  async function confirmDelete() {
+  async function confirmDeletePlaylistItems() {
     await saveMediaUpdates();
     clearCheckboxSelection();
     resetData();
   }
 
-  async function cancelDelete() {
+  async function cancelDeletePlaylistItems() {
     clearCheckboxSelection();
     resetData();
   }
 
   // TODO: We have to do this automatically, and on!
   /* async function save() {
-    await withIds(selectedPlaylist.mediaIds);
+    await saveWithIds(selectedPlaylist.mediaIds);
     setIsLoaded(false);
     await loadData();
   } */
@@ -194,7 +199,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
     const mediaIds = selectedPlaylist.mediaIds || [];
     const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
 
-    await withIds(filtered);
+    await saveWithIds(filtered);
     setIsLoaded(false);
     await loadData();
   }
@@ -209,7 +214,8 @@ export const PlaylistDetail = ({ route }: PageProps) => {
 
   async function deletePlaylist() {
     await dispatch(removeUserPlaylist(playlistId));
-    await playlists();
+    await dispatch(findUserPlaylists({}));
+    await goToPlaylists();
   }
 };
 

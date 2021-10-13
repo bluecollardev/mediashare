@@ -89,7 +89,7 @@ const routeConfig = {
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
     component: AddToPlaylist,
-    options: { title: 'Add To Playlist', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Add To Playlist', header: (props) => <AppHeader {...props} searchable={true} /> },
   },
   addMedia: {
     name: 'addMediaItem',
@@ -99,7 +99,7 @@ const routeConfig = {
   shareWith: {
     name: 'shareWith',
     component: ShareWith,
-    options: { title: 'Share With', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Share With', header: (props) => <AppHeader {...props} searchable={true} /> },
   },
   user: {
     name: 'user',

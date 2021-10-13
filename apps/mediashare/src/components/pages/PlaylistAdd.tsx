@@ -1,13 +1,13 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useGoBack, useRouteName, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
 
 import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
 import { findMediaItems } from '../../state/modules/media-items';
-import { addUserPlaylist, findUserPlaylists } from '../../state/modules/playlists';
+import { addUserPlaylist, findUserPlaylists, getPlaylistById } from '../../state/modules/playlists';
 
 import { CreatePlaylistDto, PlaylistCategoryType } from '../../rxjs-api';
 
@@ -15,7 +15,6 @@ import { withLoadingSpinner, LoadingSpinnerProps } from '../hoc/withLoadingSpinn
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
-// import { MediaList, MediaListType } from '../layout/MediaList';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 import AppUpload from '../layout/AppUpload';
@@ -41,6 +40,7 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selected, setSelected] = useState([]);
   const goBack = useGoBack();
+  const edit = useRouteWithParams(ROUTES.playlistEdit);
 
   const clearAndGoBack = function () {
     // @ts-ignore
@@ -52,11 +52,7 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
     goBack();
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const goToItem = useRouteWithParams(ROUTES.mediaItemDetail);
-  const goToPlaylists = useRouteName(ROUTES.playlists);
-
-  const actionLabel = 'Save';
+  const actionLabel = 'Create';
   const cancelLabel = 'Cancel';
   const cancelCb = clearAndGoBack;
 
@@ -64,21 +60,11 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
     return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category);
   };
 
-  /* const updateSelection = function (bool: boolean, item: MediaListType) {
-    const filtered = bool ? selected.concat([item._id]) : selected.filter((key) => key !== item._id);
-    setSelected(filtered);
-  };
-
-  const onMediaItemClick = (e) => {
-    goToItem({ mediaId: e._id });
-  }; */
-
   const options = [];
 
   for (const value in PlaylistCategoryType) {
     options.push(value);
   }
-  // const list = useAppSelector((state) => state.mediaItems.mediaItems);
 
   const onUpload = (uri: string) => {
     setImageSrc(uri);
@@ -90,23 +76,6 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
       setIsLoaded(true);
     }
   }, [loaded, dispatch]);
-
-  const saveItem = async function () {
-    const dto: CreatePlaylistDto = {
-      title,
-      category: category,
-      description,
-      mediaIds: selected,
-      imageSrc,
-    };
-    // const res = await dispatch(addUserPlaylist(dto));
-    await dispatch(addUserPlaylist(dto));
-    await dispatch(findUserPlaylists({}));
-
-    // const item = res as any;
-    // goToItem({ playlistId: item.payload.playlist._id });
-    goToPlaylists();
-  };
 
   return (
     <PageContainer>
@@ -135,19 +104,11 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
             </View>
           )}
         />
-        {/* <MediaList
-          list={list}
-          selectable={true}
-          showThumbnail={true}
-          onViewDetail={onMediaItemClick}
-          addItem={(item) => updateSelection(true, item)}
-          removeItem={(item) => updateSelection(false, item)}
-        /> */}
       </KeyboardAvoidingPageContent>
       <PageActions>
         <ActionButtons
           rightIcon="check-circle"
-          actionCb={() => saveItem()}
+          actionCb={() => savePlaylist()}
           cancelCb={cancelCb}
           actionLabel={actionLabel}
           cancelLabel={cancelLabel}
@@ -156,6 +117,27 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
       </PageActions>
     </PageContainer>
   );
+
+  async function savePlaylist() {
+    const dto: CreatePlaylistDto = {
+      title,
+      category: category,
+      description,
+      mediaIds: selected,
+      imageSrc,
+    };
+
+    // @ts-ignore TODO: Fix types on dispatch?
+    const { payload } = await dispatch(addUserPlaylist(dto));
+    const playlistId = payload.playlist._id;
+    await dispatch(findUserPlaylists({}));
+    await dispatch(getPlaylistById(playlistId));
+    editPlaylist(playlistId);
+  }
+
+  async function editPlaylist(playlistId) {
+    edit({ playlistId });
+  }
 };
 
 export default withLoadingSpinner(PlaylistAdd);

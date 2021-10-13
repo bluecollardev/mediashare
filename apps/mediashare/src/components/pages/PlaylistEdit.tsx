@@ -6,11 +6,11 @@ import { getPlaylistById, updateUserPlaylist } from '../../state/modules/playlis
 
 import { PlaylistCategoryType, MediaItem } from '../../rxjs-api';
 
-import { useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
+import { usePlaylists, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { View } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, IconButton } from 'react-native-paper';
 import { AppUpload } from '../layout/AppUpload';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
@@ -20,8 +20,12 @@ import { ROUTES } from '../../routes';
 
 import { theme } from '../../styles';
 
+const actionModes = { delete: 'delete', default: 'default' };
+
 const PlaylistEdit = ({ navigation, route }: PageProps) => {
   const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
+  const onViewMediaItemClicked = useViewMediaItem();
+  const goToPlaylists = usePlaylists();
 
   const dispatch = useDispatch();
 
@@ -29,6 +33,8 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
 
   const { loaded, selectedPlaylist } = useAppSelector((state) => state.playlist);
   const [isLoaded, setIsLoaded] = useState(loaded);
+  const [isSelectable, setIsSelectable] = useState(false);
+  const [actionMode, setActionMode] = useState(actionModes.default);
 
   const [title, setTitle] = useState(selectedPlaylist?.title);
   const [description, setDescription] = useState(selectedPlaylist?.description);
@@ -46,8 +52,6 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   for (const value in PlaylistCategoryType) {
     options.push(value);
   }
-
-  const onViewMediaItemClicked = useViewMediaItem();
 
   const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
 
@@ -92,7 +96,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
               </View>
               <View style={{ flex: 4 }}>
                 <AppUpload onUpload={onUpload}>
-                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
+                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.primary} compact>
                     Change Cover Photo
                   </Button>
                 </AppUpload>
@@ -100,51 +104,55 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
             </View>
           )}
         />
-
-        {!selectedItems ||
-          (selectedItems.length === 0 && (
-            <Button
-              icon="playlist-add"
-              color={theme.colors.primary}
-              mode="contained"
-              style={{ width: '100%', marginTop: 10, marginBottom: 10 }}
-              onPress={() => onAddToPlaylistClicked({ playlistId })}
-              compact
-              dark
-            >
-              Add To Playlist
-            </Button>
-          ))}
+        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+          <IconButton
+            icon="rule"
+            color={isSelectable ? theme.colors.primary : theme.colors.disabled}
+            style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
+            onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+          />
+          <Button
+            icon="playlist-add"
+            color={theme.colors.primary}
+            mode="contained"
+            style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
+            onPress={() => onAddToPlaylistClicked({ playlistId })}
+            disabled={actionMode === actionModes.delete}
+            compact
+            dark
+          >
+            Add To Playlist
+          </Button>
+        </View>
         <MediaList
           key={clearSelectionKey}
           onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}
           list={items}
-          selectable={true}
-          showActions={!selectedItems || selectedItems.length === 0}
+          selectable={isSelectable}
+          showActions={!isSelectable}
           removeItem={onRemoveItem}
           addItem={onAddItem}
           showThumbnail={true}
         />
       </KeyboardAvoidingPageContent>
       <PageActions>
-        {!selectedItems ||
-          (selectedItems.length === 0 && (
-            <ActionButtons
-              actionCb={() => saveMediaUpdates()}
-              cancelCb={cancelCb}
-              actionLabel={actionLabel}
-              cancelLabel={cancelLabel}
-              rightIcon={'check-circle'}
-            />
-          ))}
-        {selectedItems && selectedItems.length > 0 && (
-          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Remove" cancelLabel="Cancel" rightIcon="delete" />
+        {!isSelectable && (
+          <ActionButtons actionCb={() => savePlaylist()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} rightIcon={'check-circle'} />
+        )}
+        {isSelectable && (
+          <ActionButtons
+            actionCb={confirmDeletePlaylistItems}
+            cancelCb={cancelDeletePlaylistItems}
+            actionLabel="Remove"
+            cancelLabel="Cancel"
+            rightIcon="delete"
+          />
         )}
       </PageActions>
     </PageContainer>
   );
 
-  function withIds(mediaIds: string[]) {
+  async function saveWithIds(mediaIds: string[]) {
     return dispatch(
       updateUserPlaylist({
         title: title,
@@ -179,23 +187,51 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
     setSelectedItems(updatedItems);
   }
 
-  async function confirmDelete() {
-    await saveMediaUpdates();
+  async function activateDeleteMode() {
+    setActionMode(actionModes.delete);
+    setIsSelectable(true);
+  }
+
+  async function confirmDeletePlaylistItems() {
+    await savePlaylistItems();
+    setActionMode(actionModes.default);
     clearCheckboxSelection();
+    setIsSelectable(false);
     resetData();
   }
 
-  async function cancelDelete() {
+  async function cancelDeletePlaylistItems() {
+    setActionMode(actionModes.default);
     clearCheckboxSelection();
+    setIsSelectable(false);
     resetData();
   }
-  async function saveMediaUpdates() {
-    const mediaIds = selectedPlaylist.mediaIds || [];
-    const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
 
-    await withIds(filtered);
+  async function savePlaylist() {
+    const mediaIds = selectedPlaylist.mediaItems.map((item) => item._id) || [];
+    if (isSelectable) {
+      const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
+      await saveWithIds(filtered);
+    } else {
+      await saveWithIds(mediaIds);
+    }
+
     setIsLoaded(false);
-    await loadData();
+    // await loadData();
+    goToPlaylists();
+  }
+
+  async function savePlaylistItems() {
+    const mediaIds = selectedPlaylist.mediaItems.map((item) => item._id) || [];
+    if (isSelectable) {
+      const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
+      await saveWithIds(filtered);
+    } else {
+      await saveWithIds(mediaIds);
+    }
+
+    setIsLoaded(false);
+    // await loadData();
   }
 
   function resetData() {

@@ -68,7 +68,7 @@ export const AddToPlaylist = ({ route }: PageProps) => {
     };
     await dispatch(updateUserPlaylist(dto));
     setIsLoaded(false);
-    viewPlaylist({ playlistId });
+    goBack();
   }
 
   function cancelCb() {
