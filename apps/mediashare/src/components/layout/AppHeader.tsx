@@ -4,7 +4,7 @@ import { Appbar, Searchbar } from 'react-native-paper';
 import { theme } from '../../styles';
 
 export const AppHeader = (props) => {
-  const { options, previous, navigation, searchable = false } = props;
+  const { options, back, navigation, searchable = false } = props;
 
   const [searchIsActive, setSearchIsActive] = useState(false);
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
@@ -35,15 +35,15 @@ export const AppHeader = (props) => {
       )}
       {searchable && !searchIsActive && (
         <>
-          {previous && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
+          {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
           <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingLeft: '15%' }} />
           <Appbar.Action icon="search" color="#ffffff" onPress={() => enableSearch()} />
         </>
       )}
       {!searchable && (
         <>
-          {previous && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
-          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingRight: previous ? '15%' : 0 }} />
+          {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
+          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingRight: back ? '15%' : 0 }} />
         </>
       )}
     </Appbar.Header>
