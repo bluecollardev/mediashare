@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { TextInput } from 'react-native-paper';
+import styles from '../../styles';
 
 export interface TextFieldProps {
   label?: string;
@@ -21,7 +22,7 @@ export default function TextField({ value = '', validator = (val) => false, onCh
       error={validator(value)}
       onChangeText={onChangeText}
       disabled={disabled}
-      style={{ marginBottom: 10 }}
+      style={styles.textField}
     />
   );
 }

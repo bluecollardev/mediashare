@@ -128,13 +128,13 @@ export const Videos = () => {
   return (
     <ScrollView
       contentInset={{ bottom: 120 }}
-      contentContainerStyle={{ height: '100%', flex: 1, backgroundColor: theme.colors.background, flexDirection: 'row', flexWrap: 'wrap' }}
+      contentContainerStyle={styles.tabContent}
     >
       {sortedList.map((item) => {
         const { _id, title, description, thumbnail } = item;
 
         return (
-          <Card key={`item_${_id}`} onPress={() => viewMediaItem(item)} style={{ flexBasis: '50%', padding: 3, backgroundColor: 'transparent' }}>
+          <Card key={`item_${_id}`} onPress={() => viewMediaItem(item)} style={styles.card50} elevation={0}>
             <Card.Title title={title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(description, 40)}`} />
             <Card.Content>
               <ImageBackground source={{ uri: thumbnail }} resizeMode="cover" style={{ width: '100%', height: 100 }}>

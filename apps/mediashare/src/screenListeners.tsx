@@ -6,7 +6,7 @@
 import { StackActions } from '@react-navigation/native';
 // https://github.com/react-navigation/react-navigation/issues/8583
 // const TAB_TO_RESET = 'HomeTab';
-export const bottomTabSwitchActions = ({ navigation }) => ({
+export const bottomTabListeners = ({ navigation }) => ({
   tabPress: (e) => {
     /* TODO: Prevent default action
     if (!user.firstName) {

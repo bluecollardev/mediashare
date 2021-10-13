@@ -49,13 +49,13 @@ const theme: Theme = {
 const styles: any = StyleSheet.create({
   pageContainer: {
     height: '100%',
+    backgroundColor: '#ffffff',
   },
   pageContent: {
     paddingTop: 5,
     paddingHorizontal: 5,
     height: '100%',
     flex: 1,
-    backgroundColor: '#ffffff',
   },
   pageActions: {
     display: 'flex',
@@ -88,6 +88,13 @@ const styles: any = StyleSheet.create({
   mediaListItemThumbnail: {
     marginLeft: 5,
     marginRight: 10,
+  },
+  tabContent: {
+    height: '100%',
+    flex: 1,
+    backgroundColor: '#ffffff',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   tabBar: {
     flexDirection: 'row',
@@ -123,6 +130,15 @@ const styles: any = StyleSheet.create({
   },
   mt: {
     marginTop: 18,
+  },
+  card50: {
+    flexBasis: '50%',
+    padding: 3,
+    backgroundColor: 'transparent',
+  },
+  textField: {
+    marginBottom: 10,
+    backgroundColor: '#fefefe',
   },
 });
 

@@ -18,7 +18,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { ProfileDto } from './rxjs-api';
 
 import * as build from './build';
-import { bottomTabSwitchActions } from './routeActions';
+import { bottomTabListeners } from './screenListeners';
 
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
@@ -126,7 +126,7 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         <PrivateNavigator.Screen
           name={'Browse'}
           component={BrowseNavigation}
-          listeners={bottomTabSwitchActions}
+          listeners={bottomTabListeners}
         />
       )}
 
@@ -134,7 +134,7 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         <PrivateNavigator.Screen
           name={'Playlists'}
           component={PlaylistsNavigation}
-          listeners={bottomTabSwitchActions}
+          listeners={bottomTabListeners}
         />
       )}
 
@@ -142,7 +142,7 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
         <PrivateNavigator.Screen
           name={'Media'}
           component={MediaNavigation}
-          listeners={bottomTabSwitchActions}
+          listeners={bottomTabListeners}
         />
       )}
       <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} initialParams={{ userId: user._id }} />
