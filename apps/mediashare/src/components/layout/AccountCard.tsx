@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Avatar, Caption, Title, Subheading } from 'react-native-paper';
 
 import { theme } from '../../styles';
@@ -14,6 +14,7 @@ interface AccountCardProps {
   email: string;
   phoneNumber: string;
   showSocial: boolean;
+  onProfileImageClicked?: () => void;
 }
 
 // function AccountCard({ image, likes, shares, shared, fullName: title, phoneNumber: contact, email: company }: AccountCardProps) {
@@ -27,12 +28,14 @@ interface AccountCardProps {
 //   shared?: number;
 // }
 
-export function AccountCard({ title, email, image, likes, shares, shared, showSocial = false }: AccountCardProps) {
+export function AccountCard({ title, email, image, likes, shares, shared, showSocial = false, onProfileImageClicked = () => {} }: AccountCardProps) {
   return (
     <View>
       <View style={styles.container}>
         <View style={{ flex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Avatar.Image source={{ uri: image }} />
+          <TouchableWithoutFeedback onPress={onProfileImageClicked}>
+            <Avatar.Image source={{ uri: image }} />
+          </TouchableWithoutFeedback>
         </View>
         <View style={{ flex: 3 }}>
           <Title style={{ color: '#222222' }}>{title}</Title>

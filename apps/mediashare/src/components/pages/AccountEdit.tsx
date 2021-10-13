@@ -22,6 +22,7 @@ import { switchMap, take } from 'rxjs/operators';
 import * as R from 'remeda';
 import { theme } from '../../styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { AccountCard } from '../layout/AccountCard';
 
 const awsUrl = Config.AWS_URL;
 interface AccountEditProps extends PageProps {}
@@ -87,8 +88,21 @@ function AccountEdit({ route }: AccountEditProps) {
       )
       .subscribe(() => viewAccount({ userId }));
   };
+
+  const fullName = state.firstName || state.lastName ? `${state.firstName} ${state.lastName}` : 'Unnamed User';
   return (
     <PageContainer>
+      <AccountCard
+        title={fullName}
+        email={state.email}
+        phoneNumber={state.phoneNumber}
+        image={user.imageSrc}
+        showSocial={true}
+        likes={state.likesCount}
+        shared={state.sharedCount}
+        shares={state.sharesCount}
+        onProfileImageClicked={() => getDocument()}
+      />
       {withoutName() && (
         <Card>
           <Card.Title
@@ -98,12 +112,6 @@ function AccountEdit({ route }: AccountEditProps) {
           />
         </Card>
       )}
-      <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
-        <Avatar.Image source={{ uri: state.imageSrc }} size={128} />
-        <Button mode="outlined" onPress={() => getDocument()} style={{ marginTop: 15 }}>
-          Upload a Profile Picture
-        </Button>
-      </View>
       <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.container}>
         <TextField onChangeText={(text) => onUpdate({ firstName: text })} label={'First Name'} value={state.firstName} disabled={!isLoaded} />
         <TextField onChangeText={(text) => onUpdate({ lastName: text })} label={'Last Name'} value={state.lastName} disabled={!isLoaded} />
