@@ -3,12 +3,11 @@ import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../state';
 import { findUserPlaylists } from '../../state/modules/playlists';
-import { findMediaItems } from '../../state/modules/media-items';
 
-import { PlaylistResponseDto } from '../../rxjs-api';
+import { PlaylistResponseDto, PlaylistDto } from '../../rxjs-api';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useViewMediaItem, useViewPlaylistById } from '../../hooks/NavigationHooks';
+import { useViewPlaylistById } from '../../hooks/NavigationHooks';
 
 import { ScrollView } from 'react-native';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
@@ -20,51 +19,77 @@ import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/MediaCard';
 import { PlaylistsComponent } from './Playlists';
 
-import { shortenText } from '../../utils';
-
 import styles, { theme } from '../../styles';
-import { MediaPreview } from '../layout/MediaPreview';
-
-/* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
-  const list = playlist.map((item) => {
-    const keyed = {
-      id: item._id,
-      title: item.title,
-      description: `${item?.mediaItems?.length || 0} Videos`,
-      key: item._id,
-      ...item,
-    };
-    return keyed;
-  });
-  return list;
-} */
 
 export interface BrowseProps {
   list: PlaylistResponseDto[];
   onViewDetailClicked: Function;
 }
 
-export const Articles = () => {
-  const playlists = useAppSelector((state) => state.playlists);
-  const list = playlists?.userPlaylists || [];
+export const SharedArticles = () => {
+  const { sharedItems } = useAppSelector((state) => state?.user);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const list = sharedItems || [];
 
   let sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
-  sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
+  // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 
   return (
     <ScrollView contentContainerStyle={styles.tabContent}>
       <List.Section>
         <List.Subheader>Latest Articles</List.Subheader>
-        {sortedList.slice(0, 2).map((item) => {
-          const { _id, title, description } = item;
+      </List.Section>
+    </ScrollView>
+  );
+};
+
+export const SharedList = () => {
+  const { sharedItems } = useAppSelector((state) => state?.user);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const list = [...new Set(sharedItems)] || []; // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
+
+  let sortedList = list.map((item) => {
+    // const { mediaIds, description } = item;
+    // const itemDescription = `${shortenText(description, 40)}\n${mediaIds.length || 0} videos`;
+    return Object.assign({}, item) as PlaylistDto;
+  });
+
+  // sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
+  // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
+
+  const viewPlaylistAction = useViewPlaylistById();
+  const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item.playlistId });
+
+  return (
+    <ScrollView contentContainerStyle={styles.tabContent}>
+      <PlaylistsComponent list={sortedList} onViewDetailClicked={viewPlaylist} />
+    </ScrollView>
+  );
+};
+export const SharedBlock = () => {
+  const { sharedItems } = useAppSelector((state) => state?.user);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const list = [...new Set(sharedItems)] || []; // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
+
+  let sortedList = list.map((item) => item);
+  sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
+  // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
+
+  return (
+    <ScrollView contentContainerStyle={styles.tabContent}>
+      <List.Section>
+        {sortedList.map((item) => {
+          // @ts-ignore
+          const { playlistId, title, description, author, imageSrc } = item;
           return (
-            <View key={`article_${_id}`} style={{ padding: 15, paddingTop: 0 }}>
+            <View key={`shared_${playlistId}`} style={{ padding: 15, paddingTop: 0 }}>
               <MediaCard
                 title={title}
-                author={'Admin'}
+                author={author}
                 description={description}
                 category={'General'}
+                thumbnail={imageSrc}
                 showSocial={true}
                 showActions={false}
                 showThumbnail={true}
@@ -77,85 +102,11 @@ export const Articles = () => {
   );
 };
 
-export const Playlists = () => {
-  const playlists = useAppSelector((state) => state.playlists);
-  const list = playlists?.userPlaylists || [];
-
-  let sortedList = list.map((item) => {
-    const { mediaIds, description } = item;
-    const itemDescription = `${shortenText(description, 40)}\n${mediaIds.length || 0} videos`;
-    return Object.assign({}, item, { itemDescription });
-  });
-
-  sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
-  sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
-
-  const viewPlaylistAction = useViewPlaylistById();
-  const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
-
-  return (
-    <ScrollView contentContainerStyle={styles.tabContent}>
-      <PlaylistsComponent list={sortedList} onViewDetailClicked={viewPlaylist} />
-    </ScrollView>
-  );
-
-  /*
-  <Card key={`item_${_id}`} onPress={} style={{ flexBasis: '50%', padding: 5, backgroundColor: 'transparent' }}>
-    <Card.Title title={title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(description, 40)}`} />
-    <Card.Cover source={{ uri: imageSrc }} />
-  </Card>
-  */
-};
-
-export const Videos = () => {
-  const dispatch = useDispatch();
-
-  const { loaded, mediaItems } = useAppSelector((state) => state.mediaItems);
-  const [isLoaded, setIsLoaded] = useState(loaded);
-  const list = mediaItems || [];
-
-  useEffect(() => {
-    if (!isLoaded) {
-      loadData().then();
-    }
-  }, [isLoaded, dispatch]);
-
-  let sortedList = list.map((item) => item);
-  sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
-
-  const viewMediaItemAction = useViewMediaItem();
-  const viewMediaItem = (item) => viewMediaItemAction({ mediaId: item._id, uri: item.mediaSrc });
-
-  return (
-    <ScrollView
-      contentInset={{ bottom: 120 }}
-      contentContainerStyle={styles.tabContentQuarters}
-    >
-      {sortedList.map((item) => {
-        const { _id, title, description, thumbnail } = item;
-
-        return (
-          <Card key={`item_${_id}`} onPress={() => viewMediaItem(item)} style={styles.card50} elevation={0}>
-            <Card.Title title={title} titleStyle={{ fontSize: 14 }} subtitle={`${shortenText(description, 40)}`} />
-            <Card.Content>
-              <MediaPreview thumbnail={thumbnail} onPress={() => viewMediaItem(item)} />
-            </Card.Content>
-          </Card>
-        );
-      })}
-    </ScrollView>
-  );
-
-  async function loadData() {
-    dispatch(findMediaItems());
-    setIsLoaded(true);
-  }
-};
-
 const renderScene = SceneMap({
-  playlists: Playlists,
-  videos: Videos,
-  articles: Articles,
+  list: SharedList,
+  // grid: SharedGrid,
+  block: SharedBlock,
+  // articles: SharedArticles,
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -166,9 +117,9 @@ export const Browse = ({}: PageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [index, setIndex] = useState(0);
   const [routes] = React.useState([
-    { key: 'playlists', title: 'Playlists', icon: 'subscriptions' },
-    { key: 'videos', title: 'Videos', icon: 'movie-filter' },
-    { key: 'articles', title: 'Articles', icon: 'library-books' },
+    { key: 'list', title: '', icon: 'view-list' },
+    { key: 'block', title: '', icon: 'article' },
+    // { key: 'grid', title: '', icon: 'apps' },
   ]);
   // Do other stuff
 

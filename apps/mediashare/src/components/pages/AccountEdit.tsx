@@ -49,7 +49,7 @@ function AccountEdit({ route }: AccountEditProps) {
   });
   const user = useAppSelector((state) => state.profile.entity);
   const withoutName = function () {
-    return state.firstName.length < 1 || state.lastName.length < 1;
+    return state?.firstName?.length < 1 || state?.lastName?.length < 1;
   };
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
@@ -89,18 +89,18 @@ function AccountEdit({ route }: AccountEditProps) {
       .subscribe(() => viewAccount({ userId }));
   };
 
-  const fullName = state.firstName || state.lastName ? `${state.firstName} ${state.lastName}` : 'Unnamed User';
+  const fullName = state?.firstName || state?.lastName ? `${state?.firstName} ${state?.lastName}` : 'Unnamed User';
   return (
     <PageContainer>
       <AccountCard
         title={fullName}
-        email={state.email}
-        phoneNumber={state.phoneNumber}
-        image={user.imageSrc}
+        email={state?.email}
+        phoneNumber={state?.phoneNumber}
+        image={user?.imageSrc}
         showSocial={true}
-        likes={state.likesCount}
-        shared={state.sharedCount}
-        shares={state.sharesCount}
+        likes={state?.likesCount}
+        shared={state?.sharedCount}
+        shares={state?.sharesCount}
         onProfileImageClicked={() => getDocument()}
       />
       {withoutName() && (
@@ -113,10 +113,10 @@ function AccountEdit({ route }: AccountEditProps) {
         </Card>
       )}
       <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.container}>
-        <TextField onChangeText={(text) => onUpdate({ firstName: text })} label={'First Name'} value={state.firstName} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ lastName: text })} label={'Last Name'} value={state.lastName} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ email: text })} label={'Email'} value={state.email} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label={'Phone Number'} value={state.phoneNumber} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ firstName: text })} label={'First Name'} value={state?.firstName} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ lastName: text })} label={'Last Name'} value={state?.lastName} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ email: text })} label={'Email'} value={state?.email} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label={'Phone Number'} value={state?.phoneNumber} disabled={!isLoaded} />
       </ScrollView>
       <ActionButtons
         disableAction={withoutName()}

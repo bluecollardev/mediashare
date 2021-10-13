@@ -91,7 +91,6 @@ const styles: any = StyleSheet.create({
     marginRight: 10,
   },
   tabContent: {
-    height: '100%',
     backgroundColor: '#ffffff',
     padding: 5,
   },

@@ -136,7 +136,7 @@ export const Playlists = ({}: PageProps) => {
       )}
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Delete" cancelLabel="Cancel" rightIcon="delete" />
+          <ActionButtons actionCb={confirmPlaylistsToDelete} cancelCb={cancelPlaylistsToDelete} actionLabel="Delete" cancelLabel="Cancel" rightIcon="delete" />
         </PageActions>
       )}
       {!isSelectable && (
@@ -193,13 +193,13 @@ export const Playlists = ({}: PageProps) => {
     setIsSelectable(true);
   }
 
-  async function confirmDelete() {
+  async function confirmPlaylistsToDelete() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
   }
 
-  async function cancelDelete() {
+  async function cancelPlaylistsToDelete() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
