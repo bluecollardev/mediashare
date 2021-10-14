@@ -1,10 +1,9 @@
 import React from 'react';
-import { UserDto } from '../../rxjs-api';
-import ContactListItem from './ContactListItem';
 import * as R from 'remeda';
-import { List } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
 import { NonEmptyArray } from 'remeda/dist/commonjs/_types';
+import { UserDto } from '../../rxjs-api';
+import { List } from 'react-native-paper';
+import { ContactListItem } from './ContactListItem';
 
 export interface ContactListProps {
   navigation?: any;
@@ -13,10 +12,16 @@ export interface ContactListProps {
   showActions?: boolean;
   showGroups?: boolean;
   onViewDetail?: (userId) => void;
+  onChecked?: (bool: boolean, userId: string) => void;
   selectable?: boolean;
 }
 
-export const ContactList: React.FC<ContactListProps> = ({ contacts = [], selectable, showActions, onViewDetail = () => {} }) => {
+export const ContactList: React.FC<ContactListProps> = ({
+  contacts = [],
+  selectable,
+  onChecked = () => {},
+  showActions, onViewDetail = () => {},
+}) => {
   const namedContacts = contacts.filter((user) => !!user.firstName || !!user.lastName);
   const unnamedContacts = contacts.filter((user) => !user.firstName && !user.lastName);
   const mappedAndKeyed = R.values(
@@ -50,8 +55,9 @@ export const ContactList: React.FC<ContactListProps> = ({ contacts = [], selecta
                   showLetterLabel={!idx && (!!firstName || !!lastName)}
                   userId={item._id}
                   selectable={selectable}
+                  onChecked={onChecked}
                   onViewDetail={onViewDetail}
-                  showActions={showActions}
+                  showActions={!selectable && showActions}
                 />
               );
             })}

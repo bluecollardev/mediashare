@@ -7,15 +7,11 @@ import { useAppSelector } from '../../state';
 import { findUserPlaylists, shareUserPlaylist } from '../../state/modules/playlists';
 import { loadUsers } from '../../state/modules/users';
 
-import { UserDto } from '../../rxjs-api';
-
 import { useGoBack, useRouteName } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
-// TODO: Why do we have ContactList and ContactListSelectable as separate components?
-// import { ContactList } from '../layout/ContactList';
-import { ContactListSelectable } from '../layout/ContactListSelectable';
+import { ContactList } from '../layout/ContactList';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -32,7 +28,7 @@ const ShareWith = ({}: PageProps) => {
   const actionCb = async function () {
     await dispatch(
       shareUserPlaylist({
-        userIds: selectedUsers.map((user) => user._id),
+        userIds: selectedUsers,
         playlistIds: playlists.map((playlist) => playlist._id),
       })
     );
@@ -43,8 +39,8 @@ const ShareWith = ({}: PageProps) => {
   const users = useAppSelector((state) => state.users.entities);
   const playlists = useAppSelector((state) => state.playlists.selectedPlaylists);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
-  const updateSelectedUsers = function (bool: boolean, user: UserDto) {
-    const filtered = bool ? selectedUsers.concat([user]) : selectedUsers.filter((item) => item._id !== user._id);
+  const updateSelectedUsers = function (bool: boolean, userId: string) {
+    const filtered = bool ? selectedUsers.concat([userId]) : selectedUsers.filter((item) => item._id !== userId);
     setSelectedUsers(filtered);
   };
 
@@ -65,7 +61,7 @@ const ShareWith = ({}: PageProps) => {
   return (
     <PageContainer>
       <PageContent>
-        <ContactListSelectable items={users} showGroups={true} onChecked={updateSelectedUsers} />
+        <ContactList contacts={users} showGroups={true} selectable={true} onChecked={updateSelectedUsers} />
       </PageContent>
       <PageActions>
         <ActionButtons cancelCb={goBack} actionCb={actionCb} actionLabel="Confirm" cancelLabel="Cancel" rightIcon="check-circle" />

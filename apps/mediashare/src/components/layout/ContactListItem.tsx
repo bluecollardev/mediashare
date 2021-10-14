@@ -12,7 +12,7 @@ interface ContactListItemProps {
   showFollow?: boolean;
   selectable?: boolean;
   checked?: boolean;
-  onChecked?: (bool: boolean) => void;
+  onChecked?: (bool: boolean, userId: string) => void;
   onViewDetail?: (userId: any) => void;
   showLetterLabel: boolean;
   showActions?: boolean;
@@ -29,8 +29,8 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
   showLetterLabel = false,
   onViewDetail,
   selectable,
-  onChecked = () => {},
   checked,
+  onChecked = () => {},
   showActions = true,
   iconRight = 'chevron-right',
   iconRightColor = theme.colors.accent,
@@ -83,7 +83,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
   async function onPress() {
     if (selectable) {
       setIsChecked(!isChecked);
-      onChecked(!isChecked);
+      onChecked(!isChecked, userId);
     } else if (onViewDetail) {
       onViewDetail(userId);
     }
