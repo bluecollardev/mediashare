@@ -1,10 +1,10 @@
 import React from 'react';
-
-import { View, StyleSheet, SectionList } from 'react-native';
-import { ProfileShareItem } from '../../rxjs-api';
 import * as R from 'remeda';
-import { Card, List } from 'react-native-paper';
 
+import { ProfileShareItem } from '../../rxjs-api';
+
+import { View, ScrollView, StyleSheet, SectionList } from 'react-native';
+import { Card, List } from 'react-native-paper';
 import { ShareItemCard } from './ShareItemCard';
 
 interface SharedListProps {
@@ -21,31 +21,29 @@ export const SharedList = ({ sharedItems, onDelete, onView }: SharedListProps) =
     data: mappedSharedItems[key],
   }));
   return (
-    <List.Section>
-      <SectionList
-        sections={data}
-        renderSectionHeader={({ section }) => (
-          <Card mode="outlined" style={styles.sectionHeader}>
-            <Card.Title titleStyle={styles.sectionHeaderTitle} title={`Shared by ${section.title}`} subtitle={`${section.count.toString()} items`} />
-          </Card>
-        )}
-        keyExtractor={(item) => item.shareItemId}
-        renderItem={({ item }) => {
-          return (
-            <View style={{}}>
-              <ShareItemCard
-                title={item.title}
-                date={item.createdAt}
-                read={item.read}
-                image={item.imageSrc}
-                onDelete={() => onDelete(item.shareItemId)}
-                onView={() => onView(item.playlistId, item.shareItemId)}
-              />
-            </View>
-          );
-        }}
-      />
-    </List.Section>
+    <SectionList
+      sections={data}
+      renderSectionHeader={({ section }) => (
+        <Card mode="outlined" style={styles.sectionHeader}>
+          <Card.Title titleStyle={styles.sectionHeaderTitle} title={`Shared by ${section.title}`} subtitle={`${section.count.toString()} items`} />
+        </Card>
+      )}
+      keyExtractor={(item) => item.shareItemId}
+      renderItem={({ item }) => {
+        return (
+          <View style={{}}>
+            <ShareItemCard
+              title={item.title}
+              date={item.createdAt}
+              read={item.read}
+              image={item.imageSrc}
+              onDelete={() => onDelete(item.shareItemId)}
+              onView={() => onView(item.playlistId, item.shareItemId)}
+            />
+          </View>
+        );
+      }}
+    />
   );
 };
 

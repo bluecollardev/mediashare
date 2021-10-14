@@ -30,7 +30,7 @@ interface AccountCardProps {
 
 export function AccountCard({ title, email, image, likes, shares, shared, showSocial = false, onProfileImageClicked = () => {} }: AccountCardProps) {
   return (
-    <View>
+    <View style={{ height: 200 }}>
       <View style={styles.container}>
         <View style={{ flex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <TouchableWithoutFeedback onPress={onProfileImageClicked}>
