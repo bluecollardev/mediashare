@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   username: {
-    color: theme.colors.accentDarker,
+    color: theme.colors.primary,
     fontSize: 12,
   },
   card: {
