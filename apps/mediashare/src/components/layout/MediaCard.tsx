@@ -11,7 +11,7 @@ export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b
 
 import { UserDto } from '../../rxjs-api';
 import { useAppSelector } from '../../state';
-import { findInArray, getAuthorText } from '../../utils';
+import { findInArray, getAuthorText, getUsername } from '../../utils';
 import { theme } from '../../styles';
 
 export interface MediaCardProps {
@@ -176,14 +176,20 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       <DisplayPreviewOrVideo />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <Card.Title
-        title={<Title>{`  ${title}`}</Title>}
-        subtitle={`   By ${creator ? getAuthorText(creator) : 'Anonymous'}`}
+        title={<Title>{title}</Title>}
+        subtitle={
+          <View>
+            <Text style={styles.author}>By {getAuthorText(creator)}</Text>
+            <Text style={styles.username}>{getUsername(creator)}</Text>
+          </View>
+        }
+        leftStyle={styles.avatar}
         left={() =>
           showThumbnail &&
           creator?.imageSrc && (
-            <>
+            <View>
               <Avatar.Image source={{ uri: creator?.imageSrc || DEFAULT_AVATAR }} size={52} />
-            </>
+            </View>
           )
         }
         right={(buttonProps: any) => showActions && <IconButton {...buttonProps} icon="more-vert" onPress={onActionsClicked} />}
@@ -217,11 +223,16 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   }
 };
 const styles = StyleSheet.create({
-  input: {},
-  title: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: '#fff',
+  avatar: {
+    width: 50,
+  },
+  author: {
+    color: '#666',
+    fontSize: 12,
+  },
+  username: {
+    color: theme.colors.accentDarker,
+    fontSize: 12,
   },
   card: {
     margin: 0,
