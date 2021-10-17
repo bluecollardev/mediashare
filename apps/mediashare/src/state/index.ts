@@ -8,10 +8,7 @@ export interface ErrorType {
   message: string;
 }
 
-export type RootStateType = {
-  userPlaylists: null;
-  // offlineMode: null,
-};
+export type RootStateType = {};
 
 export type RootState = ReturnType<typeof store.getState>;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

@@ -10,32 +10,16 @@ import { reducer as appStateReducer } from './modules/app-state/index';
 import { reducer as profileReducer } from './modules/profile/index';
 import { reducer as shareItemsReducer } from './modules/share-items/index';
 
-// Global app flags and data
-const systemReducers = {
-  isOffline: 'test',
-};
-
-// Media item and playlist data
-const userOwnedReducers = {
-  userMediaItems: mediaItemsReducer,
-  userPlaylists: playlistsReducer,
-};
-
-const userSharedReducers = {
-  sharedMediaItems: mediaItemsReducer,
-  sharedPlaylists: playlistsReducer,
-};
-
 // Combine our reducers and export
 const rootReducer = combineReducers({
   app: appStateReducer,
   profile: profileReducer,
   user: userReducer,
-  mediaItems: mediaItemsReducer,
-  mediaItem: mediaItemReducer,
+  userPlaylists: playlistsReducer,
   createPlaylist: createPlaylistReducer,
-  playlists: playlistsReducer,
   playlist: playlistReducer,
+  mediaItem: mediaItemReducer,
+  mediaItems: mediaItemsReducer,
   shareItems: shareItemsReducer,
   users: usersReducer,
 });

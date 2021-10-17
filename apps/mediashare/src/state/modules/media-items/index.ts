@@ -289,6 +289,6 @@ const mediaItemsSlice = createSlice({
   },
 });
 
-const mediaItemsSliceReducer = mediaItemsSlice.reducer;
 const mediaItemSliceReducer = mediaItemSlice.reducer;
+const mediaItemsSliceReducer = mediaItemsSlice.reducer;
 export { mediaItemSliceReducer as mediaItemReducer, mediaItemsSliceReducer as mediaItemsReducer };

@@ -111,15 +111,15 @@ export const Playlists = ({}: PageProps) => {
     clearCheckboxSelection();
   }, []);
 
-  const { userPlaylists = [] } = state?.playlists;
+  const { entities = [] } = state?.userPlaylists;
 
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        {loaded && userPlaylists.length > 0 ? (
+        {loaded && entities.length > 0 ? (
           <PlaylistsComponent
             key={clearSelectionKey}
-            list={userPlaylists}
+            list={entities}
             onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
             selectable={isSelectable}
             showActions={!isSelectable}

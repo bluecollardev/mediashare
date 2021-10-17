@@ -37,7 +37,7 @@ const ShareWith = ({}: PageProps) => {
     viewPlaylists();
   };
   const users = useAppSelector((state) => state.users.entities);
-  const playlists = useAppSelector((state) => state.playlists.selectedPlaylists);
+  const playlists = useAppSelector((state) => state.userPlaylists.selected);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const updateSelectedUsers = function (bool: boolean, userId: string) {
     const filtered = bool ? selectedUsers.concat([userId]) : selectedUsers.filter((item) => item._id !== userId);

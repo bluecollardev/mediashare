@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createReducer, createSlice } from '@reduxjs/toolkit';
 import { flattenDeep } from 'remeda';
 import { merge } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -85,61 +85,88 @@ export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: st
   return response;
 });
 
-const initialState: { selectedPlaylists: PlaylistResponseDto[]; userPlaylists: PlaylistResponseDto[]; loading: boolean; loaded: boolean } = {
-  userPlaylists: [],
-  selectedPlaylists: [],
-  loading: false,
-  loaded: false,
-};
+export interface PlaylistInitialState {
+  createdPlaylist: CreatePlaylistResponseDto;
+  selectedPlaylist: PlaylistResponseDto;
+  loading: boolean;
+  loaded: boolean;
 
-const initialPlaylistState: { createdPlaylist: CreatePlaylistResponseDto; loading: boolean; loaded: boolean; selectedPlaylist: PlaylistResponseDto } = {
-  loading: false,
-  loaded: false,
+}
+
+export const PLAYLIST_INITIAL_STATE: PlaylistInitialState = {
   createdPlaylist: null,
   selectedPlaylist: null,
+  loading: false,
+  loaded: false,
 };
 
-const playlistReducer = createReducer(initialPlaylistState, (builder) => {
-  builder
-    .addCase(addUserPlaylist.pending, reducePendingState())
-    .addCase(addUserPlaylist.fulfilled, (state, action) => {
-      return { ...state, createdPlaylist: action.payload };
-    })
-    .addCase(clearPlaylistAction, (state) => {
-      return { ...state, createdPlaylist: null };
-    })
-    .addCase(getPlaylistById.pending, (state) => {
-      return { ...state, selectedPlaylist: null };
-    })
-    .addCase(getPlaylistById.rejected, reduceRejectedState())
-    .addCase(getPlaylistById.fulfilled, (state, action) => {
-      return { ...state, selectedPlaylist: action.payload };
-    })
-    .addCase(removeUserPlaylist.pending, (state) => {
-      return { ...state, selectedPlaylist: null };
-    })
-    .addCase(removeUserPlaylist.rejected, reduceRejectedState())
-    .addCase(removeUserPlaylist.fulfilled, (state) => {
-      return { ...state, selectedPlaylist: null };
-    });
+const playlistSlice = createSlice({
+  name: 'playlist',
+  initialState: PLAYLIST_INITIAL_STATE,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(addUserPlaylist.pending, reducePendingState())
+      .addCase(addUserPlaylist.fulfilled, (state, action) => {
+        return { ...state, createdPlaylist: action.payload };
+      })
+      .addCase(clearPlaylistAction, (state) => {
+        return { ...state, createdPlaylist: null };
+      })
+      .addCase(getPlaylistById.pending, (state) => {
+        return { ...state, selectedPlaylist: null };
+      })
+      .addCase(getPlaylistById.rejected, reduceRejectedState())
+      .addCase(getPlaylistById.fulfilled, (state, action) => {
+        return { ...state, selectedPlaylist: action.payload };
+      })
+      .addCase(removeUserPlaylist.pending, (state) => {
+        return { ...state, selectedPlaylist: null };
+      })
+      .addCase(removeUserPlaylist.rejected, reduceRejectedState())
+      .addCase(removeUserPlaylist.fulfilled, (state) => {
+        return { ...state, selectedPlaylist: null };
+      });
+  },
 });
 
-const playlistsReducer = createReducer(initialState, (builder) => {
-  builder.addCase(findUserPlaylists.pending, (state, action) => {
-    return { ...state, userPlaylists: action.payload };
-  });
-  builder
-    .addCase(findUserPlaylists.fulfilled, (state, action) => {
-      return { ...state, userPlaylists: action.payload };
-    })
-    .addCase(selectPlaylistAction, (state, action) => {
-      const updateSelection = function (bool: boolean, item: PlaylistResponseDto) {
-        const { selectedPlaylists } = state;
-        // Is it filtered?
-        return bool ? selectedPlaylists.concat([item]) : selectedPlaylists.filter((plist) => plist._id !== item._id);
-      };
-      return { ...state, selectedPlaylists: updateSelection(action.payload.isChecked, action.payload.plist) };
+export interface PlaylistsInitialState {
+  selected: PlaylistResponseDto[];
+  entities: PlaylistResponseDto[];
+  loading: boolean;
+  loaded: boolean;
+}
+
+export const PLAYLISTS_INITIAL_STATE: PlaylistsInitialState = {
+  entities: [],
+  selected: [],
+  loading: false,
+  loaded: false,
+};
+
+const playlistsSlice = createSlice({
+  name: 'playlists',
+  initialState: PLAYLISTS_INITIAL_STATE,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(findUserPlaylists.pending, (state, action) => {
+      return { ...state, entities: action.payload };
     });
+    builder
+      .addCase(findUserPlaylists.fulfilled, (state, action) => {
+        return { ...state, entities: action.payload };
+      })
+      .addCase(selectPlaylistAction, (state, action) => {
+        const updateSelection = function (bool: boolean, item: PlaylistResponseDto) {
+          const { selected } = state;
+          // Is it filtered?
+          return bool ? selected.concat([item]) : selected.filter((plist) => plist._id !== item._id);
+        };
+        return { ...state, selected: updateSelection(action.payload.isChecked, action.payload.plist) };
+      });
+  },
 });
 
-export { playlistReducer, playlistsReducer };
+const playlistSliceReducer = playlistSlice.reducer;
+const playlistsSliceReducer = playlistsSlice.reducer;
+export { playlistSliceReducer as playlistReducer, playlistsSliceReducer as playlistsReducer }
