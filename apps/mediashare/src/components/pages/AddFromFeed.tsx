@@ -57,7 +57,7 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
         {(!items || items.length === 0) && loaded && (
           <Card>
             <Card.Content>
-              <Subheading style={{ textAlign: 'center' }}>Your media collection is in sync!</Subheading>
+              <Subheading style={{ textAlign: 'center' }}>There are no items to import in your bucket.</Subheading>
             </Card.Content>
           </Card>
         )}

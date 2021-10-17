@@ -74,7 +74,7 @@ const routeConfig = {
   addFromFeed: {
     name: 'addFromFeed',
     component: AddFromFeed,
-    options: { title: 'Download From Cloud', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Import From S3 Bucket', header: (props) => <AppHeader {...props} /> },
   },
   addFromMedia: {
     name: 'addFromMedia',
