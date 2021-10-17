@@ -36,7 +36,7 @@ export const MediaList = ({
           <View key={`item_${_id}`}>
             <MediaListItem
               title={title}
-              description={`${shortenText(description, 40)}`}
+              description={`${shortenText(description, 52)}`}
               image={thumbnail}
               selectable={selectable}
               showThumbnail={showThumbnail}
