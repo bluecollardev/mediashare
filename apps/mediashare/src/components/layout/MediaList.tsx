@@ -1,6 +1,6 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Divider } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Divider, Text } from 'react-native-paper';
 
 import { MediaListItem } from './MediaListItem';
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
@@ -36,7 +36,11 @@ export const MediaList = ({
           <View key={`item_${_id}`}>
             <MediaListItem
               title={title}
-              description={`${shortenText(description, 52)}`}
+              description={
+                <View>
+                  <Text style={styles.description}>{shortenText(description, 52)}</Text>
+                </View>
+              }
               image={thumbnail}
               selectable={selectable}
               showThumbnail={showThumbnail}
@@ -51,3 +55,12 @@ export const MediaList = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  description: {
+    color: '#666666',
+    fontSize: 12,
+    marginTop: 2,
+    marginBottom: 4,
+  },
+});
