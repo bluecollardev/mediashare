@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { Appbar, Searchbar } from 'react-native-paper';
-
+import { withGlobalStateConsumer, GlobalStateProps } from '../../core/globalState';
 import { theme } from '../../styles';
 
-export const AppHeader = (props) => {
-  const { options, back, navigation, searchable = false } = props;
+export interface AppHeaderProps {
+  options?: any;
+  back?: any;
+  navigation?: any;
+  searchable?: boolean;
+  globalState?: GlobalStateProps;
+}
 
+const AppHeaderComponent = ({ options, back, navigation, searchable = false, globalState }: AppHeaderProps) => {
+  console.log(`AppHeaderComponent > Dumping global state: ${JSON.stringify(globalState, null, 2)}`);
   const [searchIsActive, setSearchIsActive] = useState(false);
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
 
@@ -49,3 +56,5 @@ export const AppHeader = (props) => {
     </Appbar.Header>
   );
 };
+
+export const AppHeader = withGlobalStateConsumer(AppHeaderComponent);

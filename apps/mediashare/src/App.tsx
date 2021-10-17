@@ -19,6 +19,7 @@ import { ProfileDto } from './rxjs-api';
 
 import * as build from './build';
 import { bottomTabListeners } from './screenListeners';
+import { withGlobalStateProvider } from './core/globalState';
 
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
@@ -157,6 +158,9 @@ async function fakeLogin() {
 
 fakeLogin().then();
 
+const PublicNavigationWithGlobalState = withGlobalStateProvider(PublicNavigation);
+const PrivateNavigationWithGlobalState = withGlobalStateProvider(PrivateNavigation);
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
 
@@ -210,11 +214,11 @@ function App() {
         >
           {isLoggedIn ? (
             <NavigationContainer>
-              <PrivateNavigation user={user} />
+              <PrivateNavigationWithGlobalState user={user} />
             </NavigationContainer>
           ) : (
             <NavigationContainer>
-              <PublicNavigation />
+              <PublicNavigationWithGlobalState />
             </NavigationContainer>
           )}
         </PaperProvider>

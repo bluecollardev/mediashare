@@ -1,6 +1,6 @@
 import { UPDATE_GLOBAL_STATE, UPDATE_TOAST } from './actionTypes';
 
-export default function globalStateReducer(state: {}, action: { type: any; payload: any }) {
+export default function reducer(state: { isConfirmLogoutModalOpen: any }, action: { type: any; payload: any }) {
   const { payload, type } = action;
   switch (type) {
     case UPDATE_GLOBAL_STATE:
@@ -8,13 +8,11 @@ export default function globalStateReducer(state: {}, action: { type: any; paylo
         ...state,
         ...payload,
       };
-
     case UPDATE_TOAST:
       return {
         ...state,
         toast: payload,
       };
-
     default:
       throw new Error();
   }
