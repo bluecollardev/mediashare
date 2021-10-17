@@ -69,7 +69,7 @@ export const Media = ({ navigation }: PageProps) => {
 
   const dispatch = useDispatch();
 
-  const { loaded, mediaItems } = useAppSelector((state) => state.mediaItems);
+  const { loaded, entities } = useAppSelector((state) => state.mediaItems);
   const [isLoaded, setIsLoaded] = useState(loaded);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
@@ -97,11 +97,11 @@ export const Media = ({ navigation }: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        {loaded && mediaItems.length > 0 ? (
+        {loaded && entities.length > 0 ? (
           <MediaComponent
             key={clearSelectionKey}
             navigation={navigation}
-            list={mediaItems}
+            list={entities}
             onViewDetail={onEditItem}
             selectable={isSelectable}
             showActions={!isSelectable}

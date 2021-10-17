@@ -39,7 +39,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
   const dispatch = useDispatch();
 
   const { mediaId } = route?.params || {};
-  const mediaItem = useAppSelector((state) => state.mediaItem.mediaItem);
+  const mediaItem = useAppSelector((state) => state.mediaItem.entity);
 
   const [title, setTitle] = useState(mediaItem?.title);
   const [description, setDescription] = useState(mediaItem?.description);

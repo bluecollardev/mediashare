@@ -5,7 +5,7 @@ import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/MediaCard';
 
 const MediaItemDetail = ({}: PageProps) => {
-  const mediaItem = useAppSelector((state) => state.mediaItem?.mediaItem);
+  const mediaItem = useAppSelector((state) => state.mediaItem?.entity);
   const { title, description, category, author, uri, thumbnail } = mediaItem || {};
 
   return (

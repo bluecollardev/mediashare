@@ -1,21 +1,11 @@
-import { createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createReducer, createSlice } from '@reduxjs/toolkit';
 import { forkJoin, from, merge } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import Config from 'react-native-config';
 
 import { makeEnum } from '../../core/factory';
-import {
-  copyStorage,
-  deleteStorage,
-  fetchMedia,
-  getStorage,
-  listStorage,
-  putToS3,
-  sanitizeFoldername,
-  uploadMedia,
-  uploadThumbnail
-} from './storage';
+import { copyStorage, deleteStorage, fetchMedia, getStorage, listStorage, putToS3, sanitizeFoldername, uploadMedia, uploadThumbnail } from './storage';
 import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
@@ -184,24 +174,20 @@ export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaIt
   return await mediaItems.mediaItemControllerFindAll({ text: null }).toPromise();
 });
 
-const initialState: { mediaItems: MediaItemDto[]; loading: boolean; loaded: boolean } = {
-  loading: false,
-  mediaItems: [],
-  loaded: false,
-};
-
-const initialMediaItemState: {
+export interface MediaItemInitialState {
   getMediaItem: string;
   loading: boolean;
   file: any;
-  mediaItem: MediaItemDto;
+  entity: MediaItemDto | undefined;
   mediaSrc: string;
   feed: AwsMediaItem[];
   loaded: boolean;
   createState: 'submitting' | 'progress' | 'empty';
-} = {
+}
+
+export const MEDIA_ITEM_INITIAL_STATE: MediaItemInitialState = {
   getMediaItem: null,
-  mediaItem: null,
+  entity: undefined,
   loading: false,
   file: null,
   mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
@@ -210,74 +196,99 @@ const initialMediaItemState: {
   loaded: false,
 };
 
-export const MEDIA_ITEMS_STATE_KEY = 'mediaItems';
-
-const mediaItemReducer = createReducer(initialMediaItemState, (builder) => {
-  builder
-    .addCase(getMediaItemById.pending, (state) => ({
-      ...state,
-      loading: true,
-      loaded: false,
-      mediaItem: null,
-      mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
-    }))
-    .addCase(getMediaItemById.rejected, (state) => ({ ...state, mediaItem: null }))
-    .addCase(getMediaItemById.fulfilled, (state, action) => ({
-      ...state,
-      mediaItem: action.payload.mediaItem,
-      mediaSrc: action.payload.src as string,
-      loading: false,
-      loaded: true,
-    }))
-    .addCase(createThumbnail.fulfilled, (state, action) => ({
-      ...state,
-      mediaSrc: action.payload as string,
-    }))
-    .addCase(addMediaItem.pending, reducePendingState())
-    .addCase(addMediaItem.rejected, reduceRejectedState())
-    .addCase(addMediaItem.fulfilled, (state, action) => {
-      return {
+const mediaItemSlice = createSlice({
+  name: 'mediaItem',
+  initialState: MEDIA_ITEM_INITIAL_STATE,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getMediaItemById.pending, (state) => ({
         ...state,
-        loading: false,
+        loading: true,
         loaded: false,
-        getMediaItem: action.payload.uri,
+        entity: null,
         mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
-      };
-    })
-    .addCase(getFeedMediaItems.pending, reducePendingState())
-    .addCase(getFeedMediaItems.rejected, reduceRejectedState())
-    .addCase(getFeedMediaItems.fulfilled, (state, action) => {
-      return { ...state, feed: action.payload };
-    })
-    .addCase(selectMediaItem, (state, action) => {
-      return { ...state, mediaItem: action.payload };
-    })
-    .addCase(clearMediaItem, (state) => {
-      return { ...state, mediaItem: null, createState: 'empty' };
-    });
-});
-
-const mediaItemsReducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(findMediaItems.pending, reducePendingState())
-    .addCase(findMediaItems.rejected, reduceRejectedState())
-    .addCase(findMediaItems.fulfilled, (state, action) => {
-      return {
+      }))
+      .addCase(getMediaItemById.rejected, (state) => ({ ...state, mediaItem: null }))
+      .addCase(getMediaItemById.fulfilled, (state, action) => ({
         ...state,
-        mediaItems: action.payload,
+        entity: action.payload.mediaItem,
+        mediaSrc: action.payload.src as string,
         loading: false,
         loaded: true,
-      };
-    })
-    .addCase(loadUserMediaItems.fulfilled, (state, action) => {
-      return { ...state, mediaItems: action.payload };
-    })
-    .addCase(clearMediaItemSelection, (state) => {
-      return { ...state, mediaItems: [] };
-    })
-    .addCase(saveFeedMediaItems.pending, reducePendingState())
-    .addCase(saveFeedMediaItems.rejected, reduceRejectedState())
-    .addCase(saveFeedMediaItems.fulfilled, reduceFulfilledState());
+      }))
+      .addCase(createThumbnail.fulfilled, (state, action) => ({
+        ...state,
+        mediaSrc: action.payload as string,
+      }))
+      .addCase(addMediaItem.pending, reducePendingState())
+      .addCase(addMediaItem.rejected, reduceRejectedState())
+      .addCase(addMediaItem.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          loaded: false,
+          getMediaItem: action.payload.uri,
+          mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
+        };
+      })
+      // TODO: Are we using these? Where?
+      .addCase(getFeedMediaItems.pending, reducePendingState())
+      .addCase(getFeedMediaItems.rejected, reduceRejectedState())
+      .addCase(getFeedMediaItems.fulfilled, (state, action) => {
+        return { ...state, feed: action.payload };
+      })
+      .addCase(selectMediaItem, (state, action) => {
+        return { ...state, entity: action.payload };
+      })
+      .addCase(clearMediaItem, (state) => {
+        return { ...state, entity: undefined, createState: 'empty' };
+      });
+  },
 });
 
-export { mediaItemReducer, mediaItemsReducer };
+export interface MediaItemsInitialState {
+  selected: [];
+  entities: MediaItemDto[];
+  loading: boolean;
+  loaded: boolean;
+}
+
+export const MEDIA_ITEMS_INITIAL_STATE: MediaItemsInitialState = {
+  selected: [],
+  entities: [],
+  loading: false,
+  loaded: false,
+};
+
+const mediaItemsSlice = createSlice({
+  name: 'mediaItems',
+  initialState: MEDIA_ITEMS_INITIAL_STATE,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(findMediaItems.pending, reducePendingState())
+      .addCase(findMediaItems.rejected, reduceRejectedState())
+      .addCase(findMediaItems.fulfilled, (state, action) => {
+        return {
+          ...state,
+          entities: action.payload,
+          loading: false,
+          loaded: true,
+        };
+      })
+      .addCase(loadUserMediaItems.fulfilled, (state, action) => {
+        return { ...state, mediaItems: action.payload };
+      })
+      .addCase(clearMediaItemSelection, (state) => {
+        return { ...state, entities: [] };
+      })
+      .addCase(saveFeedMediaItems.pending, reducePendingState())
+      .addCase(saveFeedMediaItems.rejected, reduceRejectedState())
+      .addCase(saveFeedMediaItems.fulfilled, reduceFulfilledState());
+  },
+});
+
+const mediaItemsSliceReducer = mediaItemsSlice.reducer;
+const mediaItemSliceReducer = mediaItemSlice.reducer;
+export { mediaItemSliceReducer as mediaItemReducer, mediaItemsSliceReducer as mediaItemsReducer };
