@@ -3,26 +3,34 @@ import { compose } from 'recompose';
 
 import { useAppSelector } from '../../state';
 
+// TODO: Type these better!
 export interface GlobalStateProps {
   loading?: boolean;
   isLoggedIn?: boolean;
-  agreementAccepted?: boolean;
-  history: any;
-  location: any;
+  history?: any;
+  location?: any;
+  search?: any;
+  setSearchFilters?: Function;
 }
 
 export const GlobalState = React.createContext<GlobalStateProps>({} as GlobalStateProps);
+
+export const INITIAL_SEARCH_FILTERS = {
+  text: '',
+};
 
 export const GlobalStateProvider = (WrappedComponent: any) => (props: any) => {
   // const { addToast, clearToast, toast } = useToast([])
   const { history, location } = props;
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
-
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const loading = useAppSelector((state) => state?.app.loading);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const user = useAppSelector((state) => state?.user);
+
+  const [searchFilters, setSearchFilters] = useState(INITIAL_SEARCH_FILTERS);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
@@ -42,10 +50,9 @@ export const GlobalStateProvider = (WrappedComponent: any) => (props: any) => {
       location,
       loading,
       isLoggedIn,
+      setSearchFilters,
       search: {
-        filters: {
-          text: '',
-        },
+        filters: { ...searchFilters },
       },
     } as GlobalStateProps;
   }

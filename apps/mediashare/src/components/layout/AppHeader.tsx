@@ -22,7 +22,14 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
   const placeholder = `Search ${title}`;
 
   const [searchText, setSearchText] = useState('');
-  const updateSearchText = (text) => setSearchText(text);
+  const updateSearchText = (text) => {
+    const { setSearchFilters } = globalState;
+    // TODO: We have to throttle this!
+    setSearchText(text);
+    setSearchFilters({ text });
+  };
+
+  console.log(`AppHeader > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
 
   return (
     <Appbar.Header style={{ backgroundColor: theme.colors.accent }}>

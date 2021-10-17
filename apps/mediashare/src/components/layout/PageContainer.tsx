@@ -8,12 +8,15 @@ import { clearError } from '../../state/modules/app-state';
 import { LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
 
 import styles from '../../styles';
-import { StackScreenProps } from '@react-navigation/stack';
+// import { StackScreenProps } from '@react-navigation/stack';
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
+import { GlobalStateProps } from '../../core/globalState';
 type withProps<T1, T2> = T1 & T2;
 type WithNavProps = withProps<MaterialBottomTabScreenProps<any>, LoadingSpinnerProps>;
 
-export interface PageProps extends WithNavProps {}
+export interface PageProps extends WithNavProps {
+  globalState?: GlobalStateProps;
+}
 
 export interface PageContainerProps {
   children?: ReactNode;
