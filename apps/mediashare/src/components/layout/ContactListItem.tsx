@@ -46,9 +46,9 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
         onPress={onPress}
         title={title}
         description={
-          <View>
+          <>
             <Text style={styles.description}>{description}</Text>
-          </View>
+          </>
         }
         left={() =>
           selectable ? (

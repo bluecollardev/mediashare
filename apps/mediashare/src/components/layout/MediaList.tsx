@@ -37,9 +37,9 @@ export const MediaList = ({
             <MediaListItem
               title={title}
               description={
-                <View>
+                <>
                   <Text style={styles.description}>{shortenText(description, 52)}</Text>
-                </View>
+                </>
               }
               image={thumbnail}
               selectable={selectable}

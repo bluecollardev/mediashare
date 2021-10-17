@@ -48,10 +48,10 @@ export const MediaComponent = ({
             key={`item_${_id}`}
             title={title}
             description={
-              <View>
+              <>
                 {author && <Text style={styles.username}>By @{author}</Text>}
                 <Text style={styles.description}>{shortenText(description, 52)}</Text>
-              </View>
+              </>
             }
             showThumbnail={true}
             showActions={showActions}

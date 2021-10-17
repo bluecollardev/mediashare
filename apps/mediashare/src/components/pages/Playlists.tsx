@@ -58,19 +58,20 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
       {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
       {sortedList.map((item, idx) => {
         const { title, author, description, mediaIds, imageSrc } = item;
+        console.log(`Dumping playlist item: ${JSON.stringify(item, null, 2)}`);
         return (
           <MediaListItem
             key={item._id}
             title={title}
             titleStyle={styles.title}
-            description={
-              <View>
+            description={() => (
+              <>
                 {/* <Text style={styles.author}>By {getAuthorText(creator)}</Text> */}
                 {author && <Text style={styles.username}>By @{author}</Text>}
                 <Text style={styles.description}>{shortenText(description, 52)}</Text>
                 <Text style={styles.videoCount}>{mediaIds.length || 0} videos</Text>
-              </View>
-            }
+              </>
+            )}
             showThumbnail={true}
             image={imageSrc}
             showActions={showActions}

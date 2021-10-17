@@ -49,12 +49,11 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
     onPress,
   };
 
-  description = description || <Caption>{description}</Caption>;
+  description = typeof description === 'string' ? <Caption>{description}</Caption> : description;
 
   return (
     <List.Item
       title={title}
-      titleStyle={styles.title}
       description={description}
       descriptionNumberOfLines={1}
       onPress={onPress}
