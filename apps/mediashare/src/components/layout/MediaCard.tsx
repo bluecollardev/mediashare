@@ -197,14 +197,14 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       />
       {!showSocial && (
         <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
-          <Paragraph style={{ marginBottom: 15 }}>{description}</Paragraph>
+          <Paragraph style={styles.description}>{description}</Paragraph>
           {showThumbnail && thumbnail && <Card.Cover source={{ uri: thumbnail }} />}
           {children}
         </Card.Content>
       )}
       {showSocial && (
         <Card.Content style={{ marginTop: 0, marginBottom: 10 }}>
-          <Paragraph style={{ marginTop: 15, marginBottom: 30 }}>{description}</Paragraph>
+          <Paragraph style={styles.descriptionWithSocial}>{description}</Paragraph>
           {children}
           <View style={{ marginBottom: 0 }}>
             <SocialButtons likes={likes} shares={shares} views={views} />
@@ -234,6 +234,17 @@ const styles = StyleSheet.create({
   username: {
     color: theme.colors.primary,
     fontSize: 12,
+  },
+  description: {
+    marginBottom: 15,
+    fontSize: 13,
+    color: '#666666',
+  },
+  descriptionWithSocial: {
+    marginTop: 15,
+    marginBottom: 30,
+    fontSize: 13,
+    color: '#666666',
   },
   card: {
     margin: 0,
