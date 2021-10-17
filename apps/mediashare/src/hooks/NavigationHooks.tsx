@@ -107,7 +107,7 @@ export function useMediaItems() {
   const nav = useRouteName(ROUTES.media);
   const dispatch = useDispatch();
   return async function () {
-    const args = { text: 'Adam' };
+    const args = { text: '' };
     console.log(`useMediaItems > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
     await dispatch(findMediaItems(args));
     nav();

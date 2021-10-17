@@ -32,7 +32,7 @@ export const AddToPlaylist = ({ route }: PageProps) => {
   useEffect(() => {
     if (!loaded) {
       dispatch(getPlaylistById(playlistId));
-      const args = { text: 'Adam' };
+      const args = { text: '' };
       console.log(`AddToPlaylist.useEffect > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
       dispatch(findMediaItems(args));
       setIsLoaded(true);
