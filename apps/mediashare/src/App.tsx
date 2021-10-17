@@ -31,6 +31,7 @@ const BrowseNavigation = () => {
       <BrowseStackNavigator.Screen {...routeConfig.browse} />
       <BrowseStackNavigator.Screen {...routeConfig.playlistDetail} />
       <BrowseStackNavigator.Screen {...routeConfig.mediaItemDetail} />
+      <BrowseStackNavigator.Screen {...routeConfig.shareWith} />
     </BrowseStackNavigator.Navigator>
   );
 };
