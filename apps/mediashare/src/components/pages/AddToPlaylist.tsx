@@ -18,10 +18,9 @@ export const AddToPlaylist = ({ route }: PageProps) => {
   const dispatch = useDispatch();
 
   const viewMediaItem = useViewMediaItem();
-  const viewPlaylist = useViewPlaylist();
   const goBack = useGoBack();
 
-  const playlist = useAppSelector((state) => state.playlist.selectedPlaylist);
+  const playlist = useAppSelector((state) => state.playlist.selected);
 
   const mediaItemState: MediaListType[] = useAppSelector((state) => state.mediaItems.entities);
 
