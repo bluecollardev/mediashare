@@ -8,7 +8,7 @@ import {
   findUserPlaylists,
   getPlaylistById,
   removeUserPlaylist,
-  updateUserPlaylist
+  updateUserPlaylist,
 } from '../../state/modules/playlists';
 import { loadUsers } from '../../state/modules/users';
 
@@ -42,13 +42,13 @@ export const PlaylistDetail = ({ route }: PageProps) => {
 
   const dispatch = useDispatch();
 
-  const selectedPlaylist = useAppSelector((state) => state.playlist.selectedPlaylist);
+  const { selected } = useAppSelector((state) => state.playlist);
   const [showDialog, setShowDialog] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
   const { _id, title = '', userId, author = '', description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } =
-    selectedPlaylist || {};
+  selected || {};
   const items = mediaItems || [];
 
   useEffect(() => {
@@ -148,7 +148,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
         mediaIds,
         description: description,
         category: category as any,
-        _id: selectedPlaylist._id,
+        _id: selected._id,
         imageSrc,
       })
     );
@@ -172,8 +172,8 @@ export const PlaylistDetail = ({ route }: PageProps) => {
     setSelectedItems(updatedItems);
   }
 
-  function onRemoveItem(selected: MediaItem) {
-    const updatedItems = selectedItems.filter((item) => item !== selected._id);
+  function onRemoveItem(selectedItem: MediaItem) {
+    const updatedItems = selectedItems.filter((item) => item !== selectedItem._id);
     setSelectedItems(updatedItems);
   }
 
@@ -196,7 +196,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   } */
 
   async function saveMediaUpdates() {
-    const mediaIds = selectedPlaylist.mediaIds || [];
+    const mediaIds = selected.mediaIds || [];
     const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
 
     await saveWithIds(filtered);

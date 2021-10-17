@@ -31,16 +31,16 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
 
   const { playlistId } = route.params;
 
-  const { loaded, selectedPlaylist } = useAppSelector((state) => state.playlist);
+  const { loaded, selected } = useAppSelector((state) => state.playlist);
   const [isLoaded, setIsLoaded] = useState(loaded);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
 
-  const [title, setTitle] = useState(selectedPlaylist?.title);
-  const [description, setDescription] = useState(selectedPlaylist?.description);
-  const [category, setCategory] = useState(selectedPlaylist?.category);
+  const [title, setTitle] = useState(selected?.title);
+  const [description, setDescription] = useState(selected?.description);
+  const [category, setCategory] = useState(selected?.category);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [imageSrc, setImageSrc] = useState(selectedPlaylist?.imageSrc);
+  const [imageSrc, setImageSrc] = useState(selected?.imageSrc);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -63,7 +63,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
     clearCheckboxSelection();
   }, []);
 
-  const items = selectedPlaylist?.mediaItems || [];
+  const items = selected?.mediaItems || [];
   const author = '';
 
   const actionLabel = 'Save';
@@ -159,7 +159,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
         mediaIds,
         description: description,
         category: category as any,
-        _id: selectedPlaylist._id,
+        _id: selected._id,
         imageSrc,
       })
     );
@@ -208,7 +208,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   }
 
   async function savePlaylist() {
-    const mediaIds = selectedPlaylist.mediaItems.map((item) => item._id) || [];
+    const mediaIds = selected.mediaItems.map((item) => item._id) || [];
     if (isSelectable) {
       const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
       await saveWithIds(filtered);
@@ -222,7 +222,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   }
 
   async function savePlaylistItems() {
-    const mediaIds = selectedPlaylist.mediaItems.map((item) => item._id) || [];
+    const mediaIds = selected.mediaItems.map((item) => item._id) || [];
     if (isSelectable) {
       const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
       await saveWithIds(filtered);

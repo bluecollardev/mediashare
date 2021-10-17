@@ -86,16 +86,15 @@ export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: st
 });
 
 export interface PlaylistInitialState {
-  createdPlaylist: CreatePlaylistResponseDto;
-  selectedPlaylist: PlaylistResponseDto;
+  created: CreatePlaylistResponseDto | undefined;
+  selected: PlaylistResponseDto | undefined;
   loading: boolean;
   loaded: boolean;
-
 }
 
 export const PLAYLIST_INITIAL_STATE: PlaylistInitialState = {
-  createdPlaylist: null,
-  selectedPlaylist: null,
+  created: undefined,
+  selected: undefined,
   loading: false,
   loaded: false,
 };
@@ -108,24 +107,24 @@ const playlistSlice = createSlice({
     builder
       .addCase(addUserPlaylist.pending, reducePendingState())
       .addCase(addUserPlaylist.fulfilled, (state, action) => {
-        return { ...state, createdPlaylist: action.payload };
+        return { ...state, created: action.payload };
       })
       .addCase(clearPlaylistAction, (state) => {
-        return { ...state, createdPlaylist: null };
+        return { ...state, created: undefined };
       })
       .addCase(getPlaylistById.pending, (state) => {
-        return { ...state, selectedPlaylist: null };
+        return { ...state, selected: undefined };
       })
       .addCase(getPlaylistById.rejected, reduceRejectedState())
       .addCase(getPlaylistById.fulfilled, (state, action) => {
-        return { ...state, selectedPlaylist: action.payload };
+        return { ...state, selected: action.payload };
       })
       .addCase(removeUserPlaylist.pending, (state) => {
-        return { ...state, selectedPlaylist: null };
+        return { ...state, selected: undefined };
       })
       .addCase(removeUserPlaylist.rejected, reduceRejectedState())
       .addCase(removeUserPlaylist.fulfilled, (state) => {
-        return { ...state, selectedPlaylist: null };
+        return { ...state, selected: undefined };
       });
   },
 });
