@@ -30,12 +30,19 @@ export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = '
 
   if (children) {
     return React.cloneElement(React.Children.only(children), {
-      onPress: uploadMode === 'video' ? () => uploadVideo() : uploadPhoto(),
+      onPress: uploadMode === 'video' ? () => uploadVideo() : () => uploadPhoto(),
     });
   }
 
   return (
-    <Button icon="cloud-upload" mode="contained" dark color={theme.colors.error} onPress={() => uploadPhoto()} compact>
+    <Button
+      icon="cloud-upload"
+      mode="contained"
+      dark
+      color={theme.colors.error}
+      onPress={uploadMode === 'video' ? () => uploadVideo() : () => uploadPhoto()}
+      compact
+    >
       {label}
     </Button>
   );

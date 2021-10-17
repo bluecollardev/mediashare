@@ -59,7 +59,7 @@ const routeConfig = {
   media: {
     name: 'media',
     component: Media,
-    options: { title: 'My Media Collection', header: (props) => <AppHeader {...props} searchable={true} /> },
+    options: { title: 'Media Library', header: (props) => <AppHeader {...props} searchable={true} /> },
   },
   mediaItemDetail: {
     name: 'mediaItemDetail',

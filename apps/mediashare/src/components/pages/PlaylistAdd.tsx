@@ -18,7 +18,6 @@ import { MediaCard } from '../layout/MediaCard';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 import { AppUpload } from '../layout/AppUpload';
-import { TouchableWithoutFeedback, View } from 'react-native';
 
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 import { theme } from '../../styles';
