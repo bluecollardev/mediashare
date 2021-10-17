@@ -70,7 +70,7 @@ export const MediaComponent = ({
 const actionModes = { delete: 'delete', default: 'default' };
 
 export const Media = ({ navigation, globalState }: PageProps) => {
-  console.log(`Media > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
+  // console.log(`Media > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
 
   const addFromFeed = useRouteName(ROUTES.addFromFeed);
   const addMedia = useRouteName(ROUTES.addMediaItem);
@@ -148,8 +148,8 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   async function loadData() {
     const { search } = globalState;
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    console.log(`Media.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
-    console.log(globalState);
+    // console.log(`Media.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+    // console.log(globalState);
     dispatch(findMediaItems(args));
     setIsLoaded(true);
   }
@@ -158,8 +158,8 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     setRefreshing(true);
     const { search } = globalState;
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    console.log(`Media.refresh > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
-    console.log(globalState);
+    // console.log(`Media.refresh > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+    // console.log(globalState);
     await dispatch(findMediaItems(args));
     setRefreshing(false);
   }

@@ -3,9 +3,11 @@ import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
 
-import { findUserPlaylists, selectPlaylistAction } from '../../state/modules/playlists';
+import { getUserPlaylists, findPlaylists, selectPlaylistAction } from '../../state/modules/playlists';
 
 import { PlaylistResponseDto } from '../../rxjs-api';
+
+import { withGlobalStateConsumer } from '../../core/globalState';
 
 import { useLoadPlaylistData } from '../../hooks/useLoadData';
 import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
@@ -13,16 +15,16 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { FAB, Text } from 'react-native-paper';
 import { RefreshControl, StyleSheet } from 'react-native';
-
 import { View } from 'react-native';
-import { MediaListItem } from '../layout/MediaListItem';
+
 import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
+import { MediaListItem } from '../layout/MediaListItem';
+import { ActionButtons } from '../layout/ActionButtons';
+import { NoItems } from '../layout/NoItems';
 
 import { getAuthorText, getUsername, shortenText } from '../../utils';
 
 import { theme } from '../../styles';
-import { ActionButtons } from '../layout/ActionButtons';
-import { NoItems } from '../layout/NoItems';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
@@ -85,7 +87,9 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
 
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
-export const Playlists = ({}: PageProps) => {
+export const Playlists = ({ globalState }: PageProps) => {
+  console.log(`Playlists > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
+
   const shareWith = useRouteName(ROUTES.shareWith);
   const createPlaylist = useRouteName(ROUTES.playlistAdd);
   const viewPlaylist = useViewPlaylistById();
@@ -99,12 +103,14 @@ export const Playlists = ({}: PageProps) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(refresh, [dispatch]);
+  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
   useEffect(() => {
-    if (!isLoaded) {
+    const currentSearchFilters = globalState?.search;
+    if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
+      setPrevSearchFilters(currentSearchFilters);
       loadData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, dispatch]);
+  }, [isLoaded, globalState]);
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
@@ -163,13 +169,33 @@ export const Playlists = ({}: PageProps) => {
   );
 
   async function loadData() {
-    await dispatch(findUserPlaylists({}));
+    const { search } = globalState;
+    const args = { text: search?.filters?.text ? search.filters.text : '' };
+    console.log(`Playlists.loadData > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
+    console.log(globalState);
+    if (search.filters.text) {
+      console.log('Dispatch findPlaylists');
+      await dispatch(findPlaylists(args));
+    } else {
+      console.log('Dispatch getUserPlaylists');
+      await dispatch(getUserPlaylists({}));
+    }
     setIsLoaded(true);
   }
 
   async function refresh() {
     setRefreshing(true);
-    await dispatch(findUserPlaylists({}));
+    const { search } = globalState;
+    const args = { text: search?.filters?.text ? search.filters.text : '' };
+    console.log(`Playlists.refresh > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
+    console.log(globalState);
+    if (search.filters.text) {
+      console.log('Dispatch findPlaylists');
+      await dispatch(findPlaylists(args));
+    } else {
+      console.log('Dispatch getUserPlaylists');
+      await dispatch(getUserPlaylists({}));
+    }
     setRefreshing(false);
   }
 
@@ -218,7 +244,7 @@ export const Playlists = ({}: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(Playlists);
+export default withLoadingSpinner(withGlobalStateConsumer(Playlists));
 
 const styles = StyleSheet.create({
   author: {
