@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../state';
-import { findUserPlaylists } from '../../state/modules/playlists';
+import { getUserPlaylists } from '../../state/modules/playlists';
 
 import { PlaylistResponseDto } from '../../rxjs-api';
 
@@ -203,7 +203,7 @@ export const Browse = ({}: PageProps) => {
   }
 
   async function loadData() {
-    await dispatch(findUserPlaylists({}));
+    await dispatch(getUserPlaylists({}));
   }
 };
 

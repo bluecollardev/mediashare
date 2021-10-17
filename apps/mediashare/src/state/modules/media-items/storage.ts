@@ -83,8 +83,7 @@ export async function uploadThumbnail({ fileUri, key }) {
     fileUri: item.uri,
     options: { contentType: 'image/jpeg' },
   })) as any;
-  const getItem = await getStorage(thumbnailResponse.key);
-  return getItem;
+  return await getStorage(thumbnailResponse.key);
 }
 
 export async function uploadMedia({ key, fileUri, options }: { key: string; fileUri: string; options: StorageOptions }) {

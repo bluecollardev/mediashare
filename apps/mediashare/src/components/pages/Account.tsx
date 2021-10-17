@@ -10,6 +10,9 @@ import { logout } from '../../state/modules/user';
 import { loadUsers } from '../../state/modules/users';
 import { loadProfile } from '../../state/modules/profile';
 import { findMediaItems } from '../../state/modules/media-items';
+import { readShareItem } from '../../state/modules/share-items';
+
+import { withGlobalStateConsumer } from '../../core/globalState';
 
 import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { FAB, Text } from 'react-native-paper';
@@ -20,12 +23,11 @@ import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
 import { ContactList } from '../layout/ContactList';
 import { ActionButtons } from '../layout/ActionButtons';
 import { AccountCard } from '../layout/AccountCard';
-
-import styles, { theme } from '../../styles';
+import { SharedList } from '../layout/SharedList';
 
 import * as build from '../../build';
-import { SharedList } from '../layout/SharedList';
-import { readShareItem } from '../../state/modules/share-items';
+
+import styles, { theme } from '../../styles';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
   const manageContact = useRouteName(ROUTES.user);
@@ -74,7 +76,7 @@ const renderScene = (sceneComponentProps) => ({ route }) => {
 
 const actionModes = { delete: 'delete', default: 'default' };
 
-export const Account = ({}: PageProps) => {
+export const Account = ({ globalState }: PageProps) => {
   const layout = useWindowDimensions();
   const editProfile = useRouteWithParams(ROUTES.accountEdit);
   const [index, setIndex] = useState(0);
@@ -177,6 +179,7 @@ export const Account = ({}: PageProps) => {
   );
 
   async function loadData() {
+    const { search } = globalState;
     const args = { text: search?.filters?.text ? search.filters.text : '' };
     console.log(`Account.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
     await dispatch(findMediaItems(args));
@@ -238,4 +241,4 @@ export const Account = ({}: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(Account);
+export default withLoadingSpinner(withGlobalStateConsumer(Account));

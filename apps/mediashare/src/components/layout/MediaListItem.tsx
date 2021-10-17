@@ -22,6 +22,7 @@ export interface MediaListItemProps {
   showActions?: boolean;
   iconRight?: string;
   iconRightColor?: string;
+  titleStyle?: any;
 }
 
 export const MediaListItem: React.FC<MediaListItemProps> = ({
@@ -36,7 +37,8 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   showThumbnail = false,
   iconRight = 'chevron-right',
   iconRightColor = theme.colors.accent,
-}: MediaListItemProps) => {
+  ...rest
+}: MediaListItemProps & any) => {
   const [isChecked, setIsChecked] = useState(checked);
   const DEFAULT_IMAGE = usePreviewImage();
 
@@ -47,12 +49,13 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
     onPress,
   };
 
+  description = description || <Caption>{description}</Caption>;
+
   return (
     <List.Item
       title={title}
-      description={() => {
-        return <Caption>{description}</Caption>;
-      }}
+      titleStyle={styles.title}
+      description={description}
       descriptionNumberOfLines={1}
       onPress={onPress}
       left={() =>
@@ -74,6 +77,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
         ) : null
       }
       right={() => showActions === true && <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} />}
+      {...rest}
     />
   );
 

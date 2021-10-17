@@ -62,6 +62,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
           <MediaListItem
             key={item._id}
             title={title}
+            titleStyle={styles.title}
             description={
               <View>
                 {/* <Text style={styles.author}>By {getAuthorText(creator)}</Text> */}
@@ -247,6 +248,9 @@ export const Playlists = ({ globalState }: PageProps) => {
 export default withLoadingSpinner(withGlobalStateConsumer(Playlists));
 
 const styles = StyleSheet.create({
+  title: {
+    marginBottom: 2,
+  },
   author: {
     color: '#666',
     fontSize: 12,
