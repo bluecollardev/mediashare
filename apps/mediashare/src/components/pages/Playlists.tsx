@@ -11,14 +11,14 @@ import { useLoadPlaylistData } from '../../hooks/useLoadData';
 import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { FAB } from 'react-native-paper';
-import { RefreshControl } from 'react-native';
+import { FAB, Text } from 'react-native-paper';
+import { RefreshControl, StyleSheet } from 'react-native';
 
 import { View } from 'react-native';
 import { MediaListItem } from '../layout/MediaListItem';
 import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
 
-import { shortenText } from '../../utils';
+import { getAuthorText, getUsername, shortenText } from '../../utils';
 
 import { theme } from '../../styles';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -55,12 +55,19 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
     <View>
       {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
       {sortedList.map((item, idx) => {
-        const { title, description, mediaIds, imageSrc } = item;
+        const { title, author, description, mediaIds, imageSrc } = item;
         return (
           <MediaListItem
             key={item._id}
             title={title}
-            description={`${shortenText(description, 40)}\n${mediaIds.length || 0} videos`}
+            description={
+              <View>
+                {/* <Text style={styles.author}>By {getAuthorText(creator)}</Text> */}
+                {author && <Text style={styles.username}>By @{author}</Text>}
+                <Text style={styles.description}>{shortenText(description, 40)}</Text>
+                <Text style={styles.videoCount}>{mediaIds.length || 0} videos</Text>
+              </View>
+            }
             showThumbnail={true}
             image={imageSrc}
             showActions={showActions}
@@ -212,3 +219,28 @@ export const Playlists = ({}: PageProps) => {
 };
 
 export default withLoadingSpinner(Playlists);
+
+const styles = StyleSheet.create({
+  author: {
+    color: '#666',
+    fontSize: 12,
+    marginBottom: 2,
+  },
+  username: {
+    color: theme.colors.primary,
+    fontSize: 12,
+    marginBottom: 4,
+  },
+  description: {
+    color: '#666666',
+    fontSize: 12,
+    marginTop: 2,
+    marginBottom: 4,
+  },
+  videoCount: {
+    color: '#666666',
+    fontSize: 12,
+    marginBottom: 2,
+    fontWeight: 'bold',
+  },
+});

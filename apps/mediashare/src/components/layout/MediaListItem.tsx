@@ -11,7 +11,8 @@ import { MediaPreview } from './MediaPreview';
 export interface MediaListItemProps {
   navigation?: any;
   title?: string;
-  description?: string;
+  author?: string;
+  description?: any;
   image?: string;
   showThumbnail?: boolean;
   selectable?: boolean;
@@ -26,8 +27,8 @@ export interface MediaListItemProps {
 export const MediaListItem: React.FC<MediaListItemProps> = ({
   checked,
   image,
-  description,
   title,
+  description,
   onViewDetail,
   onChecked = () => {},
   selectable = true,
@@ -52,6 +53,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       description={() => {
         return <Caption>{description}</Caption>;
       }}
+      descriptionNumberOfLines={1}
       onPress={onPress}
       left={() =>
         selectable ? (

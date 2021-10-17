@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { ROUTES } from '../../routes';
 
@@ -12,7 +12,7 @@ import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
 
 import { RefreshControl } from 'react-native';
-import { FAB } from 'react-native-paper';
+import { FAB, Text } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
@@ -40,12 +40,18 @@ export const MediaComponent = ({
   return (
     <View>
       {sortedList.map((item) => {
-        const { _id, title, description, thumbnail } = item;
+        const { _id, title, author, description, thumbnail } = item;
         return (
           <MediaListItem
             key={`item_${_id}`}
             title={title}
-            description={`${shortenText(description, 40)}`}
+            description={
+              <View>
+                {/* <Text style={styles.author}>By {getAuthorText(creator)}</Text> */}
+                {/* <Text style={styles.username}>By @{author}</Text> */}
+                <Text style={styles.description}>{shortenText(description, 40)}</Text>
+              </View>
+            }
             showThumbnail={true}
             showActions={showActions}
             image={thumbnail}
@@ -176,3 +182,28 @@ export const Media = ({ navigation }: PageProps) => {
 };
 
 export default withLoadingSpinner(Media);
+
+const styles = StyleSheet.create({
+  author: {
+    color: '#666',
+    fontSize: 12,
+    marginBottom: 2,
+  },
+  username: {
+    color: theme.colors.primary,
+    fontSize: 12,
+    marginBottom: 4,
+  },
+  description: {
+    color: '#666666',
+    fontSize: 12,
+    marginTop: 2,
+    marginBottom: 4,
+  },
+  videoCount: {
+    color: '#666666',
+    fontSize: 12,
+    marginBottom: 2,
+    fontWeight: 'bold',
+  },
+});

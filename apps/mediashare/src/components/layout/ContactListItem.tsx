@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
 import { View, StyleSheet } from 'react-native';
-import { Avatar, Button, Checkbox, Divider, Headline, IconButton, List } from 'react-native-paper';
+import { Avatar, Button, Checkbox, Divider, Headline, IconButton, List, Text } from 'react-native-paper';
 import { theme } from '../../styles';
+import { shortenText } from '../../utils';
 
 interface ContactListItemProps {
   userId: string;
@@ -44,7 +45,11 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
         style={styles.listItem}
         onPress={onPress}
         title={title}
-        description={`${description}`}
+        description={
+          <View>
+            <Text style={styles.description}>{description}</Text>
+          </View>
+        }
         left={() =>
           selectable ? (
             <View style={styles.leftOuterWrapper}>
@@ -91,6 +96,12 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
 };
 
 const styles = StyleSheet.create({
+  description: {
+    color: '#666666',
+    fontSize: 12,
+    marginTop: 4,
+    marginBottom: 4,
+  },
   listItem: { margin: 0, justifyContent: 'center', backgroundColor: '#ffffff' },
   leftOuterWrapper: { flexDirection: 'row', width: 100, justifyContent: 'space-between' },
   letterLabelWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
