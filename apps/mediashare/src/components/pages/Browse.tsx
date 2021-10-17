@@ -4,14 +4,14 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../state';
 import { findUserPlaylists } from '../../state/modules/playlists';
 
-import { PlaylistResponseDto, PlaylistDto } from '../../rxjs-api';
+import { PlaylistResponseDto } from '../../rxjs-api';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useViewPlaylistById } from '../../hooks/NavigationHooks';
 
-import { ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { ScrollView } from 'react-native';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import { List, Text, Card, IconButton, Button } from 'react-native-paper';
+import { List, Text, Button } from 'react-native-paper';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -26,10 +26,19 @@ export interface BrowseProps {
   onViewDetailClicked: Function;
 }
 
+const filterUnique = (arr, key) =>
+  arr.reduce((acc, cur) => {
+    if (!acc.find((item) => item[key] === cur[key])) {
+      acc.push(cur);
+    }
+    return acc;
+  }, []);
+
 export const SharedArticles = () => {
   const { sharedItems } = useAppSelector((state) => state?.user);
   const [isLoaded, setIsLoaded] = useState(false);
-  const list = sharedItems || [];
+  // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
+  const list = filterUnique(sharedItems, 'title') || [];
 
   let sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
@@ -46,16 +55,17 @@ export const SharedArticles = () => {
 
 export const SharedList = () => {
   const { sharedItems } = useAppSelector((state) => state?.user);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const list = [...new Set(sharedItems)] || []; // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
+  // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
+  const list = filterUnique(sharedItems, 'title') || [];
 
   let sortedList = list.map((item) => {
     // const { mediaIds, description } = item;
     // const itemDescription = `${shortenText(description, 40)}\n${mediaIds.length || 0} videos`;
     // Hack to set playlist id as we're just casting a SharedItemDto to a PlaylistDto
-    return Object.assign({}, item, { _id: item.playlistId }) as PlaylistDto;
+    return (Object.assign({}, item, { _id: item.playlistId }) as unknown) as PlaylistResponseDto;
   });
 
+  console.log(`SharedList > Dumping sortedList: ${JSON.stringify(sortedList, null, 2)}`);
   // sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
   // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 
@@ -71,7 +81,8 @@ export const SharedList = () => {
 export const SharedBlock = () => {
   const { sharedItems } = useAppSelector((state) => state?.user);
   const [isLoaded, setIsLoaded] = useState(false);
-  const list = [...new Set(sharedItems)] || []; // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
+  // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
+  const list = filterUnique(sharedItems, 'title') || [];
 
   let sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));

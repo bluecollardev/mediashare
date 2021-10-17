@@ -54,7 +54,11 @@ export function shortenText(str, maxLen, separator: RegExp = undefined) {
   return `${str.substring(0, idx < 0 ? idx : idx + maxLen)}...`;
 }
 
-export function getUserFullName({ firstName = '', lastName = '' }) {
+export function getUserFullName(user) {
+  if (!user) {
+    return 'Unknown';
+  }
+  const { firstName = '', lastName = '' } = user;
   return !!firstName || !!lastName ? `${firstName} ${lastName}` : 'Unknown';
 }
 
