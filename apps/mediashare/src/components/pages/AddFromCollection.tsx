@@ -21,12 +21,7 @@ export interface AddFromCollectionState {}
 export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollectionProps) => {
   const dispatch = useDispatch();
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
-  const loading = useAppSelector((state) => state.mediaItems.loading);
   const items = useAppSelector((state) => state.mediaItems.entities);
-
-  /* if (!loaded || loading || items?.length < 1) {
-    return <ActivityIndicator animating={true} color={theme.colors.accent} />;
-  } */
 
   return (
     <PageContainer>

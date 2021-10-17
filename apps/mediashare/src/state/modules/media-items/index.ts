@@ -206,10 +206,10 @@ const mediaItemSlice = createSlice({
         ...state,
         loading: true,
         loaded: false,
-        entity: null,
+        entity: undefined,
         mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
       }))
-      .addCase(getMediaItemById.rejected, (state) => ({ ...state, mediaItem: null }))
+      .addCase(getMediaItemById.rejected, (state) => ({ ...state, entity: undefined }))
       .addCase(getMediaItemById.fulfilled, (state, action) => ({
         ...state,
         entity: action.payload.mediaItem,
