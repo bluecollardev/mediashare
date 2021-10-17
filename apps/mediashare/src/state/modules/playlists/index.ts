@@ -79,7 +79,7 @@ export const updateUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.u
     .toPromise();
 });
 
-export const getPlaylistById = createAsyncThunk('getPlaylistById', async (id: string) => {
+export const getPlaylistById = createAsyncThunk(playlistActionTypes.getPlaylistById, async (id: string) => {
   const response = await apis.playlists.playlistControllerFindOne({ playlistId: id }).toPromise();
   apis.views.viewsControllerCreatePlaylistView({ playlistId: id }).pipe(take(1)).subscribe();
   return response;

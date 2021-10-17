@@ -97,11 +97,11 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
           isEdit={true}
           topDrawer={() =>
             !imageSrc ? (
-              <AppUpload onUpload={onUpload}>
+              <AppUpload uploadMode="photo" onUpload={onUpload}>
                 <UploadPlaceholder buttonText="Add Cover Photo" />
               </AppUpload>
             ) : (
-              <AppUpload onUpload={onUpload}>
+              <AppUpload uploadMode="photo" onUpload={onUpload}>
                 <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.primary} compact>
                   Change Cover Photo
                 </Button>

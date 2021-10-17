@@ -117,7 +117,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
                 </Button>
               </View>
               <View style={{ flex: 4 }}>
-                <AppUpload onUpload={setThumbnail}>
+                <AppUpload uploadMode="photo" onUpload={setThumbnail}>
                   <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.accentDarker} compact>
                     Change Preview Image
                   </Button>

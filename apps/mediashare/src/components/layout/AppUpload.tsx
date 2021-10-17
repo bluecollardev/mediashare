@@ -1,21 +1,70 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import Config from 'react-native-config';
 
-import { launchImageLibrary } from 'react-native-image-picker';
 import { thumbnailRoot, awsUrl } from '../../state/modules/media-items/key-factory';
 import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
-import { theme } from '../../styles';
+import { createThumbnail } from '../../state/modules/media-items';
+import { setError } from '../../state/modules/app-state';
+
+import * as DocumentPicker from 'expo-document-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { Button } from 'react-native-paper';
+
+import { theme } from '../../styles';
 
 interface AppUploadProps {
   startLoad?: any;
   endLoad?: any;
   onUpload: (uri) => any;
+  uploadMode: 'video' | 'photo';
   label?: string;
   children?: any;
 }
 
-export function AppUpload({ onUpload, label = 'Upload Picture', children }: AppUploadProps) {
-  const uploadDocument = async function () {
+const maxUpload = parseInt(Config.MAX_UPLOAD, 10) || 104857600;
+
+export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = 'Upload Picture', children }: AppUploadProps) {
+  const dispatch = useDispatch();
+  label = label || (uploadMode === 'video' ? 'Upload Video' : uploadMode === 'photo' ? 'Upload Photo' : 'Upload File');
+
+  if (children) {
+    return React.cloneElement(React.Children.only(children), {
+      onPress: uploadMode === 'video' ? () => uploadVideo() : uploadPhoto(),
+    });
+  }
+
+  return (
+    <Button icon="cloud-upload" mode="contained" dark color={theme.colors.error} onPress={() => uploadPhoto()} compact>
+      {label}
+    </Button>
+  );
+
+  async function uploadVideo() {
+    // TODO: Only MP4 supported right now?
+    const video = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
+    if (!video) {
+      return;
+    }
+    if (!video || video.size > maxUpload) {
+      dispatch(setError({ name: 'File too big', message: `Files must be under ${maxUpload / 1024 / 1024} Mb` }));
+      return;
+    }
+
+    console.log('Video upload response');
+    console.log(video);
+    try {
+      console.log('Dispatching createThumbnail action');
+      await dispatch(createThumbnail({ key: video.name, fileUri: video.uri }));
+    } catch (err) {
+      console.log(err);
+    }
+
+    handleUploadSuccess(video);
+    // setDocumentUri(document.uri || '');
+  }
+
+  async function uploadPhoto() {
     launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
       if (!res.assets) {
         return;
@@ -25,22 +74,14 @@ export function AppUpload({ onUpload, label = 'Upload Picture', children }: AppU
       fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
         // eslint-disable-next-line no-shadow
         const image = awsUrl + res.key;
-        onUpload(image);
+        handleUploadSuccess(image);
       });
-    });
-  };
-
-  if (children) {
-    return React.cloneElement(React.Children.only(children), {
-      onPress: () => uploadDocument(),
     });
   }
 
-  return (
-    <Button icon="cloud-upload" mode="contained" dark color={theme.colors.error} onPress={() => uploadDocument()} compact>
-      {label}
-    </Button>
-  );
+  async function handleUploadSuccess(media) {
+    onUpload(media);
+  }
 }
 
 export default AppUpload;

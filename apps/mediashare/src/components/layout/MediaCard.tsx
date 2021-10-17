@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Avatar, Button, Card, IconButton, Paragraph, TextInput, Title, Text } from 'react-native-paper';
+import { Avatar, Button, Card, IconButton, Paragraph, Title, Text } from 'react-native-paper';
 import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 import Video from 'react-native-video';
 import SwitchSelector from 'react-native-switch-selector';
@@ -125,6 +125,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         style={{ width: '100%', height: 300, margin: 3, marginBottom: 6 }}
         resizeMode="contain"
         controls={true}
+        paused={true}
       />
     ) : null;
   };
@@ -133,7 +134,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 
   return isEdit ? (
     <View>
-      {showThumbnail && <DisplayPreviewOrVideo />}
+      {showThumbnail && <DisplayPreviewOrVideo key={mediaSrc} />}
       {topDrawer && <TopDrawer />}
       <View style={{ marginTop: 10, marginBottom: 10 }}>
         <TextField

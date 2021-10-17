@@ -3,10 +3,8 @@ import { useDispatch } from 'react-redux';
 
 import Config from 'react-native-config';
 import { Button } from 'react-native-paper';
-import * as DocumentPicker from 'expo-document-picker';
 
-import { addMediaItem, createThumbnail } from '../../state/modules/media-items';
-import { setError } from '../../state/modules/app-state/';
+import { addMediaItem } from '../../state/modules/media-items';
 
 import { CreateMediaItemDto, MediaCategoryType } from '../../rxjs-api';
 
@@ -23,8 +21,6 @@ import { theme } from '../../styles';
 import { AppUpload } from '../layout/AppUpload';
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 
-const maxUpload = parseInt(Config.MAX_UPLOAD, 10) || 104857600;
-
 export const AddMedia = ({}: PageProps) => {
   const dispatch = useDispatch();
 
@@ -32,11 +28,11 @@ export const AddMedia = ({}: PageProps) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState(MediaCategoryType.Free);
-  const [documentUri, setDocumentUri] = useState('');
+  const [mediaUri, setMediaUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
   // const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const isValid = function () {
-    return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !minLength(1)(documentUri);
+    return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !minLength(1)(mediaUri);
   };
 
   const options = [];
@@ -47,7 +43,7 @@ export const AddMedia = ({}: PageProps) => {
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
   const cancelCb = clearAndGoBack;
-  const mediaItems = useMediaItems();
+  const goToMediaItems = useMediaItems();
 
   return (
     <PageContainer>
@@ -55,8 +51,8 @@ export const AddMedia = ({}: PageProps) => {
         <MediaCard
           title={title}
           description={description}
-          mediaSrc={documentUri}
-          showThumbnail={!!documentUri}
+          mediaSrc={mediaUri}
+          showThumbnail={!!mediaUri}
           thumbnail={thumbnail}
           category={category}
           categoryOptions={options}
@@ -68,12 +64,12 @@ export const AddMedia = ({}: PageProps) => {
           isEdit={true}
           isPlayable={true}
           topDrawer={() =>
-            !documentUri ? (
-              <AppUpload onUpload={getDocument}>
+            !mediaUri ? (
+              <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
                 <UploadPlaceholder buttonText="Upload Media" />
               </AppUpload>
             ) : (
-              <AppUpload onUpload={getDocument}>
+              <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
                 <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.primary} compact>
                   Replace Media
                 </Button>
@@ -95,21 +91,8 @@ export const AddMedia = ({}: PageProps) => {
     </PageContainer>
   );
 
-  async function getDocument() {
-    const document = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
-    if (!document) {
-      return;
-    }
-    if (!document || document.size > maxUpload) {
-      dispatch(setError({ name: 'File too big', message: `Files must be under ${maxUpload / 1024 / 1024} Mb` }));
-      return;
-    }
-    try {
-      await dispatch(createThumbnail({ key: document.name, fileUri: document.uri }));
-    } catch (err) {
-      console.log(err);
-    }
-    setDocumentUri(document.uri || '');
+  async function onUploadSuccess(media) {
+    setMediaUri(media.uri || '');
   }
 
   async function saveItem() {
@@ -119,7 +102,7 @@ export const AddMedia = ({}: PageProps) => {
       description,
       summary: '',
       isPlayable: true,
-      uri: documentUri,
+      uri: mediaUri,
       thumbnail: thumbnail,
       key: title,
       eTag: '',
@@ -129,7 +112,7 @@ export const AddMedia = ({}: PageProps) => {
     setCategory(MediaCategoryType.Free);
     setDescription('');
     setThumbnail('');
-    mediaItems();
+    goToMediaItems();
   }
 
   function clearAndGoBack() {
@@ -137,7 +120,7 @@ export const AddMedia = ({}: PageProps) => {
     setCategory(MediaCategoryType.Free);
     setDescription('');
     setThumbnail('');
-    mediaItems();
+    goToMediaItems();
   }
 };
 

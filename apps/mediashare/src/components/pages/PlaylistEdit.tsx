@@ -95,7 +95,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
                 </Button>
               </View>
               <View style={{ flex: 4 }}>
-                <AppUpload onUpload={onUpload}>
+                <AppUpload uploadMode="photo" onUpload={onUpload}>
                   <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.primary} compact>
                     Change Cover Photo
                   </Button>
