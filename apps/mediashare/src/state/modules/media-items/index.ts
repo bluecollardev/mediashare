@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk, createReducer, createSlice } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { forkJoin, from, merge } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import * as VideoThumbnails from 'expo-video-thumbnails';
@@ -10,7 +10,7 @@ import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './k
 import { AwsMediaItem } from './aws-media-item.model';
 
 import { CreateMediaItemDto, MediaCategoryType, MediaItemDto, UpdateMediaItemDto } from '../../../rxjs-api';
-import { apis, ApiService, mediaItems } from '../../apis';
+import { apis, ApiService } from '../../apis';
 
 import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '../../helpers';
 
@@ -163,15 +163,19 @@ export const shareMediaItem = createAsyncThunk(
   }
 );
 
-export const deleteMediaItem = createAsyncThunk(mediaItemActionTypes.removeMediaItem, async function (args: { id: string; key: string }, { extra }) {
+export const deleteMediaItem = createAsyncThunk(mediaItemActionTypes.removeMediaItem, async (args: { id: string; key: string }, { extra }) => {
   const { api } = extra as { api: ApiService };
   const { id, key } = args;
   await deleteStorage(key);
   return await api.mediaItems.mediaItemControllerRemove({ mediaId: id }).toPromise();
 });
 
-export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async () => {
-  return await mediaItems.mediaItemControllerFindAll({ text: null }).toPromise();
+export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async (args: { text?: string }, { extra }) => {
+  const { api } = extra as { api: ApiService };
+  const { text } = args;
+  console.log(`Search args: ${JSON.stringify(args, null, 2)}`);
+  console.log(`Searching media items for: ${text}`);
+  return await api.mediaItems.mediaItemControllerFindAll({ text }).toPromise();
 });
 
 export interface MediaItemInitialState {

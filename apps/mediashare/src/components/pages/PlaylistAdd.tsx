@@ -73,7 +73,9 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
 
   useEffect(() => {
     if (!loaded) {
-      dispatch(findMediaItems());
+      const args = { text: 'Adam' };
+      console.log(`PlaylistAdd.useEffect > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+      dispatch(findMediaItems(args));
       setIsLoaded(true);
     }
   }, [loaded, dispatch]);

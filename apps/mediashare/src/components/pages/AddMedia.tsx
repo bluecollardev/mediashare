@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Config from 'react-native-config';
-import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
 
@@ -19,7 +18,7 @@ import { MediaCard } from '../layout/MediaCard';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from '../layout/PageContainer';
 import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
 
-import { minLength } from '../../lib/Validators';
+import { minLength } from '../../core/lib/Validators';
 import { theme } from '../../styles';
 import { AppUpload } from '../layout/AppUpload';
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';

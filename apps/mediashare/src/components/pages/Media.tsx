@@ -134,13 +134,17 @@ export const Media = ({ navigation }: PageProps) => {
   );
 
   async function loadData() {
-    dispatch(findMediaItems());
+    const args = { text: 'Adam' };
+    console.log(`Media.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+    dispatch(findMediaItems(args));
     setIsLoaded(true);
   }
 
   async function refresh() {
     setRefreshing(true);
-    await dispatch(findMediaItems());
+    const args = { text: 'Adam' };
+    console.log(`Media.refresh > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+    await dispatch(findMediaItems(args));
     setRefreshing(false);
   }
 

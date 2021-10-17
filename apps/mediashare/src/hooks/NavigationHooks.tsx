@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { EnumLiteralsOf } from '../lib/Generics';
+import { EnumLiteralsOf } from '../core/lib/Generics';
 import { routeConfig, ROUTES } from '../routes';
 import { findMediaItems, getMediaItemById } from '../state/modules/media-items';
 import { findUserPlaylists, getPlaylistById } from '../state/modules/playlists';
@@ -107,7 +107,9 @@ export function useMediaItems() {
   const nav = useRouteName(ROUTES.media);
   const dispatch = useDispatch();
   return async function () {
-    await dispatch(findMediaItems());
+    const args = { text: 'Adam' };
+    console.log(`useMediaItems > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+    await dispatch(findMediaItems(args));
     nav();
   };
 }

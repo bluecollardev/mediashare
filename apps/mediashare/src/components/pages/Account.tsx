@@ -177,7 +177,9 @@ export const Account = ({}: PageProps) => {
   );
 
   async function loadData() {
-    await dispatch(findMediaItems());
+    const args = { text: 'Adam' };
+    console.log(`Account.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+    await dispatch(findMediaItems(args));
     await dispatch(loadUsers());
     await dispatch(loadProfile({}));
     setIsLoaded(true);

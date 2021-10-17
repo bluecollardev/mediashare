@@ -7,7 +7,7 @@ import { findMediaItems } from '../../state/modules/media-items';
 
 import { UpdatePlaylistDto } from '../../rxjs-api';
 
-import { useGoBack, useViewMediaItem, useViewPlaylist } from '../../hooks/NavigationHooks';
+import { useGoBack, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
@@ -32,7 +32,9 @@ export const AddToPlaylist = ({ route }: PageProps) => {
   useEffect(() => {
     if (!loaded) {
       dispatch(getPlaylistById(playlistId));
-      dispatch(findMediaItems());
+      const args = { text: 'Adam' };
+      console.log(`AddToPlaylist.useEffect > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+      dispatch(findMediaItems(args));
       setIsLoaded(true);
     }
   }, [loaded, dispatch, playlistId]);
