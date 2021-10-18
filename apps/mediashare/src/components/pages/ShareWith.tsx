@@ -25,6 +25,16 @@ const ShareWith = ({}: PageProps) => {
 
   const goBack = useGoBack();
   const viewPlaylists = useRouteName(ROUTES.playlists);
+
+  const users = useAppSelector((state) => state.users.entities);
+  const playlists = useAppSelector((state) => state.userPlaylists.selected);
+  const [selectedUsers, setSelectedUsers] = React.useState([]);
+
+  const updateSelectedUsers = function (bool: boolean, userId: string) {
+    const filtered = bool ? selectedUsers.concat([userId]) : selectedUsers.filter((item) => item._id !== userId);
+    setSelectedUsers(filtered);
+  };
+
   const actionCb = async function () {
     await dispatch(
       shareUserPlaylist({
@@ -35,13 +45,6 @@ const ShareWith = ({}: PageProps) => {
     setIsLoaded(false);
 
     viewPlaylists();
-  };
-  const users = useAppSelector((state) => state.users.entities);
-  const playlists = useAppSelector((state) => state.userPlaylists.selected);
-  const [selectedUsers, setSelectedUsers] = React.useState([]);
-  const updateSelectedUsers = function (bool: boolean, userId: string) {
-    const filtered = bool ? selectedUsers.concat([userId]) : selectedUsers.filter((item) => item._id !== userId);
-    setSelectedUsers(filtered);
   };
 
   useEffect(() => {

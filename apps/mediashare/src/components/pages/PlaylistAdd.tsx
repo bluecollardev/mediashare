@@ -16,7 +16,7 @@ import { withLoadingSpinner, LoadingSpinnerProps } from '../hoc/withLoadingSpinn
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { AppUpload } from '../layout/AppUpload';
 
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
@@ -24,11 +24,7 @@ import { theme } from '../../styles';
 import { Button } from 'react-native-paper';
 import { withGlobalStateConsumer } from '../../core/globalState';
 
-interface PlaylistAddContainerProps extends LoadingSpinnerProps {
-  children: ReactNode;
-}
-
-const PlaylistAdd = ({ globalState }: PlaylistAddContainerProps) => {
+const PlaylistAdd = ({ globalState }: PageProps) => {
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);
