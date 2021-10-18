@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Avatar, Button, Card } from 'react-native-paper';
+import { IconButton, Card, Divider, Menu } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { UserDto } from '../../rxjs-api';
 import { useAppSelector } from '../../state';
@@ -90,28 +90,64 @@ function AccountEdit({ route }: AccountEditProps) {
   };
 
   const fullName = state?.firstName || state?.lastName ? `${state?.firstName} ${state?.lastName}` : 'Unnamed User';
+
+  const [visible, setVisible] = useState(false);
+  const read = false;
+
   return (
     <PageContainer>
-      <AccountCard
-        title={fullName}
-        email={state?.email}
-        phoneNumber={state?.phoneNumber}
-        image={user?.imageSrc}
-        showSocial={true}
-        likes={state?.likesCount}
-        shared={state?.sharedCount}
-        shares={state?.sharesCount}
-        onProfileImageClicked={() => getDocument()}
-      />
-      {withoutName() && (
-        <Card>
+      <View>
+        <AccountCard
+          title={fullName}
+          email={state?.email}
+          phoneNumber={state?.phoneNumber}
+          image={user?.imageSrc}
+          showSocial={true}
+          likes={state?.likesCount}
+          shared={state?.sharedCount}
+          shares={state?.sharesCount}
+          onProfileImageClicked={() => getDocument()}
+        />
+        <Card mode={'elevated'} onPress={() => setVisible(!visible)}>
           <Card.Title
-            title={'A name is required'}
-            left={(props) => <MaterialIcons {...props} name="warning" color={theme.colors.error} size={30} />}
-            // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
-          />
+            title="Account"
+            left={() => <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />}
+            titleStyle={{ fontSize: 16 }}
+            right={() => (
+              // <View style={styles.buttonContainer}>
+              //   <IconButton icon="delete-outline" color={theme.colors.primaryText} size={20} onPress={onDelete} />
+              //   <IconButton icon="play-circle-filled" color={theme.colors.primaryText} size={20} onPress={onView} />
+              // </View>
+              <Menu
+                visible={visible}
+                onDismiss={() => setVisible(false)}
+                anchor={
+                  <IconButton icon={'more-vert'} onPress={() => setVisible(!visible)}>
+                    Show menu
+                  </IconButton>
+                }
+              >
+                {/* <Menu.Item icon={'play-circle-filled'} onPress={() => {}} title="Watch" />
+                <Divider /> */}
+                <Menu.Item icon={'delete'} onPress={() => {}} title="Delete Account" />
+              </Menu>
+            )}
+          >
+            {/* </View> */}
+          </Card.Title>
+          <Card.Content>
+            {withoutName() && (
+              <Card>
+                <Card.Title
+                  title={'A name is required'}
+                  left={(props) => <MaterialIcons {...props} name="warning" color={theme.colors.error} size={30} />}
+                  // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
+                />
+              </Card>
+            )}
+          </Card.Content>
         </Card>
-      )}
+      </View>
       <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.container}>
         <TextField onChangeText={(text) => onUpdate({ firstName: text })} label={'First Name'} value={state?.firstName} disabled={!isLoaded} />
         <TextField onChangeText={(text) => onUpdate({ lastName: text })} label={'Last Name'} value={state?.lastName} disabled={!isLoaded} />

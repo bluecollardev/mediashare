@@ -41,7 +41,9 @@ export const SharedList = ({ sharedItems, selectable, showActions, onDelete, onV
               read={item.read}
               image={item.imageSrc}
               selectable={selectable}
-              showActions={showActions}
+              // TODO: Do we want to show these?
+              // showActions={showActions}
+              showActions={false}
               onDelete={() => onDelete(item.shareItemId)}
               onView={() => onView(item.playlistId, item.shareItemId)}
             />
