@@ -58,7 +58,7 @@ export const SharedList = () => {
     return (Object.assign({}, item, { _id: item.playlistId }) as unknown) as PlaylistResponseDto;
   });
 
-  console.log(`SharedList > Dumping sortedList: ${JSON.stringify(sortedList, null, 2)}`);
+  // console.log(`SharedList > Dumping sortedList: ${JSON.stringify(sortedList, null, 2)}`);
   // sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
   // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 

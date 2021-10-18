@@ -58,7 +58,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
       {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
       {sortedList.map((item, idx) => {
         const { title, author, description, mediaIds, imageSrc } = item;
-        console.log(`Dumping playlist item: ${JSON.stringify(item, null, 2)}`);
+        // console.log(`Dumping playlist item: ${JSON.stringify(item, null, 2)}`);
         return (
           <MediaListItem
             key={item._id}
