@@ -14,7 +14,7 @@ import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
 import { MediaItem, MediaItemDto } from '../../rxjs-api';
 
 import { RefreshControl } from 'react-native';
-import { FAB, Text } from 'react-native-paper';
+import { FAB, Text, Divider } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
@@ -44,23 +44,26 @@ export const MediaComponent = ({
       {sortedList.map((item) => {
         const { _id, title, author, description, thumbnail } = item;
         return (
-          <MediaListItem
-            key={`item_${_id}`}
-            title={title}
-            description={
-              <>
-                {author && <Text style={styles.username}>By @{author}</Text>}
-                <Text style={styles.description}>{shortenText(description, 52)}</Text>
-              </>
-            }
-            showThumbnail={true}
-            showActions={showActions}
-            image={thumbnail}
-            iconRight="edit"
-            iconRightColor={theme.colors.accentDarker}
-            selectable={selectable}
-            onViewDetail={() => onViewDetail(item)}
-          />
+          <>
+            <MediaListItem
+              key={`item_${_id}`}
+              title={title}
+              description={
+                <>
+                  {author && <Text style={styles.username}>By @{author}</Text>}
+                  <Text style={styles.description}>{shortenText(description, 52)}</Text>
+                </>
+              }
+              showThumbnail={true}
+              showActions={showActions}
+              image={thumbnail}
+              iconRight="edit"
+              iconRightColor={theme.colors.accentDarker}
+              selectable={selectable}
+              onViewDetail={() => onViewDetail(item)}
+            />
+            <Divider />
+          </>
         );
       })}
     </View>

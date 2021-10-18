@@ -13,7 +13,7 @@ import { useLoadPlaylistData } from '../../hooks/useLoadData';
 import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { FAB, Text } from 'react-native-paper';
+import { FAB, Text, Divider } from 'react-native-paper';
 import { RefreshControl, StyleSheet } from 'react-native';
 import { View } from 'react-native';
 
@@ -60,27 +60,30 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
         const { title, author, description, mediaIds, imageSrc } = item;
         // console.log(`Dumping playlist item: ${JSON.stringify(item, null, 2)}`);
         return (
-          <MediaListItem
-            key={item._id}
-            title={title}
-            titleStyle={styles.title}
-            description={() => (
-              <>
-                {/* <Text style={styles.author}>By {getAuthorText(creator)}</Text> */}
-                {author && <Text style={styles.username}>By @{author}</Text>}
-                <Text style={styles.description}>{shortenText(description, 52)}</Text>
-                <Text style={styles.videoCount}>{mediaIds.length || 0} videos</Text>
-              </>
-            )}
-            showThumbnail={true}
-            image={imageSrc}
-            showActions={showActions}
-            selectable={selectable}
-            onViewDetail={() => {
-              onViewDetailClicked(item);
-            }}
-            onChecked={(checked) => onChecked(checked, item)}
-          />
+          <>
+            <MediaListItem
+              key={item._id}
+              title={title}
+              titleStyle={styles.title}
+              description={() => (
+                <>
+                  {/* <Text style={styles.author}>By {getAuthorText(creator)}</Text> */}
+                  {author && <Text style={styles.username}>By @{author}</Text>}
+                  <Text style={styles.description}>{shortenText(description, 52)}</Text>
+                  <Text style={styles.videoCount}>{mediaIds.length || 0} videos</Text>
+                </>
+              )}
+              showThumbnail={true}
+              image={imageSrc}
+              showActions={showActions}
+              selectable={selectable}
+              onViewDetail={() => {
+                onViewDetailClicked(item);
+              }}
+              onChecked={(checked) => onChecked(checked, item)}
+            />
+            <Divider />
+          </>
         );
       })}
     </View>

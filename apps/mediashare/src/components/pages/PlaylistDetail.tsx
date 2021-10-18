@@ -11,7 +11,7 @@ import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { Button, FAB } from 'react-native-paper';
+import { Button, FAB, Divider } from 'react-native-paper';
 
 import AppDialog from '../layout/AppDialog';
 import { MediaCard } from '../layout/MediaCard';
@@ -108,6 +108,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
             Play From Beginning
           </Button>
         </MediaCard>
+        <Divider />
         <MediaList
           key={clearSelectionKey}
           onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
