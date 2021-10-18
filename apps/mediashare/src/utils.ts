@@ -73,3 +73,11 @@ export function getUsername(user = { username: 'Unknown' }) {
 export function findInArray(arr, fieldName, value) {
   return arr.find((item) => item[fieldName] === value);
 }
+
+export const filterUnique = (arr, key) =>
+  arr.reduce((acc, cur) => {
+    if (!acc.find((item) => item[key] === cur[key])) {
+      acc.push(cur);
+    }
+    return acc;
+  }, []);

@@ -3,8 +3,8 @@ import * as R from 'remeda';
 
 import { ProfileShareItem } from '../../rxjs-api';
 
-import { View, ScrollView, StyleSheet, SectionList } from 'react-native';
-import { Card, List } from 'react-native-paper';
+import { View, StyleSheet, SectionList } from 'react-native';
+import { Card } from 'react-native-paper';
 import { ShareItemCard } from './ShareItemCard';
 
 interface SharedListProps {

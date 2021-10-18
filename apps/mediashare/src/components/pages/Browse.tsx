@@ -19,20 +19,13 @@ import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/MediaCard';
 import { PlaylistsComponent } from './Playlists';
 
+import { filterUnique } from '../../utils';
 import styles, { theme } from '../../styles';
 
 export interface BrowseProps {
   list: PlaylistResponseDto[];
   onViewDetailClicked: Function;
 }
-
-const filterUnique = (arr, key) =>
-  arr.reduce((acc, cur) => {
-    if (!acc.find((item) => item[key] === cur[key])) {
-      acc.push(cur);
-    }
-    return acc;
-  }, []);
 
 export const SharedArticles = () => {
   const { sharedItems } = useAppSelector((state) => state?.user);

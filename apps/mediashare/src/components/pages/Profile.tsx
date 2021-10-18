@@ -2,23 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { from } from 'rxjs';
+import { take } from 'rxjs/operators';
+
+import { ROUTES } from '../../routes';
+
 import { useAppSelector } from '../../state';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { AccountCard } from '../layout/AccountCard';
-import { SharedList } from '../layout/SharedList';
-import { Button } from 'react-native-paper';
-import { theme } from '../../styles';
+import { removeShareItem, readShareItem } from '../../state/modules/share-items';
+import { loadProfile } from '../../state/modules/profile';
 
 import { useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
-import { removeShareItem, readShareItem } from '../../state/modules/share-items';
-import { ROUTES } from '../../routes';
-import { loadProfile } from '../../state/modules/profile';
-import { take } from 'rxjs/operators';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { Button } from 'react-native-paper';
+import { AccountCard } from '../layout/AccountCard';
+import { SharedList } from '../layout/SharedList';
 import { PageProps } from '../layout/PageContainer';
+
+import { filterUnique } from '../../utils';
+
+import { theme } from '../../styles';
 
 interface ProfileProps extends PageProps {}
 
-function Profile({ route }: ProfileProps) {
+const Profile = ({ route }: ProfileProps) => {
   const { userId } = route.params;
   const [loaded, setLoaded] = useState(false);
   // const userId = '6149b54a19531dd4c6b0df59';
@@ -29,7 +34,7 @@ function Profile({ route }: ProfileProps) {
   const accountEdit = useRouteWithParams(ROUTES.accountEdit);
   const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
 
-  const playlist = useViewPlaylistById();
+  const viewPlaylist = useViewPlaylistById();
 
   const onDelete = function (itemId: string) {
     from(dispatch(removeShareItem(itemId))).subscribe(() => {
@@ -40,7 +45,7 @@ function Profile({ route }: ProfileProps) {
   const onView = function (playlistId: string, shareItemId: string) {
     dispatch(readShareItem(shareItemId));
     setLoaded(false);
-    playlist({ playlistId });
+    viewPlaylist({ playlistId });
   };
 
   useEffect(() => {
@@ -52,6 +57,8 @@ function Profile({ route }: ProfileProps) {
   }, [loaded, dispatch]);
 
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
+  // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
+  const uniqueSharedItems = filterUnique(sharedItems, 'title') || [];
 
   return (
     <View style={styles.container}>
@@ -71,10 +78,10 @@ function Profile({ route }: ProfileProps) {
         </Button>
       )}
 
-      <SharedList onDelete={onDelete} onView={onView} sharedItems={sharedItems} />
+      <SharedList onDelete={onDelete} onView={onView} sharedItems={uniqueSharedItems} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
