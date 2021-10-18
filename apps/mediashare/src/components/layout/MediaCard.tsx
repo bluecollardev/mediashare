@@ -178,12 +178,15 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <Card.Title
         title={<Title>{title}</Title>}
+        titleStyle={styles.title}
+        // TODO: Stupid component doesn't render right on Android if we use a View to wrap, but then the whole f*cking thing appears on a single line!
         subtitle={
-          <View>
+          <View style={styles.subtitle}>
             <Text style={styles.author}>By {getAuthorText(creator)}</Text>
             <Text style={styles.username}>{getUsername(creator)}</Text>
           </View>
         }
+        subtitleStyle={styles.subtitle}
         leftStyle={styles.avatar}
         left={() =>
           showThumbnail &&
@@ -226,6 +229,13 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
+  },
+  title: {
+    marginBottom: 4,
+  },
+  subtitle: {
+    display: 'flex',
+    flexDirection: 'column',
   },
   author: {
     color: '#666',
