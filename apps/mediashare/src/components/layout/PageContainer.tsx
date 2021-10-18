@@ -16,6 +16,7 @@ type WithNavProps = withProps<MaterialBottomTabScreenProps<any>, LoadingSpinnerP
 
 export interface PageProps extends WithNavProps {
   globalState?: GlobalStateProps;
+  route?: any;
 }
 
 export interface PageContainerProps {

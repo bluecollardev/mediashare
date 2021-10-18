@@ -7,7 +7,7 @@ import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
 import { findMediaItems } from '../../state/modules/media-items';
-import { addUserPlaylist, findUserPlaylists, getPlaylistById } from '../../state/modules/playlists';
+import { addUserPlaylist, getUserPlaylists, getPlaylistById } from '../../state/modules/playlists';
 
 import { CreatePlaylistDto, PlaylistCategoryType } from '../../rxjs-api';
 
@@ -22,12 +22,13 @@ import { AppUpload } from '../layout/AppUpload';
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 import { theme } from '../../styles';
 import { Button } from 'react-native-paper';
+import { withGlobalStateConsumer } from '../../core/globalState';
 
 interface PlaylistAddContainerProps extends LoadingSpinnerProps {
   children: ReactNode;
 }
 
-const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
+const PlaylistAdd = ({ globalState }: PlaylistAddContainerProps) => {
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);
@@ -72,12 +73,13 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
 
   useEffect(() => {
     if (!loaded) {
+      const { search } = globalState;
       const args = { text: search?.filters?.text ? search.filters.text : '' };
       console.log(`PlaylistAdd.useEffect > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
       dispatch(findMediaItems(args));
       setIsLoaded(true);
     }
-  }, [loaded, dispatch]);
+  }, [loaded, dispatch, globalState]);
 
   return (
     <PageContainer>
@@ -134,7 +136,7 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
     // @ts-ignore TODO: Fix types on dispatch?
     const { payload } = await dispatch(addUserPlaylist(dto));
     const playlistId = payload.playlist._id;
-    await dispatch(findUserPlaylists({}));
+    await dispatch(getUserPlaylists({}));
     await dispatch(getPlaylistById(playlistId));
     editPlaylist(playlistId);
   }
@@ -144,4 +146,4 @@ const PlaylistAdd = ({}: PlaylistAddContainerProps) => {
   }
 };
 
-export default withLoadingSpinner(PlaylistAdd);
+export default withLoadingSpinner(withGlobalStateConsumer(PlaylistAdd));

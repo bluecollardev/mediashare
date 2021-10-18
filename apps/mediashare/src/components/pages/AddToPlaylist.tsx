@@ -5,6 +5,8 @@ import { useAppSelector } from '../../state';
 import { getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
 import { findMediaItems } from '../../state/modules/media-items';
 
+import { withGlobalStateConsumer } from '../../core/globalState';
+
 import { UpdatePlaylistDto } from '../../rxjs-api';
 
 import { useGoBack, useViewMediaItem } from '../../hooks/NavigationHooks';
@@ -14,7 +16,7 @@ import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList, MediaListType } from '../layout/MediaList';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 
-export const AddToPlaylist = ({ route }: PageProps) => {
+export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   const dispatch = useDispatch();
 
   const viewMediaItem = useViewMediaItem();
@@ -32,12 +34,13 @@ export const AddToPlaylist = ({ route }: PageProps) => {
   useEffect(() => {
     if (!loaded) {
       dispatch(getPlaylistById(playlistId));
+      const { search } = globalState;
       const args = { text: search?.filters?.text ? search.filters.text : '' };
       console.log(`AddToPlaylist.useEffect > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
       dispatch(findMediaItems(args));
       setIsLoaded(true);
     }
-  }, [loaded, dispatch, playlistId]);
+  }, [loaded, dispatch, playlistId, globalState]);
 
   return (
     <PageContainer>
@@ -65,7 +68,7 @@ export const AddToPlaylist = ({ route }: PageProps) => {
       title: playlist.title,
       category: category,
       _id: playlistId,
-      imageSrc: playlist.imageSrc,
+      imageSrc: playlist?.imageSrc,
     };
     await dispatch(updateUserPlaylist(dto));
     setIsLoaded(false);
@@ -83,4 +86,4 @@ export const AddToPlaylist = ({ route }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(AddToPlaylist);
+export default withLoadingSpinner(withGlobalStateConsumer(AddToPlaylist));
