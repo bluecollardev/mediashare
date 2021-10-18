@@ -96,7 +96,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           author={author}
           description={description}
           showSocial={true}
-          showActions={allowEdit}
+          showActions={false}
           showThumbnail={true}
           thumbnail={imageSrc}
           likes={likesCount}
