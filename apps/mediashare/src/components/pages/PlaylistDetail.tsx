@@ -38,12 +38,14 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   const dispatch = useDispatch();
 
   const { selected } = useAppSelector((state) => state.playlist);
+  const appUserId = useAppSelector((state) => state.user?._id);
   const [showDialog, setShowDialog] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
   // @ts-ignore
-  const { _id, title = '', author = '', description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } = selected || {};
+  const { _id, title = '', author = '', createdBy, description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } =
+    selected || {};
   const items = mediaItems || [];
 
   useEffect(() => {
@@ -53,12 +55,22 @@ export const PlaylistDetail = ({ route }: PageProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
+  console.log(`Logged In User: ${appUserId}, Media Item Owned By: ${createdBy}`);
+  console.log(selected);
+
+  const allowEdit = createdBy === appUserId;
+
   const [fabState, setFabState] = useState({ open: false });
-  const fabActions = [
-    { icon: 'delete', onPress: () => setShowDialog(true), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-    { icon: 'share', onPress: shareWith, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
-    { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
-  ];
+  let fabActions = [];
+  if (allowEdit) {
+    fabActions = [
+      { icon: 'delete', onPress: () => setShowDialog(true), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
+      { icon: 'share', onPress: shareWith, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
+      { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+    ];
+  } else {
+    fabActions = [{ icon: 'share', onPress: shareWith, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } }];
+  }
 
   const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
   useEffect(() => {
@@ -84,7 +96,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           author={author}
           description={description}
           showSocial={true}
-          showActions={false}
+          showActions={allowEdit}
           showThumbnail={true}
           thumbnail={imageSrc}
           likes={likesCount}
@@ -109,10 +121,10 @@ export const PlaylistDetail = ({ route }: PageProps) => {
         />
       </PageContent>
       <PageActions>
-        {!build.forFreeUser && (!selectedItems || selectedItems.length === 0) && (
+        {!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
           <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
         )}
-        {!build.forFreeUser && selectedItems && selectedItems.length > 0 && (
+        {!build.forFreeUser && allowEdit && selectedItems && selectedItems.length > 0 && (
           <ActionButtons
             actionCb={confirmDeletePlaylistItems}
             cancelCb={cancelDeletePlaylistItems}

@@ -173,13 +173,13 @@ export const Playlists = ({ globalState }: PageProps) => {
   async function loadData() {
     const { search } = globalState;
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    console.log(`Playlists.loadData > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
-    console.log(globalState);
+    // console.log(`Playlists.loadData > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
+    // console.log(globalState);
     if (search.filters.text) {
-      console.log('Dispatch findPlaylists');
+      // console.log('Dispatch findPlaylists');
       await dispatch(findPlaylists(args));
     } else {
-      console.log('Dispatch getUserPlaylists');
+      // console.log('Dispatch getUserPlaylists');
       await dispatch(getUserPlaylists({}));
     }
     setIsLoaded(true);

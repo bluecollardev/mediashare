@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../state';
-import { getUserPlaylists } from '../../state/modules/playlists';
+import { findPlaylists, getUserPlaylists } from '../../state/modules/playlists';
 
 import { PlaylistResponseDto } from '../../rxjs-api';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useViewPlaylistById } from '../../hooks/NavigationHooks';
+import { withGlobalStateConsumer } from '../../core/globalState';
 
-import { ScrollView } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { List, Text, Button } from 'react-native-paper';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { PageContainer, PageProps } from '../layout/PageContainer';
+import { PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/MediaCard';
 import { PlaylistsComponent } from './Playlists';
 
@@ -134,26 +135,29 @@ const renderScene = SceneMap({
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const Browse = ({}: PageProps) => {
+export const Browse = ({ globalState }: PageProps) => {
   const layout = useWindowDimensions();
-  // Set up the loader
+
   const dispatch = useDispatch();
+
   const [isLoaded, setIsLoaded] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [index, setIndex] = useState(0);
   const [routes] = React.useState([
     { key: 'list', title: '', icon: 'view-list' },
     { key: 'block', title: '', icon: 'article' },
     // { key: 'grid', title: '', icon: 'apps' },
   ]);
-  // Do other stuff
 
-  // Load our data right before rendering
+  const onRefresh = useCallback(refresh, [dispatch]);
+  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
   useEffect(() => {
-    if (!isLoaded) {
-      loadData().then(() => setIsLoaded(true));
+    const currentSearchFilters = globalState?.search;
+    if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
+      setPrevSearchFilters(currentSearchFilters);
+      loadData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded]);
+  }, [isLoaded, globalState]);
 
   return (
     <PageContainer>
@@ -196,8 +200,35 @@ export const Browse = ({}: PageProps) => {
   }
 
   async function loadData() {
-    await dispatch(getUserPlaylists({}));
+    const { search } = globalState;
+    const args = { text: search?.filters?.text ? search.filters.text : '' };
+    console.log(`Browse.loadData > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
+    console.log(globalState);
+    if (search.filters.text) {
+      console.log('Dispatch findPlaylists');
+      await dispatch(findPlaylists(args));
+    } else {
+      console.log('Dispatch getUserPlaylists');
+      await dispatch(getUserPlaylists({}));
+    }
+    setIsLoaded(true);
+  }
+
+  async function refresh() {
+    setRefreshing(true);
+    const { search } = globalState;
+    const args = { text: search?.filters?.text ? search.filters.text : '' };
+    console.log(`Playlists.refresh > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
+    console.log(globalState);
+    if (search.filters.text) {
+      console.log('Dispatch findPlaylists');
+      await dispatch(findPlaylists(args));
+    } else {
+      console.log('Dispatch getUserPlaylists');
+      await dispatch(getUserPlaylists({}));
+    }
+    setRefreshing(false);
   }
 };
 
-export default withLoadingSpinner(Browse);
+export default withLoadingSpinner(withGlobalStateConsumer(Browse));
