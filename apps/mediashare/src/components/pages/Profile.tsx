@@ -12,7 +12,7 @@ import { loadProfile } from '../../state/modules/profile';
 
 import { useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { Button, FAB } from 'react-native-paper';
+import { Button, FAB, Divider } from 'react-native-paper';
 import { AccountCard } from '../layout/AccountCard';
 import { SharedList } from '../layout/SharedList';
 import { PageActions, PageContainer, PageContent, PageProps } from '../layout/PageContainer';
@@ -95,7 +95,7 @@ const Profile = ({ route }: ProfileProps) => {
             Edit Profile
           </Button>
         )}
-
+        <Divider />
         <SharedList onDelete={onDelete} onView={onView} sharedItems={uniqueSharedItems} selectable={isSelectable} showActions={!isSelectable} />
       </PageContent>
       {isSelectable && actionMode === actionModes.delete && (

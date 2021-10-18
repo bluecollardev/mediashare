@@ -15,7 +15,7 @@ import { readShareItem } from '../../state/modules/share-items';
 import { withGlobalStateConsumer } from '../../core/globalState';
 
 import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
-import { FAB, Text } from 'react-native-paper';
+import { FAB, Text, Divider } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useRouteName, useRouteWithParams, useViewPlaylistById, useViewProfileById } from '../../hooks/NavigationHooks';
@@ -145,6 +145,7 @@ export const Account = ({ globalState }: PageProps) => {
         shared={sharedCount}
         shares={sharesCount}
       />
+      <Divider />
       {/* <Highlights highlights={state.highlights} /> */}
       {!build.forFreeUser && (
         <TabView

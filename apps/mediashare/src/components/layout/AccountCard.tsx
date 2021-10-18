@@ -30,20 +30,22 @@ interface AccountCardProps {
 
 export function AccountCard({ title, email, image, likes, shares, shared, showSocial = false, onProfileImageClicked = () => {} }: AccountCardProps) {
   return (
-    <View style={{ height: 200 }}>
-      <View style={styles.container}>
-        <View style={{ flex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <TouchableWithoutFeedback onPress={onProfileImageClicked}>
-            <Avatar.Image source={{ uri: image }} />
-          </TouchableWithoutFeedback>
-        </View>
-        <View style={{ flex: 3 }}>
-          <Title style={{ color: '#222222' }}>{title}</Title>
-          <Subheading style={{ fontSize: 11, color: theme.colors.accentDarker }}>{email}</Subheading>
+    <View style={{ height: 160, marginBottom: 20 }}>
+      <View>
+        <View style={styles.header}>
+          <View style={{ flex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <TouchableWithoutFeedback onPress={onProfileImageClicked}>
+              <Avatar.Image source={{ uri: image }} />
+            </TouchableWithoutFeedback>
+          </View>
+          <View style={{ flex: 3 }}>
+            <Title style={{ color: '#222222' }}>{title}</Title>
+            <Subheading style={{ fontSize: 11, color: theme.colors.accentDarker }}>{email}</Subheading>
+          </View>
         </View>
       </View>
       {showSocial && (
-        <View style={styles.container}>
+        <View style={styles.social}>
           <View style={styles.labelledElement}>
             <Subheading>{likes}</Subheading>
             <Caption>Likes</Caption>
@@ -63,11 +65,19 @@ export function AccountCard({ title, email, image, likes, shares, shared, showSo
 }
 
 const styles = StyleSheet.create({
-  container: {
+  header: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingTop: 30,
+    paddingBottom: 10,
+  },
+  social: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 20,
+    paddingTop: 0,
     paddingBottom: 0,
   },
   labelledElement: { display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center', flexDirection: 'column' },
