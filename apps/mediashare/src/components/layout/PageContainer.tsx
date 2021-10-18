@@ -14,6 +14,7 @@ import { GlobalStateProps } from '../../core/globalState';
 type withProps<T1, T2> = T1 & T2;
 type WithNavProps = withProps<MaterialBottomTabScreenProps<any>, LoadingSpinnerProps>;
 
+// @ts-ignore
 export interface PageProps extends WithNavProps {
   globalState?: GlobalStateProps;
   route?: any;

@@ -35,10 +35,11 @@ const ShareWith = ({}: PageProps) => {
     setSelectedUsers(filtered);
   };
 
-  const actionCb = async function () {
+  const actionCb = async () => {
     await dispatch(
       shareUserPlaylist({
         userIds: selectedUsers,
+        // @ts-ignore
         playlistIds: playlists.map((playlist) => playlist._id),
       })
     );

@@ -40,12 +40,14 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   const [description, setDescription] = useState(selected?.description);
   const [category, setCategory] = useState(selected?.category);
   const [selectedItems, setSelectedItems] = useState([]);
+  // @ts-ignore
   const [imageSrc, setImageSrc] = useState(selected?.imageSrc);
 
   useEffect(() => {
     if (!isLoaded) {
       loadData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
   const options = [];
@@ -63,6 +65,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
     clearCheckboxSelection();
   }, []);
 
+  // @ts-ignore
   const items = selected?.mediaItems || [];
   const author = '';
 
@@ -208,6 +211,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   }
 
   async function savePlaylist() {
+    // @ts-ignore
     const mediaIds = selected.mediaItems.map((item) => item._id) || [];
     if (isSelectable) {
       const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
@@ -222,6 +226,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   }
 
   async function savePlaylistItems() {
+    // @ts-ignore
     const mediaIds = selected.mediaItems.map((item) => item._id) || [];
     if (isSelectable) {
       const filtered = mediaIds.filter((id) => !selectedItems.includes(id));

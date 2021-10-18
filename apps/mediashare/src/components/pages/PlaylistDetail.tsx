@@ -4,12 +4,7 @@ import { useDispatch } from 'react-redux';
 import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
-import {
-  getUserPlaylists,
-  getPlaylistById,
-  removeUserPlaylist,
-  updateUserPlaylist,
-} from '../../state/modules/playlists';
+import { getUserPlaylists, getPlaylistById, removeUserPlaylist, updateUserPlaylist } from '../../state/modules/playlists';
 import { loadUsers } from '../../state/modules/users';
 
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
@@ -47,14 +42,15 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const { _id, title = '', userId, author = '', description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } =
-  selected || {};
+  // @ts-ignore
+  const { _id, title = '', author = '', description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } = selected || {};
   const items = mediaItems || [];
 
   useEffect(() => {
     if (!isLoaded) {
       loadData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
   const [fabState, setFabState] = useState({ open: false });
@@ -117,7 +113,13 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
         )}
         {!build.forFreeUser && selectedItems && selectedItems.length > 0 && (
-          <ActionButtons actionCb={confirmDeletePlaylistItems} cancelCb={cancelDeletePlaylistItems} actionLabel="Remove" cancelLabel="Cancel" rightIcon="delete" />
+          <ActionButtons
+            actionCb={confirmDeletePlaylistItems}
+            cancelCb={cancelDeletePlaylistItems}
+            actionLabel="Remove"
+            cancelLabel="Cancel"
+            rightIcon="delete"
+          />
         )}
       </PageActions>
       {!build.forFreeUser && (!selectedItems || selectedItems.length === 0) && (
@@ -196,6 +198,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   } */
 
   async function saveMediaUpdates() {
+    // @ts-ignore
     const mediaIds = selected.mediaIds || [];
     const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
 

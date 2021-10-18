@@ -27,6 +27,7 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   const mediaItemState: MediaListType[] = useAppSelector((state) => state.mediaItems.entities);
 
   const [loaded, setIsLoaded] = useState(false);
+  // @ts-ignore
   const [mediaItems, setMediaItems] = useState((playlist?.mediaItems as MediaListType[]) || []);
 
   const { playlistId } = route.params;
@@ -40,7 +41,8 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
       dispatch(findMediaItems(args));
       setIsLoaded(true);
     }
-  }, [loaded, dispatch, playlistId, globalState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded, playlistId, globalState]);
 
   return (
     <PageContainer>
@@ -68,6 +70,7 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
       title: playlist.title,
       category: category,
       _id: playlistId,
+      // @ts-ignore
       imageSrc: playlist?.imageSrc,
     };
     await dispatch(updateUserPlaylist(dto));
