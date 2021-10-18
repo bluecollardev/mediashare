@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
-import { findUserPlaylists, shareUserPlaylist } from '../../state/modules/playlists';
+import { getUserPlaylists, shareUserPlaylist } from '../../state/modules/playlists';
 import { loadUsers } from '../../state/modules/users';
 
 import { useGoBack, useRouteName } from '../../hooks/NavigationHooks';
@@ -20,7 +20,7 @@ const ShareWith = ({}: PageProps) => {
   const [loaded, setIsLoaded] = useState(false);
 
   const loadData = async function () {
-    await dispatch(findUserPlaylists({}));
+    await dispatch(getUserPlaylists({}));
   };
 
   const goBack = useGoBack();

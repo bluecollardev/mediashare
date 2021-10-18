@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { findUserPlaylists } from '../../state/modules/playlists';
+import { getUserPlaylists } from '../../state/modules/playlists';
 import { useAppSelector } from '../../state';
 
 // import { ActivityIndicator } from 'react-native-paper';
@@ -48,7 +48,7 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
   );
 
   async function loadData() {
-    await dispatch(findUserPlaylists({}));
+    await dispatch(getUserPlaylists({}));
   }
 
   function updateMediaItem(add: boolean, selected: any) {

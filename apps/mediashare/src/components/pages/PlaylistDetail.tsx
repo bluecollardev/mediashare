@@ -5,7 +5,7 @@ import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../state';
 import {
-  findUserPlaylists,
+  getUserPlaylists,
   getPlaylistById,
   removeUserPlaylist,
   updateUserPlaylist,
@@ -214,7 +214,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
 
   async function deletePlaylist() {
     await dispatch(removeUserPlaylist(playlistId));
-    await dispatch(findUserPlaylists({}));
+    await dispatch(getUserPlaylists({}));
     await goToPlaylists();
   }
 };

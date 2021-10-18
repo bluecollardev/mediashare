@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { EnumLiteralsOf } from '../core/lib/Generics';
 import { routeConfig, ROUTES } from '../routes';
 import { findMediaItems, getMediaItemById } from '../state/modules/media-items';
-import { findUserPlaylists, getPlaylistById } from '../state/modules/playlists';
+import { getUserPlaylists, getPlaylistById } from '../state/modules/playlists';
 
 type RouteConfigKeyType = EnumLiteralsOf<typeof ROUTES>;
 // @ts-ignore
@@ -98,7 +98,7 @@ export function usePlaylists() {
   const nav = useRouteName(ROUTES.playlists);
   const dispatch = useDispatch();
   return async function () {
-    await dispatch(findUserPlaylists({}));
+    await dispatch(getUserPlaylists({}));
     nav();
   };
 }

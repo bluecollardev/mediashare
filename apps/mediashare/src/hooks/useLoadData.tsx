@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../state';
-import { findUserPlaylists } from '../state/modules/playlists';
+import { getUserPlaylists } from '../state/modules/playlists';
 
 export function useLoadData({ action }: { action: any }) {
   const dispatch = useDispatch();
@@ -23,6 +23,6 @@ export function useLoadData({ action }: { action: any }) {
 }
 
 export const useLoadPlaylistData = function () {
-  const action = () => findUserPlaylists({});
+  const action = () => getUserPlaylists({});
   return useLoadData({ action });
 } as any;
