@@ -9,17 +9,20 @@ import { ShareItemCard } from './ShareItemCard';
 
 interface SharedListProps {
   sharedItems: ProfileShareItem[];
+  selectable?: boolean;
+  showActions?: boolean;
   onDelete?: any;
   onView?: any;
 }
 
-export const SharedList = ({ sharedItems, onDelete, onView }: SharedListProps) => {
+export const SharedList = ({ sharedItems, selectable, showActions, onDelete, onView }: SharedListProps) => {
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
   const data = R.map(R.keys(mappedSharedItems), (key) => ({
     title: `${mappedSharedItems[key][0].authorName || 'Unnamed User'}`,
     count: mappedSharedItems[key].length,
     data: mappedSharedItems[key],
   }));
+
   return (
     <SectionList
       sections={data}
@@ -37,6 +40,8 @@ export const SharedList = ({ sharedItems, onDelete, onView }: SharedListProps) =
               date={item.createdAt}
               read={item.read}
               image={item.imageSrc}
+              selectable={selectable}
+              showActions={showActions}
               onDelete={() => onDelete(item.shareItemId)}
               onView={() => onView(item.playlistId, item.shareItemId)}
             />

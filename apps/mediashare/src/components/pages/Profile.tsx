@@ -12,16 +12,19 @@ import { loadProfile } from '../../state/modules/profile';
 
 import { useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { Button } from 'react-native-paper';
+import { Button, FAB } from 'react-native-paper';
 import { AccountCard } from '../layout/AccountCard';
 import { SharedList } from '../layout/SharedList';
-import { PageProps } from '../layout/PageContainer';
+import { PageActions, PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 
 import { filterUnique } from '../../utils';
 
 import { theme } from '../../styles';
+import { ActionButtons } from '../layout/ActionButtons';
 
 interface ProfileProps extends PageProps {}
+
+const actionModes = { delete: 'delete', default: 'default' };
 
 const Profile = ({ route }: ProfileProps) => {
   const { userId } = route.params;
@@ -33,6 +36,9 @@ const Profile = ({ route }: ProfileProps) => {
   const profile = useAppSelector((state) => state.profile.entity);
   const accountEdit = useRouteWithParams(ROUTES.accountEdit);
   const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
+
+  const [isSelectable, setIsSelectable] = useState(false);
+  const [actionMode, setActionMode] = useState(actionModes.default);
 
   const viewPlaylist = useViewPlaylistById();
 
@@ -60,27 +66,86 @@ const Profile = ({ route }: ProfileProps) => {
   // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
   const uniqueSharedItems = filterUnique(sharedItems, 'title') || [];
 
-  return (
-    <View style={styles.container}>
-      <AccountCard
-        title={fullName}
-        email={email}
-        phoneNumber={phoneNumber}
-        image={imageSrc}
-        likes={likesCount}
-        shares={sharesCount}
-        shared={sharedCount}
-        showSocial={true}
-      />
-      {isAdmin && (
-        <Button mode="outlined" style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
-          Edit Profile
-        </Button>
-      )}
+  const [fabState, setFabState] = useState({ open: false });
+  const fabActions = [
+    { icon: 'person-remove', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accentDarker } },
+  ];
 
-      <SharedList onDelete={onDelete} onView={onView} sharedItems={uniqueSharedItems} />
-    </View>
+  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
+
+  return (
+    <PageContainer>
+      <PageContent>
+        <AccountCard
+          title={fullName}
+          email={email}
+          phoneNumber={phoneNumber}
+          image={imageSrc}
+          likes={likesCount}
+          shares={sharesCount}
+          shared={sharedCount}
+          showSocial={true}
+        />
+        {isAdmin && (
+          <Button mode="outlined" style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
+            Edit Profile
+          </Button>
+        )}
+
+        <SharedList onDelete={onDelete} onView={onView} sharedItems={uniqueSharedItems} selectable={isSelectable} showActions={!isSelectable} />
+      </PageContent>
+      {isSelectable && actionMode === actionModes.delete && (
+        <PageActions>
+          <ActionButtons
+            actionCb={confirmPlaylistsToUnshare}
+            cancelCb={cancelPlaylistsToUnshare}
+            actionLabel="Unshare"
+            cancelLabel="Cancel"
+            rightIcon="delete"
+          />
+        </PageActions>
+      )}
+      {!isSelectable && (
+        <FAB.Group
+          visible={true}
+          open={fabState.open}
+          icon={fabState.open ? 'close' : 'more-vert'}
+          actions={fabActions}
+          color={theme.colors.primaryTextLighter}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          onStateChange={(open) => {
+            setFabState(open);
+          }}
+        />
+      )}
+    </PageContainer>
   );
+
+  async function confirmPlaylistsToUnshare() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  async function cancelPlaylistsToUnshare() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  async function activateUnshareMode() {
+    setActionMode(actionModes.delete);
+    setIsSelectable(true);
+  }
+
+  function clearCheckboxSelection() {
+    const randomKey = Math.random();
+    setClearSelectionKey(randomKey);
+  }
 };
 
 const styles = StyleSheet.create({

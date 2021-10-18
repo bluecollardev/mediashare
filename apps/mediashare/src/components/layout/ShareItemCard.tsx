@@ -9,12 +9,14 @@ interface ShareItemCardProps {
   date: string;
   title: string;
   image: string;
+  selectable?: boolean;
+  showActions?: boolean;
   read: boolean;
   onDelete: () => void;
   onView: () => void;
 }
 
-export function ShareItemCard({ date, title, onDelete, onView, image, read }: ShareItemCardProps) {
+export function ShareItemCard({ date, title, onDelete, onView, image, read, selectable, showActions }: ShareItemCardProps) {
   const [visible, setVisible] = useState(false);
   return (
     <View style={styles.sharedItem}>
@@ -29,14 +31,14 @@ export function ShareItemCard({ date, title, onDelete, onView, image, read }: Sh
             <Menu visible={visible} onDismiss={() => setVisible(false)} anchor={() => null}>
               <Menu.Item icon="play-circle-filled" onPress={onView} title="Watch" />
               <Divider />
-              <Menu.Item icon="delete" onPress={onDelete} title="Delete" />
+              <Menu.Item icon="delete" onPress={onDelete} title="Un-Share" />
             </Menu>
           </View>
         }
         showThumbnail={true}
         image={image}
-        showActions={true}
-        selectable={false}
+        showActions={showActions}
+        selectable={selectable}
         onViewDetail={() => setVisible(!visible)}
         iconRight="more-vert"
       />
