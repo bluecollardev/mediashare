@@ -93,7 +93,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
 export const Playlists = ({ globalState }: PageProps) => {
-  console.log(`Playlists > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
+  // console.log(`Playlists > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
 
   const shareWith = useRouteName(ROUTES.shareWith);
   const createPlaylist = useRouteName(ROUTES.playlistAdd);
@@ -192,13 +192,13 @@ export const Playlists = ({ globalState }: PageProps) => {
     setRefreshing(true);
     const { search } = globalState;
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    console.log(`Playlists.refresh > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
-    console.log(globalState);
+    // console.log(`Playlists.refresh > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
+    // console.log(globalState);
     if (search.filters.text) {
-      console.log('Dispatch findPlaylists');
+      // console.log('Dispatch findPlaylists');
       await dispatch(findPlaylists(args));
     } else {
-      console.log('Dispatch getUserPlaylists');
+      // console.log('Dispatch getUserPlaylists');
       await dispatch(getUserPlaylists({}));
     }
     setRefreshing(false);

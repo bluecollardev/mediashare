@@ -71,7 +71,7 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
     if (!loaded) {
       const { search } = globalState;
       const args = { text: search?.filters?.text ? search.filters.text : '' };
-      console.log(`PlaylistAdd.useEffect > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+      // console.log(`PlaylistAdd.useEffect > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
       dispatch(findMediaItems(args));
       setIsLoaded(true);
     }
