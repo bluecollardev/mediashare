@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { from } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -12,15 +12,15 @@ import { loadProfile } from '../../state/modules/profile';
 
 import { useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { Button, FAB, Divider } from 'react-native-paper';
+import { FAB, Divider } from 'react-native-paper';
+import { PageActions, PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 import { AccountCard } from '../layout/AccountCard';
 import { SharedList } from '../layout/SharedList';
-import { PageActions, PageContainer, PageContent, PageProps } from '../layout/PageContainer';
+import { ActionButtons } from '../layout/ActionButtons';
 
 import { filterUnique } from '../../utils';
 
 import { theme } from '../../styles';
-import { ActionButtons } from '../layout/ActionButtons';
 
 interface ProfileProps extends PageProps {}
 
@@ -33,8 +33,9 @@ const Profile = ({ route }: ProfileProps) => {
   const dispatch = useDispatch();
   const userRole = useAppSelector((state) => state.user.role);
   const isAdmin = userRole === 'admin';
-  const profile = useAppSelector((state) => state.profile.entity);
   const accountEdit = useRouteWithParams(ROUTES.accountEdit);
+  const profile = useAppSelector((state) => state.profile.entity);
+
   const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
 
   const [isSelectable, setIsSelectable] = useState(false);
@@ -68,7 +69,7 @@ const Profile = ({ route }: ProfileProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    { icon: 'person-remove', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
+    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
     { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accentDarker } },
   ];
 
@@ -89,12 +90,14 @@ const Profile = ({ route }: ProfileProps) => {
           shares={sharesCount}
           shared={sharedCount}
           showSocial={true}
+          showActions={true}
+          isCurrentUser={false}
         />
-        {isAdmin && (
+        {/* isAdmin && (
           <Button mode="outlined" style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
             Edit Profile
           </Button>
-        )}
+        ) */}
         <Divider />
         <SharedList onDelete={onDelete} onView={onView} sharedItems={uniqueSharedItems} selectable={isSelectable} showActions={!isSelectable} />
       </PageContent>

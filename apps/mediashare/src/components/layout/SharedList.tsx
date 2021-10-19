@@ -34,16 +34,14 @@ export const SharedList = ({ sharedItems, selectable, showActions, onDelete, onV
       keyExtractor={(item) => item.shareItemId}
       renderItem={({ item }) => {
         return (
-          <View style={{}}>
+          <View>
             <ShareItemCard
               title={item.title}
               date={item.createdAt}
               read={item.read}
               image={item.imageSrc}
               selectable={selectable}
-              // TODO: Do we want to show these?
-              // showActions={showActions}
-              showActions={false}
+              showActions={showActions}
               onDelete={() => onDelete(item.shareItemId)}
               onView={() => onView(item.playlistId, item.shareItemId)}
             />

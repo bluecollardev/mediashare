@@ -109,7 +109,7 @@ const routeConfig = {
   account: {
     name: 'account',
     component: Account,
-    options: { title: 'Account', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'My Account', header: (props) => <AppHeader {...props} /> },
   },
   accountEdit: {
     name: 'accountEdit',
@@ -119,7 +119,7 @@ const routeConfig = {
   profile: {
     name: 'profile',
     component: Profile,
-    options: { title: 'Profile', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'User Profile', header: (props) => <AppHeader {...props} /> },
   },
 } as const;
 type RouteEnumKeys = keyof typeof routeConfig;

@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from 'react';
-
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { IconButton, Card, Divider, Menu } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
-import { UserDto } from '../../rxjs-api';
-import { useAppSelector } from '../../state';
-import { loadUser, updateAccount } from '../../state/modules/user';
-import { TextField } from '../form/TextField';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import PageContainer, { PageProps } from '../layout/PageContainer';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import Config from 'react-native-config';
-import { thumbnailRoot } from '../../state/modules/media-items/key-factory';
-import { useRouteWithParams } from '../../hooks/NavigationHooks';
-import { ROUTES } from '../../routes';
-import { ActionButtons } from '../layout/ActionButtons';
-import { loadProfile } from '../../state/modules/profile';
+import * as R from 'remeda';
 import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
-import * as R from 'remeda';
-import { theme } from '../../styles';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { launchImageLibrary } from 'react-native-image-picker';
+
+import { UserDto } from '../../rxjs-api';
+
+import { useAppSelector } from '../../state';
+import { loadUser, updateAccount } from '../../state/modules/user';
+import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
+import { thumbnailRoot } from '../../state/modules/media-items/key-factory';
+import { loadProfile } from '../../state/modules/profile';
+
+import { ROUTES } from '../../routes';
+
+import { useRouteWithParams } from '../../hooks/NavigationHooks';
+import { TextField } from '../form/TextField';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { PageContainer, PageProps } from '../layout/PageContainer';
+import { ActionButtons } from '../layout/ActionButtons';
 import { AccountCard } from '../layout/AccountCard';
 
 const awsUrl = Config.AWS_URL;
 interface AccountEditProps extends PageProps {}
 
-function AccountEdit({ route }: AccountEditProps) {
+const AccountEdit = ({ route }: AccountEditProps) => {
   const { userId = null } = route.params;
 
   const dispatch = useDispatch();
@@ -47,10 +47,9 @@ function AccountEdit({ route }: AccountEditProps) {
       loadData();
     }
   });
+
   const user = useAppSelector((state) => state.profile.entity);
-  const withoutName = function () {
-    return state?.firstName?.length < 1 || state?.lastName?.length < 1;
-  };
+  const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
   // eslint-disable-next-line no-shadow
@@ -91,9 +90,6 @@ function AccountEdit({ route }: AccountEditProps) {
 
   const fullName = state?.firstName || state?.lastName ? `${state?.firstName} ${state?.lastName}` : 'Unnamed User';
 
-  const [visible, setVisible] = useState(false);
-  const read = false;
-
   return (
     <PageContainer>
       <View>
@@ -102,51 +98,14 @@ function AccountEdit({ route }: AccountEditProps) {
           email={state?.email}
           phoneNumber={state?.phoneNumber}
           image={user?.imageSrc}
-          showSocial={true}
           likes={state?.likesCount}
           shared={state?.sharedCount}
           shares={state?.sharesCount}
           onProfileImageClicked={() => getDocument()}
+          showSocial={true}
+          showActions={true}
+          isCurrentUser={true}
         />
-        <Card mode={'elevated'} onPress={() => setVisible(!visible)}>
-          <Card.Title
-            title="Account"
-            left={() => <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />}
-            titleStyle={{ fontSize: 16 }}
-            right={() => (
-              // <View style={styles.buttonContainer}>
-              //   <IconButton icon="delete-outline" color={theme.colors.primaryText} size={20} onPress={onDelete} />
-              //   <IconButton icon="play-circle-filled" color={theme.colors.primaryText} size={20} onPress={onView} />
-              // </View>
-              <Menu
-                visible={visible}
-                onDismiss={() => setVisible(false)}
-                anchor={
-                  <IconButton icon={'more-vert'} onPress={() => setVisible(!visible)}>
-                    Show menu
-                  </IconButton>
-                }
-              >
-                {/* <Menu.Item icon={'play-circle-filled'} onPress={() => {}} title="Watch" />
-                <Divider /> */}
-                <Menu.Item icon={'delete'} onPress={() => {}} title="Delete Account" />
-              </Menu>
-            )}
-          >
-            {/* </View> */}
-          </Card.Title>
-          <Card.Content>
-            {withoutName() && (
-              <Card>
-                <Card.Title
-                  title={'A name is required'}
-                  left={(props) => <MaterialIcons {...props} name="warning" color={theme.colors.error} size={30} />}
-                  // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
-                />
-              </Card>
-            )}
-          </Card.Content>
-        </Card>
       </View>
       <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.container}>
         <TextField onChangeText={(text) => onUpdate({ firstName: text })} label={'First Name'} value={state?.firstName} disabled={!isLoaded} />
@@ -164,7 +123,7 @@ function AccountEdit({ route }: AccountEditProps) {
       />
     </PageContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
