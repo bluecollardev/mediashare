@@ -46,10 +46,8 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   ...rest
 }: MediaListItemProps & any) => {
   const [isChecked, setIsChecked] = useState(checked);
-  const DEFAULT_IMAGE = usePreviewImage();
-
   const mediaPreviewProps = {
-    thumbnail: image || DEFAULT_IMAGE,
+    thumbnail: image,
     width: 104,
     height: 78,
     onPress,
@@ -78,6 +76,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
             </View>
           ) : (
             <View style={styles.mediaListItem}>
+              {showActions === 'left' && <IconButton icon={iconLeft} color={iconLeftColor} onPress={onViewDetail} />}
               <MediaPreview {...mediaPreviewProps} />
             </View>
           )
