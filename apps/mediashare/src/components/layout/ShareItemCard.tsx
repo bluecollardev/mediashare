@@ -4,6 +4,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { Divider, Menu } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { MediaListItem } from './MediaListItem';
+import { theme } from '../../styles';
 
 interface ShareItemCardProps {
   date: string;
@@ -31,7 +32,7 @@ export function ShareItemCard({ date, title, onDelete, onView, image, read, sele
             <Menu visible={visible} onDismiss={() => setVisible(false)} anchor={() => null}>
               <Menu.Item icon="play-circle-filled" onPress={onView} title="Watch" />
               <Divider />
-              <Menu.Item icon="delete" onPress={onDelete} title="Un-Share" />
+              <Menu.Item icon="delete" onPress={onDelete} title="Unshare" />
             </Menu>
           </View>
         }
@@ -40,7 +41,8 @@ export function ShareItemCard({ date, title, onDelete, onView, image, read, sele
         showActions={showActions}
         selectable={selectable}
         onViewDetail={() => setVisible(!visible)}
-        iconRight="more-vert"
+        iconRight="remove-circle"
+        iconRightColor={theme.colors.error}
       />
       <Divider />
     </View>

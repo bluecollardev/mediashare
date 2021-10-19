@@ -80,27 +80,25 @@ const Profile = ({ route }: ProfileProps) => {
 
   return (
     <PageContainer>
-      <PageContent>
-        <AccountCard
-          title={fullName}
-          email={email}
-          phoneNumber={phoneNumber}
-          image={imageSrc}
-          likes={likesCount}
-          shares={sharesCount}
-          shared={sharedCount}
-          showSocial={true}
-          showActions={true}
-          isCurrentUser={false}
-        />
-        {/* isAdmin && (
+      <AccountCard
+        title={fullName}
+        email={email}
+        phoneNumber={phoneNumber}
+        image={imageSrc}
+        likes={likesCount}
+        shares={sharesCount}
+        shared={sharedCount}
+        showSocial={true}
+        showActions={!isSelectable}
+        isCurrentUser={false}
+      />
+      {/* isAdmin && (
           <Button mode="outlined" style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
             Edit Profile
           </Button>
         ) */}
-        <Divider />
-        <SharedList onDelete={onDelete} onView={onView} sharedItems={uniqueSharedItems} selectable={isSelectable} showActions={!isSelectable} />
-      </PageContent>
+      <Divider />
+      <SharedList onDelete={onDelete} onView={onView} sharedItems={uniqueSharedItems} selectable={isSelectable} showActions={!isSelectable} />
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
           <ActionButtons

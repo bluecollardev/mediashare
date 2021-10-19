@@ -25,6 +25,7 @@ export const SharedList = ({ sharedItems, selectable, showActions, onDelete, onV
 
   return (
     <SectionList
+      style={{ height: '100%' }}
       sections={data}
       renderSectionHeader={({ section }) => (
         <Card mode="outlined" style={styles.sectionHeader}>
@@ -59,5 +60,6 @@ const styles = StyleSheet.create({
   },
   sectionHeaderTitle: {
     fontSize: 16,
+    color: '#444444',
   },
 });
