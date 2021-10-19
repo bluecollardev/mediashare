@@ -96,7 +96,7 @@ export const User = ({}: PageProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    { icon: 'delete', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
+    { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
     { icon: 'person-remove', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
   ];
 

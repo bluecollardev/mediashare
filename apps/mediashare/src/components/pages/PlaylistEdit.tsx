@@ -93,7 +93,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
           topDrawer={() => (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
               <View style={{ flex: 1 }}>
-                <Button icon="delete" mode="text" dark color={theme.colors.error} onPress={() => console.log('Do something!')} compact>
+                <Button icon="delete-forever" mode="text" dark color={theme.colors.error} onPress={() => console.log('Do something!')} compact>
                   {' '}
                 </Button>
               </View>

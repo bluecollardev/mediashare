@@ -72,7 +72,7 @@ export const AccountCard = ({
                   </IconButton>
                 }
               >
-                {isCurrentUser && <Menu.Item icon="delete" onPress={() => {}} title="Delete Account" />}
+                {isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Delete Account" />}
                 {!isCurrentUser && <Menu.Item icon="person-remove" onPress={() => {}} title="Unfollow" />}
               </Menu>
             ) : null

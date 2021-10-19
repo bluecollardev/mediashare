@@ -29,20 +29,17 @@ export function ShareItemCard({ date, title, onDelete, onView, image, read, sele
           <View style={styles.description}>
             <MaterialIcons style={styles.visibilityIcon} name={read ? 'visibility' : 'visibility-off'} size={16} />
             <Text style={styles.date}>{new Date(date).toDateString()}</Text>
-            <Menu visible={visible} onDismiss={() => setVisible(false)} anchor={() => null}>
-              <Menu.Item icon="play-circle-filled" onPress={onView} title="Watch" />
-              <Divider />
-              <Menu.Item icon="delete" onPress={onDelete} title="Unshare" />
-            </Menu>
           </View>
         }
         showThumbnail={true}
+        showPlayableIcon={false}
         image={image}
-        showActions={showActions}
+        showActions={showActions ? 'left' : false}
         selectable={selectable}
-        onViewDetail={() => setVisible(!visible)}
-        iconRight="remove-circle"
-        iconRightColor={theme.colors.error}
+        // onViewDetail={() => setVisible(!visible)}
+        onViewDetail={onDelete}
+        iconLeft="remove-circle"
+        iconLeftColor={theme.colors.error}
       />
       <Divider />
     </View>

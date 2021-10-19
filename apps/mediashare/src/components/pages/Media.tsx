@@ -99,7 +99,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
 
   const [fabState, setState] = useState({ open: false });
   const fabActions = [
-    { icon: 'delete', onPress: activateDeleteMode, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
+    { icon: 'delete-forever', onPress: activateDeleteMode, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
     { icon: 'cloud-download', onPress: addFromFeed, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
     { icon: 'library-add', onPress: addMedia, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];

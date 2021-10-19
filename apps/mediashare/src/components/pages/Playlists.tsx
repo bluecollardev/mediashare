@@ -119,7 +119,7 @@ export const Playlists = ({ globalState }: PageProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    { icon: 'delete', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
+    { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
     { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
     { icon: 'library-add', onPress: () => createPlaylist(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];

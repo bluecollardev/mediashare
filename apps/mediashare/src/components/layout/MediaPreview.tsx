@@ -4,11 +4,12 @@ import React from 'react';
 
 export interface MediaPreviewProps {
   thumbnail?: string;
-  onPress?: () => void;
+  showPlayableIcon?: boolean;
   imageStyle?: any;
   buttonStyle?: any;
   width?: string | number;
   height?: string | number;
+  onPress?: () => void;
 }
 
 export const MediaPreview = ({
@@ -16,6 +17,7 @@ export const MediaPreview = ({
   onPress = () => {},
   imageStyle = styles.defaultImageStyle,
   buttonStyle = styles.defaultButtonStyle,
+  showPlayableIcon = true,
   width = '100%',
   height = 100,
   ...rest
@@ -25,7 +27,8 @@ export const MediaPreview = ({
       <ImageBackground source={{ uri: thumbnail }} resizeMode="cover" style={imageStyle}>
         <TouchableWithoutFeedback onPress={onPress}>
           <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width, height }}>
-            <Button icon="play-circle-filled" color="#ffffff" labelStyle={buttonStyle} />
+            {/* @ts-ignore */}
+            {showPlayableIcon && <Button icon="play-circle-filled" color="#ffffff" labelStyle={buttonStyle} />}
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>

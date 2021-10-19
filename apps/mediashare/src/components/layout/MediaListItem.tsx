@@ -15,11 +15,14 @@ export interface MediaListItemProps {
   description?: any;
   image?: string;
   showThumbnail?: boolean;
+  showPlayableIcon?: boolean;
   selectable?: boolean;
   checked?: boolean;
   onChecked?: (bool: boolean) => void;
   onViewDetail?: () => void;
-  showActions?: boolean;
+  showActions?: boolean | 'left' | 'right';
+  iconLeft?: string;
+  iconLeftColor?: string;
   iconRight?: string;
   iconRightColor?: string;
   titleStyle?: any;
@@ -35,6 +38,9 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   selectable = true,
   showActions = true,
   showThumbnail = false,
+  showPlayableIcon = true,
+  iconLeft = '',
+  iconLeftColor = theme.colors.accent,
   iconRight = 'chevron-right',
   iconRightColor = theme.colors.accent,
   ...rest
@@ -56,7 +62,8 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
       title={title}
       description={description}
       descriptionNumberOfLines={1}
-      onPress={onPress}
+      // It doesn't feel right to have the whole thing be a tap target when we're displaying actions on the left
+      onPress={showActions !== 'left' ? onPress : undefined}
       left={() =>
         selectable ? (
           <View style={styles.mediaListItem}>
@@ -66,7 +73,8 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
         ) : showThumbnail ? (
           image ? (
             <View style={styles.mediaListItem}>
-              <MediaPreview {...mediaPreviewProps} />
+              {showActions === 'left' && <IconButton icon={iconLeft} color={iconLeftColor} onPress={onViewDetail} />}
+              <MediaPreview {...mediaPreviewProps} showPlayableIcon={showPlayableIcon} />
             </View>
           ) : (
             <View style={styles.mediaListItem}>
@@ -75,7 +83,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
           )
         ) : null
       }
-      right={() => showActions === true && <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} />}
+      right={() => (showActions === 'right' || showActions === true) && <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} />}
       {...rest}
     />
   );
