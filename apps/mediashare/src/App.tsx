@@ -6,7 +6,8 @@ import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@r
 import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
 import { routeConfig } from './routes';
 
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
 import { Provider } from 'react-redux';
 import { store } from './boot/configureStore';
@@ -21,6 +22,25 @@ import * as build from './build';
 import { bottomTabListeners } from './screenListeners';
 import { withGlobalStateProvider } from './core/globalState';
 
+import Login from './components/pages/Login';
+import Browse from './components/pages/Browse';
+import AddFromCollection from './components/pages/AddFromCollection';
+import AddMedia from './components/pages/AddMedia';
+import AddFromFeed from './components/pages/AddFromFeed';
+import Playlists from './components/pages/Playlists';
+import PlaylistDetail from './components/pages/PlaylistDetail';
+import PlaylistEdit from './components/pages/PlaylistEdit';
+import PlaylistAdd from './components/pages/PlaylistAdd';
+import AddToPlaylist from './components/pages/AddToPlaylist';
+import Media from './components/pages/Media';
+import MediaItemDetail from './components/pages/MediaItemDetail';
+import MediaItemEdit from './components/pages/MediaItemEdit';
+import ShareWith from './components/pages/ShareWith';
+import Account from './components/pages/Account';
+import User from './components/pages/User';
+import AccountEdit from './components/pages/AccountEdit';
+import Profile from './components/pages/Profile';
+
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
 
@@ -28,10 +48,10 @@ const BrowseStackNavigator = createStackNavigator();
 const BrowseNavigation = () => {
   return (
     <BrowseStackNavigator.Navigator>
-      <BrowseStackNavigator.Screen {...routeConfig.browse} />
-      <BrowseStackNavigator.Screen {...routeConfig.playlistDetail} />
-      <BrowseStackNavigator.Screen {...routeConfig.mediaItemDetail} />
-      <BrowseStackNavigator.Screen {...routeConfig.shareWith} />
+      <BrowseStackNavigator.Screen {...routeConfig.browse} component={Browse} />
+      <BrowseStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
+      <BrowseStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
+      <BrowseStackNavigator.Screen {...routeConfig.shareWith} component={ShareWith} />
     </BrowseStackNavigator.Navigator>
   );
 };
@@ -40,15 +60,15 @@ const PlaylistsStackNavigator = createStackNavigator();
 const PlaylistsNavigation = () => {
   return (
     <PlaylistsStackNavigator.Navigator>
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlists} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemDetail} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemEdit} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.addFromMedia} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlists} component={Playlists} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistAdd} component={PlaylistAdd} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.addItemsToPlaylist} component={AddToPlaylist} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} component={PlaylistEdit} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.addFromMedia} component={AddFromCollection} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} component={ShareWith} />
     </PlaylistsStackNavigator.Navigator>
   );
 };
@@ -58,11 +78,11 @@ const MediaStackNavigator = createStackNavigator();
 const MediaNavigation = () => {
   return (
     <MediaStackNavigator.Navigator>
-      <MediaStackNavigator.Screen {...routeConfig.media} />
-      <MediaStackNavigator.Screen {...routeConfig.mediaItemDetail} />
-      <MediaStackNavigator.Screen {...routeConfig.addFromFeed} />
-      <MediaStackNavigator.Screen {...routeConfig.mediaItemEdit} />
-      <MediaStackNavigator.Screen {...routeConfig.addMedia} />
+      <MediaStackNavigator.Screen {...routeConfig.media} component={Media} />
+      <MediaStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
+      <MediaStackNavigator.Screen {...routeConfig.addFromFeed} component={AddFromFeed} />
+      <MediaStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
+      <MediaStackNavigator.Screen {...routeConfig.addMedia} component={AddMedia} />
     </MediaStackNavigator.Navigator>
   );
 };
@@ -73,14 +93,14 @@ const AccountNavigation = () => {
 
   return (
     <AccountStackNavigator.Navigator initialRouteName={user.firstName ? 'Account' : 'accountEdit'}>
-      <AccountStackNavigator.Screen {...routeConfig.account} />
-      <AccountStackNavigator.Screen {...routeConfig.profile} />
-      <AccountStackNavigator.Screen {...routeConfig.accountEdit} initialParams={{ userId: null }} />
-      <AccountStackNavigator.Screen {...routeConfig.user} />
-      <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} />
-      <AccountStackNavigator.Screen {...routeConfig.playlistDetail} />
-      <AccountStackNavigator.Screen {...routeConfig.playlistEdit} />
-      <AccountStackNavigator.Screen {...routeConfig.addItemsToPlaylist} />
+      <AccountStackNavigator.Screen {...routeConfig.account} component={Account} />
+      <AccountStackNavigator.Screen {...routeConfig.profile} component={Profile} />
+      <AccountStackNavigator.Screen {...routeConfig.accountEdit} component={AccountEdit} initialParams={{ userId: null }} />
+      <AccountStackNavigator.Screen {...routeConfig.user} component={User} />
+      <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
+      <AccountStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
+      <AccountStackNavigator.Screen {...routeConfig.playlistEdit} component={PlaylistEdit} />
+      <AccountStackNavigator.Screen {...routeConfig.addItemsToPlaylist} component={AddToPlaylist} />
     </AccountStackNavigator.Navigator>
   );
 };
@@ -91,7 +111,7 @@ const PublicStackNavigator = createStackNavigator();
 const PublicNavigation = () => {
   return (
     <PublicStackNavigator.Navigator initialRouteName={'Login'}>
-      <PublicStackNavigator.Screen {...routeConfig.login} />
+      <PublicStackNavigator.Screen {...routeConfig.login} component={Login} />
     </PublicStackNavigator.Navigator>
   );
 };
