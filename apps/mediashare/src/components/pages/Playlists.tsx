@@ -60,9 +60,9 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
         const { title, author, description, mediaIds, imageSrc } = item;
         // console.log(`Dumping playlist item: ${JSON.stringify(item, null, 2)}`);
         return (
-          <>
+          <View key={`playlists_item_${item._id}`}>
             <MediaListItem
-              key={item._id}
+              key={`playlist_${item._id}`}
               title={title}
               titleStyle={styles.title}
               description={() => (
@@ -82,8 +82,8 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
               }}
               onChecked={(checked) => onChecked(checked, item)}
             />
-            <Divider />
-          </>
+            <Divider key={`playlist_divider_${item._id}`} />
+          </View>
         );
       })}
     </View>

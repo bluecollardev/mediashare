@@ -44,9 +44,9 @@ export const MediaComponent = ({
       {sortedList.map((item) => {
         const { _id, title, author, description, thumbnail } = item;
         return (
-          <>
+          <View key={`medias_${_id}`}>
             <MediaListItem
-              key={`item_${_id}`}
+              key={`media_item_${_id}`}
               title={title}
               description={
                 <>
@@ -62,8 +62,8 @@ export const MediaComponent = ({
               selectable={selectable}
               onViewDetail={() => onViewDetail(item)}
             />
-            <Divider />
-          </>
+            <Divider key={`media_item_divider_${_id}`} />
+          </View>
         );
       })}
     </View>
