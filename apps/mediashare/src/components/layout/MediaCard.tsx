@@ -106,8 +106,12 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   }, [users]);
 
   const DisplayPreviewOrVideo = () => {
+    const imageSrc = thumbnail || DEFAULT_IMAGE;
+    if (imageSrc === '') {
+      console.warn('image src is an empty string');
+    }
     return mediaDisplayMode === 'image' ? (
-      <ImageBackground source={{ uri: thumbnail || DEFAULT_IMAGE }} resizeMode="cover" style={{ width: '100%', height: 250 }}>
+      <ImageBackground source={{ uri: imageSrc }} resizeMode="cover" style={{ width: '100%', height: 250 }}>
         {isPlayable && (
           <TouchableWithoutFeedback onPress={toggleMediaMode}>
             <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>

@@ -26,6 +26,9 @@ export const MediaPreview = ({
   const DEFAULT_IMAGE = usePreviewImage();
   const imageSrc = thumbnail || DEFAULT_IMAGE;
   const isDefaultImage = imageSrc === DEFAULT_IMAGE;
+  if (imageSrc === '') {
+    console.warn('image src is an empty string');
+  }
   return (
     <View {...rest}>
       <ImageBackground source={{ uri: imageSrc }} resizeMode="cover" style={imageStyle}>

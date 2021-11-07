@@ -57,8 +57,8 @@ export const PlaylistDetail = ({ route }: PageProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
-  console.log(`Logged In User: ${appUserId}, Media Item Owned By: ${createdBy}`);
-  console.log(selected);
+  // console.log(`Logged In User: ${appUserId}, Media Item Owned By: ${createdBy}`);
+  // console.log(selected);
 
   const allowEdit = createdBy === appUserId;
 

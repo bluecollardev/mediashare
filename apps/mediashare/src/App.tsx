@@ -170,7 +170,13 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
   );
 }
 
-Amplify.configure(awsmobile);
+Amplify.configure({
+  ...awsmobile,
+  // Fix AWS Pinpoint connection issues
+  Analytics: {
+    disabled: true,
+  },
+});
 
 async function fakeLogin() {
   await Auth.signOut();

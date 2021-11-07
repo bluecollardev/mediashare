@@ -51,11 +51,17 @@ export const AccountCard = ({
       <Card mode="elevated">
         <Card.Title
           style={styles.header}
-          left={() => (
-            <TouchableWithoutFeedback onPress={onProfileImageClicked}>
-              <Avatar.Image size={108} source={{ uri: image }} />
-            </TouchableWithoutFeedback>
-          )}
+          left={() =>
+            image ? (
+              <TouchableWithoutFeedback onPress={onProfileImageClicked}>
+                <Avatar.Image size={108} source={{ uri: image }} />
+              </TouchableWithoutFeedback>
+            ) : (
+              <TouchableWithoutFeedback onPress={onProfileImageClicked}>
+                <Avatar.Icon size={108} icon="person" />
+              </TouchableWithoutFeedback>
+            )
+          }
           leftStyle={styles.left}
           title={<Title style={styles.titleText}>{title}</Title>}
           titleStyle={styles.title}
