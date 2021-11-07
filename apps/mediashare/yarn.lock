@@ -9310,7 +9310,7 @@ react-native-gesture-handler@1.9.0:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-get-random-values@^1.4.0:
+react-native-get-random-values@^1.4.0, react-native-get-random-values@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.7.0.tgz#86d9d1960828b606392dba4540bf760605448530"
   integrity sha512-zDhmpWUekGRFb9I+MQkxllHcqXN9HBSsgPwBQfrZ1KZYpzDspWLZ6/yLMMZrtq4pVqNR7C7N96L3SuLpXv1nhQ==
