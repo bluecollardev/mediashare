@@ -18,11 +18,13 @@ import { FAB, Text, Divider } from 'react-native-paper';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
 import { MediaListItem } from '../layout/MediaListItem';
-
-import { theme } from '../../styles';
-import { shortenText } from '../../utils';
 import { ActionButtons } from '../layout/ActionButtons';
 import { NoItems } from '../layout/NoItems';
+
+import { shortenText } from '../../utils';
+import { createRandomRenderKey } from '../../core/utils';
+
+import { theme } from '../../styles';
 
 export const MediaComponent = ({
   onViewDetail,
@@ -104,7 +106,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     { icon: 'library-add', onPress: addMedia, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
@@ -189,7 +191,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   }
 
   function clearCheckboxSelection() {
-    const randomKey = Math.random();
+    const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
   }
 };

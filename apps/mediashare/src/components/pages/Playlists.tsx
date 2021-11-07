@@ -23,6 +23,7 @@ import { ActionButtons } from '../layout/ActionButtons';
 import { NoItems } from '../layout/NoItems';
 
 import { getAuthorText, getUsername, shortenText } from '../../utils';
+import { createRandomRenderKey } from '../../core/utils';
 
 import { theme } from '../../styles';
 
@@ -124,7 +125,7 @@ export const Playlists = ({ globalState }: PageProps) => {
     { icon: 'library-add', onPress: () => createPlaylist(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
   ];
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
@@ -244,7 +245,7 @@ export const Playlists = ({ globalState }: PageProps) => {
   }
 
   function clearCheckboxSelection() {
-    const randomKey = Math.random();
+    const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
   }
 };

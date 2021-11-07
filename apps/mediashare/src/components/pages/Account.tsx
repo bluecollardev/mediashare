@@ -27,6 +27,8 @@ import { SharedList } from '../layout/SharedList';
 
 import * as build from '../../build';
 
+import { createRandomRenderKey } from '../../core/utils';
+
 import styles, { theme } from '../../styles';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
@@ -124,7 +126,7 @@ export const Account = ({ globalState }: PageProps) => {
     ];
   }
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
@@ -213,7 +215,7 @@ export const Account = ({ globalState }: PageProps) => {
   }
 
   function clearCheckboxSelection() {
-    const randomKey = Math.random();
+    const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
   }
 

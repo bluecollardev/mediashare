@@ -18,6 +18,8 @@ import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { ROUTES } from '../../routes';
 
+import { createRandomRenderKey } from '../../core/utils';
+
 import { theme } from '../../styles';
 
 const actionModes = { delete: 'delete', default: 'default' };
@@ -55,7 +57,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
     options.push(value);
   }
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
 
   const onUpload = (uri: string) => {
     setImageSrc(uri);
@@ -174,7 +176,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   }
 
   function clearCheckboxSelection() {
-    const randomKey = Math.random();
+    const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
   }
 

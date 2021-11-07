@@ -22,9 +22,11 @@ import { ActionButtons } from '../layout/ActionButtons';
 
 import { MediaItem } from '../../rxjs-api';
 
-import { theme } from '../../styles';
-
 import * as build from '../../build';
+
+import { createRandomRenderKey } from '../../core/utils';
+
+import { theme } from '../../styles';
 
 export const PlaylistDetail = ({ route }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
@@ -72,7 +74,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
     fabActions = [{ icon: 'share', onPress: shareWith, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } }];
   }
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
@@ -184,7 +186,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   }
 
   function clearCheckboxSelection() {
-    const randomKey = Math.random();
+    const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
   }
 

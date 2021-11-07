@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../state';
 
@@ -10,10 +9,12 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from '../layout/PageContainer';
 import AccountCard from '../layout/AccountCard';
 import { MediaListItem } from '../layout/MediaListItem';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { theme } from '../../styles';
 import { ActionButtons } from '../layout/ActionButtons';
-// import { shortenText } from '../../utils';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import { createRandomRenderKey } from '../../core/utils';
+
+import { theme } from '../../styles';
 
 const SharedItems = ({ selectable = false }) => {
   const sharedItems = useAppSelector((state) => state.user.sharedItems) || [];
@@ -100,7 +101,7 @@ export const User = ({}: PageProps) => {
     { icon: 'person-remove', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
   ];
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
@@ -153,7 +154,7 @@ export const User = ({}: PageProps) => {
   }
 
   function clearCheckboxSelection() {
-    const randomKey = Math.random();
+    const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
   }
 };

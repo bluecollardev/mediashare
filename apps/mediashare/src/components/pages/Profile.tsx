@@ -20,6 +20,8 @@ import { ActionButtons } from '../layout/ActionButtons';
 
 import { filterUnique } from '../../utils';
 
+import { createRandomRenderKey } from '../../core/utils';
+
 import { theme } from '../../styles';
 
 interface ProfileProps extends PageProps {}
@@ -73,7 +75,7 @@ const Profile = ({ route }: ProfileProps) => {
     { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accentDarker } },
   ];
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(Math.random());
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
@@ -144,7 +146,7 @@ const Profile = ({ route }: ProfileProps) => {
   }
 
   function clearCheckboxSelection() {
-    const randomKey = Math.random();
+    const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
   }
 };
