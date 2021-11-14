@@ -19,7 +19,7 @@ export class Playlist extends BcEntity implements PlaylistInterface {
   description: string;
 
   @Column('imageSrc')
-  @ApiString()
+  @ApiProperty({ required: false })
   imageSrc: string;
 
   @Column('mediaIds')
