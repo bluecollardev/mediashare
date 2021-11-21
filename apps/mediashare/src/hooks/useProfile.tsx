@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { forkJoin, from } from 'rxjs';
-import { findMediaItems } from '../state/modules/media-items';
-import { loadProfile } from '../state/modules/profile';
-import { removeShareItem, readShareItem } from '../state/modules/share-items';
-import { loadUser } from '../state/modules/user';
-import { loadUsers } from '../state/modules/users';
+import { findMediaItems } from '../store/modules/media-items';
+import { loadProfile } from '../store/modules/profile';
+import { removeShareItem, readShareItem } from '../store/modules/share-items';
+import { loadUser } from '../store/modules/user';
+import { loadUsers } from '../store/modules/users';
 import { useViewPlaylist } from './NavigationHooks';
 
 export const useProfile = function (userId?: string) {

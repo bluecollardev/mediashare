@@ -4,8 +4,8 @@ import { StyleSheet, View } from 'react-native';
 
 import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../state';
-import { findMediaItems } from '../../state/modules/media-items';
+import { useAppSelector } from '../../store';
+import { findMediaItems } from '../../store/modules/media-items';
 
 import { withGlobalStateConsumer } from '../../core/globalState';
 

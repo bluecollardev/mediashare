@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../state';
-import { getFeedMediaItems, saveFeedMediaItems } from '../../state/modules/media-items';
+import { useAppSelector } from '../../store';
+import { getFeedMediaItems, saveFeedMediaItems } from '../../store/modules/media-items';
 
 import { useMediaItems } from '../../hooks/NavigationHooks';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -12,7 +12,7 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { Subheading, Card } from 'react-native-paper';
-import { AwsMediaItem } from '../../state/modules/media-items/aws-media-item.model';
+import { AwsMediaItem } from '../../store/modules/media-items/aws-media-item.model';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const AddFromFeed = ({ navigation }: PageProps) => {

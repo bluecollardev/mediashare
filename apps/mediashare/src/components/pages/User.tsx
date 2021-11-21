@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useAppSelector } from '../../state';
+import { useAppSelector } from '../../store';
 
 import { ScrollView, View } from 'react-native';
 import { Card, FAB, Subheading, Text } from 'react-native-paper';

@@ -1,8 +1,8 @@
 import React, { Component, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { loginAction } from '../../state/modules/user';
-import { RootState } from '../../state';
+import { loginAction } from '../../store/modules/user';
+import { RootState } from '../../store';
 
 import { Authenticator, SignIn, SignUp, Greetings, VerifyContact, ForgotPassword, AmplifyTheme, ConfirmSignIn } from 'aws-amplify-react-native';
 

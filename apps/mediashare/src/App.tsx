@@ -9,9 +9,7 @@ import { routeConfig } from './routes';
 import Amplify from 'aws-amplify';
 import { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
-import { Provider } from 'react-redux';
-import { store } from './boot/configureStore';
-import { useAppSelector } from './state';
+import { useAppSelector } from './store';
 import { theme } from './styles';
 import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black, useFonts } from '@expo-google-fonts/roboto';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -189,6 +187,7 @@ const PublicNavigationWithGlobalState = withGlobalStateProvider(PublicNavigation
 const PrivateNavigationWithGlobalState = withGlobalStateProvider(PrivateNavigation);
 
 function App() {
+  console.info('rendering app...');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
 
   // TODO: Fix font loading on Android
@@ -231,7 +230,7 @@ function App() {
     return <ActivityIndicator />;
   } else {
     return (
-      <Provider store={store}>
+      <>
         <Spinner visible={loading} />
         <PaperProvider
           theme={customTheme}
@@ -249,7 +248,7 @@ function App() {
             </NavigationContainer>
           )}
         </PaperProvider>
-      </Provider>
+      </>
     );
   }
 }

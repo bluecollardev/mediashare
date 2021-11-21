@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../state';
-import { getUserPlaylists, getPlaylistById, removeUserPlaylist, updateUserPlaylist } from '../../state/modules/playlists';
-import { loadUsers } from '../../state/modules/users';
+import { useAppSelector } from '../../store';
+import { getUserPlaylists, getPlaylistById, removeUserPlaylist, updateUserPlaylist } from '../../store/modules/playlists';
+import { loadUsers } from '../../store/modules/users';
 
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 

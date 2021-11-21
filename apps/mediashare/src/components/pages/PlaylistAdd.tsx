@@ -5,9 +5,9 @@ import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
 
 import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../state';
-import { findMediaItems } from '../../state/modules/media-items';
-import { addUserPlaylist, getUserPlaylists, getPlaylistById } from '../../state/modules/playlists';
+import { useAppSelector } from '../../store';
+import { findMediaItems } from '../../store/modules/media-items';
+import { addUserPlaylist, getUserPlaylists, getPlaylistById } from '../../store/modules/playlists';
 
 import { CreatePlaylistDto, PlaylistCategoryType } from '../../rxjs-api';
 

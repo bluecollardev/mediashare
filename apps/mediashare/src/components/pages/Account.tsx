@@ -5,12 +5,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../state';
-import { logout } from '../../state/modules/user';
-import { loadUsers } from '../../state/modules/users';
-import { loadProfile } from '../../state/modules/profile';
-import { findMediaItems } from '../../state/modules/media-items';
-import { readShareItem } from '../../state/modules/share-items';
+import { useAppSelector } from '../../store';
+import { logout } from '../../store/modules/user';
+import { loadUsers } from '../../store/modules/users';
+import { loadProfile } from '../../store/modules/profile';
+import { findMediaItems } from '../../store/modules/media-items';
+import { readShareItem } from '../../store/modules/share-items';
 
 import { withGlobalStateConsumer } from '../../core/globalState';
 

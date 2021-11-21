@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'recompose';
 
-import { useAppSelector } from '../../state';
+import { useAppSelector } from '../../store';
 
 export interface GlobalStateProps {
   loading?: boolean;

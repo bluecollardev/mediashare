@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import Config from 'react-native-config';
 import { Button } from 'react-native-paper';
 
-import { addMediaItem } from '../../state/modules/media-items';
+import { addMediaItem } from '../../store/modules/media-items';
 
 import { CreateMediaItemDto, MediaCategoryType } from '../../rxjs-api';
 

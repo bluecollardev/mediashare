@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../state';
-import { getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
+import { useAppSelector } from '../../store';
+import { getPlaylistById, updateUserPlaylist } from '../../store/modules/playlists';
 
 import { PlaylistCategoryType, MediaItem } from '../../rxjs-api';
 

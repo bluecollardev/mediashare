@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../state';
-import { findPlaylists, getUserPlaylists } from '../../state/modules/playlists';
+import { useAppSelector } from '../../store';
+import { findPlaylists, getUserPlaylists } from '../../store/modules/playlists';
 
 import { PlaylistResponseDto } from '../../rxjs-api';
 

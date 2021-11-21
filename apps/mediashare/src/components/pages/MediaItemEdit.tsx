@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../state';
-import { deleteMediaItem, updateMediaItem } from '../../state/modules/media-items';
+import { useAppSelector } from '../../store';
+import { deleteMediaItem, updateMediaItem } from '../../store/modules/media-items';
 
 import { MediaCategoryType, UpdateMediaItemDto } from '../../rxjs-api';
 import { useMediaItems } from '../../hooks/NavigationHooks';
@@ -80,6 +80,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
   if (!mediaItem) {
     return <Paragraph>Loading</Paragraph>;
   }
+
   // @ts-ignore
   return (
     <PageContainer>
@@ -95,6 +96,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
           subtitle={'Are you sure you want to do this? This action is final and cannot be undone.'}
         />
         <MediaCard
+          key={mediaId}
           title={title}
           description={description}
           mediaSrc={documentUri}

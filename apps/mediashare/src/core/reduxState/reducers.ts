@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../state';
+import { RootState } from '../../store';
 
 // Initial load
 export const loadItems = (stateKey: string) => <T>(state: RootState, action: PayloadAction<T>): RootState => {

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
 
-import { getUserPlaylists, findPlaylists, selectPlaylistAction } from '../../state/modules/playlists';
+import { getUserPlaylists, findPlaylists, selectPlaylistAction } from '../../store/modules/playlists';
 
 import { PlaylistResponseDto } from '../../rxjs-api';
 

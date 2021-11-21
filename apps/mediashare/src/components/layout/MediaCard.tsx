@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import { Avatar, Button, Card, IconButton, Paragraph, Title, Text } from 'react-native-paper';
 import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
-import Video from 'react-native-video';
+
+// import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
+import { Video as ExpoVideo } from 'expo-av';
+import Video from 'expo-video-player';
+
 import SwitchSelector from 'react-native-switch-selector';
 import { descriptionValidator, titleValidator } from './formConfig';
 import { TextField } from '../form/TextField';
@@ -10,7 +14,7 @@ export const DEFAULT_IMAGE = 'https://www.mapcom.com/wp-content/uploads/2015/07/
 export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png';
 
 import { UserDto } from '../../rxjs-api';
-import { useAppSelector } from '../../state';
+import { useAppSelector } from '../../store';
 import { findInArray, getAuthorText, getUsername } from '../../utils';
 import { theme } from '../../styles';
 
@@ -123,14 +127,31 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         )}
       </ImageBackground>
     ) : mediaDisplayMode === 'video' && mediaSrc ? (
-      <Video
-        source={{ uri: mediaSrc }}
-        poster={thumbnail || DEFAULT_IMAGE}
-        style={{ width: '100%', height: 300, margin: 3, marginBottom: 6 }}
-        resizeMode="contain"
-        controls={true}
-        paused={true}
-      />
+      <>
+        {/* This react-native-video version doesn't work with web and the lib has over a thousand open issues */}
+        {/*<Video
+          source={{ uri: mediaSrc }}
+          poster={thumbnail || DEFAULT_IMAGE}
+          style={{ width: '100%', height: 300, margin: 3, marginBottom: 6 }}
+          resizeMode="contain"
+          controls={true}
+          paused={true}
+        />*/}
+        {/* Use expo-av + expo-video-player */}
+        <Video
+          style={{
+            height: 300,
+          }}
+          videoProps={{
+            shouldPlay: false, // Pause by default
+            resizeMode: ExpoVideo.RESIZE_MODE_CONTAIN,
+            // ❗ source is required https://docs.expo.io/versions/latest/sdk/video/#props
+            source: {
+              uri: mediaSrc,
+            },
+          }}
+        />
+      </>
     ) : null;
   };
 

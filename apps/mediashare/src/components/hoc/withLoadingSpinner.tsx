@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../state';
+import { useAppSelector } from '../../store';
 // @ts-ignore
 import { LoadingOverlay } from '../LoadingOverlay';
 

@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { EnumLiteralsOf } from '../core/lib/Generics';
 import { routeConfig, ROUTES } from '../routes';
-import { findMediaItems, getMediaItemById } from '../state/modules/media-items';
-import { getUserPlaylists, getPlaylistById } from '../state/modules/playlists';
+import { findMediaItems, getMediaItemById } from '../store/modules/media-items';
+import { getUserPlaylists, getPlaylistById } from '../store/modules/playlists';
 
 type RouteConfigKeyType = EnumLiteralsOf<typeof ROUTES>;
 // @ts-ignore

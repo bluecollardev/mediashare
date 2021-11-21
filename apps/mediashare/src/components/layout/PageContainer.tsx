@@ -2,9 +2,9 @@ import React, { ReactNode } from 'react';
 import themeStyles, { theme } from '../../styles';
 import { KeyboardAvoidingView, SafeAreaView, ScrollView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
-import { useAppSelector } from '../../state';
+import { useAppSelector } from '../../store';
 import { useDispatch } from 'react-redux';
-import { clearError } from '../../state/modules/app-state';
+import { clearError } from '../../store/modules/app-state';
 import { LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
 
 import styles from '../../styles';

@@ -1,12 +1,33 @@
 {
-  "name": "MediashareTechnology",
-  "displayName": "Mediashare Technology",
-  "usesIcloudStorage": true,
-  "version": "1.0.0",
-  "ios": {
-    "infoPlist": {
-      "NSPhotoLibraryUsageDescription": "MediaShare is an application designed to share videos and other content that someone creates with other application users. To get data to share it needs to be uploaded from the Photo Library.",
-      "NSPhotoLibraryAddUsageDescription": "MediaShare is an application designed to share videos and other content that someone creates with other application users. To get data to share it needs to be uploaded from the Photo Library."
+  "expo": {
+    "name": "Mediashare",
+    "slug": "mediashare",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bcdev.mediashare"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     }
   }
 }

@@ -6,9 +6,9 @@ import { take } from 'rxjs/operators';
 
 import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../state';
-import { removeShareItem, readShareItem } from '../../state/modules/share-items';
-import { loadProfile } from '../../state/modules/profile';
+import { useAppSelector } from '../../store';
+import { removeShareItem, readShareItem } from '../../store/modules/share-items';
+import { loadProfile } from '../../store/modules/profile';
 
 import { useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';

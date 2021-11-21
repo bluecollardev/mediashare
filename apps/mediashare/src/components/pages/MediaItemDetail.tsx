@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppSelector } from '../../state';
+import { useAppSelector } from '../../store';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/MediaCard';
