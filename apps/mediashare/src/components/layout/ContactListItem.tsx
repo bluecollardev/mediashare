@@ -53,7 +53,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
         left={() =>
           selectable ? (
             <View style={styles.leftOuterWrapper}>
-              <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.default : theme.colors.disabled} />
+              <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.success : theme.colors.disabled} />
               <View style={styles.avatarWrapper}>
                 <Avatar.Image source={avatar ? { uri: avatar } : undefined} size={40} />
               </View>

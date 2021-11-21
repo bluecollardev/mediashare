@@ -183,9 +183,9 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           <SwitchSelector
             fontSize={13}
             textColor={theme.colors.text}
-            selectedColor={'#ffffff'}
-            backgroundColor={'#ffffff'}
-            buttonColor={theme.colors.default}
+            selectedColor={theme.colors.primary}
+            backgroundColor={theme.colors.background}
+            buttonColor={theme.colors.darkDefault}
             style={{ margin: 0, padding: 0, width: '100%' }}
             options={categoryOptions.map((option) => ({ value: option, label: option }))}
             initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}

@@ -108,8 +108,8 @@ export const PlaylistDetail = ({ route }: PageProps) => {
         >
           <Button
             icon="live-tv"
-            color={theme.colors.primary}
-            mode="contained"
+            color={theme.colors.default}
+            mode="outlined"
             style={{ width: '100%', marginBottom: 10 }}
             compact
             dark

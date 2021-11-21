@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import Config from 'react-native-config';
 import { Button } from 'react-native-paper';
 
 import { addMediaItem } from '../../store/modules/media-items';

@@ -9,6 +9,7 @@ const theme = {
     success: '#9ECD3B',
     primary: '#00B8EC',
     default: '#BDC1C6',
+    darkDefault: '#1D1D1D',
     accent: '#50C100',
     textDarker: '#BDC1C6',
     text: 'rgba(255,255,255,1)',
