@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, HttpStatus, UseGuards, HttpCode, Request } from '@nestjs/common';
+import { Controller, Get, Body, Put, Param, Delete, UseGuards, HttpCode, Request } from '@nestjs/common';
 import { UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/services/playlist.service';
@@ -9,7 +9,7 @@ import { ShareItemService } from '../../modules/share-item/services/share-item.s
 
 import { ObjectId } from 'mongodb';
 
-import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
+// import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
 import { BcRolesType, BC_ROLES } from '@core-lib';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
@@ -28,15 +28,20 @@ export class UsersController {
 
   @UserGetResponse({ isArray: true })
   @Get()
-  findAll(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
+  async findAll(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
     return from(this.userService.findAll()).pipe(map((users) => users.filter((user) => user._id !== userId)));
   }
 
   @Get(RouteTokens.USER_ID)
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserGetResponse({ type: ProfileDto })
-  findOne(@Param('userId', new ObjectIdPipe()) userId: ObjectId): Promise<User> {
-    return this.userService.getUserById(userId);
+  async findOne(@Param('userId', new ObjectIdPipe()) userId: ObjectId): Promise<User> {
+    const result = await this.userService.getUserById(userId);
+    if (result !== null) {
+      return result;
+    }
+    // If the aggregate fails due to the user not having shared items, result will be null
+    return await this.userService.findOne(userId);
   }
 
   @Delete(RouteTokens.USER_ID)
@@ -68,6 +73,4 @@ export class UsersController {
     const { roles = [] } = params;
     return this.userService.setRoles(id, roles);
   }
-
-  /* shared with others */
 }

@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Avatar, Button, Checkbox, Divider, Headline, IconButton, List, Text } from 'react-native-paper';
 import { theme } from '../../styles';
-import { shortenText } from '../../utils';
 
 interface ContactListItemProps {
   userId: string;
@@ -69,7 +68,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
         }
         right={() => {
           return showActions ? (
-            <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} />
+            <IconButton icon={iconRight} color={iconRightColor} onPress={() => onViewDetail(userId)} />
           ) : (
             <View>
               {showFollow && (

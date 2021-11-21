@@ -21,8 +21,6 @@ export const INITIAL_SEARCH_FILTERS = {
 export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
   return function GlobalStateProvider(props: any) {
     const { history, location } = props;
-    console.log('GlobalStateProvider props');
-    console.log(props);
 
     const loading = useAppSelector((state) => state?.app.loading);
     const user = useAppSelector((state) => state?.user);
@@ -56,7 +54,6 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
           filters: { ...searchFilters },
         },
       } as GlobalStateProps;
-      console.log(`getProviderValue: ${JSON.stringify(value, null, 2)}`);
       return value;
     }
   };

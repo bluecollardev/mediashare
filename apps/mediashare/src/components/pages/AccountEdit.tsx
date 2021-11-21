@@ -39,7 +39,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 
   useEffect(() => {
     async function loadData() {
-      const result = (await dispatch(loadProfile({ userId }))) as any;
+      const result = (await dispatch(loadProfile(userId))) as any;
       setState(result.payload);
       setIsLoaded(true);
     }
@@ -81,7 +81,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 
     from(dispatch(updateAccount({ updateUserDto, userId })))
       .pipe(
-        switchMap(() => dispatch(loadProfile({ userId }))),
+        switchMap(() => dispatch(loadProfile(userId))),
         switchMap(() => dispatch(loadUser())),
         take(1)
       )

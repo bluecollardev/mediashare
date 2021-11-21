@@ -56,10 +56,8 @@ export const SharedList = ({ sharedItems, selectable, showActions, onDelete, onV
 const styles = StyleSheet.create({
   sectionHeader: {
     borderColor: 'transparent',
-    backgroundColor: '#ffffff',
   },
   sectionHeaderTitle: {
     fontSize: 16,
-    color: '#444444',
   },
 });

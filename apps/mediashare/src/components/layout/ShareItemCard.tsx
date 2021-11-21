@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
   sharedItem: {
     margin: 0,
     padding: 0,
-    backgroundColor: '#ffffff',
     // padding: 5,
     // alignContent: 'center',
     // justifyContent: 'space-between',

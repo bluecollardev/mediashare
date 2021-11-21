@@ -187,7 +187,6 @@ const PublicNavigationWithGlobalState = withGlobalStateProvider(PublicNavigation
 const PrivateNavigationWithGlobalState = withGlobalStateProvider(PrivateNavigation);
 
 function App() {
-  console.info('rendering app...');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
 
   // TODO: Fix font loading on Android

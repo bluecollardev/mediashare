@@ -32,7 +32,7 @@ import { createRandomRenderKey } from '../../core/utils';
 import styles, { theme } from '../../styles';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
-  const manageContact = useRouteName(ROUTES.user);
+  // const manageContact = useRouteName(ROUTES.user);
   const contacts = useAppSelector((state) => state.users.entities);
   const viewProfileById = useViewProfileById();
 
@@ -44,11 +44,6 @@ const Contacts = ({ selectable = false, showActions = false }) => {
         showActions={showActions}
         onViewDetail={viewProfileById}
         selectable={selectable}
-        listItemProps={{
-          iconRight: 'visibility',
-          iconRightColor: theme.colors.default,
-          onViewDetail: () => manageContact(),
-        }}
       />
     </ScrollView>
   ) : null;
@@ -189,7 +184,8 @@ export const Account = ({ globalState }: PageProps) => {
     // console.log(`Account.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
     await dispatch(findMediaItems(args));
     await dispatch(loadUsers());
-    await dispatch(loadProfile({}));
+    // @ts-ignore
+    await dispatch(loadProfile());
     setIsLoaded(true);
   }
 
