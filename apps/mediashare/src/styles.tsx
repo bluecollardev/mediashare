@@ -6,6 +6,7 @@ const theme = {
   roundness: 2,
   colors: {
     ...DarkTheme.colors,
+    background: '#222222',
     success: '#9ECD3B',
     primary: '#00B8EC',
     default: '#BDC1C6',

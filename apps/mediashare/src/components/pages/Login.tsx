@@ -7,7 +7,6 @@ import { RootState } from '../../store';
 import { Authenticator, SignIn, SignUp, Greetings, VerifyContact, ForgotPassword, AmplifyTheme, ConfirmSignIn } from 'aws-amplify-react-native';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { Text } from 'react-native';
 import { Button, Card } from 'react-native-paper';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent } from '../layout/PageContainer';
 
@@ -27,49 +26,152 @@ const sectionFooterLinkDisabled = Object.assign({}, AmplifyTheme.sectionFooterLi
   color: theme.colors.disabled,
   fontFamily: theme.fonts.medium.fontFamily,
 });
-const MyTheme = Object.assign({}, AmplifyTheme, {
-  button: {
-    backgroundColor: theme.colors.primary,
-    fontFamily: theme.fonts.medium.fontFamily,
 
-    paddingVertical: 6,
-    // paddingHorizontal: variables.buttonPadding + 10,
-    borderRadius: 5,
-    borderColor: '#2874F0',
-    borderWidth: null,
-    height: 45,
-    elevation: 2,
-    shadowColor: undefined,
-    shadowOffset: undefined,
-    shadowOpacity: undefined,
-    shadowRadius: undefined,
+// https://github.com/aws-amplify/amplify-js/blob/main/packages/aws-amplify-react-native/src/AmplifyTheme.ts
+const MyTheme = Object.assign({}, AmplifyTheme, {
+  container: {
+    flex: 1,
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-around',
-    textAlign: 'center',
+    paddingTop: 20,
     width: '100%',
+    // TODO: Use our real background color
+    // backgroundColor: theme.colors.background,
+    backgroundColor: '#222222',
+  },
+  section: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  sectionScroll: {
+    flex: 1,
+    width: '100%',
+    paddingHorizontal: 20,
+  },
+  sectionHeader: {
+    width: '100%',
+    marginBottom: 32,
+    paddingTop: 20,
+  },
+  sectionHeaderText: {
+    color: theme.colors.primary,
+    fontSize: 20,
+    fontWeight: '500',
+  },
+  sectionFooter: {
+    width: '100%',
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 15,
+    marginBottom: 20,
+  },
+  sectionFooterLink: {
+    fontSize: 14,
+    color: theme.colors.textDarker,
+    alignItems: 'baseline',
+    textAlign: 'center',
+  },
+  sectionFooterLinkDisabled: {
+    fontSize: 14,
+    color: theme.colors.textDarker,
+    alignItems: 'baseline',
+    textAlign: 'center',
+  },
+  navBar: {
+    marginTop: 35,
+    padding: 15,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  navButton: {
+    marginLeft: 12,
+    borderRadius: 4,
+  },
+  cell: {
+    flex: 1,
+    width: '50%',
+  },
+  errorRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    color: theme.colors.error,
+  },
+  errorRowIcon: {
+    height: 25,
+    width: 25,
+    color: theme.colors.error,
+  },
+  errorRowText: {
+    marginLeft: 10,
+    color: theme.colors.error,
+  },
+  photo: {
+    width: '100%',
+  },
+  album: {
+    width: '100%',
+  },
+  button: {
+    backgroundColor: theme.colors.primary,
+    alignItems: 'center',
+    padding: 16,
   },
   buttonDisabled: {
     backgroundColor: theme.colors.disabled,
-    fontFamily: theme.fonts.medium.fontFamily,
-
-    paddingVertical: 6,
-    // paddingHorizontal: variables.buttonPadding + 10,
-    borderRadius: 5,
-    borderColor: '#2874F0',
-    borderWidth: null,
-    height: 45,
-    elevation: 2,
-    shadowColor: undefined,
-    shadowOffset: undefined,
-    shadowOpacity: undefined,
-    shadowRadius: undefined,
     alignItems: 'center',
-    justifyContent: 'space-around',
-    textAlign: 'center',
-    width: '100%',
+    padding: 16,
   },
-  sectionFooterLink,
-  sectionFooterLinkDisabled,
+  buttonText: {
+    color: theme.colors.text,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  formField: {
+    marginBottom: 22,
+  },
+  input: {
+    padding: 16,
+    borderWidth: 1,
+    borderRadius: 3,
+    borderColor: theme.colors.default,
+    color: theme.colors.text,
+  },
+  inputLabel: {
+    marginBottom: 8,
+    color: theme.colors.textDarker,
+  },
+  phoneContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  phoneInput: {
+    flex: 2,
+    padding: 16,
+    borderWidth: 1,
+    borderRadius: 3,
+    borderColor: theme.colors.default,
+    color: theme.colors.text,
+  },
+  picker: {
+    flex: 1,
+    height: 44,
+    // ensure that longer text values render without truncation
+    // as the selected value of the Picker on Android
+  },
+  pickerItem: {
+    height: 44,
+  },
+  signedOutMessage: {
+    textAlign: 'center',
+    padding: 20,
+    color: theme.colors.text,
+  },
 });
 export interface LoginState extends Pick<RootState, never> {}
 
@@ -93,7 +195,7 @@ const LoginComponent = ({}: PageProps) => {
     <PageContainer>
       <KeyboardAvoidingPageContent>
         <Card elevation={0}>
-          <Card.Cover style={{ backgroundColor: '#fff' }} resizeMode={'contain'} source={require('./logo.png')} />
+          <Card.Cover resizeMode="contain" source={require('../../assets/af-logo.png')} style={{ backgroundColor: theme.colors.background }} />
         </Card>
         {show && (
           <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={true}>
