@@ -9,7 +9,7 @@ interface ConfigInterface {
   TEST_USER: string;
   TEST_PASSWORD: string;
   AWS_URL: string;
-  MAX_UPLOAD: string | number;
+  MAX_UPLOAD: string;
   BUILD_FOR: string;
 }
 
@@ -47,7 +47,7 @@ if (!env.BUILD_FOR) {
     TEST_USER: '',
     TEST_PASSWORD: '',
     AWS_URL: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.amazonaws.com/public/',
-    MAX_UPLOAD: 104857600,
+    MAX_UPLOAD: '104857600',
     BUILD_FOR: 'admin',
   } as ConfigInterface;
 }

@@ -70,7 +70,7 @@ export const AddMedia = ({}: PageProps) => {
               </AppUpload>
             ) : (
               <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
-                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.primary} compact>
+                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
                   Replace Media
                 </Button>
               </AppUpload>

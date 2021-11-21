@@ -57,13 +57,13 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 11,
-    color: '#666666',
+    color: theme.colors.textDarker,
   },
   visibilityIcon: {
     flex: 0,
     width: 16,
     marginRight: 5,
-    color: '#666666',
+    color: theme.colors.textDarker,
   },
   sharedItem: {
     margin: 0,

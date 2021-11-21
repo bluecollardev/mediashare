@@ -128,9 +128,9 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
   return (
     <PrivateNavigator.Navigator
       initialRouteName={'Account'}
-      activeColor={theme.colors.primaryTextLighter}
-      inactiveColor={theme.colors.accentLighter}
-      barStyle={{ backgroundColor: theme.colors.accent }}
+      activeColor={theme.colors.text}
+      inactiveColor={theme.colors.primary}
+      barStyle={{ backgroundColor: theme.colors.background }}
       labeled={false}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

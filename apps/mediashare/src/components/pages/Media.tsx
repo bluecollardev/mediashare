@@ -60,7 +60,7 @@ export const MediaComponent = ({
               showActions={showActions}
               image={thumbnail}
               iconRight="edit"
-              iconRightColor={theme.colors.accentDarker}
+              iconRightColor={theme.colors.default}
               selectable={selectable}
               onViewDetail={() => onViewDetail(item)}
             />
@@ -101,9 +101,9 @@ export const Media = ({ navigation, globalState }: PageProps) => {
 
   const [fabState, setState] = useState({ open: false });
   const fabActions = [
-    { icon: 'delete-forever', onPress: activateDeleteMode, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
-    { icon: 'cloud-download', onPress: addFromFeed, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
-    { icon: 'library-add', onPress: addMedia, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+    { icon: 'delete-forever', onPress: activateDeleteMode, color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+    { icon: 'cloud-download', onPress: addFromFeed, color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'library-add', onPress: addMedia, color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
   ];
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
@@ -138,8 +138,8 @@ export const Media = ({ navigation, globalState }: PageProps) => {
           open={fabState.open}
           icon={fabState.open ? 'close' : 'more-vert'}
           actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          color={theme.colors.text}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.default : theme.colors.primary }}
           onStateChange={(open) => {
             // open && setOpen(!open);
             setState(open);
@@ -200,7 +200,7 @@ export default withLoadingSpinner(withGlobalStateConsumer(Media));
 
 const styles = StyleSheet.create({
   author: {
-    color: '#666',
+    color: theme.colors.textDarker,
     fontSize: 12,
     marginBottom: 2,
   },
@@ -210,13 +210,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   description: {
-    color: '#666666',
+    color: theme.colors.textDarker,
     fontSize: 12,
     marginTop: 2,
     marginBottom: 4,
   },
   videoCount: {
-    color: '#666666',
+    color: theme.colors.textDarker,
     fontSize: 12,
     marginBottom: 2,
     fontWeight: 'bold',

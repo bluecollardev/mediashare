@@ -21,13 +21,13 @@ function AppDialog({ leftActionLabel, rightActionLabel, leftActionCb, rightActio
       <Dialog visible={showDialog} onDismiss={onDismiss}>
         <Card.Title
           title={title}
-          left={(props) => <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="warning" />}
+          left={(props) => <Avatar.Icon color={theme.colors.text} style={{ backgroundColor: theme.colors.error }} {...props} icon="warning" />}
         />
         <Card.Content style={{ marginBottom: 15 }}>
           <Text>{subtitle}</Text>
         </Card.Content>
         <Dialog.Actions style={{ paddingTop: 0 }}>
-          <Button mode="text" color={theme.colors.primaryText} onPress={leftActionCb}>
+          <Button mode="text" color={theme.colors.text} onPress={leftActionCb}>
             {leftActionLabel}
           </Button>
           <Button mode="contained" dark color={theme.colors.error} onPress={rightActionCb}>
@@ -38,19 +38,5 @@ function AppDialog({ leftActionLabel, rightActionLabel, leftActionCb, rightActio
     </Portal>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#312e38',
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: '#fff',
-  },
-});
 
 export default AppDialog;

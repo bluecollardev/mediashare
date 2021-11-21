@@ -46,7 +46,7 @@ const Contacts = ({ selectable = false, showActions = false }) => {
         selectable={selectable}
         listItemProps={{
           iconRight: 'visibility',
-          iconRightColor: theme.colors.accentDarker,
+          iconRightColor: theme.colors.default,
           onViewDetail: () => manageContact(),
         }}
       />
@@ -110,19 +110,19 @@ export const Account = ({ globalState }: PageProps) => {
   let fabActions = [];
   if (build.forFreeUser) {
     fabActions = [
-      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   } else if (build.forSubscriber) {
     fabActions = [
-      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   } else if (build.forAdmin) {
     fabActions = [
-      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-      { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   }
 
@@ -172,8 +172,8 @@ export const Account = ({ globalState }: PageProps) => {
           open={fabState.open}
           icon={fabState.open ? 'close' : 'more-vert'}
           actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          color={theme.colors.text}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.default : theme.colors.primary }}
           onStateChange={(open) => {
             // open && setOpen(!open);
             setFabState(open);
@@ -232,7 +232,7 @@ export const Account = ({ globalState }: PageProps) => {
               <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <MaterialIcons
                   name={route.icon}
-                  color={props.navigationState.index === i ? theme.colors.primaryText : theme.colors.disabled}
+                  color={props.navigationState.index === i ? theme.colors.text : theme.colors.disabled}
                   size={26}
                   style={{ marginRight: 10 }}
                 />

@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import { usePreviewImage } from '../../hooks/UsePreviewImage';
-
 import { View } from 'react-native';
 import { Caption, Checkbox, IconButton, List } from 'react-native-paper';
 
@@ -40,9 +38,9 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   showThumbnail = false,
   showPlayableIcon = true,
   iconLeft = '',
-  iconLeftColor = theme.colors.accent,
+  iconLeftColor = theme.colors.default,
   iconRight = 'chevron-right',
-  iconRightColor = theme.colors.accent,
+  iconRightColor = theme.colors.default,
   ...rest
 }: MediaListItemProps & any) => {
   const [isChecked, setIsChecked] = useState(checked);

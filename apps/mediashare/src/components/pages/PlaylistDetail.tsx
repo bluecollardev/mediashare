@@ -66,12 +66,12 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   let fabActions = [];
   if (allowEdit) {
     fabActions = [
-      { icon: 'delete-forever', onPress: () => setShowDialog(true), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-      { icon: 'share', onPress: shareWith, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
-      { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+      { icon: 'delete-forever', onPress: () => setShowDialog(true), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'share', onPress: shareWith, color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+      { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   } else {
-    fabActions = [{ icon: 'share', onPress: shareWith, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } }];
+    fabActions = [{ icon: 'share', onPress: shareWith, color: theme.colors.text, style: { backgroundColor: theme.colors.text } }];
   }
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
@@ -151,8 +151,8 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           open={fabState.open}
           icon={fabState.open ? 'close' : 'more-vert'}
           actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          color={theme.colors.text}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.default : theme.colors.primary }}
           onStateChange={(open) => {
             // open && setOpen(!open);
             setFabState(open);

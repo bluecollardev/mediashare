@@ -185,7 +185,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             textColor={theme.colors.text}
             selectedColor={'#ffffff'}
             backgroundColor={'#ffffff'}
-            buttonColor={theme.colors.primary}
+            buttonColor={theme.colors.default}
             style={{ margin: 0, padding: 0, width: '100%' }}
             options={categoryOptions.map((option) => ({ value: option, label: option }))}
             initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
@@ -263,7 +263,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   author: {
-    color: '#666',
     fontSize: 12,
   },
   username: {
@@ -273,13 +272,11 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 15,
     fontSize: 13,
-    color: '#666666',
   },
   descriptionWithSocial: {
     marginTop: 15,
     marginBottom: 30,
     fontSize: 13,
-    color: '#666666',
   },
   card: {
     margin: 0,

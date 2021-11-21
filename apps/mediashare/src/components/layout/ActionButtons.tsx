@@ -36,10 +36,10 @@ export const ActionButtons = ({
   return (
     <View style={mergedStyles}>
       {children}
-      <Button icon={leftIcon} loading={loading} onPress={() => cancelCb()} style={styles.actionButton} disabled={disableCancel} color={theme.colors.error}>
+      <Button icon={leftIcon} loading={loading} onPress={() => cancelCb()} style={styles.actionButton} disabled={disableCancel} color={theme.colors.default}>
         {cancelLabel}
       </Button>
-      <Button loading={loading} icon={rightIcon} onPress={() => actionCb()} disabled={disableAction} style={styles.actionButton} color={theme.colors.primary}>
+      <Button loading={loading} icon={rightIcon} onPress={() => actionCb()} disabled={disableAction} style={styles.actionButton} color={theme.colors.accent}>
         {actionLabel}
       </Button>
     </View>

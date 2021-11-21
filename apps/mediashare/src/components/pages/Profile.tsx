@@ -71,8 +71,8 @@ const Profile = ({ route }: ProfileProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accentDarker } },
+    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
   ];
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
@@ -118,8 +118,8 @@ const Profile = ({ route }: ProfileProps) => {
           open={fabState.open}
           icon={fabState.open ? 'close' : 'more-vert'}
           actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          color={theme.colors.text}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.default : theme.colors.primary }}
           onStateChange={(open) => {
             setFabState(open);
           }}
@@ -150,47 +150,5 @@ const Profile = ({ route }: ProfileProps) => {
     setClearSelectionKey(randomKey);
   }
 };
-
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    width: '100%',
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: '#fff',
-  },
-  text: {
-    color: theme.colors.primaryTextLighter,
-  },
-  listContainer: {
-    padding: 15,
-  },
-  textContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: 150,
-    justifyContent: 'center',
-    marginLeft: 5,
-  },
-  buttonContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignContent: 'center',
-  },
-  sharedItemCard: {
-    width: '100%',
-    height: 75,
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: theme.colors.success,
-    color: theme.colors.primaryTextLighter,
-    // padding: 5,
-    alignContent: 'center',
-    justifyContent: 'space-between',
-  },
-});
 
 export default withLoadingSpinner(Profile);

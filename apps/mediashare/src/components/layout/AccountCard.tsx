@@ -42,8 +42,8 @@ export const AccountCard = ({
 
   // <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />
   // <View style={styles.buttonContainer}>
-  //   <IconButton icon="delete-outline" color={theme.colors.primaryText} size={20} onPress={onDelete} />
-  //   <IconButton icon="play-circle-filled" color={theme.colors.primaryText} size={20} onPress={onView} />
+  //   <IconButton icon="delete-outline" color={theme.colors.text} size={20} onPress={onDelete} />
+  //   <IconButton icon="play-circle-filled" color={theme.colors.text} size={20} onPress={onView} />
   // </View>
   // <Menu.Item icon={'play-circle-filled'} onPress={() => {}} title="Watch" />
   return (
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   titleText: {
-    color: '#444',
+    color: theme.colors.text,
     fontSize: 18,
   },
   subtitleText: {

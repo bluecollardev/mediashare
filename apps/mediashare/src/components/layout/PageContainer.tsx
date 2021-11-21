@@ -75,7 +75,7 @@ export function PageContainer({ children }: PageContainerProps) {
         <Dialog visible={app.hasError} onDismiss={hideDialog}>
           <Card.Title
             title={app.error.name}
-            left={(props) => <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="error" />}
+            left={(props) => <Avatar.Icon color={theme.colors.text} style={{ backgroundColor: theme.colors.error }} {...props} icon="error" />}
             // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
           />
           <Card.Content style={{ maxHeight: '80%', overflow: 'scroll' }}>

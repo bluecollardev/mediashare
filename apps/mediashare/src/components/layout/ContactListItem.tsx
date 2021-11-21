@@ -34,7 +34,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
   onChecked = () => {},
   showActions = true,
   iconRight = 'chevron-right',
-  iconRightColor = theme.colors.accent,
+  iconRightColor = theme.colors.default,
 }: ContactListItemProps) => {
   const [isChecked, setIsChecked] = useState(checked);
 
@@ -53,7 +53,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
         left={() =>
           selectable ? (
             <View style={styles.leftOuterWrapper}>
-              <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.success : theme.colors.disabled} />
+              <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.default : theme.colors.disabled} />
               <View style={styles.avatarWrapper}>
                 <Avatar.Image source={avatar ? { uri: avatar } : undefined} size={40} />
               </View>
@@ -97,12 +97,12 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
 
 const styles = StyleSheet.create({
   description: {
-    color: '#666666',
+    color: theme.colors.textDarker,
     fontSize: 12,
     marginTop: 4,
     marginBottom: 4,
   },
-  listItem: { margin: 0, justifyContent: 'center', backgroundColor: '#ffffff' },
+  listItem: { margin: 0, justifyContent: 'center' },
   leftOuterWrapper: { flexDirection: 'row', width: 100, justifyContent: 'space-between' },
   letterLabelWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
   headline: { marginLeft: 10, color: theme.colors.primary },
