@@ -9,7 +9,7 @@ import { PlaylistCategoryType, MediaItem } from '../../rxjs-api';
 import { usePlaylists, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { Button, IconButton } from 'react-native-paper';
 import { AppUpload } from '../layout/AppUpload';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -21,12 +21,13 @@ import { ROUTES } from '../../routes';
 import { createRandomRenderKey } from '../../core/utils';
 
 import { theme } from '../../styles';
+import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 
 const actionModes = { delete: 'delete', default: 'default' };
 
 const PlaylistEdit = ({ navigation, route }: PageProps) => {
-  const onAddToPlaylistClicked = useRouteWithParams(ROUTES.addItemsToPlaylist);
-  const onViewMediaItemClicked = useViewMediaItem();
+  const addToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
+  const viewMediaItem = useViewMediaItem();
   const goToPlaylists = usePlaylists();
 
   const dispatch = useDispatch();
@@ -92,22 +93,32 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
           onDescriptionChange={setDescription}
           isEdit={true}
           isReadOnly={selectedItems && selectedItems.length > 0}
-          topDrawer={() => (
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <View style={{ flex: 1 }}>
-                <Button icon="delete-forever" mode="text" dark color={theme.colors.error} onPress={() => console.log('Do something!')} compact>
-                  {' '}
-                </Button>
-              </View>
-              <View style={{ flex: 4 }}>
-                <AppUpload uploadMode="photo" onUpload={onUpload}>
-                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
-                    Change Cover Photo
+          topDrawer={() =>
+            imageSrc ? (
+              <View style={{ display: 'flex', flexDirection: 'row' }}>
+                <View style={{ flex: 1 }}>
+                  <Button icon="delete-forever" mode="text" dark color={theme.colors.error} onPress={() => console.log('Do something!')} compact>
+                    {' '}
                   </Button>
-                </AppUpload>
+                </View>
+                <View style={{ flex: 4 }}>
+                  <AppUpload uploadMode="photo" onUpload={onUpload}>
+                    <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
+                      <Text>Change Cover Photo</Text>
+                    </Button>
+                  </AppUpload>
+                </View>
               </View>
-            </View>
-          )}
+            ) : (
+              <View style={{ display: 'flex', flexDirection: 'row' }}>
+                <View style={{ flex: 1 }}>
+                  <AppUpload uploadMode="photo" onUpload={onUpload}>
+                    <UploadPlaceholder buttonText="Add Cover Photo" />
+                  </AppUpload>
+                </View>
+              </View>
+            )
+          }
         />
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
           <IconButton
@@ -118,10 +129,10 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
           />
           <Button
             icon="playlist-add"
-            color={theme.colors.primary}
+            color={theme.colors.accent}
             mode="contained"
             style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
-            onPress={() => onAddToPlaylistClicked({ playlistId })}
+            onPress={() => addToPlaylist({ playlistId })}
             disabled={actionMode === actionModes.delete}
             compact
             dark
@@ -131,7 +142,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
         </View>
         <MediaList
           key={clearSelectionKey}
-          onViewDetail={(item) => onViewMediaItemClicked({ mediaId: item._id, uri: item.uri })}
+          onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
           list={items}
           selectable={isSelectable}
           showActions={!isSelectable}
@@ -151,6 +162,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
             actionLabel="Remove"
             cancelLabel="Cancel"
             rightIcon="delete"
+            rightIconColor={theme.colors.error}
           />
         )}
       </PageActions>

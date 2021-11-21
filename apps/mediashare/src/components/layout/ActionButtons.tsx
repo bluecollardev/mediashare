@@ -11,8 +11,10 @@ interface Props {
   cancelCb: () => void;
   disableAction?: boolean;
   disableCancel?: boolean;
-  rightIcon?: string;
   leftIcon?: string;
+  leftIconColor?: string;
+  rightIcon?: string;
+  rightIconColor?: string;
   loading?: boolean;
   disabled?: boolean;
   style?: any;
@@ -26,8 +28,10 @@ export const ActionButtons = ({
   cancelLabel = 'Back',
   disableAction = false,
   disableCancel = false,
-  rightIcon = '',
   leftIcon = 'cancel',
+  leftIconColor = theme.colors.default,
+  rightIcon = 'check-circle',
+  rightIconColor = theme.colors.accent,
   loading = false,
   style = undefined,
   children,
@@ -36,10 +40,10 @@ export const ActionButtons = ({
   return (
     <View style={mergedStyles}>
       {children}
-      <Button icon={leftIcon} loading={loading} onPress={() => cancelCb()} style={styles.actionButton} disabled={disableCancel} color={theme.colors.default}>
+      <Button icon={leftIcon} loading={loading} onPress={() => cancelCb()} style={styles.actionButton} disabled={disableCancel} color={leftIconColor}>
         {cancelLabel}
       </Button>
-      <Button loading={loading} icon={rightIcon} onPress={() => actionCb()} disabled={disableAction} style={styles.actionButton} color={theme.colors.accent}>
+      <Button loading={loading} icon={rightIcon} onPress={() => actionCb()} disabled={disableAction} style={styles.actionButton} color={rightIconColor}>
         {actionLabel}
       </Button>
     </View>

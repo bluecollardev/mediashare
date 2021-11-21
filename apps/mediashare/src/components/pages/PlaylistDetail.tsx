@@ -11,7 +11,7 @@ import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { Button, FAB, Divider } from 'react-native-paper';
+import { Button, FAB, Divider, IconButton } from 'react-native-paper';
 
 import AppDialog from '../layout/AppDialog';
 import { MediaCard } from '../layout/MediaCard';
@@ -27,6 +27,7 @@ import * as build from '../../build';
 import { createRandomRenderKey } from '../../core/utils';
 
 import { theme } from '../../styles';
+import { View } from 'react-native';
 
 export const PlaylistDetail = ({ route }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
@@ -119,6 +120,28 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           </Button>
         </MediaCard>
         <Divider />
+        {!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+            {/*<IconButton
+              icon="rule"
+              color={isSelectable ? theme.colors.primary : theme.colors.disabled}
+              style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
+              onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+            />*/}
+            <Button
+              icon="playlist-add"
+              color={theme.colors.accent}
+              mode="contained"
+              style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
+              onPress={() => addToPlaylist({ playlistId })}
+              // disabled={actionMode === actionModes.delete}
+              compact
+              dark
+            >
+              Add To Playlist
+            </Button>
+          </View>
+        )}
         <MediaList
           key={clearSelectionKey}
           onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
@@ -132,9 +155,10 @@ export const PlaylistDetail = ({ route }: PageProps) => {
         />
       </PageContent>
       <PageActions>
-        {!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
+        {/* TODO: Selectively display depending if the user has scrolled up past the upper button */}
+        {/*!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
           <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
-        )}
+        )*/}
         {!build.forFreeUser && allowEdit && selectedItems && selectedItems.length > 0 && (
           <ActionButtons
             actionCb={confirmDeletePlaylistItems}
