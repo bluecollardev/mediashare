@@ -50,7 +50,13 @@ export interface PlaylistsProps {
   return list;
 } */
 
-export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable = false, showActions = true, onChecked = () => {} }: PlaylistsProps) => {
+export const PlaylistsComponent = ({
+  list = [],
+  onViewDetailClicked,
+  selectable = false,
+  showActions = true,
+  onChecked = () => undefined
+}: PlaylistsProps) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 

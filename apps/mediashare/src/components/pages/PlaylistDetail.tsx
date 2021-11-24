@@ -4,7 +4,13 @@ import { useDispatch } from 'react-redux';
 import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../store';
-import { getUserPlaylists, getPlaylistById, removeUserPlaylist, updateUserPlaylist } from '../../store/modules/playlists';
+import {
+  getUserPlaylists,
+  getPlaylistById,
+  removeUserPlaylist,
+  updateUserPlaylist,
+  selectPlaylistAction
+} from '../../store/modules/playlists';
 import { loadUsers } from '../../store/modules/users';
 
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
@@ -20,7 +26,7 @@ import { ListActionButton } from '../layout/ListActionButton';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { ActionButtons } from '../layout/ActionButtons';
 
-import { MediaItem } from '../../rxjs-api';
+import { MediaItem, PlaylistResponseDto } from '../../rxjs-api';
 
 import * as build from '../../build';
 
@@ -35,7 +41,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   const edit = useRouteWithParams(ROUTES.playlistEdit);
   const addToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
   const viewMediaItem = useViewMediaItem();
-  const shareWith = useRouteName(ROUTES.shareWith);
+  const goToShareWith = useRouteName(ROUTES.shareWith);
   const goToPlaylists = usePlaylists();
 
   const dispatch = useDispatch();
@@ -44,7 +50,6 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   const appUserId = useAppSelector((state) => state.user?._id);
   const [showDialog, setShowDialog] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedItems, setSelectedItems] = useState([]);
 
   // @ts-ignore
   const { _id, title = '', author = '', createdBy, description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } =
@@ -68,17 +73,12 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   if (allowEdit) {
     fabActions = [
       { icon: 'delete-forever', onPress: () => setShowDialog(true), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
-      { icon: 'share', onPress: shareWith, color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+      { icon: 'share', onPress: () => sharePlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
       { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   } else {
-    fabActions = [{ icon: 'share', onPress: shareWith, color: theme.colors.text, style: { backgroundColor: theme.colors.text } }];
+    fabActions = [{ icon: 'share', onPress: (() => sharePlaylist()), color: theme.colors.text, style: { backgroundColor: theme.colors.text } }];
   }
-
-  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
-  useEffect(() => {
-    clearCheckboxSelection();
-  }, []);
 
   return (
     <PageContainer>
@@ -120,7 +120,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           </Button>
         </MediaCard>
         <Divider />
-        {!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
+        {!build.forFreeUser && allowEdit && (
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
             {/*<IconButton
               icon="rule"
@@ -143,15 +143,11 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           </View>
         )}
         <MediaList
-          key={clearSelectionKey}
           onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
           list={items}
           showThumbnail={true}
           // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
           selectable={false}
-          showActions={!selectedItems || selectedItems.length === 0}
-          removeItem={onRemoveItem}
-          addItem={onAddItem}
         />
       </PageContent>
       <PageActions>
@@ -159,17 +155,8 @@ export const PlaylistDetail = ({ route }: PageProps) => {
         {/*!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
           <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
         )*/}
-        {!build.forFreeUser && allowEdit && selectedItems && selectedItems.length > 0 && (
-          <ActionButtons
-            actionCb={confirmDeletePlaylistItems}
-            cancelCb={cancelDeletePlaylistItems}
-            actionLabel="Remove"
-            cancelLabel="Cancel"
-            rightIcon="delete"
-          />
-        )}
       </PageActions>
-      {!build.forFreeUser && (!selectedItems || selectedItems.length === 0) && (
+      {!build.forFreeUser && (
         <FAB.Group
           visible={true}
           open={fabState.open}
@@ -181,27 +168,11 @@ export const PlaylistDetail = ({ route }: PageProps) => {
             // open && setOpen(!open);
             setFabState(open);
           }}
-          onPress={() => {
-            clearCheckboxSelection();
-            resetData();
-          }}
+          onPress={() => undefined}
         />
       )}
     </PageContainer>
   );
-
-  function saveWithIds(mediaIds: string[]) {
-    return dispatch(
-      updateUserPlaylist({
-        title: title,
-        mediaIds,
-        description: description,
-        category: category as any,
-        _id: selected._id,
-        imageSrc,
-      })
-    );
-  }
 
   async function loadData() {
     await dispatch(getPlaylistById(playlistId));
@@ -209,53 +180,13 @@ export const PlaylistDetail = ({ route }: PageProps) => {
     setIsLoaded(true);
   }
 
-  function clearCheckboxSelection() {
-    const randomKey = createRandomRenderKey();
-    setClearSelectionKey(randomKey);
+  async function sharePlaylist() {
+    await dispatch(selectPlaylistAction({ isChecked: true, plist: selected as PlaylistResponseDto }));
+    goToShareWith()
   }
 
-  // const [selected, setSelected] = useState(selectedItems.size);
-  function onAddItem(item: MediaItem) {
-    // setSelected(selectedItems.size);
-    const updatedItems = selectedItems.concat([item._id]);
-    setSelectedItems(updatedItems);
-  }
-
-  function onRemoveItem(selectedItem: MediaItem) {
-    const updatedItems = selectedItems.filter((item) => item !== selectedItem._id);
-    setSelectedItems(updatedItems);
-  }
-
-  async function confirmDeletePlaylistItems() {
-    await saveMediaUpdates();
-    clearCheckboxSelection();
-    resetData();
-  }
-
-  async function cancelDeletePlaylistItems() {
-    clearCheckboxSelection();
-    resetData();
-  }
-
-  // TODO: We have to do this automatically, and on!
-  /* async function save() {
-    await saveWithIds(selectedPlaylist.mediaIds);
-    setIsLoaded(false);
-    await loadData();
-  } */
-
-  async function saveMediaUpdates() {
-    // @ts-ignore
-    const mediaIds = selected.mediaIds || [];
-    const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
-
-    await saveWithIds(filtered);
-    setIsLoaded(false);
-    await loadData();
-  }
-
-  function resetData() {
-    setSelectedItems([]);
+  async function cancelSharePlaylist() {
+    dispatch(selectPlaylistAction({ isChecked: false, plist: selected as PlaylistResponseDto }));
   }
 
   async function editPlaylist() {
