@@ -20,7 +20,7 @@ import { ROUTES } from '../../routes';
 
 import { createRandomRenderKey } from '../../core/utils';
 
-import { theme } from '../../styles';
+import styles, { theme } from '../../styles';
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 
 const actionModes = { delete: 'delete', default: 'default' };
@@ -95,22 +95,22 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
           isReadOnly={selectedItems && selectedItems.length > 0}
           topDrawer={() =>
             imageSrc ? (
-              <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <View style={styles.itemControls}>
                 <View style={{ flex: 1 }}>
-                  <Button icon="delete-forever" mode="text" dark color={theme.colors.error} onPress={() => console.log('Do something!')} compact>
+                  <Button icon="delete-forever" mode="outlined" dark color={theme.colors.default} onPress={() => console.log('Do something!')} compact style={styles.deleteItemButton}>
                     {' '}
                   </Button>
                 </View>
                 <View style={{ flex: 4 }}>
                   <AppUpload uploadMode="photo" onUpload={onUpload}>
-                    <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
+                    <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact style={styles.changeImageButton}>
                       <Text>Change Cover Photo</Text>
                     </Button>
                   </AppUpload>
                 </View>
               </View>
             ) : (
-              <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <View style={styles.itemControls}>
                 <View style={{ flex: 1 }}>
                   <AppUpload uploadMode="photo" onUpload={onUpload}>
                     <UploadPlaceholder buttonText="Add Cover Photo" />

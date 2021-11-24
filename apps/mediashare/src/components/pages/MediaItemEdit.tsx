@@ -17,7 +17,7 @@ import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import AppDialog from '../layout/AppDialog';
 
-import { theme } from '../../styles';
+import styles, { theme } from '../../styles';
 import AppUpload from '../layout/AppUpload';
 
 export interface MediaItemEditContainerProps {
@@ -112,15 +112,15 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
           isEdit={true}
           isPlayable={true}
           topDrawer={() => (
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <View style={styles.itemControls}>
               <View style={{ flex: 1 }}>
-                <Button icon="delete-forever" mode="text" dark color={theme.colors.error} onPress={() => setShowDialog(true)} compact>
+                <Button icon="delete-forever" mode="text" dark color={theme.colors.error} onPress={() => setShowDialog(true)} compact style={styles.deleteItemButton}>
                   {' '}
                 </Button>
               </View>
               <View style={{ flex: 4 }}>
                 <AppUpload uploadMode="photo" onUpload={setThumbnail}>
-                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
+                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact style={styles.changeImageButton}>
                     Change Preview Image
                   </Button>
                 </AppUpload>

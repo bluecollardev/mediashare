@@ -11,6 +11,7 @@ const theme = {
     primary: '#00B8EC',
     default: '#BDC1C6',
     darkDefault: '#1D1D1D',
+    defaultBorder: 'rgba(255,255,255,0.29)',
     accent: '#50C100',
     textDarker: '#BDC1C6',
     text: 'rgba(255,255,255,1)',
@@ -123,6 +124,21 @@ const styles: any = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: theme.colors.surface,
   },
+  changeImageButton: {
+    borderTopWidth: 0,
+    borderRadius: 0
+  },
+  deleteItemButton: {
+    borderTopWidth: 0,
+    borderRightWidth: 0,
+    borderRadius: 0
+  },
+  itemControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    borderTopColor: theme.colors.defaultBorder,
+    borderTopWidth: 1
+  }
 });
 
 export default styles;
