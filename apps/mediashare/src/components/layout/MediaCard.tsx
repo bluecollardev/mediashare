@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Button, Card, IconButton, Paragraph, Title, Text } from 'react-native-paper';
 import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 
-// import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
-import { Video as ExpoVideo } from 'expo-av';
-import Video from 'expo-video-player';
+import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
+// import { Video as ExpoVideo } from 'expo-av';
+// import Video from 'expo-video-player';
 
 import SwitchSelector from 'react-native-switch-selector';
 import { descriptionValidator, titleValidator } from './formConfig';
@@ -126,16 +126,16 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     ) : mediaDisplayMode === 'video' && mediaSrc ? (
       <>
         {/* This react-native-video version doesn't work with web and the lib has over a thousand open issues */}
-        {/*<Video
+        <Video
           source={{ uri: mediaSrc }}
-          poster={thumbnail || DEFAULT_IMAGE}
+          poster={imageSrc}
           style={{ width: '100%', height: 300, margin: 3, marginBottom: 6 }}
           resizeMode="contain"
           controls={true}
           paused={true}
-        />*/}
+        />
         {/* Use expo-av + expo-video-player */}
-        <Video
+        {/* <Video
           style={{
             height: 300,
           }}
@@ -147,7 +147,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
               uri: mediaSrc,
             },
           }}
-        />
+        /> */}
       </>
     ) : null;
   };
