@@ -1,6 +1,7 @@
-import ReactNativeConfig from 'react-native-config'; // TODO: Use this once/if we eject!
+// import ReactNativeConfig from 'react-native-config'; // TODO: Use this once/if we eject!
+import Config from 'react-native-config'; // TODO: Use this once/if we eject!
 
-interface ConfigInterface {
+/* interface ConfigInterface {
   API_SERVER: string | number;
   AWS_ROOT: string;
   VIDEO_ROOT: string;
@@ -34,7 +35,7 @@ if (ReactNativeConfig.BUILD_FOR) {
   console.info('loading configuration, using .env');
   env = process.env;
 }
-console.info('checking configuratio...');
+console.info('checking configuration...');
 if (!env.BUILD_FOR) {
   console.info('loading configuration failed, using hardcoded defaults');
   // Hardcode default for now
@@ -62,6 +63,6 @@ Config.TEST_PASSWORD = env.TEST_PASSWORD;
 Config.AWS_URL = env.AWS_URL;
 Config.MAX_UPLOAD = env.MAX_UPLOAD;
 Config.BUILD_FOR = env.BUILD_FOR;
-console.info('exporting config', Config);
+console.info('exporting config', Config); */
 
 export default Config;
