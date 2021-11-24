@@ -84,9 +84,7 @@ export const PlaylistsComponent = ({
               image={imageSrc}
               showActions={showActions}
               selectable={selectable}
-              onViewDetail={() => {
-                onViewDetailClicked(item);
-              }}
+              onViewDetail={() => onViewDetailClicked(item)}
               onChecked={(checked) => onChecked(checked, item)}
             />
             <Divider key={`playlist_divider_${item._id}`} />

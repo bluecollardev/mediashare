@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { ROUTES } from '../../routes';
 
 import { useAppSelector } from '../../store';
-import { findMediaItems } from '../../store/modules/media-items';
+import { deleteMediaItem, findMediaItems } from '../../store/modules/media-items';
 
 import { withGlobalStateConsumer } from '../../core/globalState';
 
@@ -25,18 +25,21 @@ import { shortenText } from '../../utils';
 import { createRandomRenderKey } from '../../core/utils';
 
 import { theme } from '../../styles';
+import { selectMediaItem } from '../../store/modules/media-items';
 
 export const MediaComponent = ({
-  onViewDetail,
   list = [],
   selectable,
   showActions = true,
+  onViewDetail,
+  onChecked = () => undefined
 }: {
   navigation: any;
   list: MediaItemDto[];
   onViewDetail: any;
   selectable: boolean;
   showActions?: boolean;
+  onChecked?: (checked: boolean, item?: any) => void;
 }) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
@@ -63,6 +66,7 @@ export const MediaComponent = ({
               iconRightColor={theme.colors.default}
               selectable={selectable}
               onViewDetail={() => onViewDetail(item)}
+              onChecked={(checked) => onChecked(checked, item)}
             />
             <Divider key={`media_item_divider_${_id}`} />
           </View>
@@ -83,7 +87,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
 
   const dispatch = useDispatch();
 
-  const { loaded, entities } = useAppSelector((state) => state.mediaItems);
+  const { loaded, entities, selected } = useAppSelector((state) => state.mediaItems);
   const [isLoaded, setIsLoaded] = useState(loaded);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
@@ -119,9 +123,10 @@ export const Media = ({ navigation, globalState }: PageProps) => {
             key={clearSelectionKey}
             navigation={navigation}
             list={entities}
-            onViewDetail={onEditItem}
-            selectable={isSelectable}
             showActions={!isSelectable}
+            selectable={isSelectable}
+            onViewDetail={onEditItem}
+            onChecked={updateSelection}
           />
         ) : (
           <NoItems />
@@ -179,6 +184,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   }
 
   async function confirmDelete() {
+    await deleteItems();
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
@@ -188,6 +194,20 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
+  }
+
+  async function deleteItems() {
+    selected.map(async (item) => {
+      await dispatch(deleteMediaItem({ id: item._id, key: item.uri }));
+    }) // TODO: Find a real way to do this
+    setTimeout(() => {
+      loadData()
+    }, 3000)
+
+  }
+
+  async function updateSelection(bool, item) {
+    await dispatch(selectMediaItem({ isChecked: bool, item: item }));
   }
 
   function clearCheckboxSelection() {

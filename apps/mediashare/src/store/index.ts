@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 import { apis } from './apis';
 import { rootReducer as reducer } from './reducers';
 import { loading, setError } from './modules/app-state';
-import { clearMediaItemSelection } from './modules/media-items';
+import { clearActiveMediaItemSelection } from './modules/media-items';
 
 const errorMiddleware: Middleware = function exampleMiddleware(store) {
   return function wrapDispatch(next) {
@@ -29,7 +29,7 @@ export const store = configureStore({
       .prepend(thunk.withExtraArgument({ api: apis }))
       .concat(errorMiddleware),
 });
-export const actions = bindActionCreators({ clearMediaItemSelection }, store.dispatch);
+export const actions = bindActionCreators({ clearActiveMediaItemSelection }, store.dispatch);
 
 export const loadStateAction = bindActionCreators(loading, store.dispatch);
 export const setErrorAction = bindActionCreators(setError, store.dispatch);

@@ -10,6 +10,7 @@
     "app:ios:local": "yarn app:ios:refresh-pods && react-native run-ios --scheme MedishareTechnologyDevelopment",
     "app:ios:prod": "yarn app:ios:refresh-pods && react-native run-ios --scheme MediaShareTechnologyProduction",
     "run:ios:prod": "react-native run-ios --scheme MediaShareTechnologyProduction",
+    "run:android:prod": "react-native run-android",
     "app:lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "app:sort-pkg": "npx sort-package-json",
     "app:test": "jest",

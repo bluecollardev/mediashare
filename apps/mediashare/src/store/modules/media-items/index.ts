@@ -9,7 +9,12 @@ import { copyStorage, deleteStorage, fetchMedia, getStorage, listStorage, putToS
 import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
-import { CreateMediaItemDto, MediaCategoryType, MediaItemDto, UpdateMediaItemDto } from '../../../rxjs-api';
+import {
+  CreateMediaItemDto,
+  MediaCategoryType,
+  MediaItemDto,
+  UpdateMediaItemDto
+} from '../../../rxjs-api';
 import { apis, ApiService } from '../../apis';
 
 import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '../../helpers';
@@ -30,10 +35,10 @@ const MEDIA_ITEM_ACTIONS = [
 ] as const;
 export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
 export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
-export const selectMediaItem = createAction<MediaItemDto, 'selectMediaItem'>('selectMediaItem');
-export const toggleMediaItem = createAction<number, 'selectMediaItem'>('selectMediaItem');
-export const clearMediaItemSelection = createAction('clearMediaItems');
-export const clearMediaItem = createAction('clearMediaItem');
+export const setActiveMediaItem = createAction<MediaItemDto, 'setActiveMediaItem'>('setActiveMediaItem');
+export const clearActiveMediaItem = createAction('clearActiveMediaItem');
+export const selectMediaItem = createAction<{ isChecked: boolean; item: MediaItemDto}, 'selectMediaItem'>('selectMediaItem');
+export const clearMediaItems = createAction('clearMediaItems');
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async ({ uri, mediaId }: { uri: string; mediaId: string }) => {
   const result = await forkJoin({
@@ -243,17 +248,17 @@ const mediaItemSlice = createSlice({
       .addCase(getFeedMediaItems.fulfilled, (state, action) => {
         return { ...state, feed: action.payload };
       })
-      .addCase(selectMediaItem, (state, action) => {
+      .addCase(setActiveMediaItem, (state, action) => {
         return { ...state, entity: action.payload };
       })
-      .addCase(clearMediaItem, (state) => {
+      .addCase(clearActiveMediaItem, (state) => {
         return { ...state, entity: undefined, createState: 'empty' };
       });
   },
 });
 
 export interface MediaItemsInitialState {
-  selected: [];
+  selected: MediaItemDto[];
   entities: MediaItemDto[];
   loading: boolean;
   loaded: boolean;
@@ -285,7 +290,16 @@ const mediaItemsSlice = createSlice({
       .addCase(loadUserMediaItems.fulfilled, (state, action) => {
         return { ...state, mediaItems: action.payload };
       })
-      .addCase(clearMediaItemSelection, (state) => {
+      .addCase(selectMediaItem, (state, action) => {
+        const updateSelection = function(bool: boolean, item: MediaItemDto) {
+          const { selected } = state;
+          // Is it filtered?
+          // @ts-ignore
+          return bool ? selected.concat([item]) : selected.filter((item) => item._id !== item._id);
+        };
+        return { ...state, selected: updateSelection(action.payload.isChecked, action.payload.item) };
+      })
+      .addCase(clearMediaItems, (state) => {
         return { ...state, entities: [] };
       })
       .addCase(saveFeedMediaItems.pending, reducePendingState())
