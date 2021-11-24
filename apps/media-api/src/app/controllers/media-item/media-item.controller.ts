@@ -106,7 +106,7 @@ export class MediaItemController {
     const { title } = await this.mediaItemService.findOne(mediaId);
     if (!title && !createdBy) return response.status(HttpStatus.NOT_FOUND);
 
-    const shareItem = await this.shareItemService.createMediaShareItem({
+    const shareItem = await this.shareItemService.createMediashareItem({
       createdBy,
       userId,
       mediaId,

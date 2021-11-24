@@ -2,7 +2,7 @@ import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { forkJoin, from, merge } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import Config from 'react-native-config';
+import Config from '../../../config';
 
 import { makeEnum } from '../../core/factory';
 import { copyStorage, deleteStorage, fetchMedia, getStorage, listStorage, putToS3, sanitizeFoldername, uploadMedia, uploadThumbnail } from './storage';
@@ -80,7 +80,8 @@ export const addMediaItem = createAsyncThunk(
 );
 
 export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
-  const feedMediaItems = (await listStorage(mediaRoot + uploadRoot)) as AwsMediaItem[];
+  // TODO: Non-overlapping types here!
+  const feedMediaItems = ((await listStorage(mediaRoot + uploadRoot)) as unknown) as AwsMediaItem[];
   return feedMediaItems
     .filter((item) => item.key !== mediaRoot + uploadRoot)
     .map((item) => ({

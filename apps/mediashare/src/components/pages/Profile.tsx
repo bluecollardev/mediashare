@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { from } from 'rxjs';
-import { take } from 'rxjs/operators';
 
-import { ROUTES } from '../../routes';
+import { useAppSelector } from '../../store';
+import { removeShareItem, readShareItem } from '../../store/modules/share-items';
+import { loadProfile } from '../../store/modules/profile';
 
-import { useAppSelector } from '../../state';
-import { removeShareItem, readShareItem } from '../../state/modules/share-items';
-import { loadProfile } from '../../state/modules/profile';
-
-import { useRouteWithParams, useViewPlaylistById } from '../../hooks/NavigationHooks';
+import { useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { FAB, Divider } from 'react-native-paper';
-import { PageActions, PageContainer, PageContent, PageProps } from '../layout/PageContainer';
+import { PageActions, PageContainer, PageProps } from '../layout/PageContainer';
 import { AccountCard } from '../layout/AccountCard';
 import { SharedList } from '../layout/SharedList';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -30,13 +25,15 @@ const actionModes = { delete: 'delete', default: 'default' };
 
 const Profile = ({ route }: ProfileProps) => {
   const { userId } = route.params;
-  const [loaded, setLoaded] = useState(false);
+  // const [loaded, setLoaded] = useState(false);
   // const userId = '6149b54a19531dd4c6b0df59';
   const dispatch = useDispatch();
-  const userRole = useAppSelector((state) => state.user.role);
-  const isAdmin = userRole === 'admin';
-  const accountEdit = useRouteWithParams(ROUTES.accountEdit);
-  const profile = useAppSelector((state) => state.profile.entity);
+  // const userRole = useAppSelector((state) => state.user.role);
+  // const isAdmin = userRole === 'admin';
+  // const accountEdit = useRouteWithParams(ROUTES.accountEdit);
+  const profile = useAppSelector((state) => {
+    return state.profile.entity;
+  });
 
   const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
 
@@ -45,25 +42,19 @@ const Profile = ({ route }: ProfileProps) => {
 
   const viewPlaylist = useViewPlaylistById();
 
-  const onDelete = function (itemId: string) {
-    from(dispatch(removeShareItem(itemId))).subscribe(() => {
-      setLoaded(false);
-    });
+  const onDelete = async (itemId: string) => {
+    dispatch(removeShareItem(itemId));
   };
 
-  const onView = function (playlistId: string, shareItemId: string) {
-    dispatch(readShareItem(shareItemId));
-    setLoaded(false);
-    viewPlaylist({ playlistId });
+  const onView = async (playlistId: string, shareItemId: string) => {
+    await dispatch(readShareItem(shareItemId));
+    await viewPlaylist({ playlistId });
   };
 
   useEffect(() => {
-    from(dispatch(loadProfile({ userId })))
-      .pipe(take(1))
-      .subscribe(() => {
-        setLoaded(true);
-      });
-  }, [loaded, dispatch]);
+    dispatch(loadProfile(userId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
   // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
@@ -71,8 +62,8 @@ const Profile = ({ route }: ProfileProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accentDarker } },
+    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
   ];
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
@@ -118,8 +109,8 @@ const Profile = ({ route }: ProfileProps) => {
           open={fabState.open}
           icon={fabState.open ? 'close' : 'more-vert'}
           actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          color={theme.colors.text}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.default : theme.colors.primary }}
           onStateChange={(open) => {
             setFabState(open);
           }}
@@ -150,47 +141,5 @@ const Profile = ({ route }: ProfileProps) => {
     setClearSelectionKey(randomKey);
   }
 };
-
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    width: '100%',
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: '#fff',
-  },
-  text: {
-    color: theme.colors.primaryTextLighter,
-  },
-  listContainer: {
-    padding: 15,
-  },
-  textContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: 150,
-    justifyContent: 'center',
-    marginLeft: 5,
-  },
-  buttonContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignContent: 'center',
-  },
-  sharedItemCard: {
-    width: '100%',
-    height: 75,
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: theme.colors.success,
-    color: theme.colors.primaryTextLighter,
-    // padding: 5,
-    alignContent: 'center',
-    justifyContent: 'space-between',
-  },
-});
 
 export default withLoadingSpinner(Profile);

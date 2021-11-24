@@ -2,7 +2,7 @@ import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import * as R from 'remeda';
 
 import { ActionsFactory } from '../../core/factory';
-import { setKeyPair } from './keypair-store';
+// import { setKeyPair } from './keypair-store'; // TODO: Not compatible with react-native-web [https://github.com/expo/expo/issues/7744]
 import { signOut } from './auth';
 
 import { AuthorizeDto, ProfileDto, UpdateUserDto, BcRolesType } from '../../../rxjs-api';
@@ -66,8 +66,8 @@ export const updateAccount = createAsyncThunk(
 
 export const logout = createAsyncThunk(UserActions.logout.type, async () => {
   const response = await apis.user.userControllerLogout().toPromise();
-  await setKeyPair('token', '');
-  const signout = await signOut();
+  // await setKeyPair('token', ''); // TODO: Not compatible with react-native-web [https://github.com/expo/expo/issues/7744]
+  await signOut();
   return response;
 });
 

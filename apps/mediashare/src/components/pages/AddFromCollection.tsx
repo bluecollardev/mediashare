@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { getUserPlaylists } from '../../state/modules/playlists';
-import { useAppSelector } from '../../state';
+import { getUserPlaylists } from '../../store/modules/playlists';
+import { useAppSelector } from '../../store';
 
 // import { ActivityIndicator } from 'react-native-paper';
 

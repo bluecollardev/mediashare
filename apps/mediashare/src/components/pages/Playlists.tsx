@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
 
-import { getUserPlaylists, findPlaylists, selectPlaylistAction } from '../../state/modules/playlists';
+import { getUserPlaylists, findPlaylists, selectPlaylistAction } from '../../store/modules/playlists';
 
 import { PlaylistResponseDto } from '../../rxjs-api';
 
@@ -120,9 +120,9 @@ export const Playlists = ({ globalState }: PageProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
-    { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
-    { icon: 'library-add', onPress: () => createPlaylist(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+    { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+    { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'library-add', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
   ];
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
@@ -164,8 +164,8 @@ export const Playlists = ({ globalState }: PageProps) => {
           open={fabState.open}
           icon={fabState.open ? 'close' : 'more-vert'}
           actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          color={theme.colors.text}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.default : theme.colors.primary }}
           onStateChange={(open) => {
             setFabState(open);
           }}
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   author: {
-    color: '#666',
+    color: theme.colors.textDarker,
     fontSize: 12,
     marginBottom: 2,
   },
@@ -267,13 +267,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   description: {
-    color: '#666666',
+    color: theme.colors.textDarker,
     fontSize: 12,
     marginTop: 2,
     marginBottom: 4,
   },
   videoCount: {
-    color: '#666666',
+    color: theme.colors.textDarker,
     fontSize: 12,
     marginBottom: 2,
     fontWeight: 'bold',

@@ -1,11 +1,11 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import Config from 'react-native-config';
+import Config from '../../config';
 
-import { thumbnailRoot, awsUrl } from '../../state/modules/media-items/key-factory';
-import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
-import { createThumbnail } from '../../state/modules/media-items';
-import { setError } from '../../state/modules/app-state';
+import { thumbnailRoot, awsUrl } from '../../store/modules/media-items/key-factory';
+import { fetchAndPutToS3 } from '../../store/modules/media-items/storage';
+import { createThumbnail } from '../../store/modules/media-items';
+import { setError } from '../../store/modules/app-state';
 
 import * as DocumentPicker from 'expo-document-picker';
 import { launchImageLibrary } from 'react-native-image-picker';

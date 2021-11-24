@@ -1,46 +1,24 @@
 import { StyleSheet } from 'react-native';
-import { DefaultTheme } from 'react-native-paper';
-import variable from '../src/theme/variables/platform';
+import { DarkTheme } from 'react-native-paper';
 
-type ThemeType = typeof DefaultTheme;
-
-interface Theme extends ThemeType {
-  colors: ThemeType['colors'] & {
-    success: string;
-    primaryLighter: string;
-    accentDarker: string;
-    accentLighter: string;
-    primaryDarker: string;
-    primaryText: string;
-    primaryTextLighter: string;
-    bgColor: string;
-  };
-}
-
-const theme: Theme = {
-  ...DefaultTheme,
+const theme = {
+  ...DarkTheme,
   roundness: 2,
   colors: {
-    ...DefaultTheme.colors,
-    primary: variable.brandPrimary as string,
-    accent: variable.brandInfo as string,
-    success: variable.brandSuccess as string,
-    error: variable.brandWarning as string,
-    text: variable.primaryText,
-    background: variable.segmentBackgroundColor,
-    primaryLighter: variable.primaryLighter,
-    accentDarker: variable.accentDarker,
-    accentLighter: variable.accentLighter,
-    primaryDarker: variable.primaryDarker,
-    primaryText: variable.primaryText,
-    primaryTextLighter: variable.primaryTextDarker,
-    bgColor: variable.bgColor,
+    ...DarkTheme.colors,
+    background: '#222222',
+    success: '#9ECD3B',
+    primary: '#00B8EC',
+    default: '#BDC1C6',
+    darkDefault: '#1D1D1D',
+    accent: '#50C100',
+    textDarker: '#BDC1C6',
+    text: 'rgba(255,255,255,1)',
+    error: 'rgba(242,22,81,1)',
   },
   fonts: {
     medium: { fontFamily: 'Roboto_500Medium', fontWeight: '500' },
-
     light: { fontFamily: 'Roboto_300Light', fontWeight: '300' },
-
     regular: { fontFamily: 'Roboto_400Regular', fontWeight: '400' },
     thin: { fontFamily: 'Roboto_100Thin', fontWeight: '100' },
   },
@@ -49,7 +27,7 @@ const theme: Theme = {
 const styles: any = StyleSheet.create({
   pageContainer: {
     height: '100%',
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.background,
   },
   pageContent: {
     paddingTop: 5,
@@ -61,14 +39,14 @@ const styles: any = StyleSheet.create({
     display: 'flex',
     width: '100%',
     height: 50, // Make sure actionButtons is the same height!
-    backgroundColor: '#ffffff',
+    backgroundColor: 'transparent',
   },
   actionButtons: {
     display: 'flex',
     flexDirection: 'row',
     height: 50, // Make sure this is the same height as pageActions!
     borderTopWidth: 1,
-    borderColor: '#eeeeee',
+    borderColor: 'transparent',
   },
   actionButton: {
     flex: 1,
@@ -91,13 +69,13 @@ const styles: any = StyleSheet.create({
     marginRight: 10,
   },
   tabContent: {
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.background,
     padding: 5,
   },
   tabContentQuarters: {
     height: '100%',
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.background,
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
@@ -143,7 +121,7 @@ const styles: any = StyleSheet.create({
   },
   textField: {
     marginBottom: 10,
-    backgroundColor: '#fefefe',
+    backgroundColor: theme.colors.surface,
   },
 });
 

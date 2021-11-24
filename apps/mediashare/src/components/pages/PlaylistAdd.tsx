@@ -1,17 +1,17 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
 
 import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../state';
-import { findMediaItems } from '../../state/modules/media-items';
-import { addUserPlaylist, getUserPlaylists, getPlaylistById } from '../../state/modules/playlists';
+import { useAppSelector } from '../../store';
+import { findMediaItems } from '../../store/modules/media-items';
+import { addUserPlaylist, getUserPlaylists, getPlaylistById } from '../../store/modules/playlists';
 
 import { CreatePlaylistDto, PlaylistCategoryType } from '../../rxjs-api';
 
-import { withLoadingSpinner, LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
@@ -99,7 +99,7 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
               </AppUpload>
             ) : (
               <AppUpload uploadMode="photo" onUpload={onUpload}>
-                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.primary} compact>
+                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
                   Change Cover Photo
                 </Button>
               </AppUpload>

@@ -1,7 +1,6 @@
+import Config from '../../../config';
+
 // type MediaKeyUnionType<K, L> = KeyLabelType<K>
-
-import Config from 'react-native-config';
-
 // declare function MakeVideoKey<K, L>(label: L, key: K): MediaKeyType<L>
 const mediaRoot = Config.AWS_ROOT;
 

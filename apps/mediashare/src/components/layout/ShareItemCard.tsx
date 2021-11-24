@@ -57,18 +57,17 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 11,
-    color: '#666666',
+    color: theme.colors.textDarker,
   },
   visibilityIcon: {
     flex: 0,
     width: 16,
     marginRight: 5,
-    color: '#666666',
+    color: theme.colors.textDarker,
   },
   sharedItem: {
     margin: 0,
     padding: 0,
-    backgroundColor: '#ffffff',
     // padding: 5,
     // alignContent: 'center',
     // justifyContent: 'space-between',

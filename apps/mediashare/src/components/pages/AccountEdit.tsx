@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import Config from 'react-native-config';
+import Config from '../../config';
 import * as R from 'remeda';
 import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
@@ -9,11 +9,11 @@ import { launchImageLibrary } from 'react-native-image-picker';
 
 import { UserDto } from '../../rxjs-api';
 
-import { useAppSelector } from '../../state';
-import { loadUser, updateAccount } from '../../state/modules/user';
-import { fetchAndPutToS3 } from '../../state/modules/media-items/storage';
-import { thumbnailRoot } from '../../state/modules/media-items/key-factory';
-import { loadProfile } from '../../state/modules/profile';
+import { useAppSelector } from '../../store';
+import { loadUser, updateAccount } from '../../store/modules/user';
+import { fetchAndPutToS3 } from '../../store/modules/media-items/storage';
+import { thumbnailRoot } from '../../store/modules/media-items/key-factory';
+import { loadProfile } from '../../store/modules/profile';
 
 import { ROUTES } from '../../routes';
 
@@ -39,7 +39,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 
   useEffect(() => {
     async function loadData() {
-      const result = (await dispatch(loadProfile({ userId }))) as any;
+      const result = (await dispatch(loadProfile(userId))) as any;
       setState(result.payload);
       setIsLoaded(true);
     }
@@ -81,7 +81,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 
     from(dispatch(updateAccount({ updateUserDto, userId })))
       .pipe(
-        switchMap(() => dispatch(loadProfile({ userId }))),
+        switchMap(() => dispatch(loadProfile(userId))),
         switchMap(() => dispatch(loadUser())),
         take(1)
       )

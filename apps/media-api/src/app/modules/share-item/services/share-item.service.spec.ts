@@ -52,7 +52,7 @@ describe('ShareItemService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('createMediaShareItem', () => {
+  describe('createMediashareItem', () => {
     it('should insert a media share item', async () => {
       const mediaItem = userFactory.createMediaItem();
 
@@ -60,7 +60,7 @@ describe('ShareItemService', () => {
       const mediaId = mediaItem._id;
       const createdBy = new ObjectId(userFactory.userId);
 
-      const result = await service.createMediaShareItem({ createdBy, mediaId, userId, title: 'blah' });
+      const result = await service.createMediashareItem({ createdBy, mediaId, userId, title: 'blah' });
 
       expect(result).toHaveProperty('mediaId');
       expect(result.mediaId.toHexString()).toEqual(mediaId.toHexString());

@@ -2,9 +2,9 @@ import React, { ReactNode } from 'react';
 import themeStyles, { theme } from '../../styles';
 import { KeyboardAvoidingView, SafeAreaView, ScrollView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
-import { useAppSelector } from '../../state';
+import { useAppSelector } from '../../store';
 import { useDispatch } from 'react-redux';
-import { clearError } from '../../state/modules/app-state';
+import { clearError } from '../../store/modules/app-state';
 import { LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
 
 import styles from '../../styles';
@@ -75,7 +75,7 @@ export function PageContainer({ children }: PageContainerProps) {
         <Dialog visible={app.hasError} onDismiss={hideDialog}>
           <Card.Title
             title={app.error.name}
-            left={(props) => <Avatar.Icon color={theme.colors.primaryTextLighter} style={{ backgroundColor: theme.colors.error }} {...props} icon="error" />}
+            left={(props) => <Avatar.Icon color={theme.colors.text} style={{ backgroundColor: theme.colors.error }} {...props} icon="error" />}
             // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
           />
           <Card.Content style={{ maxHeight: '80%', overflow: 'scroll' }}>

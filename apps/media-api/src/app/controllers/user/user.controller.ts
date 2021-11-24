@@ -1,6 +1,6 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UnauthorizedException, UseGuards, Req, Res, Put } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UnauthorizedException, UseGuards, Req, Res, Put } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser, GetUserId } from '../../core/decorators/user.decorator';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { UserService } from '../../modules/auth/user.service';
@@ -16,12 +16,8 @@ import { ObjectId } from 'mongodb';
 import { PlaylistGetResponse } from '../playlist/playlist.decorator';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 import { UserGuard } from '../../modules/auth/guards/user.guard';
-import { User } from './entities/user.entity';
-import { UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ObjectIdPipe } from '@mediashare/shared';
 import { ProfileDto } from './dto/profile.dto';
-import * as R from 'remeda';
 import { AuthorizeDto } from './dto/authorize.dto';
 
 @ApiTags('user')
@@ -37,16 +33,14 @@ export class UserController {
   @Get()
   @UserGetResponse({ type: ProfileDto })
   async getUser(@GetUserId() userId: ObjectId) {
-    const user = await this.userService.getUserById(userId);
-
-    return user;
+    return await this.userService.getUserById(userId);
   }
 
   @Put()
   @UserPostResponse()
   @ApiBody({ type: UpdateUserDto })
-  update(@GetUserId() userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.updateUser({ userId, updateUserDto });
+  async update(@GetUserId() userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.updateUser({ userId, updateUserDto });
   }
 
   @Post('logout')
@@ -63,8 +57,7 @@ export class UserController {
   @ApiBearerAuth()
   @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
   async getUserPlaylists(@GetUserId() userId: ObjectId) {
-    const result = await this.playlistService.getPlaylistByUserId({ userId });
-    return result;
+    return await this.playlistService.getPlaylistByUserId({ userId });
   }
 
   @Get('media-items')
@@ -72,39 +65,33 @@ export class UserController {
   @ApiBearerAuth()
   @UserGetResponse({ type: MediaItemDto, isArray: true })
   async getMediaItems(@GetUserId() userId: ObjectId) {
-    const result = await this.mediaItemService.findMediaItemsByUserId(userId);
-
-    return result;
+    return await this.mediaItemService.findMediaItemsByUserId(userId);
   }
 
   @Get('media-items/shared')
   @UserGetResponse({ type: MediaItemDto, isArray: true })
-  getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
+  async getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
-
-    return this.shareItemService.aggregateSharedMediaItems({ userId });
+    return await this.shareItemService.aggregateSharedMediaItems({ userId });
   }
   @Get('playlists/shared')
   @UserGetResponse({ isArray: true, type: ShareItem })
   async getSharedPlaylists(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
-
     return await this.shareItemService.aggregateSharedPlaylists({ userId });
   }
 
   @Get('media-items/shares')
   @UserGetResponse({ type: MediaItemDto, isArray: true })
-  getSharesMediaItems(@GetUser() user: SessionUserInterface = null) {
+  async getSharesMediaItems(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
-
-    return this.shareItemService.aggregateSharedMediaItems({ userId });
+    return await this.shareItemService.aggregateSharedMediaItems({ userId });
   }
   @Get('playlists/shares')
   @UserGetResponse({ isArray: true, type: ShareItem })
-  getSharesPlaylists(@GetUser() user: SessionUserInterface = null) {
+  async getSharesPlaylists(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
-
-    return this.shareItemService.aggregateSharesPlaylists({ createdBy: userId });
+    return await this.shareItemService.aggregateSharesPlaylists({ createdBy: userId });
   }
 
   @HttpCode(HttpStatus.OK)
@@ -116,7 +103,6 @@ export class UserController {
     const { accessToken = null, idToken = null } = req.body as any;
 
     const valid = this.userService.validateToken({ token: accessToken, idToken });
-
     if (!valid) throw new UnauthorizedException();
     const user = await this.userService.findByQuery({ sub: valid.sub });
 

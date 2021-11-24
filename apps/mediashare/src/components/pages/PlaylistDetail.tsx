@@ -3,15 +3,15 @@ import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../state';
-import { getUserPlaylists, getPlaylistById, removeUserPlaylist, updateUserPlaylist } from '../../state/modules/playlists';
-import { loadUsers } from '../../state/modules/users';
+import { useAppSelector } from '../../store';
+import { getUserPlaylists, getPlaylistById, removeUserPlaylist, updateUserPlaylist } from '../../store/modules/playlists';
+import { loadUsers } from '../../store/modules/users';
 
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { Button, FAB, Divider } from 'react-native-paper';
+import { Button, FAB, Divider, IconButton } from 'react-native-paper';
 
 import AppDialog from '../layout/AppDialog';
 import { MediaCard } from '../layout/MediaCard';
@@ -27,6 +27,7 @@ import * as build from '../../build';
 import { createRandomRenderKey } from '../../core/utils';
 
 import { theme } from '../../styles';
+import { View } from 'react-native';
 
 export const PlaylistDetail = ({ route }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
@@ -66,12 +67,12 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   let fabActions = [];
   if (allowEdit) {
     fabActions = [
-      { icon: 'delete-forever', onPress: () => setShowDialog(true), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-      { icon: 'share', onPress: shareWith, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
-      { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+      { icon: 'delete-forever', onPress: () => setShowDialog(true), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'share', onPress: shareWith, color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+      { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   } else {
-    fabActions = [{ icon: 'share', onPress: shareWith, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } }];
+    fabActions = [{ icon: 'share', onPress: shareWith, color: theme.colors.text, style: { backgroundColor: theme.colors.text } }];
   }
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
@@ -108,8 +109,8 @@ export const PlaylistDetail = ({ route }: PageProps) => {
         >
           <Button
             icon="live-tv"
-            color={theme.colors.primary}
-            mode="contained"
+            color={theme.colors.default}
+            mode="outlined"
             style={{ width: '100%', marginBottom: 10 }}
             compact
             dark
@@ -119,6 +120,28 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           </Button>
         </MediaCard>
         <Divider />
+        {!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+            {/*<IconButton
+              icon="rule"
+              color={isSelectable ? theme.colors.primary : theme.colors.disabled}
+              style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
+              onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+            />*/}
+            <Button
+              icon="playlist-add"
+              color={theme.colors.accent}
+              mode="contained"
+              style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
+              onPress={() => addToPlaylist({ playlistId })}
+              // disabled={actionMode === actionModes.delete}
+              compact
+              dark
+            >
+              Add To Playlist
+            </Button>
+          </View>
+        )}
         <MediaList
           key={clearSelectionKey}
           onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
@@ -132,9 +155,10 @@ export const PlaylistDetail = ({ route }: PageProps) => {
         />
       </PageContent>
       <PageActions>
-        {!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
+        {/* TODO: Selectively display depending if the user has scrolled up past the upper button */}
+        {/*!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
           <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
-        )}
+        )*/}
         {!build.forFreeUser && allowEdit && selectedItems && selectedItems.length > 0 && (
           <ActionButtons
             actionCb={confirmDeletePlaylistItems}
@@ -151,8 +175,8 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           open={fabState.open}
           icon={fabState.open ? 'close' : 'more-vert'}
           actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          color={theme.colors.text}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.default : theme.colors.primary }}
           onStateChange={(open) => {
             // open && setOpen(!open);
             setFabState(open);

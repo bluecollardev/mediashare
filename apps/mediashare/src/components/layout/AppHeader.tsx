@@ -32,7 +32,7 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
   // console.log(`AppHeader > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
 
   return (
-    <Appbar.Header style={{ backgroundColor: theme.colors.accent }}>
+    <Appbar.Header style={{ backgroundColor: theme.colors.background }}>
       {searchable && searchIsActive && (
         <>
           <Searchbar

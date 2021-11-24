@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useAppSelector } from '../../state';
+import { useAppSelector } from '../../store';
 
 import { ScrollView, View } from 'react-native';
 import { Card, FAB, Subheading, Text } from 'react-native-paper';
@@ -35,7 +35,7 @@ const SharedItems = ({ selectable = false }) => {
           borderColor: 'lightgrey',
         }}
       >
-        <MaterialIcons name="movie" color={theme.colors.primaryText} size={26} style={{ marginRight: 10 }} />
+        <MaterialIcons name="movie" color={theme.colors.text} size={26} style={{ marginRight: 10 }} />
         <Text style={{ fontWeight: 'bold' }}>Items Shared With User</Text>
       </View>
       <ScrollView>
@@ -50,7 +50,7 @@ const SharedItems = ({ selectable = false }) => {
                 showThumbnail={true}
                 image={imageSrc}
                 showActions={false}
-                iconRightColor={theme.colors.accentDarker}
+                iconRightColor={theme.colors.accent}
                 selectable={selectable}
                 onViewDetail={() => {}}
               />
@@ -97,8 +97,8 @@ export const User = ({}: PageProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.disabled } },
-    { icon: 'person-remove', onPress: () => {}, color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primaryDarker } },
+    { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.disabled } },
+    { icon: 'person-remove', onPress: () => {}, color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
   ];
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
@@ -125,8 +125,8 @@ export const User = ({}: PageProps) => {
           open={fabState.open}
           icon={fabState.open ? 'close' : 'more-vert'}
           actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          color={theme.colors.text}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.default : theme.colors.primary }}
           onStateChange={(open) => {
             // open && setOpen(!open);
             setFabState(open);

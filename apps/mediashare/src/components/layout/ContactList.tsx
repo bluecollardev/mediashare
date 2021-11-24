@@ -7,7 +7,6 @@ import { ContactListItem } from './ContactListItem';
 
 export interface ContactListProps {
   navigation?: any;
-  listItemProps?: any;
   contacts?: UserDto[];
   showActions?: boolean;
   showGroups?: boolean;

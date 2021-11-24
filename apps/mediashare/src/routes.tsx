@@ -5,7 +5,7 @@ import { AppHeader } from './components/layout/AppHeader';
 const routeConfig = {
   login: {
     name: 'login',
-    options: { title: ' ', header: undefined },
+    options: { title: ' ', header: (props) => <AppHeader {...props} searchable={false} /> },
   },
   browse: {
     name: 'browse',

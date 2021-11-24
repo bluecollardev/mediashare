@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import Config from 'react-native-config';
 import { Button } from 'react-native-paper';
 
-import { addMediaItem } from '../../state/modules/media-items';
+import { addMediaItem } from '../../store/modules/media-items';
 
 import { CreateMediaItemDto, MediaCategoryType } from '../../rxjs-api';
 
@@ -70,7 +69,7 @@ export const AddMedia = ({}: PageProps) => {
               </AppUpload>
             ) : (
               <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
-                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.primary} compact>
+                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
                   Replace Media
                 </Button>
               </AppUpload>

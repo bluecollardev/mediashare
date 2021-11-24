@@ -5,12 +5,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import { ROUTES } from '../../routes';
 
-import { useAppSelector } from '../../state';
-import { logout } from '../../state/modules/user';
-import { loadUsers } from '../../state/modules/users';
-import { loadProfile } from '../../state/modules/profile';
-import { findMediaItems } from '../../state/modules/media-items';
-import { readShareItem } from '../../state/modules/share-items';
+import { useAppSelector } from '../../store';
+import { logout } from '../../store/modules/user';
+import { loadUsers } from '../../store/modules/users';
+import { loadProfile } from '../../store/modules/profile';
+import { findMediaItems } from '../../store/modules/media-items';
+import { readShareItem } from '../../store/modules/share-items';
 
 import { withGlobalStateConsumer } from '../../core/globalState';
 
@@ -32,7 +32,7 @@ import { createRandomRenderKey } from '../../core/utils';
 import styles, { theme } from '../../styles';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
-  const manageContact = useRouteName(ROUTES.user);
+  // const manageContact = useRouteName(ROUTES.user);
   const contacts = useAppSelector((state) => state.users.entities);
   const viewProfileById = useViewProfileById();
 
@@ -44,11 +44,6 @@ const Contacts = ({ selectable = false, showActions = false }) => {
         showActions={showActions}
         onViewDetail={viewProfileById}
         selectable={selectable}
-        listItemProps={{
-          iconRight: 'visibility',
-          iconRightColor: theme.colors.accentDarker,
-          onViewDetail: () => manageContact(),
-        }}
       />
     </ScrollView>
   ) : null;
@@ -110,19 +105,19 @@ export const Account = ({ globalState }: PageProps) => {
   let fabActions = [];
   if (build.forFreeUser) {
     fabActions = [
-      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   } else if (build.forSubscriber) {
     fabActions = [
-      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   } else if (build.forAdmin) {
     fabActions = [
-      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.error } },
-      { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.primary } },
-      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.primaryTextLighter, style: { backgroundColor: theme.colors.accent } },
+      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   }
 
@@ -172,8 +167,8 @@ export const Account = ({ globalState }: PageProps) => {
           open={fabState.open}
           icon={fabState.open ? 'close' : 'more-vert'}
           actions={fabActions}
-          color={theme.colors.primaryTextLighter}
-          fabStyle={{ backgroundColor: fabState.open ? theme.colors.error : theme.colors.primary }}
+          color={theme.colors.text}
+          fabStyle={{ backgroundColor: fabState.open ? theme.colors.default : theme.colors.primary }}
           onStateChange={(open) => {
             // open && setOpen(!open);
             setFabState(open);
@@ -189,7 +184,8 @@ export const Account = ({ globalState }: PageProps) => {
     // console.log(`Account.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
     await dispatch(findMediaItems(args));
     await dispatch(loadUsers());
-    await dispatch(loadProfile({}));
+    // @ts-ignore
+    await dispatch(loadProfile());
     setIsLoaded(true);
   }
 
@@ -232,7 +228,7 @@ export const Account = ({ globalState }: PageProps) => {
               <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <MaterialIcons
                   name={route.icon}
-                  color={props.navigationState.index === i ? theme.colors.primaryText : theme.colors.disabled}
+                  color={props.navigationState.index === i ? theme.colors.text : theme.colors.disabled}
                   size={26}
                   style={{ marginRight: 10 }}
                 />

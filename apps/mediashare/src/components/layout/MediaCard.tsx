@@ -2,16 +2,20 @@ import React, { useEffect, useState } from 'react';
 
 import { Avatar, Button, Card, IconButton, Paragraph, Title, Text } from 'react-native-paper';
 import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
-import Video from 'react-native-video';
+
+import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
+// import { Video as ExpoVideo } from 'expo-av';
+// import Video from 'expo-video-player';
+
 import SwitchSelector from 'react-native-switch-selector';
 import { descriptionValidator, titleValidator } from './formConfig';
 import { TextField } from '../form/TextField';
-export const DEFAULT_IMAGE = 'https://www.mapcom.com/wp-content/uploads/2015/07/video-placeholder.jpg';
 export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png';
 
 import { UserDto } from '../../rxjs-api';
-import { useAppSelector } from '../../state';
+import { useAppSelector } from '../../store';
 import { findInArray, getAuthorText, getUsername } from '../../utils';
+import { usePreviewImage } from '../../hooks/usePreviewImage';
 import { theme } from '../../styles';
 
 export interface MediaCardProps {
@@ -106,11 +110,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   }, [users]);
 
   const DisplayPreviewOrVideo = () => {
-    const imageSrc = thumbnail || DEFAULT_IMAGE;
-    if (imageSrc === '') {
-      console.warn('image src is an empty string');
-    }
-    return mediaDisplayMode === 'image' ? (
+    const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
+    return mediaDisplayMode === 'image' && !isDefaultImage ? (
       <ImageBackground source={{ uri: imageSrc }} resizeMode="cover" style={{ width: '100%', height: 250 }}>
         {isPlayable && (
           <TouchableWithoutFeedback onPress={toggleMediaMode}>
@@ -123,14 +124,31 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         )}
       </ImageBackground>
     ) : mediaDisplayMode === 'video' && mediaSrc ? (
-      <Video
-        source={{ uri: mediaSrc }}
-        poster={thumbnail || DEFAULT_IMAGE}
-        style={{ width: '100%', height: 300, margin: 3, marginBottom: 6 }}
-        resizeMode="contain"
-        controls={true}
-        paused={true}
-      />
+      <>
+        {/* This react-native-video version doesn't work with web and the lib has over a thousand open issues */}
+        <Video
+          source={{ uri: mediaSrc }}
+          poster={imageSrc}
+          style={{ width: '100%', height: 300, margin: 3, marginBottom: 6 }}
+          resizeMode="contain"
+          controls={true}
+          paused={true}
+        />
+        {/* Use expo-av + expo-video-player */}
+        {/* <Video
+          style={{
+            height: 300,
+          }}
+          videoProps={{
+            shouldPlay: false, // Pause by default
+            resizeMode: ExpoVideo.RESIZE_MODE_CONTAIN,
+            // ❗ source is required https://docs.expo.io/versions/latest/sdk/video/#props
+            source: {
+              uri: mediaSrc,
+            },
+          }}
+        /> */}
+      </>
     ) : null;
   };
 
@@ -162,9 +180,9 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           <SwitchSelector
             fontSize={13}
             textColor={theme.colors.text}
-            selectedColor={'#ffffff'}
-            backgroundColor={'#ffffff'}
-            buttonColor={theme.colors.primary}
+            selectedColor={theme.colors.primary}
+            backgroundColor={theme.colors.background}
+            buttonColor={theme.colors.darkDefault}
             style={{ margin: 0, padding: 0, width: '100%' }}
             options={categoryOptions.map((option) => ({ value: option, label: option }))}
             initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
@@ -181,6 +199,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       <DisplayPreviewOrVideo />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <Card.Title
+        style={{ marginTop: 25 }}
         title={<Title>{title}</Title>}
         titleStyle={styles.title}
         // TODO: Stupid component doesn't render right on Android if we use a View to wrap, but then the whole f*cking thing appears on a single line!
@@ -230,6 +249,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     }
   }
 };
+
 const styles = StyleSheet.create({
   avatar: {
     width: 50,
@@ -242,7 +262,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   author: {
-    color: '#666',
     fontSize: 12,
   },
   username: {
@@ -252,15 +271,14 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 15,
     fontSize: 13,
-    color: '#666666',
   },
   descriptionWithSocial: {
     marginTop: 15,
     marginBottom: 30,
     fontSize: 13,
-    color: '#666666',
   },
   card: {
+    paddingTop: 5,
     margin: 0,
   },
 });

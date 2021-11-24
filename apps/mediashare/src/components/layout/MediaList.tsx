@@ -9,6 +9,8 @@ import { shortenText } from '../../utils';
 
 export type MediaListType = Omit<Pick<MediaItemDto, keyof MediaItem>, 'category'>;
 
+import { theme } from '../../styles';
+
 interface MediaListProps {
   list: MediaListType[];
   showActions?: boolean;
@@ -58,7 +60,7 @@ export const MediaList = ({
 
 const styles = StyleSheet.create({
   description: {
-    color: '#666666',
+    color: theme.colors.textDarker,
     fontSize: 12,
     marginTop: 2,
     marginBottom: 4,

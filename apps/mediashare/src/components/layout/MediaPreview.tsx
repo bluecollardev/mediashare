@@ -1,7 +1,7 @@
 import React from 'react';
 import { ImageBackground, TouchableWithoutFeedback, View } from 'react-native';
 import { Button } from 'react-native-paper';
-import { usePreviewImage } from '../../hooks/UsePreviewImage';
+import { usePreviewImage } from '../../hooks/usePreviewImage';
 
 export interface MediaPreviewProps {
   thumbnail?: string;
@@ -23,15 +23,10 @@ export const MediaPreview = ({
   height = 100,
   ...rest
 }: MediaPreviewProps & any) => {
-  const DEFAULT_IMAGE = usePreviewImage();
-  const imageSrc = thumbnail || DEFAULT_IMAGE;
-  const isDefaultImage = imageSrc === DEFAULT_IMAGE;
-  if (imageSrc === '') {
-    console.warn('image src is an empty string');
-  }
+  const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
   return (
     <View {...rest}>
-      <ImageBackground source={{ uri: imageSrc }} resizeMode="cover" style={imageStyle}>
+      <ImageBackground source={{ uri: imageSrc }} resizeMode={isDefaultImage ? 'contain' : 'cover'} style={imageStyle}>
         <TouchableWithoutFeedback onPress={onPress}>
           <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width, height }}>
             {/* @ts-ignore */}

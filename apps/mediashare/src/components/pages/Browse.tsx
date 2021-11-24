@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../state';
-import { findPlaylists, getUserPlaylists } from '../../state/modules/playlists';
+import { useAppSelector } from '../../store';
+import { findPlaylists, getUserPlaylists } from '../../store/modules/playlists';
 
 import { PlaylistResponseDto } from '../../rxjs-api';
 
@@ -185,7 +185,7 @@ export const Browse = ({ globalState }: PageProps) => {
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                   <MaterialIcons
                     name={route.icon}
-                    color={props.navigationState.index === i ? theme.colors.primaryText : theme.colors.disabled}
+                    color={props.navigationState.index === i ? theme.colors.text : theme.colors.disabled}
                     size={26}
                     style={{ marginRight: 10 }}
                   />

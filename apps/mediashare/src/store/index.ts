@@ -1,18 +1,19 @@
-import thunk from 'redux-thunk';
-import { rootReducer as reducer } from '../state/reducers';
-import { bindActionCreators, configureStore } from '@reduxjs/toolkit';
-// import { loggerMiddleware } from '../state/middlewares';
-import { apis } from '../state/apis';
-import { clearMediaItemSelection } from '../state/modules/media-items';
-import { loading, setError } from '../state/modules/app-state';
 import { Middleware } from 'redux';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators, configureStore } from '@reduxjs/toolkit';
+import thunk from 'redux-thunk';
+
+import { apis } from './apis';
+import { rootReducer as reducer } from './reducers';
+import { loading, setError } from './modules/app-state';
+import { clearMediaItemSelection } from './modules/media-items';
 
 const errorMiddleware: Middleware = function exampleMiddleware(store) {
   return function wrapDispatch(next) {
     return function handleAction(action) {
       if (action.type.includes('rejected')) {
         const msg = `${JSON.stringify(action, null, 2)}`;
-        action.error.name = `Ajax request was rejected`;
+        action.error.name = 'Ajax request was rejected';
         action.error.message = `Action [${action.type}] failed.\nAPI returned ${action.error.message}.\n\n${msg}`;
         return store.dispatch(setError(action.error));
       }
@@ -21,16 +22,19 @@ const errorMiddleware: Middleware = function exampleMiddleware(store) {
   };
 };
 
-const store = configureStore({
+export const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .prepend(thunk.withExtraArgument({ api: apis }))
       .concat(errorMiddleware),
 });
+export const actions = bindActionCreators({ clearMediaItemSelection }, store.dispatch);
 
-const actions = bindActionCreators({ clearMediaItemSelection }, store.dispatch);
 export const loadStateAction = bindActionCreators(loading, store.dispatch);
 export const setErrorAction = bindActionCreators(setError, store.dispatch);
 
-export { store, actions };
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = ReturnType<typeof store.dispatch>;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

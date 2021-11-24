@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../state';
-import { getPlaylistById, updateUserPlaylist } from '../../state/modules/playlists';
-import { findMediaItems } from '../../state/modules/media-items';
+import { useAppSelector } from '../../store';
+import { getPlaylistById, updateUserPlaylist } from '../../store/modules/playlists';
+import { findMediaItems } from '../../store/modules/media-items';
 
 import { withGlobalStateConsumer } from '../../core/globalState';
 
