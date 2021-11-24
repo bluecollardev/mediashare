@@ -43,7 +43,8 @@ const Profile = ({ route }: ProfileProps) => {
   const viewPlaylist = useViewPlaylistById();
 
   const onDelete = async (itemId: string) => {
-    dispatch(removeShareItem(itemId));
+    await dispatch(removeShareItem(itemId));
+    await dispatch(loadProfile(userId));
   };
 
   const onView = async (playlistId: string, shareItemId: string) => {
@@ -58,7 +59,7 @@ const Profile = ({ route }: ProfileProps) => {
 
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
   // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
-  const uniqueSharedItems = filterUnique(sharedItems, 'title') || [];
+  // const uniqueSharedItems = filterUnique(sharedItems, 'title') || [];
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
@@ -91,7 +92,7 @@ const Profile = ({ route }: ProfileProps) => {
           </Button>
         ) */}
       <Divider />
-      <SharedList onDelete={onDelete} onView={onView} sharedItems={uniqueSharedItems} selectable={isSelectable} showActions={!isSelectable} />
+      <SharedList onDelete={onDelete} onView={onView} sharedItems={sharedItems} selectable={isSelectable} showActions={!isSelectable} />
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
           <ActionButtons
