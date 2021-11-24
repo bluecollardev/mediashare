@@ -32,9 +32,9 @@ export const SharedArticles = () => {
   const { sharedItems } = useAppSelector((state) => state?.user);
   const [isLoaded, setIsLoaded] = useState(false);
   // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
-  const list = filterUnique(sharedItems, 'title') || [];
+  // const list = filterUnique(sharedItems, 'title') || [];
 
-  let sortedList = list.map((item) => item);
+  let sortedList = sharedItems.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
   // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 
@@ -76,9 +76,9 @@ export const SharedBlock = () => {
   const { sharedItems } = useAppSelector((state) => state?.user);
   const [isLoaded, setIsLoaded] = useState(false);
   // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
-  const list = filterUnique(sharedItems, 'title') || [];
+  // const list = filterUnique(sharedItems, 'title') || [];
 
-  let sortedList = list.map((item) => item);
+  let sortedList = sharedItems.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
   // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 
@@ -151,6 +151,11 @@ export const Browse = ({ globalState }: PageProps) => {
 
   const onRefresh = useCallback(refresh, [dispatch]);
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
+
+  useEffect(() => {
+    loadData()
+  }, [])
+
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
     if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
