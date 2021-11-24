@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
+import { store } from './store';
 import { routeConfig } from './routes';
 
 import Amplify from 'aws-amplify';
@@ -38,6 +39,7 @@ import Account from './components/pages/Account';
 import User from './components/pages/User';
 import AccountEdit from './components/pages/AccountEdit';
 import Profile from './components/pages/Profile';
+import { Provider } from 'react-redux';
 
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
@@ -229,7 +231,7 @@ function App() {
     return <ActivityIndicator />;
   } else {
     return (
-      <>
+      <Provider store={store}>
         <Spinner visible={loading} />
         <PaperProvider
           theme={customTheme}
@@ -247,7 +249,7 @@ function App() {
             </NavigationContainer>
           )}
         </PaperProvider>
-      </>
+      </Provider>
     );
   }
 }
