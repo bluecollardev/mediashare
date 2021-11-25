@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../routes';
 
-import { getUserPlaylists, findPlaylists, selectPlaylistAction } from '../../store/modules/playlists';
+import { useAppSelector } from '../../store';
+import { getUserPlaylists, findPlaylists, removeUserPlaylist, selectPlaylistAction } from '../../store/modules/playlists';
 
 import { PlaylistResponseDto } from '../../rxjs-api';
 
 import { withGlobalStateConsumer } from '../../core/globalState';
-
 import { useLoadPlaylistData } from '../../hooks/useLoadData';
 import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
@@ -99,14 +99,18 @@ const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
 export const Playlists = ({ globalState }: PageProps) => {
   // console.log(`Playlists > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
-
   const shareWith = useRouteName(ROUTES.shareWith);
   const createPlaylist = useRouteName(ROUTES.playlistAdd);
   const viewPlaylist = useViewPlaylistById();
 
   const dispatch = useDispatch();
 
-  const [{ state, loaded }] = useLoadPlaylistData();
+  // TODO: A generic data loader is a good idea, but we can do it later, use useAppSelector for now
+  // const [{ state, loaded }] = useLoadPlaylistData();
+  // TODO: Type check entities and selected?
+  // TODO: Clean up this area!
+  const [{ loaded }] = useLoadPlaylistData();
+  const { entities = [] as any[], selected = [] as any[] } = useAppSelector((state) => state.userPlaylists);
   const [isLoaded, setIsLoaded] = useState(loaded);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
@@ -133,8 +137,6 @@ export const Playlists = ({ globalState }: PageProps) => {
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
-
-  const { entities = [] } = state?.userPlaylists;
 
   return (
     <PageContainer>
@@ -237,6 +239,7 @@ export const Playlists = ({ globalState }: PageProps) => {
   }
 
   async function confirmPlaylistsToDelete() {
+    await deletePlaylists();
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
@@ -246,6 +249,15 @@ export const Playlists = ({ globalState }: PageProps) => {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
+  }
+
+  async function deletePlaylists() {
+    selected.map(async (item) => {
+      await dispatch(removeUserPlaylist(item._id));
+    }) // TODO: Find a real way to do this
+    setTimeout(() => {
+      loadData()
+    }, 2500)
   }
 
   function clearCheckboxSelection() {

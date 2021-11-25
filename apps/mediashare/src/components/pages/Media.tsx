@@ -203,7 +203,6 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     setTimeout(() => {
       loadData()
     }, 2500)
-
   }
 
   async function updateSelection(bool, item) {
