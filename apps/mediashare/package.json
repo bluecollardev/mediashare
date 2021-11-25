@@ -3,19 +3,20 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "app:modules:rebuild": "rm -rf ./node_modules && yarn install",
-    "app:ios:install-pods": "cd ios && pod install --clean-install && cd ..",
     "app:ios:clean-pods": "cd ios && bash ./purge-pod-artifacts.sh && cd ..",
+    "app:ios:install-pods": "cd ios && pod install --clean-install && cd ..",
     "app:ios:refresh-pods": "yarn app:ios:clean-pods && yarn app:ios:install-pods",
-    "app:ios:local": "yarn app:ios:refresh-pods && react-native run-ios --scheme MedishareTechnologyDevelopment",
-    "app:ios:prod": "yarn app:ios:refresh-pods && react-native run-ios --scheme MediaShareTechnologyProduction",
-    "run:ios:prod": "react-native run-ios --scheme MediaShareTechnologyProduction",
+    "app:modules:rebuild": "rm -rf ./node_modules && yarn install",
+    "link:react-native-config": "react-native link react-native-config",
     "run:android:prod": "react-native run-android",
-    "app:lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "app:sort-pkg": "npx sort-package-json",
-    "app:test": "jest",
-    "app:update": "git pull --rebase",
-    "link:react-native-config": "react-native link react-native-config"
+    "run:ios:local": "react-native run-ios --scheme MedishareTechnologyDevelopment",
+    "run:ios:prod": "react-native run-ios --scheme MediaShareTechnologyProduction",
+    "serve:ios:local": "yarn app:ios:refresh-pods && react-native run-ios --scheme MedishareTechnologyDevelopment",
+    "serve:ios:prod": "yarn app:ios:refresh-pods && react-native run-ios --scheme MediaShareTechnologyProduction",
+    "test": "jest",
+    "utils:lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "utils:sort-pkg": "npx sort-package-json",
+    "utils:update": "git pull --rebase"
   },
   "jest": {
     "moduleFileExtensions": [
