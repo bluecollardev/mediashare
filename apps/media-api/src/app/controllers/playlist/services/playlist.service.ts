@@ -139,7 +139,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         {
           '$match': {
             '$text': {
-              '$search': 'test'
+              '$search': `${query}`
             }
           }
         }, {
