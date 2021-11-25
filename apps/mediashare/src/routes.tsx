@@ -81,7 +81,7 @@ const routeConfig = {
   },
   profile: {
     name: 'profile',
-    options: { title: 'Friends', header: (props) => <AppHeader {...props} /> },
+    options: { title: "Subscriber", header: (props) => <AppHeader {...props} /> },
   },
 } as const;
 type RouteEnumKeys = keyof typeof routeConfig;

@@ -6,6 +6,7 @@ import { ProfileShareItem } from '../../rxjs-api';
 import { View, StyleSheet, SectionList } from 'react-native';
 import { Card } from 'react-native-paper';
 import { ShareItemCard } from './ShareItemCard';
+import { useAppSelector } from '../../store';
 
 interface SharedListProps {
   sharedItems: ProfileShareItem[];
@@ -17,12 +18,21 @@ interface SharedListProps {
 }
 
 export const SharedList = ({ sharedItems, selectable, showActions, onDelete = () => undefined, onView = () => undefined, onChecked = () => undefined }: SharedListProps) => {
+ const { _id } = useAppSelector((state) => state.user)
+
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
-  const data = R.map(R.keys(mappedSharedItems), (key) => ({
-    title: `${mappedSharedItems[key][0].authorName || 'Unnamed User'}`,
-    count: mappedSharedItems[key].length,
-    data: mappedSharedItems[key],
-  }));
+  const data = R.map(R.keys(mappedSharedItems), (key) => {
+    const heading = mappedSharedItems[key][0].authorId === _id
+      ? "Subscribes To"
+      : mappedSharedItems[key][0].authorId !== _id
+      ? `Shared by ${mappedSharedItems[key][0].authorName}`
+      : 'Shared by Unknown User'
+    return ({
+      title: `${heading}`,
+      count: mappedSharedItems[key].length,
+      data: mappedSharedItems[key],
+    })
+  });
 
   return (
     <SectionList
@@ -30,7 +40,7 @@ export const SharedList = ({ sharedItems, selectable, showActions, onDelete = ()
       sections={data}
       renderSectionHeader={({ section }) => (
         <Card mode="outlined" style={styles.sectionHeader}>
-          <Card.Title titleStyle={styles.sectionHeaderTitle} title={`Shared by ${section.title}`} subtitle={`${section.count.toString()} items`} />
+          <Card.Title titleStyle={styles.sectionHeaderTitle} title={section.title} subtitle={`${section.count.toString()} items`} />
         </Card>
       )}
       keyExtractor={(item) => item.shareItemId}
