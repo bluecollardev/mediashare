@@ -1,4 +1,4 @@
-package oi.technologycompany.mediashare.generated;
+package oi.bluecollardev.mediashare.generated;
 
 import java.util.Arrays;
 import java.util.List;

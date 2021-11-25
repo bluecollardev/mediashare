@@ -1,6 +1,6 @@
 {
   "name": "mediashare",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "app:ios:clean-pods": "cd ios && bash ./purge-pod-artifacts.sh && cd ..",
@@ -9,10 +9,10 @@
     "app:modules:rebuild": "rm -rf ./node_modules && yarn install",
     "link:react-native-config": "react-native link react-native-config",
     "run:android:prod": "react-native run-android",
-    "run:ios:local": "react-native run-ios --scheme MedishareTechnologyDevelopment",
-    "run:ios:prod": "react-native run-ios --scheme MediaShareTechnologyProduction",
-    "serve:ios:local": "yarn app:ios:refresh-pods && react-native run-ios --scheme MedishareTechnologyDevelopment",
-    "serve:ios:prod": "yarn app:ios:refresh-pods && react-native run-ios --scheme MediaShareTechnologyProduction",
+    "run:ios:local": "react-native run-ios --scheme 'Mediashare Development'",
+    "run:ios:prod": "react-native run-ios --scheme 'Mediashare Pro'",
+    "serve:ios:local": "yarn app:ios:refresh-pods && react-native run-ios --scheme 'Mediashare Development'",
+    "serve:ios:prod": "yarn app:ios:refresh-pods && react-native run-ios --scheme 'Mediashare Pro'",
     "test": "jest",
     "utils:lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "utils:sort-pkg": "npx sort-package-json",

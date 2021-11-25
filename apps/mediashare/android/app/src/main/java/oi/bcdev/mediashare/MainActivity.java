@@ -1,4 +1,4 @@
-package oi.technologycompany.mediashare;
+package oi.bluecollardev.mediashare;
 
 import com.facebook.react.ReactActivity;
 

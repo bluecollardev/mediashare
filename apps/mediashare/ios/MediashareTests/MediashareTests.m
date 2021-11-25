@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface MediashareTechnologyTests : XCTestCase
+@interface MediashareTests : XCTestCase
 
 @end
 
-@implementation MediashareTechnologyTests
+@implementation MediashareTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

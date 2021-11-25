@@ -124,7 +124,7 @@ android {
     dexOptions {
       javaMaxHeapSize "4G"
     }
-    
+
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
@@ -133,7 +133,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "oi.technologycompany.mediashare"
+        applicationId "oi.bluecollardev.mediashare"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -1,12 +1,12 @@
 {
-  "name": "MediashareTechnology",
-  "displayName": "Mediashare Technology",
+  "name": "Mediashare",
+  "displayName": "Mediashare",
   "usesIcloudStorage": true,
-  "version": "1.0.0",
+  "version": "0.0.1",
   "ios": {
     "infoPlist": {
-      "NSPhotoLibraryUsageDescription": "MediaShare is an application designed to share videos and other content that someone creates with other application users. To get data to share it needs to be uploaded from the Photo Library.",
-      "NSPhotoLibraryAddUsageDescription": "MediaShare is an application designed to share videos and other content that someone creates with other application users. To get data to share it needs to be uploaded from the Photo Library."
+      "NSPhotoLibraryUsageDescription": "Mediashare is an application designed to share videos and other content that someone creates with other application users. To get data to share it needs to be uploaded from the Photo Library.",
+      "NSPhotoLibraryAddUsageDescription": "Mediashare is an application designed to share videos and other content that someone creates with other application users. To get data to share it needs to be uploaded from the Photo Library."
     }
   }
 }

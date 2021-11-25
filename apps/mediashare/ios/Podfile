@@ -4,7 +4,7 @@ require File.join(File.dirname(`node --print "require.resolve('react-native-unim
 
 platform :ios, '12.0'
 
-target 'MediashareTechnology' do
+target 'Mediashare' do
   use_unimodules!
   config = use_native_modules!
 
@@ -24,7 +24,7 @@ target 'MediashareTechnology' do
     end
   end
 
-  target 'MediashareTechnologyTests' do
+  target 'MediashareTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -44,11 +44,11 @@ target 'MediashareTechnology' do
   # end
 end
 
-# target 'MediashareTechnology-tvOS' do
-  # Pods for MediashareTechnology-tvOS
+# target 'Mediashare-tvOS' do
+  # Pods for Mediashare-tvOS
 #
 #
-#   target 'MediashareTechnology-tvOSTests' do
+#   target 'Mediashare-tvOSTests' do
 #     inherit! :search_paths
     # Pods for testing
 #   end
