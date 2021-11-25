@@ -22,6 +22,7 @@ import { PlaylistsComponent } from './Playlists';
 
 import { filterUnique } from '../../utils';
 import styles, { theme } from '../../styles';
+import { createRandomRenderKey } from '../../core/utils';
 
 export interface BrowseProps {
   list: PlaylistResponseDto[];
@@ -73,14 +74,11 @@ export const SharedList = () => {
   );
 };
 export const SharedBlock = () => {
+  const randomKey = createRandomRenderKey();
   const { sharedItems } = useAppSelector((state) => state?.user);
-  const [isLoaded, setIsLoaded] = useState(false);
-  // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
-  // const list = filterUnique(sharedItems, 'title') || [];
-
-  let sortedList = sharedItems.map((item) => item);
+  const list = filterUnique(sharedItems, 'playlistId') || [];
+  let sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
-  // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 
   const viewPlaylistAction = useViewPlaylistById();
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item.playlistId });
@@ -92,7 +90,7 @@ export const SharedBlock = () => {
           // @ts-ignore
           const { playlistId, title, description, author, imageSrc, sharedCount, sharesCount, likesCount } = item;
           return (
-            <View key={`shared_block_${playlistId}`} style={{ padding: 0, paddingTop: 0 }}>
+            <View key={`shared_block_${randomKey}_${playlistId}`} style={{ padding: 0, paddingTop: 0 }}>
               <MediaCard
                 elevation={1}
                 title={title}

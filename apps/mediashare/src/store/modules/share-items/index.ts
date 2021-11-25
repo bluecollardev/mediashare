@@ -31,7 +31,8 @@ export const readShareItem = createAsyncThunk(shareItemsActionTypes.readShareIte
 
 export const removeShareItem = createAsyncThunk(shareItemsActionTypes.removeShareItem, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.shareItems.shareItemsControllerRemove({ shareId: id }).toPromise();
+  const remove = await api.shareItems.shareItemsControllerRemove({ shareId: id }).toPromise();
+  return remove
 });
 
 interface InitialState {

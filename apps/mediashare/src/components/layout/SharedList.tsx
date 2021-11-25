@@ -9,13 +9,14 @@ import { ShareItemCard } from './ShareItemCard';
 
 interface SharedListProps {
   sharedItems: ProfileShareItem[];
-  selectable?: boolean;
   showActions?: boolean;
   onDelete?: any;
   onView?: any;
+  selectable?: boolean;
+  onChecked?: (bool: boolean, userId: string) => void;
 }
 
-export const SharedList = ({ sharedItems, selectable, showActions, onDelete, onView }: SharedListProps) => {
+export const SharedList = ({ sharedItems, selectable, showActions, onDelete = () => undefined, onView = () => undefined, onChecked = () => undefined }: SharedListProps) => {
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
   const data = R.map(R.keys(mappedSharedItems), (key) => ({
     title: `${mappedSharedItems[key][0].authorName || 'Unnamed User'}`,
@@ -45,6 +46,7 @@ export const SharedList = ({ sharedItems, selectable, showActions, onDelete, onV
               showActions={showActions}
               onDelete={() => onDelete(item.shareItemId)}
               onView={() => onView(item.playlistId, item.shareItemId)}
+              onChecked={(checked) => onChecked(checked, item.shareItemId)}
             />
           </View>
         );

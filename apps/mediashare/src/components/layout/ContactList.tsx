@@ -18,8 +18,8 @@ export interface ContactListProps {
 export const ContactList: React.FC<ContactListProps> = ({
   contacts = [],
   selectable,
-  onChecked = () => {},
-  showActions, onViewDetail = () => {},
+  onChecked = () => undefined,
+  showActions, onViewDetail = () => undefined,
 }) => {
   const namedContacts = contacts.filter((user) => !!user.firstName || !!user.lastName);
   const unnamedContacts = contacts.filter((user) => !user.firstName && !user.lastName);

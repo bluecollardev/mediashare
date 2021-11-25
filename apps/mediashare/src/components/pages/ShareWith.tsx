@@ -30,11 +30,6 @@ const ShareWith = ({}: PageProps) => {
   const playlists = useAppSelector((state) => state.userPlaylists.selected);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
 
-  const updateSelectedUsers = function (bool: boolean, userId: string) {
-    const filtered = bool ? selectedUsers.concat([userId]) : selectedUsers.filter((item) => item._id !== userId);
-    setSelectedUsers(filtered);
-  };
-
   const actionCb = async () => {
     await dispatch(
       shareUserPlaylist({
@@ -72,6 +67,11 @@ const ShareWith = ({}: PageProps) => {
       </PageActions>
     </PageContainer>
   );
+
+  function updateSelectedUsers(bool: boolean, userId: string) {
+    const filtered = bool ? selectedUsers.concat([userId]) : selectedUsers.filter((item) => item._id !== userId);
+    setSelectedUsers(filtered);
+  }
 };
 
 export default withLoadingSpinner(ShareWith);

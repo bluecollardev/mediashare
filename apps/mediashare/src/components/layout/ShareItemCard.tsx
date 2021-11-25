@@ -15,9 +15,10 @@ interface ShareItemCardProps {
   read: boolean;
   onDelete: () => void;
   onView: () => void;
+  onChecked?: (checked: boolean, item?: any) => void;
 }
 
-export function ShareItemCard({ date, title, onDelete, onView, image, read, selectable, showActions }: ShareItemCardProps) {
+export function ShareItemCard({ date, title, onDelete, onView, onChecked, image, read, selectable, showActions }: ShareItemCardProps) {
   const [visible, setVisible] = useState(false);
   return (
     <View style={styles.sharedItem}>
@@ -38,6 +39,7 @@ export function ShareItemCard({ date, title, onDelete, onView, image, read, sele
         selectable={selectable}
         // onViewDetail={() => setVisible(!visible)}
         onViewDetail={onDelete}
+        onChecked={onChecked}
         iconLeft="remove-circle"
         iconLeftColor={theme.colors.error}
       />

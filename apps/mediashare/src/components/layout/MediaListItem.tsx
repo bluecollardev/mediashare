@@ -16,7 +16,7 @@ export interface MediaListItemProps {
   showPlayableIcon?: boolean;
   selectable?: boolean;
   checked?: boolean;
-  onChecked?: (bool: boolean) => void;
+  onChecked?: (checked: boolean, item?: any) => void;
   onViewDetail?: () => void;
   showActions?: boolean | 'left' | 'right';
   iconLeft?: string;

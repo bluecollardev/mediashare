@@ -202,7 +202,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     }) // TODO: Find a real way to do this
     setTimeout(() => {
       loadData()
-    }, 3000)
+    }, 2500)
 
   }
 

@@ -13,7 +13,7 @@ import { AccountCard } from '../layout/AccountCard';
 import { SharedList } from '../layout/SharedList';
 import { ActionButtons } from '../layout/ActionButtons';
 
-import { filterUnique } from '../../utils';
+// import { filterUnique } from '../../utils';
 
 import { createRandomRenderKey } from '../../core/utils';
 
@@ -39,18 +39,9 @@ const Profile = ({ route }: ProfileProps) => {
 
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
+  const [selectedItems, setSelectedItems] = React.useState([]);
 
   const viewPlaylist = useViewPlaylistById();
-
-  const onDelete = async (itemId: string) => {
-    await dispatch(removeShareItem(itemId));
-    await dispatch(loadProfile(userId));
-  };
-
-  const onView = async (playlistId: string, shareItemId: string) => {
-    await dispatch(readShareItem(shareItemId));
-    await viewPlaylist({ playlistId });
-  };
 
   useEffect(() => {
     dispatch(loadProfile(userId));
@@ -59,7 +50,7 @@ const Profile = ({ route }: ProfileProps) => {
 
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
   // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
-  // const uniqueSharedItems = filterUnique(sharedItems, 'title') || [];
+  // const uniqueSharedItems = filterUnique(sharedItems, 'shareItemId') || [];
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
@@ -92,7 +83,14 @@ const Profile = ({ route }: ProfileProps) => {
           </Button>
         ) */}
       <Divider />
-      <SharedList onDelete={onDelete} onView={onView} sharedItems={sharedItems} selectable={isSelectable} showActions={!isSelectable} />
+      <SharedList
+        selectable={isSelectable}
+        showActions={!isSelectable}
+        onDelete={deleteShareItem}
+        onView={viewShareItem}
+        sharedItems={sharedItems}
+        onChecked={updateSelection}
+      />
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
           <ActionButtons
@@ -120,21 +118,46 @@ const Profile = ({ route }: ProfileProps) => {
     </PageContainer>
   );
 
+  async function viewShareItem(playlistId: string, shareItemId: string) {
+    await dispatch(readShareItem(shareItemId));
+    await viewPlaylist({ playlistId });
+  }
+
+  async function deleteShareItem (shareItemId: string) {
+    await dispatch(removeShareItem(shareItemId));
+    await dispatch(loadProfile(userId));
+  }
+
+  async function deleteShareItems() {
+    selectedItems.map(async (shareItemId) => {
+      await deleteShareItem(shareItemId);
+    }) // TODO: Find a real way to do this
+    setTimeout(async () => {
+      await dispatch(loadProfile(userId));
+    }, 2500)
+  }
+
+  function updateSelection(bool: boolean, shareItemId: string) {
+    const filtered = bool ? selectedItems.concat([shareItemId]) : selectedItems.filter((item) => item.shareItemId !== shareItemId);
+    setSelectedItems(filtered);
+  }
+
+  async function activateUnshareMode() {
+    setActionMode(actionModes.delete);
+    setIsSelectable(true);
+  }
+
   async function confirmPlaylistsToUnshare() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
+    deleteShareItems();
   }
 
   async function cancelPlaylistsToUnshare() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
-  }
-
-  async function activateUnshareMode() {
-    setActionMode(actionModes.delete);
-    setIsSelectable(true);
   }
 
   function clearCheckboxSelection() {
