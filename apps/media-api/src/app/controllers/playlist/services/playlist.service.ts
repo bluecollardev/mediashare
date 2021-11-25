@@ -136,76 +136,66 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
   searchPlaylists({ query }: { query: string }) {
     return this.repository
       .aggregate([
+        { $match: { $text: { $search: query } } },
         {
-          '$match': {
-            '$text': {
-              '$search': `${query}`
-            }
+          $lookup: {
+            from: 'media_item',
+            localField: 'mediaIds',
+            foreignField: '_id',
+            as: 'mediaItems'
           }
-        }, {
-          '$sort': {
-            'score': {
-              '$meta': 'textScore'
-            }
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'createdBy',
+            foreignField: '_id',
+            as: 'user'
           }
-        }, {
-          '$lookup': {
-            'from': 'media_item',
-            'localField': 'mediaIds',
-            'foreignField': '_id',
-            'as': 'mediaItems'
+        },
+        {
+          $lookup: {
+            from: 'share_item',
+            localField: '_id',
+            foreignField: 'playlistId',
+            as: 'shareItems'
           }
-        }, {
-          '$lookup': {
-            'from': 'user',
-            'localField': 'createdBy',
-            'foreignField': '_id',
-            'as': 'user'
+        },
+        {
+          $lookup: {
+            from: 'view_item',
+            localField: '_id',
+            foreignField: 'playlistId',
+            as: 'viewItems'
           }
-        }, {
-          '$lookup': {
-            'from': 'share_item',
-            'localField': '_id',
-            'foreignField': 'playlistId',
-            'as': 'shareItems'
+        },
+        {
+          $lookup: {
+            from: 'like_item',
+            localField: '_id',
+            foreignField: 'playlistId',
+            as: 'likeItems'
           }
-        }, {
-          '$lookup': {
-            'from': 'view_item',
-            'localField': '_id',
-            'foreignField': 'playlistId',
-            'as': 'viewItems'
-          }
-        }, {
-          '$lookup': {
-            'from': 'like_item',
-            'localField': '_id',
-            'foreignField': 'playlistId',
-            'as': 'likeItems'
-          }
-        }, {
-          '$replaceRoot': {
-            'newRoot': {
-              '$mergeObjects': [
+        },
+        { $sort: { score: { $meta: 'textScore' } } },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: [
                 {
-                  '_id': '$_id',
-                  'author': '$user.username',
-                  'category': '$category',
-                  'createdAt': '$createdAt',
-                  'createdBy': '$user._id',
-                  'description': '$description',
-                  'imageSrc': '$imageSrc',
-                  'mediaItems': '$mediaItems',
-                  'title': '$title',
-                  'shareCount': {
-                    '$size': '$shareItems'
-                  },
-                  'likesCount': {
-                    '$size': '$likeItems'
-                  },
-                  'viewCount': {
-                    '$size': '$viewItems'
-                  }
+                  _id: '$_id',
+                  author: '$user.username',
+                  category: '$category',
+                  createdAt: '$createdAt',
+                  createdBy: '$user._id',
+                  description: '$description',
+                  imageSrc: '$imageSrc',
+                  mediaItems: '$mediaItems',
+                  title: '$title',
+                  shareCount: { $size: '$shareItems' },
+                  likesCount: { $size: '$likeItems' },
+                  viewCount: { $size: '$viewItems' }
+                  // shared: { $count: '$shareItems' }
                 }
               ]
             }

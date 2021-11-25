@@ -55,7 +55,7 @@ function apiFactory() {
   console.log(`servers: ${JSON.stringify(servers)}`);
   console.log(`using configuration: ${JSON.stringify(Config.API_SERVER)}`);
   const configuration = new Configuration({
-    basePath: servers[Config.API_SERVER].getUrl(),
+    basePath: servers[1].getUrl(),
     middleware: middlewareFactory(),
   });
 
