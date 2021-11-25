@@ -1,4 +1,4 @@
-rootProject.name = 'MediashareTechnology'
+rootProject.name = 'Mediashare'
 // include ':amazon-cognito-identity-js'
 // project(':amazon-cognito-identity-js').projectDir = new File(rootProject.projectDir, '../node_modules/amazon-cognito-identity-js/android')
 include ':amazon-cognito-identity-js'
