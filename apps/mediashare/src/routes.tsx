@@ -37,11 +37,11 @@ const routeConfig = {
   },
   mediaItemDetail: {
     name: 'mediaItemDetail',
-    options: { title: 'View Media Item', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'File Details', header: (props) => <AppHeader {...props} /> },
   },
   mediaItemEdit: {
     name: 'mediaItemEdit',
-    options: { title: 'Edit Media Item', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Edit Media', header: (props) => <AppHeader {...props} /> },
   },
   addFromFeed: {
     name: 'addFromFeed',
@@ -49,11 +49,11 @@ const routeConfig = {
   },
   addFromMedia: {
     name: 'addFromMedia',
-    options: { title: 'Add Existing Media Item', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Add From Library', header: (props) => <AppHeader {...props} /> },
   },
   addPlaylist: {
     name: 'addPlaylist',
-    options: { title: 'Add Playlist', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Create Playlist', header: (props) => <AppHeader {...props} /> },
   },
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
@@ -61,7 +61,7 @@ const routeConfig = {
   },
   addMedia: {
     name: 'addMediaItem',
-    options: { title: 'Add Media', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Upload', header: (props) => <AppHeader {...props} /> },
   },
   shareWith: {
     name: 'shareWith',
@@ -69,19 +69,19 @@ const routeConfig = {
   },
   user: {
     name: 'user',
-    options: { title: 'Manage Contact', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Edit Contact', header: (props) => <AppHeader {...props} /> },
   },
   account: {
     name: 'account',
-    options: { title: 'My Account', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Account', header: (props) => <AppHeader {...props} /> },
   },
   accountEdit: {
     name: 'accountEdit',
-    options: { title: 'Update Your Profile', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Update Profile', header: (props) => <AppHeader {...props} /> },
   },
   profile: {
     name: 'profile',
-    options: { title: 'User Profile', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Friends', header: (props) => <AppHeader {...props} /> },
   },
 } as const;
 type RouteEnumKeys = keyof typeof routeConfig;
