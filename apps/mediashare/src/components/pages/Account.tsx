@@ -18,7 +18,7 @@ import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-n
 import { FAB, Text, Divider } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useRouteName, useRouteWithParams, useViewPlaylistById, useViewProfileById } from '../../hooks/NavigationHooks';
+import { useRouteWithParams, useViewPlaylistById, useViewProfileById } from '../../hooks/NavigationHooks';
 import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
 import { ContactList } from '../layout/ContactList';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -75,7 +75,7 @@ const actionModes = { delete: 'delete', default: 'default' };
 
 export const Account = ({ globalState }: PageProps) => {
   const layout = useWindowDimensions();
-  const editProfile = useRouteWithParams(routes.accountEdit);
+  const editProfile = useRouteWithParams(routeNames.accountEdit);
   const [index, setIndex] = useState(0);
   // const { setLoaded, onView, onDelete } = useProfile();
   const [isLoaded, setIsLoaded] = useState(false);

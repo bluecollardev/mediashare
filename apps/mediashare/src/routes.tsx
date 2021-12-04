@@ -80,7 +80,7 @@ type RouteEnumKeys = keyof typeof routeConfig;
 type RouteEnumType<Key extends RouteEnumKeys> = typeof routeConfig[Key]['name'];
 type MappedRouteEnum = { [P in RouteEnumKeys]: RouteEnumType<P> };
 
-function createRouteConfig(config: typeof routeConfig): MappedRouteEnum {
+function mapRouteNames(config: typeof routeConfig): MappedRouteEnum {
   const obj = Object.create({});
   for (let key in config) {
     if (config.hasOwnProperty(key)) {
@@ -90,5 +90,5 @@ function createRouteConfig(config: typeof routeConfig): MappedRouteEnum {
   return obj;
 }
 
-const routeNames = createRouteConfig(routeConfig);
+const routeNames = mapRouteNames(routeConfig);
 export { routeConfig, routeNames };
