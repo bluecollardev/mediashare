@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ROUTES } from '../../routes';
+import { routeNames } from '../../routes';
 
 import { useAppSelector } from '../../store';
 import {
@@ -38,10 +38,10 @@ import { View } from 'react-native';
 export const PlaylistDetail = ({ route }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
 
-  const edit = useRouteWithParams(ROUTES.playlistEdit);
-  const addToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
+  const edit = useRouteWithParams(routeNames.playlistEdit);
+  const addToPlaylist = useRouteWithParams(routeNames.addItemsToPlaylist);
   const viewMediaItem = useViewMediaItem();
-  const goToShareWith = useRouteName(ROUTES.shareWith);
+  const goToShareWith = useRouteName(routeNames.shareWith);
   const goToPlaylists = usePlaylists();
 
   const dispatch = useDispatch();

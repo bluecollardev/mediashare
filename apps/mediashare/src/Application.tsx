@@ -24,7 +24,7 @@ import { withGlobalStateProvider } from './core/globalState';
 import Login from './components/pages/Login';
 import Browse from './components/pages/Browse';
 import AddFromCollection from './components/pages/AddFromCollection';
-import AddMedia from './components/pages/AddMedia';
+import MediaItemAdd from './components/pages/MediaItemAdd';
 import AddFromFeed from './components/pages/AddFromFeed';
 import Playlists from './components/pages/Playlists';
 import PlaylistDetail from './components/pages/PlaylistDetail';
@@ -82,7 +82,7 @@ const MediaNavigation = () => {
       <MediaStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
       <MediaStackNavigator.Screen {...routeConfig.addFromFeed} component={AddFromFeed} />
       <MediaStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
-      <MediaStackNavigator.Screen {...routeConfig.addMedia} component={AddMedia} />
+      <MediaStackNavigator.Screen {...routeConfig.mediaItemAdd} component={MediaItemAdd} />
     </MediaStackNavigator.Navigator>
   );
 };

@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { EnumLiteralsOf } from '../core/lib/Generics';
-import { routeConfig, ROUTES } from '../routes';
+import { routeConfig, routeNames } from '../routes';
 import { findMediaItems, getMediaItemById } from '../store/modules/media-items';
 import { getUserPlaylists, getPlaylistById } from '../store/modules/playlists';
 
-type RouteConfigKeyType = EnumLiteralsOf<typeof ROUTES>;
+type RouteConfigKeyType = EnumLiteralsOf<typeof routeNames>;
 // @ts-ignore
 type RouteParentKeyType = keyof Pick<typeof routeConfig, 'Browse' | 'Media' | 'Playlists' | 'Account'>;
 
@@ -15,7 +15,7 @@ export function useRouteName(key: RouteConfigKeyType) {
   return () => nav.navigate(key);
 }
 
-export function useRouteWithParams(key: EnumLiteralsOf<typeof ROUTES>) {
+export function useRouteWithParams(key: EnumLiteralsOf<typeof routeNames>) {
   const nav = useNavigation();
 
   // @ts-ignore
@@ -36,18 +36,18 @@ export function useGoBack() {
 export function useViewPlaylist() {
   const nav = useNavigation();
   // @ts-ignore
-  return ({ playlistId }) => nav.navigate(ROUTES?.playlistDetail, { playlistId });
+  return ({ playlistId }) => nav.navigate(routeNames?.playlistDetail, { playlistId });
 }
 
 // TODO: Why does this also just take playlistId, the old version used a mediaId, which may not also be correct, maybe both?
 /* export function useViewPlaylistItem() {
   const nav = useNavigation();
-  return ({ playlistId, uri }) => nav.navigate(ROUTES.playlistItemDetail, { playlistId, uri });
+  return ({ playlistId, uri }) => nav.navigate(routeNames.playlistItemDetail, { playlistId, uri });
 } */
 
 /* export function useViewSharedMediaItem() {
   const nav = useNavigation();
-  return ({ mediaId, uri }) => nav.navigate(ROUTES.sharedItemDetail, { mediaId, uri });
+  return ({ mediaId, uri }) => nav.navigate(routeNames.sharedItemDetail, { mediaId, uri });
 } */
 
 export function useEditMediaItem() {
@@ -56,7 +56,7 @@ export function useEditMediaItem() {
   return async ({ mediaId, uri }) => {
     await dispatch(getMediaItemById({ uri, mediaId }));
     // @ts-ignore
-    nav.navigate(ROUTES.mediaItemEdit, { mediaId, uri });
+    nav.navigate(routeNames.mediaItemEdit, { mediaId, uri });
   };
 }
 export function useViewMediaItem() {
@@ -65,7 +65,7 @@ export function useViewMediaItem() {
   return async ({ mediaId, uri }) => {
     await dispatch(getMediaItemById({ uri, mediaId }));
     // @ts-ignore
-    nav.navigate(ROUTES.mediaItemDetail, { mediaId, uri });
+    nav.navigate(routeNames.mediaItemDetail, { mediaId, uri });
   };
 }
 export function useEditPlaylistById() {
@@ -74,7 +74,7 @@ export function useEditPlaylistById() {
   return async ({ playlistId }) => {
     await dispatch(getPlaylistById(playlistId));
     // @ts-ignore
-    nav.navigate(ROUTES.playlistEdit, { playlistId });
+    nav.navigate(routeNames.playlistEdit, { playlistId });
   };
 }
 
@@ -84,18 +84,18 @@ export function useViewPlaylistById() {
   return async ({ playlistId }: { playlistId: string }) => {
     await dispatch(getPlaylistById(playlistId));
     // @ts-ignore
-    nav.navigate(ROUTES.playlistDetail, { playlistId });
+    nav.navigate(routeNames.playlistDetail, { playlistId });
   };
 }
 
 export function useViewProfileById() {
-  const nav = useRouteWithParams(ROUTES.profile);
+  const nav = useRouteWithParams(routeNames.profile);
   return function (userId) {
     nav({ userId });
   };
 }
 export function usePlaylists() {
-  const nav = useRouteName(ROUTES.playlists);
+  const nav = useRouteName(routeNames.playlists);
   const dispatch = useDispatch();
   return async function () {
     await dispatch(getUserPlaylists({}));
@@ -104,7 +104,7 @@ export function usePlaylists() {
 }
 
 export function useMediaItems() {
-  const nav = useRouteName(ROUTES.media);
+  const nav = useRouteName(routeNames.media);
   const dispatch = useDispatch();
   return async function () {
     await dispatch(findMediaItems({}));

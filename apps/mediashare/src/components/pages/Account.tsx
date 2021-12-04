@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { ROUTES } from '../../routes';
+import { routeNames } from '../../routes';
 
 import { useAppSelector } from '../../store';
 import { logout } from '../../store/modules/user';
@@ -32,7 +32,7 @@ import { createRandomRenderKey } from '../../core/utils';
 import styles, { theme } from '../../styles';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
-  // const manageContact = useRouteName(ROUTES.user);
+  // const manageContact = useRouteName(routeNames.user);
   const contacts = useAppSelector((state) => state.users.entities);
   const viewProfileById = useViewProfileById();
 
@@ -75,7 +75,7 @@ const actionModes = { delete: 'delete', default: 'default' };
 
 export const Account = ({ globalState }: PageProps) => {
   const layout = useWindowDimensions();
-  const editProfile = useRouteWithParams(ROUTES.accountEdit);
+  const editProfile = useRouteWithParams(routes.accountEdit);
   const [index, setIndex] = useState(0);
   // const { setLoaded, onView, onDelete } = useProfile();
   const [isLoaded, setIsLoaded] = useState(false);

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
 
-import { ROUTES } from '../../routes';
+import { routeNames } from '../../routes';
 
 import { useAppSelector } from '../../store';
 import { deleteMediaItem, findMediaItems } from '../../store/modules/media-items';
@@ -81,8 +81,8 @@ const actionModes = { delete: 'delete', default: 'default' };
 export const Media = ({ navigation, globalState }: PageProps) => {
   // console.log(`Media > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
 
-  const addFromFeed = useRouteName(ROUTES.addFromFeed);
-  const addMedia = useRouteName(ROUTES.addMediaItem);
+  const addFromFeed = useRouteName(routeNames.addFromFeed);
+  const addMedia = useRouteName(routeNames.mediaItemAdd);
   const editMedia = useEditMediaItem();
 
   const dispatch = useDispatch();

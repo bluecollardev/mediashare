@@ -15,9 +15,9 @@ const routeConfig = {
     name: 'playlists',
     options: { title: 'Playlists', header: (props) => <AppHeader {...props} searchable={true} /> },
   },
-  addMediaItem: {
-    name: 'addMediaItem',
-    options: { title: 'Add / Upload Media' },
+  playlistAdd: {
+    name: 'playlistAdd',
+    options: { title: 'Create Playlist', header: (props) => <AppHeader {...props} /> },
   },
   playlistDetail: {
     name: 'playlistDetail',
@@ -27,13 +27,13 @@ const routeConfig = {
     name: 'playlistEdit',
     options: { title: 'Edit Playlist', header: (props) => <AppHeader {...props} /> },
   },
-  playlistAdd: {
-    name: 'playlistAdd',
-    options: { title: 'Create Playlist', header: (props) => <AppHeader {...props} /> },
-  },
   media: {
     name: 'media',
     options: { title: 'Media Library', header: (props) => <AppHeader {...props} searchable={true} /> },
+  },
+  mediaItemAdd: {
+    name: 'addMediaItem',
+    options: { title: 'Upload', header: (props) => <AppHeader {...props} /> },
   },
   mediaItemDetail: {
     name: 'mediaItemDetail',
@@ -51,17 +51,9 @@ const routeConfig = {
     name: 'addFromMedia',
     options: { title: 'Add From Library', header: (props) => <AppHeader {...props} /> },
   },
-  addPlaylist: {
-    name: 'addPlaylist',
-    options: { title: 'Create Playlist', header: (props) => <AppHeader {...props} /> },
-  },
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
     options: { title: 'Add To Playlist', header: (props) => <AppHeader {...props} searchable={true} /> },
-  },
-  addMedia: {
-    name: 'addMediaItem',
-    options: { title: 'Upload', header: (props) => <AppHeader {...props} /> },
   },
   shareWith: {
     name: 'shareWith',
@@ -81,7 +73,7 @@ const routeConfig = {
   },
   profile: {
     name: 'profile',
-    options: { title: "Subscriber", header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Subscriber', header: (props) => <AppHeader {...props} /> },
   },
 } as const;
 type RouteEnumKeys = keyof typeof routeConfig;
@@ -98,6 +90,5 @@ function createRouteConfig(config: typeof routeConfig): MappedRouteEnum {
   return obj;
 }
 
-const ROUTES = createRouteConfig(routeConfig);
-
-export { routeConfig, ROUTES };
+const routeNames = createRouteConfig(routeConfig);
+export { routeConfig, routeNames };

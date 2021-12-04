@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ROUTES } from '../../routes';
+import { routeNames } from '../../routes';
 
 import { useAppSelector } from '../../store';
 import { getUserPlaylists, findPlaylists, removeUserPlaylist, selectPlaylistAction } from '../../store/modules/playlists';
@@ -99,8 +99,8 @@ const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
 export const Playlists = ({ globalState }: PageProps) => {
   // console.log(`Playlists > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
-  const shareWith = useRouteName(ROUTES.shareWith);
-  const createPlaylist = useRouteName(ROUTES.playlistAdd);
+  const shareWith = useRouteName(routeNames.shareWith);
+  const createPlaylist = useRouteName(routeNames.playlistAdd);
   const viewPlaylist = useViewPlaylistById();
 
   const dispatch = useDispatch();

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
 
-import { ROUTES } from '../../routes';
+import { routeNames } from '../../routes';
 
 import { useAppSelector } from '../../store';
 import { findMediaItems } from '../../store/modules/media-items';
@@ -37,7 +37,7 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selected, setSelected] = useState([]);
   const goBack = useGoBack();
-  const edit = useRouteWithParams(ROUTES.playlistEdit);
+  const edit = useRouteWithParams(routeNames.playlistEdit);
 
   const clearAndGoBack = function () {
     // @ts-ignore

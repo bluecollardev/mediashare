@@ -30,7 +30,7 @@ const Profile = ({ route }: ProfileProps) => {
   const dispatch = useDispatch();
   // const userRole = useAppSelector((state) => state.user.role);
   // const isAdmin = userRole === 'admin';
-  // const accountEdit = useRouteWithParams(ROUTES.accountEdit);
+  // const accountEdit = useRouteWithParams(routeNames.accountEdit);
   const profile = useAppSelector((state) => {
     return state.profile.entity;
   });

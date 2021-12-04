@@ -20,7 +20,7 @@ import { theme } from '../../styles';
 import { AppUpload } from '../layout/AppUpload';
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 
-export const AddMedia = ({}: PageProps) => {
+export const MediaItemAdd = ({}: PageProps) => {
   const dispatch = useDispatch();
 
   // const author = useAppSelector((state) => state?.user.username);
@@ -123,4 +123,4 @@ export const AddMedia = ({}: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(AddMedia);
+export default withLoadingSpinner(MediaItemAdd);

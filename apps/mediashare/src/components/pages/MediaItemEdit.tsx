@@ -114,7 +114,15 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
           topDrawer={() => (
             <View style={styles.itemControls}>
               <View style={{ flex: 1 }}>
-                <Button icon="delete-forever" mode="text" dark color={theme.colors.error} onPress={() => setShowDialog(true)} compact style={styles.deleteItemButton}>
+                <Button
+                  icon="delete-forever"
+                  mode="text"
+                  dark
+                  color={theme.colors.error}
+                  onPress={() => setShowDialog(true)}
+                  compact
+                  style={styles.deleteItemButton}
+                >
                   {' '}
                 </Button>
               </View>

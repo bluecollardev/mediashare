@@ -15,7 +15,7 @@ import { fetchAndPutToS3 } from '../../store/modules/media-items/storage';
 import { thumbnailRoot } from '../../store/modules/media-items/key-factory';
 import { loadProfile } from '../../store/modules/profile';
 
-import { ROUTES } from '../../routes';
+import { routeNames } from '../../routes';
 
 import { useRouteWithParams } from '../../hooks/NavigationHooks';
 import { TextField } from '../form/TextField';
@@ -32,7 +32,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 
   const dispatch = useDispatch();
 
-  const viewAccount = useRouteWithParams(ROUTES.account);
+  const viewAccount = useRouteWithParams(routeNames.account);
   // const viewProfile = useViewProfileById();
 
   const [isLoaded, setIsLoaded] = useState(false);

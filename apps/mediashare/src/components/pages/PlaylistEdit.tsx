@@ -16,7 +16,7 @@ import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
 import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { ROUTES } from '../../routes';
+import { routeNames } from '../../routes';
 
 import { createRandomRenderKey } from '../../core/utils';
 
@@ -26,7 +26,7 @@ import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 const actionModes = { delete: 'delete', default: 'default' };
 
 const PlaylistEdit = ({ navigation, route }: PageProps) => {
-  const addToPlaylist = useRouteWithParams(ROUTES.addItemsToPlaylist);
+  const addToPlaylist = useRouteWithParams(routeNames.addItemsToPlaylist);
   const viewMediaItem = useViewMediaItem();
   const goToPlaylists = usePlaylists();
 
@@ -97,7 +97,15 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
             imageSrc ? (
               <View style={styles.itemControls}>
                 <View style={{ flex: 1 }}>
-                  <Button icon="delete-forever" mode="outlined" dark color={theme.colors.default} onPress={() => console.log('Do something!')} compact style={styles.deleteItemButton}>
+                  <Button
+                    icon="delete-forever"
+                    mode="outlined"
+                    dark
+                    color={theme.colors.default}
+                    onPress={() => console.log('Do something!')}
+                    compact
+                    style={styles.deleteItemButton}
+                  >
                     {' '}
                   </Button>
                 </View>

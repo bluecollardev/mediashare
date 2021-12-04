@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ROUTES } from '../../routes';
+import { routeNames } from '../../routes';
 
 import { useAppSelector } from '../../store';
 import { getUserPlaylists, shareUserPlaylist } from '../../store/modules/playlists';
@@ -24,7 +24,7 @@ const ShareWith = ({}: PageProps) => {
   };
 
   const goBack = useGoBack();
-  const viewPlaylists = useRouteName(ROUTES.playlists);
+  const viewPlaylists = useRouteName(routeNames.playlists);
 
   const users = useAppSelector((state) => state.users.entities);
   const playlists = useAppSelector((state) => state.userPlaylists.selected);
