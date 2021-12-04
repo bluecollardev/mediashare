@@ -1,6 +1,6 @@
 import { BcEntity } from '@api';
 import { MediaCategoryType, MEDIA_CATEGORY, MEDIA_ITEM_ENTITY } from '@core-lib';
-import { ApiLongString, ApiObjectId, ApiString, ApiUriString } from '@mediashare/shared';
+import { ApiLongString, ApiObjectId, ApiString, ApiTextString, ApiUriString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean } from 'class-validator';
 import { ObjectId } from 'mongodb';
@@ -23,16 +23,17 @@ export class MediaItem extends BcEntity {
   @Column({ nullable: false, unique: false })
   userId: ObjectId;
 
+  @Column({ nullable: true, type: 'text' })
+  @ApiString()
+  title: string;
+
   @Column()
   @ApiLongString()
   summary: string;
-  @ApiString({})
-  @Column()
-  description: string;
 
-  @ApiString()
-  @Column({ nullable: true, type: 'text' })
-  title: string;
+  @Column()
+  @ApiTextString()
+  description: string;
 
   @Column()
   @ApiUriString()

@@ -82,7 +82,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
 
       return R.clone(dto);
     } catch (error) {
-      this.logger.error(`${this.constructor.name}.update ${error}`);
+      this.logger.error(`${this.constructor.name}.'/api/playlists/{playlistId}'.replace('{playlistId}', encodeURI(playlistId)) ${error}`);
     }
   }
 

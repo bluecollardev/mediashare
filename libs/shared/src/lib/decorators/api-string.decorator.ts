@@ -13,7 +13,7 @@ const lengthFn = function (minLength: number, maxLength: number) {
   return { maxLength, minLength };
 };
 
-const ApiEmail: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
+export const ApiEmail: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
   const length = [5, 50] as const;
 
   return applyDecorators(
@@ -22,11 +22,11 @@ const ApiEmail: ApiDecoratorType = function ({ required } = apiDecoratorDefaults
   );
 };
 
-const ApiUsername: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
+export const ApiUsername: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
   return applyDecorators(ApiEmail({ required }));
 };
 
-const ApiName: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
+export const ApiName: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
   const length = [3, 30] as const;
 
   return applyDecorators(
@@ -35,7 +35,7 @@ const ApiName: ApiDecoratorType = function ({ required } = apiDecoratorDefaults)
   );
 };
 
-const ApiString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
+export const ApiString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
   const length = [3, 255] as const;
   return applyDecorators(
     ...baseStringValidators(...length),
@@ -48,7 +48,7 @@ const ApiString: ApiDecoratorType = function ({ required } = apiDecoratorDefault
   );
 };
 
-const ApiUriString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
+export const ApiUriString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
   const [min, max] = [5, 255] as const;
   return applyDecorators(
     IsUrl(),
@@ -62,11 +62,16 @@ const ApiUriString: ApiDecoratorType = function ({ required } = apiDecoratorDefa
   );
 };
 
-const ApiLongString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
+export const ApiLongString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
   return applyDecorators(
-    ...baseStringValidators(5, 700),
+    ...baseStringValidators(5, 1000),
     ApiProperty({ required, type: String, example: R.randomString(300) })
   );
 };
 
-export { ApiEmail, ApiUsername, ApiName, ApiString, ApiUriString, ApiLongString };
+export const ApiTextString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
+  return applyDecorators(
+    ...baseStringValidators(5, 50000),
+    ApiProperty({ required, type: String, example: R.randomString(300) })
+  );
+};

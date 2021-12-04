@@ -1,21 +1,19 @@
 import { BcEntity } from '@api';
-import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY, PLAYLIST_ENTITY } from '@core-lib';
-import { ApiObjectId, ApiString } from '@mediashare/shared';
+import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY } from '@core-lib';
+import { ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
-import { IsIn } from 'class-validator';
 import { ObjectId } from 'mongodb';
-import { Column, Entity, ObjectIdColumn, Index } from 'typeorm';
+import { Column, Entity, Index } from 'typeorm';
 import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
 
 @Entity('playlist')
 export class Playlist extends BcEntity implements PlaylistInterface {
   @Column('title')
   @ApiString()
-
   title: string;
 
   @Column('description')
-  @ApiString()
+  @ApiTextString()
   description: string;
 
   @Column('imageSrc')

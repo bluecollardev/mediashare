@@ -13,6 +13,7 @@ import { writeFileSync } from 'fs';
 
 import * as passport from 'passport';
 import { AppConfigService } from './app/modules/app-config/app-config.provider';
+import { GlobalExceptionFilter } from './app/core/exception-filters/global-exception.filter';
 import * as session from 'express-session';
 import MongoStore from 'connect-mongo';
 import * as compression from 'compression';
@@ -26,7 +27,10 @@ async function bootstrap() {
 
   app.useLogger(app.get(Logger));
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    enableDebugMessages: false
+  }));
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
   const [host, globalPrefix, title, mongoUrl, dbName, collectionName, secret, isDev] = [
     appConfig.get('host'),
