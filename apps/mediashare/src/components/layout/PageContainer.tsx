@@ -42,7 +42,7 @@ export function PageContent({ refreshControl, children }: PageContentProps) {
 export function KeyboardAvoidingPageContent({ refreshControl, children }: PageContentProps) {
   return (
     <View style={styles.pageContent}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.pageContent}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : undefined} style={styles.pageContent}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView refreshControl={refreshControl}>{children}</ScrollView>
         </TouchableWithoutFeedback>
