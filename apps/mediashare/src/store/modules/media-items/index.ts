@@ -99,14 +99,14 @@ export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMedia
 
 export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ items }: { items: AwsMediaItem[] }) => {
   const createThumbnailFactory = (item: CreateMediaItemDto) =>
-    from(VideoThumbnails.getThumbnailAsync(s3Url + mediaRoot + videoRoot + item.title.replace(/\s/g, '%20'), { time: 100 })).pipe(
+    from(VideoThumbnails.getThumbnailAsync(s3Url + mediaRoot + videoRoot + item.title.replace(/\s/g, '+'), { time: 100 })).pipe(
       tap((res) => {
-        // console.log(item.key);
-        // console.log(res);
+        console.log(item.key);
+        console.log(res);
       }),
       switchMap((thumbnail) => from(fetchMedia(thumbnail.uri))),
       tap((res) => {
-        // console.log(res);
+        console.log(res);
       }),
 
       switchMap((file) => from(putToS3({ key: mediaRoot + videoRoot + item.title, file, options: { contentType: 'image/jpeg' } })))
@@ -131,15 +131,16 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
   const dtoPromises = dtos.map((dto) =>
     from(copyStorage(dto.title)).pipe(
       switchMap(() => createThumbnailFactory(dto)),
-
-      switchMap(() => deleteStorage(dto.title)),
+      // switchMap(() => deleteStorage(dto.title)),
       switchMap((_) => apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto: dto }))
     )
   );
   // const save = merge(...dtoPromises).pipe(tap((res) => console.log(res)));
   // const deleted = items.map((item) => deleteStorage(mediaRoot + uploadRoot + item.key));
   // await Promise.all(thumbnailPromises);
-  return await merge(...dtoPromises).toPromise();
+  return await merge(...dtoPromises)
+    .pipe(tap((res) => console.log(res)))
+    .toPromise();
 });
 export const loadUserMediaItems = createAsyncThunk(mediaItemActionTypes.loadUserMediaItems, async () => {
   return await apis.user.userControllerGetMediaItems().toPromise();

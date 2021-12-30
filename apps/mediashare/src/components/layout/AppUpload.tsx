@@ -50,7 +50,8 @@ export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = '
   async function uploadVideo() {
     // TODO: Only MP4 supported right now?
     const video = (await DocumentPicker.getDocumentAsync({ type: 'video/mp4' })) as any;
-    if (!video) {
+    // TODO: Ideally we don't have to check for the video type cancel here, improve whatever logic is setting the value!
+    if (!video || video.type === 'cancel') {
       return;
     }
     if (!video || video.size > maxUpload) {
@@ -62,8 +63,10 @@ export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = '
     console.log(video);
     try {
       console.log('Dispatching createThumbnail action');
+      console.log(JSON.stringify({ key: video.name, fileUri: video.uri }, null, 2));
       await dispatch(createThumbnail({ key: video.name, fileUri: video.uri }));
     } catch (err) {
+      console.log('Dispatching createThumbnail action failed');
       console.log(err);
     }
 

@@ -132,7 +132,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           style={{ width: '100%', height: 300, margin: 3, marginBottom: 6 }}
           resizeMode="contain"
           controls={true}
-          paused={true}
+          paused={false}
         />
         {/* Use expo-av + expo-video-player */}
         {/* <Video

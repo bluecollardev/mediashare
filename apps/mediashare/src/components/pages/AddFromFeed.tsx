@@ -36,9 +36,11 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
       return;
     }
     const items = Array.from(selectedItems.values());
-    await dispatch(saveFeedMediaItems({ items }));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const result = await dispatch(saveFeedMediaItems({ items }));
     goToMediaItems();
   };
+
   useEffect(() => {
     const loadData = async function () {
       await dispatch(getFeedMediaItems());
