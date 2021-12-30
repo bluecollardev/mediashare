@@ -47,7 +47,7 @@ if (!env.BUILD_FOR) {
     THUMBNAIL_ROOT: 'thumbnails/',
     TEST_USER: '',
     TEST_PASSWORD: '',
-    AWS_URL: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.amazonaws.com/public/',
+    AWS_URL: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/',
     MAX_UPLOAD: '104857600',
     BUILD_FOR: 'admin',
   } as ConfigInterface;
