@@ -11,14 +11,16 @@ import {
   listStorage,
   sanitizeFoldername,
   sanitizeKey,
+  titleFromKey,
   uploadMediaToS3,
-  uploadThumbnailToS3
+  uploadThumbnailToS3,
 } from './storage';
 import {
   KeyFactory,
   getVideoPath,
   getThumbnailPath,
-  getUploadPath, awsUrl
+  getUploadPath,
+  awsUrl,
 } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
@@ -121,12 +123,16 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
       // Copy storage will sanitize the key automatically
       copyStorage(item.key);
       const sanitizedKey = sanitizeKey(item.key);
-      return Object.assign({}, item, { key: sanitizedKey });
+      const title = titleFromKey(item.key);
+      return Object.assign({}, item, {
+        key: sanitizedKey,
+        title: title,
+      });
     })
     .map((item) => ({
       description: `${item.size} - ${item.lastModified}`,
       // TODO: Is there a better way to set the title?
-      title: item.key,
+      title: item.title,
       thumbnail: awsUrl + getThumbnailPath(item.key),
       video: awsUrl + getVideoPath(item.key),
       uri: awsUrl + getVideoPath(item.key),

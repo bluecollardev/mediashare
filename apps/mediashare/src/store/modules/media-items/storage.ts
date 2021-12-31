@@ -40,6 +40,14 @@ export function sanitizeKey(key: string) {
   return key.replace(/\s/g, '+');
 }
 
+export function titleFromKey(key: string) {
+  // TODO: Decode all entities?
+  return key
+    .replace('+', ' ')
+    .replace('%20', ' ')
+    .replace(/(\.(mp4|avi|mov))$/, '');
+}
+
 function copyStorageFactory({ root, uploadRoot, videoRoot }: Pick<KeyFactoryProps, 'root' | 'uploadRoot' | 'videoRoot'>) {
   return async (key: string) => {
     const from = root + uploadRoot + key;
