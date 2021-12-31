@@ -1,20 +1,28 @@
 import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { forkJoin, from, merge } from 'rxjs';
-import { switchMap, take, tap } from 'rxjs/operators';
-import * as VideoThumbnails from 'expo-video-thumbnails';
+import { forkJoin } from 'rxjs';
+import { take } from 'rxjs/operators';
 import Config from '../../../config';
 
 import { makeEnum } from '../../core/factory';
-import { copyStorage, deleteStorage, fetchMedia, getStorage, listStorage, putToS3, sanitizeFoldername, uploadMedia, uploadThumbnail } from './storage';
-import { KeyFactory, mediaRoot, thumbnailRoot, uploadRoot, videoRoot } from './key-factory';
+import {
+  copyStorage,
+  deleteStorage,
+  getStorage,
+  listStorage,
+  sanitizeFoldername,
+  sanitizeKey,
+  uploadMediaToS3,
+  uploadThumbnailToS3
+} from './storage';
+import {
+  KeyFactory,
+  getVideoPath,
+  getThumbnailPath,
+  getUploadPath, awsUrl
+} from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
-import {
-  CreateMediaItemDto,
-  MediaCategoryType,
-  MediaItemDto,
-  UpdateMediaItemDto
-} from '../../../rxjs-api';
+import { CreateMediaItemDto, MediaCategoryType, MediaItemDto, UpdateMediaItemDto } from '../../../rxjs-api';
 import { apis, ApiService } from '../../apis';
 
 import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '../../helpers';
@@ -37,7 +45,7 @@ export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
 export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
 export const setActiveMediaItem = createAction<MediaItemDto, 'setActiveMediaItem'>('setActiveMediaItem');
 export const clearActiveMediaItem = createAction('clearActiveMediaItem');
-export const selectMediaItem = createAction<{ isChecked: boolean; item: MediaItemDto}, 'selectMediaItem'>('selectMediaItem');
+export const selectMediaItem = createAction<{ isChecked: boolean; item: MediaItemDto }, 'selectMediaItem'>('selectMediaItem');
 export const clearMediaItems = createAction('clearMediaItems');
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async ({ uri, mediaId }: { uri: string; mediaId: string }) => {
@@ -50,8 +58,9 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
 });
 
 export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {
-  return await uploadThumbnail({ fileUri, key });
+  return await uploadThumbnailToS3({ fileUri, key });
 });
+
 export const addMediaItem = createAsyncThunk(
   mediaItemActionTypes.addMediaItem,
   async (dto: Pick<CreateMediaItemDto, 'category' | 'description' | 'summary' | 'title' | 'key' | 'uri'>) => {
@@ -59,7 +68,7 @@ export const addMediaItem = createAsyncThunk(
     try {
       const options = { description: dto.description, summary: dto.summary, contentType: 'video/mp4' };
 
-      const { video } = await uploadMedia({ fileUri, key: title, options });
+      const { video } = await uploadMediaToS3({ fileUri, key: title, options });
       if (!video) {
         throw new Error('No response in add media item');
       }
@@ -86,61 +95,56 @@ export const addMediaItem = createAsyncThunk(
 
 export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
   // TODO: Non-overlapping types here!
-  const feedMediaItems = ((await listStorage(mediaRoot + uploadRoot)) as unknown) as AwsMediaItem[];
+  const feedMediaItems = ((await listStorage(getUploadPath())) as unknown) as AwsMediaItem[];
   return feedMediaItems
-    .filter((item) => item.key !== mediaRoot + uploadRoot)
+    .filter((item) => item.key !== getUploadPath())
     .map((item) => ({
       etag: item.etag,
       size: typeof item.size === 'number' ? `${(item.size / (1024 * 1024)).toFixed(2)} MB` : '',
       lastModified: new Date(Date.parse(item.lastModified)).toDateString(),
-      key: sanitizeFoldername(item.key, mediaRoot + uploadRoot),
+      key: sanitizeFoldername(item.key, getUploadPath()),
     }));
 });
 
 export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ items }: { items: AwsMediaItem[] }) => {
-  const createThumbnailFactory = (item: CreateMediaItemDto) =>
-    from(VideoThumbnails.getThumbnailAsync(s3Url + mediaRoot + videoRoot + item.title.replace(/\s/g, '+'), { time: 100 })).pipe(
-      tap((res) => {
-        console.log(item.key);
-        console.log(res);
-      }),
-      switchMap((thumbnail) => from(fetchMedia(thumbnail.uri))),
-      tap((res) => {
-        console.log(res);
-      }),
+  const createFeedItemThumbnail = async (dto: CreateMediaItemDto) => {
+    try {
+      const fileUri = s3Url + getVideoPath(dto.key);
+      return await uploadThumbnailToS3({ fileUri, key: dto.key });
+    } catch (err) {
+      console.log('[createFeedItemThumbnail] createFeedItemThumbnail failed');
+    }
+  };
 
-      switchMap((file) => from(putToS3({ key: mediaRoot + videoRoot + item.title, file, options: { contentType: 'image/jpeg' } })))
-    );
+  const dtos: CreateMediaItemDto[] = items
+    .map((item) => {
+      // Copy storage will sanitize the key automatically
+      copyStorage(item.key);
+      const sanitizedKey = sanitizeKey(item.key);
+      return Object.assign({}, item, { key: sanitizedKey });
+    })
+    .map((item) => ({
+      description: `${item.size} - ${item.lastModified}`,
+      // TODO: Is there a better way to set the title?
+      title: item.key,
+      thumbnail: awsUrl + getThumbnailPath(item.key),
+      video: awsUrl + getVideoPath(item.key),
+      uri: awsUrl + getVideoPath(item.key),
+      isPlayable: true,
+      category: MediaCategoryType.Free,
+      eTag: item.etag,
+      key: item.key,
+      summary: '',
+    }));
 
-  // TODO: Were we planning on doing something here?
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const copy = items.map((item) => copyStorage(item.key));
-  const dtos: CreateMediaItemDto[] = items.map((item) => ({
-    description: `${item.size} - ${item.lastModified}`,
-    title: item.key,
-    thumbnail: mediaRoot + thumbnailRoot + item.key,
-    video: mediaRoot + videoRoot + item.key,
-    uri: mediaRoot + videoRoot + item.key,
-    isPlayable: true,
-    category: MediaCategoryType.Free,
-    eTag: item.etag,
-    key: mediaRoot + videoRoot + item.key,
-    summary: '',
-  }));
-
-  const dtoPromises = dtos.map((dto) =>
-    from(copyStorage(dto.title)).pipe(
-      switchMap(() => createThumbnailFactory(dto)),
-      // switchMap(() => deleteStorage(dto.title)),
-      switchMap((_) => apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto: dto }))
-    )
-  );
-  // const save = merge(...dtoPromises).pipe(tap((res) => console.log(res)));
-  // const deleted = items.map((item) => deleteStorage(mediaRoot + uploadRoot + item.key));
-  // await Promise.all(thumbnailPromises);
-  return await merge(...dtoPromises)
-    .pipe(tap((res) => console.log(res)))
-    .toPromise();
+  const dtoPromises = dtos.map(async (dto) => {
+    const thumbnailUrl = await createFeedItemThumbnail(dto);
+    console.log(`dumping thumbnail url: ${thumbnailUrl}`);
+    // await deleteStorage(dto.title)),
+    const createMediaItemDto = Object.assign({}, dto, { thumbnail: thumbnailUrl });
+    return await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
+  });
+  return await Promise.all(dtoPromises);
 });
 export const loadUserMediaItems = createAsyncThunk(mediaItemActionTypes.loadUserMediaItems, async () => {
   return await apis.user.userControllerGetMediaItems().toPromise();
@@ -292,7 +296,7 @@ const mediaItemsSlice = createSlice({
         return { ...state, mediaItems: action.payload };
       })
       .addCase(selectMediaItem, (state, action) => {
-        const updateSelection = function(bool: boolean, item: MediaItemDto) {
+        const updateSelection = function (bool: boolean, item: MediaItemDto) {
           const { selected } = state;
           // Is it filtered?
           // @ts-ignore

@@ -17,8 +17,7 @@ export interface PutStorageParams {
 }
 
 export function sanitizeFoldername(key: string, folder: string) {
-  const test = key.replace(new RegExp(folder), '');
-  return test;
+  return key.replace(new RegExp(folder), '');
 }
 
 export function getStorage(key: string) {
@@ -37,20 +36,32 @@ export function listStorage(key: string) {
   return Storage.list(key, { download: true });
 }
 
-function copyStorageFactory({ root, uploadRoot, videoRoot }: Pick<KeyFactoryProps, 'root' | 'uploadRoot' | 'videoRoot'>) {
-  return (key: string) => {
-    const from = root + uploadRoot + key;
+export function sanitizeKey(key: string) {
+  return key.replace(/\s/g, '+');
+}
 
-    const to = root + videoRoot + key;
-    return Storage.copy({ key: from }, { key: to });
+function copyStorageFactory({ root, uploadRoot, videoRoot }: Pick<KeyFactoryProps, 'root' | 'uploadRoot' | 'videoRoot'>) {
+  return async (key: string) => {
+    const from = root + uploadRoot + key;
+    // We want to eliminate spaces (and possibly other things) from our filenames
+    const to = root + videoRoot + sanitizeKey(key);
+    try {
+      return await Storage.copy({ key: from }, { key: to });
+    } catch (err) {
+      console.log(`[copyStorageFactory] Storage.copy from (${from}) to (${to}) failed`);
+      console.log(err);
+    }
   };
 }
 
 export const copyStorage = copyStorageFactory({ root: mediaRoot, uploadRoot, videoRoot });
 
-export function putToS3({ key, file, options = {} }: PutStorageParams) {
+export async function putToS3({ key, file, options = {} }: PutStorageParams) {
   const { title = '', description = '', summary = '', contentType = 'video/mp4' } = options;
-  return Storage.put(key, file, { contentType, metadata: { summary, description }, contentDisposition: title });
+  const result = await Storage.put(key, file, { contentType, metadata: { summary, description }, contentDisposition: title });
+  console.log('PUT to S3 storage');
+  console.log(result);
+  return result;
 }
 
 export async function fetchMedia(path: string) {
@@ -63,39 +74,47 @@ export async function fetchMedia(path: string) {
 }
 
 export async function fetchAndPutToS3({ fileUri, key, options }: { fileUri: string; key: string; options?: StorageOptions }) {
-  const file = await fetchMedia(fileUri);
-  const putFile = await putToS3({ key, file, options });
-  return putFile;
+  try {
+    const file = await fetchMedia(fileUri);
+    return await putToS3({ key, file, options });
+  } catch (err) {
+    console.log('[fetchAndPutToS3] fetchAndPutToS3 failed');
+    console.log(err);
+  }
 }
 
-export async function uploadThumbnail({ fileUri, key }) {
-  const { thumbnailKey } = KeyFactory(key);
+async function getVideoThumbnailFromUri(fileUri) {
   let item;
   try {
     item = await VideoThumbnails.getThumbnailAsync(fileUri);
   } catch (err) {
-    console.log('Error getting thumbnail [getThumbnailAsync]');
-    console.log('You probably need to link the expo module');
+    console.log('[getVideoThumbnailFromUri] Error getting thumbnail, getThumbnailAsync failed');
+    console.log(`Make sure the file at [$fileUri] exists`);
+    console.log('You may need to manually link the expo modules');
     console.log(err);
   }
-
-  const thumbnailResponse = (await fetchAndPutToS3({
-    key: thumbnailKey,
-    fileUri: item.uri,
-    options: { contentType: 'image/jpeg' },
-  })) as any;
-  return await getStorage(thumbnailResponse.key);
+  return item;
 }
 
-export async function uploadMedia({ key, fileUri, options }: { key: string; fileUri: string; options: StorageOptions }) {
-  const { videoKey, thumbnailKey } = KeyFactory(key);
-
-  const { uri: thumbUri } = await VideoThumbnails.getThumbnailAsync(fileUri);
-  const thumbnailResponse = await fetchAndPutToS3({
+/**
+ * @param fileUri The URI of the video file
+ * @param key The ID key
+ * @return string URL for uploaded AWS file
+ */
+export async function uploadThumbnailToS3({ fileUri, key }): Promise<string> {
+  const { thumbnailKey } = KeyFactory(key);
+  const { uri: thumbnailUri } = await getVideoThumbnailFromUri(fileUri);
+  const uploadResponse = await fetchAndPutToS3({
     key: thumbnailKey,
-    fileUri: thumbUri,
+    fileUri: thumbnailUri,
     options: { contentType: 'image/jpeg' },
   });
+  return await getStorage(uploadResponse.key);
+}
+
+export async function uploadMediaToS3({ fileUri, key, options }: { fileUri: string; key: string; options: StorageOptions }) {
+  const { videoKey } = KeyFactory(key);
+  const thumbnailResponse = uploadThumbnailToS3({ fileUri, key });
   const videoResponse = await fetchAndPutToS3({ fileUri, key: videoKey, options });
   return { thumb: thumbnailResponse, video: videoResponse };
 }

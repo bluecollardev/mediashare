@@ -31,5 +31,10 @@ function createKeyFactory({ root, thumbnailRoot, videoRoot, uploadRoot }: KeyFac
     };
   };
 }
+
+export const getVideoPath = (key = '') => mediaRoot + videoRoot + key;
+export const getThumbnailPath = (key = '') => mediaRoot + thumbnailRoot + key;
+export const getUploadPath = (key = '') => mediaRoot + uploadRoot + key;
+
 const KeyFactory = createKeyFactory({ root: mediaRoot, videoRoot, thumbnailRoot, uploadRoot });
 export { KeyFactory, mediaRoot, videoRoot, thumbnailRoot, uploadRoot, awsUrl };
