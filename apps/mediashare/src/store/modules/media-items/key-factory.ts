@@ -16,6 +16,8 @@ export interface KeyFactoryProps {
 }
 
 // eslint-disable-next-line no-shadow
+// TODO: We should use this but it's not ready...
+//  Just get things working first then redo our get*Path functions below...
 function createKeyFactory({ root, thumbnailRoot, videoRoot, uploadRoot }: KeyFactoryProps) {
   return function (title: string) {
     const makeKey = <K extends string>(key: K) => `${root}${key}${title}`;

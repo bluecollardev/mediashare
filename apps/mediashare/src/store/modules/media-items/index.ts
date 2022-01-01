@@ -9,7 +9,7 @@ import {
   deleteStorage,
   getStorage,
   listStorage,
-  sanitizeFoldername,
+  sanitizeFolderName,
   sanitizeKey,
   titleFromKey,
   uploadMediaToS3,
@@ -98,7 +98,7 @@ export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMedia
       etag: item.etag,
       size: typeof item.size === 'number' ? `${(item.size / (1024 * 1024)).toFixed(2)} MB` : '',
       lastModified: new Date(Date.parse(item.lastModified)).toDateString(),
-      key: sanitizeFoldername(item.key, getUploadPath()),
+      key: sanitizeFolderName(item.key, getUploadPath()),
     }));
 });
 
@@ -116,8 +116,9 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
 
   const dtoPromises = items
     .map((item) => {
-      // Copy storage will sanitize the key automatically
-      copyStorage(item.key);
+      // Copy storage will sanitize the 'to' key automatically
+      const s3KeyString = item.key;
+      copyStorage(s3KeyString);
       return item;
     })
     .map(async (item) => {
