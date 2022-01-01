@@ -37,15 +37,12 @@ export function listStorage(key: string) {
 }
 
 export function sanitizeKey(key: string) {
-  return key.replace(/\s/g, '+');
+  return key.replace(/[\W_]+/g, '-');
 }
 
 export function titleFromKey(key: string) {
   // TODO: Decode all entities?
-  return key
-    .replace('+', ' ')
-    .replace('%20', ' ')
-    .replace(/(\.(mp4|avi|mov))$/, '');
+  return key.replace(/(\.(mp4|avi|mov))$/, '');
 }
 
 function copyStorageFactory({ root, uploadRoot, videoRoot }: Pick<KeyFactoryProps, 'root' | 'uploadRoot' | 'videoRoot'>) {
@@ -112,11 +109,13 @@ async function getVideoThumbnailFromUri(fileUri) {
 export async function uploadThumbnailToS3({ fileUri, key }): Promise<string> {
   const { thumbnailKey } = KeyFactory(key);
   const { uri: thumbnailUri } = await getVideoThumbnailFromUri(fileUri);
-  const uploadResponse = await fetchAndPutToS3({
+  const payload = {
     key: thumbnailKey,
     fileUri: thumbnailUri,
     options: { contentType: 'image/jpeg' },
-  });
+  };
+  console.log(`[uploadThumbnailToS3] ${JSON.stringify(payload, null, 2)}`);
+  const uploadResponse = await fetchAndPutToS3(payload);
   return await getStorage(uploadResponse.key);
 }
 

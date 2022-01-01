@@ -15,13 +15,7 @@ import {
   uploadMediaToS3,
   uploadThumbnailToS3,
 } from './storage';
-import {
-  KeyFactory,
-  getVideoPath,
-  getThumbnailPath,
-  getUploadPath,
-  awsUrl,
-} from './key-factory';
+import { KeyFactory, getVideoPath, getThumbnailPath, getUploadPath, awsUrl } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
 import { CreateMediaItemDto, MediaCategoryType, MediaItemDto, UpdateMediaItemDto } from '../../../rxjs-api';
@@ -109,49 +103,51 @@ export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMedia
 });
 
 export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ items }: { items: AwsMediaItem[] }) => {
-  const createFeedItemThumbnail = async (dto: CreateMediaItemDto) => {
+  const createFeedItemThumbnail = async (key) => {
     try {
-      const fileUri = s3Url + getVideoPath(dto.key);
-      return await uploadThumbnailToS3({ fileUri, key: dto.key });
+      // AWS will replace spaces with a '+' in the actual Object URL
+      const fileUri = s3Url + getUploadPath(key.replace(/\s/g, '+'));
+      console.log(`[createFeedItemThumbnail] Creating thumbnail for file at ${fileUri}`);
+      return await uploadThumbnailToS3({ fileUri, key: sanitizeKey(key) });
     } catch (err) {
       console.log('[createFeedItemThumbnail] createFeedItemThumbnail failed');
     }
   };
 
-  const dtos: CreateMediaItemDto[] = items
+  const dtoPromises = items
     .map((item) => {
       // Copy storage will sanitize the key automatically
       copyStorage(item.key);
-      const sanitizedKey = sanitizeKey(item.key);
-      const title = titleFromKey(item.key);
-      return Object.assign({}, item, {
-        key: sanitizedKey,
-        title: title,
-      });
+      return item;
     })
-    .map((item) => ({
-      description: `${item.size} - ${item.lastModified}`,
+    .map(async (item) => {
+      const sanitizedKey = sanitizeKey(item.key);
       // TODO: Is there a better way to set the title?
-      title: item.title,
-      thumbnail: awsUrl + getThumbnailPath(item.key),
-      video: awsUrl + getVideoPath(item.key),
-      uri: awsUrl + getVideoPath(item.key),
-      isPlayable: true,
-      category: MediaCategoryType.Free,
-      eTag: item.etag,
-      key: item.key,
-      summary: '',
-    }));
+      const automaticTitle = titleFromKey(item.key);
+      const thumbnailUrl = await createFeedItemThumbnail(item.key);
+      console.log('Compare URLs...');
+      console.log(`thumbnailUrl: ${thumbnailUrl}`);
+      console.log(`dto thumbnailUrl: ${awsUrl + getThumbnailPath(sanitizedKey)}`);
+      const createMediaItemDto = {
+        key: sanitizedKey,
+        title: automaticTitle,
+        description: `${item.size} - ${item.lastModified}`,
+        // TODO: Fix this, can we use KeyFactory?
+        thumbnail: awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg',
+        video: awsUrl + getVideoPath(sanitizedKey),
+        uri: awsUrl + getVideoPath(sanitizedKey),
+        isPlayable: true,
+        category: MediaCategoryType.Free,
+        eTag: item.etag,
+        summary: '',
+      };
+      // await deleteStorage(dto.title)),
+      return await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
+    });
 
-  const dtoPromises = dtos.map(async (dto) => {
-    const thumbnailUrl = await createFeedItemThumbnail(dto);
-    console.log(`dumping thumbnail url: ${thumbnailUrl}`);
-    // await deleteStorage(dto.title)),
-    const createMediaItemDto = Object.assign({}, dto, { thumbnail: thumbnailUrl });
-    return await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
-  });
   return await Promise.all(dtoPromises);
 });
+
 export const loadUserMediaItems = createAsyncThunk(mediaItemActionTypes.loadUserMediaItems, async () => {
   return await apis.user.userControllerGetMediaItems().toPromise();
 });
