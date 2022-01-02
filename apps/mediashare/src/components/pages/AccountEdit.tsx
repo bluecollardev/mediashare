@@ -12,7 +12,7 @@ import { UserDto } from '../../rxjs-api';
 import { useAppSelector } from '../../store';
 import { loadUser, updateAccount } from '../../store/modules/user';
 import { fetchAndPutToS3 } from '../../store/modules/media-items/storage';
-import { thumbnailRoot } from '../../store/modules/media-items/s3-keys';
+import { thumbnailRoot } from '../../store/modules/media-items/key-factory';
 import { loadProfile } from '../../store/modules/profile';
 
 import { routeNames } from '../../routes';

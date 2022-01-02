@@ -1,7 +1,7 @@
 import { Storage } from 'aws-amplify';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 
-import { KeyFactory, KeyFactoryProps, mediaRoot, uploadRoot, videoRoot } from './s3-keys';
+import { KeyFactory, KeyFactoryProps, mediaRoot, uploadRoot, videoRoot } from './key-factory';
 
 // Common video and image formats
 export const validVideoFormats = ['mp4', 'mov', 'wmv', 'flv', 'avi', 'webm', 'mkv'];

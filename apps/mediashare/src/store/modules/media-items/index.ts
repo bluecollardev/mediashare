@@ -6,7 +6,8 @@ import Config from '../../../config';
 import { makeEnum } from '../../core/factory';
 import {
   copyStorage,
-  deleteStorage, getFileExtension,
+  deleteStorage,
+  getFileExtension,
   getStorage,
   listStorage,
   sanitizeFolderName,
@@ -15,7 +16,7 @@ import {
   uploadMediaToS3,
   uploadThumbnailToS3,
 } from './storage';
-import { getVideoPath, getThumbnailPath, getUploadPath, awsUrl, KeyFactory } from './s3-keys';
+import { getVideoPath, getThumbnailPath, getUploadPath, awsUrl, KeyFactory } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
 import { CreateMediaItemDto, MediaCategoryType, MediaItemDto, UpdateMediaItemDto } from '../../../rxjs-api';
