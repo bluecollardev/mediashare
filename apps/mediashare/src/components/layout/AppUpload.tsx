@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import Config from '../../config';
 
-import { thumbnailRoot, awsUrl } from '../../store/modules/media-items/key-factory';
+import { thumbnailRoot, awsUrl } from '../../store/modules/media-items/s3-keys';
 import { fetchAndPutToS3 } from '../../store/modules/media-items/storage';
 import { createThumbnail } from '../../store/modules/media-items';
 import { setError } from '../../store/modules/app-state';

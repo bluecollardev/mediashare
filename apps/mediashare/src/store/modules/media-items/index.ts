@@ -6,7 +6,7 @@ import Config from '../../../config';
 import { makeEnum } from '../../core/factory';
 import {
   copyStorage,
-  deleteStorage,
+  deleteStorage, getFileExtension,
   getStorage,
   listStorage,
   sanitizeFolderName,
@@ -15,7 +15,7 @@ import {
   uploadMediaToS3,
   uploadThumbnailToS3,
 } from './storage';
-import { KeyFactory, getVideoPath, getThumbnailPath, getUploadPath, awsUrl } from './key-factory';
+import { getVideoPath, getThumbnailPath, getUploadPath, awsUrl, KeyFactory } from './s3-keys';
 import { AwsMediaItem } from './aws-media-item.model';
 
 import { CreateMediaItemDto, MediaCategoryType, MediaItemDto, UpdateMediaItemDto } from '../../../rxjs-api';
@@ -59,27 +59,31 @@ export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key
 
 export const addMediaItem = createAsyncThunk(
   mediaItemActionTypes.addMediaItem,
-  async (dto: Pick<CreateMediaItemDto, 'category' | 'description' | 'summary' | 'title' | 'key' | 'uri'>) => {
+  async (dto: Pick<CreateMediaItemDto, 'key' | 'title' | 'description' | 'summary' | 'category' | 'uri'>) => {
     const { uri: fileUri, title, category, summary, description } = dto;
     try {
       const options = { description: dto.description, summary: dto.summary, contentType: 'video/mp4' };
-
-      const { video } = await uploadMediaToS3({ fileUri, key: title, options });
+      const sanitizedKey = sanitizeKey(`${title}.${getFileExtension(fileUri)}`);
+      const { video, thumbnail } = await uploadMediaToS3({ fileUri, key: sanitizedKey, options });
       if (!video) {
-        throw new Error('No response in add media item');
+        throw new Error('[addMediaItem] video upload to S3 failed');
       }
-      const { thumbnailKey, videoKey } = KeyFactory(title);
+      if (!thumbnail) {
+        console.warn('[addMediaItem] thumbnail generation failed');
+      }
+
+      const { videoKey } = KeyFactory(sanitizedKey);
       const createMediaItemDto: CreateMediaItemDto = {
-        category,
-        summary,
-        description,
         key: videoKey,
-        uri: videoKey,
-        isPlayable: true,
-        thumbnail: thumbnailKey,
-        // eTag: video.,
-        eTag: '',
         title,
+        description,
+        summary,
+        category: category || MediaCategoryType.Free,
+        thumbnail: awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg',
+        // video: awsUrl + getVideoPath(sanitizedKey),
+        uri: awsUrl + getVideoPath(sanitizedKey),
+        isPlayable: true,
+        eTag: '',
       };
 
       return await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
@@ -108,9 +112,11 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
       // AWS will replace spaces with a '+' in the actual Object URL
       const fileUri = s3Url + getUploadPath(key.replace(/\s/g, '+'));
       console.log(`[createFeedItemThumbnail] Creating thumbnail for file at ${fileUri}`);
-      return await uploadThumbnailToS3({ fileUri, key: sanitizeKey(key) });
+      const sanitizedKey = sanitizeKey(key);
+      return await uploadThumbnailToS3({ fileUri, key: sanitizedKey });
     } catch (err) {
       console.log('[createFeedItemThumbnail] createFeedItemThumbnail failed');
+      console.log(err);
     }
   };
 
@@ -128,19 +134,19 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
       const thumbnailUrl = await createFeedItemThumbnail(item.key);
       console.log('Compare URLs...');
       console.log(`thumbnailUrl: ${thumbnailUrl}`);
-      console.log(`dto thumbnailUrl: ${awsUrl + getThumbnailPath(sanitizedKey)}`);
-      const createMediaItemDto = {
-        key: sanitizedKey,
+      console.log(`dto thumbnailUrl: ${awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg'}`);
+      const { videoKey } = KeyFactory(sanitizedKey);
+      const createMediaItemDto: CreateMediaItemDto = {
+        key: videoKey,
         title: automaticTitle,
         description: `${item.size} - ${item.lastModified}`,
-        // TODO: Fix this, can we use KeyFactory?
+        summary: '',
+        category: MediaCategoryType.Free,
         thumbnail: awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg',
-        video: awsUrl + getVideoPath(sanitizedKey),
+        // video: awsUrl + getVideoPath(sanitizedKey),
         uri: awsUrl + getVideoPath(sanitizedKey),
         isPlayable: true,
-        category: MediaCategoryType.Free,
         eTag: item.etag,
-        summary: '',
       };
       // await deleteStorage(dto.title)),
       return await apis.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();

@@ -1,7 +1,7 @@
 import { Storage } from 'aws-amplify';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 
-import { KeyFactory, KeyFactoryProps, mediaRoot, uploadRoot, videoRoot } from './key-factory';
+import { KeyFactory, KeyFactoryProps, mediaRoot, uploadRoot, videoRoot } from './s3-keys';
 
 // Common video and image formats
 export const validVideoFormats = ['mp4', 'mov', 'wmv', 'flv', 'avi', 'webm', 'mkv'];
@@ -96,7 +96,7 @@ export function sanitizeKey(dirtyKeyString: string) {
   }
 
   if (ext) {
-    const fileName = getFilenameWithoutExtension(dirtyKeyString);
+    const fileName = getFilenameWithoutExtension(dirtyKeyString.toLowerCase());
     const basePath = getFileBasePath(dirtyKeyString);
     return `${basePath}${fileName.replace(/[\W_]+/g, '-')}.${ext}`;
   }
@@ -121,6 +121,7 @@ export function deleteStorage(key: string) {
 }
 
 export function listStorage(key: string) {
+  // @ts-ignore
   return Storage.list(key, { download: true });
 }
 
@@ -186,8 +187,8 @@ async function getVideoThumbnailFromUri(fileUri) {
  * @return string URL for uploaded AWS file
  */
 export async function uploadThumbnailToS3({ fileUri, key }): Promise<string> {
-  const { thumbnailKey } = KeyFactory(key);
   const { uri: thumbnailUri } = await getVideoThumbnailFromUri(fileUri);
+  const { thumbnailKey } = KeyFactory(key);
   const payload = {
     key: thumbnailKey,
     fileUri: thumbnailUri,
@@ -195,13 +196,16 @@ export async function uploadThumbnailToS3({ fileUri, key }): Promise<string> {
   };
   console.log(`[uploadThumbnailToS3] ${JSON.stringify(payload, null, 2)}`);
   const uploadResponse = await fetchAndPutToS3(payload);
+  console.log(`[uploadThumbnailToS3] uploadResponse: ${JSON.stringify(uploadResponse, null, 2)}`);
   const storageKey = await getStorage(uploadResponse.key);
+  console.log(`[uploadThumbnailToS3] storageKey: ${storageKey}`);
   return storageKey;
 }
 
+// TODO: The thumbnail response returns a string and video response returns an object like { key: my-key }
+//  Standardize the returns!
 export async function uploadMediaToS3({ fileUri, key, options }: { fileUri: string; key: string; options: StorageOptions }) {
-  const { videoKey } = KeyFactory(key);
-  const thumbnailResponse = uploadThumbnailToS3({ fileUri, key });
-  const videoResponse = await fetchAndPutToS3({ fileUri, key: videoKey, options });
-  return { thumb: thumbnailResponse, video: videoResponse };
+  const thumbnailResponse = await uploadThumbnailToS3({ fileUri, key });
+  const videoResponse = await fetchAndPutToS3({ fileUri, key, options });
+  return { thumbnail: thumbnailResponse, video: videoResponse };
 }
