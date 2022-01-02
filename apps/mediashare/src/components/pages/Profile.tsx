@@ -123,7 +123,7 @@ const Profile = ({ route }: ProfileProps) => {
     await viewPlaylist({ playlistId });
   }
 
-  async function deleteShareItem (shareItemId: string) {
+  async function deleteShareItem(shareItemId: string) {
     await dispatch(removeShareItem(shareItemId));
     await dispatch(loadProfile(userId));
   }

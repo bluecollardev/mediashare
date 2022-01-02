@@ -182,7 +182,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
 
   async function sharePlaylist() {
     await dispatch(selectPlaylistAction({ isChecked: true, plist: selected as PlaylistResponseDto }));
-    goToShareWith()
+    goToShareWith();
   }
 
   async function cancelSharePlaylist() {
