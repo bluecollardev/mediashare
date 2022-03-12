@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, FlatList, View } from 'react-native';
 
 import { routeNames } from '../../routes';
 
@@ -41,39 +41,41 @@ export const MediaComponent = ({
   showActions?: boolean;
   onChecked?: (checked: boolean, item?: any) => void;
 }) => {
-  const sortedList = list.map((item) => item);
+  const sortedList = list.map((item) => item) || [];
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
   return (
     <View>
-      {sortedList.map((item) => {
-        const { _id, title, author, description, thumbnail } = item;
-        return (
-          <View key={`medias_${_id}`}>
-            <MediaListItem
-              key={`media_item_${_id}`}
-              title={title}
-              description={
-                <>
-                  {author && <Text style={styles.username}>By @{author}</Text>}
-                  <Text style={styles.description}>{shortenText(description, 52)}</Text>
-                </>
-              }
-              showThumbnail={true}
-              showActions={showActions}
-              image={thumbnail}
-              iconRight="edit"
-              iconRightColor={theme.colors.default}
-              selectable={selectable}
-              onViewDetail={() => onViewDetail(item)}
-              onChecked={(checked) => onChecked(checked, item)}
-            />
-            <Divider key={`media_item_divider_${_id}`} />
-          </View>
-        );
-      })}
+      <FlatList data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `media_item_${_id}`} />
     </View>
   );
+
+  function renderVirtualizedListItem(item) {
+    const { _id = '', title = '', author, description = '', thumbnail } = item;
+    return (
+      <>
+        <MediaListItem
+          key={`media_item_${_id}`}
+          title={title}
+          description={
+            <>
+              {author && <Text style={styles.username}>By @{author}</Text>}
+              <Text style={styles.description}>{shortenText(description, 52)}</Text>
+            </>
+          }
+          showThumbnail={true}
+          showActions={showActions}
+          image={thumbnail}
+          iconRight="edit"
+          iconRightColor={theme.colors.default}
+          selectable={selectable}
+          onViewDetail={() => onViewDetail(item)}
+          onChecked={(checked) => onChecked(checked, item)}
+        />
+        <Divider key={`media_item_divider_${_id}`} />
+      </>
+    );
+  }
 };
 
 const actionModes = { delete: 'delete', default: 'default' };

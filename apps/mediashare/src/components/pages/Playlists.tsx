@@ -14,7 +14,7 @@ import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { FAB, Text, Divider } from 'react-native-paper';
-import { RefreshControl, StyleSheet } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { View } from 'react-native';
 
 import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
@@ -62,37 +62,37 @@ export const PlaylistsComponent = ({
 
   return (
     <View>
-      {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-      {sortedList.map((item, idx) => {
-        const { title, author, description, mediaIds = [], imageSrc } = item;
-        // console.log(`Dumping playlist item: ${JSON.stringify(item, null, 2)}`);
-        return (
-          <View key={`playlists_item_${item._id}`}>
-            <MediaListItem
-              key={`playlist_${item._id}`}
-              title={title}
-              titleStyle={styles.title}
-              description={() => (
-                <>
-                  {/* <Text style={styles.author}>By {getAuthorText(creator)}</Text> */}
-                  {author && <Text style={styles.username}>By @{author}</Text>}
-                  <Text style={styles.description}>{shortenText(description, 52)}</Text>
-                  <Text style={styles.videoCount}>{mediaIds?.length || 0} videos</Text>
-                </>
-              )}
-              showThumbnail={true}
-              image={imageSrc}
-              showActions={showActions}
-              selectable={selectable}
-              onViewDetail={() => onViewDetailClicked(item)}
-              onChecked={(checked) => onChecked(checked, item)}
-            />
-            <Divider key={`playlist_divider_${item._id}`} />
-          </View>
-        );
-      })}
+      <FlatList data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
     </View>
   );
+
+  function renderVirtualizedListItem(item) {
+    const { _id = '', title = '', author = '', description = '', mediaIds = [], imageSrc = '' } = item;
+    return (
+      <>
+        <MediaListItem
+          key={`playlist_${_id}`}
+          title={title}
+          titleStyle={styles.title}
+          description={() => (
+            <>
+              {/* <Text style={styles.author}>By {getAuthorText(creator)}</Text> */}
+              {author && <Text style={styles.username}>By @{author}</Text>}
+              <Text style={styles.description}>{shortenText(description, 52)}</Text>
+              <Text style={styles.videoCount}>{mediaIds?.length || 0} videos</Text>
+            </>
+          )}
+          showThumbnail={true}
+          image={imageSrc}
+          showActions={showActions}
+          selectable={selectable}
+          onViewDetail={() => onViewDetailClicked(item)}
+          onChecked={(checked) => onChecked(checked, item)}
+        />
+        <Divider key={`playlist_divider_${item._id}`} />
+      </>
+    );
+  }
 };
 
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };

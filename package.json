@@ -6,6 +6,7 @@
     "node": "14.x"
   },
   "scripts": {
+    "install:tools:mongocli": "brew install mongocli",
     "build:api": "nest build --path apps/media-api/tsconfig.json --watch",
     "build:auth": "nest build --path apps/media-auth/tsconfig.json --watch",
     "build:prod": "rm -rf dist && nx build",

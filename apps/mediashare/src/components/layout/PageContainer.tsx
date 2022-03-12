@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import themeStyles, { theme } from '../../styles';
-import { KeyboardAvoidingView, SafeAreaView, ScrollView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
+import { KeyboardAvoidingView, SafeAreaView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
 import { useAppSelector } from '../../store';
 import { useDispatch } from 'react-redux';
@@ -30,21 +30,20 @@ export interface PageContentProps {
   style?: any;
 }
 
-export function PageContent({ refreshControl, children }: PageContentProps) {
+export function PageContent({ children }: PageContentProps) {
   return (
     <View style={styles.pageContent}>
-      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
-      <ScrollView refreshControl={refreshControl}>{children}</ScrollView>
+      <View>{children}</View>
     </View>
   );
 }
 
-export function KeyboardAvoidingPageContent({ refreshControl, children }: PageContentProps) {
+export function KeyboardAvoidingPageContent({ children }: PageContentProps) {
   return (
     <View style={styles.pageContent}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.pageContent}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView refreshControl={refreshControl}>{children}</ScrollView>
+          <>{children}</>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </View>

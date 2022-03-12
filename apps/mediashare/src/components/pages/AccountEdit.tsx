@@ -78,7 +78,6 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 
   const save = function () {
     const updateUserDto = state;
-
     from(dispatch(updateAccount({ updateUserDto, userId })))
       .pipe(
         switchMap(() => dispatch(loadProfile(userId))),
