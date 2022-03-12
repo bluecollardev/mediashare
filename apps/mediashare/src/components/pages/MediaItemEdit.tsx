@@ -10,7 +10,7 @@ import { useMediaItems } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { Button, Paragraph } from 'react-native-paper';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
@@ -95,47 +95,49 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
           title={'Delete Media Item'}
           subtitle={'Are you sure you want to do this? This action is final and cannot be undone.'}
         />
-        <MediaCard
-          key={mediaId}
-          title={title}
-          description={description}
-          mediaSrc={documentUri}
-          thumbnail={thumbnail}
-          showThumbnail={true}
-          category={category}
-          categoryOptions={options}
-          onCategoryChange={(e: any) => {
-            setCategory(e);
-          }}
-          onTitleChange={setTitle}
-          onDescriptionChange={setDescription}
-          isEdit={true}
-          isPlayable={true}
-          topDrawer={() => (
-            <View style={styles.itemControls}>
-              <View style={{ flex: 1 }}>
-                <Button
-                  icon="delete-forever"
-                  mode="text"
-                  dark
-                  color={theme.colors.error}
-                  onPress={() => setShowDialog(true)}
-                  compact
-                  style={styles.deleteItemButton}
-                >
-                  {' '}
-                </Button>
-              </View>
-              <View style={{ flex: 4 }}>
-                <AppUpload uploadMode="photo" onUpload={setThumbnail}>
-                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact style={styles.changeImageButton}>
-                    Change Preview Image
+        <ScrollView>
+          <MediaCard
+            key={mediaId}
+            title={title}
+            description={description}
+            mediaSrc={documentUri}
+            thumbnail={thumbnail}
+            showThumbnail={true}
+            category={category}
+            categoryOptions={options}
+            onCategoryChange={(e: any) => {
+              setCategory(e);
+            }}
+            onTitleChange={setTitle}
+            onDescriptionChange={setDescription}
+            isEdit={true}
+            isPlayable={true}
+            topDrawer={() => (
+              <View style={styles.itemControls}>
+                <View style={{ flex: 1 }}>
+                  <Button
+                    icon="delete-forever"
+                    mode="text"
+                    dark
+                    color={theme.colors.error}
+                    onPress={() => setShowDialog(true)}
+                    compact
+                    style={styles.deleteItemButton}
+                  >
+                    {' '}
                   </Button>
-                </AppUpload>
+                </View>
+                <View style={{ flex: 4 }}>
+                  <AppUpload uploadMode="photo" onUpload={setThumbnail}>
+                    <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact style={styles.changeImageButton}>
+                      Change Preview Image
+                    </Button>
+                  </AppUpload>
+                </View>
               </View>
-            </View>
-          )}
-        />
+            )}
+          />
+        </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
         <ActionButtons actionCb={saveItem} cancelCb={cancelCb} rightIcon="check-circle" actionLabel={actionLabel} cancelLabel={cancelLabel} />

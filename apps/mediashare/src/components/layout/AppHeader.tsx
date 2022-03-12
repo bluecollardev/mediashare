@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-native';
 import { Appbar, Card, Portal, Searchbar, Text, IconButton } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import { MultiSelectIcon } from '../form/MultiSelect';
 import { withGlobalStateConsumer, GlobalStateProps } from '../../core/globalState';
 import themeStyles, { theme } from '../../styles';
+
+import { customCategories } from '../../data/categories';
 
 export interface AppHeaderProps {
   options?: any;
@@ -12,87 +15,6 @@ export interface AppHeaderProps {
   searchable?: boolean;
   globalState?: GlobalStateProps;
 }
-
-const customTags = [
-  // this is the parent or 'item'
-  {
-    name: 'Body parts',
-    id: 1,
-    // these are the children or 'sub items'
-    children: [
-      {
-        name: 'Arms',
-        id: 10,
-      },
-      {
-        name: 'Legs',
-        id: 17,
-      },
-      {
-        name: 'Hips',
-        id: 13,
-      },
-      {
-        name: 'Back',
-        id: 14,
-      },
-      {
-        name: 'Head',
-        id: 15,
-      },
-      {
-        name: 'Neck',
-        id: 16,
-      },
-      {
-        name: 'Hands',
-        id: 18,
-      },
-      {
-        name: 'Feet',
-        id: 19,
-      },
-    ],
-  },
-  {
-    name: 'Routines',
-    id: 2,
-    // these are the children or 'sub items'
-    children: [
-      {
-        name: 'Daily',
-        id: 10,
-      },
-      {
-        name: 'Weekly',
-        id: 17,
-      },
-      {
-        name: 'Monthly',
-        id: 13,
-      },
-      {
-        name: 'Yearly',
-        id: 14,
-      },
-    ],
-  },
-  {
-    name: 'Pricing',
-    id: 3,
-    // these are the children or 'sub items'
-    children: [
-      {
-        name: 'Premium Content',
-        id: 10,
-      },
-      {
-        name: 'Free Content',
-        id: 17,
-      },
-    ],
-  },
-];
 
 const ModalContentWrapper = (props) => {
   const { modalWithSafeAreaView, children } = props;
@@ -141,8 +63,8 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
   };
 
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const onSelectedCategoriesChange = (tags) => {
-    setSelectedCategories(tags);
+  const onSelectedCategoriesChange = (categories) => {
+    setSelectedCategories(categories);
   };
 
   // console.log(`AppHeader > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
@@ -212,8 +134,8 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
                                 backgroundColor: '#000',
                               },
                             }}
-                            items={customTags}
-                            IconRenderer={renderIcon}
+                            items={customCategories}
+                            IconRenderer={MultiSelectIcon}
                             uniqueKey="id"
                             subKey="children"
                             searchPlaceholderText="Enter Text"
@@ -325,34 +247,6 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
       )}
     </Appbar.Header>
   );
-
-  function renderIcon({ name, size = 18, styles }) {
-    let iconComponent;
-    switch (name) {
-      case 'search':
-        iconComponent = <IconButton icon="search" color={theme.colors.primary} />;
-        break;
-      case 'keyboard-arrow-up':
-        iconComponent = <IconButton icon="keyboard-arrow-up" color={theme.colors.primary} />;
-        break;
-      case 'keyboard-arrow-down':
-        iconComponent = <IconButton icon="keyboard-arrow-down" color={theme.colors.primary} />;
-        break;
-      case 'close':
-        iconComponent = <IconButton icon="cancel" color={theme.colors.primary} />;
-        break;
-      case 'check':
-        iconComponent = <IconButton icon="check-circle" color={theme.colors.primary} />;
-        break;
-      case 'cancel':
-        iconComponent = <IconButton icon="cancel" color={theme.colors.default} />;
-        break;
-      default:
-        iconComponent = null;
-        break;
-    }
-    return <View style={styles}>{iconComponent}</View>;
-  }
 };
 
 export const AppHeader = withGlobalStateConsumer(AppHeaderComponent);

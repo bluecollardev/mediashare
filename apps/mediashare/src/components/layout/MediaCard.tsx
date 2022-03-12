@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Button, Card, Divider, IconButton, Paragraph, Title, Text } from 'react-native-paper';
 import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
 // import { Video as ExpoVideo } from 'expo-av';
 // import Video from 'expo-video-player';
 
-import SwitchSelector from 'react-native-switch-selector';
+// import SwitchSelector from 'react-native-switch-selector';
 import { descriptionValidator, titleValidator } from './formConfig';
+import { MultiSelectIcon } from '../form/MultiSelect';
 import { TextField } from '../form/TextField';
 export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png';
 
@@ -17,6 +19,8 @@ import { useAppSelector } from '../../store';
 import { findInArray, getAuthorText, getUsername } from '../../utils';
 import { usePreviewImage } from '../../hooks/usePreviewImage';
 import { theme } from '../../styles';
+
+import { customCategories } from '../../data/categories';
 
 export interface MediaCardProps {
   id?: string;
@@ -109,6 +113,11 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     setCreator(user);
   }, [users]);
 
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const onSelectedCategoriesChange = (categories) => {
+    setSelectedCategories(categories);
+  };
+
   const DisplayPreviewOrVideo = () => {
     const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
     return mediaDisplayMode === 'image' && !isDefaultImage ? (
@@ -158,26 +167,20 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     <View>
       {showThumbnail && <DisplayPreviewOrVideo key={mediaSrc} />}
       {topDrawer && <TopDrawer />}
-      <View style={{ marginTop: 10, marginBottom: 10 }}>
-        <TextField
-          label="Title"
-          value={title}
-          error={title && titleValidator(title)}
-          onChangeText={(text) => onTitleChange(text)}
-          disabled={isReadOnly}
-        />
-        <TextField
-          multiline={true}
-          label="Description"
-          value={description}
-          numberOfLines={5}
-          error={title && descriptionValidator(description)}
-          onChangeText={(text) => onDescriptionChange(text)}
-          disabled={isReadOnly}
-        />
-        <Card elevation={elevation}>
+      <View style={{ marginBottom: 25 }}>
+        <Card elevation={elevation} style={{ marginTop: 25, marginBottom: 0 }}>
+          <TextField
+            label="Title"
+            value={title}
+            multiline={true}
+            error={title && titleValidator(title)}
+            onChangeText={(text) => onTitleChange(text)}
+            disabled={isReadOnly}
+          />
+        </Card>
+        <Card elevation={elevation} style={{ marginBottom: 25 }}>
           {/* <Text style={{ color: '#333', fontWeight: 'bold', fontSize: 13 }}>Select Content Type</Text> */}
-          <SwitchSelector
+          {/* <SwitchSelector
             fontSize={13}
             textColor={theme.colors.text}
             selectedColor={theme.colors.primary}
@@ -189,6 +192,57 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             onPress={(value) => onCategoryChange(value as string)}
             disabled={isReadOnly}
             borderRadius={3}
+          /> */}
+          <SectionedMultiSelect
+            colors={{
+              primary: theme.colors.primary,
+              text: '#fff',
+              subText: '#fff',
+              searchPlaceholderTextColor: '#fff',
+              selectToggleTextColor: '#fff',
+              searchSelectionColor: '#fff',
+              itemBackground: 'transparent',
+              subItemBackground: 'transparent',
+            }}
+            styles={{
+              searchTextInput: {
+                color: '#fff',
+              },
+              searchBar: {
+                backgroundColor: '#000',
+              },
+              container: {
+                backgroundColor: '#000',
+              },
+            }}
+            items={customCategories}
+            IconRenderer={MultiSelectIcon}
+            uniqueKey="id"
+            subKey="children"
+            searchPlaceholderText="Enter Text"
+            selectText="Select Categories"
+            confirmText="Done"
+            onSelectedItemsChange={onSelectedCategoriesChange}
+            selectedItems={selectedCategories}
+            expandDropDowns={true}
+            readOnlyHeadings={false}
+            showDropDowns={true}
+            parentChipsRemoveChildren={true}
+            showCancelButton={true}
+            modalWithTouchable={true}
+            modalWithSafeAreaView={true}
+          />
+        </Card>
+        <Card elevation={elevation} style={{ marginBottom: 25 }}>
+          <TextField
+            style={{ height: 500, overflow: 'scroll' }}
+            multiline={true}
+            label="Description"
+            value={description}
+            numberOfLines={10}
+            error={title && descriptionValidator(description)}
+            onChangeText={(text) => onDescriptionChange(text)}
+            disabled={isReadOnly}
           />
         </Card>
         <View>{children}</View>

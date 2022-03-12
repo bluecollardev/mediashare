@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 
 import { addMediaItem } from '../../store/modules/media-items';
@@ -47,35 +48,37 @@ export const MediaItemAdd = ({}: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent>
-        <MediaCard
-          title={title}
-          description={description}
-          mediaSrc={mediaUri}
-          showThumbnail={!!mediaUri}
-          thumbnail={thumbnail}
-          category={category}
-          categoryOptions={options}
-          onCategoryChange={(e: any) => {
-            setCategory(e);
-          }}
-          onTitleChange={setTitle}
-          onDescriptionChange={setDescription}
-          isEdit={true}
-          isPlayable={true}
-          topDrawer={() =>
-            !mediaUri ? (
-              <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
-                <UploadPlaceholder buttonText="Upload Media" />
-              </AppUpload>
-            ) : (
-              <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
-                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
-                  Replace Media
-                </Button>
-              </AppUpload>
-            )
-          }
-        />
+        <ScrollView>
+          <MediaCard
+            title={title}
+            description={description}
+            mediaSrc={mediaUri}
+            showThumbnail={!!mediaUri}
+            thumbnail={thumbnail}
+            category={category}
+            categoryOptions={options}
+            onCategoryChange={(e: any) => {
+              setCategory(e);
+            }}
+            onTitleChange={setTitle}
+            onDescriptionChange={setDescription}
+            isEdit={true}
+            isPlayable={true}
+            topDrawer={() =>
+              !mediaUri ? (
+                <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
+                  <UploadPlaceholder buttonText="Upload Media" />
+                </AppUpload>
+              ) : (
+                <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
+                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
+                    Replace Media
+                  </Button>
+                </AppUpload>
+              )
+            }
+          />
+        </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
         <ActionButtons
