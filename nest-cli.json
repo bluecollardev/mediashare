@@ -1,0 +1,34 @@
+{
+  "projects": {
+    "utility": {
+      "type": "library",
+      "root": "libs/utility",
+      "entryFile": "index",
+      "sourceRoot": "libs/utility/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/utility/tsconfig.lib.json"
+      }
+    },
+    "media-api": {
+      "type": "application",
+      "root": "apps/media-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/media-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/media-api/tsconfig.app.json"
+      }
+    },
+    "media-auth": {
+      "type": "application",
+      "root": "apps/media-auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/media-auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/media-auth/tsconfig.app.json"
+      }
+    }
+  },
+  "compilerOptions": {
+    "webpack": true
+  }
+}

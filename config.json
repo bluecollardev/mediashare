@@ -1,0 +1,25 @@
+{
+  "transforms": [
+    {
+      "mode": "sql",
+      "include": "**/*.sql",
+      "emitTemplate": "{{dir}}/{{name}}.queries.ts"
+    },
+    {
+      "mode": "ts",
+      "include": "**/**.ts",
+      "emitTemplate": "{{dir}}/{{name}}.types.ts"
+    }
+  ],
+  "srcDir": "./libs",
+  "failOnError": false,
+  "camelCaseColumnNames": false,
+  "db": {
+    "dbName": "ms-user",
+    "user": "ms-user",
+    "password": "ms-user-pass",
+    "host": "localhost",
+    "port": 5432,
+    "ssl": false
+  }
+}

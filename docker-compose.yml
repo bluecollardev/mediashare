@@ -1,0 +1,114 @@
+version: '3.8'
+services:
+  # mediapostgres:
+  #   image: postgres
+  #   container_name: mediapostgres
+  #   environment:
+  #     - POSTGRES_USER=msuser
+  #     - POSTGRES_PASSWORD=msuserpass
+  #     - POSTGRES_DB=msuser
+  #     - POSTGRES_HOST_AUTH_METHOD=trust
+  #   volumes:
+  #     - ms-postgres-data:/var/lib/postgres/data
+  #   ports:
+  #     - 5432:5432
+  #   networks:
+  #     - mediashare
+  #   command: ['postgres']
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile.slim
+    user: 'node'
+    working_dir: /usr/src/app
+    environment:
+      - APP_HOST={DOCKER_HOST}
+      - NODE_ENV=production
+      - APP_NAME=MediaApi
+      - APP_PORT=3333
+      - APP_PREFIX=
+      - APP_TITLE=Mediashare
+      - DB_HOST=db
+      - DB_URL=mongodb://db:27017/
+      - SESSION_DB_NAME=api-session
+      - SESSION_SECRET=this-is-my-secret-key
+      - SESSION_DB_COLLECTION=session
+      - MS_PORT=4000
+      - DB_TYPE=mongodb
+      - DB=mediashare
+      - DB_SSL=false
+      - DB_SYNCHRONIZE=true
+      - DB_USERNAME=mongodb
+      - AUTH_HOST=auth
+      - AUTH_PORT=4000
+    volumes:
+      - .:/usr/src/app
+      - /usr/app/node_modules
+    tty: true
+    restart: always
+    command: 'npm run serve:prod'
+    links:
+      - db
+    depends_on:
+      - db
+    ports:
+      - 3333:3333
+    networks:
+      - mediashareapi
+
+  # auth:
+  #   # image is provided by docker build of local app using Dockerfile
+  #   container_name: auth
+  #   build:
+  #     context: .
+  #     target: development
+  #   working_dir: /usr/src/app
+  #   environment:
+  #     - POSTGRES_PORT=5432
+  #     - POSTGRES_USERNAME=msuser
+  #     - POSTGRES_PASSWORD=msuserpass
+  #     - POSTGRES_DB=msuser
+  #     - POSTGRES_HOST=mediapostgres
+  #     - NODE_ENV=docker
+  #     - SESSION_SECRET=this-is-my-secret-key
+  #     - MS_PORT=4000
+  #     - MS_HOST=auth
+  #     - MS_API_PORT=4444
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #     - /usr/src/dist
+  #   tty: true
+  #   command: npm run start:auth
+  #   depends_on:
+  #     - mediapostgres
+  #   links:
+  #     - mediapostgres:db
+  #   networks:
+  #     - mediashare
+  #     - mediashareapi
+  #   ports:
+  #     - 4000
+
+  db:
+    image: mongo:4.0.4
+    container_name: db
+    environment:
+      - MONGODB_DATABASE='mediashare'
+    volumes:
+      - ms-mongo-data:/var/lib/mongodb/data
+    ports:
+      - 27017:27017
+    networks:
+      - mediashareapi
+
+volumes:
+  ms-mongo-data:
+  ms-postgres-data:
+  node-cache:
+
+networks:
+  mediashare:
+  mediashareapi:
