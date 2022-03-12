@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Avatar, Button, Card, IconButton, Paragraph, Title, Text } from 'react-native-paper';
+import { Avatar, Button, Card, Divider, IconButton, Paragraph, Title, Text } from 'react-native-paper';
 import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 
 import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
@@ -199,7 +199,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       <DisplayPreviewOrVideo />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <Card.Title
-        style={{ marginTop: 25 }}
+        style={{ marginTop: 25, marginBottom: 25 }}
         title={<Title>{title}</Title>}
         titleStyle={styles.title}
         // TODO: Stupid component doesn't render right on Android if we use a View to wrap, but then the whole f*cking thing appears on a single line!
@@ -223,18 +223,19 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       />
       {!showSocial && (
         <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
-          <Paragraph style={styles.description}>{description}</Paragraph>
           {showThumbnail && thumbnail && <Card.Cover source={{ uri: thumbnail }} />}
           {children}
+          <Divider />
+          <Paragraph style={styles.description}>{description}</Paragraph>
         </Card.Content>
       )}
       {showSocial && (
         <Card.Content style={{ marginTop: 0, marginBottom: 10 }}>
-          <Paragraph style={styles.descriptionWithSocial}>{description}</Paragraph>
-          {children}
           <View style={{ marginBottom: 0 }}>
             <SocialButtons likes={likes} shares={shares} views={views} />
           </View>
+          {children}
+          <Paragraph style={styles.descriptionWithSocial}>{description}</Paragraph>
         </Card.Content>
       )}
     </Card>

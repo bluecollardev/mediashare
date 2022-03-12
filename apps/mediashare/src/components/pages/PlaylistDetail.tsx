@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { ScrollView } from 'react-native';
 
 import { routeNames } from '../../routes';
 
 import { useAppSelector } from '../../store';
-import {
-  getUserPlaylists,
-  getPlaylistById,
-  removeUserPlaylist,
-  updateUserPlaylist,
-  selectPlaylistAction
-} from '../../store/modules/playlists';
+import { getUserPlaylists, getPlaylistById, removeUserPlaylist, updateUserPlaylist, selectPlaylistAction } from '../../store/modules/playlists';
 import { loadUsers } from '../../store/modules/users';
 
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
@@ -77,7 +72,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
       { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   } else {
-    fabActions = [{ icon: 'share', onPress: (() => sharePlaylist()), color: theme.colors.text, style: { backgroundColor: theme.colors.text } }];
+    fabActions = [{ icon: 'share', onPress: () => sharePlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.text } }];
   }
 
   return (
@@ -93,62 +88,65 @@ export const PlaylistDetail = ({ route }: PageProps) => {
           title={'Delete Playlist'}
           subtitle={'Are you sure you want to do this? This action is final and cannot be undone.'}
         />
-        <MediaCard
-          id={_id}
-          title={title}
-          author={author}
-          description={description}
-          showSocial={true}
-          showActions={false}
-          showThumbnail={true}
-          thumbnail={imageSrc}
-          likes={likesCount}
-          shares={shareCount}
-          views={viewCount}
-          category={category}
-        >
-          <Button
-            icon="live-tv"
-            color={theme.colors.default}
-            mode="outlined"
-            style={{ width: '100%', marginBottom: 10 }}
-            compact
-            dark
-            onPress={() => (items && items.length > 0 ? viewMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
+        <ScrollView>
+          <MediaCard
+            id={_id}
+            title={title}
+            author={author}
+            description={description}
+            showSocial={true}
+            showActions={false}
+            showThumbnail={true}
+            thumbnail={imageSrc}
+            likes={likesCount}
+            shares={shareCount}
+            views={viewCount}
+            category={category}
           >
-            Play From Beginning
-          </Button>
-        </MediaCard>
-        <Divider />
-        {!build.forFreeUser && allowEdit && (
-          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-            {/*<IconButton
+            <Button
+              icon="live-tv"
+              color={theme.colors.default}
+              mode="outlined"
+              style={{ width: '100%', marginTop: 25, marginBottom: 25 }}
+              compact
+              dark
+              onPress={() => (items && items.length > 0 ? viewMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
+            >
+              Play From Beginning
+            </Button>
+            <Divider />
+            <MediaList
+              onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
+              list={items}
+              showThumbnail={true}
+              // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
+              selectable={false}
+            />
+          </MediaCard>
+          <Divider />
+          {!build.forFreeUser && allowEdit && (
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+              {/*<IconButton
               icon="rule"
               color={isSelectable ? theme.colors.primary : theme.colors.disabled}
               style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
               onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
             />*/}
-            <Button
-              icon="playlist-add"
-              color={theme.colors.accent}
-              mode="contained"
-              style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
-              onPress={() => addToPlaylist({ playlistId })}
-              // disabled={actionMode === actionModes.delete}
-              compact
-              dark
-            >
-              Add To Playlist
-            </Button>
-          </View>
-        )}
-        <MediaList
-          onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
-          list={items}
-          showThumbnail={true}
-          // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
-          selectable={false}
-        />
+              <Button
+                icon="playlist-add"
+                color={theme.colors.accent}
+                mode="contained"
+                style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
+                onPress={() => addToPlaylist({ playlistId })}
+                // disabled={actionMode === actionModes.delete}
+                compact
+                dark
+              >
+                Add To Playlist
+              </Button>
+            </View>
+          )}
+        </ScrollView>
       </PageContent>
       <PageActions>
         {/* TODO: Selectively display depending if the user has scrolled up past the upper button */}
@@ -182,7 +180,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
 
   async function sharePlaylist() {
     await dispatch(selectPlaylistAction({ isChecked: true, plist: selected as PlaylistResponseDto }));
-    goToShareWith()
+    goToShareWith();
   }
 
   async function cancelSharePlaylist() {
