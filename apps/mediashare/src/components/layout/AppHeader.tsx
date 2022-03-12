@@ -6,7 +6,7 @@ import { MultiSelectIcon } from '../form/MultiSelect';
 import { withGlobalStateConsumer, GlobalStateProps } from '../../core/globalState';
 import themeStyles, { theme } from '../../styles';
 
-import { customCategories } from '../../data/categories';
+import { customVideoCategories, customPlaylistCategories } from '../../data/categories';
 
 export interface AppHeaderProps {
   options?: any;
@@ -134,7 +134,7 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
                                 backgroundColor: '#000',
                               },
                             }}
-                            items={customCategories}
+                            items={customVideoCategories}
                             IconRenderer={MultiSelectIcon}
                             uniqueKey="id"
                             subKey="children"
@@ -143,7 +143,7 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
                             confirmText="Done"
                             onSelectedItemsChange={onSelectedCategoriesChange}
                             selectedItems={selectedCategories}
-                            expandDropDowns={true}
+                            expandDropDowns={false}
                             readOnlyHeadings={true}
                             showDropDowns={true}
                             parentChipsRemoveChildren={true}

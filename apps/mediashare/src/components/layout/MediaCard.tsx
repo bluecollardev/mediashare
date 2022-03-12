@@ -20,7 +20,7 @@ import { findInArray, getAuthorText, getUsername } from '../../utils';
 import { usePreviewImage } from '../../hooks/usePreviewImage';
 import { theme } from '../../styles';
 
-import { customCategories } from '../../data/categories';
+import { customVideoCategories } from '../../data/categories';
 
 export interface MediaCardProps {
   id?: string;
@@ -215,7 +215,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                 backgroundColor: '#000',
               },
             }}
-            items={customCategories}
+            items={customVideoCategories}
             IconRenderer={MultiSelectIcon}
             uniqueKey="id"
             subKey="children"
@@ -224,7 +224,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             confirmText="Done"
             onSelectedItemsChange={onSelectedCategoriesChange}
             selectedItems={selectedCategories}
-            expandDropDowns={true}
+            expandDropDowns={false}
             readOnlyHeadings={false}
             showDropDowns={true}
             parentChipsRemoveChildren={true}
