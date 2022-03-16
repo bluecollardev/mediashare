@@ -112,6 +112,7 @@ export class UserController {
       const newUser = await this.userService.create({
         ...valid,
         role: 'user',
+        // TODO: Replace this string!
         imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
       });
       const profile = await this.userService.getUserById(newUser._id);
