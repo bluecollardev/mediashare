@@ -1,4 +1,4 @@
-import { BcEntity } from '@api';
+import { BcEntity } from '@api-core/entities/base.entity';
 import { MediaCategoryType, MEDIA_CATEGORY, MEDIA_ITEM_ENTITY } from '@core-lib';
 import { ApiLongString, ApiObjectId, ApiString, ApiTextString, ApiUriString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';

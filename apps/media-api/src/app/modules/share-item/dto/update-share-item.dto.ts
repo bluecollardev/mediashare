@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateMediaShareItemDto } from './create-share-item.dto';
+import { CreateMediaShareItemDto, CreatePlaylistShareItemDto } from './create-share-item.dto';
 
 export class UpdateMediaShareItemDto extends PartialType(CreateMediaShareItemDto) {
   @ApiProperty({ required: true })

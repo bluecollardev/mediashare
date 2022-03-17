@@ -1,14 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
-import { TagService } from '../../modules/tag/services/tag.service';
-import { TagController } from './tag.controller';
+import { TagService } from '@api-modules/tag/services/tag.service';
+import { TagsController } from './tags.controller';
+
 ß;
 describe('TagController', () => {
-  let controller: TagController;
+  let controller: TagsController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TagController],
+      controllers: [TagsController],
       providers: [
         {
           provide: TagService,
@@ -17,7 +18,7 @@ describe('TagController', () => {
       ],
     }).compile();
 
-    controller = module.get(TagController);
+    controller = module.get(TagsController);
   });
 
   it('should be defined', () => {

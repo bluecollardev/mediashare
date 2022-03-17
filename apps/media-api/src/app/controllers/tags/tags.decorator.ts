@@ -1,8 +1,8 @@
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
 import { applyDecorators } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { UseJwtGuard } from '../../modules/auth/auth.decorator';
-import { Tag } from '../../modules/tag/entities/tag.entity';
+import { Tag } from '@api-core/entities/tag.entity';
+import { UseJwtGuard } from '@api-modules/auth/auth.decorator';
 
 function TagPostResponse({ isArray = false, type = Tag, description }: ApiControllerDecoratorParams = {}) {
   return applyDecorators(ApiResponse({ description, type, status: 201, isArray }), UseJwtGuard());

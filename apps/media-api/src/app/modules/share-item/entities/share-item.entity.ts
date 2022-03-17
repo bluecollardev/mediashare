@@ -1,4 +1,4 @@
-import { BcEntity } from '@api';
+import { BcEntity } from '@api-core/entities/base.entity';
 import { ApiDecoratorOptions, ApiObjectId, ApiString } from '@mediashare/shared';
 import { IsBoolean } from 'class-validator';
 import { ObjectId } from 'mongodb';

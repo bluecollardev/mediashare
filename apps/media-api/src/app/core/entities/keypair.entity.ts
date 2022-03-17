@@ -1,4 +1,4 @@
-import { BcBaseEntity } from '@api';
+import { BcBaseEntity } from '@api-core/entities/base.entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity()

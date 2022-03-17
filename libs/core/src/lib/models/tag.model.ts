@@ -1,4 +1,4 @@
-import { IdType } from '../types';
+import { IdType } from '../types/id.type';
 
 export interface TagInterface {
   // If this is set, consider the tag a custom / private user tag

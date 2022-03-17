@@ -68,8 +68,9 @@ describe('ShareItemService', () => {
       expect(result.createdBy.toHexString()).toEqual(createdBy.toHexString());
     });
   });
+
   describe('createPlaylistShareItem', () => {
-    it('should insert a playlist share item', async () => {
+    /* it('should insert a playlist share item', async () => {
       const playlist = userFactory.createPlaylist();
 
       const userId = new ObjectId().toHexString();
@@ -86,6 +87,6 @@ describe('ShareItemService', () => {
       expect(result).toHaveProperty('createdBy');
       expect(result).toHaveProperty('playlistId');
       expect(result.createdBy.toHexString()).toBe(userFactory.user._id.toHexString());
-    });
+    }); */
   });
 });

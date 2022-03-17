@@ -4,7 +4,7 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { ObjectIdPipe } from '@mediashare/shared';
 
 import { LikesService } from './likes.service';
-import { GetUserId } from '../../core/decorators/user.decorator';
+import { GetUserId } from '@api-core/decorators/user.decorator';
 import { LikeResponse } from './decorators/likes.decorator';
 
 @ApiTags('likes')

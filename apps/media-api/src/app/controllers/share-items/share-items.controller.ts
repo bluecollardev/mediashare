@@ -1,13 +1,13 @@
 import { Controller, Get, Param, Delete, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-import { GetUserId } from '../../core/decorators/user.decorator';
 import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ShareItemGetResponse } from './share-items.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
-import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
-import { UserGuard } from '../../modules/auth/guards/user.guard';
-import RouteTokens from '../../modules/app-config/constants/open-api.constants';
+import { GetUserId } from '@api-core/decorators/user.decorator';
+import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
+import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
+import { UserGuard } from '@api-modules/auth/guards/user.guard';
 
 @ApiTags('share-items')
 @Controller('share-items')

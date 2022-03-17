@@ -6,20 +6,20 @@ import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 
-import { notFoundResponse } from '../../core/functors/http-errors.functor';
+import { notFoundResponse } from '@api-core/functors/http-errors.functor';
 
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { MEDIA_CATEGORY } from '@core-lib';
 import { ObjectId } from 'mongodb';
-import { MediaGetResponse, MediaPostResponse } from './media-item.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
-import { CreateDto } from '../../core/decorators/create-dto.decorator';
-import RouteTokens from '../../modules/app-config/constants/open-api.constants';
-import { GetUserId } from '../../core/decorators/user.decorator';
-import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { AppConfigService } from '@api-modules/app-config/app-config.provider';
+import { CreateDto } from '@api-core/decorators/create-dto.decorator';
+import { GetUserId } from '@api-core/decorators/user.decorator';
+import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
+import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
+import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { MediaItem } from './entities/media-item.entity';
-import { AppConfigService } from '../../modules/app-config/app-config.provider';
+import { MediaGetResponse, MediaPostResponse } from './media-item.decorator';
 
 @ApiTags('media-items')
 @Controller('media-items')

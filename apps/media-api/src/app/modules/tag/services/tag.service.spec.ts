@@ -1,11 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
-import { MongoRepository, getMongoRepository } from 'typeorm';
+import { getMongoRepository, MongoRepository } from 'typeorm';
+import { Tag } from '../../../core/entities/tag.entity';
 import { UserFactory } from '../../../factories/mock-data.factory';
 import { mockLoggerFactory } from '../../../factories/mock-logger.factory';
-import { Tag } from '../entities/tag.entity';
 import { TagService } from './tag.service';
 
 describe('ShareItemService', () => {

@@ -1,15 +1,15 @@
-import { Controller, Get, Param, Delete } from '@nestjs/common';
+import { ObjectIdPipe } from '@mediashare/shared';
+import { Controller, Delete, Get, Param } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
-import { ObjectIdPipe } from '@mediashare/shared';
-import { GetUserId } from '../../core/decorators/user.decorator';
-import RouteTokens from '../../modules/app-config/constants/open-api.constants';
-import { TagService } from '../../modules/tag/services/tag.service';
-import { TagGetResponse } from './tag.decorator';
+import { GetUserId } from '@api-core/decorators/user.decorator';
+import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
+import { TagService } from '@api-modules/tag/services/tag.service';
+import { TagGetResponse } from './tags.decorator';
 
 @ApiTags('tags')
 @Controller('tags')
-export class TagController {
+export class TagsController {
   constructor(private readonly tagService: TagService) {}
 
   @TagGetResponse({ isArray: true })

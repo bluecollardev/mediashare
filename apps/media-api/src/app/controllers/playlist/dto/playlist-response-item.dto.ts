@@ -1,8 +1,8 @@
-import { BcEntity } from '@api';
+import { BcEntity } from '@api-core/entities/base.entity';
 import { ApiObjectId, ApiString } from '@mediashare/shared';
 import { ApiProperty, IntersectionType, OmitType } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
-import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
+import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
 import { MediaItem } from '../../media-item/entities/media-item.entity';
 
 class PlaylistItemCreatedBy extends BcEntity {

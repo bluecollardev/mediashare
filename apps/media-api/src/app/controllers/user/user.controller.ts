@@ -1,21 +1,21 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, UnauthorizedException, UseGuards, Req, Res, Put } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GetUser, GetUserId } from '../../core/decorators/user.decorator';
-import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
-import { UserService } from '../../modules/auth/user.service';
+import { GetUser, GetUserId } from '@api-core/decorators/user.decorator';
+import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
+import { UserService } from '@api-modules/auth/user.service';
 import { PlaylistService } from '../playlist/services/playlist.service';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
 
-import { SessionUserInterface } from '../../core/models/auth-user.model';
+import { SessionUserInterface } from '@api-core/models/auth-user.model';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';
 import { PlaylistGetResponse } from '../playlist/playlist.decorator';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
-import { UserGuard } from '../../modules/auth/guards/user.guard';
+import { UserGuard } from '@api-modules/auth/guards/user.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ProfileDto } from './dto/profile.dto';
 import { AuthorizeDto } from './dto/authorize.dto';
