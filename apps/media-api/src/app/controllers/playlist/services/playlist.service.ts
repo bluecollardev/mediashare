@@ -4,17 +4,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { mapPlaylistItems } from '../../../modules/playlist-item/functors/map-playlist-item.functor';
+import { mapPlaylistItems } from '@api-modules/playlist-item/functors/map-playlist-item.functor';
 import { Playlist, PlaylistByUserResponseDto } from '../entities/playlist.entity';
 
-import { PlaylistItemService } from '../../../modules/playlist-item/services/playlist-item.service';
-import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
+import { PlaylistItemService } from '@api-modules/playlist-item/services/playlist-item.service';
+import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
 
 import * as R from 'remeda';
 import { CreatePlaylistDto } from '../dto/create-playlist.dto';
 
 import { OptionalObjectIdParameters } from '@mediashare/shared';
-import { UserService } from '../../../modules/auth/user.service';
+import { UserService } from '@api-modules/auth/user.service';
 
 type CreatePlaylistParameters = {
   playlistId: ObjectId;
@@ -67,11 +67,11 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
           $match: {
             where: {
               $or: R.map(ObjectIds, (id) => ({
-                _id: id
-              }))
-            }
-          }
-        }
+                _id: id,
+              })),
+            },
+          },
+        },
       ])
       .toArray();
   }
@@ -80,9 +80,9 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.repository.find({
       where: {
         $or: R.map(playlistIds, (id) => ({
-          _id: id
-        }))
-      }
+          _id: id,
+        })),
+      },
     });
   }
 
@@ -91,7 +91,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.repository
       .aggregate([
         {
-          $match: { createdBy: userId }
+          $match: { createdBy: userId },
         },
 
         {
@@ -99,16 +99,16 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             from: 'media_item',
             localField: 'mediaIds',
             foreignField: '_id',
-            as: 'mediaItems'
-          }
+            as: 'mediaItems',
+          },
         },
         {
           $lookup: {
             from: 'user',
             localField: 'createdBy',
             foreignField: '_id',
-            as: 'user'
-          }
+            as: 'user',
+          },
         },
         // {
         //   $lookup: {
@@ -119,7 +119,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         //   }
         // },
         // { $unwind: { path: '$mediaItems' } },
-        { $unwind: { path: '$user' } }
+        { $unwind: { path: '$user' } },
         // {
         //   $group: {
         //     _id: '$playlist._id',
@@ -142,40 +142,40 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             from: 'media_item',
             localField: 'mediaIds',
             foreignField: '_id',
-            as: 'mediaItems'
-          }
+            as: 'mediaItems',
+          },
         },
         {
           $lookup: {
             from: 'user',
             localField: 'createdBy',
             foreignField: '_id',
-            as: 'user'
-          }
+            as: 'user',
+          },
         },
         {
           $lookup: {
             from: 'share_item',
             localField: '_id',
             foreignField: 'playlistId',
-            as: 'shareItems'
-          }
+            as: 'shareItems',
+          },
         },
         {
           $lookup: {
             from: 'view_item',
             localField: '_id',
             foreignField: 'playlistId',
-            as: 'viewItems'
-          }
+            as: 'viewItems',
+          },
         },
         {
           $lookup: {
             from: 'like_item',
             localField: '_id',
             foreignField: 'playlistId',
-            as: 'likeItems'
-          }
+            as: 'likeItems',
+          },
         },
         { $sort: { score: { $meta: 'textScore' } } },
         {
@@ -194,13 +194,13 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
                   title: '$title',
                   shareCount: { $size: '$shareItems' },
                   likesCount: { $size: '$likeItems' },
-                  viewCount: { $size: '$viewItems' }
+                  viewCount: { $size: '$viewItems' },
                   // shared: { $count: '$shareItems' }
-                }
-              ]
-            }
-          }
-        }
+                },
+              ],
+            },
+          },
+        },
       ])
       .toArray();
   }
@@ -208,15 +208,15 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.repository
       .aggregate([
         {
-          $match: { _id: playlistId }
+          $match: { _id: playlistId },
         },
         {
           $lookup: {
             from: 'media_item',
             localField: 'mediaIds',
             foreignField: '_id',
-            as: 'mediaItems'
-          }
+            as: 'mediaItems',
+          },
         },
 
         {
@@ -224,36 +224,36 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             from: 'user',
             localField: 'createdBy',
             foreignField: '_id',
-            as: 'user'
-          }
+            as: 'user',
+          },
         },
         {
           $lookup: {
             from: 'share_item',
             localField: '_id',
             foreignField: 'playlistId',
-            as: 'shareItems'
-          }
+            as: 'shareItems',
+          },
         },
         {
           $lookup: {
             from: 'view_item',
             localField: '_id',
             foreignField: 'playlistId',
-            as: 'viewItems'
-          }
+            as: 'viewItems',
+          },
         },
         {
           $lookup: {
             from: 'like_item',
             localField: '_id',
             foreignField: 'playlistId',
-            as: 'likeItems'
-          }
+            as: 'likeItems',
+          },
         },
 
         {
-          $unwind: { path: '$user' }
+          $unwind: { path: '$user' },
         },
 
         {
@@ -272,13 +272,13 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
                   title: '$title',
                   shareCount: { $size: '$shareItems' },
                   likesCount: { $size: '$likeItems' },
-                  viewCount: { $size: '$viewItems' }
+                  viewCount: { $size: '$viewItems' },
                   // shared: { $count: '$shareItems' }
-                }
-              ]
-            }
-          }
-        }
+                },
+              ],
+            },
+          },
+        },
       ])
       .next();
   }

@@ -5,19 +5,19 @@ import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiTags } from '@nes
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/services/playlist.service';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
 
 import { ObjectId } from 'mongodb';
 
-// import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
-import { UserService } from '../../modules/auth/user.service';
+// import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
+import { UserService } from '@api-modules/auth/user.service';
 import { BcRolesType, BC_ROLES } from '@core-lib';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
-import RouteTokens from '../../modules/app-config/constants/open-api.constants';
+import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 import { ProfileDto } from './dto/profile.dto';
-import { UserGuard } from '../../modules/auth/guards/user.guard';
+import { UserGuard } from '@api-modules/auth/guards/user.guard';
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 

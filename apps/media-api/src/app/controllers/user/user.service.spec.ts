@@ -6,7 +6,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { getMongoRepository, MongoRepository } from 'typeorm';
 import { userPropsFactory } from '../../factories/user.factory';
 import { mockLoggerFactory } from '../../factories/mock-logger.factory';
-import { UserService } from '../../modules/auth/user.service';
+import { UserService } from '@api-modules/auth/user.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { stub } from 'jest-auto-stub';
 

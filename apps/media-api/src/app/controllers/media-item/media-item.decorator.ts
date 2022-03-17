@@ -1,7 +1,7 @@
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
-import { UseJwtGuard } from '../../modules/auth/auth.decorator';
+import { UseJwtGuard } from '@api-modules/auth/auth.decorator';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { MediaItemDto } from './dto/media-item.dto';
 import { MediaItem } from './entities/media-item.entity';

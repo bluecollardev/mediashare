@@ -4,7 +4,7 @@ import { CreateMediaItemDto } from '../controllers/media-item/dto/create-media-i
 import { MediaItem } from '../controllers/media-item/entities/media-item.entity';
 import { CreateUserDto } from '../controllers/user/dto/create-user.dto';
 import { User } from '../controllers/user/entities/user.entity';
-import { CreatePlaylistItemDto } from '../modules/playlist-item/dto/create-playlist-item.dto';
+import { CreatePlaylistItemDto } from '@api-modules/playlist-item/dto/create-playlist-item.dto';
 
 import * as R from 'remeda';
 import { Playlist } from '../controllers/playlist/entities/playlist.entity';

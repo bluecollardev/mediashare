@@ -4,7 +4,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository, getMongoRepository } from 'typeorm';
 import { UserFactory } from '../../../factories/mock-data.factory';
 import { mockLoggerFactory } from '../../../factories/mock-logger.factory';
-import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
+import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
 import { MediaItem } from '../../media-item/entities/media-item.entity';
 import { User } from '../../user/entities/user.entity';
 import { Playlist } from '../entities/playlist.entity';
@@ -12,7 +12,7 @@ import { PlaylistService } from './playlist.service';
 
 import * as R from 'remeda';
 import { ObjectId } from 'mongodb';
-import { PlaylistItemService } from '../../../modules/playlist-item/services/playlist-item.service';
+import { PlaylistItemService } from '@api-modules/playlist-item/services/playlist-item.service';
 
 describe('PlaylistService', () => {
   let service: PlaylistService;

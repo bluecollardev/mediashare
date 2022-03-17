@@ -1,7 +1,7 @@
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
 import { applyDecorators } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { UseJwtGuard } from '../../modules/auth/auth.decorator';
+import { UseJwtGuard } from '@api-modules/auth/auth.decorator';
 import { Playlist } from './entities/playlist.entity';
 
 function PlaylistPostResponse({ isArray = false, type = Playlist, description }: ApiControllerDecoratorParams = {}) {
