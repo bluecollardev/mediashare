@@ -1,25 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { ApiEmail, ApiName, ApiObjectId, ApiPastDate, ApiString } from '@mediashare/shared';
+import { ApiDecoratorOptions, ApiEmail, ApiName, ApiObjectId, ApiPastDate, ApiString } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
 import { MediaItemDto } from '../../media-item/dto/media-item.dto';
 import { PlaylistResponseDto } from '../../playlist/dto/playlist-response.dto';
 import { User } from '../entities/user.entity';
 import { BC_ROLES } from '@core-lib';
-import { BcRolesType } from '../../../core/types/roles.type';
+import { BcRolesType } from '@api-core/types/roles.type';
 
 const uuidExample = '1731ee8a-8f27-53af-805d-2ee2e705f0e2';
 export class CreateUserDto {
-  @ApiName({ required: true })
+  @ApiName(<ApiDecoratorOptions>{ required: true })
   firstName: string;
 
-  @ApiName({ required: true })
+  @ApiName(<ApiDecoratorOptions>{ required: true })
   lastName: string;
 
-  @ApiEmail({ required: true })
+  @ApiEmail(<ApiDecoratorOptions>{ required: true })
   email: string;
 
-  @ApiName({ required: true })
+  @ApiName(<ApiDecoratorOptions>{ required: true })
   username: string;
 }
 

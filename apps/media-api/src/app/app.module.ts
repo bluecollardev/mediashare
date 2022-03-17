@@ -16,6 +16,7 @@ import { AppConfigService } from './modules/app-config/app-config.provider';
 import { JwtModule } from '@nestjs/jwt';
 import { ViewsModule } from './controllers/views/views.module';
 import { LikesModule } from './controllers/likes/likes.module';
+// import { TagsModule } from './controllers/tags/tags.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { LikesModule } from './controllers/likes/likes.module';
     ViewsModule,
     ShareItemsModule,
     LikesModule,
+    // TagsModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -6,17 +6,17 @@ import { ObjectId } from 'mongodb';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { PlaylistService } from './services/playlist.service';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
 import { PLAYLIST_CATEGORY } from '@core-lib';
-import { GetUserId } from '../../core/decorators/user.decorator';
+import { GetUserId } from '@api-core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse } from './playlist.decorator';
 
 import { ObjectIdPipe } from '@mediashare/shared';
-import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { PlaylistItemResponseDto, PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
-import { CreateDto } from '../../core/decorators/create-dto.decorator';
-import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
+import { CreateDto } from '@api-core/decorators/create-dto.decorator';
+import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 
 const PLAYLIST_ID_TOKEN = ':playlistId';
 @ApiTags('playlists')

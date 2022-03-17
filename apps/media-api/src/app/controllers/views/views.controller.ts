@@ -4,7 +4,7 @@ import { ViewsPostResponse } from './decorators/views.decorator';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
-import { GetUserId } from '../../core/decorators/user.decorator';
+import { GetUserId } from '@api-core/decorators/user.decorator';
 
 @ApiTags('views')
 @Controller({ path: ['views'] })
