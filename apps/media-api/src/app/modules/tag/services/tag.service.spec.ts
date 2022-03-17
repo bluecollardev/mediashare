@@ -5,12 +5,12 @@ import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository, getMongoRepository } from 'typeorm';
 import { UserFactory } from '../../../factories/mock-data.factory';
 import { mockLoggerFactory } from '../../../factories/mock-logger.factory';
-import { ShareItem } from '../entities/share-item.entity';
-import { ShareItemService } from './share-item.service';
+import { Tag } from '../entities/tag.entity';
+import { TagService } from './tag.service';
 
 describe('ShareItemService', () => {
-  let service: ShareItemService;
-  let repository: MongoRepository<ShareItem>;
+  let service: TagService;
+  let repository: MongoRepository<Tag>;
 
   const userFactory = new UserFactory();
 
@@ -25,7 +25,7 @@ describe('ShareItemService', () => {
           host: 'localhost',
           port: 27017,
           database: 'test',
-          entities: [ShareItem],
+          entities: [Tag],
           ssl: false,
           useUnifiedTopology: true,
           useNewUrlParser: true,
@@ -34,18 +34,18 @@ describe('ShareItemService', () => {
       ],
       providers: [
         {
-          provide: getRepositoryToken(ShareItem),
+          provide: getRepositoryToken(Tag),
           useClass: MongoRepository,
         },
         { provide: PinoLogger, useValue: mockLoggerFactory() },
       ],
     }).compile();
 
-    repository = getMongoRepository(ShareItem);
+    repository = getMongoRepository(Tag);
     await repository.deleteMany({});
 
     const logger = module.get(PinoLogger);
-    service = new ShareItemService(repository, logger);
+    service = new TagService(repository, logger);
   });
 
   it('should be defined', () => {
@@ -60,7 +60,7 @@ describe('ShareItemService', () => {
       const mediaId = mediaItem._id;
       const createdBy = new ObjectId(userFactory.userId);
 
-      const result = await service.createMediaShareItem({ createdBy, mediaId, userId, title: 'blah' });
+      const result = await service.createMediashareItem({ createdBy, mediaId, userId, title: 'blah' });
 
       expect(result).toHaveProperty('mediaId');
       expect(result.mediaId.toHexString()).toEqual(mediaId.toHexString());

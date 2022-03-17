@@ -142,7 +142,7 @@ describe('MediaItemController', () => {
       );
       const resultMock = { _id: new ObjectId(), userId, mediaId, read: false, createdBy, title: 'sometime' };
 
-      reveal(mockShareItemService).createMediashareItem.mockReturnValueOnce(
+      reveal(mockShareItemService).createMediaShareItem.mockReturnValueOnce(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         new Promise((resolve) => resolve(resultMock))

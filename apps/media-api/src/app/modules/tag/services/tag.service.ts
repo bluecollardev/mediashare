@@ -5,9 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { CreateMediaShareItemInput, CreatePlaylistShareItemDto } from '../dto/create-share-item.dto';
-
-import { ShareItem } from '../entities/share-item.entity';
+import { Tag } from '../entities/tag.entity';
+import { CreateTagInput, CreateTagDto } from '../dto/create-tag.dto';
 
 export class QueryBuilder {
   match({ userId }: OptionalObjectIdParameters) {
@@ -16,10 +15,10 @@ export class QueryBuilder {
 }
 
 @Injectable()
-export class ShareItemService extends DataService<ShareItem, MongoRepository<ShareItem>> {
+export class TagService extends DataService<Tag, MongoRepository<Tag>> {
   constructor(
-    @InjectRepository(ShareItem)
-    repository: MongoRepository<ShareItem>,
+    @InjectRepository(Tag)
+    repository: MongoRepository<Tag>,
     logger: PinoLogger
   ) {
     super(repository, logger);
@@ -213,11 +212,11 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   /**
    * Create a new share media item. This inserts a record into the mongo database in the shape of the share item.
    *
-   * @param {CreateMediaShareItemInput} params
+   * @param {CreateMediashareItemInput} params
    * @return {ShareItem}
    * @memberof TagService
    */
-  async createMediaShareItem(params: CreateMediaShareItemInput) {
+  async createTag(params: CreateTagInput) {
     const { userId: userIdStr, mediaId: mediaIdStr, createdBy: createdByStr, title } = params;
     const item = await this.create({
       userId: new ObjectId(userIdStr),
@@ -228,14 +227,5 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     });
 
     return item;
-  }
-
-  createPlaylistShareItem({ userId, playlistId, createdBy }: CreatePlaylistShareItemDto): Promise<ShareItem> {
-    return this.create({
-      userId,
-      playlistId,
-      createdBy,
-      read: false,
-    });
   }
 }

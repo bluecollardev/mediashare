@@ -39,12 +39,14 @@ export class MediaItemController {
   @MediaPostResponse()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUserId() createdBy: ObjectId) {
-    const mediaItem: Omit<MediaItem, '_id'> = { ...createMediaItemDto, userId: createdBy, createdBy };
-    return this.mediaItemService.create({ ...mediaItem });
+  async create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUserId() createdBy: ObjectId) {
+    const mediaItem: Omit<MediaItem, '_id'> = {
+      isPlayable: false,
+      uri: '', ...createMediaItemDto, userId: createdBy, createdBy
+    };
+    return await this.mediaItemService.create({ ...mediaItem });
   }
 
-  /* TODO: findout what this needs to be */
   @Get('popular')
   @Get()
   @MediaGetResponse({ isArray: true })
@@ -104,7 +106,7 @@ export class MediaItemController {
     const { title } = await this.mediaItemService.findOne(mediaId);
     if (!title && !createdBy) return response.status(HttpStatus.NOT_FOUND);
 
-    const shareItem = await this.shareItemService.createMediashareItem({
+    const shareItem = await this.shareItemService.createMediaShareItem({
       createdBy,
       userId,
       mediaId,

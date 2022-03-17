@@ -1,23 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-import { ShareItemsController } from './share-items.controller';
-
-describe('ShareItemsController', () => {
-  let controller: ShareItemsController;
+import { TagService } from '../../modules/tag/services/tag.service';
+import { TagController } from './tag.controller';
+ß
+describe('TagController', () => {
+  let controller: TagController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [ShareItemsController],
+      controllers: [TagController],
       providers: [
         {
-          provide: ShareItemService,
+          provide: TagService,
           useValue: mockDataServiceFactory(),
         },
       ],
     }).compile();
 
-    controller = module.get(ShareItemsController);
+    controller = module.get(TagController);
   });
 
   it('should be defined', () => {

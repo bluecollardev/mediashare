@@ -15,21 +15,21 @@ export class LikesController {
   @Post('playlist/:playlistId')
   @LikeResponse()
   @ApiParam({ name: 'playlistId', type: String, required: true })
-  createPlaylistView(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() createdBy: ObjectId) {
-    return this.likesService.create({ playlistId, createdBy });
+  async createPlaylistView(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() createdBy: ObjectId) {
+    return await this.likesService.create({ playlistId, createdBy });
   }
 
   @Post('mediaItem/:mediaId')
   @LikeResponse()
   @ApiParam({ name: 'mediaId', type: String, required: true })
-  createMediaView(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId, @GetUserId() createdBy: ObjectId) {
-    return this.likesService.create({ mediaId, createdBy });
+  async createMediaView(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId, @GetUserId() createdBy: ObjectId) {
+    return await this.likesService.create({ mediaId, createdBy });
   }
 
   @Delete(':likeId')
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @LikeResponse()
-  remove(@Param('likeId') likeId: string) {
-    return this.likesService.remove(likeId);
+  async remove(@Param('likeId') likeId: string) {
+    return await this.likesService.remove(likeId);
   }
 }
