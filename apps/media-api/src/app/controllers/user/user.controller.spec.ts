@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {} from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { UserController } from './user.controller';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
 import { MediaItemService } from '../media-item/media-item.service';
@@ -27,7 +27,7 @@ describe('UserController', () => {
       ],
     }).compile();
 
-    controller = module.get<UserController>(UserController);
+    controller = module.get(UserController);
   });
 
   it('should be defined', () => {

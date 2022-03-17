@@ -1,7 +1,7 @@
 import { MediaCategoryType } from '@core-lib';
-import { ApiArray } from '@mediashare/shared';
+import { ApiArray, ApiDecoratorOptions } from '@mediashare/shared';
 
 export class MediaCategoryDto {
-  @ApiArray({ type: Array })
+  @ApiArray(<ApiDecoratorOptions>{ type: Array })
   categories: MediaCategoryType[];
 }

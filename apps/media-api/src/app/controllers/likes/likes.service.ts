@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { DataService } from '../../core';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { DataService } from '@api';
 import { ViewItem } from '../views/entities/view-item.entity';
 import { Like } from './entities/like.entity';
 

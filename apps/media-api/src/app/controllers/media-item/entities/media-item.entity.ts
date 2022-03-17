@@ -11,7 +11,7 @@ export const MEDIA_TOKEN = MEDIA_ITEM_ENTITY;
 export class MediaItem extends BcEntity {
   constructor(props: Partial<MediaItem> = {}) {
     super();
-    Object.assign(this, props);
+    Object.assign(this as any, props);
   }
   @Column()
   @IsBoolean()

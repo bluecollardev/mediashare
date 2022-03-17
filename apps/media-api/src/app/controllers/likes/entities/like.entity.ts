@@ -1,7 +1,7 @@
 import { ApiObjectId } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
 import { Column, Entity, Index } from 'typeorm';
-import { BcEntity } from '../../../core/entities/base.entity';
+import { BcEntity } from '@api';
 
 @Entity('like_item')
 export class Like extends BcEntity {
