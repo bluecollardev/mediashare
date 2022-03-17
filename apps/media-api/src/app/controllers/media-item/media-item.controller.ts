@@ -42,7 +42,10 @@ export class MediaItemController {
   async create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUserId() createdBy: ObjectId) {
     const mediaItem: Omit<MediaItem, '_id'> = {
       isPlayable: false,
-      uri: '', ...createMediaItemDto, userId: createdBy, createdBy
+      uri: '',
+      ...createMediaItemDto,
+      userId: createdBy,
+      createdBy,
     };
     return await this.mediaItemService.create({ ...mediaItem });
   }
@@ -113,7 +116,6 @@ export class MediaItemController {
       title,
     });
     response.status(HttpStatus.CREATED);
-
     return response.send(shareItem);
   }
 }

@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TagController } from './tag.controller';
-import { ShareItemModule } from '../../modules/share-item/share-item.module';
+import { TagModule } from '../../modules/tag/tag.module';
 import { JwtStrategy } from '../../modules/auth/jwt.strategy';
 import { AuthModule } from '../../modules/auth/auth.module';
-import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { Tag } from '../../modules/tag/entities/tag.entity';
 
 @Module({
-  imports: [ShareItemModule, TypeOrmModule.forFeature([ShareItem]), AuthModule],
+  imports: [TagModule, TypeOrmModule.forFeature([Tag]), AuthModule],
   controllers: [TagController],
   providers: [JwtStrategy],
 })

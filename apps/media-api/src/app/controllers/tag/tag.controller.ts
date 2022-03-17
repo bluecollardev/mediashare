@@ -1,48 +1,34 @@
-import { Controller, Get, Param, Delete, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-import { GetUserId } from '../../core/decorators/user.decorator';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { TagGetResponse } from './tag.decorator';
-import { ObjectIdPipe } from '@mediashare/shared';
+import { Controller, Get, Param, Delete } from '@nestjs/common';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
+import { ObjectIdPipe } from '@mediashare/shared';
+import { GetUserId } from '../../core/decorators/user.decorator';
 import RouteTokens from '../../modules/app-config/constants/open-api.constants';
-import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
-import { UserGuard } from '../../modules/auth/guards/user.guard';
+import { TagService } from '../../modules/tag/services/tag.service';
+import { TagGetResponse } from './tag.decorator';
 
-@ApiTags('share-items')
-@Controller('share-items')
+@ApiTags('tags')
+@Controller('tags')
 export class TagController {
-  constructor(private readonly shareItemService: ShareItemService) {}
+  constructor(private readonly tagService: TagService) {}
 
   @TagGetResponse({ isArray: true })
   @Get()
   async findAll(@GetUserId() userId: ObjectId) {
-    const [sharedMedia, sharedPlaylists] = await Promise.all(this.shareItemService.findShareItemsByUserId(userId));
-
-    return { sharedMedia, sharedPlaylists };
+    return this.tagService.findAll();
   }
 
   @TagGetResponse()
-  @Get(RouteTokens.SHARE_ID)
-  @ApiParam({ name: 'shareId', type: String, required: true })
-  async findOne(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {
-    return await this.shareItemService.findOne(shareId);
+  @Get(RouteTokens.TAG_ID)
+  @ApiParam({ name: 'tagId', type: String, required: true })
+  async findOne(@Param('tagId', new ObjectIdPipe()) tagId: ObjectId) {
+    return await this.tagService.findOne(tagId);
   }
 
   @TagGetResponse()
-  @Delete(':shareId')
-  @ApiParam({ name: 'shareId', type: String, required: true })
-  async remove(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {
-    return await this.shareItemService.remove(shareId);
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(UserGuard)
-  @ApiBearerAuth()
-  @Post('read/:shareId')
-  @ApiParam({ name: 'shareId', type: String, required: true })
-  @ApiResponse({ type: ShareItem, status: 200 })
-  async readSharedItem(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {
-    return await this.shareItemService.update(shareId, { read: true });
+  @Delete(':tagId')
+  @ApiParam({ name: 'tagId', type: String, required: true })
+  async remove(@Param('tagId', new ObjectIdPipe()) tagId: ObjectId) {
+    return await this.tagService.remove(tagId);
   }
 }

@@ -27,17 +27,17 @@ export interface CreateMediaItemDto {
    * @type {string}
    * @memberof CreateMediaItemDto
    */
+  title: string;
+  /**
+   * @type {string}
+   * @memberof CreateMediaItemDto
+   */
   summary: string;
   /**
    * @type {string}
    * @memberof CreateMediaItemDto
    */
   description: string;
-  /**
-   * @type {string}
-   * @memberof CreateMediaItemDto
-   */
-  title: string;
   /**
    * @type {string}
    * @memberof CreateMediaItemDto

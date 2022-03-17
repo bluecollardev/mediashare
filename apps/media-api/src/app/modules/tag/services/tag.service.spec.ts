@@ -51,41 +51,4 @@ describe('ShareItemService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-
-  describe('createMediashareItem', () => {
-    it('should insert a media share item', async () => {
-      const mediaItem = userFactory.createMediaItem();
-
-      const userId = new ObjectId();
-      const mediaId = mediaItem._id;
-      const createdBy = new ObjectId(userFactory.userId);
-
-      const result = await service.createMediashareItem({ createdBy, mediaId, userId, title: 'blah' });
-
-      expect(result).toHaveProperty('mediaId');
-      expect(result.mediaId.toHexString()).toEqual(mediaId.toHexString());
-      expect(result.userId.toHexString()).toEqual(userId.toHexString());
-      expect(result.createdBy.toHexString()).toEqual(createdBy.toHexString());
-    });
-  });
-  describe('createPlaylistShareItem', () => {
-    it('should insert a playlist share item', async () => {
-      const playlist = userFactory.createPlaylist();
-
-      const userId = new ObjectId().toHexString();
-
-      const result = await service.createPlaylistShareItem({
-        createdBy: userFactory.userId,
-        playlistId: playlist._id.toHexString(),
-        userId,
-        title: 'blah',
-      });
-
-      expect(result).toBeDefined();
-
-      expect(result).toHaveProperty('createdBy');
-      expect(result).toHaveProperty('playlistId');
-      expect(result.createdBy.toHexString()).toBe(userFactory.user._id.toHexString());
-    });
-  });
 });

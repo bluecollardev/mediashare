@@ -1,11 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MediaItem } from '../media-item/entities/media-item.entity';
-import { PlaylistItemResponseDto } from '../playlist/dto/playlist-response.dto';
+import { Tag } from '../../modules/tag/entities/tag.entity';
 
-class ShareItemsResponseDto {
-  @ApiProperty({ name: 'Media Items', type: () => PlaylistItemResponseDto, description: 'all items that are shared with a particular user' })
-  mediaItems: MediaItem[];
-  playlists: PlaylistItemResponseDto[];
+class TagResponseDto {
+  @ApiProperty({ name: 'Tags', type: () => TagResponseDto, description: 'tags' })
+  tags: Tag[];
 }
 
-export { ShareItemsResponseDto };
+export { TagResponseDto };

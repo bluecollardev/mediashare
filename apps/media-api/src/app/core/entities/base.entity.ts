@@ -37,13 +37,13 @@ export class BcEntity implements BcBaseInterface {
 
   @Column()
   @ApiObjectId(<ApiDecoratorOptions>{
-    description: ''
+    description: '',
   })
   readonly createdBy?: Readonly<ObjectId>;
 
   @Column()
   @ApiObjectId(<ApiDecoratorOptions>{
-    description: ''
+    description: '',
   })
   userId?: ObjectId;
 }

@@ -137,9 +137,7 @@ describe('MediaItemController', () => {
       const mediaId = new ObjectId();
       const createdBy = new ObjectId();
 
-      reveal(mockMediaService).findOne.mockReturnValueOnce(
-        new Promise((resolve) => resolve({ userId: userId } as any))
-      );
+      reveal(mockMediaService).findOne.mockReturnValueOnce(new Promise((resolve) => resolve({ userId: userId } as any)));
       const resultMock = { _id: new ObjectId(), userId, mediaId, read: false, createdBy, title: 'sometime' };
 
       reveal(mockShareItemService).createMediaShareItem.mockReturnValueOnce(
