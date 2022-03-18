@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
+import { withGlobalStateConsumer } from '../../core/globalState/index';
 
 import { routeNames } from '../../routes';
 
@@ -26,7 +27,8 @@ import * as build from '../../build';
 import { theme } from '../../styles';
 import { View } from 'react-native';
 
-export const PlaylistDetail = ({ route }: PageProps) => {
+export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps) => {
+  const { tags = [] } = globalState;
   const { playlistId = '' } = route?.params || {};
 
   const edit = useRouteWithParams(routeNames.playlistEdit);
@@ -47,8 +49,8 @@ export const PlaylistDetail = ({ route }: PageProps) => {
     selected || {};
   const items = mediaItems || [];
 
-  const tagKeys = selected?.tags.map((tag) => tag.key);
-  const [tags, setTags] = useState(tagKeys);
+  const initialTagKeys = selected?.tags.map((tag) => tag.key);
+  const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -101,7 +103,12 @@ export const PlaylistDetail = ({ route }: PageProps) => {
             shares={shareCount}
             views={viewCount}
             category={category}
-            tags={tags}
+            availableTags={tags}
+            tags={selectedTagKeys}
+            // tagOptions={options}
+            onTagChange={(e: any) => {
+              setSelectedTagKeys(e);
+            }}
           >
             <Button
               icon="live-tv"
@@ -198,4 +205,4 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(PlaylistDetail);
+export default withLoadingSpinner(withGlobalStateConsumer(PlaylistDetail));

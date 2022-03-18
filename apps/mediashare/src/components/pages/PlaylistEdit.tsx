@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { withGlobalStateConsumer } from '../../core/globalState/index';
 
 import { useAppSelector } from '../../store';
 import { getPlaylistById, updateUserPlaylist } from '../../store/modules/playlists';
@@ -25,7 +26,8 @@ import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 
 const actionModes = { delete: 'delete', default: 'default' };
 
-const PlaylistEdit = ({ navigation, route }: PageProps) => {
+const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PageProps) => {
+  const { tags = [] } = globalState;
   const addToPlaylist = useRouteWithParams(routeNames.addItemsToPlaylist);
   const viewMediaItem = useViewMediaItem();
   const goToPlaylists = usePlaylists();
@@ -35,11 +37,6 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   const { playlistId } = route.params;
 
   const { loaded, selected } = useAppSelector((state) => state?.playlist);
-  const allTags = useAppSelector((state) => state?.tags?.entities);
-  console.log('all tags');
-  console.log(allTags);
-  const state = useAppSelector((state) => state);
-  console.log(state);
 
   const [isLoaded, setIsLoaded] = useState(loaded);
   const [isSelectable, setIsSelectable] = useState(false);
@@ -48,10 +45,8 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   const [title, setTitle] = useState(selected?.title);
   const [description, setDescription] = useState(selected?.description);
   const [category, setCategory] = useState(selected?.category);
-  console.log(selected?.tags);
-  const tagKeys = selected?.tags.map((tag) => tag.key);
-  const [tags, setTags] = useState(tagKeys);
-  console.log(tagKeys);
+  const initialTagKeys = selected?.tags.map((tag) => tag.key);
+  const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
   const [selectedItems, setSelectedItems] = useState([]);
   // @ts-ignore
   const [imageSrc, setImageSrc] = useState(selected?.imageSrc);
@@ -100,11 +95,11 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
             onCategoryChange={(e: any) => {
               setCategory(e);
             }}
-            availableTags={allTags}
-            tags={tagKeys}
+            availableTags={tags}
+            tags={selectedTagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {
-              setTags(e);
+              setSelectedTagKeys(e);
             }}
             onTitleChange={setTitle}
             onDescriptionChange={setDescription}
@@ -207,7 +202,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
         mediaIds,
         description: description,
         category: category as any,
-        tags: tags as any[],
+        tags: selectedTagKeys as any[],
         _id: selected._id,
         imageSrc,
       })
@@ -295,4 +290,4 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(PlaylistEdit);
+export default withLoadingSpinner(withGlobalStateConsumer(PlaylistEdit));

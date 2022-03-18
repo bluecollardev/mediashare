@@ -4,6 +4,7 @@ import { compose } from 'recompose';
 
 import { useAppSelector } from '../../store';
 import { getTags } from '../../store/modules/tags';
+import { Tag } from '../../rxjs-api/models';
 
 export interface GlobalStateProps {
   loading?: boolean;
@@ -12,6 +13,7 @@ export interface GlobalStateProps {
   location?: any;
   search?: any;
   setSearchFilters?: Function;
+  tags?: Tag[];
 }
 
 export const GlobalState = React.createContext<GlobalStateProps>({} as GlobalStateProps);
@@ -26,20 +28,12 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
 
     const loading = useAppSelector((state) => state?.app.loading);
     const user = useAppSelector((state) => state?.user);
-    const tags = useAppSelector((state) => state?.tags.entities);
+    const tags = useAppSelector((state) => state?.tags?.entities || []);
     const authenticatedAndLoggedIn = user?._id?.length > 0;
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authenticatedAndLoggedIn);
     const [searchFilters, setSearchFilters] = useState(INITIAL_SEARCH_FILTERS);
 
     const dispatch = useDispatch();
-
-    useEffect(() => {
-      const loadTags = async () => {
-        dispatch(getTags());
-      };
-      loadTags().finally();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     useEffect(() => {
       if (authenticatedAndLoggedIn) {
@@ -48,6 +42,17 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
       }
     }, [authenticatedAndLoggedIn]);
     console.log(`are we logged in? ${authenticatedAndLoggedIn}`);
+
+    useEffect(() => {
+      const loadTags = async () => {
+        await dispatch(getTags());
+      };
+
+      if (isLoggedIn) {
+        loadTags().finally();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLoggedIn]);
 
     const providerValue = getProviderValue() as GlobalStateProps;
     return (
@@ -66,6 +71,7 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
         search: {
           filters: { ...searchFilters },
         },
+        tags,
       } as GlobalStateProps;
       return value;
     }

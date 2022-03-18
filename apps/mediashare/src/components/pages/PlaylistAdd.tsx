@@ -25,14 +25,16 @@ import { theme } from '../../styles';
 import { Button } from 'react-native-paper';
 import { withGlobalStateConsumer } from '../../core/globalState';
 
-const PlaylistAdd = ({ globalState }: PageProps) => {
+const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
+  const { tags = [] } = globalState;
+
   const dispatch = useDispatch();
 
   const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
   const [category, setCategory] = useState(PlaylistCategoryType.Free);
-  const [tags, setTags] = useState([]);
+  const [selectedTagKeys, setSelectedTagKeys] = useState([]);
   const [loaded, setIsLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
 
@@ -45,7 +47,7 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
     // @ts-ignore
     setTitle('');
     setCategory(PlaylistCategoryType.Free);
-    setTags([]);
+    setSelectedTagKeys([]);
     // @ts-ignore
     setDescription('');
     setIsLoaded(false);
@@ -93,9 +95,12 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
             category={category}
             categoryOptions={options}
             onCategoryChange={setCategory as any}
-            tags={tags}
+            availableTags={tags}
+            tags={selectedTagKeys}
             tagOptions={options}
-            onTagChange={setTags as any}
+            onTagChange={(e: any) => {
+              setSelectedTagKeys(e);
+            }}
             onTitleChange={setTitle as any}
             onDescriptionChange={setDescription as any}
             isEdit={true}
