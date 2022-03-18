@@ -152,8 +152,8 @@ export const Browse = ({ globalState }: PageProps) => {
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
 
   useEffect(() => {
-    loadData()
-  }, [])
+    loadData();
+  }, []);
 
   useEffect(() => {
     const currentSearchFilters = globalState?.search;

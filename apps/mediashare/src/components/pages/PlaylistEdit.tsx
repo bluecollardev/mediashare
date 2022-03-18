@@ -15,13 +15,7 @@ import { AppUpload } from '../layout/AppUpload';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
 import { MediaCard } from '../layout/MediaCard';
-import {
-  PageContainer,
-  KeyboardAvoidingPageContent,
-  PageActions,
-  PageProps,
-  PageContent
-} from '../layout/PageContainer';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { routeNames } from '../../routes';
 
 import { createRandomRenderKey } from '../../core/utils';
@@ -48,14 +42,17 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   const [title, setTitle] = useState(selected?.title);
   const [description, setDescription] = useState(selected?.description);
   const [category, setCategory] = useState(selected?.category);
-  const [tags, setTags] = useState(selected?.tags);
+  console.log(selected?.tags);
+  const tagKeys = selected?.tags.map((tag) => tag.key);
+  const [tags, setTags] = useState(tagKeys);
+  console.log(tagKeys);
   const [selectedItems, setSelectedItems] = useState([]);
   // @ts-ignore
   const [imageSrc, setImageSrc] = useState(selected?.imageSrc);
 
   useEffect(() => {
     if (!isLoaded) {
-      loadData();
+      loadData().finally();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
@@ -97,7 +94,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
             onCategoryChange={(e: any) => {
               setCategory(e);
             }}
-            tags={tags}
+            tags={tagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {
               setTags(e);

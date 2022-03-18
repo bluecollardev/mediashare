@@ -70,11 +70,10 @@ export class PlaylistController {
   async update(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() userId: ObjectId, @Body() updatePlaylistDto: UpdatePlaylistDto) {
     const { mediaIds, ...rest } = updatePlaylistDto;
 
-    const result = await this.playlistService.update(playlistId, {
+    return await this.playlistService.update(playlistId, {
       ...rest,
       mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => new ObjectId(id)) : [],
     });
-    return result;
   }
 
   @Delete(PLAYLIST_ID_TOKEN)

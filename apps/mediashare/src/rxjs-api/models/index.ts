@@ -15,6 +15,8 @@ export * from './PlaylistResponseDto';
 export * from './ProfileDto';
 export * from './ProfileShareItem';
 export * from './ShareItem';
+export * from './Tag';
+export * from './TagKeyValue';
 export * from './UpdateMediaItemDto';
 export * from './UpdatePlaylistDto';
 export * from './UpdateUserDto';

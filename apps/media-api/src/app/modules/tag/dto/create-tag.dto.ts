@@ -5,22 +5,26 @@ import { ObjectId } from 'mongodb';
 export class CreateTagDto {
   @ApiProperty({ required: true })
   @IsString()
-  userId: string;
-
-  @ApiProperty({ required: false })
-  @IsString()
-  mediaId: string;
+  key: string;
 
   @ApiProperty({ required: true })
   @IsString()
-  createdBy: string;
-  title: string;
+  value: string;
+
+  @ApiProperty({ type: Boolean, required: true })
+  isMediaTag: boolean;
+
+  @ApiProperty({ type: Boolean, required: true })
+  isPlaylistTag: boolean;
+
+  @ApiProperty({ type: [], required: true, isArray: true, nullable: true })
+  parentIds: ObjectId[];
 }
 
 export class CreateTagInput {
-  userId: ObjectId;
-  mediaId?: ObjectId;
-  playlistId?: ObjectId;
-  createdBy: ObjectId;
-  title: string;
+  key: string;
+  value?: string;
+  isMediaTag?: boolean;
+  isPlaylistTag?: boolean;
+  parentIds?: ObjectId[];
 }

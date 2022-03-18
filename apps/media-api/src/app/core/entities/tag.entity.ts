@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb'
+import { ObjectId } from 'mongodb';
 import { ApiString } from '@mediashare/shared';
 import { KeyPair } from './keypair.entity';
 import { TagInterface } from '@core-lib';

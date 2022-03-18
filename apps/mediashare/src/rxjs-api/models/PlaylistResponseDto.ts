@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { MediaItem, PlaylistCategoryType } from './';
+import { MediaItem, PlaylistCategoryType, TagKeyValue } from './';
 
 /**
  * @export
@@ -69,20 +69,20 @@ export interface PlaylistResponseDto {
    */
   category: PlaylistCategoryType;
   /**
-   * @type {PlaylistCategoryType}
+   * @type {Array<TagKeyValue>}
    * @memberof PlaylistResponseDto
    */
-  tags: any[];
-  /**
-   * @type {Array<MediaItem>}
-   * @memberof PlaylistResponseDto
-   */
-  mediaItems: Array<MediaItem>;
+  tags: Array<TagKeyValue> | null;
   /**
    * @type {string}
    * @memberof PlaylistResponseDto
    */
   author: string;
+  /**
+   * @type {Array<MediaItem>}
+   * @memberof PlaylistResponseDto
+   */
+  mediaItems: Array<MediaItem>;
   /**
    * @type {number}
    * @memberof PlaylistResponseDto

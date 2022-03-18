@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { PlaylistCategoryType } from './';
+import { PlaylistCategoryType, TagKeyValue } from './';
 
 /**
  * @export
@@ -69,8 +69,8 @@ export interface Playlist {
    */
   category: PlaylistCategoryType;
   /**
-   * @type {PlaylistCategoryType}
+   * @type {Array<TagKeyValue>}
    * @memberof Playlist
    */
-  tags: any[];
+  tags: Array<TagKeyValue> | null;
 }

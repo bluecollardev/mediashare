@@ -75,22 +75,22 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
   const availableMediaTags = useMemo(
     () =>
       [...customMediaTags, ...customMediaSubtags]
-      .filter((tag) => tag.isMediaTag)
-      .map((tag) => ({
-        id: tag?.key,
-        name: tag?.value,
-      })),
+        .filter((tag) => tag.isMediaTag)
+        .map((tag) => ({
+          id: tag?.key,
+          name: tag?.value,
+        })),
     []
   );
 
   const availablePlaylistTags = useMemo(
     () =>
       [...customPlaylistTags, ...customPlaylistSubtags]
-      .filter((tag) => tag.isPlaylistTag)
-      .map((tag) => ({
-        id: tag?.key,
-        name: tag?.value,
-      })),
+        .filter((tag) => tag.isPlaylistTag)
+        .map((tag) => ({
+          id: tag?.key,
+          name: tag?.value,
+        })),
     []
   );
 

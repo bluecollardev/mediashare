@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { MediaCategoryType } from './';
+import { MediaCategoryType, TagKeyValue } from './';
 
 /**
  * @export
@@ -49,10 +49,10 @@ export interface CreateMediaItemDto {
    */
   category: MediaCategoryType;
   /**
-   * @type {MediaCategoryType}
+   * @type {Array<TagKeyValue>}
    * @memberof CreateMediaItemDto
    */
-  tags: any[];
+  tags?: Array<TagKeyValue> | null;
   /**
    * @type {string}
    * @memberof CreateMediaItemDto

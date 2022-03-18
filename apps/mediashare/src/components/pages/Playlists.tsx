@@ -50,13 +50,7 @@ export interface PlaylistsProps {
   return list;
 } */
 
-export const PlaylistsComponent = ({
-  list = [],
-  onViewDetailClicked,
-  selectable = false,
-  showActions = true,
-  onChecked = () => undefined
-}: PlaylistsProps) => {
+export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable = false, showActions = true, onChecked = () => undefined }: PlaylistsProps) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
@@ -255,10 +249,10 @@ export const Playlists = ({ globalState }: PageProps) => {
   async function deletePlaylists() {
     selected.map(async (item) => {
       await dispatch(removeUserPlaylist(item._id));
-    }) // TODO: Find a real way to do this
+    }); // TODO: Find a real way to do this
     setTimeout(() => {
-      loadData()
-    }, 2500)
+      loadData();
+    }, 2500);
   }
 
   function clearCheckboxSelection() {

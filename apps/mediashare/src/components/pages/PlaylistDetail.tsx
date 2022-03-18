@@ -47,8 +47,20 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   // @ts-ignore
-  const { _id, title = '', author = '', createdBy, description = '', imageSrc, category, tags, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } =
-    selected || {};
+  const {
+    _id,
+    title = '',
+    author = '',
+    createdBy,
+    description = '',
+    imageSrc,
+    category,
+    tags,
+    shareCount = 0,
+    viewCount = 0,
+    likesCount = 0,
+    mediaItems = [],
+  } = selected || {};
   const items = mediaItems || [];
 
   useEffect(() => {

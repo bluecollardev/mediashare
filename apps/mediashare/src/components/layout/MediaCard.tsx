@@ -8,19 +8,20 @@ import Video from 'react-native-video'; // TODO: Not compatible with react-nativ
 // import { Video as ExpoVideo } from 'expo-av';
 // import Video from 'expo-video-player';
 
-// import SwitchSelector from 'react-native-switch-selector';
+import SwitchSelector from 'react-native-switch-selector';
 import { descriptionValidator, titleValidator } from './formConfig';
 import { MultiSelectIcon } from '../form/MultiSelect';
 import { TextField } from '../form/TextField';
 export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png';
 
-import { UserDto } from '../../rxjs-api';
+// import { TagKeyValue, UserDto } from '../../rxjs-api';
 import { useAppSelector } from '../../store';
 import { findInArray, getAuthorText, getUsername } from '../../utils';
 import { usePreviewImage } from '../../hooks/usePreviewImage';
 import { theme } from '../../styles';
 
 import { customMediaTags, customMediaSubtags, customPlaylistTags, customPlaylistSubtags } from '../../data/tags';
+import { UserDto } from '../../rxjs-api/models/UserDto';
 
 export interface MediaCardProps {
   id?: string;
@@ -32,13 +33,8 @@ export interface MediaCardProps {
   showThumbnail?: boolean;
   thumbnail?: string;
   mediaSrc?: string | null;
-  // TODO: Finish re-adding category stuff
   category?: string;
-  // TODO: Finish tag, change to tags!
-  // Allow both for now while we wire things up, we previously only accepted a string
-  tag?: string | string[];
-  tags?: string | string[];
-  // END TODO
+  tags?: string[];
   children?: any;
   topDrawer?: React.FC<any>;
   isEdit?: boolean;
@@ -113,6 +109,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   views = 0,
   shares = 0,
 }: MediaCardProps) => {
+  console.log('MediaCard tags');
+  console.log(tags);
   const getMediaDisplayMode = () => (showThumbnail && thumbnail ? 'image' : 'video');
   const initialMediaDisplayMode = isPlayable ? (getMediaDisplayMode() as MediaDisplayMode) : 'image';
   const [mediaDisplayMode, setMediaDisplayMode] = useState(initialMediaDisplayMode);
@@ -129,9 +127,10 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   const [selectedCategories, setSelectedCategories] = useState([]);
   const onSelectedCategoriesChange = (categories) => {
     setSelectedCategories(categories);
+    onCategoryChange(categories);
   };
 
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState(tags);
   const onSelectedTagsChange = (tags) => {
     setSelectedTags(tags);
   };
@@ -139,22 +138,22 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   const availableMediaTags = useMemo(
     () =>
       [...customMediaTags, ...customMediaSubtags]
-      .filter((tag) => tag.isMediaTag)
-      .map((tag) => ({
-        id: tag?.key,
-        name: tag?.value,
-      })),
+        .filter((tag) => tag.isMediaTag)
+        .map((tag) => ({
+          id: tag?.key,
+          name: tag?.value,
+        })),
     []
   );
 
   const availablePlaylistTags = useMemo(
     () =>
       [...customPlaylistTags, ...customPlaylistSubtags]
-      .filter((tag) => tag.isPlaylistTag)
-      .map((tag) => ({
+        .filter((tag) => tag.isPlaylistTag)
+        .map((tag) => ({
           id: tag?.key,
-        name: tag?.value,
-      })),
+          name: tag?.value,
+        })),
     []
   );
 
@@ -259,7 +258,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             modalWithSafeAreaView={true}
           />
         </Card>
-        {/* <Card elevation={elevation} style={{ position: 'relative', marginBottom: 25, borderColor: theme.colors.defaultBorder, borderWidth: 1, padding: 0.5 }}>
+        <Card elevation={elevation} style={{ position: 'relative', marginBottom: 25, borderColor: theme.colors.defaultBorder, borderWidth: 1, padding: 0.5 }}>
           <SwitchSelector
             fontSize={13}
             textColor={theme.colors.text}
@@ -269,12 +268,12 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             buttonColor={theme.colors.darkDefault}
             style={{ margin: 0, padding: 0, width: '100%' }}
             options={categoryOptions.map((option) => ({ value: option, label: `${option} Content` }))}
-            initial={categoryOptions.findIndex((option) => option.toLowerCase() === selectedCategory.toLowerCase())}
-            onPress={(value) => onSelectedCategoryChange(value as string)}
+            initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
+            onPress={(value) => onSelectedCategoriesChange(value as string)}
             disabled={isReadOnly}
             borderRadius={3}
           />
-        </Card> */}
+        </Card>
         <Card elevation={elevation} style={{ marginBottom: 25 }}>
           <TextField
             style={{ height: 500, overflow: 'scroll' }}
