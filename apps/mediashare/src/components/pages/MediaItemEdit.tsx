@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { withGlobalStateConsumer } from '../../core/globalState/index';
 
 import { useAppSelector } from '../../store';
 import { deleteMediaItem, updateMediaItem } from '../../store/modules/media-items';
@@ -28,7 +29,7 @@ export interface MediaItemEditContainerProps {
 
 export interface MediaItemEditContainerState {}
 
-const MediaItemEdit = ({ navigation, route }: PageProps) => {
+const MediaItemEdit = ({ navigation, route, globalState = { tags: [] } }: PageProps) => {
   const actionLabel = 'Save';
   const cancelLabel = 'Cancel';
   const options = [];
@@ -36,16 +37,19 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
     options.push(value);
   }
 
+  const { tags = [] } = globalState;
+
   const dispatch = useDispatch();
 
   const { mediaId } = route?.params || {};
-  const mediaItem = useAppSelector((state) => state.mediaItem.entity);
+  const mediaItem = useAppSelector((state) => state?.mediaItem?.entity);
 
   const [showDialog, setShowDialog] = useState(false);
   const [title, setTitle] = useState(mediaItem?.title);
   const [description, setDescription] = useState(mediaItem?.description);
   const [category, setCategory] = useState();
-  const [tags, setTags] = useState([]);
+  const initialTagKeys = mediaItem?.tags?.map((tag) => tag.key) || [];
+  const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
   const [documentUri] = useState(mediaItem?.uri);
   const [thumbnail, setThumbnail] = useState(mediaItem?.thumbnail);
   const mediaItems = useMediaItems();
@@ -75,7 +79,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
       setTitle(mediaItem?.title);
       setDescription(mediaItem?.description);
       setCategory(mediaItem?.category as any);
-      setTags(mediaItem?.tags as any[]);
+      setSelectedTagKeys(mediaItem?.tags as any[]);
     }
   }, [mediaItem]);
   if (!mediaItem) {
@@ -109,10 +113,11 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
             onCategoryChange={(e: any) => {
               setCategory(e);
             }}
-            tags={tags}
+            availableTags={tags}
+            tags={selectedTagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {
-              setTags(e);
+              setSelectedTagKeys(e);
             }}
             onTitleChange={setTitle}
             onDescriptionChange={setDescription}
@@ -157,4 +162,4 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(MediaItemEdit);
+export default withLoadingSpinner(withGlobalStateConsumer(MediaItemEdit));
