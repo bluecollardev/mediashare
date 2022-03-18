@@ -6,13 +6,7 @@ import { take } from 'rxjs/operators';
 import { makeEnum } from '../../core/factory';
 
 import { ApiService } from '../../apis';
-import {
-  CreatePlaylistDto,
-  UpdatePlaylistDto,
-  CreatePlaylistResponseDto,
-  PlaylistResponseDto,
-  PlaylistItemResponseDto
-} from '../../../rxjs-api';
+import { CreatePlaylistDto, UpdatePlaylistDto, CreatePlaylistResponseDto, PlaylistResponseDto, PlaylistItemResponseDto } from '../../../rxjs-api';
 import { reducePendingState, reduceRejectedState } from '../../helpers';
 
 const PLAYLIST_ACTIONS = [

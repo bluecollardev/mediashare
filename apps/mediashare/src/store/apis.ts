@@ -10,6 +10,7 @@ import {
   ShareItemsApi,
   UserApi,
   UsersApi,
+  TagsApi,
   ViewsApi,
 } from '../rxjs-api';
 import Config from '../config';
@@ -67,6 +68,7 @@ function apiFactory() {
     user: new UserApi(configuration),
     users: new UsersApi(configuration),
     views: new ViewsApi(configuration),
+    tags: new TagsApi(configuration),
     configuration,
   };
 }
@@ -74,6 +76,6 @@ function apiFactory() {
 const apis = apiFactory();
 export type ApiService = typeof apis;
 
-const { mediaItems, shareItems, playlists, user, users, configuration } = apis;
+const { mediaItems, shareItems, playlists, user, users, views, tags, configuration } = apis;
 
-export { apis, mediaItems, shareItems, playlists, user, users, configuration };
+export { apis, mediaItems, shareItems, playlists, user, users, views, tags, configuration };

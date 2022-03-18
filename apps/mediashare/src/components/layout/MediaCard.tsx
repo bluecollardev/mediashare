@@ -20,8 +20,8 @@ import { findInArray, getAuthorText, getUsername } from '../../utils';
 import { usePreviewImage } from '../../hooks/usePreviewImage';
 import { theme } from '../../styles';
 
-import { customMediaTags, customMediaSubtags, customPlaylistTags, customPlaylistSubtags } from '../../data/tags';
-import { UserDto } from '../../rxjs-api/models/UserDto';
+// import { customMediaTags, customMediaSubtags, customPlaylistTags, customPlaylistSubtags } from '../../data/tags';
+import { UserDto, Tag } from '../../rxjs-api/models';
 
 export interface MediaCardProps {
   id?: string;
@@ -34,6 +34,7 @@ export interface MediaCardProps {
   thumbnail?: string;
   mediaSrc?: string | null;
   category?: string;
+  availableTags?: Tag[];
   tags?: string[];
   children?: any;
   topDrawer?: React.FC<any>;
@@ -90,6 +91,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   children,
   topDrawer = undefined,
   category = 'None',
+  availableTags = [] as Tag[],
   tags = [],
   isEdit = false,
   isPlayable = false,
@@ -137,23 +139,25 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 
   const availableMediaTags = useMemo(
     () =>
-      [...customMediaTags, ...customMediaSubtags]
-        .filter((tag) => tag.isMediaTag)
+      [...availableTags]
+        .filter((tag) => tag?.isMediaTag)
         .map((tag) => ({
           id: tag?.key,
           name: tag?.value,
         })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
   const availablePlaylistTags = useMemo(
     () =>
-      [...customPlaylistTags, ...customPlaylistSubtags]
+      [...availableTags]
         .filter((tag) => tag.isPlaylistTag)
         .map((tag) => ({
           id: tag?.key,
           name: tag?.value,
         })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 

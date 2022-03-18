@@ -9,6 +9,7 @@ import { reducer as createPlaylistReducer } from './modules/create-playlist';
 import { reducer as appStateReducer } from './modules/app-state/index';
 import { reducer as profileReducer } from './modules/profile/index';
 import { reducer as shareItemsReducer } from './modules/share-items/index';
+import { reducer as tagsReducer } from './modules/tags/index';
 
 // Combine our reducers and export
 const rootReducer = combineReducers({
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   mediaItem: mediaItemReducer,
   mediaItems: mediaItemsReducer,
   shareItems: shareItemsReducer,
+  tags: tagsReducer,
   users: usersReducer,
 });
 

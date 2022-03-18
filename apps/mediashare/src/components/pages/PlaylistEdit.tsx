@@ -34,7 +34,13 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
 
   const { playlistId } = route.params;
 
-  const { loaded, selected } = useAppSelector((state) => state.playlist);
+  const { loaded, selected } = useAppSelector((state) => state?.playlist);
+  const allTags = useAppSelector((state) => state?.tags?.entities);
+  console.log('all tags');
+  console.log(allTags);
+  const state = useAppSelector((state) => state);
+  console.log(state);
+
   const [isLoaded, setIsLoaded] = useState(loaded);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
@@ -94,6 +100,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
             onCategoryChange={(e: any) => {
               setCategory(e);
             }}
+            availableTags={allTags}
             tags={tagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {
@@ -189,6 +196,11 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   );
 
   async function saveWithIds(mediaIds: string[]) {
+    /* const selectedTags = tags.map((tag) => {
+      return {
+        tag
+      }
+    }) */
     return dispatch(
       updateUserPlaylist({
         title: title,

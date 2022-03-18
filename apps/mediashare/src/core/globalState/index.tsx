@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { compose } from 'recompose';
 
 import { useAppSelector } from '../../store';
+import { getTags } from '../../store/modules/tags';
 
 export interface GlobalStateProps {
   loading?: boolean;
@@ -24,9 +26,20 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
 
     const loading = useAppSelector((state) => state?.app.loading);
     const user = useAppSelector((state) => state?.user);
+    const tags = useAppSelector((state) => state?.tags.entities);
     const authenticatedAndLoggedIn = user?._id?.length > 0;
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authenticatedAndLoggedIn);
     const [searchFilters, setSearchFilters] = useState(INITIAL_SEARCH_FILTERS);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      const loadTags = async () => {
+        dispatch(getTags());
+      };
+      loadTags().finally();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
       if (authenticatedAndLoggedIn) {

@@ -14,7 +14,7 @@ export class TagsController {
 
   @TagGetResponse({ isArray: true })
   @Get()
-  async findAll(@GetUserId() userId: ObjectId) {
+  async findAll() {
     return this.tagService.findAll();
   }
 
@@ -26,7 +26,7 @@ export class TagsController {
   }
 
   @TagGetResponse()
-  @Delete(':tagId')
+  @Delete(RouteTokens.TAG_ID)
   @ApiParam({ name: 'tagId', type: String, required: true })
   async remove(@Param('tagId', new ObjectIdPipe()) tagId: ObjectId) {
     return await this.tagService.remove(tagId);

@@ -26,4 +26,19 @@ export interface Tag {
    * @memberof Tag
    */
   value: string;
+  /**
+   * @type {boolean}
+   * @memberof Tag
+   */
+  isMediaTag: boolean | null;
+  /**
+   * @type {boolean}
+   * @memberof Tag
+   */
+  isPlaylistTag: boolean | null;
+  /**
+   * @type {Array<object>}
+   * @memberof Tag
+   */
+  parentIds: Array<object> | null;
 }
