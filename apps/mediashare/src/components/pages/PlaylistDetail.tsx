@@ -5,27 +5,23 @@ import { ScrollView } from 'react-native';
 import { routeNames } from '../../routes';
 
 import { useAppSelector } from '../../store';
-import { getUserPlaylists, getPlaylistById, removeUserPlaylist, updateUserPlaylist, selectPlaylistAction } from '../../store/modules/playlists';
+import { getUserPlaylists, getPlaylistById, removeUserPlaylist, selectPlaylistAction } from '../../store/modules/playlists';
 import { loadUsers } from '../../store/modules/users';
 
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { Button, FAB, Divider, IconButton } from 'react-native-paper';
+import { Button, FAB, Divider } from 'react-native-paper';
 
 import AppDialog from '../layout/AppDialog';
 import { MediaCard } from '../layout/MediaCard';
 import { MediaList } from '../layout/MediaList';
-import { ListActionButton } from '../layout/ListActionButton';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { ActionButtons } from '../layout/ActionButtons';
 
-import { MediaItem, PlaylistResponseDto } from '../../rxjs-api';
+import { PlaylistResponseDto } from '../../rxjs-api';
 
 import * as build from '../../build';
-
-import { createRandomRenderKey } from '../../core/utils';
 
 import { theme } from '../../styles';
 import { View } from 'react-native';
@@ -55,7 +51,6 @@ export const PlaylistDetail = ({ route }: PageProps) => {
     description = '',
     imageSrc,
     category,
-    tags,
     shareCount = 0,
     viewCount = 0,
     likesCount = 0,
@@ -63,9 +58,12 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   } = selected || {};
   const items = mediaItems || [];
 
+  const tagKeys = selected?.tags.map((tag) => tag.key);
+  const [tags, setTags] = useState(tagKeys);
+
   useEffect(() => {
     if (!isLoaded) {
-      loadData();
+      loadData().finally();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);

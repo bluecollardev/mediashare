@@ -316,6 +316,48 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         }
         right={(buttonProps: any) => showActions && <IconButton {...buttonProps} icon="more-vert" onPress={onActionsClicked} />}
       />
+      <Card.Content style={{ marginBottom: 25 }}>
+        <SectionedMultiSelect
+          colors={{
+            primary: theme.colors.primary,
+            text: '#fff',
+            subText: '#fff',
+            searchPlaceholderTextColor: '#fff',
+            selectToggleTextColor: '#fff',
+            searchSelectionColor: '#fff',
+            itemBackground: 'transparent',
+            subItemBackground: 'transparent',
+          }}
+          styles={{
+            searchTextInput: {
+              color: '#fff',
+            },
+            searchBar: {
+              backgroundColor: '#000',
+            },
+            container: {
+              backgroundColor: '#000',
+            },
+          }}
+          disabled={false}
+          items={availableMediaTags}
+          IconRenderer={MultiSelectIcon}
+          uniqueKey="id"
+          subKey="children"
+          searchPlaceholderText="Enter Text"
+          selectText="Update Tags"
+          confirmText="Done"
+          expandDropDowns={false}
+          readOnlyHeadings={false}
+          showDropDowns={true}
+          parentChipsRemoveChildren={false}
+          showCancelButton={true}
+          modalWithTouchable={true}
+          modalWithSafeAreaView={true}
+          onSelectedItemsChange={onSelectedTagsChange}
+          selectedItems={selectedTags}
+        />
+      </Card.Content>
       {!showSocial && (
         <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
           {showThumbnail && thumbnail && <Card.Cover source={{ uri: thumbnail }} />}
