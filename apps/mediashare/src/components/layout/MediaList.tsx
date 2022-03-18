@@ -3,11 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 
 import { MediaListItem } from './MediaListItem';
-import { MediaItem, MediaItemDto } from '../../rxjs-api';
+import { MediaItemDto } from '../../rxjs-api';
 
 import { shortenText } from '../../utils';
 
-export type MediaListType = Omit<Pick<MediaItemDto, keyof MediaItem>, 'category'>;
+export type MediaListType = MediaItemDto;
 
 import { theme } from '../../styles';
 

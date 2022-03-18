@@ -74,6 +74,11 @@ export interface MediaItemDto {
    */
   category: MediaCategoryType;
   /**
+   * @type {MediaCategoryType}
+   * @memberof MediaItemDto
+   */
+  tags: [];
+  /**
    * @type {string}
    * @memberof MediaItemDto
    */

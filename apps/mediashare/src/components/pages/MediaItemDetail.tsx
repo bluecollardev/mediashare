@@ -6,7 +6,7 @@ import { MediaCard } from '../layout/MediaCard';
 
 const MediaItemDetail = ({}: PageProps) => {
   const mediaItem = useAppSelector((state) => state.mediaItem?.entity);
-  const { title, description, category, author, uri, thumbnail } = mediaItem || {};
+  const { title, description, category, tags, author, uri, thumbnail } = mediaItem || {};
 
   return (
     <PageContainer>
@@ -19,6 +19,7 @@ const MediaItemDetail = ({}: PageProps) => {
           thumbnail={thumbnail}
           showThumbnail={true}
           category={category}
+          tags={tags}
           showSocial={true}
           showActions={false}
           isPlayable={true}

@@ -74,6 +74,11 @@ export interface MediaItem {
    */
   category: MediaCategoryType;
   /**
+   * @type {MediaCategoryType}
+   * @memberof MediaItem
+   */
+  tags: any[];
+  /**
    * @type {string}
    * @memberof MediaItem
    */

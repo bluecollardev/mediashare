@@ -63,12 +63,13 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   );
 
   async function actionCb() {
-    const { category } = playlist as any;
+    const { category, tags } = playlist as any;
     const dto: UpdatePlaylistDto = {
       mediaIds: mediaItems.map((item) => item._id),
       description: playlist.description,
       title: playlist.title,
       category: category,
+      tags: tags,
       _id: playlistId,
       // @ts-ignore
       imageSrc: playlist?.imageSrc,

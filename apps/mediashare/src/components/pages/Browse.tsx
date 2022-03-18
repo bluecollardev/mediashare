@@ -97,6 +97,7 @@ export const SharedBlock = () => {
                 author={author}
                 description={description}
                 category={'General'}
+                tags={['General']}
                 thumbnail={imageSrc}
                 showSocial={true}
                 showActions={false}

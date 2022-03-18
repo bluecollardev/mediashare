@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 import { Avatar, Button, Card, Divider, IconButton, Paragraph, Title, Text } from 'react-native-paper';
 import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
@@ -20,7 +20,7 @@ import { findInArray, getAuthorText, getUsername } from '../../utils';
 import { usePreviewImage } from '../../hooks/usePreviewImage';
 import { theme } from '../../styles';
 
-import { customVideoCategories } from '../../data/categories';
+import { customMediaTags, customMediaSubtags, customPlaylistTags, customPlaylistSubtags } from '../../data/tags';
 
 export interface MediaCardProps {
   id?: string;
@@ -32,7 +32,13 @@ export interface MediaCardProps {
   showThumbnail?: boolean;
   thumbnail?: string;
   mediaSrc?: string | null;
+  // TODO: Finish re-adding category stuff
   category?: string;
+  // TODO: Finish tag, change to tags!
+  // Allow both for now while we wire things up, we previously only accepted a string
+  tag?: string | string[];
+  tags?: string | string[];
+  // END TODO
   children?: any;
   topDrawer?: React.FC<any>;
   isEdit?: boolean;
@@ -41,6 +47,8 @@ export interface MediaCardProps {
   onActionsClicked?: () => void;
   onTitleChange?: (value: string) => void;
   onDescriptionChange?: (value: string) => void;
+  onTagChange?: (value: string) => void;
+  tagOptions?: any[];
   onCategoryChange?: (value: string) => void;
   categoryOptions?: any[];
   likes?: number;
@@ -86,6 +94,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   children,
   topDrawer = undefined,
   category = 'None',
+  tags = [],
   isEdit = false,
   isPlayable = false,
   isReadOnly = false,
@@ -97,6 +106,9 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onCategoryChange = (value: string) => {},
   categoryOptions = [],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onTagChange = (value: string) => {},
+  tagOptions = [],
   likes = 0,
   views = 0,
   shares = 0,
@@ -111,12 +123,40 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     const primaryAuthor = Array.isArray(author) ? author[0] : author;
     const user = findInArray(users, 'username', primaryAuthor);
     setCreator(user);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users]);
 
   const [selectedCategories, setSelectedCategories] = useState([]);
   const onSelectedCategoriesChange = (categories) => {
     setSelectedCategories(categories);
   };
+
+  const [selectedTags, setSelectedTags] = useState([]);
+  const onSelectedTagsChange = (tags) => {
+    setSelectedTags(tags);
+  };
+
+  const availableMediaTags = useMemo(
+    () =>
+      [...customMediaTags, ...customMediaSubtags]
+      .filter((tag) => tag.isMediaTag)
+      .map((tag) => ({
+        id: tag?.key,
+        name: tag?.value,
+      })),
+    []
+  );
+
+  const availablePlaylistTags = useMemo(
+    () =>
+      [...customPlaylistTags, ...customPlaylistSubtags]
+      .filter((tag) => tag.isPlaylistTag)
+      .map((tag) => ({
+          id: tag?.key,
+        name: tag?.value,
+      })),
+    []
+  );
 
   const DisplayPreviewOrVideo = () => {
     const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
@@ -179,20 +219,6 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           />
         </Card>
         <Card elevation={elevation} style={{ marginBottom: 25 }}>
-          {/* <Text style={{ color: '#333', fontWeight: 'bold', fontSize: 13 }}>Select Content Type</Text> */}
-          {/* <SwitchSelector
-            fontSize={13}
-            textColor={theme.colors.text}
-            selectedColor={theme.colors.primary}
-            backgroundColor={theme.colors.background}
-            buttonColor={theme.colors.darkDefault}
-            style={{ margin: 0, padding: 0, width: '100%' }}
-            options={categoryOptions.map((option) => ({ value: option, label: option }))}
-            initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
-            onPress={(value) => onCategoryChange(value as string)}
-            disabled={isReadOnly}
-            borderRadius={3}
-          /> */}
           <SectionedMultiSelect
             colors={{
               primary: theme.colors.primary,
@@ -215,15 +241,15 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                 backgroundColor: '#000',
               },
             }}
-            items={customVideoCategories}
+            items={availableMediaTags}
             IconRenderer={MultiSelectIcon}
             uniqueKey="id"
             subKey="children"
             searchPlaceholderText="Enter Text"
-            selectText="Select Categories"
+            selectText="Select Tags"
             confirmText="Done"
-            onSelectedItemsChange={onSelectedCategoriesChange}
-            selectedItems={selectedCategories}
+            onSelectedItemsChange={onSelectedTagsChange}
+            selectedItems={selectedTags}
             expandDropDowns={false}
             readOnlyHeadings={false}
             showDropDowns={true}
@@ -233,6 +259,22 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             modalWithSafeAreaView={true}
           />
         </Card>
+        {/* <Card elevation={elevation} style={{ position: 'relative', marginBottom: 25, borderColor: theme.colors.defaultBorder, borderWidth: 1, padding: 0.5 }}>
+          <SwitchSelector
+            fontSize={13}
+            textColor={theme.colors.text}
+            borderColor={theme.colors.defaultBorder}
+            selectedColor={theme.colors.primary}
+            backgroundColor={theme.colors.background}
+            buttonColor={theme.colors.darkDefault}
+            style={{ margin: 0, padding: 0, width: '100%' }}
+            options={categoryOptions.map((option) => ({ value: option, label: `${option} Content` }))}
+            initial={categoryOptions.findIndex((option) => option.toLowerCase() === selectedCategory.toLowerCase())}
+            onPress={(value) => onSelectedCategoryChange(value as string)}
+            disabled={isReadOnly}
+            borderRadius={3}
+          />
+        </Card> */}
         <Card elevation={elevation} style={{ marginBottom: 25 }}>
           <TextField
             style={{ height: 500, overflow: 'scroll' }}

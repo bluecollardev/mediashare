@@ -15,7 +15,7 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
-import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
+import { titleValidator, descriptionValidator, tagValidator, categoryValidator } from '../layout/formConfig';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { AppUpload } from '../layout/AppUpload';
 
@@ -31,6 +31,7 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
   const [category, setCategory] = useState(PlaylistCategoryType.Free);
+  const [tags, setTags] = useState([]);
   const [loaded, setIsLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
 
@@ -43,6 +44,7 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
     // @ts-ignore
     setTitle('');
     setCategory(PlaylistCategoryType.Free);
+    setTags([]);
     // @ts-ignore
     setDescription('');
     setIsLoaded(false);
@@ -89,6 +91,9 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
           category={category}
           categoryOptions={options}
           onCategoryChange={setCategory as any}
+          tags={tags}
+          tagOptions={options}
+          onTagChange={setTags as any}
           onTitleChange={setTitle as any}
           onDescriptionChange={setDescription as any}
           isEdit={true}
@@ -123,10 +128,11 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
   async function savePlaylist() {
     const dto: CreatePlaylistDto = {
       title,
-      category: category,
       description,
-      mediaIds: selected,
       imageSrc,
+      category: category,
+      tags: tags as any[],
+      mediaIds: selected,
     };
 
     // @ts-ignore TODO: Fix types on dispatch?

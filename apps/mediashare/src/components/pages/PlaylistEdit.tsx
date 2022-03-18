@@ -42,6 +42,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   const [title, setTitle] = useState(selected?.title);
   const [description, setDescription] = useState(selected?.description);
   const [category, setCategory] = useState(selected?.category);
+  const [tags, setTags] = useState(selected?.tags);
   const [selectedItems, setSelectedItems] = useState([]);
   // @ts-ignore
   const [imageSrc, setImageSrc] = useState(selected?.imageSrc);
@@ -88,6 +89,11 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
           categoryOptions={options}
           onCategoryChange={(e: any) => {
             setCategory(e);
+          }}
+          tags={tags}
+          tagOptions={options}
+          onTagChange={(e: any) => {
+            setTags(e);
           }}
           onTitleChange={setTitle}
           onDescriptionChange={setDescription}
@@ -184,6 +190,7 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
         mediaIds,
         description: description,
         category: category as any,
+        tags: tags as any[],
         _id: selected._id,
         imageSrc,
       })

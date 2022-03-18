@@ -41,14 +41,13 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
   const { mediaId } = route?.params || {};
   const mediaItem = useAppSelector((state) => state.mediaItem.entity);
 
+  const [showDialog, setShowDialog] = useState(false);
   const [title, setTitle] = useState(mediaItem?.title);
   const [description, setDescription] = useState(mediaItem?.description);
   const [category, setCategory] = useState();
-  const [showDialog, setShowDialog] = useState(false);
-
+  const [tags, setTags] = useState([]);
   const [documentUri] = useState(mediaItem?.uri);
   const [thumbnail, setThumbnail] = useState(mediaItem?.thumbnail);
-
   const mediaItems = useMediaItems();
 
   const resetData = () => {};
@@ -58,12 +57,13 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
   };
   const saveItem = async function () {
     const dto: UpdateMediaItemDto & { _id } = {
-      title,
-      category: MediaCategoryType[category as any],
-      description,
-      isPlayable: true,
-      thumbnail,
       _id: mediaId,
+      title,
+      description,
+      thumbnail,
+      isPlayable: true,
+      category: MediaCategoryType[category as any],
+      tags: tags || [],
     };
 
     await dispatch(updateMediaItem(dto));
@@ -75,6 +75,7 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
       setTitle(mediaItem?.title);
       setDescription(mediaItem?.description);
       setCategory(mediaItem?.category as any);
+      setTags(mediaItem?.tags as any[]);
     }
   }, [mediaItem]);
   if (!mediaItem) {
@@ -107,6 +108,11 @@ const MediaItemEdit = ({ navigation, route }: PageProps) => {
             categoryOptions={options}
             onCategoryChange={(e: any) => {
               setCategory(e);
+            }}
+            tags={tags}
+            tagOptions={options}
+            onTagChange={(e: any) => {
+              setTags(e);
             }}
             onTitleChange={setTitle}
             onDescriptionChange={setDescription}

@@ -44,6 +44,11 @@ export interface UpdatePlaylistDto {
    */
   category: PlaylistCategoryType;
   /**
+   * @type {PlaylistCategoryType}
+   * @memberof UpdatePlaylistDto
+   */
+  tags: any[];
+  /**
    * @type {Array<string>}
    * @memberof UpdatePlaylistDto
    */

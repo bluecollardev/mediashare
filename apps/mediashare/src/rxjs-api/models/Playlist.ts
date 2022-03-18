@@ -68,4 +68,9 @@ export interface Playlist {
    * @memberof Playlist
    */
   category: PlaylistCategoryType;
+  /**
+   * @type {PlaylistCategoryType}
+   * @memberof Playlist
+   */
+  tags: any[];
 }

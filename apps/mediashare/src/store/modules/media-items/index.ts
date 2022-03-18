@@ -60,8 +60,8 @@ export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key
 
 export const addMediaItem = createAsyncThunk(
   mediaItemActionTypes.addMediaItem,
-  async (dto: Pick<CreateMediaItemDto, 'key' | 'title' | 'description' | 'summary' | 'category' | 'uri'>) => {
-    const { uri: fileUri, title, category, summary, description } = dto;
+  async (dto: Pick<CreateMediaItemDto, 'key' | 'title' | 'description' | 'summary' | 'category' | 'tags' | 'uri'>) => {
+    const { uri: fileUri, title, category, tags = [], summary, description } = dto;
     try {
       const options = { description: dto.description, summary: dto.summary, contentType: 'video/mp4' };
       const sanitizedKey = sanitizeKey(`${title}.${getFileExtension(fileUri)}`);
@@ -80,6 +80,7 @@ export const addMediaItem = createAsyncThunk(
         description,
         summary,
         category: category || MediaCategoryType.Free,
+        tags: tags || [],
         thumbnail: awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg',
         // video: awsUrl + getVideoPath(sanitizedKey),
         uri: awsUrl + getVideoPath(sanitizedKey),
@@ -143,6 +144,7 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
         description: `${item.size} - ${item.lastModified}`,
         summary: '',
         category: MediaCategoryType.Free,
+        tags: [],
         thumbnail: awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg',
         // video: awsUrl + getVideoPath(sanitizedKey),
         uri: awsUrl + getVideoPath(sanitizedKey),

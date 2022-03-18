@@ -69,6 +69,11 @@ export interface PlaylistResponseDto {
    */
   category: PlaylistCategoryType;
   /**
+   * @type {PlaylistCategoryType}
+   * @memberof PlaylistResponseDto
+   */
+  tags: any[];
+  /**
    * @type {Array<MediaItem>}
    * @memberof PlaylistResponseDto
    */

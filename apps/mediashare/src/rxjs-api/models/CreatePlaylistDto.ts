@@ -39,6 +39,11 @@ export interface CreatePlaylistDto {
    */
   category: PlaylistCategoryType;
   /**
+   * @type {PlaylistCategoryType}
+   * @memberof CreatePlaylistDto
+   */
+  tags: any[];
+  /**
    * @type {Array<string>}
    * @memberof CreatePlaylistDto
    */

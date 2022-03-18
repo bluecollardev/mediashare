@@ -19,3 +19,10 @@ export const categoryValidator = function (category) {
   }
   return minLength(1)(category);
 };
+
+export const tagValidator = function (tag) {
+  if (!tag) {
+    return true;
+  }
+  return minLength(1)(tag);
+};

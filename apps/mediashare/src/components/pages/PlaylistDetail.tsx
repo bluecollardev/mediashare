@@ -47,7 +47,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   // @ts-ignore
-  const { _id, title = '', author = '', createdBy, description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } =
+  const { _id, title = '', author = '', createdBy, description = '', imageSrc, category, tags, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } =
     selected || {};
   const items = mediaItems || [];
 
@@ -102,6 +102,7 @@ export const PlaylistDetail = ({ route }: PageProps) => {
             shares={shareCount}
             views={viewCount}
             category={category}
+            tags={tags}
           >
             <Button
               icon="live-tv"

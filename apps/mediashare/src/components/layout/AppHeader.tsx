@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-native';
 import { Appbar, Card, Portal, Searchbar, Text, IconButton } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
@@ -6,7 +6,7 @@ import { MultiSelectIcon } from '../form/MultiSelect';
 import { withGlobalStateConsumer, GlobalStateProps } from '../../core/globalState';
 import themeStyles, { theme } from '../../styles';
 
-import { customVideoCategories, customPlaylistCategories } from '../../data/categories';
+import { customMediaTags, customMediaSubtags, customPlaylistTags, customPlaylistSubtags } from '../../data/tags';
 
 export interface AppHeaderProps {
   options?: any;
@@ -66,6 +66,33 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
   const onSelectedCategoriesChange = (categories) => {
     setSelectedCategories(categories);
   };
+
+  const [selectedTags, setSelectedTags] = useState([]);
+  const onSelectedTagsChange = (tags) => {
+    setSelectedTags(tags);
+  };
+
+  const availableMediaTags = useMemo(
+    () =>
+      [...customMediaTags, ...customMediaSubtags]
+      .filter((tag) => tag.isMediaTag)
+      .map((tag) => ({
+        id: tag?.key,
+        name: tag?.value,
+      })),
+    []
+  );
+
+  const availablePlaylistTags = useMemo(
+    () =>
+      [...customPlaylistTags, ...customPlaylistSubtags]
+      .filter((tag) => tag.isPlaylistTag)
+      .map((tag) => ({
+        id: tag?.key,
+        name: tag?.value,
+      })),
+    []
+  );
 
   // console.log(`AppHeader > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
 
@@ -134,15 +161,15 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
                                 backgroundColor: '#000',
                               },
                             }}
-                            items={customVideoCategories}
+                            items={availableMediaTags}
                             IconRenderer={MultiSelectIcon}
                             uniqueKey="id"
                             subKey="children"
                             searchPlaceholderText="Enter Text"
-                            selectText="Select Categories"
+                            selectText="Select Tags"
                             confirmText="Done"
-                            onSelectedItemsChange={onSelectedCategoriesChange}
-                            selectedItems={selectedCategories}
+                            onSelectedItemsChange={onSelectedTagsChange}
+                            selectedItems={selectedTags}
                             expandDropDowns={false}
                             readOnlyHeadings={true}
                             showDropDowns={true}

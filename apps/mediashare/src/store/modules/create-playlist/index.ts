@@ -13,13 +13,14 @@ function initialStateFactory(): CreatePlaylistDto & { loading: boolean } {
     title: '',
     mediaIds: [],
     category: null,
+    tags: [],
     loading: false,
   };
 }
 
 const CREATE_PLAYLIST_KEY = 'createPlaylist' as const;
 
-// const actions = makeActions(['addItem', 'removeItem', 'setDescription', 'setCreatedBy', 'setTitle', 'setCategory']);
+// const actions = makeActions(['addItem', 'removeItem', 'setDescription', 'setCreatedBy', 'setTitle', 'setCategory', 'setTag']);
 
 const createPlaylist = createAsyncThunk('createPlaylist', async function (createPlaylistDto: CreatePlaylistDto) {
   return await playlists.playlistControllerCreate({ createPlaylistDto }).toPromise();
@@ -38,6 +39,7 @@ const slice = createSlice({
     },
     setTitle: (state, action) => ({ ...state, title: action.payload }),
     setCategory: (state, action) => ({ ...state, category: action.payload }),
+    setTags: (state, action) => ({ ...state, tags: action.payload }),
     setDescription: (state, action) => ({ ...state, description: action.payload }),
   },
   extraReducers: (builder) => {
@@ -52,8 +54,8 @@ const slice = createSlice({
 });
 
 const {
-  actions: { setCategory, setDescription, setMediaIds, setTitle },
+  actions: { setCategory, setTags, setDescription, setMediaIds, setTitle },
   reducer,
 } = slice;
 
-export { reducer, setCategory, setDescription, setMediaIds, setTitle, createPlaylist };
+export { reducer, setCategory, setTags, setDescription, setMediaIds, setTitle, createPlaylist };

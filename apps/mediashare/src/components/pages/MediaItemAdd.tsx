@@ -14,7 +14,7 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from '../layout/PageContainer';
-import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
+import { tagValidator, categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
 
 import { minLength } from '../../core/lib/Validators';
 import { theme } from '../../styles';
@@ -28,6 +28,7 @@ export const MediaItemAdd = ({}: PageProps) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState(MediaCategoryType.Free);
+  const [tags, setTags] = useState([]);
   const [mediaUri, setMediaUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
   // const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
@@ -59,6 +60,11 @@ export const MediaItemAdd = ({}: PageProps) => {
             categoryOptions={options}
             onCategoryChange={(e: any) => {
               setCategory(e);
+            }}
+            tags={tags}
+            tagOptions={options}
+            onTagChange={(e: any) => {
+              setTags(e);
             }}
             onTitleChange={setTitle}
             onDescriptionChange={setDescription}
@@ -99,19 +105,21 @@ export const MediaItemAdd = ({}: PageProps) => {
 
   async function saveItem() {
     const dto: CreateMediaItemDto = {
+      key: title,
       title,
-      category: MediaCategoryType[category],
       description,
       summary: '',
+      thumbnail: thumbnail,
       isPlayable: true,
       uri: mediaUri,
-      thumbnail: thumbnail,
-      key: title,
+      category: MediaCategoryType[category],
+      tags: tags || ([] as any[]),
       eTag: '',
     };
     await dispatch(addMediaItem(dto));
 
     setCategory(MediaCategoryType.Free);
+    setTags([]);
     setDescription('');
     setThumbnail('');
     goToMediaItems();
@@ -120,6 +128,7 @@ export const MediaItemAdd = ({}: PageProps) => {
   function clearAndGoBack() {
     setTitle('');
     setCategory(MediaCategoryType.Free);
+    setTags([] as any[]);
     setDescription('');
     setThumbnail('');
     goToMediaItems();
