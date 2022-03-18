@@ -49,11 +49,11 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
   const [searchIsActive, setSearchIsActive] = useState(false);
   const { tags = [] } = globalState;
-  console.log(`[AppHeaderComponent] tags: ${JSON.stringify(tags, null, 2)}`);
+  // console.log(`[AppHeaderComponent] tags: ${JSON.stringify(tags, null, 2)}`);
   const [selectedTags, setSelectedTags] = useState([]);
   const onSelectedTagsChange = (tags) => {
-    console.log('selected tags changed');
-    console.log(tags);
+    // console.log('selected tags changed');
+    // console.log(tags);
     setSelectedTags(tags);
   };
 

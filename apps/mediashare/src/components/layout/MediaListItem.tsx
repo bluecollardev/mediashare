@@ -80,7 +80,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
           )
         ) : null
       }
-      right={() => (showActions === 'right' || showActions === true) && <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} />}
+      right={() => (showActions === 'right' || showActions === true) ? <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} /> : null}
       {...rest}
     />
   );
