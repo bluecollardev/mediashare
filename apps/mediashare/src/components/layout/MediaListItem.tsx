@@ -55,7 +55,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
 
   return (
     <List.Item
-      title={title}
+      title={title || null}
       description={description}
       descriptionNumberOfLines={1}
       // It doesn't feel right to have the whole thing be a tap target when we're displaying actions on the left

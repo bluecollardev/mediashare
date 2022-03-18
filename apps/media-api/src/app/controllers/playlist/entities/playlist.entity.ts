@@ -5,6 +5,7 @@ import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { Column, Entity, Index } from 'typeorm';
 import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
+import { Tag } from '@api-core/entities/tag.entity';
 
 @Entity('playlist')
 export class Playlist extends BcEntity implements PlaylistInterface {
@@ -32,6 +33,10 @@ export class Playlist extends BcEntity implements PlaylistInterface {
   @Column('category')
   @ApiProperty({ enum: PLAYLIST_CATEGORY, name: 'category', enumName: 'PlaylistCategoryType' })
   category: PlaylistCategoryType;
+
+  @ApiProperty({ type: Tag, isArray: true, nullable: true })
+  @Column({ name: 'tags', array: true, nullable: true })
+  tags: Tag[];
 }
 
 class PlaylistResponseFields {

@@ -1,4 +1,5 @@
 import { BcEntity } from '@api-core/entities/base.entity';
+import { Tag } from '@api-core/entities/tag.entity';
 import { MediaCategoryType, MEDIA_CATEGORY, MEDIA_ITEM_ENTITY } from '@core-lib';
 import { ApiLongString, ApiObjectId, ApiString, ApiTextString, ApiUriString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
@@ -42,6 +43,10 @@ export class MediaItem extends BcEntity {
   @Column()
   @ApiProperty({ enum: MEDIA_CATEGORY, name: 'category', enumName: 'MediaCategoryType' })
   category: MediaCategoryType;
+
+  @ApiProperty({ type: Tag, isArray: true, nullable: true })
+  @Column({ name: 'tags', array: true, nullable: true })
+  tags: Tag[];
 
   @Column()
   @ApiString()

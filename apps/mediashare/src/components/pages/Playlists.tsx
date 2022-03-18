@@ -74,14 +74,15 @@ export const PlaylistsComponent = ({
           key={`playlist_${_id}`}
           title={title}
           titleStyle={styles.title}
-          description={() => (
-            <>
-              {/* <Text style={styles.author}>By {getAuthorText(creator)}</Text> */}
-              {author && <Text style={styles.username}>By @{author}</Text>}
-              <Text style={styles.description}>{shortenText(description, 52)}</Text>
-              <Text style={styles.videoCount}>{mediaIds?.length || 0} videos</Text>
-            </>
-          )}
+          description={() => {
+            return (
+              <View style={{ display: 'flex', flexDirection: 'column' }}>
+                {!!author && <Text style={styles.username}>By {author}</Text>}
+                <Text style={{ ...styles.description }}>{shortenText(description || '', 52)}</Text>
+                <Text style={{ ...styles.videoCount }}>{mediaIds?.length || 0} videos</Text>
+              </View>
+            );
+          }}
           showThumbnail={true}
           image={imageSrc}
           showActions={showActions}
