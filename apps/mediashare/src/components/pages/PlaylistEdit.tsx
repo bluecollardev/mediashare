@@ -9,13 +9,19 @@ import { PlaylistCategoryType, MediaItem } from '../../rxjs-api';
 import { usePlaylists, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Button, IconButton } from 'react-native-paper';
 import { AppUpload } from '../layout/AppUpload';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
 import { MediaCard } from '../layout/MediaCard';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
+import {
+  PageContainer,
+  KeyboardAvoidingPageContent,
+  PageActions,
+  PageProps,
+  PageContent
+} from '../layout/PageContainer';
 import { routeNames } from '../../routes';
 
 import { createRandomRenderKey } from '../../core/utils';
@@ -79,91 +85,93 @@ const PlaylistEdit = ({ navigation, route }: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent>
-        <MediaCard
-          title={title}
-          author={author}
-          description={description}
-          showThumbnail={true}
-          thumbnail={imageSrc}
-          category={category}
-          categoryOptions={options}
-          onCategoryChange={(e: any) => {
-            setCategory(e);
-          }}
-          tags={tags}
-          tagOptions={options}
-          onTagChange={(e: any) => {
-            setTags(e);
-          }}
-          onTitleChange={setTitle}
-          onDescriptionChange={setDescription}
-          isEdit={true}
-          isReadOnly={selectedItems && selectedItems.length > 0}
-          topDrawer={() =>
-            imageSrc ? (
-              <View style={styles.itemControls}>
-                <View style={{ flex: 1 }}>
-                  <Button
-                    icon="delete-forever"
-                    mode="outlined"
-                    dark
-                    color={theme.colors.default}
-                    onPress={() => console.log('Do something!')}
-                    compact
-                    style={styles.deleteItemButton}
-                  >
-                    {' '}
-                  </Button>
-                </View>
-                <View style={{ flex: 4 }}>
-                  <AppUpload uploadMode="photo" onUpload={onUpload}>
-                    <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact style={styles.changeImageButton}>
-                      <Text>Change Cover Photo</Text>
+        <ScrollView>
+          <MediaCard
+            title={title}
+            author={author}
+            description={description}
+            showThumbnail={true}
+            thumbnail={imageSrc}
+            category={category}
+            categoryOptions={options}
+            onCategoryChange={(e: any) => {
+              setCategory(e);
+            }}
+            tags={tags}
+            tagOptions={options}
+            onTagChange={(e: any) => {
+              setTags(e);
+            }}
+            onTitleChange={setTitle}
+            onDescriptionChange={setDescription}
+            isEdit={true}
+            isReadOnly={selectedItems && selectedItems.length > 0}
+            topDrawer={() =>
+              imageSrc ? (
+                <View style={styles.itemControls}>
+                  <View style={{ flex: 1 }}>
+                    <Button
+                      icon="delete-forever"
+                      mode="outlined"
+                      dark
+                      color={theme.colors.default}
+                      onPress={() => console.log('Do something!')}
+                      compact
+                      style={styles.deleteItemButton}
+                    >
+                      {' '}
                     </Button>
-                  </AppUpload>
+                  </View>
+                  <View style={{ flex: 4 }}>
+                    <AppUpload uploadMode="photo" onUpload={onUpload}>
+                      <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact style={styles.changeImageButton}>
+                        <Text>Change Cover Photo</Text>
+                      </Button>
+                    </AppUpload>
+                  </View>
                 </View>
-              </View>
-            ) : (
-              <View style={styles.itemControls}>
-                <View style={{ flex: 1 }}>
-                  <AppUpload uploadMode="photo" onUpload={onUpload}>
-                    <UploadPlaceholder buttonText="Add Cover Photo" />
-                  </AppUpload>
+              ) : (
+                <View style={styles.itemControls}>
+                  <View style={{ flex: 1 }}>
+                    <AppUpload uploadMode="photo" onUpload={onUpload}>
+                      <UploadPlaceholder buttonText="Add Cover Photo" />
+                    </AppUpload>
+                  </View>
                 </View>
-              </View>
-            )
-          }
-        />
-        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-          <IconButton
-            icon="rule"
-            color={isSelectable ? theme.colors.primary : theme.colors.disabled}
-            style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
-            onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+              )
+            }
           />
-          <Button
-            icon="playlist-add"
-            color={theme.colors.accent}
-            mode="contained"
-            style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
-            onPress={() => addToPlaylist({ playlistId })}
-            disabled={actionMode === actionModes.delete}
-            compact
-            dark
-          >
-            Add To Playlist
-          </Button>
-        </View>
-        <MediaList
-          key={clearSelectionKey}
-          onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
-          list={items}
-          selectable={isSelectable}
-          showActions={!isSelectable}
-          removeItem={onRemoveItem}
-          addItem={onAddItem}
-          showThumbnail={true}
-        />
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+            <IconButton
+              icon="rule"
+              color={isSelectable ? theme.colors.primary : theme.colors.disabled}
+              style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
+              onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+            />
+            <Button
+              icon="playlist-add"
+              color={theme.colors.accent}
+              mode="contained"
+              style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
+              onPress={() => addToPlaylist({ playlistId })}
+              disabled={actionMode === actionModes.delete}
+              compact
+              dark
+            >
+              Add To Playlist
+            </Button>
+          </View>
+          <MediaList
+            key={clearSelectionKey}
+            onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
+            list={items}
+            selectable={isSelectable}
+            showActions={!isSelectable}
+            removeItem={onRemoveItem}
+            addItem={onAddItem}
+            showThumbnail={true}
+          />
+        </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
         {!isSelectable && (

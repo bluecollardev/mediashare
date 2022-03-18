@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 
 import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
@@ -82,35 +83,37 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        <MediaCard
-          title={title}
-          author={author}
-          description={description}
-          showThumbnail={!!imageSrc}
-          thumbnail={imageSrc}
-          category={category}
-          categoryOptions={options}
-          onCategoryChange={setCategory as any}
-          tags={tags}
-          tagOptions={options}
-          onTagChange={setTags as any}
-          onTitleChange={setTitle as any}
-          onDescriptionChange={setDescription as any}
-          isEdit={true}
-          topDrawer={() =>
-            !imageSrc ? (
-              <AppUpload uploadMode="photo" onUpload={onUpload}>
-                <UploadPlaceholder buttonText="Add Cover Photo" />
-              </AppUpload>
-            ) : (
-              <AppUpload uploadMode="photo" onUpload={onUpload}>
-                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
-                  Change Cover Photo
-                </Button>
-              </AppUpload>
-            )
-          }
-        />
+        <ScrollView>
+          <MediaCard
+            title={title}
+            author={author}
+            description={description}
+            showThumbnail={!!imageSrc}
+            thumbnail={imageSrc}
+            category={category}
+            categoryOptions={options}
+            onCategoryChange={setCategory as any}
+            tags={tags}
+            tagOptions={options}
+            onTagChange={setTags as any}
+            onTitleChange={setTitle as any}
+            onDescriptionChange={setDescription as any}
+            isEdit={true}
+            topDrawer={() =>
+              !imageSrc ? (
+                <AppUpload uploadMode="photo" onUpload={onUpload}>
+                  <UploadPlaceholder buttonText="Add Cover Photo" />
+                </AppUpload>
+              ) : (
+                <AppUpload uploadMode="photo" onUpload={onUpload}>
+                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
+                    Change Cover Photo
+                  </Button>
+                </AppUpload>
+              )
+            }
+          />
+        </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
         <ActionButtons
