@@ -48,6 +48,14 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
   // console.log(`AppHeaderComponent > Dumping global state: ${JSON.stringify(globalState, null, 2)}`);
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
   const [searchIsActive, setSearchIsActive] = useState(false);
+  const { tags = [] } = globalState;
+  console.log(`[AppHeaderComponent] tags: ${JSON.stringify(tags, null, 2)}`);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const onSelectedTagsChange = (tags) => {
+    console.log('selected tags changed');
+    console.log(tags);
+    setSelectedTags(tags);
+  };
 
   const enableSearch = () => setSearchIsActive(true);
   const disableSearch = () => setSearchIsActive(false);
@@ -62,35 +70,15 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
     setSearchFilters({ text });
   };
 
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const onSelectedCategoriesChange = (categories) => {
-    setSelectedCategories(categories);
-  };
-
-  const [selectedTags, setSelectedTags] = useState([]);
-  const onSelectedTagsChange = (tags) => {
-    setSelectedTags(tags);
-  };
-
   const availableMediaTags = useMemo(
     () =>
-      [...customMediaTags, ...customMediaSubtags]
-        .filter((tag) => tag.isMediaTag)
+      [...tags]
+        .filter((tag) => tag?.isMediaTag)
         .map((tag) => ({
           id: tag?.key,
           name: tag?.value,
         })),
-    []
-  );
-
-  const availablePlaylistTags = useMemo(
-    () =>
-      [...customPlaylistTags, ...customPlaylistSubtags]
-        .filter((tag) => tag.isPlaylistTag)
-        .map((tag) => ({
-          id: tag?.key,
-          name: tag?.value,
-        })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -171,7 +159,7 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
                             onSelectedItemsChange={onSelectedTagsChange}
                             selectedItems={selectedTags}
                             expandDropDowns={false}
-                            readOnlyHeadings={true}
+                            readOnlyHeadings={false}
                             showDropDowns={true}
                             parentChipsRemoveChildren={true}
                             showCancelButton={true}
