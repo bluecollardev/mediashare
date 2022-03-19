@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyleSheet, FlatList, View } from 'react-native';
+import { TagKeyValue } from '../../../../media-api/src/app/modules/tag/dto/tag-key-value.dto';
 
 import { routeNames } from '../../routes';
 
@@ -32,7 +33,7 @@ export const MediaComponent = ({
   selectable,
   showActions = true,
   onViewDetail,
-  onChecked = () => undefined
+  onChecked = () => undefined,
 }: {
   navigation: any;
   list: MediaItemDto[];
@@ -91,19 +92,51 @@ export const Media = ({ navigation, globalState }: PageProps) => {
 
   const { loaded, entities, selected } = useAppSelector((state) => state.mediaItems);
   const [isLoaded, setIsLoaded] = useState(loaded);
+
+  const [filteredEntities, setFilteredEntities] = useState([...entities] as MediaItemDto[]);
+
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(refresh, [dispatch]);
-  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
+  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
     if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
       setPrevSearchFilters(currentSearchFilters);
-      loadData();
+      loadData().finally();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState]);
+
+  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
+  const searchTags = searchFilters.tags || [];
+  const prevSearchTagsRef = useRef(searchTags);
+  useEffect(() => {
+    // Only run this if search tags have actually changed in value
+    if (JSON.stringify(prevSearchTagsRef.current) !== JSON.stringify(searchTags)) {
+      if (Array.isArray(searchTags) && searchTags.length > 0) {
+        const filtered = entities.filter((entity) => {
+          if (Array.isArray(entity.tags) && entity.tags.length > 0) {
+            const tagKeys = entity.tags.map((tag) => tag.key);
+            const hasTag = !!searchTags
+            // Make an array of true or false values
+            .map((searchTag) => tagKeys.includes(searchTag))
+            // If there are any true values return true, we have a match
+            .find((isMatch) => isMatch === true);
+            return hasTag;
+          }
+          return false;
+        });
+        setFilteredEntities(filtered);
+      } else if (searchTags.length === 0) {
+        setFilteredEntities(entities);
+      }
+      prevSearchTagsRef.current = searchTags;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTags]);
 
   const [fabState, setState] = useState({ open: false });
   const fabActions = [
@@ -120,11 +153,11 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        {loaded && entities.length > 0 ? (
+        {loaded ? (
           <MediaComponent
             key={clearSelectionKey}
             navigation={navigation}
-            list={entities}
+            list={filteredEntities && filteredEntities.length > 0 ? filteredEntities : entities}
             showActions={!isSelectable}
             selectable={isSelectable}
             onViewDetail={onEditItem}
@@ -157,8 +190,13 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     </PageContainer>
   );
 
+  /**
+   * We use server-side filtering for text, and client-side filtering on tags.
+   * This will change once we have cloud search on tags implemented.
+   */
   async function loadData() {
     const { search } = globalState;
+
     const args = { text: search?.filters?.text ? search.filters.text : '' };
     // console.log(`Media.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
     // console.log(globalState);
@@ -201,10 +239,10 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   async function deleteItems() {
     selected.map(async (item) => {
       await dispatch(deleteMediaItem({ id: item._id, key: item.uri }));
-    }) // TODO: Find a real way to do this
+    }); // TODO: Find a real way to do this
     setTimeout(() => {
-      loadData()
-    }, 2500)
+      loadData();
+    }, 2500);
   }
 
   async function updateSelection(bool, item) {

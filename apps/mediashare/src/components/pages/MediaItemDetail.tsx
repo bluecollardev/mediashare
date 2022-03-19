@@ -8,7 +8,7 @@ const MediaItemDetail = ({}: PageProps) => {
   const mediaItem = useAppSelector((state) => state.mediaItem?.entity);
   const { title, description, category, author, uri, thumbnail } = mediaItem || {};
 
-  const tagKeys = mediaItem?.tags.map((tag) => tag.key);
+  const tagKeys = (mediaItem?.tags || []).map((tag) => tag.key);
 
   return (
     <PageContainer>

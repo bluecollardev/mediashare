@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { routeNames } from '../../routes';
@@ -101,19 +101,22 @@ export const Playlists = ({ globalState }: PageProps) => {
   // TODO: Type check entities and selected?
   // TODO: Clean up this area!
   const [{ loaded }] = useLoadPlaylistData();
-  const { entities = [] as any[], selected = [] as any[] } = useAppSelector((state) => state.userPlaylists);
   const [isLoaded, setIsLoaded] = useState(loaded);
+
+  const { entities = [] as any[], selected = [] as any[] } = useAppSelector((state) => state?.userPlaylists);
+  const [filteredEntities, setFilteredEntities] = useState([...entities] as PlaylistResponseDto[]);
+
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(refresh, [dispatch]);
-  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
+  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
     if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
       setPrevSearchFilters(currentSearchFilters);
-      loadData();
+      loadData().finally();
     }
   }, [isLoaded, globalState]);
 
@@ -129,13 +132,41 @@ export const Playlists = ({ globalState }: PageProps) => {
     clearCheckboxSelection();
   }, []);
 
+  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
+  const searchTags = searchFilters.tags || [];
+  const prevSearchTagsRef = useRef(searchTags);
+  useEffect(() => {
+    // Only run this if search tags have actually changed in value
+    if (JSON.stringify(prevSearchTagsRef.current) !== JSON.stringify(searchTags)) {
+      if (Array.isArray(searchTags) && searchTags.length > 0) {
+        const filtered = entities.filter((entity) => {
+          if (Array.isArray(entity.tags) && entity.tags.length > 0) {
+            const tagKeys = entity.tags.map((tag) => tag.key);
+            const hasTag = !!searchTags
+              // Make an array of true or false values
+              .map((searchTag) => tagKeys.includes(searchTag))
+              // If there are any true values return true, we have a match
+              .find((isMatch) => isMatch === true);
+            return hasTag;
+          }
+          return false;
+        });
+        setFilteredEntities(filtered);
+      } else if (searchTags.length === 0) {
+        setFilteredEntities(entities);
+      }
+      prevSearchTagsRef.current = searchTags;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTags]);
+
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        {loaded && entities.length > 0 ? (
+        {loaded ? (
           <PlaylistsComponent
             key={clearSelectionKey}
-            list={entities}
+            list={filteredEntities && filteredEntities.length > 0 ? filteredEntities : entities}
             onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
             selectable={isSelectable}
             showActions={!isSelectable}

@@ -49,24 +49,10 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
   const { tags = [] } = globalState;
   // console.log(`[AppHeaderComponent] tags: ${JSON.stringify(tags, null, 2)}`);
   const [selectedTags, setSelectedTags] = useState([]);
-  const onSelectedTagsChange = (tags) => {
-    // console.log('selected tags changed');
-    // console.log(tags);
-    setSelectedTags(tags);
-  };
-
-  const enableSearch = () => setSearchIsActive(true);
-  const disableSearch = () => setSearchIsActive(false);
 
   const placeholder = `Search ${title}`;
 
   const [searchText, setSearchText] = useState('');
-  const updateSearchText = (text) => {
-    const { setSearchFilters } = globalState;
-    // TODO: We have to throttle this!
-    setSearchText(text);
-    setSearchFilters({ text });
-  };
 
   const availableMediaTags = useMemo(
     () =>
@@ -260,6 +246,36 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
       )}
     </Appbar.Header>
   );
+
+  function onSelectedTagsChange(tags) {
+    // console.log('selected tags changed');
+    // console.log(tags);
+    setSelectedTags(tags);
+    updateSearchTags(tags);
+  }
+
+  function enableSearch() {
+    setSearchIsActive(true);
+  }
+  function disableSearch() {
+    setSearchIsActive(false);
+  }
+
+  // TODO: Throttle the search we don't want this poppin' off more than it needs to
+  function updateSearchText(searchText) {
+    const { setSearchFilters } = globalState;
+    // Set the in-component state value
+    setSearchText(searchText);
+    // Set the global value
+    setSearchFilters({ text: searchText, tags: [...selectedTags] });
+  }
+
+  function updateSearchTags(searchTags = []) {
+    const { setSearchFilters } = globalState;
+    // Set the in-component state value
+    // Set the global value
+    setSearchFilters({ text: searchText, tags: [...searchTags] });
+  }
 };
 
 export const AppHeader = withGlobalStateConsumer(AppHeaderComponent);

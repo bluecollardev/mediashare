@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
@@ -22,20 +22,48 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { PageContainer, PageActions, PageProps, PageContent } from '../layout/PageContainer';
 
 export const AddToPlaylist = ({ route, globalState }: PageProps) => {
-  const dispatch = useDispatch();
+  const { playlistId } = route.params;
 
+  const dispatch = useDispatch();
   const viewMediaItem = useViewMediaItem();
   const goBack = useGoBack();
 
   const playlist = useAppSelector((state) => state.playlist.selected);
 
-  const mediaItemState: MediaListType[] = useAppSelector((state) => state.mediaItems.entities);
+  const mediaItemEntities: MediaListType[] = useAppSelector((state) => state.mediaItems.entities);
+  const [filteredMediaItemEntities, setFilteredMediaItemEntities] = useState([...mediaItemEntities] as MediaListType[]);
 
   const [loaded, setIsLoaded] = useState(false);
   // @ts-ignore
   const [mediaItems, setMediaItems] = useState((playlist?.mediaItems as MediaListType[]) || []);
 
-  const { playlistId } = route.params;
+  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
+  const searchTags = searchFilters.tags || [];
+  const prevSearchTagsRef = useRef(searchTags);
+  useEffect(() => {
+    // Only run this if search tags have actually changed in value
+    if (JSON.stringify(prevSearchTagsRef.current) !== JSON.stringify(searchTags)) {
+      if (Array.isArray(searchTags) && searchTags.length > 0) {
+        const filtered = mediaItemEntities.filter((entity) => {
+          if (Array.isArray(entity.tags) && entity.tags.length > 0) {
+            const tagKeys = entity.tags.map((tag) => tag.key);
+            const hasTag = !!searchTags
+              // Make an array of true or false values
+              .map((searchTag) => tagKeys.includes(searchTag))
+              // If there are any true values return true, we have a match
+              .find((isMatch) => isMatch === true);
+            return hasTag;
+          }
+          return false;
+        });
+        setFilteredMediaItemEntities(filtered);
+      } else if (searchTags.length === 0) {
+        setFilteredMediaItemEntities(mediaItemEntities);
+      }
+      prevSearchTagsRef.current = searchTags;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTags]);
 
   useEffect(() => {
     if (!loaded) {
@@ -52,7 +80,7 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   return (
     <PageContainer>
       <PageContent>
-        <FlatList data={mediaItemState} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
+        <FlatList data={filteredMediaItemEntities && filteredMediaItemEntities.length > 0 ? filteredMediaItemEntities : mediaItemEntities} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
       </PageContent>
       <PageActions>
         <ActionButtons actionCb={actionCb} rightIcon="check-circle" actionLabel="Save" cancelLabel="Cancel" cancelCb={cancelCb} />

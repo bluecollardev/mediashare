@@ -20,6 +20,7 @@ export const GlobalState = React.createContext<GlobalStateProps>({} as GlobalSta
 
 export const INITIAL_SEARCH_FILTERS = {
   text: '',
+  tags: [],
 };
 
 export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
