@@ -14,12 +14,12 @@ import { UpdatePlaylistDto } from '../../rxjs-api';
 import { useGoBack, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { theme } from '../../styles';
 import { shortenText } from '../../utils';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+// import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
-import { MediaList, MediaListType } from '../layout/MediaList';
+import { MediaListType } from '../layout/MediaList';
 import { MediaListItem } from '../layout/MediaListItem';
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageActions, PageProps, PageContent } from '../layout/PageContainer';
 
 export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   const dispatch = useDispatch();
@@ -51,19 +51,26 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
 
   return (
     <PageContainer>
-      <View>
-        <FlatList
-          data={mediaItemState}
-          renderItem={({ item }) => renderVirtualizedListItem(item)}
-          keyExtractor={({ _id }) => `playlist_${_id}`}
-        />
-      </View>
+      <PageContent>
+        <FlatList data={mediaItemState} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
+      </PageContent>
       <PageActions>
         <ActionButtons actionCb={actionCb} rightIcon="check-circle" actionLabel="Save" cancelLabel="Cancel" cancelCb={cancelCb} />
       </PageActions>
     </PageContainer>
   );
 
+  /**
+   * <MediaList
+   list={mediaItemState}
+   showThumbnail={true}
+   selectable={true}
+   onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
+   addItem={(e) => updateMediaItemsList(true, e)}
+   removeItem={(e) => updateMediaItemsList(false, e)}
+   />
+   * @param item
+   */
   function renderVirtualizedListItem(item) {
     const { _id = '', title = '', author = '', description = '', mediaIds = [], thumbnail = '' } = item;
     return (
@@ -82,16 +89,13 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
             );
           }}
           image={thumbnail}
-          // showActions={showActions}
-          // selectable={selectable}
-          // onViewDetail={() => onViewDetailClicked(item)}
-          // onChecked={(checked) => onChecked(checked, item)}
-          // Fix these
           showThumbnail={true}
           selectable={true}
-          // onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
-          // addItem={(e) => updateMediaItemsList(true, e)}
-          // removeItem={(e) => updateMediaItemsList(false, e)}
+          showActions={true}
+          onViewDetail={() => {
+            viewMediaItem({ mediaId: item._id, uri: item.uri }).finally();
+          }}
+          onChecked={(v) => (v ? addItem(item) : removeItem(item))}
         />
         <Divider key={`playlist_divider_${item._id}`} />
       </>
@@ -118,6 +122,14 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   function cancelCb() {
     setIsLoaded(false);
     goBack();
+  }
+
+  function addItem(e) {
+    return updateMediaItemsList(true, e);
+  }
+
+  function removeItem(e) {
+    return updateMediaItemsList(false, e);
   }
 
   function updateMediaItemsList(bool: boolean, mediaItem: MediaListType) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 
-import { Avatar, Button, Card, Divider, IconButton, Paragraph, Title, Text } from 'react-native-paper';
+import { Avatar, Button, Card, Chip, Divider, IconButton, Paragraph, Title, Text } from 'react-native-paper';
 import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
@@ -279,6 +279,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             borderRadius={3}
           />
         </Card>
+        <View>{children}</View>
+        {/* Description can be the longest field so we've moved it to last when we're in edit mode */}
         <Card elevation={elevation} style={{ marginBottom: 25 }}>
           <TextField
             style={{ height: 500, overflow: 'scroll' }}
@@ -291,7 +293,6 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             disabled={isReadOnly}
           />
         </Card>
-        <View>{children}</View>
       </View>
     </View>
   ) : (
@@ -322,46 +323,15 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         right={(buttonProps: any) => showActions && <IconButton {...buttonProps} icon="more-vert" onPress={onActionsClicked} />}
       />
       <Card.Content style={{ marginBottom: 25 }}>
-        <SectionedMultiSelect
-          colors={{
-            primary: theme.colors.primary,
-            text: '#fff',
-            subText: '#fff',
-            searchPlaceholderTextColor: '#fff',
-            selectToggleTextColor: '#fff',
-            searchSelectionColor: '#fff',
-            itemBackground: 'transparent',
-            subItemBackground: 'transparent',
-          }}
-          styles={{
-            searchTextInput: {
-              color: '#fff',
-            },
-            searchBar: {
-              backgroundColor: '#000',
-            },
-            container: {
-              backgroundColor: '#000',
-            },
-          }}
-          disabled={false}
-          items={availableMediaTags}
-          IconRenderer={MultiSelectIcon}
-          uniqueKey="id"
-          subKey="children"
-          searchPlaceholderText="Enter Text"
-          selectText="Update Tags"
-          confirmText="Done"
-          expandDropDowns={false}
-          readOnlyHeadings={false}
-          showDropDowns={true}
-          parentChipsRemoveChildren={false}
-          showCancelButton={true}
-          modalWithTouchable={true}
-          modalWithSafeAreaView={true}
-          onSelectedItemsChange={onSelectedTagsChange}
-          selectedItems={selectedTags}
-        />
+        <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+          {Array.isArray(selectedTags) &&
+            selectedTags.length > 0 &&
+            selectedTags.map((selectedTag, idx) => (
+              <View key={`${selectedTag}_${idx}`} style={{ flex: 0, marginLeft: 3, marginRight: 3 }}>
+                <Chip>{selectedTag}</Chip>
+              </View>
+            ))}
+        </View>
       </Card.Content>
       {!showSocial && (
         <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>

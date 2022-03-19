@@ -5,7 +5,7 @@ import { withGlobalStateConsumer } from '../../core/globalState/index';
 import { useAppSelector } from '../../store';
 import { getPlaylistById, updateUserPlaylist } from '../../store/modules/playlists';
 
-import { PlaylistCategoryType, MediaItem } from '../../rxjs-api';
+import { PlaylistCategoryType, MediaItem, MediaCategoryType } from '../../rxjs-api';
 
 import { usePlaylists, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
@@ -45,8 +45,8 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   const [title, setTitle] = useState(selected?.title);
   const [description, setDescription] = useState(selected?.description);
   const [category, setCategory] = useState(selected?.category);
-  const initialTagKeys = selected?.tags.map((tag) => tag.key);
-  const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
+  const playlistTags = getPlaylistTags();
+  const [selectedTagKeys, setSelectedTagKeys] = useState(playlistTags);
   const [selectedItems, setSelectedItems] = useState([]);
   // @ts-ignore
   const [imageSrc, setImageSrc] = useState(selected?.imageSrc);
@@ -139,37 +139,38 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
                 </View>
               )
             }
-          />
-          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-            <IconButton
-              icon="rule"
-              color={isSelectable ? theme.colors.primary : theme.colors.disabled}
-              style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
-              onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+          >
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+              <IconButton
+                icon="rule"
+                color={isSelectable ? theme.colors.primary : theme.colors.disabled}
+                style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
+                onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+              />
+              <Button
+                icon="playlist-add"
+                color={theme.colors.accent}
+                mode="contained"
+                style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
+                onPress={() => addToPlaylist({ playlistId })}
+                disabled={actionMode === actionModes.delete}
+                compact
+                dark
+              >
+                Add To Playlist
+              </Button>
+            </View>
+            <MediaList
+              key={clearSelectionKey}
+              onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
+              list={items}
+              selectable={isSelectable}
+              showActions={!isSelectable}
+              removeItem={onRemoveItem}
+              addItem={onAddItem}
+              showThumbnail={true}
             />
-            <Button
-              icon="playlist-add"
-              color={theme.colors.accent}
-              mode="contained"
-              style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
-              onPress={() => addToPlaylist({ playlistId })}
-              disabled={actionMode === actionModes.delete}
-              compact
-              dark
-            >
-              Add To Playlist
-            </Button>
-          </View>
-          <MediaList
-            key={clearSelectionKey}
-            onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
-            list={items}
-            selectable={isSelectable}
-            showActions={!isSelectable}
-            removeItem={onRemoveItem}
-            addItem={onAddItem}
-            showThumbnail={true}
-          />
+          </MediaCard>
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
@@ -190,20 +191,22 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
     </PageContainer>
   );
 
+  function getPlaylistTags() {
+    return selected?.tags?.map((tag) => (tag ? tag?.key : undefined)).filter((tag) => !!tag) || [];
+  }
+
   async function saveWithIds(mediaIds: string[]) {
-    /* const selectedTags = tags.map((tag) => {
-      return {
-        tag
-      }
-    }) */
-    return dispatch(
+    // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
+    // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
+    const selectedTags = selectedTagKeys.map((key) => tags.find((tag) => tag.key === key)).map(({ key, value }) => ({ key, value }));
+    await dispatch(
       updateUserPlaylist({
-        title: title,
-        mediaIds,
-        description: description,
-        category: category as any,
-        tags: selectedTagKeys as any[],
         _id: selected._id,
+        title,
+        description,
+        mediaIds,
+        category: MediaCategoryType[category as any],
+        tags: (selectedTags || []) as any[],
         imageSrc,
       })
     );

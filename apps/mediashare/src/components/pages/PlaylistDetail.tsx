@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { withGlobalStateConsumer } from '../../core/globalState/index';
 
 import { routeNames } from '../../routes';
@@ -13,19 +13,18 @@ import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { Button, FAB, Divider } from 'react-native-paper';
+import { Button, FAB, Divider, Chip } from 'react-native-paper';
 
+import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import AppDialog from '../layout/AppDialog';
 import { MediaCard } from '../layout/MediaCard';
 import { MediaList } from '../layout/MediaList';
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 
 import { PlaylistResponseDto } from '../../rxjs-api';
 
 import * as build from '../../build';
 
 import { theme } from '../../styles';
-import { View } from 'react-native';
 
 export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps) => {
   const { tags = [] } = globalState;
@@ -110,7 +109,8 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
               setSelectedTagKeys(e);
             }}
           >
-            <Button
+            {/* TODO: Make this work and add it back in! */}
+            {/* <Button
               icon="live-tv"
               color={theme.colors.default}
               mode="outlined"
@@ -121,7 +121,29 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
             >
               Play From Beginning
             </Button>
-            <Divider />
+            <Divider /> */}
+            {!build.forFreeUser && allowEdit && (
+              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+                {/*<IconButton
+              icon="rule"
+              color={isSelectable ? theme.colors.primary : theme.colors.disabled}
+              style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
+              onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+            />*/}
+                <Button
+                  icon="playlist-add"
+                  color={theme.colors.primary}
+                  mode="contained"
+                  style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
+                  onPress={() => addToPlaylist({ playlistId })}
+                  // disabled={actionMode === actionModes.delete}
+                  compact
+                  dark
+                >
+                  Add To Playlist
+                </Button>
+              </View>
+            )}
             <MediaList
               onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
               list={items}
@@ -130,29 +152,6 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
               selectable={false}
             />
           </MediaCard>
-          <Divider />
-          {!build.forFreeUser && allowEdit && (
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-              {/*<IconButton
-              icon="rule"
-              color={isSelectable ? theme.colors.primary : theme.colors.disabled}
-              style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
-              onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
-            />*/}
-              <Button
-                icon="playlist-add"
-                color={theme.colors.accent}
-                mode="contained"
-                style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
-                onPress={() => addToPlaylist({ playlistId })}
-                // disabled={actionMode === actionModes.delete}
-                compact
-                dark
-              >
-                Add To Playlist
-              </Button>
-            </View>
-          )}
         </ScrollView>
       </PageContent>
       <PageActions>

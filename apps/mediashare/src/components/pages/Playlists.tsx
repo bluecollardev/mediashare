@@ -54,11 +54,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
-  return (
-    <View>
-      <FlatList data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
-    </View>
-  );
+  return <FlatList data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />;
 
   function renderVirtualizedListItem(item) {
     const { _id = '', title = '', author = '', description = '', mediaIds = [], imageSrc = '' } = item;
