@@ -326,11 +326,14 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
           {Array.isArray(selectedTags) &&
             selectedTags.length > 0 &&
-            selectedTags.map((selectedTag, idx) => (
-              <View key={`${selectedTag}_${idx}`} style={{ flex: 0, marginLeft: 3, marginRight: 3 }}>
-                <Chip>{selectedTag}</Chip>
-              </View>
-            ))}
+            selectedTags.map((selectedTagKey, idx) => {
+              const mappedTag = availableMediaTags.find(({ id }) => id === selectedTagKey);
+              return (
+                <View key={`${selectedTagKey}_${idx}`} style={{ flex: 0, marginLeft: 3, marginRight: 3 }}>
+                  <Chip>{mappedTag?.name || 'Unknown'}</Chip>
+                </View>
+              );
+            })}
         </View>
       </Card.Content>
       {!showSocial && (
