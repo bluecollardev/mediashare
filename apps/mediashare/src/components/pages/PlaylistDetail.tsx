@@ -48,7 +48,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     selected || {};
   const items = mediaItems || [];
 
-  const initialTagKeys = selected?.tags.map((tag) => tag.key);
+  const initialTagKeys = (selected?.tags || []).map((tag) => tag.key);
   const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
 
   useEffect(() => {
