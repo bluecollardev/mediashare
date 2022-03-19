@@ -73,9 +73,10 @@ export class MediaItemController {
   @MediaGetResponse()
   @ApiParam({ name: 'mediaId', type: String, required: true })
   async findOne(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId) {
-    const mediaItem = await this.mediaItemService.findMediaItemWithDetail(mediaId);
-    if (!mediaItem) throw notFoundResponse('mediaItem', { args: { mediaId } });
-    return mediaItem;
+    const response = await this.mediaItemService.findMediaItemWithDetail(mediaId);
+    if (!response) throw notFoundResponse('mediaItem', { args: { mediaId } });
+    console.log(`[MediaItemController.findOne] response: ${JSON.stringify(response, null, 2)}`);
+    return response;
   }
 
   @MediaPostResponse()

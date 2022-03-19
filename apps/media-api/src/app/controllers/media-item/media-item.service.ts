@@ -46,16 +46,20 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
       $replaceRoot: {
         newRoot: {
           _id: '$_id',
-          author: '$user.username',
-          description: '$description',
-          category: '$category',
           title: '$title',
+          description: '$description',
+          author: '$user.username',
           userId: '$userId',
           uri: '$uri',
           thumbnail: '$thumbnail',
+          category: '$category',
+          tags: '$tags',
           shareCount: { $size: '$shareItems' },
           likesCount: { $size: '$likeItems' },
-          viewCount: { $size: '$viewItems' }
+          viewCount: { $size: '$viewItems' },
+          createdAt: '$createdAt',
+          createdBy: '$user._id',
+          updatedDate: '$updatedDate',
         }
       }
     }

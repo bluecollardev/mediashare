@@ -51,7 +51,9 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
     src: getStorage(uri),
   }).toPromise();
   apis.views.viewsControllerCreateMediaView({ mediaId }).pipe(take(1)).subscribe();
-  return { mediaItem: result.mediaItem as MediaItemDto, src: result.src };
+  const response = { mediaItem: result.mediaItem as MediaItemDto, src: result.src };
+  console.log(`[getMediaItemById] response: ${JSON.stringify(response, null, 2)}`);
+  return response;
 });
 
 export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {

@@ -6,8 +6,6 @@ import { MultiSelectIcon } from '../form/MultiSelect';
 import { withGlobalStateConsumer, GlobalStateProps } from '../../core/globalState';
 import themeStyles, { theme } from '../../styles';
 
-import { customMediaTags, customMediaSubtags, customPlaylistTags, customPlaylistSubtags } from '../../data/tags';
-
 export interface AppHeaderProps {
   options?: any;
   back?: any;
@@ -234,7 +232,7 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
                                 // styles.confirmText
                               ]}
                             >
-                              Update Search
+                              Done
                             </Text>
                           </View>
                         </TouchableWithoutFeedback>

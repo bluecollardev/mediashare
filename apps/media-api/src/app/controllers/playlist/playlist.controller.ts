@@ -61,6 +61,7 @@ export class PlaylistController {
   @PlaylistGetResponse({ type: PlaylistResponseDto })
   async findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
     const response = await this.playlistService.getPlaylistById({ playlistId });
+    console.log(`[PlaylistController.findOne] response: ${JSON.stringify(response, null, 2)}`);
     return response;
   }
 
