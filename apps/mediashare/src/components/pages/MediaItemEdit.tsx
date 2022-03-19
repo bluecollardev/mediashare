@@ -48,38 +48,19 @@ const MediaItemEdit = ({ navigation, route, globalState = { tags: [] } }: PagePr
   const [title, setTitle] = useState(mediaItem?.title);
   const [description, setDescription] = useState(mediaItem?.description);
   const [category, setCategory] = useState();
-  const initialTagKeys = mediaItem?.tags?.map((tag) => tag.key) || [];
-  const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
+  const mediaItemTags = getItemTags();
+  const [selectedTagKeys, setSelectedTagKeys] = useState(mediaItemTags);
   const [documentUri] = useState(mediaItem?.uri);
   const [thumbnail, setThumbnail] = useState(mediaItem?.thumbnail);
   const mediaItems = useMediaItems();
 
-  const resetData = () => {};
-  const cancelCb = () => {
-    navigation.goBack();
-    resetData();
-  };
-  const saveItem = async function () {
-    const dto: UpdateMediaItemDto & { _id } = {
-      _id: mediaId,
-      title,
-      description,
-      thumbnail,
-      isPlayable: true,
-      category: MediaCategoryType[category as any],
-      tags: tags || [],
-    };
-
-    await dispatch(updateMediaItem(dto));
-    mediaItems();
-  };
-
   useEffect(() => {
     if (mediaItem) {
+      const mediaItemTags = (mediaItem?.tags || []).map(({ key }) => key);
       setTitle(mediaItem?.title);
       setDescription(mediaItem?.description);
       setCategory(mediaItem?.category as any);
-      setSelectedTagKeys(mediaItem?.tags as any[]);
+      setSelectedTagKeys(mediaItemTags as any[]);
     }
   }, [mediaItem]);
   if (!mediaItem) {
@@ -156,9 +137,38 @@ const MediaItemEdit = ({ navigation, route, globalState = { tags: [] } }: PagePr
     </PageContainer>
   );
 
+  function getItemTags() {
+    return mediaItem?.tags?.map((tag) => (tag ? tag?.key : undefined)).filter((tag) => !!tag) || [];
+  }
+
+  function resetData() {}
+
+  function cancelCb() {
+    navigation.goBack();
+    resetData();
+  }
+
+  async function saveItem() {
+    // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
+    // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
+    const selectedTags = selectedTagKeys.map((key) => tags.find((tag) => tag.key === key)).map(({ key, value }) => ({ key, value }));
+    const dto: UpdateMediaItemDto & { _id } = {
+      _id: mediaId,
+      title,
+      description,
+      thumbnail,
+      isPlayable: true,
+      category: MediaCategoryType[category as any],
+      tags: selectedTags || [],
+    };
+
+    await dispatch(updateMediaItem(dto));
+    mediaItems().finally();
+  }
+
   async function deleteItem() {
     await dispatch(deleteMediaItem({ id: mediaId, key: mediaItem.uri }));
-    mediaItems();
+    mediaItems().finally();
   }
 };
 

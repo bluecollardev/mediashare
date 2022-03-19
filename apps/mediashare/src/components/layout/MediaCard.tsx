@@ -135,6 +135,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   const [selectedTags, setSelectedTags] = useState(tags);
   const onSelectedTagsChange = (tags) => {
     setSelectedTags(tags);
+    onTagChange(tags);
   };
 
   const availableMediaTags = useMemo(
