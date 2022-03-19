@@ -4,7 +4,6 @@ import { CreateMediaItemDto } from '../controllers/media-item/dto/create-media-i
 import { MediaItem } from '../controllers/media-item/entities/media-item.entity';
 import { CreateUserDto } from '../controllers/user/dto/create-user.dto';
 import { User } from '../controllers/user/entities/user.entity';
-import { CreatePlaylistItemDto } from '@api-modules/playlist-item/dto/create-playlist-item.dto';
 
 import * as R from 'remeda';
 import { Playlist } from '../controllers/playlist/entities/playlist.entity';
@@ -79,14 +78,6 @@ export class UserFactory extends DataFn {
     return new playlistMixin();
   }
 
-  createPlaylistItemDto() {
-    return {};
-  }
-
-  createSharedItem() {
-    return {};
-  }
-
   createMediaDto(): CreateMediaItemDto {
     return {
       summary: Faker.lorem.lines(),
@@ -94,6 +85,7 @@ export class UserFactory extends DataFn {
       isPlayable: Faker.random.boolean(),
       description: Faker.lorem.lines(),
       category: 'paid',
+      tags: [],
       key: '',
       thumbnail: '',
       uri: '',
