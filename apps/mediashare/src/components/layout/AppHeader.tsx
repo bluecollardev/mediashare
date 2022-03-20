@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, SafeAreaView, Modal, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-native';
 import { Appbar, Card, Portal, Searchbar, Text, IconButton } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { MultiSelectIcon } from '../form/MultiSelect';
@@ -57,6 +57,7 @@ const AppHeaderComponent = ({
 }: AppHeaderProps) => {
   // console.log(`AppHeaderComponent > Dumping global state: ${JSON.stringify(globalState, null, 2)}`);
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
+  const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
   const [searchIsActive, setSearchIsActive] = useState(false);
   // console.log(`[AppHeaderComponent] tags: ${JSON.stringify(tags, null, 2)}`);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -247,7 +248,11 @@ const AppHeaderComponent = ({
 
       {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
       {showDisplayControls && renderDisplayControls()}
-      <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18 }} />
+      <Appbar.Content
+        title={title}
+        titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginRight: searchable && searchIsFiltering ? '-30%' : '0%' }}
+      />
+      {searchable && searchIsFiltering && <Appbar.Action icon="filter-list" color={theme.colors.primary} onPress={() => enableSearch()} />}
       {searchable && !searchIsActive && <Appbar.Action icon="search" color="#ffffff" onPress={() => enableSearch()} />}
     </Appbar.Header>
   );
