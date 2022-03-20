@@ -10,9 +10,9 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withGlobalStateConsumer } from '../../core/globalState';
 
-import { RefreshControl, ScrollView } from 'react-native';
+import { FlatList, RefreshControl, ScrollView } from 'react-native';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import { List, Text, Button } from 'react-native-paper';
+import { List, Text, Button, Appbar } from 'react-native-paper';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -40,11 +40,9 @@ export const SharedArticles = () => {
   // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
 
   return (
-    <ScrollView contentContainerStyle={styles.tabContent}>
-      <List.Section>
-        <List.Subheader>Latest Articles</List.Subheader>
-      </List.Section>
-    </ScrollView>
+    <List.Section>
+      <List.Subheader>Latest Articles</List.Subheader>
+    </List.Section>
   );
 };
 
@@ -67,11 +65,7 @@ export const SharedList = () => {
   const viewPlaylistAction = useViewPlaylistById();
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item.playlistId });
 
-  return (
-    <ScrollView contentContainerStyle={styles.tabContent}>
-      <PlaylistsComponent list={sortedList} onViewDetailClicked={viewPlaylist} />
-    </ScrollView>
-  );
+  return <PlaylistsComponent list={sortedList} onViewDetailClicked={viewPlaylist} />;
 };
 export const SharedBlock = () => {
   const randomKey = createRandomRenderKey();
@@ -84,45 +78,43 @@ export const SharedBlock = () => {
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item.playlistId });
 
   return (
-    <ScrollView contentContainerStyle={styles.tabContent}>
-      <List.Section>
-        {sortedList.map((item) => {
-          // @ts-ignore
-          const { playlistId, title, description, author, imageSrc, sharedCount, sharesCount, likesCount } = item;
-          return (
-            <View key={`shared_block_${randomKey}_${playlistId}`} style={{ padding: 0, paddingTop: 0 }}>
-              <MediaCard
-                elevation={1}
-                title={title}
-                author={author}
-                description={description}
-                category={'General'}
-                tags={['General']}
-                thumbnail={imageSrc}
-                showSocial={true}
-                showActions={false}
-                showThumbnail={true}
-                shares={sharesCount}
-                views={sharedCount}
-                likes={likesCount}
+    <List.Section>
+      {sortedList.map((item) => {
+        // @ts-ignore
+        const { playlistId, title, description, author, imageSrc, sharedCount, sharesCount, likesCount } = item;
+        return (
+          <View key={`shared_block_${randomKey}_${playlistId}`} style={{ padding: 0, paddingTop: 0 }}>
+            <MediaCard
+              elevation={1}
+              title={title}
+              author={author}
+              description={description}
+              category={'General'}
+              tags={['General']}
+              thumbnail={imageSrc}
+              showSocial={true}
+              showActions={false}
+              showThumbnail={true}
+              shares={sharesCount}
+              views={sharedCount}
+              likes={likesCount}
+            >
+              <Button
+                icon="live-tv"
+                color={theme.colors.primary}
+                mode="contained"
+                style={{ width: '100%', marginBottom: 10 }}
+                compact
+                dark
+                onPress={() => viewPlaylist(item)}
               >
-                <Button
-                  icon="live-tv"
-                  color={theme.colors.primary}
-                  mode="contained"
-                  style={{ width: '100%', marginBottom: 10 }}
-                  compact
-                  dark
-                  onPress={() => viewPlaylist(item)}
-                >
-                  Watch Now
-                </Button>
-              </MediaCard>
-            </View>
-          );
-        })}
-      </List.Section>
-    </ScrollView>
+                Watch Now
+              </Button>
+            </MediaCard>
+          </View>
+        );
+      })}
+    </List.Section>
   );
 };
 
@@ -152,14 +144,14 @@ export const Browse = ({ globalState }: PageProps) => {
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
 
   useEffect(() => {
-    loadData();
+    loadData().finally();
   }, []);
 
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
     if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
       setPrevSearchFilters(currentSearchFilters);
-      loadData();
+      loadData().finally();
     }
   }, [isLoaded, globalState]);
 
@@ -174,34 +166,6 @@ export const Browse = ({ globalState }: PageProps) => {
       />
     </PageContainer>
   );
-
-  function renderTabBar(props) {
-    return (
-      <View>
-        <View style={styles.tabBar}>
-          {props.navigationState.routes.map((route, i) => {
-            return (
-              <TouchableOpacity
-                key={`tab_${i}-${route.name}`}
-                style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem}
-                onPress={() => setIndex(i)}
-              >
-                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                  <MaterialIcons
-                    name={route.icon}
-                    color={props.navigationState.index === i ? theme.colors.text : theme.colors.disabled}
-                    size={26}
-                    style={{ marginRight: 10 }}
-                  />
-                  <Text style={{ fontWeight: 'bold' }}>{route.title}</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
-    );
-  }
 
   async function loadData() {
     const { search } = globalState;
@@ -232,6 +196,34 @@ export const Browse = ({ globalState }: PageProps) => {
       await dispatch(getUserPlaylists({}));
     }
     setRefreshing(false);
+  }
+
+  function renderTabBar(props) {
+    return (
+      <View>
+        <View style={styles.tabBar}>
+          {props.navigationState.routes.map((route, i) => {
+            return (
+              <TouchableOpacity
+                key={`tab_${i}-${route.name}`}
+                style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem}
+                onPress={() => setIndex(i)}
+              >
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                  {/* <MaterialIcons
+                    name={route.icon}
+                    color={props.navigationState.index === i ? theme.colors.text : theme.colors.disabled}
+                    size={26}
+                    style={{ marginRight: 10 }}
+                  />
+                  <Text style={{ fontWeight: 'bold' }}>{route.title}</Text> */}
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    );
   }
 };
 

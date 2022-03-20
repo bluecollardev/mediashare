@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, SafeAreaView, Modal, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { Appbar, Card, Portal, Searchbar, Text, IconButton } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { MultiSelectIcon } from '../form/MultiSelect';
@@ -11,6 +11,7 @@ export interface AppHeaderProps {
   back?: any;
   navigation?: any;
   searchable?: boolean;
+  showDisplayControls?: boolean;
   globalState?: GlobalStateProps;
 }
 
@@ -42,7 +43,7 @@ const BackdropView = (props) => {
   );
 };
 
-const AppHeaderComponent = ({ options, back, navigation, searchable = false, globalState }: AppHeaderProps) => {
+const AppHeaderComponent = ({ options, back, navigation, searchable = false, showDisplayControls = false, globalState }: AppHeaderProps) => {
   // console.log(`AppHeaderComponent > Dumping global state: ${JSON.stringify(globalState, null, 2)}`);
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
   const [searchIsActive, setSearchIsActive] = useState(false);
@@ -231,19 +232,11 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
           </SafeAreaView>
         </Portal>
       )}
-      {searchable && !searchIsActive && (
-        <>
-          {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
-          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingLeft: '15%' }} />
-          <Appbar.Action icon="search" color="#ffffff" onPress={() => enableSearch()} />
-        </>
-      )}
-      {!searchable && (
-        <>
-          {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
-          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingRight: back ? '15%' : 0 }} />
-        </>
-      )}
+
+      {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
+      {showDisplayControls && renderDisplayControls()}
+      <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18 }} />
+      {searchable && !searchIsActive && <Appbar.Action icon="search" color="#ffffff" onPress={() => enableSearch()} />}
     </Appbar.Header>
   );
 
@@ -261,6 +254,13 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
     setSearchIsActive(false);
   }
 
+  function viewAsList() {
+    setSearchIsActive(true);
+  }
+  function viewAsArticles() {
+    setSearchIsActive(false);
+  }
+
   // TODO: Throttle the search we don't want this poppin' off more than it needs to
   function updateSearchText(searchText) {
     const { setSearchFilters } = globalState;
@@ -275,6 +275,15 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
     // Set the in-component state value
     // Set the global value
     setSearchFilters({ text: searchText, tags: [...searchTags] });
+  }
+
+  function renderDisplayControls() {
+    return (
+      <>
+        <Appbar.Action icon="view-list" color="#ffffff" onPress={() => viewAsList()} />
+        {/* <Appbar.Action icon="article" color="#ffffff" onPress={() => viewAsArticles()} /> */}
+      </>
+    );
   }
 };
 

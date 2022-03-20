@@ -37,57 +37,22 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const user = useAppSelector((state) => state.profile.entity);
+  const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
+  const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
+  const fullName = state?.firstName || state?.lastName ? `${state?.firstName} ${state?.lastName}` : 'Unnamed User';
+
   useEffect(() => {
     async function loadData() {
-      const result = (await dispatch(loadProfile(userId))) as any;
-      setState(result.payload);
+      const profile = (await dispatch(loadProfile(userId))) as any;
+      setState(profile.payload);
       setIsLoaded(true);
     }
     if (!isLoaded) {
-      loadData();
+      loadData().finally();
     }
-  });
-
-  const user = useAppSelector((state) => state.profile.entity);
-  const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
-  const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
-
-  // eslint-disable-next-line no-shadow
-  const onUpdate = (user: Partial<UserDto>) => {
-    setState({ ...state, ...user });
-  };
-
-  const getDocument = async function () {
-    launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
-      if (!res.assets) {
-        return;
-      }
-      const image = res.assets[0];
-      const thumbnailKey = thumbnailRoot + image.fileName;
-      fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
-        // eslint-disable-next-line no-shadow
-        const image = awsUrl + res.key;
-        setState({ ...state, imageSrc: image });
-      });
-    });
-  };
-  const cancel = () => {
-    setState(user);
-    viewAccount({ userId });
-  };
-
-  const save = function () {
-    const updateUserDto = state;
-    from(dispatch(updateAccount({ updateUserDto, userId })))
-      .pipe(
-        switchMap(() => dispatch(loadProfile(userId))),
-        switchMap(() => dispatch(loadUser())),
-        take(1)
-      )
-      .subscribe(() => viewAccount({ userId }));
-  };
-
-  const fullName = state?.firstName || state?.lastName ? `${state?.firstName} ${state?.lastName}` : 'Unnamed User';
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <PageContainer>
@@ -100,10 +65,10 @@ const AccountEdit = ({ route }: AccountEditProps) => {
           likes={state?.likesCount}
           shared={state?.sharedCount}
           shares={state?.sharesCount}
-          onProfileImageClicked={() => getDocument()}
           showSocial={true}
           showActions={true}
           isCurrentUser={true}
+          onProfileImageClicked={() => getDocument()}
         />
       </View>
       <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.container}>
@@ -122,6 +87,45 @@ const AccountEdit = ({ route }: AccountEditProps) => {
       />
     </PageContainer>
   );
+
+  // eslint-disable-next-line no-shadow
+  function onUpdate(user: Partial<UserDto>) {
+    setState({ ...state, ...user });
+  }
+
+  async function getDocument() {
+    launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
+      if (!res.assets) {
+        return;
+      }
+      const image = res.assets[0];
+      const thumbnailKey = thumbnailRoot + image.fileName;
+      fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
+        // eslint-disable-next-line no-shadow
+        const image = awsUrl + res.key;
+        setState({ ...state, imageSrc: image });
+      });
+    });
+  }
+
+  function cancel() {
+    setState(user);
+    viewAccount({ userId });
+  }
+
+  function save() {
+    const updateUserDto = state;
+    // @ts-ignore
+    from(dispatch(updateAccount({ updateUserDto, userId })))
+      .pipe(
+        // @ts-ignore
+        switchMap(() => dispatch(loadProfile(userId))),
+        // @ts-ignore
+        switchMap(() => dispatch(loadUser())),
+        take(1)
+      )
+      .subscribe(() => viewAccount({ userId }));
+  }
 };
 
 const styles = StyleSheet.create({

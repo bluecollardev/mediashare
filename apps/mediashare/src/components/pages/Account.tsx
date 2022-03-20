@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { useDispatch } from 'react-redux';
 import { TabView } from 'react-native-tab-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import * as R from 'remeda';
+import { from } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
+import Config from '../../config';
 
 import { routeNames } from '../../routes';
 
 import { useAppSelector } from '../../store';
-import { logout } from '../../store/modules/user';
+import { thumbnailRoot } from '../../store/modules/media-items/key-factory';
+import { fetchAndPutToS3 } from '../../store/modules/media-items/storage';
+import { loadUser, logout, updateAccount } from '../../store/modules/user';
 import { loadUsers } from '../../store/modules/users';
 import { loadProfile } from '../../store/modules/profile';
 import { findMediaItems } from '../../store/modules/media-items';
@@ -33,18 +40,12 @@ import styles, { theme } from '../../styles';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
   // const manageContact = useRouteName(routeNames.user);
-  const contacts = useAppSelector((state) => state.users.entities);
   const viewProfileById = useViewProfileById();
 
+  const contacts = useAppSelector((state) => state.users.entities);
   return contacts ? (
     <ScrollView>
-      <ContactList
-        contacts={contacts}
-        showGroups={false}
-        showActions={showActions}
-        onViewDetail={viewProfileById}
-        selectable={selectable}
-      />
+      <ContactList contacts={contacts} showGroups={false} showActions={showActions} onViewDetail={viewProfileById} selectable={selectable} />
     </ScrollView>
   ) : null;
 };
@@ -73,9 +74,14 @@ const renderScene = (sceneComponentProps) => ({ route }) => {
 
 const actionModes = { delete: 'delete', default: 'default' };
 
+const awsUrl = Config.AWS_URL;
+
 export const Account = ({ globalState }: PageProps) => {
-  const layout = useWindowDimensions();
+  const viewAccount = useRouteWithParams(routeNames.account);
   const editProfile = useRouteWithParams(routeNames.accountEdit);
+
+  const layout = useWindowDimensions();
+
   const [index, setIndex] = useState(0);
   // const { setLoaded, onView, onDelete } = useProfile();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -91,6 +97,8 @@ export const Account = ({ globalState }: PageProps) => {
   const [routes] = React.useState(tabs);
 
   const user = useAppSelector((state) => state.user);
+  const userId = user?._id || null;
+  const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
   const dispatch = useDispatch();
 
@@ -143,6 +151,7 @@ export const Account = ({ globalState }: PageProps) => {
         showSocial={true}
         showActions={false}
         isCurrentUser={true}
+        onProfileImageClicked={() => getDocument()}
       />
       <Divider />
       {/* <Highlights highlights={state.highlights} /> */}
@@ -185,8 +194,39 @@ export const Account = ({ globalState }: PageProps) => {
     await dispatch(findMediaItems(args));
     await dispatch(loadUsers());
     // @ts-ignore
-    await dispatch(loadProfile());
+    const profile = (await dispatch(loadProfile(userId))) as any;
+    setState(profile.payload);
     setIsLoaded(true);
+    setIsLoaded(true);
+  }
+
+  async function getDocument() {
+    launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
+      if (!res.assets) {
+        return;
+      }
+      const image = res.assets[0];
+      const thumbnailKey = thumbnailRoot + image.fileName;
+      fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
+        // eslint-disable-next-line no-shadow
+        const image = awsUrl + res.key;
+        setState({ ...state, imageSrc: image });
+      });
+    });
+  }
+
+  function save() {
+    const updateUserDto = state;
+    // @ts-ignore
+    from(dispatch(updateAccount({ updateUserDto, userId })))
+      .pipe(
+        // @ts-ignore
+        switchMap(() => dispatch(loadProfile(userId))),
+        // @ts-ignore
+        switchMap(() => dispatch(loadUser())),
+        take(1)
+      )
+      .subscribe(() => viewAccount({ userId }));
   }
 
   async function accountLogout() {
