@@ -43,11 +43,21 @@ const BackdropView = (props) => {
   );
 };
 
-const AppHeaderComponent = ({ options, back, navigation, searchable = false, showDisplayControls = false, globalState }: AppHeaderProps) => {
+const AppHeaderComponent = ({
+  options,
+  back,
+  navigation,
+  searchable = false,
+  showDisplayControls = false,
+  globalState = {
+    displayMode: 'list',
+    setDisplayMode: (value) => undefined,
+    tags: [],
+  },
+}: AppHeaderProps) => {
   // console.log(`AppHeaderComponent > Dumping global state: ${JSON.stringify(globalState, null, 2)}`);
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
   const [searchIsActive, setSearchIsActive] = useState(false);
-  const { tags = [] } = globalState;
   // console.log(`[AppHeaderComponent] tags: ${JSON.stringify(tags, null, 2)}`);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -57,7 +67,7 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, sho
 
   const availableMediaTags = useMemo(
     () =>
-      [...tags]
+      [...globalState?.tags]
         .filter((tag) => tag?.isMediaTag)
         .map((tag) => ({
           id: tag?.key,
@@ -66,6 +76,8 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, sho
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
+  const [displayMode, setDisplayMode] = useState(globalState?.displayMode);
 
   // console.log(`AppHeader > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
 
@@ -255,10 +267,12 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, sho
   }
 
   function viewAsList() {
-    setSearchIsActive(true);
+    setDisplayMode('list');
+    globalState?.setDisplayMode('list');
   }
   function viewAsArticles() {
-    setSearchIsActive(false);
+    setDisplayMode('article');
+    globalState?.setDisplayMode('article');
   }
 
   // TODO: Throttle the search we don't want this poppin' off more than it needs to
@@ -280,8 +294,8 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, sho
   function renderDisplayControls() {
     return (
       <>
-        <Appbar.Action icon="view-list" color="#ffffff" onPress={() => viewAsList()} />
-        {/* <Appbar.Action icon="article" color="#ffffff" onPress={() => viewAsArticles()} /> */}
+        {displayMode === 'article' && <Appbar.Action icon="view-list" color="#ffffff" onPress={() => viewAsList()} />}
+        {displayMode === 'list' && <Appbar.Action icon="article" color="#ffffff" onPress={() => viewAsArticles()} />}
       </>
     );
   }

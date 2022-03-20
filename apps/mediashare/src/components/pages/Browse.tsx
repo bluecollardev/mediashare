@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../store';
@@ -10,41 +10,16 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withGlobalStateConsumer } from '../../core/globalState';
 
-import { FlatList, RefreshControl, ScrollView } from 'react-native';
-import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import { List, Text, Button, Appbar } from 'react-native-paper';
-import { SceneMap, TabView } from 'react-native-tab-view';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { ScrollView, View } from 'react-native';
+import { List, Button } from 'react-native-paper';
 
-import { PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
+import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/MediaCard';
 import { PlaylistsComponent } from './Playlists';
 
 import { filterUnique } from '../../utils';
-import styles, { theme } from '../../styles';
+import { theme } from '../../styles';
 import { createRandomRenderKey } from '../../core/utils';
-
-export interface BrowseProps {
-  list: PlaylistResponseDto[];
-  onViewDetailClicked: Function;
-}
-
-export const SharedArticles = () => {
-  const { sharedItems } = useAppSelector((state) => state?.user);
-  const [isLoaded, setIsLoaded] = useState(false);
-  // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
-  // const list = filterUnique(sharedItems, 'title') || [];
-
-  let sortedList = sharedItems.map((item) => item);
-  sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
-  // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
-
-  return (
-    <List.Section>
-      <List.Subheader>Latest Articles</List.Subheader>
-    </List.Section>
-  );
-};
 
 export const SharedList = () => {
   const { sharedItems } = useAppSelector((state) => state?.user);
@@ -118,29 +93,16 @@ export const SharedBlock = () => {
   );
 };
 
-const renderScene = SceneMap({
-  list: SharedList,
-  // grid: SharedGrid,
-  block: SharedBlock,
-  // articles: SharedArticles,
-});
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const Browse = ({ globalState }: PageProps) => {
-  const layout = useWindowDimensions();
-
+export const Browse = ({
+  globalState = {
+    displayMode: 'list',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setDisplayMode: (value) => undefined,
+  },
+}: PageProps) => {
   const dispatch = useDispatch();
 
   const [isLoaded, setIsLoaded] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [index, setIndex] = useState(0);
-  const [routes] = React.useState([
-    { key: 'list', title: '', icon: 'view-list' },
-    { key: 'block', title: '', icon: 'article' },
-    // { key: 'grid', title: '', icon: 'apps' },
-  ]);
-
-  const onRefresh = useCallback(refresh, [dispatch]);
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
 
   useEffect(() => {
@@ -153,17 +115,13 @@ export const Browse = ({ globalState }: PageProps) => {
       setPrevSearchFilters(currentSearchFilters);
       loadData().finally();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState]);
 
   return (
     <PageContainer>
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        renderTabBar={(props) => renderTabBar(props)}
-        initialLayout={{ width: layout.width, height: layout.height }}
-      />
+      {globalState?.displayMode === 'list' && <SharedList />}
+      {globalState?.displayMode === 'article' && <ScrollView><SharedBlock /></ScrollView>}
     </PageContainer>
   );
 
@@ -180,50 +138,6 @@ export const Browse = ({ globalState }: PageProps) => {
       await dispatch(getUserPlaylists({}));
     }
     setIsLoaded(true);
-  }
-
-  async function refresh() {
-    setRefreshing(true);
-    const { search } = globalState;
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Playlists.refresh > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
-    // console.log(globalState);
-    if (search.filters.text) {
-      // console.log('Dispatch findPlaylists');
-      await dispatch(findPlaylists(args));
-    } else {
-      // console.log('Dispatch getUserPlaylists');
-      await dispatch(getUserPlaylists({}));
-    }
-    setRefreshing(false);
-  }
-
-  function renderTabBar(props) {
-    return (
-      <View>
-        <View style={styles.tabBar}>
-          {props.navigationState.routes.map((route, i) => {
-            return (
-              <TouchableOpacity
-                key={`tab_${i}-${route.name}`}
-                style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem}
-                onPress={() => setIndex(i)}
-              >
-                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                  {/* <MaterialIcons
-                    name={route.icon}
-                    color={props.navigationState.index === i ? theme.colors.text : theme.colors.disabled}
-                    size={26}
-                    style={{ marginRight: 10 }}
-                  />
-                  <Text style={{ fontWeight: 'bold' }}>{route.title}</Text> */}
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
-    );
   }
 };
 

@@ -14,6 +14,8 @@ export interface GlobalStateProps {
   search?: any;
   setSearchFilters?: Function;
   tags?: Tag[];
+  displayMode?: 'list' | 'article';
+  setDisplayMode: (value) => void;
 }
 
 export const GlobalState = React.createContext<GlobalStateProps>({} as GlobalStateProps);
@@ -22,6 +24,8 @@ export const INITIAL_SEARCH_FILTERS = {
   text: '',
   tags: [],
 };
+
+export const INITIAL_DISPLAY_MODE = 'list';
 
 export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
   return function GlobalStateProvider(props: any) {
@@ -33,6 +37,7 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
     const authenticatedAndLoggedIn = user?._id?.length > 0;
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authenticatedAndLoggedIn);
     const [searchFilters, setSearchFilters] = useState(INITIAL_SEARCH_FILTERS);
+    const [displayMode, setDisplayMode] = useState(INITIAL_DISPLAY_MODE);
 
     const dispatch = useDispatch();
 
@@ -73,6 +78,8 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
           filters: { ...searchFilters },
         },
         tags,
+        displayMode,
+        setDisplayMode,
       } as GlobalStateProps;
       return value;
     }
