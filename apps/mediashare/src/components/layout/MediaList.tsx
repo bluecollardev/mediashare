@@ -62,7 +62,7 @@ export const MediaList = ({
 const defaultStyles = StyleSheet.create({
   titleText: {
     color: theme.colors.text,
-    fontSize: 16,
+    fontSize: 14,
   },
   description: {
     color: theme.colors.textDarker,
