@@ -7,7 +7,7 @@ import { makeEnum } from '../../core/factory';
 
 import { ApiService } from '../../apis';
 import { CreatePlaylistDto, UpdatePlaylistDto, CreatePlaylistResponseDto, PlaylistResponseDto, PlaylistItemResponseDto } from '../../../rxjs-api';
-import { reducePendingState, reduceRejectedState } from '../../helpers';
+import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '../../helpers';
 
 const PLAYLIST_ACTIONS = [
   'GET_USER_PLAYLIST',
@@ -122,26 +122,42 @@ const playlistSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(addUserPlaylist.pending, reducePendingState())
-      .addCase(addUserPlaylist.fulfilled, (state, action) => {
-        return { ...state, created: action.payload };
-      })
+      .addCase(addUserPlaylist.rejected, reduceRejectedState())
+      .addCase(
+        addUserPlaylist.fulfilled,
+        reduceFulfilledState((state, action) => {
+          return { ...state, created: action.payload };
+        })
+      )
       .addCase(clearPlaylistAction, (state) => {
         return { ...state, created: undefined };
       })
-      .addCase(getPlaylistById.pending, (state) => {
-        return { ...state, selected: undefined };
-      })
+      .addCase(
+        getPlaylistById.pending,
+        reducePendingState((state) => {
+          return { ...state, selected: undefined };
+        })
+      )
       .addCase(getPlaylistById.rejected, reduceRejectedState())
-      .addCase(getPlaylistById.fulfilled, (state, action) => {
-        return { ...state, selected: action.payload };
-      })
-      .addCase(removeUserPlaylist.pending, (state) => {
-        return { ...state, selected: undefined };
-      })
+      .addCase(
+        getPlaylistById.fulfilled,
+        reduceFulfilledState((state, action) => {
+          return { ...state, selected: action.payload };
+        })
+      )
+      .addCase(
+        removeUserPlaylist.pending,
+        reducePendingState((state) => {
+          return { ...state, selected: undefined };
+        })
+      )
       .addCase(removeUserPlaylist.rejected, reduceRejectedState())
-      .addCase(removeUserPlaylist.fulfilled, (state) => {
-        return { ...state, selected: undefined };
-      });
+      .addCase(
+        removeUserPlaylist.fulfilled,
+        reduceFulfilledState((state) => {
+          return { ...state, selected: undefined };
+        })
+      );
   },
 });
 
@@ -165,18 +181,22 @@ const playlistsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getUserPlaylists.pending, (state, action) => {
-        return { ...state, entities: action.payload };
-      })
-      .addCase(getUserPlaylists.fulfilled, (state, action) => {
-        return { ...state, entities: action.payload };
-      })
-      .addCase(findPlaylists.pending, (state, action) => {
-        return { ...state, entities: action.payload };
-      })
-      .addCase(findPlaylists.fulfilled, (state, action) => {
-        return { ...state, entities: action.payload };
-      })
+      .addCase(getUserPlaylists.pending, reducePendingState())
+      .addCase(getUserPlaylists.rejected, reduceRejectedState())
+      .addCase(
+        getUserPlaylists.fulfilled,
+        reduceFulfilledState((state, action) => {
+          return { ...state, entities: action.payload, loading: false, loaded: true };
+        })
+      )
+      .addCase(findPlaylists.pending, reducePendingState())
+      .addCase(findPlaylists.rejected, reduceRejectedState())
+      .addCase(
+        findPlaylists.fulfilled,
+        reduceFulfilledState((state, action) => {
+          return { ...state, entities: action.payload, loading: false, loaded: true };
+        })
+      )
       .addCase(selectPlaylistAction, (state, action) => {
         const updateSelection = function (bool: boolean, item: PlaylistResponseDto | PlaylistItemResponseDto) {
           const { selected } = state;

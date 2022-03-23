@@ -90,11 +90,16 @@ export const Media = ({ navigation, globalState }: PageProps) => {
 
   const dispatch = useDispatch();
 
-  const { loaded, entities, selected } = useAppSelector((state) => state.mediaItems);
+  const { loading, loaded, entities, selected } = useAppSelector((state) => state.mediaItems);
   const [isLoaded, setIsLoaded] = useState(loaded);
+  useEffect(() => {
+    if (loaded && !isLoaded) {
+      setIsLoaded(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded]);
 
   const [filteredEntities, setFilteredEntities] = useState([...entities] as MediaItemDto[]);
-
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
@@ -153,7 +158,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        {loaded ? (
+        {isLoaded ? (
           <MediaComponent
             key={clearSelectionKey}
             navigation={navigation}
@@ -164,7 +169,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
             onChecked={updateSelection}
           />
         ) : (
-          <NoItems />
+          <NoItems text={loading ? 'Loading...' : 'Please import or upload a media item.'} />
         )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.delete && (
@@ -198,10 +203,9 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     const { search } = globalState;
 
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Media.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+    console.log(`[Media.loadData] Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
     // console.log(globalState);
-    dispatch(findMediaItems(args));
-    setIsLoaded(true);
+    await dispatch(findMediaItems(args));
   }
 
   async function refresh() {

@@ -298,17 +298,20 @@ const mediaItemsSlice = createSlice({
     builder
       .addCase(findMediaItems.pending, reducePendingState())
       .addCase(findMediaItems.rejected, reduceRejectedState())
-      .addCase(findMediaItems.fulfilled, (state, action) => {
-        return {
-          ...state,
-          entities: action.payload,
-          loading: false,
-          loaded: true,
-        };
-      })
-      .addCase(loadUserMediaItems.fulfilled, (state, action) => {
-        return { ...state, mediaItems: action.payload };
-      })
+      .addCase(
+        findMediaItems.fulfilled,
+        reduceFulfilledState((state, action) => {
+          return { ...state, entities: action.payload, loading: false, loaded: true };
+        })
+      )
+      .addCase(loadUserMediaItems.pending, reducePendingState())
+      .addCase(loadUserMediaItems.rejected, reduceRejectedState())
+      .addCase(
+        loadUserMediaItems.fulfilled,
+        reduceFulfilledState((state, action) => {
+          return { ...state, mediaItems: action.payload, loading: false, loaded: true };
+        })
+      )
       .addCase(selectMediaItem, (state, action) => {
         const updateSelection = function (bool: boolean, item: MediaItemDto) {
           const { selected } = state;

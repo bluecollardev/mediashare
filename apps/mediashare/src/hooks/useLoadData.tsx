@@ -13,8 +13,9 @@ export function useLoadData({ action }: { action: any }) {
       await dispatch(action({}));
     };
     if (!loaded) {
-      loadData();
-      setLoaded(true);
+      loadData().then(() => {
+        setLoaded(true);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);

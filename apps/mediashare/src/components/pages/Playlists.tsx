@@ -98,14 +98,16 @@ export const Playlists = ({ globalState }: PageProps) => {
 
   // TODO: A generic data loader is a good idea, but we can do it later, use useAppSelector for now
   // const [{ state, loaded }] = useLoadPlaylistData();
-  // TODO: Type check entities and selected?
-  // TODO: Clean up this area!
-  const [{ loaded }] = useLoadPlaylistData();
+  const { loading, loaded, entities = [] as any[], selected = [] as any[] } = useAppSelector((state) => state?.userPlaylists);
   const [isLoaded, setIsLoaded] = useState(loaded);
+  useEffect(() => {
+    if (loaded && !isLoaded) {
+      setIsLoaded(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded]);
 
-  const { entities = [] as any[], selected = [] as any[] } = useAppSelector((state) => state?.userPlaylists);
   const [filteredEntities, setFilteredEntities] = useState([...entities] as PlaylistResponseDto[]);
-
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
@@ -118,6 +120,7 @@ export const Playlists = ({ globalState }: PageProps) => {
       setPrevSearchFilters(currentSearchFilters);
       loadData().then();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState]);
 
   const [fabState, setFabState] = useState({ open: false });
@@ -163,7 +166,7 @@ export const Playlists = ({ globalState }: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        {loaded ? (
+        {isLoaded ? (
           <PlaylistsComponent
             key={clearSelectionKey}
             list={filteredEntities && filteredEntities.length > 0 ? filteredEntities : entities}
@@ -173,7 +176,7 @@ export const Playlists = ({ globalState }: PageProps) => {
             onChecked={updateSelection}
           />
         ) : (
-          <NoItems />
+          <NoItems text={loading ? 'Loading...' : 'You have not created any playlists yet.'} />
         )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
@@ -208,13 +211,12 @@ export const Playlists = ({ globalState }: PageProps) => {
     // console.log(`Playlists.loadData > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
     // console.log(globalState);
     if (search.filters.text) {
-      // console.log('Dispatch findPlaylists');
+      console.log('[Playlists.loadData] Dispatch findPlaylists');
       await dispatch(findPlaylists(args));
     } else {
-      // console.log('Dispatch getUserPlaylists');
+      console.log('[Playlists.loadData] Dispatch getUserPlaylists');
       await dispatch(getUserPlaylists({}));
     }
-    setIsLoaded(true);
   }
 
   async function refresh() {
