@@ -147,7 +147,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
               />
               <Button
                 icon="playlist-add"
-                color={theme.colors.accent}
+                color={theme.colors.primary}
                 mode="contained"
                 style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
                 onPress={() => addToPlaylist({ playlistId })}
