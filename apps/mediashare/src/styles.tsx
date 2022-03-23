@@ -44,7 +44,6 @@ const styles: any = StyleSheet.create({
     height: 41, // Make sure actionButtons is the same height!
     backgroundColor: 'transparent',
   },
-
   mediaListItem: {
     display: 'flex',
     flexDirection: 'row',

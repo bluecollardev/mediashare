@@ -61,7 +61,7 @@ export const MediaComponent = ({
           description={
             <>
               {author && <Text style={styles.username}>By @{author}</Text>}
-              <Text style={styles.description}>{shortenText(description, 52)}</Text>
+              <Text style={styles.description}>{shortenText(description || '', 80)}</Text>
             </>
           }
           showThumbnail={true}

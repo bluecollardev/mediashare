@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { withGlobalStateConsumer } from '../../core/globalState/index';
 
 import { routeNames } from '../../routes';
@@ -13,7 +13,7 @@ import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
-import { Button, FAB, Divider, Chip } from 'react-native-paper';
+import { FAB } from 'react-native-paper';
 import { ActionButtons } from '../layout/ActionButtons';
 
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
@@ -27,6 +27,7 @@ import * as build from '../../build';
 
 import { theme } from '../../styles';
 
+// @ts-ignore
 export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps) => {
   const { tags = [] } = globalState;
   const { playlistId = '' } = route?.params || {};
@@ -195,6 +196,8 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     goToShareWith();
   }
 
+  // TODO: This is unused! Implement or remove ASAP!
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function cancelSharePlaylist() {
     dispatch(selectPlaylistAction({ isChecked: false, plist: selected as PlaylistResponseDto }));
   }

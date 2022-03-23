@@ -63,12 +63,12 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
         <MediaListItem
           key={`playlist_${_id}`}
           title={title}
-          titleStyle={styles.title}
+          titleStyle={styles.titleText}
           description={() => {
             return (
               <View style={{ display: 'flex', flexDirection: 'column' }}>
                 {!!author && <Text style={styles.username}>By {author}</Text>}
-                <Text style={{ ...styles.description }}>{shortenText(description || '', 52)}</Text>
+                <Text style={{ ...styles.description }}>{shortenText(description || '', 80)}</Text>
                 <Text style={{ ...styles.videoCount }}>{mediaIds?.length || 0} videos</Text>
               </View>
             );
@@ -291,8 +291,10 @@ export const Playlists = ({ globalState }: PageProps) => {
 export default withLoadingSpinner(withGlobalStateConsumer(Playlists));
 
 const styles = StyleSheet.create({
-  title: {
+  titleText: {
     marginBottom: 2,
+    color: theme.colors.text,
+    fontSize: 14,
   },
   author: {
     color: theme.colors.textDarker,

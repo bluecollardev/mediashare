@@ -115,7 +115,7 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
             return (
               <View style={{ display: 'flex', flexDirection: 'column' }}>
                 {!!author && <Text style={styles.username}>By {author}</Text>}
-                <Text style={{ ...styles.description }}>{shortenText(description || '', 52)}</Text>
+                <Text style={{ ...styles.description }}>{shortenText(description || '', 80)}</Text>
                 <Text style={{ ...styles.videoCount }}>{mediaIds?.length || 0} videos</Text>
               </View>
             );

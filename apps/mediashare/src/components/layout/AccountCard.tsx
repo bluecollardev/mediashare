@@ -41,7 +41,7 @@ export const AccountCard = ({
   const [state] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
   // <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />
-  // <View styles={styles.buttonContainer}>
+  // <View styles={defaultStyles.buttonContainer}>
   //   <IconButton icon="delete-outline" color={theme.colors.text} size={20} onPress={onDelete} />
   //   <IconButton icon="play-circle-filled" color={theme.colors.text} size={20} onPress={onView} />
   // </View>
@@ -50,7 +50,7 @@ export const AccountCard = ({
     <>
       <Card mode="elevated">
         <Card.Title
-          style={styles.header}
+          style={defaultStyles.header}
           left={() =>
             image ? (
               <TouchableWithoutFeedback onPress={onProfileImageClicked}>
@@ -62,11 +62,11 @@ export const AccountCard = ({
               </TouchableWithoutFeedback>
             )
           }
-          leftStyle={styles.left}
-          title={<Title style={styles.titleText}>{title}</Title>}
-          titleStyle={styles.title}
-          subtitle={<Subheading style={styles.subtitleText}>{email}</Subheading>}
-          subtitleStyle={styles.subtitle}
+          leftStyle={defaultStyles.left}
+          title={<Title style={defaultStyles.titleText}>{title}</Title>}
+          titleStyle={defaultStyles.title}
+          subtitle={<Subheading style={defaultStyles.subtitleText}>{email}</Subheading>}
+          subtitleStyle={defaultStyles.subtitle}
           right={() =>
             showActions ? (
               <Menu
@@ -83,7 +83,7 @@ export const AccountCard = ({
               </Menu>
             ) : null
           }
-          rightStyle={styles.right}
+          rightStyle={defaultStyles.right}
         />
         <Card.Content>
           {withoutName() && (
@@ -97,16 +97,16 @@ export const AccountCard = ({
           )}
         </Card.Content>
         {showSocial && (
-          <View style={styles.social}>
-            <View style={styles.labelledElement}>
+          <View style={defaultStyles.social}>
+            <View style={defaultStyles.labelledElement}>
               <Subheading>{likes}</Subheading>
               <Caption>Likes</Caption>
             </View>
-            <View style={styles.labelledElement}>
+            <View style={defaultStyles.labelledElement}>
               <Subheading>{shares}</Subheading>
               <Caption>Shares</Caption>
             </View>
-            <View style={styles.labelledElement}>
+            <View style={defaultStyles.labelledElement}>
               <Subheading>{shared}</Subheading>
               <Caption>Shared</Caption>
             </View>
@@ -117,7 +117,7 @@ export const AccountCard = ({
   );
 };
 
-const styles = StyleSheet.create({
+const defaultStyles = StyleSheet.create({
   header: {
     paddingTop: 30,
     paddingBottom: 10,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: theme.colors.text,
-    fontSize: 18,
+    fontSize: 16,
   },
   subtitleText: {
     fontSize: 11,

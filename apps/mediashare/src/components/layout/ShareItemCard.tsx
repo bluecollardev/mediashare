@@ -25,7 +25,7 @@ export function ShareItemCard({ date, title, onDelete, onView, onChecked, image,
       <MediaListItem
         key={title}
         title={title}
-        titleStyle={styles.title}
+        titleStyle={styles.titleText}
         description={
           <View style={styles.description}>
             <MaterialIcons style={styles.visibilityIcon} name={read ? 'visibility' : 'visibility-off'} size={16} />
@@ -49,8 +49,10 @@ export function ShareItemCard({ date, title, onDelete, onView, onChecked, image,
 }
 
 const styles = StyleSheet.create({
-  title: {
+  titleText: {
     marginBottom: 4,
+    color: theme.colors.text,
+    fontSize: 14,
   },
   description: {
     display: 'flex',

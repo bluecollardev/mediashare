@@ -38,9 +38,10 @@ export const MediaList = ({
           <View key={`item_${_id}`}>
             <MediaListItem
               title={title}
+              titleStyle={defaultStyles.titleText}
               description={
                 <>
-                  <Text style={styles.description}>{shortenText(description, 52)}</Text>
+                  <Text style={defaultStyles.description}>{shortenText(description || '', 80)}</Text>
                 </>
               }
               image={thumbnail}
@@ -58,7 +59,11 @@ export const MediaList = ({
   );
 };
 
-const styles = StyleSheet.create({
+const defaultStyles = StyleSheet.create({
+  titleText: {
+    color: theme.colors.text,
+    fontSize: 16,
+  },
   description: {
     color: theme.colors.textDarker,
     fontSize: 12,

@@ -306,22 +306,22 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       </View>
     </View>
   ) : (
-    <Card style={styles.card} elevation={elevation}>
+    <Card style={defaultStyles.card} elevation={elevation}>
       <DisplayPreviewOrVideo />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <Card.Title
         style={{ marginTop: 25, marginBottom: 25 }}
-        title={<Title>{title}</Title>}
-        titleStyle={styles.title}
+        title={<Title style={defaultStyles.titleText}>{title}</Title>}
+        titleStyle={defaultStyles.title}
         // TODO: Stupid component doesn't render right on Android if we use a View to wrap, but then the whole f*cking thing appears on a single line!
         subtitle={
-          <View style={styles.subtitle}>
-            <Text style={styles.author}>By {getAuthorText(creator)}</Text>
-            <Text style={styles.username}>{getUsername(creator)}</Text>
+          <View style={defaultStyles.subtitle}>
+            <Text style={defaultStyles.author}>By {getAuthorText(creator)}</Text>
+            <Text style={defaultStyles.username}>{getUsername(creator)}</Text>
           </View>
         }
-        subtitleStyle={styles.subtitle}
-        leftStyle={styles.avatar}
+        subtitleStyle={defaultStyles.subtitle}
+        leftStyle={defaultStyles.avatar}
         left={() =>
           showThumbnail &&
           creator?.imageSrc && (
@@ -351,7 +351,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           {showThumbnail && thumbnail && <Card.Cover source={{ uri: thumbnail }} />}
           {children}
           <Divider />
-          <Paragraph style={styles.description}>{description}</Paragraph>
+          <Paragraph style={defaultStyles.description}>{description}</Paragraph>
         </Card.Content>
       )}
       {showSocial && (
@@ -360,7 +360,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             <SocialButtons likes={likes} shares={shares} views={views} />
           </View>
           {children}
-          <Paragraph style={styles.descriptionWithSocial}>{description}</Paragraph>
+          <Paragraph style={defaultStyles.descriptionWithSocial}>{description}</Paragraph>
         </Card.Content>
       )}
     </Card>
@@ -376,12 +376,16 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   }
 };
 
-const styles = StyleSheet.create({
+const defaultStyles = StyleSheet.create({
   avatar: {
     width: 50,
   },
   title: {
     marginBottom: 4,
+  },
+  titleText: {
+    color: theme.colors.text,
+    fontSize: 16,
   },
   subtitle: {
     display: 'flex',
