@@ -15,32 +15,32 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
         from: 'user',
         localField: 'userId',
         foreignField: '_id',
-        as: 'user'
-      }
+        as: 'user',
+      },
     },
     {
       $lookup: {
         from: 'share_item',
         localField: '_id',
         foreignField: 'mediaId',
-        as: 'shareItems'
-      }
+        as: 'shareItems',
+      },
     },
     {
       $lookup: {
         from: 'view_item',
         localField: '_id',
         foreignField: 'mediaId',
-        as: 'viewItems'
-      }
+        as: 'viewItems',
+      },
     },
     {
       $lookup: {
         from: 'like_item',
         localField: '_id',
         foreignField: 'mediaId',
-        as: 'likeItems'
-      }
+        as: 'likeItems',
+      },
     },
     {
       $replaceRoot: {
@@ -60,9 +60,9 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
           createdAt: '$createdAt',
           createdBy: '$user._id',
           updatedDate: '$updatedDate',
-        }
-      }
-    }
+        },
+      },
+    },
   ];
   constructor(
     @InjectRepository(MediaItem)
@@ -77,9 +77,9 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
     return this.repository.find({
       where: {
         $or: map(idStrings, (id) => ({
-          _id: id
-        }))
-      }
+          _id: id,
+        })),
+      },
     });
   }
 
@@ -90,7 +90,7 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
   findMediaItemsByUserId(userId: ObjectId) {
     return this.repository
       .aggregate([
-        { $match: { createdBy: userId } }
+        { $match: { createdBy: userId } },
 
         // {
         //   $lookup: {
@@ -122,7 +122,36 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
     return this.repository.aggregate([...MediaItemService.SEARCH_FIELDS, { $sort: { likesCount: -1 } }]).toArray();
   }
 
-  searchMediaItems({ query }: { query: string }) {
-    return this.repository.aggregate([{ $match: { $text: { $search: query } } }, { $sort: { score: { $meta: 'textScore' } } }]).toArray();
+  searchMediaItems({ query, tags }: { query: string; tags?: string[] }) {
+    const buildAggregateQuery = () => {
+      let aggregateQuery = [];
+      if (query) {
+        aggregateQuery = aggregateQuery.concat([
+          {
+            $match: {
+              $text: { $search: query },
+            },
+          },
+        ]);
+      }
+      if (tags) {
+        aggregateQuery = aggregateQuery.concat([
+          {
+            $addFields: {
+              matchedTags: '$tags.key',
+            },
+          },
+          {
+            $match: {
+              // createdBy: userId,
+              matchedTags: { $in: tags },
+            },
+          },
+        ]);
+      }
+      return aggregateQuery;
+    };
+
+    return this.repository.aggregate([...buildAggregateQuery(), { $sort: { score: { $meta: 'textScore' } } }]).toArray();
   }
 }

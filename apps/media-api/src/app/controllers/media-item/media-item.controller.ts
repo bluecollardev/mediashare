@@ -58,9 +58,12 @@ export class MediaItemController {
 
   @Get()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
+  @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
   @MediaGetResponse({ isArray: true })
-  findAll(@Query('text') query?: string) {
-    return query ? this.mediaItemService.searchMediaItems({ query }) : this.mediaItemService.findAll();
+  findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
+    const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
+
+    return query || tags ? this.mediaItemService.searchMediaItems({ query, tags: parsedTags }) : this.mediaItemService.findAll();
   }
 
   @Get('categories')

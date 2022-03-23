@@ -157,27 +157,28 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             $match: {
               $text: { $search: query },
             },
-          }
-        ])
+          },
+        ]);
       }
       if (tags) {
         aggregateQuery = aggregateQuery.concat([
           {
             $addFields: {
               matchedTags: '$tags.key',
-            }
+            },
           },
           {
             $match: {
               // createdBy: userId,
               matchedTags: { $in: tags },
-            }
-        }]);
+            },
+          },
+        ]);
       }
       return aggregateQuery;
-    }
+    };
 
-    const results = await this.repository
+    return this.repository
       .aggregate([
         ...buildAggregateQuery(),
         {
@@ -248,8 +249,6 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         },
       ])
       .toArray();
-
-    return results;
   }
   getPlaylistById({ playlistId }: OptionalObjectIdParameters) {
     return this.repository

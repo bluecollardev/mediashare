@@ -21,6 +21,7 @@ export interface MediaItemControllerCreateRequest {
 
 export interface MediaItemControllerFindAllRequest {
   text?: string;
+  tags?: Array<string>;
 }
 
 export interface MediaItemControllerFindOneRequest {
@@ -76,10 +77,10 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerFindAll({ text }: MediaItemControllerFindAllRequest): Observable<Array<MediaItemDto>>;
-  mediaItemControllerFindAll({ text }: MediaItemControllerFindAllRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
+  mediaItemControllerFindAll({ text, tags }: MediaItemControllerFindAllRequest): Observable<Array<MediaItemDto>>;
+  mediaItemControllerFindAll({ text, tags }: MediaItemControllerFindAllRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
   mediaItemControllerFindAll(
-    { text }: MediaItemControllerFindAllRequest,
+    { text, tags }: MediaItemControllerFindAllRequest,
     opts?: OperationOpts
   ): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
     const headers: HttpHeaders = {
@@ -92,6 +93,9 @@ export class MediaItemsApi extends BaseAPI {
 
     if (text != null) {
       query['text'] = text;
+    }
+    if (tags != null) {
+      query['tags'] = tags;
     }
 
     return this.request<Array<MediaItemDto>>(
