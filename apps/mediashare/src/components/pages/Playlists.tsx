@@ -105,7 +105,6 @@ export const Playlists = ({ globalState }: PageProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
 
-  const [filteredEntities, setFilteredEntities] = useState([...entities] as PlaylistResponseDto[]);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
@@ -115,48 +114,12 @@ export const Playlists = ({ globalState }: PageProps) => {
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
-    if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
+    if (!isLoaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
       setPrevSearchFilters(currentSearchFilters);
       loadData().then();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState, searchFilters]);
-
-  const searchText = searchFilters.text || '';
-  const prevSearchTextRef = useRef(searchText);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const searchTags = searchFilters.tags || [];
-  const prevSearchTagsRef = useRef(searchTags);
-  useEffect(() => {
-    // Only run this if search tags have actually changed in value
-    if (JSON.stringify(prevSearchTagsRef.current) !== JSON.stringify(searchTags)) {
-      if (Array.isArray(searchTags) && searchTags.length > 0) {
-        const filtered = entities.filter((entity) => {
-          if (Array.isArray(entity.tags) && entity.tags.length > 0) {
-            const tagKeys = entity.tags.map((tag) => tag.key);
-            const hasTag = !!searchTags
-              // Make an array of true or false values
-              .map((searchTag) => tagKeys.includes(searchTag))
-              // If there are any true values return true, we have a match
-              .find((isMatch) => isMatch === true);
-            return hasTag;
-          }
-          return false;
-        });
-        setFilteredEntities(filtered);
-      } else if (searchTags?.length === 0) {
-        setFilteredEntities(entities);
-        setFilteredEntities(entities);
-      }
-      prevSearchTagsRef.current = searchTags;
-    } else if (prevSearchTextRef.current !== searchText && searchText !== '') {
-      prevSearchTextRef.current = searchText;
-      setFilteredEntities(entities);
-    } else if (prevSearchTextRef.current !== searchText && searchText === '') {
-      setFilteredEntities(entities);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entities, searchTags]);
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
@@ -176,7 +139,7 @@ export const Playlists = ({ globalState }: PageProps) => {
         {isLoaded ? (
           <PlaylistsComponent
             key={clearSelectionKey}
-            list={filteredEntities && filteredEntities.length > 0 ? filteredEntities : entities}
+            list={entities}
             onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
             selectable={isSelectable}
             showActions={!isSelectable}
@@ -214,8 +177,12 @@ export const Playlists = ({ globalState }: PageProps) => {
 
   async function loadData() {
     const { search } = globalState;
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
-    if (search.filters.text) {
+    const args = {
+      text: search?.filters?.text ? search.filters.text : '',
+      tags: search?.filters?.tags || [],
+    };
+
+    if (args.text || args.tags.length > 0) {
       await dispatch(findPlaylists(args));
     } else {
       await dispatch(getUserPlaylists({}));
@@ -225,7 +192,11 @@ export const Playlists = ({ globalState }: PageProps) => {
   async function refresh() {
     setRefreshing(true);
     const { search } = globalState;
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
+    const args = {
+      text: search?.filters?.text ? search.filters.text : '',
+      tags: [],
+    };
+
     if (search.filters.text) {
       await dispatch(findPlaylists(args));
     } else {

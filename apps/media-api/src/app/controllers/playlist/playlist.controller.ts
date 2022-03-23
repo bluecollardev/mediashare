@@ -40,9 +40,16 @@ export class PlaylistController {
 
   @Get()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
+  @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
-  findAll(@Query('text') query?: string) {
-    return query ? this.playlistService.searchPlaylists({ query }) : this.playlistService.findAll();
+  findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
+    const parsedTags = Array.isArray(tags)
+      ? tags
+      : typeof tags === 'string'
+        ? [tags]
+        : undefined;
+
+    return query || tags ? this.playlistService.searchPlaylists({ query, tags: parsedTags }) : this.playlistService.findAll();
   }
 
   @Get('categories')
@@ -54,9 +61,7 @@ export class PlaylistController {
   @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   @PlaylistGetResponse({ type: PlaylistResponseDto })
   async findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
-    const response = await this.playlistService.getPlaylistById({ playlistId });
-    console.log(`[PlaylistController.findOne] response: ${JSON.stringify(response, null, 2)}`);
-    return response;
+    return await this.playlistService.getPlaylistById({ playlistId });
   }
 
   @Put(':playlistId')

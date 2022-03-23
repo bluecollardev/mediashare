@@ -79,8 +79,8 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         },
         {
           $addFields: {
-            matchedTags : '$tags.key'
-          }
+            matchedTags: '$tags.key',
+          },
         },
         /* {
           $match: {
@@ -148,25 +148,38 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
       .toArray();
   }
 
-  async searchPlaylists({ query }: { query: string }) {
+  async searchPlaylists({ query, tags }: { query: string; tags?: string[] }) {
+    const buildAggregateQuery = () => {
+      let aggregateQuery = [];
+      if (query) {
+        aggregateQuery = aggregateQuery.concat([
+          {
+            $match: {
+              $text: { $search: query },
+            },
+          }
+        ])
+      }
+      if (tags) {
+        aggregateQuery = aggregateQuery.concat([
+          {
+            $addFields: {
+              matchedTags: '$tags.key',
+            }
+          },
+          {
+            $match: {
+              // createdBy: userId,
+              matchedTags: { $in: tags },
+            }
+        }]);
+      }
+      return aggregateQuery;
+    }
+
     const results = await this.repository
       .aggregate([
-        {
-          $match: {
-            $text: { $search: query },
-          }
-        },
-        {
-          $addFields: {
-            matchedTags : '$tags.key'
-          }
-        },
-        {
-          $match: {
-            // createdBy: userId,
-            // matchedTags: { $in: ['foot-and-ankle'] },
-          },
-        },
+        ...buildAggregateQuery(),
         {
           $lookup: {
             from: 'media_item',

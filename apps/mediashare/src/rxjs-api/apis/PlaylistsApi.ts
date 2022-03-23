@@ -21,6 +21,7 @@ export interface PlaylistControllerCreateRequest {
 
 export interface PlaylistControllerFindAllRequest {
   text?: string;
+  tags?: Array<string>;
 }
 
 export interface PlaylistControllerFindOneRequest {
@@ -78,10 +79,13 @@ export class PlaylistsApi extends BaseAPI {
 
   /**
    */
-  playlistControllerFindAll({ text }: PlaylistControllerFindAllRequest): Observable<Array<PlaylistItemResponseDto>>;
-  playlistControllerFindAll({ text }: PlaylistControllerFindAllRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
+  playlistControllerFindAll({ text, tags }: PlaylistControllerFindAllRequest): Observable<Array<PlaylistItemResponseDto>>;
   playlistControllerFindAll(
-    { text }: PlaylistControllerFindAllRequest,
+    { text, tags }: PlaylistControllerFindAllRequest,
+    opts?: OperationOpts
+  ): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
+  playlistControllerFindAll(
+    { text, tags }: PlaylistControllerFindAllRequest,
     opts?: OperationOpts
   ): Observable<Array<PlaylistItemResponseDto> | RawAjaxResponse<Array<PlaylistItemResponseDto>>> {
     const headers: HttpHeaders = {
@@ -93,7 +97,10 @@ export class PlaylistsApi extends BaseAPI {
     const query: HttpQuery = {};
 
     if (text != null) {
-      query.text = text;
+      query['text'] = text;
+    }
+    if (tags != null) {
+      query['tags'] = tags;
     }
 
     return this.request<Array<PlaylistItemResponseDto>>(

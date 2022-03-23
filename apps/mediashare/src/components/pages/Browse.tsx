@@ -125,7 +125,11 @@ export const Browse = ({
 
   async function loadData() {
     const { search } = globalState;
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
+    const args = {
+      text: search?.filters?.text ? search.filters.text : '',
+      tags: ['hip'],
+    };
+
     if (search.filters.text) {
       await dispatch(findPlaylists(args));
     } else {

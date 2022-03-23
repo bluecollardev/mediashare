@@ -29,7 +29,6 @@ models/ProfileShareItem.ts
 models/ShareItem.ts
 models/Tag.ts
 models/TagKeyValue.ts
-models/UpdateMediaItemDto.ts
 models/UpdatePlaylistDto.ts
 models/UpdateUserDto.ts
 models/UserDto.ts

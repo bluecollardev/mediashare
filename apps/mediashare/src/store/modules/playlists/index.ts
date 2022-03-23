@@ -62,12 +62,12 @@ export const removeUserPlaylist = createAsyncThunk(playlistActionTypes.removeUse
   return await api.playlists.playlistControllerRemove({ playlistId: id }).toPromise();
 });
 
-export const findPlaylists = createAsyncThunk(playlistsActionTypes.findPlaylists, async (args: { text?: string }, { extra }) => {
+export const findPlaylists = createAsyncThunk(playlistsActionTypes.findPlaylists, async (args: { text?: string; tags?: string[] }, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const { text } = args;
+  const { text, tags = [] } = args;
   console.log(`Search args: ${JSON.stringify(args, null, 2)}`);
-  console.log(`Searching playlists for: ${text}`);
-  return await api.playlists.playlistControllerFindAll({ text }).toPromise();
+  console.log(`Searching playlists for: [text] ${text}, [tags] ${JSON.stringify(tags)}`);
+  return await api.playlists.playlistControllerFindAll({ text, tags }).toPromise();
 });
 
 export const getUserPlaylists = createAsyncThunk(playlistsActionTypes.getUserPlaylists, async (opts: {} | undefined, { extra }) => {
