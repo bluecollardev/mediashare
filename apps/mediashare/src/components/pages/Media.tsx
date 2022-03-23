@@ -96,14 +96,12 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
 
-  const [filteredEntities, setFilteredEntities] = useState([...entities] as MediaItemDto[]);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onRefresh = useCallback(refresh, [dispatch]);
-
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
@@ -114,42 +112,6 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState, searchFilters]);
-
-  const searchText = searchFilters.text || '';
-  const prevSearchTextRef = useRef(searchText);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const searchTags = searchFilters.tags || [];
-  const prevSearchTagsRef = useRef(searchTags);
-  useEffect(() => {
-    // Only run this if search tags have actually changed in value
-    if (JSON.stringify(prevSearchTagsRef.current) !== JSON.stringify(searchTags)) {
-      if (Array.isArray(searchTags) && searchTags.length > 0) {
-        const filtered = entities.filter((entity) => {
-          if (Array.isArray(entity.tags) && entity.tags.length > 0) {
-            const tagKeys = entity.tags.map((tag) => tag.key);
-            const hasTag = !!searchTags
-              // Make an array of true or false values
-              .map((searchTag) => tagKeys.includes(searchTag))
-              // If there are any true values return true, we have a match
-              .find((isMatch) => isMatch === true);
-            return hasTag;
-          }
-          return false;
-        });
-        setFilteredEntities(filtered);
-      } else if (searchTags?.length === 0) {
-        setFilteredEntities(entities);
-        setFilteredEntities(entities);
-      }
-      prevSearchTagsRef.current = searchTags;
-    } else if (prevSearchTextRef.current !== searchText && searchText !== '') {
-      prevSearchTextRef.current = searchText;
-      setFilteredEntities(entities);
-    } else if (prevSearchTextRef.current !== searchText && searchText === '') {
-      setFilteredEntities([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entities, searchTags]);
 
   const [fabState, setState] = useState({ open: false });
   const fabActions = [
@@ -170,7 +132,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
           <MediaComponent
             key={clearSelectionKey}
             navigation={navigation}
-            list={filteredEntities && filteredEntities.length > 0 ? filteredEntities : entities}
+            list={entities}
             showActions={!isSelectable}
             selectable={isSelectable}
             onViewDetail={onEditItem}
@@ -209,16 +171,17 @@ export const Media = ({ navigation, globalState }: PageProps) => {
    */
   async function loadData() {
     const { search } = globalState;
+    const args = {
+      text: search?.filters?.text ? search.filters.text : '',
+      tags: search?.filters?.tags || [],
+    };
 
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
     await dispatch(findMediaItems(args));
   }
 
   async function refresh() {
     setRefreshing(true);
-    const { search } = globalState;
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
-    await dispatch(findMediaItems(args));
+    await loadData();
     setRefreshing(false);
   }
 

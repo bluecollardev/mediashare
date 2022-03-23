@@ -191,17 +191,7 @@ export const Playlists = ({ globalState }: PageProps) => {
 
   async function refresh() {
     setRefreshing(true);
-    const { search } = globalState;
-    const args = {
-      text: search?.filters?.text ? search.filters.text : '',
-      tags: [],
-    };
-
-    if (search.filters.text) {
-      await dispatch(findPlaylists(args));
-    } else {
-      await dispatch(getUserPlaylists({}));
-    }
+    await loadData();
     setRefreshing(false);
   }
 
