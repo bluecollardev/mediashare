@@ -12,7 +12,15 @@ import { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
 import { useAppSelector } from './store';
 import { theme } from './styles';
-import { Roboto_100Thin, Roboto_300Light, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black, useFonts } from '@expo-google-fonts/roboto';
+import {
+  Poppins_100Thin,
+  Poppins_300Light,
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_700Bold,
+  Poppins_900Black,
+  useFonts,
+} from '@expo-google-fonts/poppins';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { ProfileDto } from './rxjs-api';
@@ -177,12 +185,12 @@ function App() {
 
   // TODO: Fix font loading on Android
   const [fontsLoaded] = useFonts({
-    Roboto_500Medium,
-    Roboto_900Black,
-    Roboto_700Bold,
-    Roboto_100Thin,
-    Roboto_300Light,
-    Roboto_400Regular,
+    Poppins_500Medium,
+    Poppins_900Black,
+    Poppins_700Bold,
+    Poppins_100Thin,
+    Poppins_300Light,
+    Poppins_400Regular,
 
   });
   // const fontsLoaded = true;
