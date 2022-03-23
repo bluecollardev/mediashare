@@ -11,7 +11,7 @@ describe('ShareItemService', () => {
   let service: TagService;
   let repository: MongoRepository<Tag>;
 
-  const userFactory = new UserFactory();
+  // const userFactory = new UserFactory();
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({

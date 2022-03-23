@@ -14,6 +14,7 @@ export const useProfile = function (userId?: string) {
   const playlist = useViewPlaylist();
 
   const onDelete = function (itemId: string) {
+    // @ts-ignore
     from(dispatch(removeShareItem(itemId))).subscribe(() => {
       setLoaded(false);
     });

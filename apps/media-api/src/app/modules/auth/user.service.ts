@@ -1,15 +1,13 @@
-import { Inject, Injectable, RequestTimeoutException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
-import { PinoLogger, Logger } from 'nestjs-pino';
+import { PinoLogger } from 'nestjs-pino';
 import { DataService } from '@api';
 import { ClientProxy } from '@nestjs/microservices';
 
 import { User } from '../../controllers/user/entities/user.entity';
 import { ObjectId } from 'mongodb';
 import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
-import { CreateUserDto } from '../../controllers/user/dto/create-user.dto';
-import { compareSync } from 'bcrypt';
 import { AuthService } from './auth.service';
 import { UpdateUserDto } from '../../controllers/user/dto/update-user.dto';
 import * as R from 'remeda';

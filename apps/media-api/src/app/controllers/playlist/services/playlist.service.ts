@@ -31,7 +31,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     private playlistItemService: PlaylistItemService
   ) {
     super(repository, logger);
-    this.repository.createCollectionIndex({ title: 'text', description: 'text' });
+    this.repository.createCollectionIndex({ title: 'text', description: 'text' }).then();
   }
 
   /**

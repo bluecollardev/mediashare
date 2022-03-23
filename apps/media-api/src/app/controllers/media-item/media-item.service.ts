@@ -70,7 +70,7 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
     logger: PinoLogger
   ) {
     super(mediaRepository, logger);
-    this.repository.createCollectionIndex({ title: 'text', description: 'text' });
+    this.repository.createCollectionIndex({ title: 'text', description: 'text' }).then();
   }
 
   findPlaylistMedia(idStrings: ObjectId[]) {

@@ -57,7 +57,7 @@ const SharedItems = () => {
 
   const onView = function (playlistId: string, shareItemId: string) {
     dispatch(readShareItem(shareItemId));
-    viewPlaylist({ playlistId });
+    viewPlaylist({ playlistId }).then();
   };
 
   return <SharedList sharedItems={sharedItems} onView={onView} />;

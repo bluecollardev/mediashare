@@ -3,12 +3,8 @@ import { ObjectId, OptionalId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { DeepPartial, MongoRepository, ObjectID } from 'typeorm';
 import { BcBaseEntity } from '../entities/base.entity';
-import { Request } from 'express';
-import * as R from 'remeda';
 import { ObjectIdGuard, StringIdGuard } from '@util-lib';
 import { IdType } from '@core-lib';
-import { REQUEST } from '@nestjs/core';
-import { SessionUserInterface } from './auth-user.model';
 
 export type MsDocumentType<T> = OptionalId<T>;
 /**

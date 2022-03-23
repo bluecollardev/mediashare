@@ -191,7 +191,6 @@ function App() {
     Poppins_100Thin,
     Poppins_300Light,
     Poppins_400Regular,
-
   });
   // const fontsLoaded = true;
   // Amplify.configure(awsmobile);

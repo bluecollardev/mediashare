@@ -53,6 +53,7 @@ const AppHeaderComponent = ({
   showDisplayControls = false,
   globalState = {
     displayMode: 'list',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     setDisplayMode: (value) => undefined,
     tags: [],
   },

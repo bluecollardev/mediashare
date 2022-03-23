@@ -79,7 +79,13 @@ export function ActionButtons({
           >
             <View style={{ ...defaultStyles.actionButton, ...actionButtonStyles, ...(disableAction ? defaultStyles.actionButtonDisabled : {}) }}>
               {actionIcon && <IconButton color={actionIconColor} icon={actionIcon} />}
-              {!!actionLabel && <Text style={{ ...defaultStyles.actionButtonLabel, ...actionButtonLabelStyles, ...(disableAction ? defaultStyles.actionButtonLabelDisabled : {}) }}>{actionLabel}</Text>}
+              {!!actionLabel && (
+                <Text
+                  style={{ ...defaultStyles.actionButtonLabel, ...actionButtonLabelStyles, ...(disableAction ? defaultStyles.actionButtonLabelDisabled : {}) }}
+                >
+                  {actionLabel}
+                </Text>
+              )}
             </View>
           </TouchableWithoutFeedback>
         )}

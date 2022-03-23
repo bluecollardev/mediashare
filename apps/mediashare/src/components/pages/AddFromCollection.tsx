@@ -47,10 +47,6 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
     </PageContainer>
   );
 
-  async function loadData() {
-    await dispatch(getUserPlaylists({}));
-  }
-
   function updateMediaItem(add: boolean, selected: any) {
     const updatedItems = add ? selectedPlaylists.concat([selected]) : selectedPlaylists.filter((item) => item._id !== selected._id);
     setSelectedPlaylists(updatedItems);

@@ -54,7 +54,7 @@ services:
     depends_on:
       - db
     ports:
-      - 3333:3333
+      - '3333:3333'
     networks:
       - mediashareapi
 
@@ -100,7 +100,7 @@ services:
     volumes:
       - ms-mongo-data:/var/lib/mongodb/data
     ports:
-      - 27017:27017
+      - '27017:27017'
     networks:
       - mediashareapi
 

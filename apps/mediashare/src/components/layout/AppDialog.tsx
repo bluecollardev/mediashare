@@ -1,6 +1,4 @@
 import React from 'react';
-
-import { StyleSheet } from 'react-native';
 import { Avatar, Button, Card, Dialog, Portal, Text } from 'react-native-paper';
 import { theme } from '../../styles';
 

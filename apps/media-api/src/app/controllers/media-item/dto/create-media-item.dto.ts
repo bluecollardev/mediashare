@@ -1,7 +1,7 @@
 import { IsIn } from 'class-validator';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { ApiString, ApiLongString, ApiTextString, ApiUriString, ApiDecoratorOptions } from '@mediashare/shared';
-import { MediaCategoryType, MEDIA_CATEGORY, Stats } from '@core-lib';
+import { MediaCategoryType, MEDIA_CATEGORY } from '@core-lib';
 import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
 import { MediaItem } from '../entities/media-item.entity';
 
