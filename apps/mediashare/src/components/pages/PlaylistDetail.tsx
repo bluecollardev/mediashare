@@ -73,8 +73,12 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
       { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   } else {
-    fabActions = [{ icon: 'share', onPress: () => sharePlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.text } }];
+    fabActions = [{ icon: 'share', onPress: () => sharePlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } }];
   }
+
+  // Don't display anything unless we have a selected playlist
+  // TODO: Show loader!
+  if (!selected) return null;
 
   return (
     <PageContainer>
@@ -128,7 +132,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
                 showCancel={false}
                 showAction={true}
-                actionLabel="Watch Now"
+                actionLabel="Play from Beginning"
                 actionIcon="live-tv"
               />
             )}
