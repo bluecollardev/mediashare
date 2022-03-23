@@ -1,4 +1,5 @@
 import React, { Component, useState } from 'react';
+import { ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 
 import { loginAction } from '../../store/modules/user';
@@ -192,24 +193,26 @@ const LoginComponent = ({}: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent>
-        <Card elevation={0}>
-          <Card.Cover resizeMode="contain" source={require('../../assets/af-logo.png')} style={{ backgroundColor: theme.colors.background }} />
-        </Card>
-        {show && (
-          <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={true}>
-            {/* <MyCustomSignUp override={'SignUp'} /> */}
-            <SignIn />
-            <SignUp />
-            <Greetings />
-            <ConfirmSignIn />
+        <ScrollView>
+          <Card elevation={0}>
+            <Card.Cover resizeMode="contain" source={require('../../assets/af-logo.png')} style={{ backgroundColor: theme.colors.background }} />
+          </Card>
+          {show && (
+            <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={true}>
+              {/* <MyCustomSignUp override={'SignUp'} /> */}
+              <SignIn />
+              <SignUp />
+              <Greetings />
+              <ConfirmSignIn />
 
-            <VerifyContact />
-            <ForgotPassword />
-            {/* <TOTPSetup /> */}
-            {/* <Loading /> */}
-            <CustomVerify override={'ConfirmSignUp'} />
-          </Authenticator>
-        )}
+              <VerifyContact />
+              <ForgotPassword />
+              {/* <TOTPSetup /> */}
+              {/* <Loading /> */}
+              <CustomVerify override={'ConfirmSignUp'} />
+            </Authenticator>
+          )}
+        </ScrollView>
       </KeyboardAvoidingPageContent>
     </PageContainer>
   );
