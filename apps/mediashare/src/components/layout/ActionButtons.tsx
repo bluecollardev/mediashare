@@ -109,9 +109,9 @@ const defaultStyles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 0,
-    // borderColor: theme.colors.defaultBorder,
-    // borderWidth: 1,
-    // borderRightWidth: 0,
+    borderColor: theme.colors.defaultBorder,
+    borderWidth: 1,
+    borderRightWidth: 0,
   },
   cancelButtonLabel: {},
   actionButtonTouchable: {

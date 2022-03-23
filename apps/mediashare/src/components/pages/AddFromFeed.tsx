@@ -64,7 +64,7 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
             </Card.Content>
           </Card>
         )}
-        <FlatList data={items} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
+        <FlatList data={items} renderItem={({ item }) => renderVirtualizedListItem(item)} />
       </PageContent>
       <PageActions>
         <ActionButtons onActionClicked={saveMedia} actionLabel="Add Media" onCancelClicked={goToMediaItems} />
@@ -77,7 +77,7 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
     return (
       <MediaListItem
         showActions={false}
-        key={key}
+        key={`s3_item_${key}`}
         title={key}
         description={`${size} - ${lastModified}`}
         checked={false}

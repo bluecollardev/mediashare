@@ -36,9 +36,7 @@ const MyTheme = Object.assign({}, AmplifyTheme, {
     justifyContent: 'space-around',
     paddingTop: 20,
     width: '100%',
-    // TODO: Use our real background color
-    // backgroundColor: theme.colors.background,
-    backgroundColor: '#222222',
+    backgroundColor: theme.colors.background,
   },
   section: {
     flex: 1,
