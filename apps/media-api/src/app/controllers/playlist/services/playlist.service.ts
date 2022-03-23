@@ -160,6 +160,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
           },
         ]);
       }
+
       if (tags) {
         aggregateQuery = aggregateQuery.concat([
           {
@@ -175,12 +176,8 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
           },
         ]);
       }
-      return aggregateQuery;
-    };
 
-    return this.repository
-      .aggregate([
-        ...buildAggregateQuery(),
+      aggregateQuery = aggregateQuery.concat([
         {
           $lookup: {
             from: 'media_item',
@@ -221,7 +218,18 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             as: 'likeItems',
           },
         },
-        // { $sort: { score: { $meta: 'textScore' } } },
+      ])
+
+      if (query) {
+        aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
+      }
+
+      return aggregateQuery;
+    };
+
+    return this.repository
+      .aggregate([
+        ...buildAggregateQuery(),
         {
           $replaceRoot: {
             newRoot: {

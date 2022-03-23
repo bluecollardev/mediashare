@@ -134,6 +134,7 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
           },
         ]);
       }
+
       if (tags) {
         aggregateQuery = aggregateQuery.concat([
           {
@@ -149,9 +150,14 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
           },
         ]);
       }
+
+      if (query) {
+        aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
+      }
+
       return aggregateQuery;
     };
 
-    return this.repository.aggregate([...buildAggregateQuery(), { $sort: { score: { $meta: 'textScore' } } }]).toArray();
+    return this.repository.aggregate([...buildAggregateQuery()]).toArray();
   }
 }
