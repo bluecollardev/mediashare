@@ -11,7 +11,7 @@ import { usePlaylists, useRouteWithParams, useViewMediaItem } from '../../hooks/
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { View, Text, ScrollView } from 'react-native';
-import { Button, IconButton } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { AppUpload } from '../layout/AppUpload';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
@@ -106,22 +106,22 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
             topDrawer={() =>
               imageSrc ? (
                 <View style={styles.itemControls}>
-                  <View style={{ flex: 1 }}>
+                  <View style={{ flex: 0, width: 54 }}>
                     <Button
                       icon="delete-forever"
                       mode="outlined"
                       dark
-                      color={theme.colors.default}
-                      onPress={() => console.log('Do something!')}
                       compact
+                      color={theme.colors.white}
                       style={styles.deleteItemButton}
+                      onPress={() => console.log('Do something!')}
                     >
                       {' '}
                     </Button>
                   </View>
                   <View style={{ flex: 4 }}>
                     <AppUpload uploadMode="photo" onUpload={onUpload}>
-                      <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact style={styles.changeImageButton}>
+                      <Button mode="outlined" dark color={theme.colors.default} compact uppercase={false} style={styles.changeImageButton}>
                         <Text>Change Cover Photo</Text>
                       </Button>
                     </AppUpload>

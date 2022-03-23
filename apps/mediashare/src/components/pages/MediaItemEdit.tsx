@@ -111,15 +111,15 @@ const MediaItemEdit = ({
             isPlayable={true}
             topDrawer={() => (
               <View style={styles.itemControls}>
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 0, width: 54 }}>
                   <Button
                     icon="delete-forever"
                     mode="text"
                     dark
-                    color={theme.colors.error}
-                    onPress={() => setShowDialog(true)}
                     compact
+                    color={theme.colors.white}
                     style={styles.deleteItemButton}
+                    onPress={() => setShowDialog(true)}
                   >
                     {' '}
                   </Button>

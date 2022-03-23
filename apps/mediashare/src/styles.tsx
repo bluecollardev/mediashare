@@ -112,11 +112,15 @@ const styles: any = StyleSheet.create({
   changeImageButton: {
     borderTopWidth: 0,
     borderRadius: 0,
+    textTransform: 'none',
   },
   deleteItemButton: {
-    borderTopWidth: 0,
+    borderWidth: 1,
     borderRightWidth: 0,
     borderRadius: 0,
+    borderColor: theme.colors.defaultBorder,
+    backgroundColor: theme.colors.error,
+    color: theme.colors.white,
   },
   itemControls: {
     display: 'flex',

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
 
 import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
@@ -110,8 +110,8 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
                 </AppUpload>
               ) : (
                 <AppUpload uploadMode="photo" onUpload={onUpload}>
-                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
-                    Change Cover Photo
+                  <Button mode="outlined" dark color={theme.colors.default} compact uppercase={false}>
+                    <Text>Change Cover Photo</Text>
                   </Button>
                 </AppUpload>
               )
