@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FlatList } from 'react-native';
 import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../store';
@@ -63,25 +64,27 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
             </Card.Content>
           </Card>
         )}
-        {items?.map((item, idx) => {
-          const { key, size, lastModified } = item;
-          return (
-            <MediaListItem
-              showActions={false}
-              key={idx}
-              title={key}
-              description={`${size} - ${lastModified}`}
-              checked={false}
-              onChecked={(v) => (v ? addItemCb(item) : removeItemCb(item))}
-            />
-          );
-        })}
+        <FlatList data={items} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
       </PageContent>
       <PageActions>
         <ActionButtons onActionClicked={saveMedia} actionLabel="Add Media" onCancelClicked={goToMediaItems} />
       </PageActions>
     </PageContainer>
   );
+
+  function renderVirtualizedListItem(item) {
+    const { key, size, lastModified } = item;
+    return (
+      <MediaListItem
+        showActions={false}
+        key={key}
+        title={key}
+        description={`${size} - ${lastModified}`}
+        checked={false}
+        onChecked={(v) => (v ? addItemCb(item) : removeItemCb(item))}
+      />
+    );
+  }
 };
 
 export default withLoadingSpinner(AddFromFeed);
