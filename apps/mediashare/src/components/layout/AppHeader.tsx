@@ -1,9 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-native';
-import { Appbar, Card, Portal, Searchbar, Text, IconButton } from 'react-native-paper';
+import { Appbar, Card, Portal, Searchbar } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import { MultiSelectIcon } from '../form/MultiSelect';
+
 import { withGlobalStateConsumer, GlobalStateProps } from '../../core/globalState';
+import { MultiSelectIcon } from '../form/MultiSelect';
+import { ActionButtons } from './ActionButtons';
 import themeStyles, { theme } from '../../styles';
 
 export interface AppHeaderProps {
@@ -166,77 +168,11 @@ const AppHeaderComponent = ({
                           />
                         </Card.Content>
                       </Card>
-                      <View style={{ flexDirection: 'row' }}>
-                        <TouchableWithoutFeedback
-                          accessibilityRole="button"
-                          onPress={() => {
-                            disableSearch();
-                          }}
-                        >
-                          <View
-                            style={[
-                              {
-                                width: 54,
-                                // flex: Platform.OS === 'android' ? 0 : 1,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                paddingVertical: 8,
-                                paddingHorizontal: 16,
-                                borderRadius: 0,
-                                flexDirection: 'row',
-                                // backgroundColor: colors.cancel
-                              },
-                              // styles.cancelButton
-                            ]}
-                          >
-                            <IconButton icon="cancel" />
-                          </View>
-                        </TouchableWithoutFeedback>
-                        <TouchableWithoutFeedback
-                          accessibilityRole="button"
-                          onPress={() => {
-                            disableSearch();
-                          }}
-                          style={{ flex: 1 }}
-                        >
-                          <View
-                            style={[
-                              {
-                                // flex: Platform.OS === 'android' ? 1 : 0,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                paddingVertical: 8,
-                                paddingHorizontal: 16,
-                                borderRadius: 0,
-                                flexDirection: 'row',
-                                backgroundColor: theme.colors.primary,
-                                width: '100%',
-                                height: 50,
-                              },
-                              // styles.button
-                            ]}
-                          >
-                            <Text
-                              style={[
-                                {
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  textAlign: 'center',
-                                  fontSize: 18,
-                                  color: '#ffffff',
-                                  fontWeight: 'bold',
-                                  paddingRight: 35,
-                                },
-                                // confirmFont,
-                                // styles.confirmText
-                              ]}
-                            >
-                              Done
-                            </Text>
-                          </View>
-                        </TouchableWithoutFeedback>
-                      </View>
+                      <ActionButtons
+                        containerStyles={{ marginHorizontal: 0 }}
+                        onActionClicked={() => disableSearch()}
+                        onCancelClicked={() => disableSearch()}
+                      />
                     </View>
                   </BackdropView>
                 </ModalContentWrapper>
