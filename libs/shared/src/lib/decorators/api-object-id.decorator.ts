@@ -1,4 +1,4 @@
-import { applyDecorator } from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsMongoId } from 'class-validator';
 import { ObjectId } from 'mongodb';
