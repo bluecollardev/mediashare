@@ -121,7 +121,11 @@ export const Browse = ({
   return (
     <PageContainer>
       {globalState?.displayMode === 'list' && <SharedList />}
-      {globalState?.displayMode === 'article' && <ScrollView><SharedBlock /></ScrollView>}
+      {globalState?.displayMode === 'article' && (
+        <ScrollView>
+          <SharedBlock />
+        </ScrollView>
+      )}
     </PageContainer>
   );
 

@@ -116,7 +116,7 @@ export const User = ({}: PageProps) => {
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Unshare" cancelLabel="Cancel" rightIcon="delete" />
+          <ActionButtons onActionClicked={confirmDelete} onCancelClicked={cancelDelete} actionLabel="Unshare" actionIcon="delete" />
         </PageActions>
       )}
       {!isSelectable && (

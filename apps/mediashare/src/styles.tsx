@@ -39,27 +39,10 @@ const styles: any = StyleSheet.create({
   pageActions: {
     display: 'flex',
     width: '100%',
-    height: 50, // Make sure actionButtons is the same height!
+    height: 41, // Make sure actionButtons is the same height!
     backgroundColor: 'transparent',
   },
-  actionButtons: {
-    display: 'flex',
-    flexDirection: 'row',
-    height: 50, // Make sure this is the same height as pageActions!
-    borderTopWidth: 1,
-    borderColor: 'transparent',
-  },
-  actionButton: {
-    flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'center',
-  },
-  deleteActionButton: {
-    flex: 0,
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    width: 30,
-  },
+
   mediaListItem: {
     display: 'flex',
     flexDirection: 'row',
@@ -126,19 +109,19 @@ const styles: any = StyleSheet.create({
   },
   changeImageButton: {
     borderTopWidth: 0,
-    borderRadius: 0
+    borderRadius: 0,
   },
   deleteItemButton: {
     borderTopWidth: 0,
     borderRightWidth: 0,
-    borderRadius: 0
+    borderRadius: 0,
   },
   itemControls: {
     display: 'flex',
     flexDirection: 'row',
     borderTopColor: theme.colors.defaultBorder,
-    borderTopWidth: 1
-  }
+    borderTopWidth: 1,
+  },
 });
 
 export default styles;

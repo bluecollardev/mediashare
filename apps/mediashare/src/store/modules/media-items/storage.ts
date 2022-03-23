@@ -174,7 +174,7 @@ async function getVideoThumbnailFromUri(fileUri) {
     item = await VideoThumbnails.getThumbnailAsync(fileUri);
   } catch (err) {
     console.log('[getVideoThumbnailFromUri] Error getting thumbnail, getThumbnailAsync failed');
-    console.log(`Make sure the file at [$fileUri] exists`);
+    console.log('Make sure the file at [$fileUri] exists');
     console.log('You may need to manually link the expo modules');
     console.log(err);
   }

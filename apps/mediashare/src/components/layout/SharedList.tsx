@@ -17,21 +17,29 @@ interface SharedListProps {
   onChecked?: (bool: boolean, userId: string) => void;
 }
 
-export const SharedList = ({ sharedItems, selectable, showActions, onDelete = () => undefined, onView = () => undefined, onChecked = () => undefined }: SharedListProps) => {
- const { _id } = useAppSelector((state) => state.user)
+export const SharedList = ({
+  sharedItems,
+  selectable,
+  showActions,
+  onDelete = () => undefined,
+  onView = () => undefined,
+  onChecked = () => undefined,
+}: SharedListProps) => {
+  const { _id } = useAppSelector((state) => state.user);
 
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
   const data = R.map(R.keys(mappedSharedItems), (key) => {
-    const heading = mappedSharedItems[key][0].authorId === _id
-      ? "Subscribes To"
-      : mappedSharedItems[key][0].authorId !== _id
-      ? `Shared by ${mappedSharedItems[key][0].authorName}`
-      : 'Shared by Unknown User'
-    return ({
+    const heading =
+      mappedSharedItems[key][0].authorId === _id
+        ? 'Subscribes To'
+        : mappedSharedItems[key][0].authorId !== _id
+        ? `Shared by ${mappedSharedItems[key][0].authorName}`
+        : 'Shared by Unknown User';
+    return {
       title: `${heading}`,
       count: mappedSharedItems[key].length,
       data: mappedSharedItems[key],
-    })
+    };
   });
 
   return (

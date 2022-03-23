@@ -167,7 +167,7 @@ export const Account = ({ globalState }: PageProps) => {
       )}
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Delete" cancelLabel="Cancel" rightIcon="delete" />
+          <ActionButtons onActionClicked={confirmDelete} onCancelClicked={cancelDelete} actionLabel="Delete" />
         </PageActions>
       )}
       {!isSelectable && (

@@ -42,7 +42,7 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
         })}
       </PageContent>
       <PageActions>
-        <ActionButtons actionCb={() => {}} cancelCb={() => {}} />
+        <ActionButtons onActionClicked={() => {}} onCancelClicked={() => {}} />
       </PageActions>
     </PageContainer>
   );

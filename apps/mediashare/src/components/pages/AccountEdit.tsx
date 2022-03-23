@@ -80,10 +80,9 @@ const AccountEdit = ({ route }: AccountEditProps) => {
       <ActionButtons
         disableAction={withoutName()}
         disableCancel={withoutName()}
-        cancelCb={cancel}
-        actionCb={save}
-        actionLabel={'Save'}
-        rightIcon="check-circle"
+        onCancelClicked={cancel}
+        onActionClicked={save}
+        actionLabel="Save"
       />
     </PageContainer>
   );

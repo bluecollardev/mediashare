@@ -189,7 +189,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         />
         {/* Use expo-av + expo-video-player */}
         {/* <Video
-          style={{
+          styles={{
             height: 300,
           }}
           videoProps={{

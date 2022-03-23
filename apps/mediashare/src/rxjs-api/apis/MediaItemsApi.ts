@@ -91,7 +91,7 @@ export class MediaItemsApi extends BaseAPI {
     const query: HttpQuery = {};
 
     if (text != null) {
-      query['text'] = text;
+      query.text = text;
     }
 
     return this.request<Array<MediaItemDto>>(

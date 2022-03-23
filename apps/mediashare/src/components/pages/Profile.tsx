@@ -54,7 +54,7 @@ const Profile = ({ route }: ProfileProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.text, styles: { backgroundColor: theme.colors.primary } },
     { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
   ];
 
@@ -78,7 +78,7 @@ const Profile = ({ route }: ProfileProps) => {
         isCurrentUser={false}
       />
       {/* isAdmin && (
-          <Button mode="outlined" style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
+          <Button mode="outlined" styles={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
             Edit Profile
           </Button>
         ) */}
@@ -94,11 +94,11 @@ const Profile = ({ route }: ProfileProps) => {
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
           <ActionButtons
-            actionCb={confirmPlaylistsToUnshare}
-            cancelCb={cancelPlaylistsToUnshare}
+            onActionClicked={confirmPlaylistsToUnshare}
+            onCancelClicked={cancelPlaylistsToUnshare}
             actionLabel="Unshare"
-            cancelLabel="Cancel"
-            rightIcon="delete"
+
+            actionIcon="delete"
           />
         </PageActions>
       )}
@@ -123,7 +123,7 @@ const Profile = ({ route }: ProfileProps) => {
     await viewPlaylist({ playlistId });
   }
 
-  async function deleteShareItem (shareItemId: string) {
+  async function deleteShareItem(shareItemId: string) {
     await dispatch(removeShareItem(shareItemId));
     await dispatch(loadProfile(userId));
   }
@@ -131,10 +131,10 @@ const Profile = ({ route }: ProfileProps) => {
   async function deleteShareItems() {
     selectedItems.map(async (shareItemId) => {
       await deleteShareItem(shareItemId);
-    }) // TODO: Find a real way to do this
+    }); // TODO: Find a real way to do this
     setTimeout(async () => {
       await dispatch(loadProfile(userId));
-    }, 2500)
+    }, 2500);
   }
 
   function updateSelection(bool: boolean, shareItemId: string) {

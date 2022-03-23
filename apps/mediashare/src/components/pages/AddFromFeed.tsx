@@ -78,7 +78,7 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
         })}
       </PageContent>
       <PageActions>
-        <ActionButtons actionCb={saveMedia} rightIcon="check-circle" actionLabel="Add Media" cancelLabel="Back" cancelCb={goToMediaItems} />
+        <ActionButtons onActionClicked={saveMedia} actionLabel="Add Media" onCancelClicked={goToMediaItems} />
       </PageActions>
     </PageContainer>
   );

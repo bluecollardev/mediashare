@@ -80,10 +80,14 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   return (
     <PageContainer>
       <PageContent>
-        <FlatList data={filteredMediaItemEntities && filteredMediaItemEntities.length > 0 ? filteredMediaItemEntities : mediaItemEntities} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
+        <FlatList
+          data={filteredMediaItemEntities && filteredMediaItemEntities.length > 0 ? filteredMediaItemEntities : mediaItemEntities}
+          renderItem={({ item }) => renderVirtualizedListItem(item)}
+          keyExtractor={({ _id }) => `playlist_${_id}`}
+        />
       </PageContent>
       <PageActions>
-        <ActionButtons actionCb={actionCb} rightIcon="check-circle" actionLabel="Save" cancelLabel="Cancel" cancelCb={cancelCb} />
+        <ActionButtons onActionClicked={actionCb} actionLabel="Save" onCancelClicked={cancelCb} />
       </PageActions>
     </PageContainer>
   );

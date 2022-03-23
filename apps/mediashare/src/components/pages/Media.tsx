@@ -121,10 +121,10 @@ export const Media = ({ navigation, globalState }: PageProps) => {
           if (Array.isArray(entity.tags) && entity.tags.length > 0) {
             const tagKeys = entity.tags.map((tag) => tag.key);
             const hasTag = !!searchTags
-            // Make an array of true or false values
-            .map((searchTag) => tagKeys.includes(searchTag))
-            // If there are any true values return true, we have a match
-            .find((isMatch) => isMatch === true);
+              // Make an array of true or false values
+              .map((searchTag) => tagKeys.includes(searchTag))
+              // If there are any true values return true, we have a match
+              .find((isMatch) => isMatch === true);
             return hasTag;
           }
           return false;
@@ -169,7 +169,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Delete" cancelLabel="Cancel" rightIcon="delete" />
+          <ActionButtons onActionClicked={confirmDelete} onCancelClicked={cancelDelete} actionLabel="Delete" />
         </PageActions>
       )}
       {!isSelectable && (

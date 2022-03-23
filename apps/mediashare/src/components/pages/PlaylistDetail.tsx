@@ -114,7 +114,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
               icon="live-tv"
               color={theme.colors.default}
               mode="outlined"
-              style={{ width: '100%', marginTop: 25, marginBottom: 25 }}
+              styles={{ width: '100%', marginTop: 25, marginBottom: 25 }}
               compact
               dark
               onPress={() => (items && items.length > 0 ? viewMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
@@ -127,7 +127,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
                 {/*<IconButton
               icon="rule"
               color={isSelectable ? theme.colors.primary : theme.colors.disabled}
-              style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
+              styles={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
               onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
             />*/}
                 <Button
@@ -157,7 +157,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
       <PageActions>
         {/* TODO: Selectively display depending if the user has scrolled up past the upper button */}
         {/*!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
-          <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
+          <ListActionButton icon="playlist-add" label="Add To Playlist" onActionClicked={() => addToPlaylist({ playlistId })} />
         )*/}
       </PageActions>
       {!build.forFreeUser && (

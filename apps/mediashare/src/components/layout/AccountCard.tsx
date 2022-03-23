@@ -41,7 +41,7 @@ export const AccountCard = ({
   const [state] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
   // <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />
-  // <View style={styles.buttonContainer}>
+  // <View styles={styles.buttonContainer}>
   //   <IconButton icon="delete-outline" color={theme.colors.text} size={20} onPress={onDelete} />
   //   <IconButton icon="play-circle-filled" color={theme.colors.text} size={20} onPress={onView} />
   // </View>

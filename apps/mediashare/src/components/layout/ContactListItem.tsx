@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   listItem: { margin: 0, justifyContent: 'center' },
   leftOuterWrapper: { flexDirection: 'row', width: 100, justifyContent: 'space-between' },
   letterLabelWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
-  headline: { marginLeft: 10, color: theme.colors.primary },
+  headline: { marginLeft: 10, color: theme.colors.default },
   avatarWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
   followButton: { justifyContent: 'center', borderColor: theme.colors.primary, transform: [{ scale: 0.75 }] },
 });

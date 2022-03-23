@@ -29,9 +29,14 @@ export interface MediaItemEditContainerProps {
 
 export interface MediaItemEditContainerState {}
 
-const MediaItemEdit = ({ navigation, route, globalState = { tags: [] } }: PageProps) => {
-  const actionLabel = 'Save';
-  const cancelLabel = 'Cancel';
+const MediaItemEdit = ({
+  navigation,
+  route,
+  // @ts-ignore
+  globalState = {
+    tags: [],
+  },
+}: PageProps) => {
   const options = [];
   for (const value in MediaCategoryType) {
     options.push(value);
@@ -132,7 +137,7 @@ const MediaItemEdit = ({ navigation, route, globalState = { tags: [] } }: PagePr
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons actionCb={saveItem} cancelCb={cancelCb} rightIcon="check-circle" actionLabel={actionLabel} cancelLabel={cancelLabel} />
+        <ActionButtons onActionClicked={saveItem} onCancelClicked={cancelCb} actionLabel="Save" />
       </PageActions>
     </PageContainer>
   );

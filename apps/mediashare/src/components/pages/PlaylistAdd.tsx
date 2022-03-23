@@ -25,6 +25,7 @@ import { theme } from '../../styles';
 import { Button } from 'react-native-paper';
 import { withGlobalStateConsumer } from '../../core/globalState';
 
+// @ts-ignore
 const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
   const { tags = [] } = globalState;
 
@@ -54,8 +55,6 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
     goBack();
   };
 
-  const actionLabel = 'Create';
-  const cancelLabel = 'Cancel';
   const cancelCb = clearAndGoBack;
 
   const isValid = function () {
@@ -122,11 +121,9 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
       </KeyboardAvoidingPageContent>
       <PageActions>
         <ActionButtons
-          rightIcon="check-circle"
-          actionCb={() => savePlaylist()}
-          cancelCb={cancelCb}
-          actionLabel={actionLabel}
-          cancelLabel={cancelLabel}
+          onActionClicked={() => savePlaylist()}
+          onCancelClicked={cancelCb}
+          actionLabel="Save"
           disableAction={!isValid()}
         />
       </PageActions>

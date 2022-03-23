@@ -143,28 +143,12 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
       })}
     >
       {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen
-          name={'Browse'}
-          component={BrowseNavigation}
-          listeners={bottomTabListeners}
-        />
+        <PrivateNavigator.Screen name={'Browse'} component={BrowseNavigation} listeners={bottomTabListeners} />
       )}
 
-      {(build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen
-          name={'Playlists'}
-          component={PlaylistsNavigation}
-          listeners={bottomTabListeners}
-        />
-      )}
+      {(build.forSubscriber || build.forAdmin) && <PrivateNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} listeners={bottomTabListeners} />}
 
-      {build.forAdmin && (
-        <PrivateNavigator.Screen
-          name={'Media'}
-          component={MediaNavigation}
-          listeners={bottomTabListeners}
-        />
-      )}
+      {build.forAdmin && <PrivateNavigator.Screen name={'Media'} component={MediaNavigation} listeners={bottomTabListeners} />}
       <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} initialParams={{ userId: user._id }} />
     </PrivateNavigator.Navigator>
   );

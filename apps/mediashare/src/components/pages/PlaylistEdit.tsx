@@ -26,6 +26,7 @@ import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 
 const actionModes = { delete: 'delete', default: 'default' };
 
+// @ts-ignore
 const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PageProps) => {
   const { tags = [] } = globalState;
   const addToPlaylist = useRouteWithParams(routeNames.addItemsToPlaylist);
@@ -76,9 +77,6 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   // @ts-ignore
   const items = selected?.mediaItems || [];
   const author = '';
-
-  const actionLabel = 'Save';
-  const cancelLabel = 'Cancel';
 
   return (
     <PageContainer>
@@ -175,16 +173,19 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
       </KeyboardAvoidingPageContent>
       <PageActions>
         {!isSelectable && (
-          <ActionButtons actionCb={() => savePlaylist()} cancelCb={cancelCb} actionLabel={actionLabel} cancelLabel={cancelLabel} rightIcon={'check-circle'} />
+          <ActionButtons
+            onActionClicked={() => savePlaylist()}
+            onCancelClicked={cancelCb}
+            actionLabel="Save"
+          />
         )}
         {isSelectable && (
           <ActionButtons
-            actionCb={confirmDeletePlaylistItems}
-            cancelCb={cancelDeletePlaylistItems}
+            onActionClicked={confirmDeletePlaylistItems}
+            onCancelClicked={cancelDeletePlaylistItems}
             actionLabel="Remove"
-            cancelLabel="Cancel"
-            rightIcon="delete"
-            rightIconColor={theme.colors.error}
+
+            actionIconColor={theme.colors.error}
           />
         )}
       </PageActions>

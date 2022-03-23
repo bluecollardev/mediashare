@@ -22,6 +22,7 @@ import { theme } from '../../styles';
 import { AppUpload } from '../layout/AppUpload';
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 
+// @ts-ignore
 export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
   const { tags = [] } = globalState;
 
@@ -45,8 +46,6 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
     options.push(value);
   }
 
-  const actionLabel = 'Save';
-  const cancelLabel = 'Cancel';
   const cancelCb = clearAndGoBack;
   const goToMediaItems = useMediaItems();
 
@@ -93,12 +92,10 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
       </KeyboardAvoidingPageContent>
       <PageActions>
         <ActionButtons
-          actionCb={() => saveItem()}
-          cancelCb={cancelCb}
-          actionLabel={actionLabel}
-          cancelLabel={cancelLabel}
+          onActionClicked={() => saveItem()}
+          onCancelClicked={cancelCb}
+          actionLabel="Save"
           disableAction={!isValid()}
-          rightIcon="check-circle"
         />
       </PageActions>
     </PageContainer>
@@ -136,7 +133,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
     setSelectedTagKeys([] as any[]);
     setDescription('');
     setThumbnail('');
-    goToMediaItems();
+    goToMediaItems().finally();
   }
 };
 
