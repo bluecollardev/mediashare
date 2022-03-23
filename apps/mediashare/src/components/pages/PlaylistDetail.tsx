@@ -53,7 +53,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
 
   useEffect(() => {
     if (!isLoaded) {
-      loadData().finally();
+      loadData().then();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);

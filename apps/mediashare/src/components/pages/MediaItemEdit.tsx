@@ -168,12 +168,12 @@ const MediaItemEdit = ({
     };
 
     await dispatch(updateMediaItem(dto));
-    mediaItems().finally();
+    mediaItems().then();
   }
 
   async function deleteItem() {
     await dispatch(deleteMediaItem({ id: mediaId, key: mediaItem.uri }));
-    mediaItems().finally();
+    mediaItems().then();
   }
 };
 

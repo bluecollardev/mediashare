@@ -125,7 +125,7 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
           selectable={true}
           showActions={true}
           onViewDetail={() => {
-            viewMediaItem({ mediaId: item._id, uri: item.uri }).finally();
+            viewMediaItem({ mediaId: item._id, uri: item.uri }).then();
           }}
           onChecked={(v) => (v ? addItem(item) : removeItem(item))}
         />

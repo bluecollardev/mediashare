@@ -116,7 +116,7 @@ export const Playlists = ({ globalState }: PageProps) => {
     const currentSearchFilters = globalState?.search;
     if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
       setPrevSearchFilters(currentSearchFilters);
-      loadData().finally();
+      loadData().then();
     }
   }, [isLoaded, globalState]);
 

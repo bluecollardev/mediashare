@@ -105,7 +105,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     const currentSearchFilters = globalState?.search;
     if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
       setPrevSearchFilters(currentSearchFilters);
-      loadData().finally();
+      loadData().then();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState]);

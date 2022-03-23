@@ -49,7 +49,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
       setIsLoaded(true);
     }
     if (!isLoaded) {
-      loadData().finally();
+      loadData().then();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

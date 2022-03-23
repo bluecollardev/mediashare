@@ -106,14 +106,14 @@ export const Browse = ({
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
 
   useEffect(() => {
-    loadData().finally();
+    loadData().then();
   }, []);
 
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
     if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
       setPrevSearchFilters(currentSearchFilters);
-      loadData().finally();
+      loadData().then();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState]);

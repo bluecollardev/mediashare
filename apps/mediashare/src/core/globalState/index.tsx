@@ -55,7 +55,7 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
       };
 
       if (isLoggedIn) {
-        loadTags().finally();
+        loadTags().then();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoggedIn]);

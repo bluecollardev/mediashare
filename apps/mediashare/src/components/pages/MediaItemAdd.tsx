@@ -133,7 +133,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
     setSelectedTagKeys([] as any[]);
     setDescription('');
     setThumbnail('');
-    goToMediaItems().finally();
+    goToMediaItems().then();
   }
 };
 

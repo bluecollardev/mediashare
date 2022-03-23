@@ -54,7 +54,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
 
   useEffect(() => {
     if (!isLoaded) {
-      loadData().finally();
+      loadData().then();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
