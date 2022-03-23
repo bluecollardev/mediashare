@@ -11,14 +11,14 @@ import { useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withGlobalStateConsumer } from '../../core/globalState';
 
 import { ScrollView, View } from 'react-native';
-import { List, Button } from 'react-native-paper';
+import { List } from 'react-native-paper';
 
 import { PageContainer, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/MediaCard';
 import { PlaylistsComponent } from './Playlists';
+import { ActionButtons } from '../layout/ActionButtons';
 
 import { filterUnique } from '../../utils';
-import { theme } from '../../styles';
 import { createRandomRenderKey } from '../../core/utils';
 
 export const SharedList = () => {
@@ -74,17 +74,14 @@ export const SharedBlock = () => {
               views={sharedCount}
               likes={likesCount}
             >
-              <Button
-                icon="live-tv"
-                color={theme.colors.primary}
-                mode="contained"
-                style={{ width: '100%', marginBottom: 10 }}
-                compact
-                dark
-                onPress={() => viewPlaylist(item)}
-              >
-                Watch Now
-              </Button>
+              <ActionButtons
+                containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
+                showCancel={false}
+                showAction={true}
+                actionLabel="Watch Now"
+                actionIcon="live-tv"
+                onActionClicked={() => viewPlaylist(item)}
+              />
             </MediaCard>
           </View>
         );

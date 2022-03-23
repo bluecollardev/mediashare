@@ -123,6 +123,15 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
               Play From Beginning
             </Button>
             <Divider /> */}
+            {!allowEdit && (
+              <ActionButtons
+                containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
+                showCancel={false}
+                showAction={true}
+                actionLabel="Watch Now"
+                actionIcon="live-tv"
+              />
+            )}
             {!build.forFreeUser && allowEdit && (
               <ActionButtons
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
