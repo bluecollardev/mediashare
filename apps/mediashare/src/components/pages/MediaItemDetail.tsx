@@ -1,15 +1,18 @@
 import React from 'react';
-import { ScrollView } from 'react-native-paper';
+import { ScrollView } from 'react-native';
+import { withGlobalStateConsumer } from '../../core/globalState/index';
 import { useAppSelector } from '../../store';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/MediaCard';
 
-const MediaItemDetail = ({}: PageProps) => {
+// @ts-ignore
+const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
   const mediaItem = useAppSelector((state) => state.mediaItem?.entity);
   const { title, description, category, author, uri, thumbnail } = mediaItem || {};
 
   const tagKeys = (mediaItem?.tags || []).map((tag) => tag.key);
+  const { tags = [] } = globalState;
 
   return (
     <PageContainer>
@@ -23,6 +26,7 @@ const MediaItemDetail = ({}: PageProps) => {
             thumbnail={thumbnail}
             showThumbnail={true}
             category={category}
+            availableTags={tags}
             tags={tagKeys}
             showSocial={true}
             showActions={false}
@@ -37,4 +41,4 @@ const MediaItemDetail = ({}: PageProps) => {
   );
 };
 
-export default withLoadingSpinner(MediaItemDetail);
+export default withLoadingSpinner(withGlobalStateConsumer(MediaItemDetail));
