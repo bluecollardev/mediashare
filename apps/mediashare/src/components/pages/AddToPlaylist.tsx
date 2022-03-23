@@ -70,7 +70,6 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
       dispatch(getPlaylistById(playlistId));
       const { search } = globalState;
       const args = { text: search?.filters?.text ? search.filters.text : '' };
-      // console.log(`AddToPlaylist.useEffect > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
       dispatch(findMediaItems(args));
       setIsLoaded(true);
     }

@@ -12,7 +12,6 @@ export interface AppHeaderProps {
 }
 
 const AppHeaderComponent = ({ options, back, navigation, searchable = false, globalState }: AppHeaderProps) => {
-  // console.log(`AppHeaderComponent > Dumping global state: ${JSON.stringify(globalState, null, 2)}`);
   const [searchIsActive, setSearchIsActive] = useState(false);
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
 
@@ -28,8 +27,6 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
     setSearchText(text);
     setSearchFilters({ text });
   };
-
-  // console.log(`AppHeader > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
 
   return (
     <Appbar.Header style={{ backgroundColor: theme.colors.background }}>

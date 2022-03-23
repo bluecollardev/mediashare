@@ -65,14 +65,9 @@ export function AppUpload({
       return;
     }
 
-    console.log('Upload video');
     onUploadStart();
 
-    console.log('Video upload response');
-    console.log(video);
     try {
-      console.log('Dispatching createThumbnail action');
-      console.log(JSON.stringify({ key: video.name, fileUri: video.uri }, null, 2));
       await dispatch(createThumbnail({ key: video.name, fileUri: video.uri }));
     } catch (err) {
       console.log('Dispatching createThumbnail action failed');
@@ -86,7 +81,6 @@ export function AppUpload({
 
   async function uploadPhoto() {
     launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
-      console.log('Upload photo');
       onUploadStart();
 
       if (!res.assets) {

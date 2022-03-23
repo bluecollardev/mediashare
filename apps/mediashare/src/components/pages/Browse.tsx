@@ -33,10 +33,6 @@ export const SharedList = () => {
     return (Object.assign({}, item, { _id: item.playlistId }) as unknown) as PlaylistResponseDto;
   });
 
-  // console.log(`SharedList > Dumping sortedList: ${JSON.stringify(sortedList, null, 2)}`);
-  // sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
-  // sortedList = sortedList.filter((item) => item.mediaIds.length > 0);
-
   const viewPlaylistAction = useViewPlaylistById();
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item.playlistId });
 
@@ -129,13 +125,9 @@ export const Browse = ({
   async function loadData() {
     const { search } = globalState;
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Browse.loadData > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
-    // console.log(globalState);
     if (search.filters.text) {
-      // console.log('Dispatch findPlaylists');
       await dispatch(findPlaylists(args));
     } else {
-      // console.log('Dispatch getUserPlaylists');
       await dispatch(getUserPlaylists({}));
     }
     setIsLoaded(true);

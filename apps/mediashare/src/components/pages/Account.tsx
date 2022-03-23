@@ -190,7 +190,6 @@ export const Account = ({ globalState }: PageProps) => {
   async function loadData() {
     const { search } = globalState;
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Account.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
     await dispatch(findMediaItems(args));
     await dispatch(loadUsers());
     // @ts-ignore

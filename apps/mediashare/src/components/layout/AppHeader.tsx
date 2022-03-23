@@ -57,11 +57,9 @@ const AppHeaderComponent = ({
     tags: [],
   },
 }: AppHeaderProps) => {
-  // console.log(`AppHeaderComponent > Dumping global state: ${JSON.stringify(globalState, null, 2)}`);
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
   const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
   const [searchIsActive, setSearchIsActive] = useState(false);
-  // console.log(`[AppHeaderComponent] tags: ${JSON.stringify(tags, null, 2)}`);
   const [selectedTags, setSelectedTags] = useState([]);
 
   const placeholder = `Search ${title}`;
@@ -81,8 +79,6 @@ const AppHeaderComponent = ({
   );
 
   const [displayMode, setDisplayMode] = useState(globalState?.displayMode);
-
-  // console.log(`AppHeader > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
 
   return (
     <Appbar.Header style={{ backgroundColor: theme.colors.background }}>
@@ -204,8 +200,6 @@ const AppHeaderComponent = ({
   );
 
   function onSelectedTagsChange(tags) {
-    // console.log('selected tags changed');
-    // console.log(tags);
     setSelectedTags(tags);
     updateSearchTags(tags);
   }

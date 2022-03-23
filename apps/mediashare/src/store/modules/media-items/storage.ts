@@ -144,7 +144,7 @@ export const copyStorage = copyStorageFactory({ root: mediaRoot, uploadRoot, vid
 export async function putToS3({ key, file, options = {} }: PutStorageParams) {
   const { title = '', description = '', summary = '', contentType = 'video/mp4' } = options;
   const result = await Storage.put(key, file, { contentType, metadata: { summary, description }, contentDisposition: title });
-  console.log('PUT to S3 storage');
+  console.log('[putToS3] PUT to S3 storage');
   console.log(result);
   return result;
 }
@@ -153,7 +153,7 @@ export async function fetchMedia(path: string) {
   const response = await fetch(path);
   const blob = await response.blob();
   if (!blob) {
-    console.log('no blob in storage.service/fetchmedia');
+    console.log('[fetchMedia] no blob in storage.service/fetchmedia');
   }
   return blob;
 }
@@ -174,8 +174,8 @@ async function getVideoThumbnailFromUri(fileUri) {
     item = await VideoThumbnails.getThumbnailAsync(fileUri);
   } catch (err) {
     console.log('[getVideoThumbnailFromUri] Error getting thumbnail, getThumbnailAsync failed');
-    console.log('Make sure the file at [$fileUri] exists');
-    console.log('You may need to manually link the expo modules');
+    console.log('[getVideoThumbnailFromUri] Make sure the file at [$fileUri] exists');
+    console.log('[getVideoThumbnailFromUri] You may need to manually link the expo modules');
     console.log(err);
   }
   return item;

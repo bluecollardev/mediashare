@@ -43,11 +43,10 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
 
     useEffect(() => {
       if (authenticatedAndLoggedIn) {
-        console.log('authenticatedAndLoggedIn is true, run setIsLoggedIn effect');
+        console.log('[GlobalStateProvider] authenticatedAndLoggedIn is true, run setIsLoggedIn effect');
         setIsLoggedIn(authenticatedAndLoggedIn);
       }
     }, [authenticatedAndLoggedIn]);
-    console.log(`are we logged in? ${authenticatedAndLoggedIn}`);
 
     useEffect(() => {
       const loadTags = async () => {

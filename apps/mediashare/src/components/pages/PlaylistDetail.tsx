@@ -61,7 +61,6 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   }, [isLoaded]);
 
   // console.log(`Logged In User: ${appUserId}, Media Item Owned By: ${createdBy}`);
-  // console.log(selected);
 
   const allowEdit = createdBy === appUserId;
 

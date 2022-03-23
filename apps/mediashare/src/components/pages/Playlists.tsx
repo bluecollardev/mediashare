@@ -88,7 +88,6 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
 export const Playlists = ({ globalState }: PageProps) => {
-  // console.log(`Playlists > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
   const shareWith = useRouteName(routeNames.shareWith);
   const createPlaylist = useRouteName(routeNames.playlistAdd);
   const viewPlaylist = useViewPlaylistById();
@@ -129,8 +128,6 @@ export const Playlists = ({ globalState }: PageProps) => {
   const searchTags = searchFilters.tags || [];
   const prevSearchTagsRef = useRef(searchTags);
   useEffect(() => {
-    // console.log('Search filters updated, dumping entities');
-    // console.log(entities);
     // Only run this if search tags have actually changed in value
     if (JSON.stringify(prevSearchTagsRef.current) !== JSON.stringify(searchTags)) {
       if (Array.isArray(searchTags) && searchTags.length > 0) {
@@ -218,13 +215,9 @@ export const Playlists = ({ globalState }: PageProps) => {
   async function loadData() {
     const { search } = globalState;
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Playlists.loadData > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
-    // console.log(globalState);
     if (search.filters.text) {
-      // console.log('[Playlists.loadData] Dispatch findPlaylists');
       await dispatch(findPlaylists(args));
     } else {
-      // console.log('[Playlists.loadData] Dispatch getUserPlaylists');
       await dispatch(getUserPlaylists({}));
     }
   }
@@ -233,13 +226,9 @@ export const Playlists = ({ globalState }: PageProps) => {
     setRefreshing(true);
     const { search } = globalState;
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Playlists.refresh > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
-    // console.log(globalState);
     if (search.filters.text) {
-      // console.log('Dispatch findPlaylists');
       await dispatch(findPlaylists(args));
     } else {
-      // console.log('Dispatch getUserPlaylists');
       await dispatch(getUserPlaylists({}));
     }
     setRefreshing(false);

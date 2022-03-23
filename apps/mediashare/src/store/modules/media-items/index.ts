@@ -51,9 +51,7 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
     src: getStorage(uri),
   }).toPromise();
   apis.views.viewsControllerCreateMediaView({ mediaId }).pipe(take(1)).subscribe();
-  const response = { mediaItem: result.mediaItem as MediaItemDto, src: result.src };
-  console.log(`[getMediaItemById] response: ${JSON.stringify(response, null, 2)}`);
-  return response;
+  return { mediaItem: result.mediaItem as MediaItemDto, src: result.src };
 });
 
 export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {
@@ -136,9 +134,6 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
       // TODO: Is there a better way to set the title?
       const automaticTitle = titleFromKey(item.key);
       const thumbnailUrl = await createFeedItemThumbnail(item.key);
-      console.log('Compare URLs...');
-      console.log(`thumbnailUrl: ${thumbnailUrl}`);
-      console.log(`dto thumbnailUrl: ${awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg'}`);
       const { videoKey } = KeyFactory(sanitizedKey);
       const createMediaItemDto: CreateMediaItemDto = {
         key: videoKey,

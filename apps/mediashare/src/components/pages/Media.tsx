@@ -81,8 +81,6 @@ export const MediaComponent = ({
 const actionModes = { delete: 'delete', default: 'default' };
 
 export const Media = ({ navigation, globalState }: PageProps) => {
-  // console.log(`Media > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
-
   const addFromFeed = useRouteName(routeNames.addFromFeed);
   const addMedia = useRouteName(routeNames.mediaItemAdd);
   const editMedia = useEditMediaItem();
@@ -103,6 +101,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onRefresh = useCallback(refresh, [dispatch]);
 
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
@@ -122,8 +121,6 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   const searchTags = searchFilters.tags || [];
   const prevSearchTagsRef = useRef(searchTags);
   useEffect(() => {
-    // console.log('Search filters updated, dumping entities');
-    // console.log(entities);
     // Only run this if search tags have actually changed in value
     if (JSON.stringify(prevSearchTagsRef.current) !== JSON.stringify(searchTags)) {
       if (Array.isArray(searchTags) && searchTags.length > 0) {
@@ -165,9 +162,6 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
-
-  // console.log('Dumping filtered entities');
-  // console.log(filteredEntities);
 
   return (
     <PageContainer>
@@ -217,8 +211,6 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     const { search } = globalState;
 
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`[Media.loadData] Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
-    // console.log(globalState);
     await dispatch(findMediaItems(args));
   }
 
@@ -226,8 +218,6 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     setRefreshing(true);
     const { search } = globalState;
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Media.refresh > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
-    // console.log(globalState);
     await dispatch(findMediaItems(args));
     setRefreshing(false);
   }

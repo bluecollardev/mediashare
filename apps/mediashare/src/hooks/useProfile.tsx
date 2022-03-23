@@ -27,7 +27,6 @@ export const useProfile = function (userId?: string) {
 
   useEffect(() => {
     if (!loaded) {
-      // console.log(`useProfile.useEffect > Dispatch findMediaItems`);
       forkJoin([dispatch(findMediaItems({})), dispatch(loadUsers()), dispatch(loadUser()), dispatch(loadProfile(userId))]).subscribe(() => setLoaded(true));
     }
   }, [loaded, dispatch, userId]);
