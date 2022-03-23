@@ -57,4 +57,4 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
   }
 };
 
-export default withLoadingSpinner(AddFromCollection);
+export default withLoadingSpinner(undefined)(AddFromCollection);

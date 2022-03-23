@@ -74,4 +74,4 @@ const ShareWith = ({}: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(ShareWith);
+export default withLoadingSpinner(undefined)(ShareWith);

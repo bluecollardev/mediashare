@@ -142,4 +142,4 @@ export const Browse = ({
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(Browse));
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(Browse));

@@ -25,4 +25,4 @@ export const LoadingOverlay = ({ show = false, onDismiss, title, subtitle }: Loa
 };
 
 export default LoadingOverlay;
-// export default withLoadingSpinner(LoadingOverlay);
+// export default withLoadingSpinner(undefined)(LoadingOverlay);

@@ -14,9 +14,8 @@ import { Button } from 'react-native-paper';
 import { theme } from '../../styles';
 
 interface AppUploadProps {
-  startLoad?: any;
-  endLoad?: any;
-  onUpload: (uri) => any;
+  onUploadStart?: () => any;
+  onUploadComplete?: (uri) => any;
   uploadMode: 'video' | 'photo';
   label?: string;
   children?: any;
@@ -24,10 +23,19 @@ interface AppUploadProps {
 
 const maxUpload = parseInt(Config.MAX_UPLOAD, 10) || 104857600;
 
-export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = 'Upload Picture', children }: AppUploadProps) {
+export function AppUpload({
+  uploadMode = 'photo',
+  onUploadStart = () => undefined,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onUploadComplete = (uri) => undefined,
+  label = 'Upload Picture',
+  children,
+}: AppUploadProps) {
   const dispatch = useDispatch();
   label = label || (uploadMode === 'video' ? 'Upload Video' : uploadMode === 'photo' ? 'Upload Photo' : 'Upload File');
 
+  console.log('Does AppUpload have children');
+  console.log(children);
   if (children) {
     return React.cloneElement(React.Children.only(children), {
       onPress: uploadMode === 'video' ? () => uploadVideo() : () => uploadPhoto(),
@@ -59,6 +67,9 @@ export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = '
       return;
     }
 
+    console.log('Upload video');
+    onUploadStart();
+
     console.log('Video upload response');
     console.log(video);
     try {
@@ -67,15 +78,19 @@ export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = '
       await dispatch(createThumbnail({ key: video.name, fileUri: video.uri }));
     } catch (err) {
       console.log('Dispatching createThumbnail action failed');
+      onUploadComplete('');
       console.log(err);
     }
 
-    handleUploadSuccess(video);
+    handleUploadComplete(video);
     // setDocumentUri(document.uri || '');
   }
 
   async function uploadPhoto() {
     launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
+      console.log('Upload photo');
+      onUploadStart();
+
       if (!res.assets) {
         return;
       }
@@ -84,13 +99,13 @@ export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = '
       fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
         // eslint-disable-next-line no-shadow
         const image = awsUrl + res.key;
-        handleUploadSuccess(image);
+        handleUploadComplete(image);
       });
     });
   }
 
-  async function handleUploadSuccess(media) {
-    onUpload(media);
+  async function handleUploadComplete(mediaUri) {
+    onUploadComplete(mediaUri);
   }
 }
 

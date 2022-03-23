@@ -36,6 +36,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
   const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
   const [mediaUri, setMediaUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
+  const [uploading, setUploading] = useState(false);
   // const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
   const isValid = function () {
     return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !minLength(1)(mediaUri);
@@ -76,11 +77,11 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
             isPlayable={true}
             topDrawer={() =>
               !mediaUri ? (
-                <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
-                  <UploadPlaceholder buttonText="Upload Media" />
+                <AppUpload uploadMode="video" onUploadStart={onUploadStart} onUploadComplete={onUploadComplete}>
+                  <UploadPlaceholder uploading={uploading} uploaded={!!mediaUri} buttonText="Upload Media" />
                 </AppUpload>
               ) : (
-                <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
+                <AppUpload uploadMode="video" onUploadStart={onUploadStart} onUploadComplete={onUploadComplete}>
                   <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
                     Replace Media
                   </Button>
@@ -96,7 +97,13 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
     </PageContainer>
   );
 
-  async function onUploadSuccess(media) {
+  async function onUploadStart() {
+    setUploading(true);
+    setMediaUri('');
+  }
+
+  async function onUploadComplete(media) {
+    setUploading(false);
     setMediaUri(media.uri || '');
   }
 
@@ -132,4 +139,4 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(MediaItemAdd));
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(MediaItemAdd));

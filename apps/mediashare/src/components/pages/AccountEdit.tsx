@@ -132,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withLoadingSpinner(AccountEdit);
+export default withLoadingSpinner(undefined)(AccountEdit);

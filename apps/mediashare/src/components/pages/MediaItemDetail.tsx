@@ -41,4 +41,4 @@ const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
   );
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(MediaItemDetail));
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(MediaItemDetail));

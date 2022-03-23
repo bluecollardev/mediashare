@@ -252,21 +252,27 @@ const mediaItemSlice = createSlice({
       }))
       .addCase(addMediaItem.pending, reducePendingState())
       .addCase(addMediaItem.rejected, reduceRejectedState())
-      .addCase(addMediaItem.fulfilled, (state, action) => {
-        return {
-          ...state,
-          loading: false,
-          loaded: false,
-          getMediaItem: action.payload.uri,
-          mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
-        };
-      })
+      .addCase(
+        addMediaItem.fulfilled,
+        reduceFulfilledState((state, action) => {
+          return {
+            ...state,
+            loading: false,
+            loaded: true,
+            getMediaItem: action.payload.uri,
+            mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
+          };
+        })
+      )
       // TODO: Are we using these? Where?
       .addCase(getFeedMediaItems.pending, reducePendingState())
       .addCase(getFeedMediaItems.rejected, reduceRejectedState())
-      .addCase(getFeedMediaItems.fulfilled, (state, action) => {
-        return { ...state, feed: action.payload };
-      })
+      .addCase(
+        getFeedMediaItems.fulfilled,
+        reduceFulfilledState((state, action) => {
+          return { ...state, feed: action.payload };
+        })
+      )
       .addCase(setActiveMediaItem, (state, action) => {
         return { ...state, entity: action.payload };
       })

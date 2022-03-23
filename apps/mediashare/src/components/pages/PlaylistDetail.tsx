@@ -213,4 +213,4 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(PlaylistDetail));
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(PlaylistDetail));

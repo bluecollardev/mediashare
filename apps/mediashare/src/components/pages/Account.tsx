@@ -282,4 +282,4 @@ export const Account = ({ globalState }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(Account));
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(Account));

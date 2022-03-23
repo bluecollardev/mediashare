@@ -239,4 +239,4 @@ class CustomVerify extends Component<any> {
   }
 }
 
-export default withLoadingSpinner(LoginComponent);
+export default withLoadingSpinner(undefined)(LoginComponent);

@@ -14,9 +14,9 @@ export interface LoadingSpinnerProps {
 
 const DEFAULT_TIMEOUT = 0.5 * 1000;
 
-export const withLoadingSpinner = (WrapperComponent: any) => (props: any) => {
+export const withLoadingSpinner = (stateSelector = (state: any) => state?.user?.loading) => (WrappedComponent: any) => (props: any) => {
   // const loading = useAppSelector((state) => state?.app.loading);
-  const loading = useAppSelector((state: any) => state?.user?.loading);
+  const loading = useAppSelector(stateSelector);
   const [isLoading, setIsLoading] = useState(loading);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const withLoadingSpinner = (WrapperComponent: any) => (props: any) => {
   return (
     <>
       <LoadingOverlay show={isLoading} />
-      <WrapperComponent {...props} />
+      <WrappedComponent {...props} />
     </>
   );
 };

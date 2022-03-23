@@ -67,7 +67,7 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
     options.push(value);
   }
 
-  const onUpload = (uri: string) => {
+  const onUploadComplete = (uri: string) => {
     setImageSrc(uri);
   };
 
@@ -105,11 +105,11 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
             isEdit={true}
             topDrawer={() =>
               !imageSrc ? (
-                <AppUpload uploadMode="photo" onUpload={onUpload}>
+                <AppUpload uploadMode="photo" onUploadComplete={onUploadComplete}>
                   <UploadPlaceholder buttonText="Add Cover Photo" />
                 </AppUpload>
               ) : (
-                <AppUpload uploadMode="photo" onUpload={onUpload}>
+                <AppUpload uploadMode="photo" onUploadComplete={onUploadComplete}>
                   <Button mode="outlined" dark color={theme.colors.default} compact uppercase={false}>
                     <Text>Change Cover Photo</Text>
                   </Button>
@@ -148,4 +148,4 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(PlaylistAdd));
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(PlaylistAdd));

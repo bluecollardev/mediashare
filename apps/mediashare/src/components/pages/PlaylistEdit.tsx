@@ -66,7 +66,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
 
-  const onUpload = (uri: string) => {
+  const onUploadComplete = (uri: string) => {
     setImageSrc(uri);
   };
 
@@ -120,7 +120,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
                     </Button>
                   </View>
                   <View style={{ flex: 4 }}>
-                    <AppUpload uploadMode="photo" onUpload={onUpload}>
+                    <AppUpload uploadMode="photo" onUploadComplete={onUploadComplete}>
                       <Button mode="outlined" dark color={theme.colors.default} compact uppercase={false} style={styles.changeImageButton}>
                         <Text>Change Cover Photo</Text>
                       </Button>
@@ -130,7 +130,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
               ) : (
                 <View style={styles.itemControls}>
                   <View style={{ flex: 1 }}>
-                    <AppUpload uploadMode="photo" onUpload={onUpload}>
+                    <AppUpload uploadMode="photo" onUploadComplete={onUploadComplete}>
                       <UploadPlaceholder buttonText="Add Cover Photo" />
                     </AppUpload>
                   </View>
@@ -278,4 +278,4 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(PlaylistEdit));
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(PlaylistEdit));

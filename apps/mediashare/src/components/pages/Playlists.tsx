@@ -9,7 +9,6 @@ import { getUserPlaylists, findPlaylists, removeUserPlaylist, selectPlaylistActi
 import { PlaylistResponseDto } from '../../rxjs-api';
 
 import { withGlobalStateConsumer } from '../../core/globalState';
-import { useLoadPlaylistData } from '../../hooks/useLoadData';
 import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -290,7 +289,9 @@ export const Playlists = ({ globalState }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(Playlists));
+export default withLoadingSpinner((state) => {
+  return !state?.userPlaylists?.loaded || state?.userPlaylists?.loading;
+})(withGlobalStateConsumer(Playlists));
 
 const styles = StyleSheet.create({
   titleText: {

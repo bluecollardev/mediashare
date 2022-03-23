@@ -90,7 +90,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
 
   const dispatch = useDispatch();
 
-  const { loading, loaded, entities, selected } = useAppSelector((state) => state.mediaItems);
+  const { loading, loaded, entities, selected } = useAppSelector((state) => state?.mediaItems);
   const [isLoaded, setIsLoaded] = useState(loaded);
   useEffect(() => {
     if (loaded && !isLoaded) {
@@ -259,7 +259,9 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(Media));
+export default withLoadingSpinner((state) => {
+  return !state?.mediaItems?.loaded || state?.mediaItems?.loading;
+})(withGlobalStateConsumer(Media));
 
 const styles = StyleSheet.create({
   author: {

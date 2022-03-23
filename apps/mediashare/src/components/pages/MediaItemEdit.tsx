@@ -125,7 +125,7 @@ const MediaItemEdit = ({
                   </Button>
                 </View>
                 <View style={{ flex: 4 }}>
-                  <AppUpload uploadMode="photo" onUpload={setThumbnail}>
+                  <AppUpload uploadMode="photo" onUploadComplete={setThumbnail}>
                     <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact style={styles.changeImageButton}>
                       Change Preview Image
                     </Button>
@@ -177,4 +177,4 @@ const MediaItemEdit = ({
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(MediaItemEdit));
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(MediaItemEdit));

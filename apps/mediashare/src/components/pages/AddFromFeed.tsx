@@ -30,7 +30,7 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
   };
 
   const [loaded, setIsLoaded] = useState(false);
-  const items = useAppSelector((state) => state.mediaItem.feed);
+  const items = useAppSelector((state) => state?.mediaItem?.feed);
 
   const saveMedia = async function () {
     if (selectedItems.size < 1) {
@@ -87,4 +87,6 @@ export const AddFromFeed = ({ navigation }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(AddFromFeed);
+export default withLoadingSpinner((state) => {
+  return !state?.mediaItem?.feed;
+})(AddFromFeed);

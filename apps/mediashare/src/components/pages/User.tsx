@@ -159,4 +159,4 @@ export const User = ({}: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(User);
+export default withLoadingSpinner(undefined)(User);

@@ -160,4 +160,4 @@ const Profile = ({ route }: ProfileProps) => {
   }
 };
 
-export default withLoadingSpinner(Profile);
+export default withLoadingSpinner(undefined)(Profile);
