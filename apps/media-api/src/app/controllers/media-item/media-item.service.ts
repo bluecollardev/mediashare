@@ -5,8 +5,8 @@ import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { MediaItem } from './entities/media-item.entity';
+import { map } from 'remeda';
 
-import * as R from 'remeda';
 @Injectable()
 export class MediaItemService extends DataService<MediaItem, MongoRepository<MediaItem>> {
   static SEARCH_FIELDS = [
@@ -76,7 +76,7 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
   findPlaylistMedia(idStrings: ObjectId[]) {
     return this.repository.find({
       where: {
-        $or: R.map(idStrings, (id) => ({
+        $or: map(idStrings, (id) => ({
           _id: id
         }))
       }

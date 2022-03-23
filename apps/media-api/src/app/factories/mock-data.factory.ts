@@ -5,7 +5,7 @@ import { MediaItem } from '../controllers/media-item/entities/media-item.entity'
 import { CreateUserDto } from '../controllers/user/dto/create-user.dto';
 import { User } from '../controllers/user/entities/user.entity';
 
-import * as R from 'remeda';
+import { range } from 'remeda';
 import { Playlist } from '../controllers/playlist/entities/playlist.entity';
 import { SessionUserInterface } from '../core/models/auth-user.model';
 
@@ -102,8 +102,8 @@ export class UserFactory extends DataFn {
 export function userDataFactory(userFactory: UserFactory) {
   const user = userFactory.user;
 
-  const media = R.range(1, DataFn.number(10)).map(() => userFactory.createMediaDto());
-  const playlistDto = R.range(1, DataFn.number(4)).map(() => userFactory.createPlaylistDto(media));
+  const media = range(1, DataFn.number(10)).map(() => userFactory.createMediaDto());
+  const playlistDto = range(1, DataFn.number(4)).map(() => userFactory.createPlaylistDto(media));
 
   return { playlistDto, user, media };
 }

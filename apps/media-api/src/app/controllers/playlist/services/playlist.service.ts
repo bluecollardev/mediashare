@@ -66,7 +66,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         {
           $match: {
             where: {
-              $or: R.map(ObjectIds, (id) => ({
+              $or: map(ObjectIds, (id) => ({
                 _id: id,
               })),
             },
@@ -79,7 +79,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
   async queryPlaylistsById(playlistIds: ObjectId[]) {
     return this.repository.find({
       where: {
-        $or: R.map(playlistIds, (id) => ({
+        $or: map(playlistIds, (id) => ({
           _id: id,
         })),
       },

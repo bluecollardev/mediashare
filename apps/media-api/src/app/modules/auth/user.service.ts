@@ -10,7 +10,7 @@ import { ObjectId } from 'mongodb';
 import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
 import { AuthService } from './auth.service';
 import { UpdateUserDto } from '../../controllers/user/dto/update-user.dto';
-import * as R from 'remeda';
+import { omit }from 'remeda';
 
 @Injectable()
 export class UserService extends DataService<User, MongoRepository<User>> {
@@ -36,7 +36,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return this.client.send({ role: 'auth', cmd: 'setRoles' }, { _id, roles }).toPromise();
   }
   updateUser({ userId, updateUserDto }: { userId: ObjectId; updateUserDto: UpdateUserDto }) {
-    return this.update(userId, R.omit(updateUserDto, ['role']));
+    return this.update(userId, omit(updateUserDto, ['role']));
   }
 
   getUserById(id: ObjectId) {
