@@ -139,14 +139,24 @@ const AppHeaderComponent = ({
                               subItemBackground: 'transparent',
                             }}
                             styles={{
+                              container: {
+                                backgroundColor: '#000',
+                              },
                               searchTextInput: {
                                 color: '#fff',
                               },
                               searchBar: {
                                 backgroundColor: '#000',
                               },
-                              container: {
-                                backgroundColor: '#000',
+                              selectToggle: {
+                                marginVertical: 10,
+                                paddingLeft: 15,
+                                paddingRight: 10,
+                                borderWidth: 1,
+                                borderColor: theme.colors.defaultBorder,
+                              },
+                              chipContainer: {
+                                marginTop: 10,
                               },
                             }}
                             items={availableMediaTags}
@@ -163,8 +173,8 @@ const AppHeaderComponent = ({
                             showDropDowns={true}
                             parentChipsRemoveChildren={true}
                             showCancelButton={true}
-                            modalWithTouchable={true}
-                            modalWithSafeAreaView={true}
+                            modalWithTouchable={false}
+                            modalWithSafeAreaView={false}
                           />
                         </Card.Content>
                       </Card>

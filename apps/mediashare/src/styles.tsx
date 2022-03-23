@@ -3,7 +3,7 @@ import { DarkTheme } from 'react-native-paper';
 
 const theme = {
   ...DarkTheme,
-  roundness: 2,
+  roundness: 0,
   colors: {
     ...DarkTheme.colors,
     background: 'rgba(30,30,30,1)',

@@ -71,13 +71,15 @@ export function ActionButtons({
           <TouchableWithoutFeedback
             accessibilityRole="button"
             onPress={() => {
-              onActionClicked();
+              if (!disableAction) {
+                onActionClicked();
+              }
             }}
             style={{ ...defaultStyles.actionButtonTouchable, ...actionButtonTouchableStyles }}
           >
-            <View style={{ ...defaultStyles.actionButton, ...actionButtonStyles }}>
+            <View style={{ ...defaultStyles.actionButton, ...actionButtonStyles, ...(disableAction ? defaultStyles.actionButtonDisabled : {}) }}>
               {actionIcon && <IconButton color={actionIconColor} icon={actionIcon} />}
-              {!!actionLabel && <Text style={{ ...defaultStyles.actionButtonLabel, ...actionButtonLabelStyles }}>{actionLabel}</Text>}
+              {!!actionLabel && <Text style={{ ...defaultStyles.actionButtonLabel, ...actionButtonLabelStyles, ...(disableAction ? defaultStyles.actionButtonLabelDisabled : {}) }}>{actionLabel}</Text>}
             </View>
           </TouchableWithoutFeedback>
         )}
@@ -139,6 +141,11 @@ const defaultStyles = StyleSheet.create({
     borderRadius: 0,
     backgroundColor: theme.colors.primary,
   },
+  actionButtonDisabled: {
+    borderColor: theme.colors.defaultBorder,
+    borderWidth: 1,
+    backgroundColor: theme.colors.darkDefault,
+  },
   actionButtonLabel: {
     display: 'flex',
     justifyContent: 'center',
@@ -148,5 +155,8 @@ const defaultStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#ffffff',
     paddingRight: 35,
+  },
+  actionButtonLabelDisabled: {
+    color: theme.colors.defaultBorder,
   },
 });
