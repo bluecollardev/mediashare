@@ -61,7 +61,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
           title={fullName}
           email={state?.email}
           phoneNumber={state?.phoneNumber}
-          image={user?.imageSrc}
+          image={state?.imageSrc}
           likes={state?.likesCount}
           shared={state?.sharedCount}
           shares={state?.sharesCount}
