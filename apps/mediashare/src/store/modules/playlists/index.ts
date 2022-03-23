@@ -62,7 +62,7 @@ export const removeUserPlaylist = createAsyncThunk(playlistActionTypes.removeUse
   return await api.playlists.playlistControllerRemove({ playlistId: id }).toPromise();
 });
 
-export const findPlaylists = createAsyncThunk(playlistsActionTypes.findPlaylists, async (args: { text?: string; tags?: string[] }, { extra }) => {
+export const findPlaylists = createAsyncThunk(playlistsActionTypes.findPlaylists, async (args: { text?: string, tags?: string[] }, { extra }) => {
   const { api } = extra as { api: ApiService };
   const { text, tags = [] } = args;
   console.log(`Search args: ${JSON.stringify(args, null, 2)}`);

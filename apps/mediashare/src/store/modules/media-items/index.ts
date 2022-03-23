@@ -190,12 +190,12 @@ export const deleteMediaItem = createAsyncThunk(mediaItemActionTypes.removeMedia
   return await api.mediaItems.mediaItemControllerRemove({ mediaId: id }).toPromise();
 });
 
-export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async (args: { text?: string }, { extra }) => {
+export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async (args: { text?: string, tags?: string[] }, { extra }) => {
   const { api } = extra as { api: ApiService };
-  const { text } = args;
+  const { text, tags = [] } = args;
   console.log(`Search args: ${JSON.stringify(args, null, 2)}`);
-  console.log(`Searching media items for: ${text}`);
-  return await api.mediaItems.mediaItemControllerFindAll({ text }).toPromise();
+  console.log(`Searching media items for: [text] ${text}, [tags] ${JSON.stringify(tags)}`);
+  return await api.mediaItems.mediaItemControllerFindAll({ text, tags }).toPromise();
 });
 
 export interface MediaItemInitialState {
