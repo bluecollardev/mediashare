@@ -111,8 +111,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   views = 0,
   shares = 0,
 }: MediaCardProps) => {
-  console.log('MediaCard tags');
-  console.log(tags);
+  // console.log('MediaCard tags');
+  // console.log(tags);
   const getMediaDisplayMode = () => (showThumbnail && thumbnail ? 'image' : 'video');
   const initialMediaDisplayMode = isPlayable ? (getMediaDisplayMode() as MediaDisplayMode) : 'image';
   const [mediaDisplayMode, setMediaDisplayMode] = useState(initialMediaDisplayMode);

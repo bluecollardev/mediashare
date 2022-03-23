@@ -120,6 +120,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
       tags: selectedTagKeys || ([] as any[]),
       eTag: '',
     };
+
     await dispatch(addMediaItem(dto));
 
     setCategory(MediaCategoryType.Free);
@@ -139,4 +140,6 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(undefined)(withGlobalStateConsumer(MediaItemAdd));
+export default withLoadingSpinner((state) => {
+  return !!state?.mediaItem?.loading || false;
+})(withGlobalStateConsumer(MediaItemAdd));

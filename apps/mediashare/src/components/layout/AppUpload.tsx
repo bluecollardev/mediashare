@@ -34,8 +34,6 @@ export function AppUpload({
   const dispatch = useDispatch();
   label = label || (uploadMode === 'video' ? 'Upload Video' : uploadMode === 'photo' ? 'Upload Photo' : 'Upload File');
 
-  console.log('Does AppUpload have children');
-  console.log(children);
   if (children) {
     return React.cloneElement(React.Children.only(children), {
       onPress: uploadMode === 'video' ? () => uploadVideo() : () => uploadPhoto(),

@@ -112,6 +112,7 @@ export const Playlists = ({ globalState }: PageProps) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(refresh, [dispatch]);
+  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
@@ -120,24 +121,16 @@ export const Playlists = ({ globalState }: PageProps) => {
       loadData().then();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, globalState]);
+  }, [isLoaded, globalState, searchFilters]);
 
-  const [fabState, setFabState] = useState({ open: false });
-  const fabActions = [
-    { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
-    { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'library-add', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
-  ];
-
-  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
-  useEffect(() => {
-    clearCheckboxSelection();
-  }, []);
-
-  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
+  const searchText = searchFilters.text || '';
+  const prevSearchTextRef = useRef(searchText);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const searchTags = searchFilters.tags || [];
   const prevSearchTagsRef = useRef(searchTags);
   useEffect(() => {
+    // console.log('Search filters updated, dumping entities');
+    // console.log(entities);
     // Only run this if search tags have actually changed in value
     if (JSON.stringify(prevSearchTagsRef.current) !== JSON.stringify(searchTags)) {
       if (Array.isArray(searchTags) && searchTags.length > 0) {
@@ -154,13 +147,31 @@ export const Playlists = ({ globalState }: PageProps) => {
           return false;
         });
         setFilteredEntities(filtered);
-      } else if (searchTags.length === 0) {
+      } else if (searchTags?.length === 0) {
+        setFilteredEntities(entities);
         setFilteredEntities(entities);
       }
       prevSearchTagsRef.current = searchTags;
+    } else if (prevSearchTextRef.current !== searchText && searchText !== '') {
+      prevSearchTextRef.current = searchText;
+      setFilteredEntities(entities);
+    } else if (prevSearchTextRef.current !== searchText && searchText === '') {
+      setFilteredEntities(entities);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTags]);
+  }, [entities, searchTags]);
+
+  const [fabState, setFabState] = useState({ open: false });
+  const fabActions = [
+    { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+    { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+    { icon: 'library-add', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
+  ];
+
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
 
   return (
     <PageContainer>
@@ -210,10 +221,10 @@ export const Playlists = ({ globalState }: PageProps) => {
     // console.log(`Playlists.loadData > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
     // console.log(globalState);
     if (search.filters.text) {
-      console.log('[Playlists.loadData] Dispatch findPlaylists');
+      // console.log('[Playlists.loadData] Dispatch findPlaylists');
       await dispatch(findPlaylists(args));
     } else {
-      console.log('[Playlists.loadData] Dispatch getUserPlaylists');
+      // console.log('[Playlists.loadData] Dispatch getUserPlaylists');
       await dispatch(getUserPlaylists({}));
     }
   }
@@ -290,7 +301,7 @@ export const Playlists = ({ globalState }: PageProps) => {
 };
 
 export default withLoadingSpinner((state) => {
-  return !state?.userPlaylists?.loaded || state?.userPlaylists?.loading;
+  return !!state?.userPlaylists?.loading || false;
 })(withGlobalStateConsumer(Playlists));
 
 const styles = StyleSheet.create({

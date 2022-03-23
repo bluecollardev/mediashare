@@ -307,6 +307,8 @@ const mediaItemsSlice = createSlice({
       .addCase(
         findMediaItems.fulfilled,
         reduceFulfilledState((state, action) => {
+          console.log('findMediaItems success');
+          console.log(action.payload);
           return { ...state, entities: action.payload, loading: false, loaded: true };
         })
       )

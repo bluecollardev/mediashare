@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyleSheet, FlatList, View } from 'react-native';
-import { TagKeyValue } from '../../../../media-api/src/app/modules/tag/dto/tag-key-value.dto';
 
 import { routeNames } from '../../routes';
 
@@ -105,20 +104,26 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(refresh, [dispatch]);
+
+  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
-    if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
+    if (!isLoaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
       setPrevSearchFilters(currentSearchFilters);
       loadData().then();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, globalState]);
+  }, [isLoaded, globalState, searchFilters]);
 
-  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
+  const searchText = searchFilters.text || '';
+  const prevSearchTextRef = useRef(searchText);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const searchTags = searchFilters.tags || [];
   const prevSearchTagsRef = useRef(searchTags);
   useEffect(() => {
+    // console.log('Search filters updated, dumping entities');
+    // console.log(entities);
     // Only run this if search tags have actually changed in value
     if (JSON.stringify(prevSearchTagsRef.current) !== JSON.stringify(searchTags)) {
       if (Array.isArray(searchTags) && searchTags.length > 0) {
@@ -135,13 +140,19 @@ export const Media = ({ navigation, globalState }: PageProps) => {
           return false;
         });
         setFilteredEntities(filtered);
-      } else if (searchTags.length === 0) {
+      } else if (searchTags?.length === 0) {
+        setFilteredEntities(entities);
         setFilteredEntities(entities);
       }
       prevSearchTagsRef.current = searchTags;
+    } else if (prevSearchTextRef.current !== searchText && searchText !== '') {
+      prevSearchTextRef.current = searchText;
+      setFilteredEntities(entities);
+    } else if (prevSearchTextRef.current !== searchText && searchText === '') {
+      setFilteredEntities([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTags]);
+  }, [entities, searchTags]);
 
   const [fabState, setState] = useState({ open: false });
   const fabActions = [
@@ -154,6 +165,9 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
+
+  // console.log('Dumping filtered entities');
+  // console.log(filteredEntities);
 
   return (
     <PageContainer>
@@ -203,7 +217,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     const { search } = globalState;
 
     const args = { text: search?.filters?.text ? search.filters.text : '' };
-    console.log(`[Media.loadData] Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
+    // console.log(`[Media.loadData] Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
     // console.log(globalState);
     await dispatch(findMediaItems(args));
   }
@@ -260,7 +274,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
 };
 
 export default withLoadingSpinner((state) => {
-  return !state?.mediaItems?.loaded || state?.mediaItems?.loading;
+  return !!state?.mediaItems?.loading || false;
 })(withGlobalStateConsumer(Media));
 
 const styles = StyleSheet.create({
