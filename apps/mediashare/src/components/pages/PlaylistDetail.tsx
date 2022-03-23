@@ -117,17 +117,17 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
           >
             {/* TODO: Make this work and add it back in! */}
             {/* <Button
-              icon="live-tv"
-              color={theme.colors.default}
-              mode="outlined"
-              styles={{ width: '100%', marginTop: 25, marginBottom: 25 }}
-              compact
-              dark
-              onPress={() => (items && items.length > 0 ? viewMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
-            >
-              Play From Beginning
-            </Button>
-            <Divider /> */}
+                icon="live-tv"
+                color={theme.colors.default}
+                mode="outlined"
+                styles={{ width: '100%', marginTop: 25, marginBottom: 25 }}
+                compact
+                dark
+                onPress={() => (items && items.length > 0 ? viewMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
+              >
+                Play From Beginning
+              </Button>
+              <Divider /> */}
             {!allowEdit && (
               <ActionButtons
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
