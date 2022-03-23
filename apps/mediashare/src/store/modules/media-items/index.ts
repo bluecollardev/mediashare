@@ -19,7 +19,8 @@ import {
 import { getVideoPath, getThumbnailPath, getUploadPath, awsUrl, KeyFactory } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
-import { CreateMediaItemDto, MediaCategoryType, MediaItemDto, UpdateMediaItemDto } from '../../../rxjs-api';
+// TODO: Fix update dto!
+import { CreateMediaItemDto, MediaCategoryType, MediaItemDto, CreateMediaItemDto as UpdateMediaItemDto } from '../../../rxjs-api';
 import { apis, ApiService } from '../../apis';
 
 import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '../../helpers';
@@ -133,7 +134,9 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
       const sanitizedKey = sanitizeKey(item.key);
       // TODO: Is there a better way to set the title?
       const automaticTitle = titleFromKey(item.key);
-      const thumbnailUrl = await createFeedItemThumbnail(item.key);
+      // TODO: Fix the thumbnail? We're doing this two ways...
+      // const thumbnailUrl = await createFeedItemThumbnail(item.key);
+      await createFeedItemThumbnail(item.key);
       const { videoKey } = KeyFactory(sanitizedKey);
       const createMediaItemDto: CreateMediaItemDto = {
         key: videoKey,
@@ -164,7 +167,8 @@ export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMedia
   return await api.mediaItems
     .mediaItemControllerUpdate({
       mediaId: item._id,
-      updateMediaItemDto: item,
+      // TODO: Fix this!
+      updateMediaItemDto: item as any,
     })
     .toPromise();
 });
