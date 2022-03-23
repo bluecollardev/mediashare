@@ -19,8 +19,9 @@ import {
 import { getVideoPath, getThumbnailPath, getUploadPath, awsUrl, KeyFactory } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
-// TODO: Fix update dto!
-import { CreateMediaItemDto, MediaCategoryType, MediaItemDto, CreateMediaItemDto as UpdateMediaItemDto } from '../../../rxjs-api';
+import { CreateMediaItemDto, MediaItemDto, MediaCategoryType } from '../../../rxjs-api';
+// TODO: Fix update dto! Not sure why it's not being exported normally...
+import { UpdateMediaItemDto } from '../../../rxjs-api/models/UpdateMediaItemDto';
 import { apis, ApiService } from '../../apis';
 
 import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '../../helpers';
@@ -167,8 +168,7 @@ export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMedia
   return await api.mediaItems
     .mediaItemControllerUpdate({
       mediaId: item._id,
-      // TODO: Fix this!
-      updateMediaItemDto: item as any,
+      updateMediaItemDto: item,
     })
     .toPromise();
 });
@@ -194,7 +194,7 @@ export const deleteMediaItem = createAsyncThunk(mediaItemActionTypes.removeMedia
   return await api.mediaItems.mediaItemControllerRemove({ mediaId: id }).toPromise();
 });
 
-export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async (args: { text?: string, tags?: string[] }, { extra }) => {
+export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async (args: { text?: string; tags?: string[] }, { extra }) => {
   const { api } = extra as { api: ApiService };
   const { text, tags = [] } = args;
   console.log(`Search args: ${JSON.stringify(args, null, 2)}`);
