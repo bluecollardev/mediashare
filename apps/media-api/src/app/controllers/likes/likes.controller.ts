@@ -13,15 +13,15 @@ export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 
   @Post('playlist/:playlistId')
-  @LikeResponse()
   @ApiParam({ name: 'playlistId', type: String, required: true })
+  @LikeResponse()
   async createPlaylistView(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() createdBy: ObjectId) {
     return await this.likesService.create({ playlistId, createdBy });
   }
 
   @Post('mediaItem/:mediaId')
-  @LikeResponse()
   @ApiParam({ name: 'mediaId', type: String, required: true })
+  @LikeResponse()
   async createMediaView(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId, @GetUserId() createdBy: ObjectId) {
     return await this.likesService.create({ mediaId, createdBy });
   }

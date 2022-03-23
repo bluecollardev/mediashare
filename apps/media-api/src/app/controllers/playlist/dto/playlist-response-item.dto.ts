@@ -9,6 +9,7 @@ class PlaylistItemCreatedBy extends BcEntity {
   @ApiString()
   username: string;
 }
+
 export class PlaylistItemResponseDto extends IntersectionType(OmitType(MediaItem, ['createdBy']), PlaylistItem) {
   @ApiObjectId()
   playlistItemId: ObjectId;

@@ -11,22 +11,22 @@ import { TagGetResponse } from './tags.decorator';
 export class TagsController {
   constructor(private readonly tagService: TagService) {}
 
-  @TagGetResponse({ isArray: true })
   @Get()
+  @TagGetResponse({ isArray: true })
   async findAll() {
     return this.tagService.findAll();
   }
 
-  @TagGetResponse()
   @Get(RouteTokens.TAG_ID)
   @ApiParam({ name: 'tagId', type: String, required: true })
+  @TagGetResponse()
   async findOne(@Param('tagId', new ObjectIdPipe()) tagId: ObjectId) {
     return await this.tagService.findOne(tagId);
   }
 
-  @TagGetResponse()
   @Delete(RouteTokens.TAG_ID)
   @ApiParam({ name: 'tagId', type: String, required: true })
+  @TagGetResponse()
   async remove(@Param('tagId', new ObjectIdPipe()) tagId: ObjectId) {
     return await this.tagService.remove(tagId);
   }

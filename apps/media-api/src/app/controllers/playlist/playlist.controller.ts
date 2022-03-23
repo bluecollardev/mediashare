@@ -51,13 +51,7 @@ export class PlaylistController {
   }
 
   @Get(':playlistId')
-  @ApiParam({
-    name: 'playlistId',
-    required: true,
-    type: 'string',
-    example: new ObjectId().toHexString(),
-  })
-  @ApiParam({ name: 'playlistId', type: String, required: true })
+  @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   @PlaylistGetResponse({ type: PlaylistResponseDto })
   async findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
     const response = await this.playlistService.getPlaylistById({ playlistId });
@@ -66,11 +60,10 @@ export class PlaylistController {
   }
 
   @Put(':playlistId')
-  @ApiParam({ name: 'playlistId', type: 'string', required: true })
+  @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   @PlaylistPutResponse()
   async update(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() userId: ObjectId, @Body() updatePlaylistDto: UpdatePlaylistDto) {
     const { mediaIds, ...rest } = updatePlaylistDto;
-
     return await this.playlistService.update(playlistId, {
       ...rest,
       mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => new ObjectId(id)) : [],
@@ -78,15 +71,15 @@ export class PlaylistController {
   }
 
   @Delete(PLAYLIST_ID_TOKEN)
-  @ApiParam({ name: 'playlistId', type: String, required: true })
+  @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   remove(@Param('playlistId') playlistId: string) {
     return this.playlistService.remove(playlistId);
   }
 
   @Post(':playlistId/share/:userId')
-  @PlaylistPostResponse({ type: ShareItem, isArray: true })
   @ApiParam({ name: 'playlistId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
+  @PlaylistPostResponse({ type: ShareItem, isArray: true })
   async share(
     @Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId,
     @Param('userId', new ObjectIdPipe()) userId: ObjectId,

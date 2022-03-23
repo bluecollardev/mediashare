@@ -26,8 +26,8 @@ import { map } from 'rxjs/operators';
 export class UsersController {
   constructor(private readonly userService: UserService, private playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
-  @UserGetResponse({ isArray: true })
   @Get()
+  @UserGetResponse({ isArray: true })
   async findAll(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
     return from(this.userService.findAll()).pipe(map((users) => users.filter((user) => user._id !== userId)));
   }
@@ -51,24 +51,26 @@ export class UsersController {
   remove(@Param('userId') userId: string): Promise<DeleteResult> {
     return this.userService.remove(userId);
   }
+
   @Put(RouteTokens.USER_ID)
-  @UserPostResponse({ type: UserDto })
   @ApiBody({ type: UpdateUserDto })
   @ApiParam({ name: 'userId', type: String, required: true })
+  @UserPostResponse({ type: UserDto })
   update(@Param('userId', new ObjectIdPipe()) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser({ userId, updateUserDto });
   }
+
   @Get(':userId/playlists')
-  @UserGetResponse({ type: PlaylistResponseDto, isArray: true })
   @ApiParam({ name: 'userId', type: String, required: true })
   @ApiHideProperty()
+  @UserGetResponse({ type: PlaylistResponseDto, isArray: true })
   getPlaylists(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
-    return this.playlistService.getPlaylistByUserId({ userId });
+    return this.playlistService.getPlaylistsByUserId({ userId });
   }
 
   @Put(':userId/roles')
-  @UserPostResponse({ type: UserDto })
   @ApiBody({ enum: BC_ROLES })
+  @UserPostResponse({ type: UserDto })
   setRoles(@Param('userId') id: string, @Body() params: { roles: BcRolesType[] }) {
     const { roles = [] } = params;
     return this.userService.setRoles(id, roles);

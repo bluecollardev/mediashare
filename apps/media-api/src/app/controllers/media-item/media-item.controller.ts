@@ -51,15 +51,14 @@ export class MediaItemController {
   }
 
   @Get('popular')
-  @Get()
   @MediaGetResponse({ isArray: true })
   findPopularMediaItems() {
     return this.mediaItemService.findPopularMediaItems();
   }
 
   @Get()
-  @MediaGetResponse({ isArray: true })
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
+  @MediaGetResponse({ isArray: true })
   findAll(@Query('text') query?: string) {
     return query ? this.mediaItemService.searchMediaItems({ query }) : this.mediaItemService.findAll();
   }
@@ -70,8 +69,8 @@ export class MediaItemController {
   }
 
   @Get(':mediaId')
-  @MediaGetResponse()
   @ApiParam({ name: 'mediaId', type: String, required: true })
+  @MediaGetResponse()
   async findOne(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId) {
     const response = await this.mediaItemService.findMediaItemWithDetail(mediaId);
     if (!response) throw notFoundResponse('mediaItem', { args: { mediaId } });
@@ -79,10 +78,10 @@ export class MediaItemController {
     return response;
   }
 
-  @MediaPostResponse()
   @Put(RouteTokens.MEDIA_ITEM_ID)
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @ApiBody({ type: UpdateMediaItemDto })
+  @MediaPostResponse()
   update(@Param('mediaId', ObjectIdPipe) mediaId: ObjectId, @Body() updateMediaItemDto: UpdateMediaItemDto) {
     return this.mediaItemService.update(mediaId, updateMediaItemDto);
   }
@@ -97,9 +96,9 @@ export class MediaItemController {
   }
 
   @Post(':mediaId/share/:userId')
-  @MediaPostResponse({ type: ShareItem })
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
+  @MediaPostResponse({ type: ShareItem })
   async share(
     @Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId,
     @Param('userId', new ObjectIdPipe()) userId: ObjectId,

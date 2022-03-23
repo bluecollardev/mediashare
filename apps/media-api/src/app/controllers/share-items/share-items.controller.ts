@@ -21,16 +21,16 @@ export class ShareItemsController {
     return { sharedMedia, sharedPlaylists };
   }
 
-  @ShareItemGetResponse()
   @Get(RouteTokens.SHARE_ID)
   @ApiParam({ name: 'shareId', type: String, required: true })
+  @ShareItemGetResponse()
   async findOne(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {
     return await this.shareItemService.findOne(shareId);
   }
 
-  @ShareItemGetResponse()
   @Delete(':shareId')
   @ApiParam({ name: 'shareId', type: String, required: true })
+  @ShareItemGetResponse()
   async remove(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {
     return this.shareItemService.remove(shareId);
   }

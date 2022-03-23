@@ -69,12 +69,24 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
   }
 
   /* FIXME: hack-around for getting a user when one doesn't exist */
-  async getPlaylistByUserId({ userId }: OptionalObjectIdParameters = { userId: null }) {
+  async getPlaylistsByUserId({ userId }: OptionalObjectIdParameters = { userId: null }) {
     return this.repository
       .aggregate([
         {
-          $match: { createdBy: userId },
+          $match: {
+            createdBy: userId,
+          },
         },
+        {
+          $addFields: {
+            matchedTags : '$tags.key'
+          }
+        },
+        /* {
+          $match: {
+            matchedTags: { $in: [] },
+          },
+        }, */
         {
           $lookup: {
             from: 'media_item',
@@ -111,13 +123,50 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         //     }
         //   }
         // }
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: [
+                {
+                  _id: '$_id',
+                  author: '$user.username',
+                  title: '$title',
+                  description: '$description',
+                  imageSrc: '$imageSrc',
+                  mediaItems: '$mediaItems',
+                  category: '$category',
+                  tags: '$tags',
+                  createdBy: '$user._id',
+                  createdAt: '$createdAt',
+                  updatedDate: '$updatedDate',
+                },
+              ],
+            },
+          },
+        },
       ])
       .toArray();
   }
-  searchPlaylists({ query }: { query: string }) {
-    return this.repository
+
+  async searchPlaylists({ query }: { query: string }) {
+    const results = await this.repository
       .aggregate([
-        { $match: { $text: { $search: query } } },
+        {
+          $match: {
+            $text: { $search: query },
+          }
+        },
+        {
+          $addFields: {
+            matchedTags : '$tags.key'
+          }
+        },
+        {
+          $match: {
+            // createdBy: userId,
+            // matchedTags: { $in: ['foot-and-ankle'] },
+          },
+        },
         {
           $lookup: {
             from: 'media_item',
@@ -158,7 +207,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             as: 'likeItems',
           },
         },
-        { $sort: { score: { $meta: 'textScore' } } },
+        // { $sort: { score: { $meta: 'textScore' } } },
         {
           $replaceRoot: {
             newRoot: {
@@ -166,17 +215,19 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
                 {
                   _id: '$_id',
                   author: '$user.username',
-                  category: '$category',
-                  createdAt: '$createdAt',
-                  createdBy: '$user._id',
+                  title: '$title',
                   description: '$description',
                   imageSrc: '$imageSrc',
                   mediaItems: '$mediaItems',
-                  title: '$title',
+                  category: '$category',
+                  tags: '$tags',
                   shareCount: { $size: '$shareItems' },
                   likesCount: { $size: '$likeItems' },
                   viewCount: { $size: '$viewItems' },
                   // shared: { $count: '$shareItems' }
+                  createdBy: '$user._id',
+                  createdAt: '$createdAt',
+                  updatedDate: '$updatedDate',
                 },
               ],
             },
@@ -184,6 +235,8 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         },
       ])
       .toArray();
+
+    return results;
   }
   getPlaylistById({ playlistId }: OptionalObjectIdParameters) {
     return this.repository
@@ -252,8 +305,8 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
                   likesCount: { $size: '$likeItems' },
                   viewCount: { $size: '$viewItems' },
                   // shared: { $count: '$shareItems' }
-                  createdAt: '$createdAt',
                   createdBy: '$user._id',
+                  createdAt: '$createdAt',
                   updatedDate: '$updatedDate',
                 },
               ],

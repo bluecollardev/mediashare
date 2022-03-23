@@ -57,7 +57,7 @@ export class UserController {
   @ApiBearerAuth()
   @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
   async getUserPlaylists(@GetUserId() userId: ObjectId) {
-    return await this.playlistService.getPlaylistByUserId({ userId });
+    return await this.playlistService.getPlaylistsByUserId({ userId });
   }
 
   @Get('media-items')
