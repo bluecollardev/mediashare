@@ -4,17 +4,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { mapPlaylistItems } from '@api-modules/playlist-item/functors/map-playlist-item.functor';
 import { Playlist, PlaylistByUserResponseDto } from '../entities/playlist.entity';
-
 import { PlaylistItemService } from '@api-modules/playlist-item/services/playlist-item.service';
 import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
-
-import * as R from 'remeda';
 import { CreatePlaylistDto } from '../dto/create-playlist.dto';
-
 import { OptionalObjectIdParameters } from '@mediashare/shared';
 import { UserService } from '@api-modules/auth/user.service';
+import { map } from 'remeda';
 
 type CreatePlaylistParameters = {
   playlistId: ObjectId;
@@ -35,10 +31,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
   }
 
   /**
-   *
-   *
-   * @param {{ mediaIds: string[]; userId: ObjectId }} { userId, mediaIds }
-   * @memberof PlaylistService
+   * @param dto
    */
   async createPlaylistWithItems(dto: CreatePlaylistDto & { createdBy: ObjectId }) {
     const playlist = await this.create({ ...dto, mediaIds: dto.mediaIds.map((id) => new ObjectId(id)) });
@@ -46,8 +39,6 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
   }
 
   /**
-   *
-   *
    * @param {{ playlistId: ObjectId; items: Partial<PlaylistItem>[] }} { playlistId, items }
    * @return {*}
    * @memberof PlaylistService
@@ -93,7 +84,6 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         {
           $match: { createdBy: userId },
         },
-
         {
           $lookup: {
             from: 'media_item',
@@ -251,11 +241,9 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             as: 'likeItems',
           },
         },
-
         {
           $unwind: { path: '$user' },
         },
-
         {
           $replaceRoot: {
             newRoot: {
