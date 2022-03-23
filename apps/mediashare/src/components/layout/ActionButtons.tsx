@@ -9,10 +9,10 @@ interface Props {
   cancelLabel?: string;
   cancelIcon?: string;
   cancelIconColor?: string;
-  onCancelClicked: () => void;
+  onCancelClicked?: () => void;
   showAction?: boolean;
   disableAction?: boolean;
-  onActionClicked: () => void;
+  onActionClicked?: () => void;
   actionLabel?: string;
   actionIcon?: string;
   actionIconColor?: string;
@@ -33,13 +33,13 @@ export function ActionButtons({
   onCancelClicked = () => undefined,
   cancelLabel = undefined,
   cancelIcon = 'cancel',
-  // cancelIconColor = theme.colors.default,
+  cancelIconColor = theme.colors.default,
   showAction = true,
   disableAction = false,
   onActionClicked = () => undefined,
   actionLabel = 'Done',
   actionIcon = undefined, // or eg. 'check-circle',
-  // actionIconColor = theme.colors.accent,
+  actionIconColor = theme.colors.white,
   // loading = false,
   containerStyles = {},
   actionButtonsStyles = {},
@@ -62,7 +62,7 @@ export function ActionButtons({
             style={{ ...defaultStyles.cancelButtonTouchable, ...cancelButtonTouchableStyles }}
           >
             <View style={{ ...defaultStyles.cancelButton, ...cancelButtonStyles }}>
-              {cancelIcon && <IconButton icon={cancelIcon} />}
+              {cancelIcon && <IconButton color={cancelIconColor} icon={cancelIcon} />}
               {!!cancelLabel && <Text style={{ ...defaultStyles.cancelButtonLabel, ...cancelButtonLabelStyles }}>{cancelLabel}</Text>}
             </View>
           </TouchableWithoutFeedback>
@@ -76,7 +76,7 @@ export function ActionButtons({
             style={{ ...defaultStyles.actionButtonTouchable, ...actionButtonTouchableStyles }}
           >
             <View style={{ ...defaultStyles.actionButton, ...actionButtonStyles }}>
-              {actionIcon && <IconButton icon={actionIcon} />}
+              {actionIcon && <IconButton color={actionIconColor} icon={actionIcon} />}
               {!!actionLabel && <Text style={{ ...defaultStyles.actionButtonLabel, ...actionButtonLabelStyles }}>{actionLabel}</Text>}
             </View>
           </TouchableWithoutFeedback>
@@ -113,7 +113,16 @@ const defaultStyles = StyleSheet.create({
     borderWidth: 1,
     borderRightWidth: 0,
   },
-  cancelButtonLabel: {},
+  cancelButtonLabel: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    paddingRight: 35,
+  },
   actionButtonTouchable: {
     flex: 1,
     overflow: 'hidden',
@@ -135,9 +144,9 @@ const defaultStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
-    fontSize: 18,
-    color: '#ffffff',
+    fontSize: 17,
     fontWeight: 'bold',
+    color: '#ffffff',
     paddingRight: 35,
   },
 });

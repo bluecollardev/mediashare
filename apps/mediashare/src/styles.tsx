@@ -16,6 +16,7 @@ const theme = {
     textDarker: '#BDC1C6',
     text: 'rgba(255,255,255,1)',
     error: 'rgba(242,22,81,1)',
+    white: '#ffffff',
   },
   fonts: {
     medium: { fontFamily: 'Roboto_500Medium', fontWeight: '500' },

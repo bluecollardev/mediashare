@@ -138,26 +138,17 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
               )
             }
           >
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-              <IconButton
-                icon="rule"
-                color={isSelectable ? theme.colors.primary : theme.colors.disabled}
-                style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
-                onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
-              />
-              <Button
-                icon="playlist-add"
-                color={theme.colors.primary}
-                mode="contained"
-                style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
-                onPress={() => addToPlaylist({ playlistId })}
-                disabled={actionMode === actionModes.delete}
-                compact
-                dark
-              >
-                Add To Playlist
-              </Button>
-            </View>
+            <ActionButtons
+              containerStyles={{ marginHorizontal: 0, marginBottom: 15 }}
+              showCancel={Array.isArray(items) && items.length > 0}
+              cancelIcon="rule"
+              onCancelClicked={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+              cancelIconColor={isSelectable ? theme.colors.primary : theme.colors.disabled}
+              disableAction={actionMode === actionModes.delete}
+              actionLabel="Add To Playlist"
+              actionIcon={!(Array.isArray(items) && items.length > 0) ? 'playlist-add' : undefined}
+              onActionClicked={() => addToPlaylist({ playlistId })}
+            />
             <MediaList
               key={clearSelectionKey}
               onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
@@ -172,19 +163,12 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        {!isSelectable && (
-          <ActionButtons
-            onActionClicked={() => savePlaylist()}
-            onCancelClicked={cancelCb}
-            actionLabel="Save"
-          />
-        )}
+        {!isSelectable && <ActionButtons onActionClicked={() => savePlaylist()} onCancelClicked={cancelCb} actionLabel="Save" />}
         {isSelectable && (
           <ActionButtons
             onActionClicked={confirmDeletePlaylistItems}
             onCancelClicked={cancelDeletePlaylistItems}
             actionLabel="Remove"
-
             actionIconColor={theme.colors.error}
           />
         )}

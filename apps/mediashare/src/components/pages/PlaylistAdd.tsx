@@ -120,12 +120,7 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons
-          onActionClicked={() => savePlaylist()}
-          onCancelClicked={cancelCb}
-          actionLabel="Save"
-          disableAction={!isValid()}
-        />
+        <ActionButtons onActionClicked={() => savePlaylist()} onCancelClicked={cancelCb} actionLabel="Save" disableAction={!isValid()} />
       </PageActions>
     </PageContainer>
   );

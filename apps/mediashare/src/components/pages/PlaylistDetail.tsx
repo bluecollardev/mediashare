@@ -14,6 +14,7 @@ import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { Button, FAB, Divider, Chip } from 'react-native-paper';
+import { ActionButtons } from '../layout/ActionButtons';
 
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import AppDialog from '../layout/AppDialog';
@@ -123,26 +124,18 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
             </Button>
             <Divider /> */}
             {!build.forFreeUser && allowEdit && (
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-                {/*<IconButton
-              icon="rule"
-              color={isSelectable ? theme.colors.primary : theme.colors.disabled}
-              styles={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
-              onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
-            />*/}
-                <Button
-                  icon="playlist-add"
-                  color={theme.colors.primary}
-                  mode="contained"
-                  style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
-                  onPress={() => addToPlaylist({ playlistId })}
-                  // disabled={actionMode === actionModes.delete}
-                  compact
-                  dark
-                >
-                  Add To Playlist
-                </Button>
-              </View>
+              <ActionButtons
+                containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
+                showCancel={false}
+                cancelIcon="rule"
+                // onCancelClicked={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+                // cancelIconColor={isSelectable ? theme.colors.primary : theme.colors.disabled}
+                // disableAction={actionMode === actionModes.delete}
+                actionLabel="Add To Playlist"
+                // actionIcon={!(Array.isArray(items) && items.length > 0) ? 'playlist-add' : undefined}
+                actionIcon={'playlist-add'}
+                onActionClicked={() => addToPlaylist({ playlistId })}
+              />
             )}
             <MediaList
               onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}

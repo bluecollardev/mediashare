@@ -93,13 +93,7 @@ const Profile = ({ route }: ProfileProps) => {
       />
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons
-            onActionClicked={confirmPlaylistsToUnshare}
-            onCancelClicked={cancelPlaylistsToUnshare}
-            actionLabel="Unshare"
-
-            actionIcon="delete"
-          />
+          <ActionButtons onActionClicked={confirmPlaylistsToUnshare} onCancelClicked={cancelPlaylistsToUnshare} actionLabel="Unshare" actionIcon="delete" />
         </PageActions>
       )}
       {!isSelectable && (

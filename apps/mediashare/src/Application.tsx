@@ -183,6 +183,7 @@ function App() {
     Roboto_100Thin,
     Roboto_300Light,
     Roboto_400Regular,
+
   });
   // const fontsLoaded = true;
   // Amplify.configure(awsmobile);

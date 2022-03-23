@@ -91,12 +91,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons
-          onActionClicked={() => saveItem()}
-          onCancelClicked={cancelCb}
-          actionLabel="Save"
-          disableAction={!isValid()}
-        />
+        <ActionButtons onActionClicked={() => saveItem()} onCancelClicked={cancelCb} actionLabel="Save" disableAction={!isValid()} />
       </PageActions>
     </PageContainer>
   );
