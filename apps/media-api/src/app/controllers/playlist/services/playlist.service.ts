@@ -6,7 +6,6 @@ import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { Playlist, PlaylistByUserResponseDto } from '../entities/playlist.entity';
 import { PlaylistItemService } from '@api-modules/playlist-item/services/playlist-item.service';
-import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
 import { CreatePlaylistDto } from '../dto/create-playlist.dto';
 import { OptionalObjectIdParameters } from '@mediashare/shared';
 import { UserService } from '@api-modules/auth/user.service';
@@ -30,19 +29,11 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     this.repository.createCollectionIndex({ title: 'text', description: 'text' }).then();
   }
 
-  /**
-   * @param dto
-   */
   async createPlaylistWithItems(dto: CreatePlaylistDto & { createdBy: ObjectId }) {
     const playlist = await this.create({ ...dto, mediaIds: dto.mediaIds.map((id) => new ObjectId(id)) });
     return { playlist };
   }
 
-  /**
-   * @param {{ playlistId: ObjectId; items: Partial<PlaylistItem>[] }} { playlistId, items }
-   * @return {*}
-   * @memberof PlaylistService
-   */
   createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
     if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
 
