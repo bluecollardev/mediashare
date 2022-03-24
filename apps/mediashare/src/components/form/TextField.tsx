@@ -25,6 +25,7 @@ export function TextField({ value = '', validator = () => false, onChangeText, d
       value={value}
       error={validator(value)}
       onChangeText={onChangeText}
+      autoCapitalize="none"
       disabled={disabled}
       style={styles.textField}
       {...rest}

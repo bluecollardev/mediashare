@@ -226,8 +226,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
               primary: theme.colors.primary,
               text: '#fff',
               subText: '#fff',
-              searchPlaceholderTextColor: '#fff',
-              selectToggleTextColor: '#fff',
+              searchPlaceholderTextColor: theme.colors.placeholder,
+              selectToggleTextColor: theme.colors.placeholder,
               searchSelectionColor: '#fff',
               itemBackground: 'transparent',
               subItemBackground: 'transparent',
@@ -248,6 +248,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                 paddingRight: 10,
                 borderWidth: 1,
                 borderColor: theme.colors.defaultBorder,
+                backgroundColor: theme.colors.surface,
               },
               chipContainer: {
                 marginTop: 10,
@@ -273,12 +274,12 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         </Card>
         <Card elevation={elevation} style={{ position: 'relative', marginBottom: 25, borderColor: theme.colors.defaultBorder, borderWidth: 1, padding: 0.5 }}>
           <SwitchSelector
-            fontSize={13}
+            fontSize={15}
             textColor={theme.colors.text}
             borderColor={theme.colors.defaultBorder}
             selectedColor={theme.colors.primary}
-            backgroundColor={theme.colors.background}
-            buttonColor={theme.colors.darkDefault}
+            backgroundColor={theme.colors.surface}
+            buttonColor={theme.colors.surface}
             style={{ margin: 0, padding: 0, width: '100%' }}
             options={categoryOptions.map((option) => ({ value: option, label: `${option} Content` }))}
             initial={categoryOptions.findIndex((option) => option.toLowerCase() === category.toLowerCase())}
@@ -291,7 +292,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         {/* Description can be the longest field so we've moved it to last when we're in edit mode */}
         <Card elevation={elevation} style={{ marginBottom: 25 }}>
           <TextField
-            style={{ height: 500, overflow: 'scroll' }}
+            style={{ height: 500, overflow: 'scroll', backgroundColor: theme.colors.surface }}
             multiline={true}
             label="Description"
             value={description}
@@ -299,24 +300,6 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             error={title && descriptionValidator(description)}
             onChangeText={(text) => onDescriptionChange(text)}
             disabled={isReadOnly}
-            /* render={(innerProps) => (
-              <NativeTextInput
-                {...innerProps}
-                multiline={true}
-                numberOfLines={10}
-                style={[
-                  innerProps.style,
-                  {
-                    flex: 1,
-                    paddingTop: 8,
-                    paddingBottom: 8,
-                    height: 100,
-                    textAlignVertical: 'top',
-                    justifyContent: 'flex-start',
-                  },
-                ]}
-              />
-            )} */
           />
         </Card>
       </View>

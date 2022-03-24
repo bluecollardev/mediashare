@@ -121,7 +121,7 @@ const AppHeaderComponent = ({
                             icon=""
                             // icon="arrow-back-ios"
                             clearIcon="clear"
-                            autoComplete={true}
+                            autoCapitalize="none"
                           />
                           {/* <Appbar.Action icon="close" onPress={() => disableSearch()} /> */}
                           <SectionedMultiSelect
@@ -129,20 +129,20 @@ const AppHeaderComponent = ({
                               primary: theme.colors.primary,
                               text: '#fff',
                               subText: '#fff',
-                              searchPlaceholderTextColor: '#fff',
-                              selectToggleTextColor: '#fff',
+                              searchPlaceholderTextColor: theme.colors.placeholder,
+                              selectToggleTextColor: theme.colors.placeholder,
                               searchSelectionColor: '#fff',
                               itemBackground: 'transparent',
                               subItemBackground: 'transparent',
                             }}
                             styles={{
-                              container: {
-                                backgroundColor: '#000',
-                              },
                               searchTextInput: {
                                 color: '#fff',
                               },
                               searchBar: {
+                                backgroundColor: '#000',
+                              },
+                              container: {
                                 backgroundColor: '#000',
                               },
                               selectToggle: {
@@ -151,6 +151,7 @@ const AppHeaderComponent = ({
                                 paddingRight: 10,
                                 borderWidth: 1,
                                 borderColor: theme.colors.defaultBorder,
+                                backgroundColor: theme.colors.surface,
                               },
                               chipContainer: {
                                 marginTop: 10,

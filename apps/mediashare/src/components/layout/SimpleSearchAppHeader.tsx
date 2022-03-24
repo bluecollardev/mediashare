@@ -40,6 +40,7 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
             onIconPress={() => disableSearch()}
             icon="arrow-back-ios"
             clearIcon="clear"
+            autoCapitalize="none"
           />
           <Appbar.Action icon="close" onPress={() => disableSearch()} />
         </>
@@ -61,4 +62,4 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
   );
 };
 
-export const AppHeader = withGlobalStateConsumer(AppHeaderComponent);
+export const SimpleAppHeader = withGlobalStateConsumer(AppHeaderComponent);
