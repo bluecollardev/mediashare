@@ -1,25 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
-import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '../../store';
 import { getPlaylistById, updateUserPlaylist } from '../../store/modules/playlists';
 import { findMediaItems } from '../../store/modules/media-items';
-
-import { withGlobalStateConsumer } from '../../core/globalState';
-
 import { UpdatePlaylistDto } from '../../rxjs-api';
 
+import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withGlobalStateConsumer } from '../../core/globalState';
 import { useGoBack, useViewMediaItem } from '../../hooks/NavigationHooks';
-import { theme } from '../../styles';
-import { shortenText } from '../../utils';
-// import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-
+import { PageContainer, PageActions, PageProps, PageContent } from '../layout/PageContainer';
+import { NoItems } from '../layout/NoItems';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaListType } from '../layout/MediaList';
 import { MediaListItem } from '../layout/MediaListItem';
-import { PageContainer, PageActions, PageProps, PageContent } from '../layout/PageContainer';
+
+import { shortenText } from '../../utils';
+import { theme } from '../../styles';
 
 export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   const { playlistId } = route.params;
@@ -29,79 +28,44 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   const goBack = useGoBack();
 
   const playlist = useAppSelector((state) => state.playlist.selected);
-
-  const mediaItemEntities: MediaListType[] = useAppSelector((state) => state.mediaItems.entities);
-  const [filteredMediaItemEntities, setFilteredMediaItemEntities] = useState([...mediaItemEntities] as MediaListType[]);
-
-  const [loaded, setIsLoaded] = useState(false);
   // @ts-ignore
   const [mediaItems, setMediaItems] = useState((playlist?.mediaItems as MediaListType[]) || []);
 
-  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
-  const searchTags = searchFilters.tags || [];
-  const prevSearchTagsRef = useRef(searchTags);
+  const { loading, loaded, entities = [] as any[] } = useAppSelector((state) => state?.mediaItems);
+  const [isLoaded, setIsLoaded] = useState(loaded);
   useEffect(() => {
-    // Only run this if search tags have actually changed in value
-    if (JSON.stringify(prevSearchTagsRef.current) !== JSON.stringify(searchTags)) {
-      if (Array.isArray(searchTags) && searchTags.length > 0) {
-        const filtered = mediaItemEntities.filter((entity) => {
-          if (Array.isArray(entity.tags) && entity.tags.length > 0) {
-            const tagKeys = entity.tags.map((tag) => tag.key);
-            const hasTag = !!searchTags
-              // Make an array of true or false values
-              .map((searchTag) => tagKeys.includes(searchTag))
-              // If there are any true values return true, we have a match
-              .find((isMatch) => isMatch === true);
-            return hasTag;
-          }
-          return false;
-        });
-        setFilteredMediaItemEntities(filtered);
-      } else if (searchTags.length === 0) {
-        setFilteredMediaItemEntities(mediaItemEntities);
-      }
-      prevSearchTagsRef.current = searchTags;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTags]);
-
-  useEffect(() => {
-    if (!loaded) {
-      dispatch(getPlaylistById(playlistId));
-      const { search } = globalState;
-      const args = { text: search?.filters?.text ? search.filters.text : '' };
-      dispatch(findMediaItems(args));
+    if (loaded && !isLoaded) {
       setIsLoaded(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaded, playlistId, globalState]);
+  }, [loaded]);
+
+  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
+  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
+  useEffect(() => {
+    const currentSearchFilters = globalState?.search;
+    if (!isLoaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
+      setPrevSearchFilters(currentSearchFilters);
+      loadData().then();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, globalState, searchFilters]);
 
   return (
     <PageContainer>
       <PageContent>
-        <FlatList
-          data={filteredMediaItemEntities && filteredMediaItemEntities.length > 0 ? filteredMediaItemEntities : mediaItemEntities}
-          renderItem={({ item }) => renderVirtualizedListItem(item)}
-          keyExtractor={({ _id }) => `playlist_${_id}`}
-        />
+        {isLoaded ? (
+          <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
+        ) : (
+          <NoItems text={loading ? 'Loading...' : 'There are no items in your media library.'} />
+        )}
       </PageContent>
       <PageActions>
-        <ActionButtons onActionClicked={actionCb} actionLabel="Save" onCancelClicked={cancelCb} />
+        <ActionButtons onActionClicked={saveItems} actionLabel="Save" onCancelClicked={cancel} />
       </PageActions>
     </PageContainer>
   );
 
-  /**
-   * <MediaList
-   list={mediaItemState}
-   showThumbnail={true}
-   selectable={true}
-   onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
-   addItem={(e) => updateMediaItemsList(true, e)}
-   removeItem={(e) => updateMediaItemsList(false, e)}
-   />
-   * @param item
-   */
   function renderVirtualizedListItem(item) {
     const { _id = '', title = '', author = '', description = '', mediaIds = [], thumbnail = '' } = item;
     return (
@@ -133,7 +97,35 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
     );
   }
 
-  async function actionCb() {
+  async function loadData() {
+    const { search } = globalState;
+    const args = {
+      text: search?.filters?.text ? search.filters.text : '',
+      tags: search?.filters?.tags || [],
+    };
+
+    await dispatch(getPlaylistById(playlistId));
+    if (args.text || args.tags.length > 0) {
+      await dispatch(findMediaItems(args));
+    } else {
+      await dispatch(findMediaItems({}));
+    }
+  }
+
+  function addItem(e) {
+    return updateMediaItemsList(true, e);
+  }
+
+  function removeItem(e) {
+    return updateMediaItemsList(false, e);
+  }
+
+  function updateMediaItemsList(bool: boolean, mediaItem: MediaListType) {
+    const filtered = bool ? mediaItems.concat([mediaItem]) : mediaItems.filter((item) => item._id !== mediaItem._id);
+    setMediaItems(filtered);
+  }
+
+  async function saveItems() {
     const { category, tags } = playlist as any;
     const dto: UpdatePlaylistDto = {
       mediaIds: mediaItems.map((item) => item._id),
@@ -150,22 +142,9 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
     goBack();
   }
 
-  function cancelCb() {
+  function cancel() {
     setIsLoaded(false);
     goBack();
-  }
-
-  function addItem(e) {
-    return updateMediaItemsList(true, e);
-  }
-
-  function removeItem(e) {
-    return updateMediaItemsList(false, e);
-  }
-
-  function updateMediaItemsList(bool: boolean, mediaItem: MediaListType) {
-    const filtered = bool ? mediaItems.concat([mediaItem]) : mediaItems.filter((item) => item._id !== mediaItem._id);
-    setMediaItems(filtered);
   }
 };
 
@@ -197,4 +176,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withGlobalStateConsumer(AddToPlaylist);
+export default withLoadingSpinner((state) => {
+  return !!state?.mediaItems?.loading || false;
+})(withGlobalStateConsumer(AddToPlaylist));

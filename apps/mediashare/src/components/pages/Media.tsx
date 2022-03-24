@@ -87,6 +87,10 @@ export const Media = ({ navigation, globalState }: PageProps) => {
 
   const dispatch = useDispatch();
 
+  const [isSelectable, setIsSelectable] = useState(false);
+  const [actionMode, setActionMode] = useState(actionModes.default);
+  const [refreshing, setRefreshing] = useState(false);
+
   const { loading, loaded, entities, selected } = useAppSelector((state) => state?.mediaItems);
   const [isLoaded, setIsLoaded] = useState(loaded);
   useEffect(() => {
@@ -95,10 +99,6 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
-
-  const [isSelectable, setIsSelectable] = useState(false);
-  const [actionMode, setActionMode] = useState(actionModes.default);
-  const [refreshing, setRefreshing] = useState(false);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onRefresh = useCallback(refresh, [dispatch]);
