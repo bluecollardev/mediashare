@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 
 import { Avatar, Button, Card, Chip, Divider, IconButton, Paragraph, Title, Text } from 'react-native-paper';
-import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground, TextInput as NativeTextInput } from 'react-native';
 
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
@@ -9,9 +9,9 @@ import Video from 'react-native-video'; // TODO: Not compatible with react-nativ
 // import Video from 'expo-video-player';
 
 import SwitchSelector from 'react-native-switch-selector';
+import { TextField } from '../form';
 import { descriptionValidator, titleValidator } from './formConfig';
 import { MultiSelectIcon } from '../form/MultiSelect';
-import { TextField } from '../form/TextField';
 export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png';
 
 // import { TagKeyValue, UserDto } from '../../rxjs-api';
@@ -299,6 +299,24 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             error={title && descriptionValidator(description)}
             onChangeText={(text) => onDescriptionChange(text)}
             disabled={isReadOnly}
+            /* render={(innerProps) => (
+              <NativeTextInput
+                {...innerProps}
+                multiline={true}
+                numberOfLines={10}
+                style={[
+                  innerProps.style,
+                  {
+                    flex: 1,
+                    paddingTop: 8,
+                    paddingBottom: 8,
+                    height: 100,
+                    textAlignVertical: 'top',
+                    justifyContent: 'flex-start',
+                  },
+                ]}
+              />
+            )} */
           />
         </Card>
       </View>
