@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-
 import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
-import { store } from './store';
-import { routeConfig } from './routes';
+import Spinner from 'react-native-loading-spinner-overlay';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import Amplify from 'aws-amplify';
-import { Auth } from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
-import { useAppSelector } from './store';
+import { ProfileDto } from './rxjs-api';
+import * as build from './build';
+import { store, useAppSelector } from './store';
+import { routeConfig } from './routes';
 import { theme } from './styles';
 import {
   Poppins_100Thin,
@@ -21,13 +23,9 @@ import {
   Poppins_900Black,
   useFonts,
 } from '@expo-google-fonts/poppins';
-import Spinner from 'react-native-loading-spinner-overlay';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { ProfileDto } from './rxjs-api';
 
-import * as build from './build';
-import { bottomTabListeners } from './screenListeners';
-import { withGlobalStateProvider } from './core/globalState';
+import { createBottomTabListeners } from './screenListeners';
+import { GlobalStateProps, withGlobalStateProvider } from './core/globalState';
 
 import Login from './components/pages/Login';
 import Browse from './components/pages/Browse';
@@ -47,7 +45,6 @@ import Account from './components/pages/Account';
 import User from './components/pages/User';
 import AccountEdit from './components/pages/AccountEdit';
 import Profile from './components/pages/Profile';
-import { Provider } from 'react-redux';
 
 // const deviceWidth = Dimensions.get('window').width;
 // const DrawerNavigator = createDrawerNavigator();
@@ -114,9 +111,8 @@ const AccountNavigation = () => {
 };
 
 /* Public and Private navigation routes are split here */
-
 const PublicStackNavigator = createStackNavigator();
-const PublicNavigation = () => {
+const PublicMainNavigation = () => {
   return (
     <PublicStackNavigator.Navigator initialRouteName={'Login'}>
       <PublicStackNavigator.Screen {...routeConfig.login} component={Login} />
@@ -134,7 +130,14 @@ export const tabNavigationIconsMap = {
 };
 
 const PrivateNavigator = createBottomTabNavigator();
-function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} }) {
+
+interface PrivateMainNavigationProps {
+  user: Partial<ProfileDto>;
+  globalState: GlobalStateProps;
+}
+
+function PrivateMainNavigation({ user, globalState }: PrivateMainNavigationProps) {
+  const navigationTabListeners = createBottomTabListeners(globalState);
   return (
     <PrivateNavigator.Navigator
       initialRouteName={'Account'}
@@ -151,12 +154,12 @@ function PrivateNavigation({ user }: { user: Partial<ProfileDto> } = { user: {} 
       })}
     >
       {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen name={'Browse'} component={BrowseNavigation} listeners={bottomTabListeners} />
+        <PrivateNavigator.Screen name={'Browse'} component={BrowseNavigation} listeners={navigationTabListeners} />
       )}
 
-      {(build.forSubscriber || build.forAdmin) && <PrivateNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} listeners={bottomTabListeners} />}
+      {(build.forSubscriber || build.forAdmin) && <PrivateNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} listeners={navigationTabListeners} />}
 
-      {build.forAdmin && <PrivateNavigator.Screen name={'Media'} component={MediaNavigation} listeners={bottomTabListeners} />}
+      {build.forAdmin && <PrivateNavigator.Screen name={'Media'} component={MediaNavigation} listeners={navigationTabListeners} />}
       <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} initialParams={{ userId: user._id }} />
     </PrivateNavigator.Navigator>
   );
@@ -177,8 +180,8 @@ async function fakeLogin() {
 
 fakeLogin().then();
 
-const PublicNavigationWithGlobalState = withGlobalStateProvider(PublicNavigation);
-const PrivateNavigationWithGlobalState = withGlobalStateProvider(PrivateNavigation);
+const PublicMainNavigationWithGlobalState = withGlobalStateProvider(PublicMainNavigation);
+const PrivateMainNavigationWithGlobalState = withGlobalStateProvider(PrivateMainNavigation);
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
@@ -192,16 +195,12 @@ function App() {
     Poppins_300Light,
     Poppins_400Regular,
   });
+
   // const fontsLoaded = true;
   // Amplify.configure(awsmobile);
   // fakeLogin();
 
-  const loading = useAppSelector((state) => state.app.loading);
-
-  const user = useAppSelector((state) => state.user);
-
-  /* This is disabled until I figure out what causes the session to be wack
-   */
+  // This is disabled until I figure out what causes the session to be wack
   // useEffect(() => {
   //   const checkToken = async function () {
   //     const storedToken = await getKeyPair('token');
@@ -211,14 +210,14 @@ function App() {
   //   };
   //   checkToken();
   // }, []);
+
+  const user = useAppSelector((state) => state.user);
+  const loading = useAppSelector((state) => state.app.loading);
   useEffect(() => {
     setIsLoggedIn(user?._id?.length > 0);
   }, [user]);
 
-  const customTheme = {
-    ...theme,
-  };
-
+  const customTheme = { ...theme };
   if (!fontsLoaded) {
     return <ActivityIndicator />;
   } else {
@@ -233,11 +232,11 @@ function App() {
         >
           {isLoggedIn ? (
             <NavigationContainer>
-              <PrivateNavigationWithGlobalState user={user} />
+              <PrivateMainNavigationWithGlobalState user={user} />
             </NavigationContainer>
           ) : (
             <NavigationContainer>
-              <PublicNavigationWithGlobalState />
+              <PublicMainNavigationWithGlobalState />
             </NavigationContainer>
           )}
         </PaperProvider>

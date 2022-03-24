@@ -1,20 +1,14 @@
-/**
- * This maybe isn't the best solution (notice the "dangerouslyGetState") but it doers seem to work well enough.
- * This solution is built on top of the solution provided in this Github issue.
- * https://source--react-navigation-docs.netlify.app/docs/use-navigation-state/
- */
 import { StackActions } from '@react-navigation/native';
-// https://github.com/react-navigation/react-navigation/issues/8583
-// const TAB_TO_RESET = 'HomeTab';
-export const bottomTabListeners = ({ navigation }) => ({
+import { GlobalStateProps, INITIAL_SEARCH_FILTERS } from './core/globalState/index';
+// Note re: popToTop https://github.com/react-navigation/react-navigation/issues/8583
+export const createBottomTabListeners = (globalState: GlobalStateProps) => ({ navigation }) => ({
   tabPress: (e) => {
-    /* TODO: Prevent default action
-    if (!user.firstName) {
-      e.preventDefault();
-    } */
     const navigationState = navigation.getState();
     if (navigationState) {
-      // Grab all the tabs that are NOT the one we just pressed
+      // First clear all search params from globalState
+      globalState?.setSearchFilters(INITIAL_SEARCH_FILTERS);
+      // Now, reset tabs, and update stack
+      // First grab all the tabs that are NOT the one we just pressed
       const nonTargetTabs = navigationState.routes.filter((r) => r.key !== e.target);
       nonTargetTabs.forEach(({ key, state }) => {
         // Pass the stack key that we want to reset and use popToTop to reset it
