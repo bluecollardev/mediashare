@@ -80,8 +80,7 @@
     "remeda": "^0.0.30",
     "rxjs": "^6.6.6",
     "styled-components": "^5.3.3",
-    "uuid": "^8.3.2",
-    "react-native-svg": "*"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
