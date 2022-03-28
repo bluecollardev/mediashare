@@ -77,7 +77,7 @@
     "rxjs": "^7.0.0",
     "swagger-ui-express": "^4.1.6",
     "tslib": "^2.0.0",
-    "typeorm": "^0.3.4"
+    "typeorm": "^0.2.41"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.6",
