@@ -8,6 +8,8 @@ import { MultiSelectIcon } from '../form/MultiSelect';
 import { ActionButtons } from './ActionButtons';
 import themeStyles, { theme } from '../../styles';
 
+import { mapAvailableTags } from '../../store/modules/tags/utils';
+
 export interface AppHeaderProps {
   options?: any;
   back?: any;
@@ -67,14 +69,9 @@ const AppHeaderComponent = ({
 
   const [searchText, setSearchText] = useState('');
 
-  const availableMediaTags = useMemo(
-    () =>
-      [...globalState?.tags]
-        .filter((tag) => tag?.isMediaTag)
-        .map((tag) => ({
-          id: tag?.key,
-          name: tag?.value,
-        })),
+  const mappedMediaTags = useMemo(
+    () => mapAvailableTags(Array.isArray(globalState?.tags) ? globalState.tags : [])
+      .filter((tag) => tag.isMediaTag),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
@@ -157,7 +154,7 @@ const AppHeaderComponent = ({
                                 marginTop: 10,
                               },
                             }}
-                            items={availableMediaTags}
+                            items={mappedMediaTags}
                             IconRenderer={MultiSelectIcon}
                             uniqueKey="id"
                             subKey="children"

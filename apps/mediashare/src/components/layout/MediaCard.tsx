@@ -21,6 +21,7 @@ import { usePreviewImage } from '../../hooks/usePreviewImage';
 import { theme } from '../../styles';
 
 // import { customMediaTags, customMediaSubtags, customPlaylistTags, customPlaylistSubtags } from '../../data/tags';
+import { mapAvailableTags, getMappedTagUsingKey } from '../../store/modules/tags/utils';
 import { UserDto, Tag } from '../../rxjs-api/models';
 
 export interface MediaCardProps {
@@ -136,26 +137,16 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     onTagChange(tags);
   };
 
-  const availableMediaTags = useMemo(
-    () =>
-      [...availableTags]
-        .filter((tag) => tag?.isMediaTag)
-        .map((tag) => ({
-          id: tag?.key,
-          name: tag?.value,
-        })),
+  const mappedMediaTags = useMemo(
+    () => mapAvailableTags(availableTags)
+      .filter((tag) => tag.isMediaTag),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  const availablePlaylistTags = useMemo(
-    () =>
-      [...availableTags]
-        .filter((tag) => tag.isPlaylistTag)
-        .map((tag) => ({
-          id: tag?.key,
-          name: tag?.value,
-        })),
+  const mappedPlaylistTags = useMemo(
+    () => mapAvailableTags(availableTags)
+      .filter((tag) => tag.isPlaylistTag),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
@@ -254,7 +245,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                 marginTop: 10,
               },
             }}
-            items={availableMediaTags}
+            items={mappedMediaTags}
             IconRenderer={MultiSelectIcon}
             uniqueKey="id"
             subKey="children"
@@ -336,7 +327,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           {Array.isArray(selectedTags) &&
             selectedTags.length > 0 &&
             selectedTags.map((selectedTagKey, idx) => {
-              const mappedTag = availableMediaTags.find(({ id }) => id === selectedTagKey);
+              const mappedTag = getMappedTagUsingKey(mappedMediaTags, selectedTagKey);
               return (
                 <View key={`${selectedTagKey}_${idx}`} style={{ flex: 0, marginLeft: 3, marginRight: 3 }}>
                   <Chip>{mappedTag?.name || 'Unknown'}</Chip>

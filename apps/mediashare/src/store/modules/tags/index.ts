@@ -6,6 +6,9 @@ import { makeEnum } from '../../core/factory';
 import { ApiService } from '../../apis';
 import { reducePendingState, reduceRejectedState, reduceFulfilledState } from '../../helpers';
 
+// Export tag utils
+export * from './utils';
+
 const TAG_ACTIONS = ['get_tags'] as const;
 
 export const tagsActionTypes = makeEnum(TAG_ACTIONS);
