@@ -37,6 +37,7 @@ services:
       - SESSION_DB_COLLECTION=session
       - MS_PORT=4000
       - DB_TYPE=mongodb
+      - DB_IS_ATLAS=true
       - DB=mediashare
       - DB_SSL=false
       - DB_SYNCHRONIZE=true

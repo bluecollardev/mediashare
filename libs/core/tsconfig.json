@@ -13,12 +13,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "util/utility": [
-        "libs/utility/src"
-      ],
-      "util/utility/*": [
-        "libs/utility/src/*"
-      ]
+      "util/utility": ["libs/utility/src"],
+      "util/utility/*": ["libs/utility/src/*"]
     }
   }
 }

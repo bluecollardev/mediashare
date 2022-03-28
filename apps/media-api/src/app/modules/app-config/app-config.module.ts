@@ -15,6 +15,7 @@ import databaseConfiguration from './database.configuration';
       load: [configuration, databaseConfiguration],
       validationSchema: appValidationSchema,
       cache: true,
+      isGlobal: true,
       ignoreEnvFile: process.env.NODE_ENV === 'production',
       ignoreEnvVars: process.env.NODE_ENV !== 'production',
     }),

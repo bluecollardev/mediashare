@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
-import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
+import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 import { ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
 import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY } from '@core-lib';
 import { BcEntity } from '@api-core/entities/base.entity';

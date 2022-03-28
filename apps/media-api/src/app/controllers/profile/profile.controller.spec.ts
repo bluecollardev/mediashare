@@ -24,7 +24,7 @@ describe('ProfileController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should findall users', () => {
+  it('should findAll users', () => {
     expect(controller.create({ userName: 'test@example.com' })).toBeDefined();
   });
 });

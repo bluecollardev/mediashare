@@ -1,5 +1,5 @@
 import { DataService } from '@api';
-import { ObjectIdParameters, OptionalObjectIdParameters } from '@mediashare/shared';
+import { ObjectIdParameters } from '@mediashare/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
@@ -10,7 +10,7 @@ import { CreateMediaShareItemInput, CreatePlaylistShareItemDto } from '../dto/cr
 import { ShareItem } from '../entities/share-item.entity';
 
 export class QueryBuilder {
-  match({ userId }: OptionalObjectIdParameters) {
+  match({ userId }: ObjectIdParameters) {
     return { $match: { $and: [{ userId }, { mediaId: { $exists: true } }] } };
   }
 }
@@ -99,7 +99,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     return query.toArray();
   }
 
-  aggregateSharedPlaylists({ userId }: OptionalObjectIdParameters) {
+  aggregateSharedPlaylists({ userId }: ObjectIdParameters) {
     return this.repository
       .aggregate([
         { $match: { $and: [{ userId: userId }, { playlistId: { $exists: true } }] } },
@@ -146,7 +146,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       ])
       .toArray();
   }
-  aggregateSharesPlaylists({ createdBy }: OptionalObjectIdParameters) {
+  aggregateSharesPlaylists({ createdBy }: ObjectIdParameters) {
     return this.repository
       .aggregate([
         { $match: { $and: [{ createdBy: createdBy }, { playlistId: { $exists: true } }] } },

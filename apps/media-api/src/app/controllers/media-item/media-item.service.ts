@@ -1,9 +1,10 @@
-import { DataService } from '@api';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
+import { DataService } from '@api';
 import { MediaItem } from './entities/media-item.entity';
 import { map } from 'remeda';
 
@@ -64,10 +65,12 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
       },
     },
   ];
+
   constructor(
     @InjectRepository(MediaItem)
     mediaRepository: MongoRepository<MediaItem>,
-    logger: PinoLogger
+    logger: PinoLogger,
+    private configService: ConfigService,
   ) {
     super(mediaRepository, logger);
     this.repository.createCollectionIndex({ title: 'text', description: 'text' }).then();
@@ -84,7 +87,8 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
   }
 
   findMediaItemWithDetail(id: ObjectId) {
-    return this.repository.aggregate([{ $match: { _id: id } }, ...MediaItemService.SEARCH_FIELDS]).next();
+    return this.repository
+      .aggregate([{ $match: { _id: id } }, ...MediaItemService.SEARCH_FIELDS]).next();
   }
 
   findMediaItemsByUserId(userId: ObjectId) {
@@ -119,7 +123,8 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
       .toArray();
   }
   findPopularMediaItems() {
-    return this.repository.aggregate([...MediaItemService.SEARCH_FIELDS, { $sort: { likesCount: -1 } }]).toArray();
+    return this.repository
+      .aggregate([...MediaItemService.SEARCH_FIELDS, { $sort: { likesCount: -1 } }]).toArray();
   }
 
   searchMediaItems({ query, tags }: { query: string; tags?: string[] }) {
@@ -158,6 +163,7 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
       return aggregateQuery;
     };
 
-    return this.repository.aggregate([...buildAggregateQuery()]).toArray();
+    return this.repository
+      .aggregate([...buildAggregateQuery()]).toArray();
   }
 }
