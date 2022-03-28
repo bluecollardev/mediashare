@@ -16,7 +16,7 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaCard } from '../layout/MediaCard';
-import { titleValidator, descriptionValidator, tagValidator, categoryValidator } from '../layout/formConfig';
+import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { AppUpload } from '../layout/AppUpload';
 

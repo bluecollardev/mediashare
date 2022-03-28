@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { getUserPlaylists } from '../../store/modules/playlists';
 import { useAppSelector } from '../../store';
-
-// import { ActivityIndicator } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -19,7 +15,6 @@ export interface AddFromCollectionProps extends PageProps {
 export interface AddFromCollectionState {}
 
 export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollectionProps) => {
-  const dispatch = useDispatch();
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
   const items = useAppSelector((state) => state.mediaItems.entities);
 

@@ -112,5 +112,5 @@ export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
 };
 
 export default withLoadingSpinner((state) => {
-  return !state?.mediaItem?.feed;
+  return !(Array.isArray(state?.mediaItem?.feed) && state?.mediaItem?.feed?.length > 0);
 })(withGlobalStateConsumer(AddFromFeed));
