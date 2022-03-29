@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '@app/store';
+import { RootState } from 'mediashare/store';
 
 // Initial load
 export const loadItems =

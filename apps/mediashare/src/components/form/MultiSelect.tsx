@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import { theme } from '@app/styles';
+import { theme } from 'mediashare/styles';
 
 export function MultiSelectIcon({ name, size = 18, styles }) {
   let iconComponent;

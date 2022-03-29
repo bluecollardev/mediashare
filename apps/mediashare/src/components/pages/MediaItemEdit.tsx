@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { withGlobalStateConsumer } from '@app/core/globalState';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 
-import { useAppSelector } from '@app/store';
-import { deleteMediaItem, updateMediaItem } from '@app/store/modules/media-items';
+import { useAppSelector } from 'mediashare/store';
+import { deleteMediaItem, updateMediaItem } from 'mediashare/store/modules/media-items';
 
 // TODO: Fix update dto! Not sure why it's not being exported normally...
-import { UpdateMediaItemDto } from '@app/rxjs-api/models/UpdateMediaItemDto';
-import { MediaCategoryType } from '@app/rxjs-api';
-import { useMediaItems } from '@app/hooks/NavigationHooks';
+import { UpdateMediaItemDto } from 'mediashare/rxjs-api/models/UpdateMediaItemDto';
+import { MediaCategoryType } from 'mediashare/rxjs-api';
+import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -20,7 +20,7 @@ import { AppDialog } from '../layout/AppDialog';
 import { MediaCard } from '../layout/mediaCard';
 import { ActionButtons } from '../layout/ActionButtons';
 
-import styles, { theme } from '@app/styles';
+import styles, { theme } from 'mediashare/styles';
 import AppUpload from '../layout/AppUpload';
 
 export interface MediaItemEditContainerProps {

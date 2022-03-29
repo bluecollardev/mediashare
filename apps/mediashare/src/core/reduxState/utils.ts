@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import * as R from 'remeda';
-import { RootState } from '@app/store';
+import { RootState } from 'mediashare/store';
 
 export type SnakeCaseToCamelCase<S extends string> = S extends `${infer FirstWord}_${infer Rest}`
   ? `${Lowercase<FirstWord>}${SnakeCaseToPascalCase<Rest>}`

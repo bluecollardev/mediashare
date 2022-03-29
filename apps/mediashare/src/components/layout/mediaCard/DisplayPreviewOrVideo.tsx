@@ -4,7 +4,7 @@ import { Button } from 'react-native-paper';
 import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
 // import { Video as ExpoVideo } from 'expo-av';
 // import Video from 'expo-video-player';
-import { usePreviewImage } from '@app/hooks/usePreviewImage';
+import { usePreviewImage } from 'mediashare/hooks/usePreviewImage';
 
 type MediaDisplayMode = 'image' | 'video';
 

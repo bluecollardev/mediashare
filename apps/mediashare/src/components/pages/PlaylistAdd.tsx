@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-import { useGoBack, useRouteWithParams } from '@app/hooks/NavigationHooks';
+import { useGoBack, useRouteWithParams } from 'mediashare/hooks/NavigationHooks';
 
-import { routeNames } from '@app/routes';
+import { routeNames } from 'mediashare/routes';
 
-import { useAppSelector } from '@app/store';
-import { findMediaItems } from '@app/store/modules/media-items';
-import { addUserPlaylist, getUserPlaylists, getPlaylistById } from '@app/store/modules/playlists';
+import { useAppSelector } from 'mediashare/store';
+import { findMediaItems } from 'mediashare/store/modules/media-items';
+import { addUserPlaylist, getUserPlaylists, getPlaylistById } from 'mediashare/store/modules/playlists';
 
-import { CreatePlaylistDto, PlaylistCategoryType } from '@app/rxjs-api';
+import { CreatePlaylistDto, PlaylistCategoryType } from 'mediashare/rxjs-api';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -21,9 +21,9 @@ import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } fr
 import { AppUpload } from '../layout/AppUpload';
 
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
-import { theme } from '@app/styles';
+import { theme } from 'mediashare/styles';
 import { Button } from 'react-native-paper';
-import { withGlobalStateConsumer } from '@app/core/globalState';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 
 // @ts-ignore
 const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {

@@ -1,17 +1,17 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import Config from '@app/config';
+import Config from 'mediashare/config';
 
-import { thumbnailRoot, awsUrl } from '@app/store/modules/media-items/key-factory';
-import { fetchAndPutToS3 } from '@app/store/modules/media-items/storage';
-import { createThumbnail } from '@app/store/modules/media-items';
-import { setError } from '@app/store/modules/app-state';
+import { thumbnailRoot, awsUrl } from 'mediashare/store/modules/media-items/key-factory';
+import { fetchAndPutToS3 } from 'mediashare/store/modules/media-items/storage';
+import { createThumbnail } from 'mediashare/store/modules/media-items';
+import { setError } from 'mediashare/store/modules/app-state';
 
 import * as DocumentPicker from 'expo-document-picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Button } from 'react-native-paper';
 
-import { theme } from '@app/styles';
+import { theme } from 'mediashare/styles';
 
 interface AppUploadProps {
   onUploadStart?: () => any;

@@ -19,7 +19,7 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "@app/*": [
+      "mediashare/*": [
         "src/*"
       ]
     }

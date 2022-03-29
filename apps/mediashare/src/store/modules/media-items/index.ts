@@ -1,9 +1,9 @@
 import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
-import Config from '@app/config';
+import Config from 'mediashare/config';
 
-import { makeEnum } from '@app/store/core/factory';
+import { makeEnum } from 'mediashare/store/core/factory';
 import {
   copyStorage,
   deleteStorage,
@@ -19,12 +19,12 @@ import {
 import { getVideoPath, getThumbnailPath, getUploadPath, awsUrl, KeyFactory } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
-import { CreateMediaItemDto, MediaItemDto, MediaCategoryType } from '@app/rxjs-api';
+import { CreateMediaItemDto, MediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
 // TODO: Fix update dto! Not sure why it's not being exported normally...
-import { UpdateMediaItemDto } from '@app/rxjs-api/models/UpdateMediaItemDto';
-import { apis, ApiService } from '@app/store/apis';
+import { UpdateMediaItemDto } from 'mediashare/rxjs-api/models/UpdateMediaItemDto';
+import { apis, ApiService } from 'mediashare/store/apis';
 
-import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '@app/store/helpers';
+import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
 
 const s3Url = Config.AWS_URL;
 

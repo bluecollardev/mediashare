@@ -1,4 +1,4 @@
-import Config from '@app/config';
+import Config from 'mediashare/config';
 
 const mediaRoot = Config.AWS_ROOT;
 

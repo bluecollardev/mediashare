@@ -4,7 +4,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { Divider } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { MediaListItem } from './MediaListItem';
-import { theme } from '@app/styles';
+import { theme } from 'mediashare/styles';
 
 interface ShareItemCardProps {
   date: string;

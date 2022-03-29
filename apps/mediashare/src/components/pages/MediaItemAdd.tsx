@@ -3,13 +3,13 @@ import { useDispatch } from 'react-redux';
 
 import { ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
-import { withGlobalStateConsumer } from '@app/core/globalState/index';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState/index';
 
-import { addMediaItem } from '@app/store/modules/media-items';
+import { addMediaItem } from 'mediashare/store/modules/media-items';
 
-import { CreateMediaItemDto, MediaCategoryType } from '@app/rxjs-api';
+import { CreateMediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
 
-import { useMediaItems } from '@app/hooks/NavigationHooks';
+import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { ActionButtons } from '../layout/ActionButtons';
@@ -17,8 +17,8 @@ import { MediaCard } from '../layout/mediaCard';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from '../layout/PageContainer';
 import { tagValidator, categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
 
-import { minLength } from '@app/core/lib/Validators';
-import { theme } from '@app/styles';
+import { minLength } from 'mediashare/core/lib/Validators';
+import { theme } from 'mediashare/styles';
 import { AppUpload } from '../layout/AppUpload';
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 

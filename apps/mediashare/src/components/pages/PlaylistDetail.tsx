@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { withGlobalStateConsumer } from '@app/core/globalState/index';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState/index';
 
-import { routeNames } from '@app/routes';
+import { routeNames } from 'mediashare/routes';
 
-import { useAppSelector } from '@app/store';
-import { getUserPlaylists, getPlaylistById, removeUserPlaylist, selectPlaylistAction } from '@app/store/modules/playlists';
-import { loadUsers } from '@app/store/modules/users';
+import { useAppSelector } from 'mediashare/store';
+import { getUserPlaylists, getPlaylistById, removeUserPlaylist, selectPlaylistAction } from 'mediashare/store/modules/playlists';
+import { loadUsers } from 'mediashare/store/modules/users';
 
-import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '@app/hooks/NavigationHooks';
+import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -21,11 +21,11 @@ import { AppDialog } from '../layout/AppDialog';
 import { MediaCard } from '../layout/mediaCard';
 import { MediaList } from '../layout/MediaList';
 
-import { PlaylistResponseDto } from '@app/rxjs-api';
+import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 
-import * as build from '@app/build';
+import * as build from 'mediashare/build';
 
-import { theme } from '@app/styles';
+import { theme } from 'mediashare/styles';
 
 // @ts-ignore
 export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Button } from 'react-native-paper';
-import styles, { theme } from '@app/styles';
+import styles, { theme } from 'mediashare/styles';
 
 interface ListActionButtonProps {
   // children: ReactNode;

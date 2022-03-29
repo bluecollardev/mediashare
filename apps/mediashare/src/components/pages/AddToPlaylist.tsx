@@ -3,22 +3,22 @@ import { useDispatch } from 'react-redux';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 
-import { useAppSelector } from '@app/store';
-import { getPlaylistById, updateUserPlaylist } from '@app/store/modules/playlists';
-import { findMediaItems } from '@app/store/modules/media-items';
-import { UpdatePlaylistDto } from '@app/rxjs-api';
+import { useAppSelector } from 'mediashare/store';
+import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/playlists';
+import { findMediaItems } from 'mediashare/store/modules/media-items';
+import { UpdatePlaylistDto } from 'mediashare/rxjs-api';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { withGlobalStateConsumer } from '@app/core/globalState';
-import { useGoBack, useViewMediaItem } from '@app/hooks/NavigationHooks';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { useGoBack, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
 import { PageContainer, PageActions, PageProps, PageContent } from '../layout/PageContainer';
 import { NoItems } from '../layout/NoItems';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaListType } from '../layout/MediaList';
 import { MediaListItem } from '../layout/MediaListItem';
 
-import { shortenText } from '@app/utils';
-import { theme } from '@app/styles';
+import { shortenText } from 'mediashare/utils';
+import { theme } from 'mediashare/styles';
 
 export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   const { playlistId } = route.params;

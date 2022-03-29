@@ -1,7 +1,7 @@
 import React from 'react';
 import { ImageBackground, TouchableWithoutFeedback, View } from 'react-native';
 import { Button } from 'react-native-paper';
-import { usePreviewImage } from '@app/hooks/usePreviewImage';
+import { usePreviewImage } from 'mediashare/hooks/usePreviewImage';
 
 export interface MediaPreviewProps {
   thumbnail?: string;

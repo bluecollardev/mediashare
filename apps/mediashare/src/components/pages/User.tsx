@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useAppSelector } from '@app/store';
+import { useAppSelector } from 'mediashare/store';
 
 import { ScrollView, View } from 'react-native';
 import { Card, FAB, Subheading, Text } from 'react-native-paper';
@@ -12,9 +12,9 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { ActionButtons } from '../layout/ActionButtons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { createRandomRenderKey } from '@app/core/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils';
 
-import { theme } from '@app/styles';
+import { theme } from 'mediashare/styles';
 
 const SharedItems = ({ selectable = false }) => {
   const sharedItems = useAppSelector((state) => state.user.sharedItems) || [];

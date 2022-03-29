@@ -2,10 +2,10 @@ import React from 'react';
 import { Avatar, Card, IconButton, Title, Text } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 
-import { getAuthorText, getUsername } from '@app/utils';
-import { theme } from '@app/styles';
+import { getAuthorText, getUsername } from 'mediashare/utils';
+import { theme } from 'mediashare/styles';
 
-import { UserDto } from '@app/rxjs-api';
+import { UserDto } from 'mediashare/rxjs-api';
 
 export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png';
 

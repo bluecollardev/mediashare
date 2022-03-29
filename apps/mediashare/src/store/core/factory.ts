@@ -1,6 +1,6 @@
 import { createAction, PayloadActionCreator } from '@reduxjs/toolkit';
 
-import { SnakeCaseToCamelCase, snakeCaseToCamelCase } from '@app/utils';
+import { SnakeCaseToCamelCase, snakeCaseToCamelCase } from 'mediashare/utils';
 
 type EnumRecordType<S extends readonly string[]> = { [P in S[number] as SnakeCaseToCamelCase<P>]: P };
 

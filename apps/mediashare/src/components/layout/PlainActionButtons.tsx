@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 
 import React from 'react';
-import styles, { theme } from '@app/styles';
+import styles, { theme } from 'mediashare/styles';
 
 interface Props {
   actionLabel?: string;

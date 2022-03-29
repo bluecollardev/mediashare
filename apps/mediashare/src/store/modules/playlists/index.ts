@@ -3,11 +3,11 @@ import { flattenDeep } from 'remeda';
 import { merge } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { makeEnum } from '@app/store/core/factory';
+import { makeEnum } from 'mediashare/store/core/factory';
 
-import { ApiService } from '@app/store/apis';
-import { CreatePlaylistDto, UpdatePlaylistDto, CreatePlaylistResponseDto, PlaylistResponseDto, PlaylistItemResponseDto } from '@app/rxjs-api';
-import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '@app/store/helpers';
+import { ApiService } from 'mediashare/store/apis';
+import { CreatePlaylistDto, UpdatePlaylistDto, CreatePlaylistResponseDto, PlaylistResponseDto, PlaylistItemResponseDto } from 'mediashare/rxjs-api';
+import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
 
 const PLAYLIST_ACTIONS = [
   'GET_USER_PLAYLIST',

@@ -6,18 +6,8 @@ module.exports = {
       {
         root: ["./"],
         alias: {
-          "^@app/(.*)": "./src/\\1",
-        },
-        extensions: [
-          '.ios.js',
-          '.android.js',
-          '.js',
-          '.jsx',
-          '.json',
-          '.tsx',
-          '.ts',
-          '.native.js',
-        ],
+          "^mediashare/(.*)": "./src/\\1",
+        }
       },
     ],
   ],

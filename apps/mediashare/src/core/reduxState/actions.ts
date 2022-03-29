@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { RootState } from '@app/store';
+import { RootState } from 'mediashare/store';
 import { SnakeCaseToCamelCase, snakeCaseToCamelCase } from './utils';
 
 export const ACTION_TYPES = ['ADD', 'REMOVE', 'GET', 'FIND'] as const;

@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Tag } from '@app/rxjs-api';
+import { Tag } from 'mediashare/rxjs-api';
 
-import { makeEnum } from '@app/store/core/factory';
+import { makeEnum } from 'mediashare/store/core/factory';
 
-import { ApiService } from '@app/store/apis';
-import { reducePendingState, reduceRejectedState, reduceFulfilledState } from '@app/store/helpers';
+import { ApiService } from 'mediashare/store/apis';
+import { reducePendingState, reduceRejectedState, reduceFulfilledState } from 'mediashare/store/helpers';
 
 // Export tag utils
 export * from './utils';

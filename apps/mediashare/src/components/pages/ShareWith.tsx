@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { routeNames } from '@app/routes';
+import { routeNames } from 'mediashare/routes';
 
-import { useAppSelector } from '@app/store';
-import { getUserPlaylists, shareUserPlaylist } from '@app/store/modules/playlists';
-import { loadUsers } from '@app/store/modules/users';
+import { useAppSelector } from 'mediashare/store';
+import { getUserPlaylists, shareUserPlaylist } from 'mediashare/store/modules/playlists';
+import { loadUsers } from 'mediashare/store/modules/users';
 
-import { useGoBack, useRouteName } from '@app/hooks/NavigationHooks';
+import { useGoBack, useRouteName } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';

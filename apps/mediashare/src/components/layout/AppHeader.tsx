@@ -3,12 +3,12 @@ import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-nativ
 import { Appbar, Card, Portal, Searchbar } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
-import { withGlobalStateConsumer, GlobalStateProps } from '@app/core/globalState';
+import { withGlobalStateConsumer, GlobalStateProps } from 'mediashare/core/globalState';
 import { MultiSelectIcon } from '../form/MultiSelect';
 import { ActionButtons } from './ActionButtons';
-import themeStyles, { theme } from '@app/styles';
+import themeStyles, { theme } from 'mediashare/styles';
 
-import { mapAvailableTags } from '@app/store/modules/tags/utils';
+import { mapAvailableTags } from 'mediashare/store/modules/tags/utils';
 
 export interface AppHeaderProps {
   options?: any;

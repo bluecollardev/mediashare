@@ -1,13 +1,13 @@
 import React, { ReactNode } from 'react';
-import styles, { theme } from '@app/styles';
+import styles, { theme } from 'mediashare/styles';
 import { KeyboardAvoidingView, SafeAreaView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
-import { useAppSelector } from '@app/store';
+import { useAppSelector } from 'mediashare/store';
 import { useDispatch } from 'react-redux';
-import { clearError } from '@app/store/modules/app-state';
+import { clearError } from 'mediashare/store/modules/app-state';
 import { LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
-import { GlobalStateProps } from '@app/core/globalState';
+import { GlobalStateProps } from 'mediashare/core/globalState';
 type withProps<T1, T2> = T1 & T2;
 type WithNavProps = withProps<MaterialBottomTabScreenProps<any>, LoadingSpinnerProps>;
 

@@ -2,9 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { View } from 'react-native';
 import { Chip } from 'react-native-paper';
 
-import { mapAvailableTags, getMappedTagUsingKey } from '@app/store/modules/tags/utils';
+import { mapAvailableTags, getMappedTagUsingKey } from 'mediashare/store/modules/tags/utils';
 
-import { Tag } from '@app/rxjs-api';
+import { Tag } from 'mediashare/rxjs-api';
 
 export interface MediaCardTagsProps {
   availableTags?: Tag[];

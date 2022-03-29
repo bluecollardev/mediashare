@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, Button, Card, Dialog, Portal, Text } from 'react-native-paper';
-import { theme } from '@app/styles';
+import { theme } from 'mediashare/styles';
 
 interface AppDialogProps {
   showDialog: boolean;

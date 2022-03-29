@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { routeNames } from '@app/routes';
+import { routeNames } from 'mediashare/routes';
 
-import { useAppSelector } from '@app/store';
-import { getUserPlaylists, findPlaylists, removeUserPlaylist, selectPlaylistAction } from '@app/store/modules/playlists';
+import { useAppSelector } from 'mediashare/store';
+import { getUserPlaylists, findPlaylists, removeUserPlaylist, selectPlaylistAction } from 'mediashare/store/modules/playlists';
 
-import { PlaylistResponseDto } from '@app/rxjs-api';
+import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 
-import { withGlobalStateConsumer } from '@app/core/globalState';
-import { useRouteName, useViewPlaylistById } from '@app/hooks/NavigationHooks';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { FAB, Text, Divider } from 'react-native-paper';
@@ -21,10 +21,10 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { ActionButtons } from '../layout/ActionButtons';
 import { NoItems } from '../layout/NoItems';
 
-import { getAuthorText, getUsername, shortenText } from '@app/utils';
-import { createRandomRenderKey } from '@app/core/utils';
+import { getAuthorText, getUsername, shortenText } from 'mediashare/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils';
 
-import { theme } from '@app/styles';
+import { theme } from 'mediashare/styles';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];

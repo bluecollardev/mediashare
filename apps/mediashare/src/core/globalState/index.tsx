@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'recompose';
 
-import { useAppSelector } from '@app/store';
-import { getTags } from '@app/store/modules/tags';
-import { Tag } from '@app/rxjs-api';
+import { useAppSelector } from 'mediashare/store';
+import { getTags } from 'mediashare/store/modules/tags';
+import { Tag } from 'mediashare/rxjs-api';
 
 export interface GlobalStateProps {
   loading?: boolean;

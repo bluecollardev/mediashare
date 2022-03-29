@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '@app/store';
+import { useAppSelector } from 'mediashare/store';
 // @ts-ignore
 import { LoadingOverlay } from '../LoadingOverlay';
 

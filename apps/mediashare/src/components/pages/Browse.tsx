@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '@app/store';
-import { findPlaylists, getUserPlaylists } from '@app/store/modules/playlists';
+import { useAppSelector } from 'mediashare/store';
+import { findPlaylists, getUserPlaylists } from 'mediashare/store/modules/playlists';
 
-import { PlaylistResponseDto } from '@app/rxjs-api';
+import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useViewPlaylistById } from '@app/hooks/NavigationHooks';
-import { withGlobalStateConsumer } from '@app/core/globalState';
+import { useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 
 import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
@@ -18,8 +18,8 @@ import { MediaCard } from '../layout/mediaCard';
 import { PlaylistsComponent } from './Playlists';
 import { ActionButtons } from '../layout/ActionButtons';
 
-import { filterUnique } from '@app/utils';
-import { createRandomRenderKey } from '@app/core/utils';
+import { filterUnique } from 'mediashare/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils';
 
 export const SharedList = () => {
   const { sharedItems } = useAppSelector((state) => state?.user);

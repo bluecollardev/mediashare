@@ -6,37 +6,37 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as R from 'remeda';
 import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
-import Config from '@app/config';
+import Config from 'mediashare/config';
 
-import { routeNames } from '@app/routes';
+import { routeNames } from 'mediashare/routes';
 
-import { useAppSelector } from '@app/store';
-import { thumbnailRoot } from '@app/store/modules/media-items/key-factory';
-import { fetchAndPutToS3 } from '@app/store/modules/media-items/storage';
-import { loadUser, logout, updateAccount } from '@app/store/modules/user';
-import { loadUsers } from '@app/store/modules/users';
-import { loadProfile } from '@app/store/modules/profile';
-import { findMediaItems } from '@app/store/modules/media-items';
-import { readShareItem } from '@app/store/modules/share-items';
+import { useAppSelector } from 'mediashare/store';
+import { thumbnailRoot } from 'mediashare/store/modules/media-items/key-factory';
+import { fetchAndPutToS3 } from 'mediashare/store/modules/media-items/storage';
+import { loadUser, logout, updateAccount } from 'mediashare/store/modules/user';
+import { loadUsers } from 'mediashare/store/modules/users';
+import { loadProfile } from 'mediashare/store/modules/profile';
+import { findMediaItems } from 'mediashare/store/modules/media-items';
+import { readShareItem } from 'mediashare/store/modules/share-items';
 
-import { withGlobalStateConsumer } from '@app/core/globalState';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 
 import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useRouteWithParams, useViewPlaylistById, useViewProfileById } from '@app/hooks/NavigationHooks';
+import { useRouteWithParams, useViewPlaylistById, useViewProfileById } from 'mediashare/hooks/NavigationHooks';
 import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
 import { ContactList } from '../layout/ContactList';
 import { ActionButtons } from '../layout/ActionButtons';
 import { AccountCard } from '../layout/AccountCard';
 import { SharedList } from '../layout/SharedList';
 
-import * as build from '@app/build';
+import * as build from 'mediashare/build';
 
-import { createRandomRenderKey } from '@app/core/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils';
 
-import styles, { theme } from '@app/styles';
+import styles, { theme } from 'mediashare/styles';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
   // const manageContact = useRouteName(routeNames.user);

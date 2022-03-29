@@ -1,12 +1,12 @@
 import React from 'react';
 import * as R from 'remeda';
 
-import { ProfileShareItem } from '@app/rxjs-api';
+import { ProfileShareItem } from 'mediashare/rxjs-api';
 
 import { View, StyleSheet, SectionList } from 'react-native';
 import { Card } from 'react-native-paper';
 import { ShareItemCard } from './ShareItemCard';
-import { useAppSelector } from '@app/store';
+import { useAppSelector } from 'mediashare/store';
 
 interface SharedListProps {
   sharedItems: ProfileShareItem[];

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { withGlobalStateConsumer } from '@app/core/globalState/index';
-import { useAppSelector } from '@app/store';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState/index';
+import { useAppSelector } from 'mediashare/store';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
 import { MediaCard } from '../layout/mediaCard';

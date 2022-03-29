@@ -3,15 +3,15 @@ import { useDispatch } from 'react-redux';
 import { FlatList } from 'react-native';
 import { Subheading, Card } from 'react-native-paper';
 
-import { useAppSelector } from '@app/store';
-import { getFeedMediaItems, saveFeedMediaItems } from '@app/store/modules/media-items';
-import { AwsMediaItem } from '@app/store/modules/media-items/aws-media-item.model';
+import { useAppSelector } from 'mediashare/store';
+import { getFeedMediaItems, saveFeedMediaItems } from 'mediashare/store/modules/media-items';
+import { AwsMediaItem } from 'mediashare/store/modules/media-items/aws-media-item.model';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { withGlobalStateConsumer } from '@app/core/globalState/index';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState/index';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { NoItems } from '../layout/NoItems';
-import { useMediaItems } from '@app/hooks/NavigationHooks';
+import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaListItem } from '../layout/MediaListItem';
 

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { withGlobalStateConsumer } from '@app/core/globalState/index';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState/index';
 
-import { useAppSelector } from '@app/store';
-import { getPlaylistById, updateUserPlaylist } from '@app/store/modules/playlists';
+import { useAppSelector } from 'mediashare/store';
+import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/playlists';
 
-import { PlaylistCategoryType, MediaItem, MediaCategoryType } from '@app/rxjs-api';
+import { PlaylistCategoryType, MediaItem, MediaCategoryType } from 'mediashare/rxjs-api';
 
-import { usePlaylists, useRouteWithParams, useViewMediaItem } from '@app/hooks/NavigationHooks';
+import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { View, Text, ScrollView } from 'react-native';
@@ -17,11 +17,11 @@ import { ActionButtons } from '../layout/ActionButtons';
 import { MediaList } from '../layout/MediaList';
 import { MediaCard } from '../layout/mediaCard';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { routeNames } from '@app/routes';
+import { routeNames } from 'mediashare/routes';
 
-import { createRandomRenderKey } from '@app/core/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils';
 
-import styles, { theme } from '@app/styles';
+import styles, { theme } from 'mediashare/styles';
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
 
 const actionModes = { delete: 'delete', default: 'default' };
