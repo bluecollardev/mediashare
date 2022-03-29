@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { routeNames } from '../../routes';
+import { routeNames } from '@app/routes';
 
-import { useAppSelector } from '../../store';
-import { getUserPlaylists, findPlaylists, removeUserPlaylist, selectPlaylistAction } from '../../store/modules/playlists';
+import { useAppSelector } from '@app/store';
+import { getUserPlaylists, findPlaylists, removeUserPlaylist, selectPlaylistAction } from '@app/store/modules/playlists';
 
-import { PlaylistResponseDto } from '../../rxjs-api';
+import { PlaylistResponseDto } from '@app/rxjs-api';
 
-import { withGlobalStateConsumer } from '../../core/globalState';
-import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
+import { withGlobalStateConsumer } from '@app/core/globalState';
+import { useRouteName, useViewPlaylistById } from '@app/hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { FAB, Text, Divider } from 'react-native-paper';
@@ -21,10 +21,10 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { ActionButtons } from '../layout/ActionButtons';
 import { NoItems } from '../layout/NoItems';
 
-import { getAuthorText, getUsername, shortenText } from '../../utils';
-import { createRandomRenderKey } from '../../core/utils';
+import { getAuthorText, getUsername, shortenText } from '@app/utils';
+import { createRandomRenderKey } from '@app/core/utils';
 
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
@@ -106,7 +106,6 @@ export const Playlists = ({ globalState }: PageProps) => {
     if (loaded && !isLoaded) {
       setIsLoaded(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
 
   const onRefresh = useCallback(refresh, [dispatch]);
@@ -118,7 +117,6 @@ export const Playlists = ({ globalState }: PageProps) => {
       setPrevSearchFilters(currentSearchFilters);
       loadData().then();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState, searchFilters]);
 
   const [fabState, setFabState] = useState({ open: false });

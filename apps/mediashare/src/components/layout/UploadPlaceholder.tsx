@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, IconButton } from 'react-native-paper';
 import { TouchableWithoutFeedback, View, Text } from 'react-native';
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 interface UploadPlaceholderProps {
   onPress?: () => void;

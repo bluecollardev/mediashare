@@ -1,9 +1,9 @@
 import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
-import Config from '../../../config';
+import Config from '@app/config';
 
-import { makeEnum } from '../../core/factory';
+import { makeEnum } from '@app/store/core/factory';
 import {
   copyStorage,
   deleteStorage,
@@ -19,12 +19,12 @@ import {
 import { getVideoPath, getThumbnailPath, getUploadPath, awsUrl, KeyFactory } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
-import { CreateMediaItemDto, MediaItemDto, MediaCategoryType } from '../../../rxjs-api';
+import { CreateMediaItemDto, MediaItemDto, MediaCategoryType } from '@app/rxjs-api';
 // TODO: Fix update dto! Not sure why it's not being exported normally...
-import { UpdateMediaItemDto } from '../../../rxjs-api/models/UpdateMediaItemDto';
-import { apis, ApiService } from '../../apis';
+import { UpdateMediaItemDto } from '@app/rxjs-api/models/UpdateMediaItemDto';
+import { apis, ApiService } from '@app/store/apis';
 
-import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '../../helpers';
+import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '@app/store/helpers';
 
 const s3Url = Config.AWS_URL;
 
@@ -99,7 +99,7 @@ export const addMediaItem = createAsyncThunk(
 
 export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
   // TODO: Non-overlapping types here!
-  const feedMediaItems = ((await listStorage(getUploadPath())) as unknown) as AwsMediaItem[];
+  const feedMediaItems = (await listStorage(getUploadPath())) as unknown as AwsMediaItem[];
   return feedMediaItems
     .filter((item) => item.key !== getUploadPath())
     .map((item) => ({

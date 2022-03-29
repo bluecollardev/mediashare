@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { withGlobalStateConsumer } from '../../core/globalState/index';
+import { withGlobalStateConsumer } from '@app/core/globalState/index';
 
-import { routeNames } from '../../routes';
+import { routeNames } from '@app/routes';
 
-import { useAppSelector } from '../../store';
-import { getUserPlaylists, getPlaylistById, removeUserPlaylist, selectPlaylistAction } from '../../store/modules/playlists';
-import { loadUsers } from '../../store/modules/users';
+import { useAppSelector } from '@app/store';
+import { getUserPlaylists, getPlaylistById, removeUserPlaylist, selectPlaylistAction } from '@app/store/modules/playlists';
+import { loadUsers } from '@app/store/modules/users';
 
-import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
+import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '@app/hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
@@ -17,15 +17,15 @@ import { FAB } from 'react-native-paper';
 import { ActionButtons } from '../layout/ActionButtons';
 
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
-import AppDialog from '../layout/AppDialog';
-import { MediaCard } from '../layout/MediaCard';
+import { AppDialog } from '../layout/AppDialog';
+import { MediaCard } from '../layout/mediaCard';
 import { MediaList } from '../layout/MediaList';
 
-import { PlaylistResponseDto } from '../../rxjs-api';
+import { PlaylistResponseDto } from '@app/rxjs-api';
 
-import * as build from '../../build';
+import * as build from '@app/build';
 
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 // @ts-ignore
 export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps) => {
@@ -46,8 +46,19 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   const [isLoaded, setIsLoaded] = useState(false);
 
   // @ts-ignore
-  const { _id, title = '', author = '', createdBy, description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } =
-    selected || {};
+  const {
+    _id,
+    title = '',
+    author = '',
+    createdBy,
+    description = '',
+    imageSrc,
+    category,
+    shareCount = 0,
+    viewCount = 0,
+    likesCount = 0,
+    mediaItems = [],
+  } = selected || {};
   const items = mediaItems || [];
 
   const initialTagKeys = (selected?.tags || []).map((tag) => tag.key);
@@ -57,7 +68,6 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     if (!isLoaded) {
       loadData().then();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
   // console.log(`Logged In User: ${appUserId}, Media Item Owned By: ${createdBy}`);
@@ -78,7 +88,9 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
 
   // Don't display anything unless we have a selected playlist
   // TODO: Show loader!
-  if (!selected) return null;
+  if (!selected) {
+    return null;
+  }
 
   return (
     <PageContainer>

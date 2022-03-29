@@ -6,37 +6,37 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as R from 'remeda';
 import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
-import Config from '../../config';
+import Config from '@app/config';
 
-import { routeNames } from '../../routes';
+import { routeNames } from '@app/routes';
 
-import { useAppSelector } from '../../store';
-import { thumbnailRoot } from '../../store/modules/media-items/key-factory';
-import { fetchAndPutToS3 } from '../../store/modules/media-items/storage';
-import { loadUser, logout, updateAccount } from '../../store/modules/user';
-import { loadUsers } from '../../store/modules/users';
-import { loadProfile } from '../../store/modules/profile';
-import { findMediaItems } from '../../store/modules/media-items';
-import { readShareItem } from '../../store/modules/share-items';
+import { useAppSelector } from '@app/store';
+import { thumbnailRoot } from '@app/store/modules/media-items/key-factory';
+import { fetchAndPutToS3 } from '@app/store/modules/media-items/storage';
+import { loadUser, logout, updateAccount } from '@app/store/modules/user';
+import { loadUsers } from '@app/store/modules/users';
+import { loadProfile } from '@app/store/modules/profile';
+import { findMediaItems } from '@app/store/modules/media-items';
+import { readShareItem } from '@app/store/modules/share-items';
 
-import { withGlobalStateConsumer } from '../../core/globalState';
+import { withGlobalStateConsumer } from '@app/core/globalState';
 
 import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useRouteWithParams, useViewPlaylistById, useViewProfileById } from '../../hooks/NavigationHooks';
+import { useRouteWithParams, useViewPlaylistById, useViewProfileById } from '@app/hooks/NavigationHooks';
 import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
 import { ContactList } from '../layout/ContactList';
 import { ActionButtons } from '../layout/ActionButtons';
 import { AccountCard } from '../layout/AccountCard';
 import { SharedList } from '../layout/SharedList';
 
-import * as build from '../../build';
+import * as build from '@app/build';
 
-import { createRandomRenderKey } from '../../core/utils';
+import { createRandomRenderKey } from '@app/core/utils';
 
-import styles, { theme } from '../../styles';
+import styles, { theme } from '@app/styles';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
   // const manageContact = useRouteName(routeNames.user);
@@ -63,14 +63,16 @@ const SharedItems = () => {
   return <SharedList sharedItems={sharedItems} onView={onView} />;
 };
 
-const renderScene = (sceneComponentProps) => ({ route }) => {
-  switch (route.key) {
-    case 'contacts':
-      return <Contacts {...sceneComponentProps} />;
-    case 'shared':
-      return <SharedItems {...sceneComponentProps} />;
-  }
-};
+const renderScene =
+  (sceneComponentProps) =>
+  ({ route }) => {
+    switch (route.key) {
+      case 'contacts':
+        return <Contacts {...sceneComponentProps} />;
+      case 'shared':
+        return <SharedItems {...sceneComponentProps} />;
+    }
+  };
 
 const actionModes = { delete: 'delete', default: 'default' };
 
@@ -106,7 +108,6 @@ export const Account = ({ globalState }: PageProps) => {
     if (!isLoaded) {
       loadData().then();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
   const [fabState, setFabState] = useState({ open: false });

@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { withGlobalStateConsumer } from '../../core/globalState/index';
+import { withGlobalStateConsumer } from '@app/core/globalState';
 
-import { useAppSelector } from '../../store';
-import { deleteMediaItem, updateMediaItem } from '../../store/modules/media-items';
+import { useAppSelector } from '@app/store';
+import { deleteMediaItem, updateMediaItem } from '@app/store/modules/media-items';
 
-import { MediaCategoryType, UpdateMediaItemDto } from '../../rxjs-api';
-import { useMediaItems } from '../../hooks/NavigationHooks';
+// TODO: Fix update dto! Not sure why it's not being exported normally...
+import { UpdateMediaItemDto } from '@app/rxjs-api/models/UpdateMediaItemDto';
+import { MediaCategoryType } from '@app/rxjs-api';
+import { useMediaItems } from '@app/hooks/NavigationHooks';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { Button, Paragraph } from 'react-native-paper';
 import { View, ScrollView } from 'react-native';
 
-import { ActionButtons } from '../layout/ActionButtons';
-import { MediaCard } from '../layout/MediaCard';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
-import AppDialog from '../layout/AppDialog';
+import { AppDialog } from '../layout/AppDialog';
+import { MediaCard } from '../layout/mediaCard';
+import { ActionButtons } from '../layout/ActionButtons';
 
-import styles, { theme } from '../../styles';
+import styles, { theme } from '@app/styles';
 import AppUpload from '../layout/AppUpload';
 
 export interface MediaItemEditContainerProps {

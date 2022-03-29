@@ -1,16 +1,13 @@
 import React, { ReactNode } from 'react';
-import themeStyles, { theme } from '../../styles';
+import styles, { theme } from '@app/styles';
 import { KeyboardAvoidingView, SafeAreaView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
-import { useAppSelector } from '../../store';
+import { useAppSelector } from '@app/store';
 import { useDispatch } from 'react-redux';
-import { clearError } from '../../store/modules/app-state';
+import { clearError } from '@app/store/modules/app-state';
 import { LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
-
-import styles from '../../styles';
-// import { StackScreenProps } from '@react-navigation/stack';
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
-import { GlobalStateProps } from '../../core/globalState';
+import { GlobalStateProps } from '@app/core/globalState';
 type withProps<T1, T2> = T1 & T2;
 type WithNavProps = withProps<MaterialBottomTabScreenProps<any>, LoadingSpinnerProps>;
 
@@ -69,7 +66,7 @@ export function PageContainer({ children }: PageContainerProps) {
     // setVisible(false);
   };
   return (
-    <SafeAreaView style={themeStyles.pageContainer}>
+    <SafeAreaView style={styles.pageContainer}>
       <Portal>
         <Dialog visible={app.hasError} onDismiss={hideDialog}>
           <Card.Title

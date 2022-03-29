@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../store';
-import { findPlaylists, getUserPlaylists } from '../../store/modules/playlists';
+import { useAppSelector } from '@app/store';
+import { findPlaylists, getUserPlaylists } from '@app/store/modules/playlists';
 
-import { PlaylistResponseDto } from '../../rxjs-api';
+import { PlaylistResponseDto } from '@app/rxjs-api';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { useViewPlaylistById } from '../../hooks/NavigationHooks';
-import { withGlobalStateConsumer } from '../../core/globalState';
+import { useViewPlaylistById } from '@app/hooks/NavigationHooks';
+import { withGlobalStateConsumer } from '@app/core/globalState';
 
 import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
 
 import { PageContainer, PageProps } from '../layout/PageContainer';
-import { MediaCard } from '../layout/MediaCard';
+import { MediaCard } from '../layout/mediaCard';
 import { PlaylistsComponent } from './Playlists';
 import { ActionButtons } from '../layout/ActionButtons';
 
-import { filterUnique } from '../../utils';
-import { createRandomRenderKey } from '../../core/utils';
+import { filterUnique } from '@app/utils';
+import { createRandomRenderKey } from '@app/core/utils';
 
 export const SharedList = () => {
   const { sharedItems } = useAppSelector((state) => state?.user);
@@ -30,7 +30,7 @@ export const SharedList = () => {
     // const { mediaIds, description } = item;
     // const itemDescription = `${shortenText(description, 40)}\n${mediaIds.length || 0} videos`;
     // Hack to set playlist id as we're just casting a SharedItemDto to a PlaylistDto
-    return (Object.assign({}, item, { _id: item.playlistId }) as unknown) as PlaylistResponseDto;
+    return Object.assign({}, item, { _id: item.playlistId }) as unknown as PlaylistResponseDto;
   });
 
   const viewPlaylistAction = useViewPlaylistById();
@@ -100,7 +100,6 @@ export const Browse = ({
 
   useEffect(() => {
     loadData().then();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -109,7 +108,6 @@ export const Browse = ({
       setPrevSearchFilters(currentSearchFilters);
       loadData().then();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState]);
 
   return (

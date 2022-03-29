@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useAppSelector } from '../../store';
+import { useAppSelector } from '@app/store';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 

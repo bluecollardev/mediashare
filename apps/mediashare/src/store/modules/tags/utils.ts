@@ -9,7 +9,4 @@ export const mapAvailableTags = (availableTags) =>
     }));
 
 // Mapped tag id is formatted as follows: `${key}:${id}`
-export const getMappedTagUsingKey = (mappedTags, selectedTagKey) =>
-  [...mappedTags].find(({ id }) =>
-    id.split(':').shift() === selectedTagKey);
-
+export const getMappedTagUsingKey = (mappedTags, selectedTagKey) => [...mappedTags].find(({ id }) => id.split(':').shift() === selectedTagKey);

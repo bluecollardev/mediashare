@@ -1,10 +1,10 @@
 import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 
-import { makeEnum } from '../../core/factory';
-import { UserDto } from '../../../rxjs-api';
-import { apis } from '../../apis';
+import { makeEnum } from '@app/store/core/factory';
+import { UserDto } from '@app/rxjs-api';
+import { apis } from '@app/store/apis';
 
-import { reducePendingState, reduceRejectedState } from '../../helpers';
+import { reducePendingState, reduceRejectedState } from '@app/store/helpers';
 
 export interface UsersState {
   entities: UserDto[];

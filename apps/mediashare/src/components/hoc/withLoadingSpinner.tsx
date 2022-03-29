@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../store';
+import { useAppSelector } from '@app/store';
 // @ts-ignore
 import { LoadingOverlay } from '../LoadingOverlay';
 
@@ -14,22 +14,25 @@ export interface LoadingSpinnerProps {
 
 const DEFAULT_TIMEOUT = 0.5 * 1000;
 
-export const withLoadingSpinner = (stateSelector = (state: any) => state?.user?.loading) => (WrappedComponent: any) => (props: any) => {
-  // const loading = useAppSelector((state) => state?.app.loading);
-  const loading = useAppSelector(stateSelector);
-  const [isLoading, setIsLoading] = useState(loading);
+export const withLoadingSpinner =
+  (stateSelector = (state: any) => state?.user?.loading) =>
+  (WrappedComponent: any) =>
+  (props: any) => {
+    // const loading = useAppSelector((state) => state?.app.loading);
+    const loading = useAppSelector(stateSelector);
+    const [isLoading, setIsLoading] = useState(loading);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, DEFAULT_TIMEOUT);
-    setIsLoading(true);
-  }, [loading]);
+    useEffect(() => {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, DEFAULT_TIMEOUT);
+      setIsLoading(true);
+    }, [loading]);
 
-  return (
-    <>
-      <LoadingOverlay show={isLoading} />
-      <WrappedComponent {...props} />
-    </>
-  );
-};
+    return (
+      <>
+        <LoadingOverlay show={isLoading} />
+        <WrappedComponent {...props} />
+      </>
+    );
+  };

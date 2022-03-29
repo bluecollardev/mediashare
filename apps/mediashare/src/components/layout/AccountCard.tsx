@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Avatar, Caption, Title, Subheading, Card, Menu, IconButton } from 'react-native-paper';
 
-import { theme } from '../../styles';
-import { useAppSelector } from '../../store';
+import { theme } from '@app/styles';
+import { useAppSelector } from '@app/store';
 import * as R from 'remeda';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 

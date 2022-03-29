@@ -1,10 +1,11 @@
 /* eslint-disable no-undef */
-import { RootState } from '../../store';
+import { RootState } from '@app/store';
 import { SnakeCaseToCamelCase, snakeCaseToCamelCase } from './utils';
 
 export const ACTION_TYPES = ['ADD', 'REMOVE', 'GET', 'FIND'] as const;
 
-const CreateActionFactory = (type: string) =>
+const CreateActionFactory =
+  (type: string) =>
   // @ts-ignore
   <T>(payload: T = null) => ({
     type,

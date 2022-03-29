@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-paper';
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 export interface TopActionButtonsProps {
   leftLabel: string;

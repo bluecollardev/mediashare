@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { View, StyleSheet } from 'react-native';
 import { Avatar, Button, Checkbox, Divider, Headline, IconButton, List, Text } from 'react-native-paper';
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 interface ContactListItemProps {
   userId: string;

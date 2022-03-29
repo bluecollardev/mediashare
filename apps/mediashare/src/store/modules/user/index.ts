@@ -1,14 +1,14 @@
 import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import * as R from 'remeda';
 
-import { ActionsFactory } from '../../core/factory';
+import { ActionsFactory } from '@app/store/core/factory';
 // import { setKeyPair } from './keypair-store'; // TODO: Not compatible with react-native-web [https://github.com/expo/expo/issues/7744]
 import { signOut } from './auth';
 
-import { AuthorizeDto, ProfileDto, UpdateUserDto, BcRolesType } from '../../../rxjs-api';
-import { apis } from '../../apis';
+import { AuthorizeDto, ProfileDto, UpdateUserDto, BcRolesType } from '@app/rxjs-api';
+import { apis } from '@app/store/apis';
 
-import { reducePendingState, reduceRejectedState } from '../../helpers';
+import { reducePendingState, reduceRejectedState } from '@app/store/helpers';
 
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
 const USER_ACTIONS = ['LOGIN', 'LOGOUT', 'UPDATE_ACCOUNT', 'DELETE_ACCOUNT', 'VALIDATE', 'LOAD_USER'] as const;

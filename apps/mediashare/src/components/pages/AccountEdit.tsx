@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import Config from '../../config';
+import Config from '@app/config';
 import * as R from 'remeda';
 import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { launchImageLibrary } from 'react-native-image-picker';
 
-import { UserDto } from '../../rxjs-api';
+import { UserDto } from '@app/rxjs-api';
 
-import { useAppSelector } from '../../store';
-import { loadUser, updateAccount } from '../../store/modules/user';
-import { fetchAndPutToS3 } from '../../store/modules/media-items/storage';
-import { thumbnailRoot } from '../../store/modules/media-items/key-factory';
-import { loadProfile } from '../../store/modules/profile';
+import { useAppSelector } from '@app/store';
+import { loadUser, updateAccount } from '@app/store/modules/user';
+import { fetchAndPutToS3 } from '@app/store/modules/media-items/storage';
+import { thumbnailRoot } from '@app/store/modules/media-items/key-factory';
+import { loadProfile } from '@app/store/modules/profile';
 
-import { routeNames } from '../../routes';
+import { routeNames } from '@app/routes';
 
-import { useRouteWithParams } from '../../hooks/NavigationHooks';
+import { useRouteWithParams } from '@app/hooks/NavigationHooks';
 import { TextField } from '../form/TextField';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { PageContainer, PageProps } from '../layout/PageContainer';
@@ -51,7 +51,6 @@ const AccountEdit = ({ route }: AccountEditProps) => {
     if (!isLoaded) {
       loadData().then();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

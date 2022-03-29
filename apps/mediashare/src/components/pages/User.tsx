@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useAppSelector } from '../../store';
+import { useAppSelector } from '@app/store';
 
 import { ScrollView, View } from 'react-native';
 import { Card, FAB, Subheading, Text } from 'react-native-paper';
@@ -12,9 +12,9 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { ActionButtons } from '../layout/ActionButtons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { createRandomRenderKey } from '../../core/utils';
+import { createRandomRenderKey } from '@app/core/utils';
 
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 const SharedItems = ({ selectable = false }) => {
   const sharedItems = useAppSelector((state) => state.user.sharedItems) || [];
@@ -92,7 +92,6 @@ export const User = ({}: PageProps) => {
     if (!isLoaded) {
       loadData().then();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
   const [fabState, setFabState] = useState({ open: false });

@@ -2,8 +2,8 @@ import React, { Component, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-import { loginAction } from '../../store/modules/user';
-import { RootState } from '../../store';
+import { loginAction } from '@app/store/modules/user';
+import { RootState } from '@app/store';
 
 import { Authenticator, SignIn, SignUp, Greetings, VerifyContact, ForgotPassword, AmplifyTheme, ConfirmSignIn } from 'aws-amplify-react-native';
 
@@ -11,7 +11,7 @@ import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { Button, Card } from 'react-native-paper';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent } from '../layout/PageContainer';
 
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -195,7 +195,7 @@ const LoginComponent = ({}: PageProps) => {
       <KeyboardAvoidingPageContent>
         <ScrollView>
           <Card elevation={0}>
-            <Card.Cover resizeMode="contain" source={require('../../assets/af-logo.png')} style={{ backgroundColor: theme.colors.background }} />
+            <Card.Cover resizeMode="contain" source={require('@app/assets/af-logo.png')} style={{ backgroundColor: theme.colors.background }} />
           </Card>
           {show && (
             <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={true}>

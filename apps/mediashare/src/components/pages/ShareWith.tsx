@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { routeNames } from '../../routes';
+import { routeNames } from '@app/routes';
 
-import { useAppSelector } from '../../store';
-import { getUserPlaylists, shareUserPlaylist } from '../../store/modules/playlists';
-import { loadUsers } from '../../store/modules/users';
+import { useAppSelector } from '@app/store';
+import { getUserPlaylists, shareUserPlaylist } from '@app/store/modules/playlists';
+import { loadUsers } from '@app/store/modules/users';
 
-import { useGoBack, useRouteName } from '../../hooks/NavigationHooks';
+import { useGoBack, useRouteName } from '@app/hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
@@ -54,7 +54,6 @@ const ShareWith = ({}: PageProps) => {
     if (!loaded) {
       loadData().then(() => setIsLoaded(true));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
 
   return (

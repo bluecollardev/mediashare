@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import * as R from 'remeda';
-import { RootState } from '../../store';
+import { RootState } from '@app/store';
 
 export type SnakeCaseToCamelCase<S extends string> = S extends `${infer FirstWord}_${infer Rest}`
   ? `${Lowercase<FirstWord>}${SnakeCaseToPascalCase<Rest>}`
@@ -21,4 +21,7 @@ export function snakeCaseToCamelCase<S extends string>(snakeCaseString: S): Snak
 }
 
 export const cloneState = (state: RootState): RootState => R.clone<RootState>(state);
-export const mergeState = (state: RootState) => <T>(item: T) => R.merge(cloneState(state), R.clone(item));
+export const mergeState =
+  (state: RootState) =>
+  <T>(item: T) =>
+    R.merge(cloneState(state), R.clone(item));

@@ -157,7 +157,9 @@ function PrivateMainNavigation({ user, globalState }: PrivateMainNavigationProps
         <PrivateNavigator.Screen name={'Browse'} component={BrowseNavigation} listeners={navigationTabListeners} />
       )}
 
-      {(build.forSubscriber || build.forAdmin) && <PrivateNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} listeners={navigationTabListeners} />}
+      {(build.forSubscriber || build.forAdmin) && (
+        <PrivateNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} listeners={navigationTabListeners} />
+      )}
 
       {build.forAdmin && <PrivateNavigator.Screen name={'Media'} component={MediaNavigation} listeners={navigationTabListeners} />}
       <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} initialParams={{ userId: user._id }} />

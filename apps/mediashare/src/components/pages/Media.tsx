@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyleSheet, FlatList, View } from 'react-native';
 
-import { routeNames } from '../../routes';
+import { routeNames } from '@app/routes';
 
-import { useAppSelector } from '../../store';
-import { deleteMediaItem, findMediaItems } from '../../store/modules/media-items';
+import { useAppSelector } from '@app/store';
+import { deleteMediaItem, findMediaItems } from '@app/store/modules/media-items';
 
-import { withGlobalStateConsumer } from '../../core/globalState';
+import { withGlobalStateConsumer } from '@app/core/globalState';
 
-import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
+import { useRouteName, useEditMediaItem } from '@app/hooks/NavigationHooks';
 
-import { MediaItem, MediaItemDto } from '../../rxjs-api';
+import { MediaItem, MediaItemDto } from '@app/rxjs-api';
 
 import { RefreshControl } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';
@@ -21,11 +21,11 @@ import { MediaListItem } from '../layout/MediaListItem';
 import { ActionButtons } from '../layout/ActionButtons';
 import { NoItems } from '../layout/NoItems';
 
-import { shortenText } from '../../utils';
-import { createRandomRenderKey } from '../../core/utils';
+import { shortenText } from '@app/utils';
+import { createRandomRenderKey } from '@app/core/utils';
 
-import { theme } from '../../styles';
-import { selectMediaItem } from '../../store/modules/media-items';
+import { theme } from '@app/styles';
+import { selectMediaItem } from '@app/store/modules/media-items';
 
 export const MediaComponent = ({
   list = [],
@@ -97,10 +97,8 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     if (loaded && !isLoaded) {
       setIsLoaded(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onRefresh = useCallback(refresh, [dispatch]);
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
@@ -110,7 +108,6 @@ export const Media = ({ navigation, globalState }: PageProps) => {
       setPrevSearchFilters(currentSearchFilters);
       loadData().then();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState, searchFilters]);
 
   const [fabState, setState] = useState({ open: false });

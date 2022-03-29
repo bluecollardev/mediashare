@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
 import { IconButton, Text } from 'react-native-paper';
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 interface Props {
   showCancel?: boolean;

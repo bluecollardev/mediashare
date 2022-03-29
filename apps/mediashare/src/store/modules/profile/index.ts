@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { ProfileDto } from '../../../rxjs-api';
-import { ApiService } from '../../apis';
+import { ProfileDto } from '@app/rxjs-api';
+import { ApiService } from '@app/store/apis';
 
 interface InitialState {
   entity: Partial<ProfileDto>;

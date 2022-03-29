@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, Button, Card, Dialog, Portal, Text } from 'react-native-paper';
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 interface AppDialogProps {
   showDialog: boolean;
@@ -13,7 +13,7 @@ interface AppDialogProps {
   subtitle: string;
 }
 
-function AppDialog({ leftActionLabel, rightActionLabel, leftActionCb, rightActionCb, showDialog, onDismiss, title, subtitle }: AppDialogProps) {
+export function AppDialog({ leftActionLabel, rightActionLabel, leftActionCb, rightActionCb, showDialog, onDismiss, title, subtitle }: AppDialogProps) {
   return (
     <Portal>
       <Dialog visible={showDialog} onDismiss={onDismiss}>

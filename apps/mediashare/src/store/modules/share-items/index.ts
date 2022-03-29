@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { makeEnum } from '../../core/factory';
+import { makeEnum } from '@app/store/core/factory';
 
-import { ApiService } from '../../apis';
-import { ShareItemsResponseDto } from '../../../../../media-api/src/app/controllers/share-items/share-items.dto';
-import { reducePendingState, reduceRejectedState, reduceFulfilledState } from '../../helpers';
+import { ApiService } from '@app/store/apis';
+import { ShareItemsResponseDto } from '@app/rxjs-api';
+import { reducePendingState, reduceRejectedState, reduceFulfilledState } from '@app/store/helpers';
 
 const SHARE_ITEM_ACTIONS = ['GET_SHARE_ITEM', 'REMOVE_SHARE_ITEM', 'FIND_ITEMS_I_AM_SHARING', 'FIND_ITEMS_SHARED_WITH_ME', 'READ_SHARE_ITEM'] as const;
 

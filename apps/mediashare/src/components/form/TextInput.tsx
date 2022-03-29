@@ -278,7 +278,7 @@ const TextInput = React.forwardRef<TextInputHandles, TextInputProps>(
       if (focused || !rest.label) {
         // Set the placeholder in a delay to offset the label animation
         // If we show it immediately, they'll overlap and look ugly
-        timer.current = (setTimeout(() => setPlaceholder(rest.placeholder), 50) as unknown) as any; // NodeJS.Timeout;
+        timer.current = setTimeout(() => setPlaceholder(rest.placeholder), 50) as unknown as any; // NodeJS.Timeout;
       } else {
         // hidePlaceholder
         setPlaceholder('');

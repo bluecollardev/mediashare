@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { CreatePlaylistDto } from '../../../rxjs-api';
-import { playlists } from '../../apis';
+import { CreatePlaylistDto } from '@app/rxjs-api';
+import { playlists } from '@app/store/apis';
 
-import { reducePendingState, reduceRejectedState } from '../../helpers';
+import { reducePendingState, reduceRejectedState } from '@app/store/helpers';
 
 function initialStateFactory(): CreatePlaylistDto & { loading: boolean } {
   return {

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../store';
-import { removeShareItem, readShareItem } from '../../store/modules/share-items';
-import { loadProfile } from '../../store/modules/profile';
+import { useAppSelector } from '@app/store';
+import { removeShareItem, readShareItem } from '@app/store/modules/share-items';
+import { loadProfile } from '@app/store/modules/profile';
 
-import { useViewPlaylistById } from '../../hooks/NavigationHooks';
+import { useViewPlaylistById } from '@app/hooks/NavigationHooks';
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 import { FAB, Divider } from 'react-native-paper';
 import { PageActions, PageContainer, PageProps } from '../layout/PageContainer';
@@ -13,11 +13,11 @@ import { AccountCard } from '../layout/AccountCard';
 import { SharedList } from '../layout/SharedList';
 import { ActionButtons } from '../layout/ActionButtons';
 
-// import { filterUnique } from '../../utils';
+// import { filterUnique } from '@app/utils';
 
-import { createRandomRenderKey } from '../../core/utils';
+import { createRandomRenderKey } from '@app/core/utils';
 
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 interface ProfileProps extends PageProps {}
 
@@ -45,7 +45,6 @@ const Profile = ({ route }: ProfileProps) => {
 
   useEffect(() => {
     dispatch(loadProfile(userId));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';

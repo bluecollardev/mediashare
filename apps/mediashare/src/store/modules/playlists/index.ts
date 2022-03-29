@@ -3,11 +3,11 @@ import { flattenDeep } from 'remeda';
 import { merge } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { makeEnum } from '../../core/factory';
+import { makeEnum } from '@app/store/core/factory';
 
-import { ApiService } from '../../apis';
-import { CreatePlaylistDto, UpdatePlaylistDto, CreatePlaylistResponseDto, PlaylistResponseDto, PlaylistItemResponseDto } from '../../../rxjs-api';
-import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '../../helpers';
+import { ApiService } from '@app/store/apis';
+import { CreatePlaylistDto, UpdatePlaylistDto, CreatePlaylistResponseDto, PlaylistResponseDto, PlaylistItemResponseDto } from '@app/rxjs-api';
+import { reduceFulfilledState, reducePendingState, reduceRejectedState } from '@app/store/helpers';
 
 const PLAYLIST_ACTIONS = [
   'GET_USER_PLAYLIST',
@@ -62,7 +62,7 @@ export const removeUserPlaylist = createAsyncThunk(playlistActionTypes.removeUse
   return await api.playlists.playlistControllerRemove({ playlistId: id }).toPromise();
 });
 
-export const findPlaylists = createAsyncThunk(playlistsActionTypes.findPlaylists, async (args: { text?: string, tags?: string[] }, { extra }) => {
+export const findPlaylists = createAsyncThunk(playlistsActionTypes.findPlaylists, async (args: { text?: string; tags?: string[] }, { extra }) => {
   const { api } = extra as { api: ApiService };
   const { text, tags = [] } = args;
   console.log(`Search args: ${JSON.stringify(args, null, 2)}`);

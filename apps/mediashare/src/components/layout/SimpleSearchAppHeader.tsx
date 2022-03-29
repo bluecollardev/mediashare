@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Appbar, Searchbar } from 'react-native-paper';
-import { withGlobalStateConsumer, GlobalStateProps } from '../../core/globalState';
-import { theme } from '../../styles';
+import { withGlobalStateConsumer, GlobalStateProps } from '@app/core/globalState';
+import { theme } from '@app/styles';
 
 export interface AppHeaderProps {
   options?: any;

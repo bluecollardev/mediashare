@@ -2,28 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
+import { useGoBack, useRouteWithParams } from '@app/hooks/NavigationHooks';
 
-import { routeNames } from '../../routes';
+import { routeNames } from '@app/routes';
 
-import { useAppSelector } from '../../store';
-import { findMediaItems } from '../../store/modules/media-items';
-import { addUserPlaylist, getUserPlaylists, getPlaylistById } from '../../store/modules/playlists';
+import { useAppSelector } from '@app/store';
+import { findMediaItems } from '@app/store/modules/media-items';
+import { addUserPlaylist, getUserPlaylists, getPlaylistById } from '@app/store/modules/playlists';
 
-import { CreatePlaylistDto, PlaylistCategoryType } from '../../rxjs-api';
+import { CreatePlaylistDto, PlaylistCategoryType } from '@app/rxjs-api';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
 
 import { ActionButtons } from '../layout/ActionButtons';
-import { MediaCard } from '../layout/MediaCard';
+import { MediaCard } from '../layout/mediaCard';
 import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { AppUpload } from '../layout/AppUpload';
 
 import { UploadPlaceholder } from '../layout/UploadPlaceholder';
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 import { Button } from 'react-native-paper';
-import { withGlobalStateConsumer } from '../../core/globalState';
+import { withGlobalStateConsumer } from '@app/core/globalState';
 
 // @ts-ignore
 const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {

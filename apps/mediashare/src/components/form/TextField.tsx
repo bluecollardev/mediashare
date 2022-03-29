@@ -1,9 +1,8 @@
 import React from 'react';
-import { Text } from 'react-native';
 // Use our own TextInput, which is essentially a clone of react-native-paper's TextInput
 // We need more control over label styling etc.
 import TextInput from './TextInput';
-import styles, { theme } from '../../styles';
+import styles, { theme } from '@app/styles';
 
 export interface TextFieldProps {
   label?: any;

@@ -3,12 +3,12 @@ import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-nativ
 import { Appbar, Card, Portal, Searchbar } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
-import { withGlobalStateConsumer, GlobalStateProps } from '../../core/globalState';
+import { withGlobalStateConsumer, GlobalStateProps } from '@app/core/globalState';
 import { MultiSelectIcon } from '../form/MultiSelect';
 import { ActionButtons } from './ActionButtons';
-import themeStyles, { theme } from '../../styles';
+import themeStyles, { theme } from '@app/styles';
 
-import { mapAvailableTags } from '../../store/modules/tags/utils';
+import { mapAvailableTags } from '@app/store/modules/tags/utils';
 
 export interface AppHeaderProps {
   options?: any;
@@ -69,12 +69,7 @@ const AppHeaderComponent = ({
 
   const [searchText, setSearchText] = useState('');
 
-  const mappedMediaTags = useMemo(
-    () => mapAvailableTags(Array.isArray(globalState?.tags) ? globalState.tags : [])
-      .filter((tag) => tag.isMediaTag),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  const mappedMediaTags = useMemo(() => mapAvailableTags(Array.isArray(globalState?.tags) ? globalState.tags : []).filter((tag) => tag.isMediaTag), []);
 
   const [displayMode, setDisplayMode] = useState(globalState?.displayMode);
 

@@ -71,9 +71,15 @@ const TextInputOutlined = ({
   const font = fonts.regular;
   const hasActiveOutline = parentState.focused || error;
 
-  const { fontSize: fontSizeStyle, fontWeight, lineHeight, height, backgroundColor = colors.background, textAlign, ...viewStyle } = (StyleSheet.flatten(
-    style
-  ) || {}) as TextStyle;
+  const {
+    fontSize: fontSizeStyle,
+    fontWeight,
+    lineHeight,
+    height,
+    backgroundColor = colors.background,
+    textAlign,
+    ...viewStyle
+  } = (StyleSheet.flatten(style) || {}) as TextStyle;
   const fontSize = fontSizeStyle || MAXIMIZED_LABEL_FONT_SIZE;
 
   let inputTextColor, activeColor, outlineColor, placeholderColor, errorColor;

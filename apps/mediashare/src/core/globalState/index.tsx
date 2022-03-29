@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'recompose';
 
-import { useAppSelector } from '../../store';
-import { getTags } from '../../store/modules/tags';
-import { Tag } from '../../rxjs-api/models';
+import { useAppSelector } from '@app/store';
+import { getTags } from '@app/store/modules/tags';
+import { Tag } from '@app/rxjs-api';
 
 export interface GlobalStateProps {
   loading?: boolean;
@@ -56,7 +56,6 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
       if (isLoggedIn) {
         loadTags().then();
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoggedIn]);
 
     const providerValue = getProviderValue() as GlobalStateProps;

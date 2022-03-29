@@ -1,7 +1,7 @@
 import React from 'react';
 import * as R from 'remeda';
 import { NonEmptyArray } from 'remeda/dist/commonjs/_types';
-import { UserDto } from '../../rxjs-api';
+import { UserDto } from '@app/rxjs-api';
 import { List } from 'react-native-paper';
 import { ContactListItem } from './ContactListItem';
 

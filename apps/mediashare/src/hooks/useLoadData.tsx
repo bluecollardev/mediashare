@@ -17,7 +17,6 @@ export function useLoadData({ action }: { action: any }) {
         setLoaded(true);
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
 
   return [{ loaded, state }, setLoaded];

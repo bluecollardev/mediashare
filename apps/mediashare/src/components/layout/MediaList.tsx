@@ -3,13 +3,13 @@ import { StyleSheet, View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 
 import { MediaListItem } from './MediaListItem';
-import { MediaItemDto } from '../../rxjs-api';
+import { MediaItemDto } from '@app/rxjs-api';
 
-import { shortenText } from '../../utils';
+import { shortenText } from '@app/utils';
 
 export type MediaListType = MediaItemDto;
 
-import { theme } from '../../styles';
+import { theme } from '@app/styles';
 
 interface MediaListProps {
   list: MediaListType[];

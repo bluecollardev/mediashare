@@ -3,15 +3,15 @@ import { useDispatch } from 'react-redux';
 import { FlatList } from 'react-native';
 import { Subheading, Card } from 'react-native-paper';
 
-import { useAppSelector } from '../../store';
-import { getFeedMediaItems, saveFeedMediaItems } from '../../store/modules/media-items';
-import { AwsMediaItem } from '../../store/modules/media-items/aws-media-item.model';
+import { useAppSelector } from '@app/store';
+import { getFeedMediaItems, saveFeedMediaItems } from '@app/store/modules/media-items';
+import { AwsMediaItem } from '@app/store/modules/media-items/aws-media-item.model';
 
 import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { withGlobalStateConsumer } from '../../core/globalState/index';
+import { withGlobalStateConsumer } from '@app/core/globalState/index';
 import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
 import { NoItems } from '../layout/NoItems';
-import { useMediaItems } from '../../hooks/NavigationHooks';
+import { useMediaItems } from '@app/hooks/NavigationHooks';
 import { ActionButtons } from '../layout/ActionButtons';
 import { MediaListItem } from '../layout/MediaListItem';
 
@@ -29,7 +29,6 @@ export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
     if (loaded && !isLoaded) {
       setIsLoaded(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
 
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
@@ -40,7 +39,6 @@ export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
       setPrevSearchFilters(currentSearchFilters);
       loadData().then();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, globalState, searchFilters]);
 
   return (

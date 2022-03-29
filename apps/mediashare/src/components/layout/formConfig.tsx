@@ -1,4 +1,4 @@
-import { minLength } from '../../core/lib/Validators';
+import { minLength } from '@app/core/lib/Validators';
 
 export const titleValidator = function (title) {
   if (!title) {

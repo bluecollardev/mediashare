@@ -1,28 +1,23 @@
 import React, { useEffect, useState, useMemo } from 'react';
-
-import { Avatar, Button, Card, Chip, Divider, IconButton, Paragraph, Title, Text } from 'react-native-paper';
-import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground, TextInput as NativeTextInput } from 'react-native';
-
+import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
+import { Button, Card, Chip, Paragraph } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
-// import { Video as ExpoVideo } from 'expo-av';
-// import Video from 'expo-video-player';
-
 import SwitchSelector from 'react-native-switch-selector';
-import { TextField } from '../form';
-import { descriptionValidator, titleValidator } from './formConfig';
-import { MultiSelectIcon } from '../form/MultiSelect';
-export const DEFAULT_AVATAR = 'https://i.pinimg.com/originals/db/fa/08/dbfa0875b8925919a3f16d53d9989738.png';
+import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
+import { TextField } from '@app/components/form';
+import { descriptionValidator, titleValidator } from '../formConfig';
+import { MultiSelectIcon } from '@app/components/form/MultiSelect';
 
-// import { TagKeyValue, UserDto } from '../../rxjs-api';
-import { useAppSelector } from '../../store';
-import { findInArray, getAuthorText, getUsername } from '../../utils';
-import { usePreviewImage } from '../../hooks/usePreviewImage';
-import { theme } from '../../styles';
+import { useAppSelector } from '@app/store';
+import { findInArray } from '@app/utils';
+import { usePreviewImage } from '@app/hooks/usePreviewImage';
+import { theme } from '@app/styles';
 
-// import { customMediaTags, customMediaSubtags, customPlaylistTags, customPlaylistSubtags } from '../../data/tags';
-import { mapAvailableTags, getMappedTagUsingKey } from '../../store/modules/tags/utils';
-import { UserDto, Tag } from '../../rxjs-api/models';
+import { MediaCardSocial } from './view/MediaCardSocial';
+import { MediaCardTitle } from './view/MediaCardTitle';
+
+import { mapAvailableTags, getMappedTagUsingKey } from '@app/store/modules/tags/utils';
+import { UserDto, Tag } from '@app/rxjs-api';
 
 export interface MediaCardProps {
   id?: string;
@@ -54,28 +49,6 @@ export interface MediaCardProps {
   shares?: number;
   elevation?: number;
 }
-
-export const SocialButtons = ({ likes, shares, views }: { likes: number; shares: number; views: number }) => {
-  return (
-    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-      <View style={{ marginRight: 3 }}>
-        <Button icon="visibility" mode="text">
-          {views}
-        </Button>
-      </View>
-      <View style={{ marginRight: 3 }}>
-        <Button icon="share" mode="text">
-          {shares}
-        </Button>
-      </View>
-      <View style={{}}>
-        <Button icon="favorite" mode="text">
-          {likes}
-        </Button>
-      </View>
-    </View>
-  );
-};
 
 type MediaDisplayMode = 'image' | 'video';
 
@@ -122,7 +95,6 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     const primaryAuthor = Array.isArray(author) ? author[0] : author;
     const user = findInArray(users, 'username', primaryAuthor);
     setCreator(user);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users]);
 
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -132,24 +104,13 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   };
 
   const [selectedTags, setSelectedTags] = useState(tags);
-  const onSelectedTagsChange = (tags) => {
-    setSelectedTags(tags);
-    onTagChange(tags);
+  const onSelectedTagsChange = (newTags) => {
+    setSelectedTags(newTags);
+    onTagChange(newTags);
   };
 
-  const mappedMediaTags = useMemo(
-    () => mapAvailableTags(availableTags)
-      .filter((tag) => tag.isMediaTag),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  const mappedPlaylistTags = useMemo(
-    () => mapAvailableTags(availableTags)
-      .filter((tag) => tag.isPlaylistTag),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  const mappedMediaTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isMediaTag), []);
+  const mappedPlaylistTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isPlaylistTag), []);
 
   const DisplayPreviewOrVideo = () => {
     const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
@@ -299,29 +260,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     <Card style={defaultStyles.card} elevation={elevation}>
       <DisplayPreviewOrVideo />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
-      <Card.Title
-        style={{ marginTop: 25, marginBottom: 25 }}
-        title={<Title style={defaultStyles.titleText}>{title}</Title>}
-        titleStyle={defaultStyles.title}
-        // TODO: Stupid component doesn't render right on Android if we use a View to wrap, but then the whole f*cking thing appears on a single line!
-        subtitle={
-          <View style={defaultStyles.subtitle}>
-            <Text style={defaultStyles.author}>By {getAuthorText(creator)}</Text>
-            <Text style={defaultStyles.username}>{getUsername(creator)}</Text>
-          </View>
-        }
-        subtitleStyle={defaultStyles.subtitle}
-        leftStyle={defaultStyles.avatar}
-        left={() =>
-          showThumbnail &&
-          creator?.imageSrc && (
-            <View>
-              <Avatar.Image source={{ uri: creator?.imageSrc || DEFAULT_AVATAR }} size={52} />
-            </View>
-          )
-        }
-        right={(buttonProps: any) => showActions && <IconButton {...buttonProps} icon="more-vert" onPress={onActionsClicked} />}
-      />
+      <MediaCardTitle title={title} creator={creator} showThumbnail={true} showActions={showActions} onActionsClicked={onActionsClicked} />
       <Card.Content style={{ marginBottom: 25 }}>
         <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
           {Array.isArray(selectedTags) &&
@@ -336,23 +275,11 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             })}
         </View>
       </Card.Content>
-      {!showSocial && (
-        <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
-          {showThumbnail && thumbnail && <Card.Cover source={{ uri: thumbnail }} />}
-          {children}
-          <Divider />
-          <Paragraph style={defaultStyles.description}>{description}</Paragraph>
-        </Card.Content>
-      )}
-      {showSocial && (
-        <Card.Content style={{ marginTop: 0, marginBottom: 10 }}>
-          <View style={{ marginBottom: 0 }}>
-            <SocialButtons likes={likes} shares={shares} views={views} />
-          </View>
-          {children}
-          <Paragraph style={defaultStyles.descriptionWithSocial}>{description}</Paragraph>
-        </Card.Content>
-      )}
+      <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
+        {showSocial && <MediaCardSocial likes={likes} shares={shares} views={views} />}
+        {children}
+        <Paragraph style={showSocial ? defaultStyles.descriptionWithSocial : defaultStyles.description}>{description}</Paragraph>
+      </Card.Content>
     </Card>
   );
 
