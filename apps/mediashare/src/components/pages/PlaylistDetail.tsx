@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { withGlobalStateConsumer } from 'mediashare/core/globalState/index';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 
 import { routeNames } from 'mediashare/routes';
 
@@ -11,15 +11,15 @@ import { loadUsers } from 'mediashare/store/modules/users';
 
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 
 import { FAB } from 'react-native-paper';
-import { ActionButtons } from '../layout/ActionButtons';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
 
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { AppDialog } from '../layout/AppDialog';
-import { MediaCard } from '../layout/mediaCard';
-import { MediaList } from '../layout/MediaList';
+import { PageContainer, PageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
+import { AppDialog } from 'mediashare/components/layout/AppDialog';
+import { MediaCard } from 'mediashare/components/layout/MediaCard';
+import { MediaList } from 'mediashare/components/layout/MediaList';
 
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 

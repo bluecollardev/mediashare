@@ -18,11 +18,11 @@ import { loadProfile } from 'mediashare/store/modules/profile';
 import { routeNames } from 'mediashare/routes';
 
 import { useRouteWithParams } from 'mediashare/hooks/NavigationHooks';
-import { TextField } from '../form/TextField';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { PageContainer, PageProps } from '../layout/PageContainer';
-import { ActionButtons } from '../layout/ActionButtons';
-import { AccountCard } from '../layout/AccountCard';
+import { TextField } from 'mediashare/components/form/TextField';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { AccountCard } from 'mediashare/components/layout/AccountCard';
 
 const awsUrl = Config.AWS_URL;
 interface AccountEditProps extends PageProps {}

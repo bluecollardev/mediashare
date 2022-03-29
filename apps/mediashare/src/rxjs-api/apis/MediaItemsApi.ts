@@ -12,7 +12,6 @@
  */
 
 import { Observable } from 'rxjs';
-import { UpdateMediaItemDto } from '../models/UpdateMediaItemDto';
 import { BaseAPI, HttpHeaders, HttpQuery, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
 import { CreateMediaItemDto, MediaItem, MediaItemDto, ShareItem } from '../models';
 
@@ -41,7 +40,7 @@ export interface MediaItemControllerShareRequest {
 
 export interface MediaItemControllerUpdateRequest {
   mediaId: string;
-  updateMediaItemDto: UpdateMediaItemDto;
+  createMediaItemDto: CreateMediaItemDto;
 }
 
 /**
@@ -93,10 +92,10 @@ export class MediaItemsApi extends BaseAPI {
     const query: HttpQuery = {};
 
     if (text != null) {
-      query.text = text;
+      query['text'] = text;
     }
     if (tags != null) {
-      query.tags = tags;
+      query['tags'] = tags;
     }
 
     return this.request<Array<MediaItemDto>>(
@@ -219,14 +218,14 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerUpdate({ mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest): Observable<MediaItem>;
-  mediaItemControllerUpdate({ mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>;
+  mediaItemControllerUpdate({ mediaId, createMediaItemDto }: MediaItemControllerUpdateRequest): Observable<MediaItem>;
+  mediaItemControllerUpdate({ mediaId, createMediaItemDto }: MediaItemControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>;
   mediaItemControllerUpdate(
-    { mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest,
+    { mediaId, createMediaItemDto }: MediaItemControllerUpdateRequest,
     opts?: OperationOpts
   ): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerUpdate');
-    throwIfNullOrUndefined(updateMediaItemDto, 'updateMediaItemDto', 'mediaItemControllerUpdate');
+    throwIfNullOrUndefined(createMediaItemDto, 'createMediaItemDto', 'mediaItemControllerUpdate');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
@@ -240,7 +239,7 @@ export class MediaItemsApi extends BaseAPI {
         url: '/api/media-items/{mediaId}'.replace('{mediaId}', encodeURI(mediaId)),
         method: 'PUT',
         headers,
-        body: updateMediaItemDto,
+        body: createMediaItemDto,
       },
       opts?.responseOpts
     );

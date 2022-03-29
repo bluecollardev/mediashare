@@ -4,19 +4,16 @@ import { Button, Card, Chip, Paragraph } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import SwitchSelector from 'react-native-switch-selector';
 import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
-import { TextField } from 'mediashare/components/form';
-import { descriptionValidator, titleValidator } from '../formConfig';
-import { MultiSelectIcon } from 'mediashare/components/form/MultiSelect';
-
-import { useAppSelector } from 'mediashare/store';
+import { TextField, MultiSelectIcon } from 'mediashare/components/form';
+import { MediaCardSocial } from './MediaCardSocial';
+import { MediaCardTitle } from './MediaCardTitle';
+import { mapAvailableTags, getMappedTagUsingKey } from 'mediashare/store/modules/tags/utils';
 import { findInArray } from 'mediashare/utils';
+import { descriptionValidator, titleValidator } from 'mediashare/core/validators';
 import { usePreviewImage } from 'mediashare/hooks/usePreviewImage';
+import { useAppSelector } from 'mediashare/store';
 import { theme } from 'mediashare/styles';
 
-import { MediaCardSocial } from './view/MediaCardSocial';
-import { MediaCardTitle } from './view/MediaCardTitle';
-
-import { mapAvailableTags, getMappedTagUsingKey } from 'mediashare/store/modules/tags/utils';
 import { UserDto, Tag } from 'mediashare/rxjs-api';
 
 export interface MediaCardProps {

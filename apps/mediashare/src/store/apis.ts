@@ -12,8 +12,8 @@ import {
   UsersApi,
   TagsApi,
   ViewsApi,
-} from '../rxjs-api';
-import Config from '../config';
+} from 'mediashare/rxjs-api';
+import Config from 'mediashare/config';
 
 function apiFactory() {
   function middlewareFactory() {

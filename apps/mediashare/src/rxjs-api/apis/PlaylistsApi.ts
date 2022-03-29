@@ -97,10 +97,10 @@ export class PlaylistsApi extends BaseAPI {
     const query: HttpQuery = {};
 
     if (text != null) {
-      query.text = text;
+      query['text'] = text;
     }
     if (tags != null) {
-      query.tags = tags;
+      query['tags'] = tags;
     }
 
     return this.request<Array<PlaylistItemResponseDto>>(

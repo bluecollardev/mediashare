@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../store';
-import { getUserPlaylists } from '../store/modules/playlists';
+import { useAppSelector } from 'mediashare/store';
+import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 
 export function useLoadData({ action }: { action: any }) {
   const dispatch = useDispatch();

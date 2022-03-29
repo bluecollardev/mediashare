@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 
 import { useAppSelector } from 'mediashare/store';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 
-import { MediaListItem } from '../layout/MediaListItem';
-import { ActionButtons } from '../layout/ActionButtons';
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
+import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { PageContainer, PageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
 
 export interface AddFromCollectionProps extends PageProps {
   onViewDetail: () => void;

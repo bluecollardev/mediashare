@@ -12,15 +12,15 @@ import { addUserPlaylist, getUserPlaylists, getPlaylistById } from 'mediashare/s
 
 import { CreatePlaylistDto, PlaylistCategoryType } from 'mediashare/rxjs-api';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 
-import { ActionButtons } from '../layout/ActionButtons';
-import { MediaCard } from '../layout/mediaCard';
-import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { AppUpload } from '../layout/AppUpload';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { MediaCard } from 'mediashare/components/layout/MediaCard';
+import { titleValidator, descriptionValidator, categoryValidator } from 'mediashare/core/validators';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
+import { AppUpload } from 'mediashare/components/layout/AppUpload';
 
-import { UploadPlaceholder } from '../layout/UploadPlaceholder';
+import { UploadPlaceholder } from 'mediashare/components/layout/UploadPlaceholder';
 import { theme } from 'mediashare/styles';
 import { Button } from 'react-native-paper';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';

@@ -8,14 +8,14 @@ import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/pl
 import { findMediaItems } from 'mediashare/store/modules/media-items';
 import { UpdatePlaylistDto } from 'mediashare/rxjs-api';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useGoBack, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
-import { PageContainer, PageActions, PageProps, PageContent } from '../layout/PageContainer';
-import { NoItems } from '../layout/NoItems';
-import { ActionButtons } from '../layout/ActionButtons';
-import { MediaListType } from '../layout/MediaList';
-import { MediaListItem } from '../layout/MediaListItem';
+import { PageContainer, PageActions, PageProps, PageContent } from 'mediashare/components/layout/PageContainer';
+import { NoItems } from 'mediashare/components/layout/NoItems';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { MediaListType } from 'mediashare/components/layout/MediaList';
+import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
 
 import { shortenText } from 'mediashare/utils';
 import { theme } from 'mediashare/styles';

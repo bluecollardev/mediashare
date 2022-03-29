@@ -6,17 +6,17 @@ import { findPlaylists, getUserPlaylists } from 'mediashare/store/modules/playli
 
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 
 import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
 
-import { PageContainer, PageProps } from '../layout/PageContainer';
-import { MediaCard } from '../layout/mediaCard';
+import { PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
+import { MediaCard } from 'mediashare/components/layout/MediaCard';
 import { PlaylistsComponent } from './Playlists';
-import { ActionButtons } from '../layout/ActionButtons';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
 
 import { filterUnique } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils';

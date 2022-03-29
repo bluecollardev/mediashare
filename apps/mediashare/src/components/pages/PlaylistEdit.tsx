@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { withGlobalStateConsumer } from 'mediashare/core/globalState/index';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 
 import { useAppSelector } from 'mediashare/store';
 import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/playlists';
@@ -8,21 +8,21 @@ import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/pl
 import { PlaylistCategoryType, MediaItem, MediaCategoryType } from 'mediashare/rxjs-api';
 
 import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 
 import { View, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
-import { AppUpload } from '../layout/AppUpload';
-import { ActionButtons } from '../layout/ActionButtons';
-import { MediaList } from '../layout/MediaList';
-import { MediaCard } from '../layout/mediaCard';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
+import { AppUpload } from 'mediashare/components/layout/AppUpload';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { MediaList } from 'mediashare/components/layout/MediaList';
+import { MediaCard } from 'mediashare/components/layout/MediaCard';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
 import { routeNames } from 'mediashare/routes';
 
 import { createRandomRenderKey } from 'mediashare/core/utils';
 
 import styles, { theme } from 'mediashare/styles';
-import { UploadPlaceholder } from '../layout/UploadPlaceholder';
+import { UploadPlaceholder } from 'mediashare/components/layout/UploadPlaceholder';
 
 const actionModes = { delete: 'delete', default: 'default' };
 

@@ -10,18 +10,18 @@ import { UpdateMediaItemDto } from 'mediashare/rxjs-api/models/UpdateMediaItemDt
 import { MediaCategoryType } from 'mediashare/rxjs-api';
 import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 
 import { Button, Paragraph } from 'react-native-paper';
 import { View, ScrollView } from 'react-native';
 
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { AppDialog } from '../layout/AppDialog';
-import { MediaCard } from '../layout/mediaCard';
-import { ActionButtons } from '../layout/ActionButtons';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
+import { AppDialog } from 'mediashare/components/layout/AppDialog';
+import { MediaCard } from 'mediashare/components/layout/MediaCard';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
 
 import styles, { theme } from 'mediashare/styles';
-import AppUpload from '../layout/AppUpload';
+import AppUpload from 'mediashare/components/layout/AppUpload';
 
 export interface MediaItemEditContainerProps {
   navigation: any;

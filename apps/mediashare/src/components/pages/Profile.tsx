@@ -6,12 +6,12 @@ import { removeShareItem, readShareItem } from 'mediashare/store/modules/share-i
 import { loadProfile } from 'mediashare/store/modules/profile';
 
 import { useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB, Divider } from 'react-native-paper';
-import { PageActions, PageContainer, PageProps } from '../layout/PageContainer';
-import { AccountCard } from '../layout/AccountCard';
-import { SharedList } from '../layout/SharedList';
-import { ActionButtons } from '../layout/ActionButtons';
+import { PageActions, PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
+import { AccountCard } from 'mediashare/components/layout/AccountCard';
+import { SharedList } from 'mediashare/components/layout/SharedList';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
 
 // import { filterUnique } from 'mediashare/utils';
 

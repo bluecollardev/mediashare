@@ -8,11 +8,11 @@ import { getUserPlaylists, shareUserPlaylist } from 'mediashare/store/modules/pl
 import { loadUsers } from 'mediashare/store/modules/users';
 
 import { useGoBack, useRouteName } from 'mediashare/hooks/NavigationHooks';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 
-import { ActionButtons } from '../layout/ActionButtons';
-import { ContactList } from '../layout/ContactList';
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { ContactList } from 'mediashare/components/layout/ContactList';
+import { PageContainer, PageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ShareWith = ({}: PageProps) => {

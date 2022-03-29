@@ -7,13 +7,13 @@ import { useAppSelector } from 'mediashare/store';
 import { getFeedMediaItems, saveFeedMediaItems } from 'mediashare/store/modules/media-items';
 import { AwsMediaItem } from 'mediashare/store/modules/media-items/aws-media-item.model';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { withGlobalStateConsumer } from 'mediashare/core/globalState/index';
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { NoItems } from '../layout/NoItems';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { PageContainer, PageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
+import { NoItems } from 'mediashare/components/layout/NoItems';
 import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
-import { ActionButtons } from '../layout/ActionButtons';
-import { MediaListItem } from '../layout/MediaListItem';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const AddFromFeed = ({ navigation, globalState }: PageProps) => {

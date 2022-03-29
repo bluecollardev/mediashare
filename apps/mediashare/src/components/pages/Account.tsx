@@ -24,13 +24,13 @@ import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { useRouteWithParams, useViewPlaylistById, useViewProfileById } from 'mediashare/hooks/NavigationHooks';
-import { PageContainer, PageActions, PageProps } from '../layout/PageContainer';
-import { ContactList } from '../layout/ContactList';
-import { ActionButtons } from '../layout/ActionButtons';
-import { AccountCard } from '../layout/AccountCard';
-import { SharedList } from '../layout/SharedList';
+import { PageContainer, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
+import { ContactList } from 'mediashare/components/layout/ContactList';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { AccountCard } from 'mediashare/components/layout/AccountCard';
+import { SharedList } from 'mediashare/components/layout/SharedList';
 
 import * as build from 'mediashare/build';
 

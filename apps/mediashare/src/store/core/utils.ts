@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 // eslint-disable-next-line no-undef
-import { RootState } from '../index';
+import { RootState } from 'mediashare/store';
 import * as R from 'remeda';
 
 export const cloneState = (state: RootState): RootState => R.clone<RootState>(state);

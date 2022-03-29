@@ -15,11 +15,11 @@ import { MediaItem, MediaItemDto } from 'mediashare/rxjs-api';
 
 import { RefreshControl } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
-import { MediaListItem } from '../layout/MediaListItem';
-import { ActionButtons } from '../layout/ActionButtons';
-import { NoItems } from '../layout/NoItems';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from 'mediashare/components/layout/PageContainer';
+import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { NoItems } from 'mediashare/components/layout/NoItems';
 
 import { shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils';

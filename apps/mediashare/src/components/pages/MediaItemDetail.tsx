@@ -1,10 +1,10 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { withGlobalStateConsumer } from 'mediashare/core/globalState/index';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useAppSelector } from 'mediashare/store';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { PageContainer, PageContent, PageProps } from '../layout/PageContainer';
-import { MediaCard } from '../layout/mediaCard';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { PageContainer, PageContent, PageProps } from 'mediashare/components/layout/PageContainer';
+import { MediaCard } from 'mediashare/components/layout/MediaCard';
 
 // @ts-ignore
 const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {

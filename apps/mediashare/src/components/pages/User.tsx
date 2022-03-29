@@ -5,11 +5,11 @@ import { useAppSelector } from 'mediashare/store';
 import { ScrollView, View } from 'react-native';
 import { Card, FAB, Subheading, Text } from 'react-native-paper';
 
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from '../layout/PageContainer';
-import AccountCard from '../layout/AccountCard';
-import { MediaListItem } from '../layout/MediaListItem';
-import { ActionButtons } from '../layout/ActionButtons';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
+import AccountCard from 'mediashare/components/layout/AccountCard';
+import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import { createRandomRenderKey } from 'mediashare/core/utils';

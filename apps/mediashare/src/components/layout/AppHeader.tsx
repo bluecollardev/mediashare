@@ -4,7 +4,7 @@ import { Appbar, Card, Portal, Searchbar } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
 import { withGlobalStateConsumer, GlobalStateProps } from 'mediashare/core/globalState';
-import { MultiSelectIcon } from '../form/MultiSelect';
+import { MultiSelectIcon } from 'mediashare/components/form/MultiSelect';
 import { ActionButtons } from './ActionButtons';
 import themeStyles, { theme } from 'mediashare/styles';
 

@@ -1,5 +1,5 @@
 import { StackActions } from '@react-navigation/native';
-import { GlobalStateProps, INITIAL_SEARCH_FILTERS } from './core/globalState/index';
+import { GlobalStateProps, INITIAL_SEARCH_FILTERS } from './core/globalState';
 // Note re: popToTop https://github.com/react-navigation/react-navigation/issues/8583
 export const createBottomTabListeners =
   (globalState: GlobalStateProps) =>

@@ -5,7 +5,7 @@ import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
 import { useAppSelector } from 'mediashare/store';
 import { useDispatch } from 'react-redux';
 import { clearError } from 'mediashare/store/modules/app-state';
-import { LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
+import { LoadingSpinnerProps } from 'mediashare/components/hoc/withLoadingSpinner';
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
 import { GlobalStateProps } from 'mediashare/core/globalState';
 type withProps<T1, T2> = T1 & T2;

@@ -10,16 +10,16 @@ import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 
 import { FAB, Text, Divider } from 'react-native-paper';
 import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { View } from 'react-native';
 
-import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
-import { MediaListItem } from '../layout/MediaListItem';
-import { ActionButtons } from '../layout/ActionButtons';
-import { NoItems } from '../layout/NoItems';
+import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from 'mediashare/components/layout/PageContainer';
+import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
+import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { NoItems } from 'mediashare/components/layout/NoItems';
 
 import { getAuthorText, getUsername, shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils';
