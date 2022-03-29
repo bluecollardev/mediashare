@@ -9,7 +9,7 @@ import { DisplayPreviewOrVideo } from './DisplayPreviewOrVideo';
 import { MediaCardTitle } from './MediaCardTitle';
 import { MediaCardTags } from './MediaCardTags';
 import { MediaCardSocial } from './MediaCardSocial';
-import { mapAvailableTags, getMappedTagUsingKey } from 'mediashare/store/modules/tags/utils';
+import { mapAvailableTags, mapKeysToTags } from 'mediashare/store/modules/tags/utils';
 import { findInArray } from 'mediashare/utils';
 import { descriptionValidator, titleValidator } from 'mediashare/core/validators';
 import { useAppSelector } from 'mediashare/store';
@@ -47,8 +47,6 @@ export interface MediaCardProps {
   shares?: number;
   elevation?: number;
 }
-
-type MediaDisplayMode = 'image' | 'video';
 
 export const MediaCard: React.FC<MediaCardProps> = ({
   title = '',
@@ -97,20 +95,23 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     onCategoryChange(categories);
   };
 
-  const [selectedTags, setSelectedTags] = useState(tags);
+  const mappedTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isPlaylistTag), []);
+  // const mappedPlaylistTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isPlaylistTag), []);
+  const mappedSelectedTags = useMemo(() => mapKeysToTags(tags, mappedTags), []);
+  const mappedSelectedTagKeys = useMemo(() => mappedSelectedTags.map(({ key }) => key), []);
+  const [selectedTagKeys, setSelectedTagKeys] = useState(mappedSelectedTagKeys);
   const onSelectedTagsChange = (newTags) => {
-    setSelectedTags(newTags);
+    setSelectedTagKeys(newTags);
     onTagChange(newTags);
   };
-
-  const mappedMediaTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isMediaTag), []);
-  const mappedPlaylistTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isPlaylistTag), []);
 
   const TopDrawer = topDrawer;
 
   return isEdit ? (
     <View>
-      {showThumbnail && <DisplayPreviewOrVideo key={mediaSrc} mediaSrc={mediaSrc} isPlayable={isPlayable} showThumbnail={showThumbnail} thumbnail={thumbnail} />}
+      {showThumbnail && (
+        <DisplayPreviewOrVideo key={mediaSrc} mediaSrc={mediaSrc} isPlayable={isPlayable} showThumbnail={showThumbnail} thumbnail={thumbnail} />
+      )}
       {topDrawer && <TopDrawer />}
       <View style={{ marginBottom: 25 }}>
         <Card elevation={elevation} style={{ marginTop: 25, marginBottom: 0 }}>
@@ -157,15 +158,16 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                 marginTop: 10,
               },
             }}
-            items={mappedMediaTags}
+            items={mappedTags}
             IconRenderer={MultiSelectIcon}
-            uniqueKey="id"
+            uniqueKey="key"
+            displayKey="value"
             subKey="children"
             searchPlaceholderText="Enter Text"
             selectText="Select Tags"
             confirmText="Done"
             onSelectedItemsChange={onSelectedTagsChange}
-            selectedItems={selectedTags}
+            selectedItems={selectedTagKeys}
             expandDropDowns={false}
             readOnlyHeadings={false}
             showDropDowns={true}
@@ -213,7 +215,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <MediaCardTitle title={title} creator={creator} showThumbnail={true} showActions={showActions} onActionsClicked={onActionsClicked} />
       <Card.Content style={{ marginBottom: 15 }}>
-        <MediaCardTags availableTags={availableTags} tags={selectedTags} />
+        <MediaCardTags tags={mappedSelectedTags} />
       </Card.Content>
       <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
         {showSocial && <MediaCardSocial likes={likes} shares={shares} views={views} />}

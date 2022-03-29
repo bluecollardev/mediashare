@@ -1,30 +1,19 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { Chip } from 'react-native-paper';
-
-import { mapAvailableTags, getMappedTagUsingKey } from 'mediashare/store/modules/tags/utils';
-
-import { Tag } from 'mediashare/rxjs-api';
+// import { Tag } from 'mediashare/rxjs-api';
 
 export interface MediaCardTagsProps {
-  availableTags?: Tag[];
-  tags?: string[];
+  tags?: any[]; // TODO: This should be a Tag[] but for some reason _id is missing from the Tag model... fix in the API
 }
 
-export const MediaCardTags: React.FC<MediaCardTagsProps> = ({
-  availableTags = [] as Tag[],
-  tags = [],
-}: MediaCardTagsProps) => {
-  const mappedMediaTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isMediaTag), []);
-  const mappedPlaylistTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isPlaylistTag), []);
-
+export const MediaCardTags: React.FC<MediaCardTagsProps> = ({ tags = [] as any[] }: MediaCardTagsProps) => {
   return (
     <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-      {Array.isArray(tags) && tags.length > 0 && tags.map((selectedTagKey, idx) => {
-        const mappedTag = getMappedTagUsingKey(mappedMediaTags, selectedTagKey);
+      {Array.isArray(tags) && tags.length > 0 && tags.map((tag, idx) => {
         return (
-          <View key={`${selectedTagKey}_${idx}`} style={{ flex: 0, marginLeft: 3, marginRight: 3 }}>
-            <Chip>{mappedTag?.name || 'Unknown'}</Chip>
+          <View key={`${tag?._id}_${idx}`} style={{ flex: 0, marginLeft: 3, marginRight: 3 }}>
+            <Chip>{tag?.value || 'Unknown'}</Chip>
           </View>
         );
       })}
