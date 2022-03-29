@@ -35,7 +35,7 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
     </ImageBackground>
   ) : mediaDisplayMode === 'video' && mediaSrc ? (
     <>
-      {/* This react-native-video version doesn't work with web and the lib has over a thousand open issues */}
+      {/* TODO: This react-native-video version doesn't work with web and the lib has over a thousand open issues */}
       <Video
         source={{ uri: mediaSrc }}
         poster={imageSrc}

@@ -9,7 +9,7 @@ import { MediaCard } from 'mediashare/components/layout/MediaCard';
 // @ts-ignore
 const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
   const mediaItem = useAppSelector((state) => state.mediaItem?.entity);
-  const { title, description, category, author, uri, thumbnail } = mediaItem || {};
+  const { _id, title, description, category, author, uri, thumbnail } = mediaItem || {};
 
   const tagKeys = (mediaItem?.tags || []).map((tag) => tag.key);
   const { tags = [] } = globalState;
@@ -19,6 +19,7 @@ const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
       <PageContent>
         <ScrollView>
           <MediaCard
+            key={_id}
             title={title}
             author={author}
             description={description}
