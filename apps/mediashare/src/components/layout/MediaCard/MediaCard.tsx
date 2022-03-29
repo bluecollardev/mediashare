@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, ImageBackground } from 'react-native';
-import { Button, Card, Chip, Paragraph } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Card, Chip, Paragraph } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import SwitchSelector from 'react-native-switch-selector';
-import Video from 'react-native-video'; // TODO: Not compatible with react-native-web
+
 import { TextField, MultiSelectIcon } from 'mediashare/components/form';
-import { MediaCardSocial } from './MediaCardSocial';
+import { DisplayPreviewOrVideo } from './DisplayPreviewOrVideo';
 import { MediaCardTitle } from './MediaCardTitle';
+import { MediaCardTags } from './MediaCardTags';
+import { MediaCardSocial } from './MediaCardSocial';
 import { mapAvailableTags, getMappedTagUsingKey } from 'mediashare/store/modules/tags/utils';
 import { findInArray } from 'mediashare/utils';
 import { descriptionValidator, titleValidator } from 'mediashare/core/validators';
-import { usePreviewImage } from 'mediashare/hooks/usePreviewImage';
 import { useAppSelector } from 'mediashare/store';
 import { theme } from 'mediashare/styles';
 
@@ -82,10 +83,6 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   views = 0,
   shares = 0,
 }: MediaCardProps) => {
-  const getMediaDisplayMode = () => (showThumbnail && thumbnail ? 'image' : 'video');
-  const initialMediaDisplayMode = isPlayable ? (getMediaDisplayMode() as MediaDisplayMode) : 'image';
-  const [mediaDisplayMode, setMediaDisplayMode] = useState(initialMediaDisplayMode);
-
   const users = useAppSelector((state) => state.users?.entities);
   const [creator, setCreator] = useState({} as UserDto);
   useEffect(() => {
@@ -109,54 +106,11 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   const mappedMediaTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isMediaTag), []);
   const mappedPlaylistTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isPlaylistTag), []);
 
-  const DisplayPreviewOrVideo = () => {
-    const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
-    return mediaDisplayMode === 'image' && !isDefaultImage ? (
-      <ImageBackground source={{ uri: imageSrc }} resizeMode="cover" style={{ width: '100%', height: 250 }}>
-        {isPlayable && (
-          <TouchableWithoutFeedback onPress={toggleMediaMode}>
-            <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-              <Button icon="play-circle-filled" color="#ffffff" labelStyle={{ fontSize: 50 }}>
-                {' '}
-              </Button>
-            </View>
-          </TouchableWithoutFeedback>
-        )}
-      </ImageBackground>
-    ) : mediaDisplayMode === 'video' && mediaSrc ? (
-      <>
-        {/* This react-native-video version doesn't work with web and the lib has over a thousand open issues */}
-        <Video
-          source={{ uri: mediaSrc }}
-          poster={imageSrc}
-          style={{ width: '100%', height: 300, margin: 3, marginBottom: 6 }}
-          resizeMode="contain"
-          controls={true}
-          paused={false}
-        />
-        {/* Use expo-av + expo-video-player */}
-        {/* <Video
-          styles={{
-            height: 300,
-          }}
-          videoProps={{
-            shouldPlay: false, // Pause by default
-            resizeMode: ExpoVideo.RESIZE_MODE_CONTAIN,
-            // ❗ source is required https://docs.expo.io/versions/latest/sdk/video/#props
-            source: {
-              uri: mediaSrc,
-            },
-          }}
-        /> */}
-      </>
-    ) : null;
-  };
-
   const TopDrawer = topDrawer;
 
   return isEdit ? (
     <View>
-      {showThumbnail && <DisplayPreviewOrVideo key={mediaSrc} />}
+      {showThumbnail && <DisplayPreviewOrVideo key={mediaSrc} isPlayable={isPlayable} showThumbnail={showThumbnail} thumbnail={thumbnail} />}
       {topDrawer && <TopDrawer />}
       <View style={{ marginBottom: 25 }}>
         <Card elevation={elevation} style={{ marginTop: 25, marginBottom: 0 }}>
@@ -258,19 +212,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       <DisplayPreviewOrVideo />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <MediaCardTitle title={title} creator={creator} showThumbnail={true} showActions={showActions} onActionsClicked={onActionsClicked} />
-      <Card.Content style={{ marginBottom: 25 }}>
-        <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-          {Array.isArray(selectedTags) &&
-            selectedTags.length > 0 &&
-            selectedTags.map((selectedTagKey, idx) => {
-              const mappedTag = getMappedTagUsingKey(mappedMediaTags, selectedTagKey);
-              return (
-                <View key={`${selectedTagKey}_${idx}`} style={{ flex: 0, marginLeft: 3, marginRight: 3 }}>
-                  <Chip>{mappedTag?.name || 'Unknown'}</Chip>
-                </View>
-              );
-            })}
-        </View>
+      <Card.Content style={{ marginBottom: 15 }}>
+        <MediaCardTags availableTags={availableTags} tags={selectedTags} />
       </Card.Content>
       <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
         {showSocial && <MediaCardSocial likes={likes} shares={shares} views={views} />}
@@ -279,15 +222,6 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       </Card.Content>
     </Card>
   );
-
-  function toggleMediaMode() {
-    const current = mediaDisplayMode as MediaDisplayMode;
-    if (current === 'video') {
-      setMediaDisplayMode('image');
-    } else if (current === 'image') {
-      setMediaDisplayMode('video');
-    }
-  }
 };
 
 const defaultStyles = StyleSheet.create({
