@@ -67,7 +67,7 @@ export function getAuthorText(user) {
 }
 
 export function getUsername(user = { username: 'Unknown' }) {
-  return user.username ? `@${user.username}` : '@anonymous';
+  return user.username ? `${user.username}` : 'anonymous';
 }
 
 export function findInArray(arr, fieldName, value) {
