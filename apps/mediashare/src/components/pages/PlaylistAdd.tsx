@@ -1,35 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, Text } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
+import { ScrollView, Text } from 'react-native';
+import { Button } from 'react-native-paper';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useGoBack, useRouteWithParams } from 'mediashare/hooks/NavigationHooks';
-
 import { routeNames } from 'mediashare/routes';
-
 import { useAppSelector } from 'mediashare/store';
 import { findMediaItems } from 'mediashare/store/modules/media-items';
 import { addUserPlaylist, getUserPlaylists, getPlaylistById } from 'mediashare/store/modules/playlists';
-
-import { CreatePlaylistDto, PlaylistCategoryType } from 'mediashare/rxjs-api';
-
+import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-
 import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
 import { MediaCard } from 'mediashare/components/layout/MediaCard';
 import { titleValidator, descriptionValidator, categoryValidator } from 'mediashare/core/validators';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
 import { AppUpload } from 'mediashare/components/layout/AppUpload';
-
 import { UploadPlaceholder } from 'mediashare/components/layout/UploadPlaceholder';
 import { theme } from 'mediashare/styles';
-import { Button } from 'react-native-paper';
-import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { CreatePlaylistDto, PlaylistCategoryType } from 'mediashare/rxjs-api';
 
 // @ts-ignore
 const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
-  const { tags = [] } = globalState;
-
   const dispatch = useDispatch();
+
+  const { tags = [] } = globalState;
+  const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
 
   const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState();
@@ -93,7 +88,7 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
             category={category}
             categoryOptions={options}
             onCategoryChange={setCategory as any}
-            availableTags={tags}
+            availableTags={mappedTags}
             tags={selectedTagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {

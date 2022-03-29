@@ -69,7 +69,7 @@ const AppHeaderComponent = ({
 
   const [searchText, setSearchText] = useState('');
 
-  const mappedMediaTags = useMemo(() => mapAvailableTags(Array.isArray(globalState?.tags) ? globalState.tags : []).filter((tag) => tag.isMediaTag), []);
+  const mappedMediaTags = useMemo(() => mapAvailableTags(Array.isArray(globalState?.tags) ? globalState.tags : []).filter((tag) => tag.isPlaylistTag), []);
 
   const [displayMode, setDisplayMode] = useState(globalState?.displayMode);
 
@@ -151,7 +151,8 @@ const AppHeaderComponent = ({
                             }}
                             items={mappedMediaTags}
                             IconRenderer={MultiSelectIcon}
-                            uniqueKey="id"
+                            uniqueKey="key"
+                            displayKey="value"
                             subKey="children"
                             searchPlaceholderText="Enter Text"
                             selectText="Select Tags"

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ScrollView } from 'react-native';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { useAppSelector } from 'mediashare/store';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { PageContainer, PageContent, PageProps } from 'mediashare/components/layout/PageContainer';
@@ -13,6 +14,7 @@ const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
 
   const tagKeys = (mediaItem?.tags || []).map((tag) => tag.key);
   const { tags = [] } = globalState;
+  const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isMediaTag), []);
 
   return (
     <PageContainer>
@@ -27,7 +29,7 @@ const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
             thumbnail={thumbnail}
             showThumbnail={true}
             category={category}
-            availableTags={tags}
+            availableTags={mappedTags}
             tags={tagKeys}
             showSocial={true}
             showActions={false}

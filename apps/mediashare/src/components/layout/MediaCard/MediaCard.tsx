@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Card, Chip, Paragraph } from 'react-native-paper';
+import { Card, Paragraph } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import SwitchSelector from 'react-native-switch-selector';
 
@@ -9,7 +9,7 @@ import { DisplayPreviewOrVideo } from './DisplayPreviewOrVideo';
 import { MediaCardTitle } from './MediaCardTitle';
 import { MediaCardTags } from './MediaCardTags';
 import { MediaCardSocial } from './MediaCardSocial';
-import { mapAvailableTags, mapKeysToTags } from 'mediashare/store/modules/tags/utils';
+import { mapKeysToTags } from 'mediashare/store/modules/tags/utils';
 import { findInArray } from 'mediashare/utils';
 import { descriptionValidator, titleValidator } from 'mediashare/core/validators';
 import { useAppSelector } from 'mediashare/store';
@@ -28,8 +28,10 @@ export interface MediaCardProps {
   thumbnail?: string;
   mediaSrc?: string | null;
   category?: string;
-  availableTags?: Tag[];
-  tags?: string[];
+  // TODO: Fix Tag type
+  // availableTags?: Tag[];
+  availableTags?: any[];
+  tags?: any[];
   children?: any;
   topDrawer?: React.FC<any>;
   isEdit?: boolean;
@@ -61,7 +63,9 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   children,
   topDrawer = undefined,
   category = 'None',
-  availableTags = [] as Tag[],
+  // TODO: Fix Tag type
+  // availableTags = [] as Tag[],
+  availableTags = [] as any[],
   tags = [],
   isEdit = false,
   isPlayable = false,
@@ -95,9 +99,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     onCategoryChange(categories);
   };
 
-  const mappedTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isPlaylistTag), []);
-  // const mappedPlaylistTags = useMemo(() => mapAvailableTags(availableTags).filter((tag) => tag.isPlaylistTag), []);
-  const mappedSelectedTags = useMemo(() => mapKeysToTags(tags, mappedTags), []);
+  const mappedSelectedTags = useMemo(() => mapKeysToTags(tags, availableTags), []);
   const mappedSelectedTagKeys = useMemo(() => mappedSelectedTags.map(({ key }) => key), []);
   const [selectedTagKeys, setSelectedTagKeys] = useState(mappedSelectedTagKeys);
   const onSelectedTagsChange = (newTags) => {
@@ -158,7 +160,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                 marginTop: 10,
               },
             }}
-            items={mappedTags}
+            items={availableTags}
             IconRenderer={MultiSelectIcon}
             uniqueKey="key"
             displayKey="value"

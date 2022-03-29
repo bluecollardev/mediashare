@@ -1,22 +1,17 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-
 import { addMediaItem } from 'mediashare/store/modules/media-items';
-
 import { CreateMediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
-
 import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
-
+import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
 import { MediaCard } from 'mediashare/components/layout/MediaCard';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
 import { tagValidator, categoryValidator, descriptionValidator, titleValidator } from 'mediashare/core/validators';
-
 import { minLength } from 'mediashare/core/lib/Validators';
 import { theme } from 'mediashare/styles';
 import { AppUpload } from 'mediashare/components/layout/AppUpload';
@@ -24,16 +19,18 @@ import { UploadPlaceholder } from 'mediashare/components/layout/UploadPlaceholde
 
 // @ts-ignore
 export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
-  const { tags = [] } = globalState;
-
   const dispatch = useDispatch();
 
   // const author = useAppSelector((state) => state?.user.username);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState(MediaCategoryType.Free);
+
   const initialTagKeys = [];
   const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
+  const { tags = [] } = globalState;
+  const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isMediaTag), []);
+
   const [mediaUri, setMediaUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -65,7 +62,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
             onCategoryChange={(e: any) => {
               setCategory(e);
             }}
-            availableTags={tags}
+            availableTags={mappedTags}
             tags={selectedTagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {

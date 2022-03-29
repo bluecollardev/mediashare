@@ -1,39 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-
 import { useAppSelector } from 'mediashare/store';
 import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/playlists';
-
-import { PlaylistCategoryType, MediaItem, MediaCategoryType } from 'mediashare/rxjs-api';
-
+import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-
 import { View, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
 import { AppUpload } from 'mediashare/components/layout/AppUpload';
 import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
 import { MediaList } from 'mediashare/components/layout/MediaList';
 import { MediaCard } from 'mediashare/components/layout/MediaCard';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
-import { routeNames } from 'mediashare/routes';
-
-import { createRandomRenderKey } from 'mediashare/core/utils';
-
-import styles, { theme } from 'mediashare/styles';
 import { UploadPlaceholder } from 'mediashare/components/layout/UploadPlaceholder';
+import { routeNames } from 'mediashare/routes';
+import { createRandomRenderKey } from 'mediashare/core/utils';
+import styles, { theme } from 'mediashare/styles';
+
+import { PlaylistCategoryType, MediaItem, MediaCategoryType } from 'mediashare/rxjs-api';
 
 const actionModes = { delete: 'delete', default: 'default' };
 
 // @ts-ignore
 const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PageProps) => {
+  const dispatch = useDispatch();
+
   const { tags = [] } = globalState;
+  const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
+
   const addToPlaylist = useRouteWithParams(routeNames.addItemsToPlaylist);
   const viewMediaItem = useViewMediaItem();
   const goToPlaylists = usePlaylists();
-
-  const dispatch = useDispatch();
 
   const { playlistId } = route.params;
 
@@ -92,7 +90,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
             onCategoryChange={(e: any) => {
               setCategory(e);
             }}
-            availableTags={tags}
+            availableTags={mappedTags}
             tags={selectedTagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {

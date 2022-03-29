@@ -1,35 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-
 import { routeNames } from 'mediashare/routes';
-
 import { useAppSelector } from 'mediashare/store';
 import { getUserPlaylists, getPlaylistById, removeUserPlaylist, selectPlaylistAction } from 'mediashare/store/modules/playlists';
 import { loadUsers } from 'mediashare/store/modules/users';
-
+import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
-
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-
 import { FAB } from 'react-native-paper';
 import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-
 import { PageContainer, PageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
 import { AppDialog } from 'mediashare/components/layout/AppDialog';
 import { MediaCard } from 'mediashare/components/layout/MediaCard';
 import { MediaList } from 'mediashare/components/layout/MediaList';
+import * as build from 'mediashare/build';
+import { theme } from 'mediashare/styles';
 
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 
-import * as build from 'mediashare/build';
-
-import { theme } from 'mediashare/styles';
-
 // @ts-ignore
 export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps) => {
-  const { tags = [] } = globalState;
+  const dispatch = useDispatch();
+
   const { playlistId = '' } = route?.params || {};
 
   const edit = useRouteWithParams(routeNames.playlistEdit);
@@ -37,8 +31,6 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   const viewMediaItem = useViewMediaItem();
   const goToShareWith = useRouteName(routeNames.shareWith);
   const goToPlaylists = usePlaylists();
-
-  const dispatch = useDispatch();
 
   const { selected } = useAppSelector((state) => state.playlist);
   const appUserId = useAppSelector((state) => state.user?._id);
@@ -61,8 +53,10 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   } = selected || {};
   const items = mediaItems || [];
 
+  const { tags = [] } = globalState;
   const initialTagKeys = (selected?.tags || []).map((tag) => tag.key);
   const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
+  const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -119,7 +113,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
             shares={shareCount}
             views={viewCount}
             category={category}
-            availableTags={tags}
+            availableTags={mappedTags}
             tags={selectedTagKeys}
             // tagOptions={options}
             onTagChange={(e: any) => {
