@@ -102,7 +102,7 @@ export const getPlaylistById = createAsyncThunk(playlistActionTypes.getPlaylistB
 
 export interface PlaylistInitialState {
   created: CreatePlaylistResponseDto | undefined;
-  selected: PlaylistResponseDto | PlaylistItemResponseDto | undefined;
+  selected: PlaylistResponseDto | undefined;
   loading: boolean;
   loaded: boolean;
 }
@@ -197,7 +197,7 @@ const playlistsSlice = createSlice({
         })
       )
       .addCase(selectPlaylistAction, (state, action) => {
-        const updateSelection = function (bool: boolean, item: PlaylistResponseDto | PlaylistItemResponseDto) {
+        const updateSelection = function (bool: boolean, item: PlaylistResponseDto) {
           const { selected } = state;
           // Is it filtered?
           // @ts-ignore
