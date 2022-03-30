@@ -162,7 +162,8 @@ function PrivateMainNavigation({ user, globalState }: PrivateMainNavigationProps
       )}
 
       {build.forAdmin && <PrivateNavigator.Screen name="Media" component={MediaNavigation} listeners={navigationTabListeners} />}
-      <PrivateNavigator.Screen name="Account" component={AccountNavigation} initialParams={{ userId: user._id }} />
+
+      <PrivateNavigator.Screen name="Account" component={AccountNavigation} listeners={navigationTabListeners} initialParams={{ userId: user._id }} />
     </PrivateNavigator.Navigator>
   );
 }

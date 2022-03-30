@@ -21,5 +21,11 @@ export const createBottomTabListeners =
           }
         });
       }
+
+      // TODO: Is there a better way to do this?
+      // If we switch to the Browse tab ALWAYS reload the data, as we may have updated shared items elsewhere in the application!
+      if (/^Browse-/.test(e.target)) {
+        globalState?.loadUserData();
+      }
     },
   });

@@ -1,16 +1,19 @@
+import { findItemsIAmSharing, findItemsSharedWithMe } from 'mediashare/store/modules/share-items';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'recompose';
 
 import { useAppSelector } from 'mediashare/store';
 import { getTags } from 'mediashare/store/modules/tags';
+import { loadUser } from 'mediashare/store/modules/user';
 import { Tag } from 'mediashare/rxjs-api';
 
 export interface GlobalStateProps {
-  loading?: boolean;
-  isLoggedIn?: boolean;
   history?: any;
   location?: any;
+  loading?: boolean;
+  isLoggedIn?: boolean;
+  loadUserData?: () => void;
   search?: any;
   setSearchFilters?: Function;
   tags?: Tag[];
@@ -71,6 +74,7 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
         location,
         loading,
         isLoggedIn,
+        loadUserData,
         setSearchFilters,
         search: {
           filters: { ...searchFilters },
@@ -80,6 +84,12 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
         setDisplayMode,
       } as GlobalStateProps;
       return value;
+    }
+
+    async function loadUserData() {
+      await dispatch(loadUser());
+      await dispatch(findItemsIAmSharing({}));
+      await dispatch(findItemsSharedWithMe({}));
     }
   };
 };

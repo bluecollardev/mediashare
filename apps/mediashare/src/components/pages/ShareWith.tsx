@@ -13,29 +13,12 @@ const ShareWith = ({}: PageProps) => {
   const dispatch = useDispatch();
   const [loaded, setIsLoaded] = useState(false);
 
-  const loadData = async function () {
-    await dispatch(getUserPlaylists({}));
-  };
-
   const goBack = useGoBack();
   const viewPlaylists = useRouteName(routeNames.playlists);
 
   const users = useAppSelector((state) => state.users.entities);
   const playlists = useAppSelector((state) => state.userPlaylists.selected);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
-
-  const actionCb = async () => {
-    await dispatch(
-      shareUserPlaylist({
-        userIds: selectedUsers,
-        // @ts-ignore
-        playlistIds: playlists.map((playlist) => playlist._id),
-      })
-    );
-    setIsLoaded(false);
-
-    viewPlaylists();
-  };
 
   useEffect(() => {
     if (!loaded) {
@@ -56,14 +39,30 @@ const ShareWith = ({}: PageProps) => {
         <ContactList contacts={users} showGroups={true} selectable={true} onChecked={updateSelectedUsers} />
       </PageContent>
       <PageActions>
-        <ActionButtons onCancelClicked={goBack} onActionClicked={actionCb} actionLabel="Confirm" />
+        <ActionButtons onCancelClicked={goBack} onActionClicked={sharePlaylists} actionLabel="Confirm" />
       </PageActions>
     </PageContainer>
   );
 
+  async function loadData() {
+    await dispatch(getUserPlaylists({}));
+  }
+
   function updateSelectedUsers(bool: boolean, userId: string) {
     const filtered = bool ? selectedUsers.concat([userId]) : selectedUsers.filter((item) => item._id !== userId);
     setSelectedUsers(filtered);
+  }
+
+  async function sharePlaylists() {
+    await dispatch(
+      shareUserPlaylist({
+        userIds: selectedUsers,
+        playlistIds: playlists.map((playlist) => playlist._id),
+      })
+    );
+
+    setIsLoaded(false);
+    viewPlaylists();
   }
 };
 

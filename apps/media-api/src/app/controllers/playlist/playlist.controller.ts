@@ -10,7 +10,7 @@ import { GetUserId } from '@api-core/decorators/user.decorator';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 
 import { PlaylistService } from './playlist.service';
-import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse } from './playlist.decorator';
+import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse, PlaylistShareResponse } from './playlist.decorator';
 import { MediaGetResponse } from '../media-item/media-item.decorator';
 import { notFoundResponse } from '@api-core/functors/http-errors.functor';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
@@ -92,7 +92,7 @@ export class PlaylistController {
   @Post(':playlistId/share/:userId')
   @ApiParam({ name: 'playlistId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
-  @PlaylistPostResponse({ type: ShareItem, isArray: true })
+  @PlaylistShareResponse({ type: ShareItem, isArray: true })
   async share(
     @Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId,
     @Param('userId', new ObjectIdPipe()) userId: ObjectId,

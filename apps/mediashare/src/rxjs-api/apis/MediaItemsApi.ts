@@ -35,7 +35,6 @@ export interface MediaItemControllerRemoveRequest {
 export interface MediaItemControllerShareRequest {
   mediaId: string;
   userId: string;
-  createMediaItemDto: CreateMediaItemDto;
 }
 
 export interface MediaItemControllerUpdateRequest {
@@ -137,9 +136,9 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerFindPopularMediaItems(): Observable<Array<MediaItemResponseDto>>;
-  mediaItemControllerFindPopularMediaItems(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemResponseDto>>>;
-  mediaItemControllerFindPopularMediaItems(opts?: OperationOpts): Observable<Array<MediaItemResponseDto> | RawAjaxResponse<Array<MediaItemResponseDto>>> {
+  mediaItemControllerFindPopular(): Observable<Array<MediaItemResponseDto>>;
+  mediaItemControllerFindPopular(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemResponseDto>>>;
+  mediaItemControllerFindPopular(opts?: OperationOpts): Observable<Array<MediaItemResponseDto> | RawAjaxResponse<Array<MediaItemResponseDto>>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -195,21 +194,13 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerShare({ mediaId, userId, createMediaItemDto }: MediaItemControllerShareRequest): Observable<ShareItem>;
-  mediaItemControllerShare(
-    { mediaId, userId, createMediaItemDto }: MediaItemControllerShareRequest,
-    opts?: OperationOpts
-  ): Observable<RawAjaxResponse<ShareItem>>;
-  mediaItemControllerShare(
-    { mediaId, userId, createMediaItemDto }: MediaItemControllerShareRequest,
-    opts?: OperationOpts
-  ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
+  mediaItemControllerShare({ mediaId, userId }: MediaItemControllerShareRequest): Observable<ShareItem>;
+  mediaItemControllerShare({ mediaId, userId }: MediaItemControllerShareRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
+  mediaItemControllerShare({ mediaId, userId }: MediaItemControllerShareRequest, opts?: OperationOpts): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerShare');
     throwIfNullOrUndefined(userId, 'userId', 'mediaItemControllerShare');
-    throwIfNullOrUndefined(createMediaItemDto, 'createMediaItemDto', 'mediaItemControllerShare');
 
     const headers: HttpHeaders = {
-      'Content-Type': 'application/json',
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
@@ -220,7 +211,6 @@ export class MediaItemsApi extends BaseAPI {
         url: '/api/media-items/{mediaId}/share/{userId}'.replace('{mediaId}', encodeURI(mediaId)).replace('{userId}', encodeURI(userId)),
         method: 'POST',
         headers,
-        body: createMediaItemDto,
       },
       opts?.responseOpts
     );

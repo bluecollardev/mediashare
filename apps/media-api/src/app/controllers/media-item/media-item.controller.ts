@@ -16,7 +16,7 @@ import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 import { MediaItem } from './entities/media-item.entity';
-import { MediaGetResponse, MediaPostResponse, MediaPutResponse } from './media-item.decorator';
+import { MediaGetResponse, MediaPostResponse, MediaPutResponse, MediaShareResponse } from './media-item.decorator';
 import { notFoundResponse } from '@api-core/functors/http-errors.functor';
 
 import { ShareItemService } from '@api-modules/share-item/share-item.service';
@@ -94,7 +94,7 @@ export class MediaItemController {
   @Post(':mediaId/share/:userId')
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
-  @MediaPostResponse({ type: ShareItem })
+  @MediaShareResponse({ type: ShareItem })
   async share(
     @Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId,
     @Param('userId', new ObjectIdPipe()) userId: ObjectId,

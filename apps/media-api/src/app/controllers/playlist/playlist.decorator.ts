@@ -1,3 +1,4 @@
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
@@ -17,4 +18,8 @@ export function PlaylistPostResponse({ isArray = false, type = Playlist, descrip
 
 export function PlaylistPutResponse({ isArray = false, type = Playlist, description }: ApiControllerDecoratorParams = {}) {
   return applyDecorators(ApiResponse({ description, type, status: 200, isArray }), ApiBody({ type: UpdatePlaylistDto }), UseJwtGuard());
+}
+
+export function PlaylistShareResponse({ isArray = false, type = ShareItem, description }: ApiControllerDecoratorParams = {}) {
+  return applyDecorators(ApiResponse({ description, type, status: 201, isArray }), UseJwtGuard());
 }

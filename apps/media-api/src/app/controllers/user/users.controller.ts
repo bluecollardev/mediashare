@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Put, Param, Delete, UseGuards, HttpCode, Request } from '@nestjs/common';
+import { Controller, Get, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
 import { UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiTags } from '@nestjs/swagger';
@@ -6,9 +6,7 @@ import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PlaylistService } from '../playlist/playlist.service';
 import { ShareItemService } from '@api-modules/share-item/share-item.service';
-
 import { ObjectId } from 'mongodb';
-
 // import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 import { UserService } from '@api-modules/auth/user.service';
 import { BcRolesType, BC_ROLES } from '@core-lib';

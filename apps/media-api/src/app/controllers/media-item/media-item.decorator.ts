@@ -1,3 +1,4 @@
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
@@ -17,4 +18,8 @@ export function MediaPostResponse({ isArray = false, type = MediaItem, descripti
 
 export function MediaPutResponse({ isArray = false, type = MediaItem, description }: ApiControllerDecoratorParams = {}) {
   return applyDecorators(ApiResponse({ description, type, status: 200, isArray }), ApiBody({ type: UpdateMediaItemDto }), UseJwtGuard());
+}
+
+export function MediaShareResponse({ isArray = false, type = ShareItem, description }: ApiControllerDecoratorParams = {}) {
+  return applyDecorators(ApiResponse({ description, type, status: 201, isArray }), UseJwtGuard());
 }

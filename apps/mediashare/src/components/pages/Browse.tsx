@@ -117,14 +117,15 @@ export const Browse = ({
     const { search } = globalState;
     const args = {
       text: search?.filters?.text ? search.filters.text : '',
-      tags: ['hip'],
+      // tags: [],
     };
 
     if (search.filters.text) {
-      await dispatch(findPlaylists(args));
+      // await dispatch(findPlaylists(args));
     } else {
-      await dispatch(getUserPlaylists({}));
+      // await dispatch(getUserPlaylists({}));
     }
+
     setIsLoaded(true);
   }
 };
