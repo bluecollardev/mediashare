@@ -65,7 +65,7 @@ export class UsersController {
   @ApiHideProperty()
   @UserGetResponse({ type: PlaylistResponseDto, isArray: true })
   getPlaylists(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
-    return this.playlistService.searchByUserId({ userId });
+    return this.playlistService.getByUserId(userId);
   }
 
   @Put(':userId/roles')
