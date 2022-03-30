@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AppHeader } from './components/layout/AppHeader';
+import { AppHeader } from 'mediashare/components/layout';
 
 const routeConfig = {
   login: {
@@ -65,7 +65,7 @@ const routeConfig = {
   },
   account: {
     name: 'account',
-    options: { title: 'Account', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'My Account', header: (props) => <AppHeader {...props} /> },
   },
   accountEdit: {
     name: 'accountEdit',

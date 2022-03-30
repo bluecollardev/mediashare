@@ -26,44 +26,36 @@ const actionModes = { delete: 'delete', default: 'default' };
 
 const Profile = ({ route }: ProfileProps) => {
   const { userId } = route.params;
-  // const [loaded, setLoaded] = useState(false);
-  // const userId = '6149b54a19531dd4c6b0df59';
+
   const dispatch = useDispatch();
-  // const userRole = useAppSelector((state) => state.user.role);
-  // const isAdmin = userRole === 'admin';
-  // const accountEdit = useRouteWithParams(routeNames.accountEdit);
+
+  const viewPlaylist = useViewPlaylistById();
+
   const profile = useAppSelector((state) => {
     return state.profile.entity;
   });
 
   const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
+  const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
 
-  const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
+  const [isSelectable, setIsSelectable] = useState(false);
   const [selectedItems, setSelectedItems] = React.useState([]);
-
-  const viewPlaylist = useViewPlaylistById();
+  const [showUnshareDialog, setShowUnshareDialog] = useState(false);
+  const [showUnshareItemDialog, setShowUnshareItemDialog] = useState(false);
+  const [itemToUnshare, setItemToUnshare] = useState(undefined as string);
 
   useEffect(() => {
     dispatch(loadProfile(userId));
   }, [userId]);
-
-  const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
-  // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
-  // const uniqueSharedItems = filterUnique(sharedItems, 'shareItemId') || [];
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
 
-  const [showUnshareDialog, setShowUnshareDialog] = useState(false);
-  const [showUnshareItemDialog, setShowUnshareItemDialog] = useState(false);
-  const [itemToUnshare, setItemToUnshare] = useState(undefined as string);
-
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
-    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.text, styles: { backgroundColor: theme.colors.primary } },
     { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
   ];
 
@@ -101,11 +93,6 @@ const Profile = ({ route }: ProfileProps) => {
         showActions={!isSelectable}
         isCurrentUser={false}
       />
-      {/* isAdmin && (
-          <Button mode="outlined" styles={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
-            Edit Profile
-          </Button>
-        ) */}
       <Divider />
       <SharedList
         key={clearSelectionKey}
@@ -199,7 +186,7 @@ const Profile = ({ route }: ProfileProps) => {
   async function unshareItems() {
     selectedItems.map(async (shareItemId) => {
       await unshareItem(shareItemId);
-    }); // TODO: Find a real way to do this
+    }); // TODO: Find a real way to do this, this timeout is JANKY
     setTimeout(async () => {
       await dispatch(loadProfile(userId));
     }, 2500);
