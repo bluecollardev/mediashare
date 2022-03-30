@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
 import { useAppSelector } from 'mediashare/store';
-
 import { ScrollView, View } from 'react-native';
 import { Card, FAB, Subheading, Text } from 'react-native-paper';
-
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
-import { AccountCard } from 'mediashare/components/layout/AccountCard';
-import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
+import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps, AccountCard, MediaListItem, ActionButtons } from 'mediashare/components/layout';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
 import { createRandomRenderKey } from 'mediashare/core/utils';
-
 import { theme } from 'mediashare/styles';
 
 const SharedItems = ({ selectable = false }) => {
