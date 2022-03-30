@@ -5,7 +5,7 @@ import { GetUser, GetUserId } from '@api-core/decorators/user.decorator';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 import { UserService } from '@api-modules/auth/user.service';
 import { PlaylistService } from '../playlist/playlist.service';
-import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
+import { UserGetResponse, UserPostResponse } from './user-response.decorator';
 
 import { SessionUserInterface } from '@api-core/models/auth-user.model';
 import { MediaItemResponseDto } from '../media-item/dto/media-item-response.dto';

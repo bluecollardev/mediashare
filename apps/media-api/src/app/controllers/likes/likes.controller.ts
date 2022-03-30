@@ -5,7 +5,7 @@ import { ObjectIdPipe } from '@mediashare/shared';
 
 import { LikesService } from './likes.service';
 import { GetUserId } from '@api-core/decorators/user.decorator';
-import { LikeResponse } from './decorators/likes.decorator';
+import { LikeResponse } from './likes.decorator';
 
 @ApiTags('likes')
 @Controller('likes')
