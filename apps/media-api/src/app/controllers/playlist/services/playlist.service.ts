@@ -29,20 +29,25 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
   ) {
     super(repository, logger);
     this.repository
-      .createCollectionIndex({ title: 'text', description: 'text' })
+      // TODO: Support weights and upgrade MongoDB, for now we're just going to remove description as we can't weight the results...
+      // .createCollectionIndex({ title: 'text', description: 'text' })
+      .createCollectionIndex({ title: 'text' })
       .then((indexName) => {
         this.collectionIndexName = indexName;
       });
   }
 
   // We can't use the TypeORM driver for this, as it doesn't support weights, use the official Node.js driver instead
-  private createCollectionIndex() {
-    /* const db = this.repository.manager.queryRunner.databaseConnection.db('mediashare')
-    const collection = db.collection('playlists')
-    const await collection.createIndex() */
-  }
+  // TODO: Support weights and upgrade MongoDB, for now we're just going to remove description as we can't weight the results...
+  /* private createCollectionIndex() {
+    const db = this.repository.manager.queryRunner.databaseConnection.db('mediashare')
+    const collection = db.collection('playlists');
+    const await collection.createIndex();
+  } */
 
-  private _collectionIndexName = 'title_text_description_text';
+  // TODO: Support weights and upgrade MongoDB, for now we're just going to remove description as we can't weight the results...
+  // private _collectionIndexName = 'title_text_description_text';
+  private _collectionIndexName = 'title_text';
 
   get collectionIndexName() {
     return this._collectionIndexName;
@@ -183,11 +188,13 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
       fullText = false,
       // textMatchingMode = 'and',
       tags,
-      tagsMatchingMode = 'all'
+      // TODO: Complete support for tagsMatchingMode (it's not exposed via controller)
+      tagsMatchingMode = 'all' // all | any // TODO: Type this!
     } : SearchParameters) {
 
     let aggregateQuery = [];
 
+    // Match by user ID first as it's indexed and this is the best way to reduce the number of results early
     if (userId) {
       aggregateQuery = aggregateQuery.concat([
         {
@@ -198,34 +205,12 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
       ]);
     }
 
-    if (tags) {
-      aggregateQuery = aggregateQuery.concat([
-        {
-          $addFields: {
-            matchedTags: '$tags.key',
-          },
-        },
-        {
-          $match: {
-            // createdBy: userId,
-            matchedTags: { $in: tags },
-          },
-        },
-      ]);
-    }
-
+    // Next, we want to match the text as it's also indexed
+    // TODO: fullText means a search on all index fields, this is only supported in MongoDB Atlas
+    // Not sure if we want to use Atlas as we can't self host... we can implement distributed search later...
     if (query && fullText) {
-      if (this.useDistributedSearch) {
-        throw new Error('Elastic search has not been implemented');
-      }
-      // Search all fields in the index
-      aggregateQuery = aggregateQuery.concat([
-        {
-          $match: {
-            $text: { $search: query },
-          },
-        },
-      ]);
+      // IMPORTANT! This shouldn't run at any time (fullText = false is hardcoded)
+      throw new Error('Elastic search has not been implemented');
     } else if (query && !fullText) {
       if (this.useDistributedSearch) {
         throw new Error('Elastic search has not been implemented');
@@ -238,6 +223,35 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
           },
         },
       ]);
+    }
+
+    // Tags are not indexed as they're nested in the documents, so do this last!
+    if (tags) {
+      aggregateQuery = aggregateQuery.concat([
+        {
+          $addFields: {
+            matchedTags: '$tags.key',
+          },
+        },
+      ]);
+
+      if (tagsMatchingMode === 'any') {
+        aggregateQuery.push({
+          $match: {
+            // TODO: User tags?
+            // createdBy: userId,
+            matchedTags: { $in: tags },
+          },
+        })
+      } else if (tagsMatchingMode === 'all') {
+        aggregateQuery.push({
+          $match: {
+            // TODO: User tags?
+            // createdBy: userId,
+            matchedTags: { $all: tags },
+          },
+        })
+      }
     }
 
     aggregateQuery = aggregateQuery.concat([
