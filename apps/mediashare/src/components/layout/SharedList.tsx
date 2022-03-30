@@ -31,7 +31,7 @@ export const SharedList = ({
   const data = R.map(R.keys(mappedSharedItems), (key) => {
     const heading =
       mappedSharedItems[key][0].authorId === _id
-        ? 'Subscribes To'
+        ? 'Shared with Subscriber'
         : mappedSharedItems[key][0].authorId !== _id
         ? `Shared by ${mappedSharedItems[key][0].authorName}`
         : 'Shared by Unknown User';

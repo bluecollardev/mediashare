@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'mediashare/store';
 import { removeShareItem, readShareItem } from 'mediashare/store/modules/share-items';
@@ -43,16 +44,16 @@ const Profile = ({ route }: ProfileProps) => {
   // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
   // const uniqueSharedItems = filterUnique(sharedItems, 'shareItemId') || [];
 
-  const [fabState, setFabState] = useState({ open: false });
-  const fabActions = [
-    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.text, styles: { backgroundColor: theme.colors.primary } },
-    { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
-  ];
-
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
+
+  const [fabState, setFabState] = useState({ open: false });
+  const fabActions = [
+    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.text, styles: { backgroundColor: theme.colors.primary } },
+    { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+  ];
 
   return (
     <PageContainer>
@@ -84,7 +85,12 @@ const Profile = ({ route }: ProfileProps) => {
       />
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons onActionClicked={confirmPlaylistsToUnshare} onCancelClicked={cancelPlaylistsToUnshare} actionLabel="Unshare" actionIcon="delete" />
+          <ActionButtons
+            onActionClicked={confirmPlaylistsToUnshare}
+            onCancelClicked={cancelPlaylistsToUnshare}
+            actionLabel="Revoke Access"
+            actionButtonStyles={styles.deleteActionButton}
+          />
         </PageActions>
       )}
       {!isSelectable && (
@@ -152,3 +158,9 @@ const Profile = ({ route }: ProfileProps) => {
 };
 
 export default withLoadingSpinner(undefined)(Profile);
+
+const styles = StyleSheet.create({
+  deleteActionButton: {
+    backgroundColor: theme.colors.error,
+  },
+});

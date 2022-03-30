@@ -17,13 +17,13 @@ import { loadProfile } from 'mediashare/store/modules/profile';
 import { findMediaItems } from 'mediashare/store/modules/media-items';
 import { readShareItem } from 'mediashare/store/modules/share-items';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { View, useWindowDimensions, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { useRouteWithParams, useViewPlaylistById, useViewProfileById } from 'mediashare/hooks/NavigationHooks';
 import { PageContainer, PageActions, PageProps, ContactList, ActionButtons, AccountCard, SharedList } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils';
-import styles, { theme } from 'mediashare/styles';
+import themeStyles, { theme } from 'mediashare/styles';
 import * as build from 'mediashare/build';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
@@ -98,26 +98,6 @@ export const Account = ({ globalState }: PageProps) => {
     }
   }, [isLoaded]);
 
-  const [fabState, setFabState] = useState({ open: false });
-  let fabActions = [];
-  if (build.forFreeUser) {
-    fabActions = [
-      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
-      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
-    ];
-  } else if (build.forSubscriber) {
-    fabActions = [
-      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
-      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
-    ];
-  } else if (build.forAdmin) {
-    fabActions = [
-      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
-      { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
-      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
-    ];
-  }
-
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
@@ -126,6 +106,27 @@ export const Account = ({ globalState }: PageProps) => {
   const { firstName, lastName, email, phoneNumber, likesCount, sharesCount, sharedCount } = user;
 
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
+
+  const [fabState, setFabState] = useState({ open: false });
+  let fabActions = [];
+  if (build.forFreeUser) {
+    fabActions = [
+      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
+    ];
+  } else if (build.forSubscriber) {
+    fabActions = [
+      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+      { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
+    ];
+  } else if (build.forAdmin) {
+    fabActions = [
+      { icon: 'logout', onPress: () => accountLogout(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+      { icon: 'person-remove', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'edit', onPress: () => editProfile({ userId: user._id }), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
+    ];
+  }
 
   return (
     <PageContainer>
@@ -156,7 +157,12 @@ export const Account = ({ globalState }: PageProps) => {
       )}
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons onActionClicked={confirmDelete} onCancelClicked={cancelDelete} actionLabel="Delete" />
+          <ActionButtons
+            onActionClicked={confirmDelete}
+            onCancelClicked={cancelDelete}
+            actionLabel="Revoke Access"
+            actionButtonStyles={styles.deleteActionButton}
+          />
         </PageActions>
       )}
       {!isSelectable && (
@@ -245,12 +251,12 @@ export const Account = ({ globalState }: PageProps) => {
 
   function renderTabBar(props) {
     return (
-      <View style={styles.tabBar}>
+      <View style={themeStyles.tabBar}>
         {props.navigationState.routes.map((route, i) => {
           return (
             <TouchableOpacity
               key={`tab_${i}-${route.name}`}
-              style={props.navigationState.index === i ? styles.tabItemActive : styles.tabItem}
+              style={props.navigationState.index === i ? themeStyles.tabItemActive : themeStyles.tabItem}
               onPress={() => setIndex(i)}
             >
               <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -271,3 +277,9 @@ export const Account = ({ globalState }: PageProps) => {
 };
 
 export default withLoadingSpinner(undefined)(withGlobalStateConsumer(Account));
+
+const styles = StyleSheet.create({
+  deleteActionButton: {
+    backgroundColor: theme.colors.error,
+  },
+});

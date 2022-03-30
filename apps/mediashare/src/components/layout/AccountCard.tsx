@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Avatar, Caption, Title, Subheading, Card, Menu, IconButton } from 'react-native-paper';
-
-import { theme } from 'mediashare/styles';
 import { useAppSelector } from 'mediashare/store';
+import { theme } from 'mediashare/styles';
 import * as R from 'remeda';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import * as build from 'mediashare/build';
+
 
 interface AccountCardProps {
   image: string;
@@ -79,7 +79,7 @@ export const AccountCard = ({
                 }
               >
                 {isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Delete Account" />}
-                {!isCurrentUser && <Menu.Item icon="person-remove" onPress={() => {}} title="Unfollow" />}
+                {build.forAdmin && !isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Deactivate" />}
               </Menu>
             ) : null
           }
