@@ -13,7 +13,7 @@ const routeConfig = {
   },
   playlists: {
     name: 'playlists',
-    options: { title: 'Playlists', header: (props) => <AppHeader {...props} searchable={true} /> },
+    options: { title: 'Playlists', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" /> },
   },
   playlistAdd: {
     name: 'playlistAdd',
@@ -29,7 +29,7 @@ const routeConfig = {
   },
   media: {
     name: 'media',
-    options: { title: 'Media Library', header: (props) => <AppHeader {...props} searchable={true} /> },
+    options: { title: 'Media Library', header: (props) => <AppHeader {...props} searchable={true} searchTarget="media" /> },
   },
   mediaItemAdd: {
     name: 'addMediaItem',
@@ -53,7 +53,7 @@ const routeConfig = {
   },
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
-    options: { title: 'Add To Playlist', header: (props) => <AppHeader {...props} searchable={true} /> },
+    options: { title: 'Add To Playlist', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" /> },
   },
   shareWith: {
     name: 'shareWith',

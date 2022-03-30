@@ -100,7 +100,9 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   };
 
   const mappedSelectedTags = useMemo(() => mapKeysToTags(tags, availableTags), []);
-  const mappedSelectedTagKeys = useMemo(() => mappedSelectedTags.map(({ key }) => key), []);
+  const mappedSelectedTagKeys = useMemo(() => {
+    return mappedSelectedTags.map(({ key }) => key)
+  }, []);
   const [selectedTagKeys, setSelectedTagKeys] = useState(mappedSelectedTagKeys);
   const onSelectedTagsChange = (newTags) => {
     setSelectedTagKeys(newTags);

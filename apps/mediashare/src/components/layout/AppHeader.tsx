@@ -15,6 +15,7 @@ export interface AppHeaderProps {
   back?: any;
   navigation?: any;
   searchable?: boolean;
+  searchTarget?: 'playlists' | 'media' | undefined;
   showDisplayControls?: boolean;
   globalState?: GlobalStateProps;
 }
@@ -52,6 +53,7 @@ const AppHeaderComponent = ({
   back,
   navigation,
   searchable = false,
+  searchTarget = undefined,
   showDisplayControls = false,
   globalState = {
     displayMode: 'list',
@@ -69,7 +71,12 @@ const AppHeaderComponent = ({
 
   const [searchText, setSearchText] = useState('');
 
-  const mappedMediaTags = useMemo(() => mapAvailableTags(Array.isArray(globalState?.tags) ? globalState.tags : []).filter((tag) => tag.isPlaylistTag), []);
+  const mappedTags = useMemo(() => {
+    const availableTags = Array.isArray(globalState?.tags) ? globalState.tags : [];
+    if (searchTarget === 'playlists') return availableTags.filter((tag) => tag.isPlaylistTag);
+    if (searchTarget === 'media') return availableTags.filter((tag) => tag.isMediaTag);
+    return availableTags;
+  }, []);
 
   const [displayMode, setDisplayMode] = useState(globalState?.displayMode);
 
@@ -149,7 +156,7 @@ const AppHeaderComponent = ({
                                 marginTop: 10,
                               },
                             }}
-                            items={mappedMediaTags}
+                            items={mappedTags}
                             IconRenderer={MultiSelectIcon}
                             uniqueKey="key"
                             displayKey="value"
