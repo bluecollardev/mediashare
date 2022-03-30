@@ -29,8 +29,9 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
 
   const { selected } = useAppSelector((state) => state.playlist);
   const appUserId = useAppSelector((state) => state.user?._id);
-  const [showDialog, setShowDialog] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   // @ts-ignore
   const {
@@ -66,7 +67,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   let fabActions = [];
   if (allowEdit) {
     fabActions = [
-      { icon: 'delete-forever', onPress: () => setShowDialog(true), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'delete-forever', onPress: () => setShowDeleteDialog(true), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
       { icon: 'share', onPress: () => sharePlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
       { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
@@ -86,10 +87,10 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
         <AppDialog
           leftActionLabel="Cancel"
           rightActionLabel="Delete"
-          leftActionCb={() => setShowDialog(false)}
+          leftActionCb={() => setShowDeleteDialog(false)}
           rightActionCb={() => deletePlaylist()}
-          onDismiss={() => setShowDialog(false)}
-          showDialog={showDialog}
+          onDismiss={() => setShowDeleteDialog(false)}
+          showDialog={showDeleteDialog}
           title="Delete Playlist"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />

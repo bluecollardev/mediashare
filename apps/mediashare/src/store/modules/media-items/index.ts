@@ -42,9 +42,9 @@ const MEDIA_ITEM_ACTIONS = [
 ] as const;
 export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
 export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
-export const setActiveMediaItem = createAction<MediaItemDto, 'setActiveMediaItem'>('setActiveMediaItem');
+export const setActiveMediaItem = createAction<MediaItemResponseDto, 'setActiveMediaItem'>('setActiveMediaItem');
 export const clearActiveMediaItem = createAction('clearActiveMediaItem');
-export const selectMediaItem = createAction<{ isChecked: boolean; item: MediaItemDto }, 'selectMediaItem'>('selectMediaItem');
+export const selectMediaItem = createAction<{ isChecked: boolean; item: MediaItemResponseDto }, 'selectMediaItem'>('selectMediaItem');
 export const clearMediaItems = createAction('clearMediaItems');
 
 export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async ({ uri, mediaId }: { uri: string; mediaId: string }) => {
@@ -53,7 +53,7 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
     src: getStorage(uri),
   }).toPromise();
   apis.views.viewsControllerCreateMediaView({ mediaId }).pipe(take(1)).subscribe();
-  return { mediaItem: result.mediaItem as MediaItemDto, src: result.src };
+  return { mediaItem: result.mediaItem as MediaItemResponseDto, src: result.src };
 });
 
 export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {
@@ -206,7 +206,7 @@ export interface MediaItemInitialState {
   getMediaItem: string;
   loading: boolean;
   file: any;
-  entity: MediaItemDto | undefined;
+  entity: MediaItemResponseDto | undefined;
   mediaSrc: string;
   feed: AwsMediaItem[];
   loaded: boolean;
@@ -282,8 +282,8 @@ const mediaItemSlice = createSlice({
 });
 
 export interface MediaItemsInitialState {
-  selected: MediaItemDto[];
-  entities: MediaItemDto[];
+  selected: MediaItemResponseDto[];
+  entities: MediaItemResponseDto[];
   loading: boolean;
   loaded: boolean;
 }
@@ -320,7 +320,7 @@ const mediaItemsSlice = createSlice({
         })
       )
       .addCase(selectMediaItem, (state, action) => {
-        const updateSelection = function (bool: boolean, item: MediaItemDto) {
+        const updateSelection = function (bool: boolean, item: MediaResponseItemDto) {
           const { selected } = state;
           // Is it filtered?
           // @ts-ignore

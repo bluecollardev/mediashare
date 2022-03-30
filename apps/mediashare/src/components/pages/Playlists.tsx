@@ -10,7 +10,16 @@ import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner
 import { FAB, Text, Divider } from 'react-native-paper';
 import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { View } from 'react-native';
-import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps, MediaListItem, ActionButtons, NoItems } from 'mediashare/components/layout';
+import {
+  PageActions,
+  PageContainer,
+  KeyboardAvoidingPageContent,
+  PageProps,
+  MediaListItem,
+  ActionButtons,
+  NoItems,
+  AppDialog,
+} from 'mediashare/components/layout';
 import { getAuthorText, getUsername, shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils';
 import { theme } from 'mediashare/styles';
@@ -23,20 +32,6 @@ export interface PlaylistsProps {
   onViewDetailClicked?: Function;
   onChecked?: (checked: boolean, item?: any) => void;
 }
-
-/* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
-  const list = playlist.map((item) => {
-    const keyed = {
-      id: item._id,
-      title: item.title,
-      description: `${item?.mediaItems?.length || 0} Videos`,
-      key: item._id,
-      ...item,
-    };
-    return keyed;
-  });
-  return list;
-} */
 
 export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable = false, showActions = true, onChecked = () => undefined }: PlaylistsProps) => {
   const sortedList = list.map((item) => item);
@@ -77,11 +72,11 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
 export const Playlists = ({ globalState }: PageProps) => {
+  const dispatch = useDispatch();
+
   const shareWith = useRouteName(routeNames.shareWith);
   const createPlaylist = useRouteName(routeNames.playlistAdd);
   const viewPlaylist = useViewPlaylistById();
-
-  const dispatch = useDispatch();
 
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
@@ -108,6 +103,13 @@ export const Playlists = ({ globalState }: PageProps) => {
     }
   }, [isLoaded, globalState, searchFilters]);
 
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
     { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
@@ -115,14 +117,19 @@ export const Playlists = ({ globalState }: PageProps) => {
     { icon: 'library-add', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
   ];
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
-  useEffect(() => {
-    clearCheckboxSelection();
-  }, []);
-
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        <AppDialog
+          leftActionLabel="Cancel"
+          rightActionLabel="Delete"
+          leftActionCb={() => closeDeleteDialog()}
+          rightActionCb={() => confirmPlaylistsToDelete()}
+          onDismiss={closeDeleteDialog}
+          showDialog={showDeleteDialog}
+          title="Delete Playlists"
+          subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+        />
         {isLoaded ? (
           <PlaylistsComponent
             key={clearSelectionKey}
@@ -143,7 +150,13 @@ export const Playlists = ({ globalState }: PageProps) => {
       )}
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons onActionClicked={confirmPlaylistsToDelete} onCancelClicked={cancelPlaylistsToDelete} actionLabel="Delete" actionIcon="delete" />
+          <ActionButtons
+            onActionClicked={openDeleteDialog}
+            onCancelClicked={cancelPlaylistsToDelete}
+            actionLabel="Delete"
+            actionIcon="delete"
+            actionButtonStyles={styles.deleteActionButton}
+          />
         </PageActions>
       )}
       {!isSelectable && (
@@ -182,41 +195,47 @@ export const Playlists = ({ globalState }: PageProps) => {
     setRefreshing(false);
   }
 
-  async function updateSelection(bool, item) {
-    dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
-  }
-
-  async function activateShareMode() {
+  function activateShareMode() {
     setActionMode(actionModes.share);
     setIsSelectable(true);
   }
 
-  async function confirmPlaylistsToShare() {
+  function confirmPlaylistsToShare() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
     shareWith();
   }
 
-  async function cancelPlaylistsToShare() {
+  function cancelPlaylistsToShare() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
   }
 
-  async function activateDeleteMode() {
+  function activateDeleteMode() {
     setActionMode(actionModes.delete);
     setIsSelectable(true);
   }
 
+  function openDeleteDialog() {
+    setShowDeleteDialog(true);
+  }
+
+  function closeDeleteDialog() {
+    cancelPlaylistsToDelete();
+    setShowDeleteDialog(false);
+  }
+
   async function confirmPlaylistsToDelete() {
     await deletePlaylists();
+    closeDeleteDialog();
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
   }
 
-  async function cancelPlaylistsToDelete() {
+  function cancelPlaylistsToDelete() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
@@ -229,6 +248,10 @@ export const Playlists = ({ globalState }: PageProps) => {
     setTimeout(() => {
       loadData();
     }, 2500);
+  }
+
+  function updateSelection(bool, item) {
+    dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
   }
 
   function clearCheckboxSelection() {
@@ -268,5 +291,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 2,
     fontWeight: 'bold',
+  },
+  deleteActionButton: {
+    backgroundColor: theme.colors.error,
   },
 });

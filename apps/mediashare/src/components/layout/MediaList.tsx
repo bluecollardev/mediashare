@@ -3,12 +3,12 @@ import { StyleSheet, View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 
 import { MediaListItem } from './MediaListItem';
-import { MediaItem, MediaItemDto } from 'mediashare/rxjs-api';
+import { MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
 
 import { shortenText } from 'mediashare/utils';
 
 // TODO: Why do we have TWO types, try to get this down to one!
-export type MediaListType = MediaItemDto | MediaItem;
+export type MediaListType = MediaItemResponseDto | MediaItem;
 
 import { theme } from 'mediashare/styles';
 

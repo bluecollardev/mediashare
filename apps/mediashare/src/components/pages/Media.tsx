@@ -6,11 +6,20 @@ import { useAppSelector } from 'mediashare/store';
 import { deleteMediaItem, findMediaItems } from 'mediashare/store/modules/media-items';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useEditMediaItem } from 'mediashare/hooks/NavigationHooks';
-import { MediaItem, MediaItemDto } from 'mediashare/rxjs-api';
+import { MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
 import { RefreshControl } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions, MediaListItem, ActionButtons, NoItems } from 'mediashare/components/layout';
+import {
+  PageContainer,
+  PageProps,
+  KeyboardAvoidingPageContent,
+  PageActions,
+  MediaListItem,
+  ActionButtons,
+  NoItems,
+  AppDialog
+} from 'mediashare/components/layout';
 import { shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils';
 import { selectMediaItem } from 'mediashare/store/modules/media-items';
@@ -24,7 +33,7 @@ export const MediaComponent = ({
   onChecked = () => undefined,
 }: {
   navigation: any;
-  list: MediaItemDto[];
+  list: MediaItemResponseDto[];
   onViewDetail: any;
   selectable: boolean;
   showActions?: boolean;
@@ -70,11 +79,11 @@ export const MediaComponent = ({
 const actionModes = { delete: 'delete', default: 'default' };
 
 export const Media = ({ navigation, globalState }: PageProps) => {
+  const dispatch = useDispatch();
+
   const addFromFeed = useRouteName(routeNames.addFromFeed);
   const addMedia = useRouteName(routeNames.mediaItemAdd);
   const editMedia = useEditMediaItem();
-
-  const dispatch = useDispatch();
 
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
@@ -99,6 +108,13 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     }
   }, [isLoaded, globalState, searchFilters]);
 
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const [fabState, setState] = useState({ open: false });
   const fabActions = [
     { icon: 'delete-forever', onPress: activateDeleteMode, color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
@@ -106,14 +122,19 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     { icon: 'library-add', onPress: addMedia, color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
   ];
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
-  useEffect(() => {
-    clearCheckboxSelection();
-  }, []);
-
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        <AppDialog
+          leftActionLabel="Cancel"
+          rightActionLabel="Delete"
+          leftActionCb={() => closeDeleteDialog()}
+          rightActionCb={() => confirmItemsToDelete()}
+          onDismiss={closeDeleteDialog}
+          showDialog={showDeleteDialog}
+          title="Delete Media Items"
+          subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+        />
         {isLoaded ? (
           <MediaComponent
             key={clearSelectionKey}
@@ -130,7 +151,13 @@ export const Media = ({ navigation, globalState }: PageProps) => {
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons onActionClicked={confirmDelete} onCancelClicked={cancelDelete} actionLabel="Delete" />
+          <ActionButtons
+            onActionClicked={openDeleteDialog}
+            onCancelClicked={cancelItemsToDelete}
+            actionLabel="Delete"
+            actionIcon="delete"
+            actionButtonStyles={styles.deleteActionButton}
+          />
         </PageActions>
       )}
       {!isSelectable && (
@@ -175,19 +202,29 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     editMedia({ mediaId: item._id, uri: item.uri });
   }
 
-  async function activateDeleteMode() {
+  function activateDeleteMode() {
     setActionMode(actionModes.delete);
     setIsSelectable(true);
   }
 
-  async function confirmDelete() {
+  function openDeleteDialog() {
+    setShowDeleteDialog(true);
+  }
+
+  function closeDeleteDialog() {
+    cancelItemsToDelete();
+    setShowDeleteDialog(false);
+  }
+
+  async function confirmItemsToDelete() {
     await deleteItems();
+    closeDeleteDialog();
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
   }
 
-  async function cancelDelete() {
+  function cancelItemsToDelete() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
@@ -238,5 +275,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 2,
     fontWeight: 'bold',
+  },
+  deleteActionButton: {
+    backgroundColor: theme.colors.error,
   },
 });
