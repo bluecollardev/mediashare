@@ -19,7 +19,7 @@ import {
 import { getVideoPath, getThumbnailPath, getUploadPath, awsUrl, KeyFactory } from './key-factory';
 import { AwsMediaItem } from './aws-media-item.model';
 
-import { CreateMediaItemDto, MediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
+import { CreateMediaItemDto, MediaItemResponseDto, MediaCategoryType } from 'mediashare/rxjs-api';
 // TODO: Fix update dto! Not sure why it's not being exported normally...
 import { UpdateMediaItemDto } from 'mediashare/rxjs-api/models/UpdateMediaItemDto';
 import { apis, ApiService } from 'mediashare/store/apis';
@@ -320,7 +320,7 @@ const mediaItemsSlice = createSlice({
         })
       )
       .addCase(selectMediaItem, (state, action) => {
-        const updateSelection = function (bool: boolean, item: MediaResponseItemDto) {
+        const updateSelection = function (bool: boolean, item: MediaItemResponseDto) {
           const { selected } = state;
           // Is it filtered?
           // @ts-ignore
