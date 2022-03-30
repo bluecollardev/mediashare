@@ -3,8 +3,8 @@ import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { getMongoRepository, MongoRepository } from 'typeorm';
 import { Tag } from '@api-core/entities/tag.entity';
-import { UserFactory } from '../../../factories/mock-data.factory';
-import { mockLoggerFactory } from '../../../factories/mock-logger.factory';
+import { UserFactory } from '../../factories/mock-data.factory';
+import { mockLoggerFactory } from '../../factories/mock-logger.factory';
 import { TagService } from './tag.service';
 
 describe('ShareItemService', () => {

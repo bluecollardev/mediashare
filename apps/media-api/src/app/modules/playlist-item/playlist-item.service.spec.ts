@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository, getMongoRepository } from 'typeorm';
-import { userDataFactory, UserFactory } from '../../../factories/mock-data.factory';
-import { mockLoggerFactory } from '../../../factories/mock-logger.factory';
-import { PlaylistItem } from '../entities/playlist-item.entity';
+import { userDataFactory, UserFactory } from '../../factories/mock-data.factory';
+import { mockLoggerFactory } from '../../factories/mock-logger.factory';
+import { PlaylistItem } from './entities/playlist-item.entity';
 import { PlaylistItemService } from './playlist-item.service';
 
 describe('PlaylistItemService', () => {

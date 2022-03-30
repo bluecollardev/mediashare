@@ -3,7 +3,7 @@ import { Controller, Delete, Get, Param } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
-import { TagService } from '@api-modules/tag/services/tag.service';
+import { TagService } from '@api-modules/tag/tag.service';
 import { TagGetResponse } from './tags.decorator';
 
 @ApiTags('tags')

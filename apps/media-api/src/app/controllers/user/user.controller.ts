@@ -4,12 +4,12 @@ import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser, GetUserId } from '@api-core/decorators/user.decorator';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 import { UserService } from '@api-modules/auth/user.service';
-import { PlaylistService } from '../playlist/services/playlist.service';
+import { PlaylistService } from '../playlist/playlist.service';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
 
 import { SessionUserInterface } from '@api-core/models/auth-user.model';
 import { MediaItemResponseDto } from '../media-item/dto/media-item-response.dto';
-import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { MediaItemService } from '../media-item/media-item.service';
 import { ObjectId } from 'mongodb';

@@ -5,7 +5,7 @@ import { ObjectIdPipe } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
-import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { UserGuard } from '@api-modules/auth/guards/user.guard';
 

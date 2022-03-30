@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ShareItem } from './entities/share-item.entity';
-import { ShareItemService } from './services/share-item.service';
+import { ShareItemService } from './share-item.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ShareItem])],

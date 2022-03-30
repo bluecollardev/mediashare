@@ -16,7 +16,7 @@ import { CreateDto } from '@api-core/decorators/create-dto.decorator';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
-import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { MediaItem } from './entities/media-item.entity';
 import { MediaGetResponse, MediaPostResponse, MediaPutResponse } from './media-item.decorator';

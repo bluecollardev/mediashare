@@ -5,8 +5,8 @@ import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swa
 import { ObjectId } from 'mongodb';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
-import { PlaylistService } from './services/playlist.service';
-import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
+import { PlaylistService } from './playlist.service';
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { PLAYLIST_CATEGORY } from '@core-lib';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse } from './playlist.decorator';

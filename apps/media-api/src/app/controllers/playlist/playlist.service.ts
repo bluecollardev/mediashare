@@ -6,9 +6,9 @@ import { MongoRepository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { DataService } from '@api';
 import { UserService } from '@api-modules/auth/user.service';
-import { PlaylistItemService } from '@api-modules/playlist-item/services/playlist-item.service';
-import { Playlist } from '../entities/playlist.entity';
-import { CreatePlaylistDto } from '../dto/create-playlist.dto';
+import { PlaylistItemService } from '@api-modules/playlist-item/playlist-item.service';
+import { Playlist } from './entities/playlist.entity';
+import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { ObjectIdParameters, ContentSearchParameters, SearchParameters } from '@mediashare/shared';
 
 type CreatePlaylistParameters = {

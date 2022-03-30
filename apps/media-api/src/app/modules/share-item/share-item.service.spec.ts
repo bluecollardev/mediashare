@@ -3,9 +3,9 @@ import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository, getMongoRepository } from 'typeorm';
-import { UserFactory } from '../../../factories/mock-data.factory';
-import { mockLoggerFactory } from '../../../factories/mock-logger.factory';
-import { ShareItem } from '../entities/share-item.entity';
+import { UserFactory } from '../../factories/mock-data.factory';
+import { mockLoggerFactory } from '../../factories/mock-logger.factory';
+import { ShareItem } from './entities/share-item.entity';
 import { ShareItemService } from './share-item.service';
 
 describe('ShareItemService', () => {

@@ -5,9 +5,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { CreateMediaShareItemInput, CreatePlaylistShareItemDto } from '../dto/create-share-item.dto';
+import { CreateMediaShareItemInput, CreatePlaylistShareItemDto } from './dto/create-share-item.dto';
 
-import { ShareItem } from '../entities/share-item.entity';
+import { ShareItem } from './entities/share-item.entity';
 
 export class QueryBuilder {
   match({ userId }: ObjectIdParameters) {

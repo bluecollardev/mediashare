@@ -4,8 +4,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
-import { PlaylistService } from '../playlist/services/playlist.service';
-import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
+import { PlaylistService } from '../playlist/playlist.service';
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 
 import { ObjectId } from 'mongodb';
 

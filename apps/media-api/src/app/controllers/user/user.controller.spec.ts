@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
 import { MediaItemService } from '../media-item/media-item.service';
-import { PlaylistService } from '../playlist/services/playlist.service';
-import { PlaylistItemService } from '@api-modules/playlist-item/services/playlist-item.service';
-import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
+import { PlaylistService } from '../playlist/playlist.service';
+import { PlaylistItemService } from '@api-modules/playlist-item/playlist-item.service';
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { UserService } from '@api-modules/auth/user.service';
 
 describe('UserController', () => {

@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { PlaylistItem } from '../entities/playlist-item.entity';
+import { PlaylistItem } from './entities/playlist-item.entity';
 import { ObjectIdParameters } from '@mediashare/shared';
 
 @Injectable()

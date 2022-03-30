@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
-import { TagService } from '@api-modules/tag/services/tag.service';
+import { TagService } from '@api-modules/tag/tag.service';
 import { TagsController } from './tags.controller';
 
 ß;
