@@ -19,7 +19,6 @@
     "gen:models": "openapi-generator-cli generate",
     "init:dev": "docker-compose -p mediashare up --build -V -d",
     "lint": "nx workspace-lint && nx lint",
-    "prepare": "husky install",
     "seed:users": "ts-node --project scripts/tsconfig.json -r tsconfig-paths/register scripts/gen-users.script.ts",
     "serve:prod": "nx run-many --all --target=serve",
     "debug:api": "nest start --path apps/media-api/tsconfig.json --exec 'node --inspect' --debug --watch",
