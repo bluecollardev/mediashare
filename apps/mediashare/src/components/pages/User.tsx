@@ -132,13 +132,13 @@ export const User = ({}: PageProps) => {
     setIsSelectable(true);
   }
 
-  async function confirmDelete() {
+  function confirmDelete() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
   }
 
-  async function cancelDelete() {
+  function cancelDelete() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);

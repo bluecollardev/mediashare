@@ -203,7 +203,7 @@ export const Account = ({ globalState }: PageProps) => {
     await dispatch(logout());
   }
 
-  async function activateUnshareMode() {
+  function activateUnshareMode() {
     setActionMode(actionModes.delete);
     setIsSelectable(true);
   }
@@ -226,13 +226,13 @@ export const Account = ({ globalState }: PageProps) => {
     unshareItems();
   }
 
-  async function cancelItemsToUnshare() {
+  function cancelItemsToUnshare() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
   }
 
-  async function unshareItems() {
+  function unshareItems() {
     selectedItems.map(async (shareItemId) => {
       // await unshareItem(shareItemId);
     }); // TODO: Find a real way to do this, using contactId

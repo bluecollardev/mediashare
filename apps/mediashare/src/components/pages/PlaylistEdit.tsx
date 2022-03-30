@@ -269,7 +269,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
     setClearSelectionKey(randomKey);
   }
 
-  async function activateDeleteMode() {
+  function activateDeleteMode() {
     setActionMode(actionModes.delete);
     setIsSelectable(true);
   }
@@ -282,7 +282,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
     resetData();
   }
 
-  async function cancelDeletePlaylistItems() {
+  function cancelDeletePlaylistItems() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);

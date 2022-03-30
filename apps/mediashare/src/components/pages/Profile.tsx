@@ -177,7 +177,7 @@ const Profile = ({ route }: ProfileProps) => {
     unshareItems();
   }
 
-  async function cancelItemsToUnshare() {
+  function cancelItemsToUnshare() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
