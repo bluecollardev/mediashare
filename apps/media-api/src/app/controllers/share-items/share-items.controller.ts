@@ -1,11 +1,12 @@
 import { Controller, Get, Param, Delete, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ShareItemGetResponse } from './share-items.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
 import { ShareItemService } from '@api-modules/share-item/share-item.service';
+import { ShareItemsResponseDto } from './dto/share-items.dto';
+import { ShareItemGetResponse } from './share-items.decorator';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { UserGuard } from '@api-modules/auth/guards/user.guard';
 
@@ -14,8 +15,8 @@ import { UserGuard } from '@api-modules/auth/guards/user.guard';
 export class ShareItemsController {
   constructor(private readonly shareItemService: ShareItemService) {}
 
-  @ShareItemGetResponse({ isArray: true })
   @Get()
+  @ShareItemGetResponse({ isArray: true, type: ShareItemsResponseDto })
   async findAll(@GetUserId() userId: ObjectId) {
     const [sharedMedia, sharedPlaylists] = await Promise.all(this.shareItemService.findShareItemsByUserId(userId));
     return { sharedMedia, sharedPlaylists };
