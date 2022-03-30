@@ -8,7 +8,7 @@ import { PlaylistService } from '../playlist/services/playlist.service';
 import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
 
 import { SessionUserInterface } from '@api-core/models/auth-user.model';
-import { MediaItemDto } from '../media-item/dto/media-item.dto';
+import { MediaItemResponseDto } from '../media-item/dto/media-item-response.dto';
 import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { MediaItemService } from '../media-item/media-item.service';
@@ -63,13 +63,13 @@ export class UserController {
   @Get('media-items')
   @UseGuards(UserGuard)
   @ApiBearerAuth()
-  @UserGetResponse({ type: MediaItemDto, isArray: true })
+  @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
   async getMediaItems(@GetUserId() userId: ObjectId) {
     return await this.mediaItemService.findMediaItemsByUserId(userId);
   }
 
   @Get('media-items/shared')
-  @UserGetResponse({ type: MediaItemDto, isArray: true })
+  @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
   async getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
     return await this.shareItemService.aggregateSharedMediaItems({ userId });
@@ -82,7 +82,7 @@ export class UserController {
   }
 
   @Get('media-items/shares')
-  @UserGetResponse({ type: MediaItemDto, isArray: true })
+  @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
   async getSharesMediaItems(@GetUser() user: SessionUserInterface = null) {
     const { _id: userId } = user;
     return await this.shareItemService.aggregateSharedMediaItems({ userId });

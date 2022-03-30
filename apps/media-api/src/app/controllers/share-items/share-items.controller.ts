@@ -38,7 +38,7 @@ export class ShareItemsController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(UserGuard)
   @ApiBearerAuth()
-  @Post('read/:shareId')
+  @Post('read/:shareId') // TODO: Why is this a POST? Shouldn't we be using ShareItemPostResponse as well?
   @ApiParam({ name: 'shareId', type: String, required: true })
   @ApiResponse({ type: ShareItem, status: 200 })
   async readSharedItem(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {

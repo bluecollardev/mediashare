@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { BcRolesType, MediaItemDto, PlaylistResponseDto } from './';
+import { BcRolesType, MediaItemResponseDto, PlaylistResponseDto } from './';
 
 /**
  * @export
@@ -74,10 +74,10 @@ export interface UserDto {
    */
   phoneNumber: string;
   /**
-   * @type {Array<MediaItemDto>}
+   * @type {Array<MediaItemResponseDto>}
    * @memberof UserDto
    */
-  mediaItems: Array<MediaItemDto>;
+  mediaItems: Array<MediaItemResponseDto>;
   /**
    * @type {Array<PlaylistResponseDto>}
    * @memberof UserDto

@@ -14,6 +14,7 @@ class CreatePlaylistItemResponseDto implements Pick<PlaylistItem, 'mediaId' | 'u
   @ApiObjectId()
   _id: ObjectId;
 }
+
 class CreatePlaylistResponseDto {
   @ApiProperty({ readOnly: true, type: Playlist })
   playlist: Playlist;

@@ -24,30 +24,12 @@ const PLAYLIST_ID_TOKEN = ':playlistId';
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
-  @Post()
-  @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
-  @ApiBody({ type: CreatePlaylistDto })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() getUserId: ObjectId) {
-    const { mediaIds } = createPlaylistDto;
-    return await this.playlistService.createPlaylistWithItems({
-      ...createPlaylistDto,
-      createdBy: getUserId,
-      mediaIds,
-    });
-  }
-
   @Get()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
   findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
-    const parsedTags = Array.isArray(tags)
-      ? tags
-      : typeof tags === 'string'
-        ? [tags]
-        : undefined;
+    const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
 
     return query || tags ? this.playlistService.searchPlaylists({ query, tags: parsedTags }) : this.playlistService.findAll();
   }
@@ -59,13 +41,29 @@ export class PlaylistController {
 
   @Get(':playlistId')
   @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
-  @PlaylistGetResponse({ type: PlaylistResponseDto })
+  @PlaylistGetResponse()
   async findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
     return await this.playlistService.getPlaylistById({ playlistId });
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Post()
+  @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
+  async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() getUserId: ObjectId) {
+    const { mediaIds } = createPlaylistDto;
+    return await this.playlistService.createPlaylistWithItems({
+      ...createPlaylistDto,
+      createdBy: getUserId,
+      mediaIds,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Put(':playlistId')
   @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
+  @ApiBody({ type: UpdatePlaylistDto })
   @PlaylistPutResponse()
   async update(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId, @GetUserId() userId: ObjectId, @Body() updatePlaylistDto: UpdatePlaylistDto) {
     const { mediaIds, ...rest } = updatePlaylistDto;
@@ -88,7 +86,6 @@ export class PlaylistController {
   async share(
     @Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId,
     @Param('userId', new ObjectIdPipe()) userId: ObjectId,
-
     @GetUserId() createdBy: ObjectId,
     @Res() response: Response
   ) {

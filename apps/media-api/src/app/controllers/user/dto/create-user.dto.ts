@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { ApiDecoratorOptions, ApiEmail, ApiName, ApiObjectId, ApiPastDate, ApiString } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
-import { MediaItemDto } from '../../media-item/dto/media-item.dto';
+import { MediaItemResponseDto } from '../../media-item/dto/media-item-response.dto';
 import { PlaylistResponseDto } from '../../playlist/dto/playlist-response.dto';
 import { User } from '../entities/user.entity';
 import { BC_ROLES } from '@core-lib';
@@ -56,8 +56,8 @@ export class UserDto implements User {
   @ApiString()
   phoneNumber: string;
 
-  @ApiProperty({ type: () => MediaItemDto, isArray: true })
-  mediaItems?: MediaItemDto[];
+  @ApiProperty({ type: () => MediaItemResponseDto, isArray: true })
+  mediaItems?: MediaItemResponseDto[];
 
   @ApiProperty({ type: () => PlaylistResponseDto, isArray: true })
   playlists?: PlaylistResponseDto[];

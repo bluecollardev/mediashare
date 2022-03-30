@@ -35,6 +35,7 @@ export interface PlaylistControllerRemoveRequest {
 export interface PlaylistControllerShareRequest {
   playlistId: string;
   userId: string;
+  createPlaylistDto: CreatePlaylistDto;
 }
 
 export interface PlaylistControllerUpdateRequest {
@@ -172,16 +173,21 @@ export class PlaylistsApi extends BaseAPI {
 
   /**
    */
-  playlistControllerShare({ playlistId, userId }: PlaylistControllerShareRequest): Observable<Array<ShareItem>>;
-  playlistControllerShare({ playlistId, userId }: PlaylistControllerShareRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItem>>>;
+  playlistControllerShare({ playlistId, userId, createPlaylistDto }: PlaylistControllerShareRequest): Observable<Array<ShareItem>>;
   playlistControllerShare(
-    { playlistId, userId }: PlaylistControllerShareRequest,
+    { playlistId, userId, createPlaylistDto }: PlaylistControllerShareRequest,
+    opts?: OperationOpts
+  ): Observable<RawAjaxResponse<Array<ShareItem>>>;
+  playlistControllerShare(
+    { playlistId, userId, createPlaylistDto }: PlaylistControllerShareRequest,
     opts?: OperationOpts
   ): Observable<Array<ShareItem> | RawAjaxResponse<Array<ShareItem>>> {
     throwIfNullOrUndefined(playlistId, 'playlistId', 'playlistControllerShare');
     throwIfNullOrUndefined(userId, 'userId', 'playlistControllerShare');
+    throwIfNullOrUndefined(createPlaylistDto, 'createPlaylistDto', 'playlistControllerShare');
 
     const headers: HttpHeaders = {
+      'Content-Type': 'application/json',
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
@@ -192,6 +198,7 @@ export class PlaylistsApi extends BaseAPI {
         url: '/api/playlists/{playlistId}/share/{userId}'.replace('{playlistId}', encodeURI(playlistId)).replace('{userId}', encodeURI(userId)),
         method: 'POST',
         headers,
+        body: createPlaylistDto,
       },
       opts?.responseOpts
     );

@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, HttpQuery, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { CreateMediaItemDto, MediaItem, MediaItemDto, ShareItem } from '../models';
+import { CreateMediaItemDto, MediaItem, MediaItemResponseDto, ShareItem, UpdateMediaItemDto } from '../models';
 
 export interface MediaItemControllerCreateRequest {
   createMediaItemDto: CreateMediaItemDto;
@@ -40,7 +40,7 @@ export interface MediaItemControllerShareRequest {
 
 export interface MediaItemControllerUpdateRequest {
   mediaId: string;
-  createMediaItemDto: CreateMediaItemDto;
+  updateMediaItemDto: UpdateMediaItemDto;
 }
 
 /**
@@ -77,12 +77,12 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerFindAll({ text, tags }: MediaItemControllerFindAllRequest): Observable<Array<MediaItemDto>>;
-  mediaItemControllerFindAll({ text, tags }: MediaItemControllerFindAllRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
+  mediaItemControllerFindAll({ text, tags }: MediaItemControllerFindAllRequest): Observable<Array<MediaItemResponseDto>>;
+  mediaItemControllerFindAll({ text, tags }: MediaItemControllerFindAllRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemResponseDto>>>;
   mediaItemControllerFindAll(
     { text, tags }: MediaItemControllerFindAllRequest,
     opts?: OperationOpts
-  ): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
+  ): Observable<Array<MediaItemResponseDto> | RawAjaxResponse<Array<MediaItemResponseDto>>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -98,7 +98,7 @@ export class MediaItemsApi extends BaseAPI {
       query['tags'] = tags;
     }
 
-    return this.request<Array<MediaItemDto>>(
+    return this.request<Array<MediaItemResponseDto>>(
       {
         url: '/api/media-items',
         method: 'GET',
@@ -111,9 +111,12 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest): Observable<MediaItemDto>;
-  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItemDto>>;
-  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<MediaItemDto | RawAjaxResponse<MediaItemDto>> {
+  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest): Observable<MediaItemResponseDto>;
+  mediaItemControllerFindOne({ mediaId }: MediaItemControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItemResponseDto>>;
+  mediaItemControllerFindOne(
+    { mediaId }: MediaItemControllerFindOneRequest,
+    opts?: OperationOpts
+  ): Observable<MediaItemResponseDto | RawAjaxResponse<MediaItemResponseDto>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerFindOne');
 
     const headers: HttpHeaders = {
@@ -122,7 +125,7 @@ export class MediaItemsApi extends BaseAPI {
         : undefined),
     };
 
-    return this.request<MediaItemDto>(
+    return this.request<MediaItemResponseDto>(
       {
         url: '/api/media-items/{mediaId}'.replace('{mediaId}', encodeURI(mediaId)),
         method: 'GET',
@@ -134,16 +137,16 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerFindPopularMediaItems(): Observable<Array<MediaItemDto>>;
-  mediaItemControllerFindPopularMediaItems(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemDto>>>;
-  mediaItemControllerFindPopularMediaItems(opts?: OperationOpts): Observable<Array<MediaItemDto> | RawAjaxResponse<Array<MediaItemDto>>> {
+  mediaItemControllerFindPopularMediaItems(): Observable<Array<MediaItemResponseDto>>;
+  mediaItemControllerFindPopularMediaItems(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemResponseDto>>>;
+  mediaItemControllerFindPopularMediaItems(opts?: OperationOpts): Observable<Array<MediaItemResponseDto> | RawAjaxResponse<Array<MediaItemResponseDto>>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
     };
 
-    return this.request<Array<MediaItemDto>>(
+    return this.request<Array<MediaItemResponseDto>>(
       {
         url: '/api/media-items/popular',
         method: 'GET',
@@ -174,10 +177,17 @@ export class MediaItemsApi extends BaseAPI {
   mediaItemControllerRemove({ mediaId }: MediaItemControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerRemove');
 
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
     return this.request<void>(
       {
         url: '/api/media-items/{mediaId}'.replace('{mediaId}', encodeURI(mediaId)),
         method: 'DELETE',
+        headers,
       },
       opts?.responseOpts
     );
@@ -218,14 +228,14 @@ export class MediaItemsApi extends BaseAPI {
 
   /**
    */
-  mediaItemControllerUpdate({ mediaId, createMediaItemDto }: MediaItemControllerUpdateRequest): Observable<MediaItem>;
-  mediaItemControllerUpdate({ mediaId, createMediaItemDto }: MediaItemControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>;
+  mediaItemControllerUpdate({ mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest): Observable<MediaItem>;
+  mediaItemControllerUpdate({ mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest, opts?: OperationOpts): Observable<RawAjaxResponse<MediaItem>>;
   mediaItemControllerUpdate(
-    { mediaId, createMediaItemDto }: MediaItemControllerUpdateRequest,
+    { mediaId, updateMediaItemDto }: MediaItemControllerUpdateRequest,
     opts?: OperationOpts
   ): Observable<MediaItem | RawAjaxResponse<MediaItem>> {
     throwIfNullOrUndefined(mediaId, 'mediaId', 'mediaItemControllerUpdate');
-    throwIfNullOrUndefined(createMediaItemDto, 'createMediaItemDto', 'mediaItemControllerUpdate');
+    throwIfNullOrUndefined(updateMediaItemDto, 'updateMediaItemDto', 'mediaItemControllerUpdate');
 
     const headers: HttpHeaders = {
       'Content-Type': 'application/json',
@@ -239,7 +249,7 @@ export class MediaItemsApi extends BaseAPI {
         url: '/api/media-items/{mediaId}'.replace('{mediaId}', encodeURI(mediaId)),
         method: 'PUT',
         headers,
-        body: createMediaItemDto,
+        body: updateMediaItemDto,
       },
       opts?.responseOpts
     );

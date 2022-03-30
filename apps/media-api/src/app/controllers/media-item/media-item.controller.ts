@@ -19,36 +19,12 @@ import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 import { ShareItemService } from '@api-modules/share-item/services/share-item.service';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { MediaItem } from './entities/media-item.entity';
-import { MediaGetResponse, MediaPostResponse } from './media-item.decorator';
+import { MediaGetResponse, MediaPostResponse, MediaPutResponse } from './media-item.decorator';
 
 @ApiTags('media-items')
 @Controller('media-items')
 export class MediaItemController {
   constructor(private readonly mediaItemService: MediaItemService, private shareItemService: ShareItemService, private configSvc: AppConfigService) {}
-
-  /**
-   * Create a new user
-
-   *
-   * @param {CreateMediaItemDto} createMediaItemDto
-   * @param {SessionUserInterface} user
-   * @return {*}
-   * @memberof MediaItemController
-   */
-  @Post()
-  @MediaPostResponse()
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  async create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUserId() createdBy: ObjectId) {
-    const mediaItem: Omit<MediaItem, '_id'> = {
-      isPlayable: false,
-      uri: '',
-      ...createMediaItemDto,
-      userId: createdBy,
-      createdBy,
-    };
-    return await this.mediaItemService.create({ ...mediaItem });
-  }
 
   @Get('popular')
   @MediaGetResponse({ isArray: true })
@@ -81,15 +57,32 @@ export class MediaItemController {
     return response;
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Post()
+  @MediaPostResponse()
+  async create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUserId() createdBy: ObjectId) {
+    const mediaItem: Omit<MediaItem, '_id'> = {
+      isPlayable: false,
+      uri: '',
+      ...createMediaItemDto,
+      userId: createdBy,
+      createdBy,
+    };
+    return await this.mediaItemService.create({ ...mediaItem });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Put(RouteTokens.MEDIA_ITEM_ID)
   @ApiParam({ name: 'mediaId', type: String, required: true })
-  @ApiBody({ type: UpdateMediaItemDto })
-  @MediaPostResponse()
+  @MediaPutResponse()
   update(@Param('mediaId', ObjectIdPipe) mediaId: ObjectId, @Body() updateMediaItemDto: UpdateMediaItemDto) {
     return this.mediaItemService.update(mediaId, updateMediaItemDto);
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Delete(RouteTokens.MEDIA_ITEM_ID)
   @ApiParam({ name: 'mediaId', type: String, required: true })
   async remove(@Param('mediaId') mediaId: string) {

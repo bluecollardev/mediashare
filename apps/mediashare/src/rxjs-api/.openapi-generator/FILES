@@ -19,7 +19,7 @@ models/CreatePlaylistResponseDto.ts
 models/Like.ts
 models/MediaCategoryType.ts
 models/MediaItem.ts
-models/MediaItemDto.ts
+models/MediaItemResponseDto.ts
 models/Playlist.ts
 models/PlaylistCategoryType.ts
 models/PlaylistItemResponseDto.ts
@@ -29,6 +29,7 @@ models/ProfileShareItem.ts
 models/ShareItem.ts
 models/Tag.ts
 models/TagKeyValue.ts
+models/UpdateMediaItemDto.ts
 models/UpdatePlaylistDto.ts
 models/UpdateUserDto.ts
 models/UserDto.ts

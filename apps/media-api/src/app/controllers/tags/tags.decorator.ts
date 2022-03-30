@@ -4,12 +4,10 @@ import { ApiResponse } from '@nestjs/swagger';
 import { Tag } from '@api-core/entities/tag.entity';
 import { UseJwtGuard } from '@api-modules/auth/auth.decorator';
 
-function TagPostResponse({ isArray = false, type = Tag, description }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ description, type, status: 201, isArray }), UseJwtGuard());
-}
-
-function TagGetResponse({ isArray = false, type = Tag }: ApiControllerDecoratorParams = {}) {
+export function TagGetResponse({ isArray = false, type = Tag }: ApiControllerDecoratorParams = {}) {
   return applyDecorators(ApiResponse({ type, isArray, status: 200 }), UseJwtGuard());
 }
 
-export { TagPostResponse, TagGetResponse };
+export function TagPostResponse({ isArray = false, type = Tag, description }: ApiControllerDecoratorParams = {}) {
+  return applyDecorators(ApiResponse({ description, type, status: 201, isArray }), UseJwtGuard());
+}
