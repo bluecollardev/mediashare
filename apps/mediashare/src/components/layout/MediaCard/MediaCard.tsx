@@ -9,7 +9,7 @@ import { DisplayPreviewOrVideo } from './DisplayPreviewOrVideo';
 import { MediaCardTitle } from './MediaCardTitle';
 import { MediaCardTags } from './MediaCardTags';
 import { MediaCardSocial } from './MediaCardSocial';
-import { mapKeysToTags } from 'mediashare/store/modules/tags/utils';
+import { mappedKeysToTags } from 'mediashare/store/modules/tags/utils';
 import { findInArray } from 'mediashare/utils';
 import { descriptionValidator, titleValidator } from 'mediashare/core/validators';
 import { useAppSelector } from 'mediashare/store';
@@ -99,7 +99,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     onCategoryChange(categories);
   };
 
-  const mappedSelectedTags = useMemo(() => mapKeysToTags(tags, availableTags), []);
+  const mappedSelectedTags = useMemo(() => mappedKeysToTags(tags, availableTags), []);
   const mappedSelectedTagKeys = useMemo(() => {
     return mappedSelectedTags.map(({ key }) => key)
   }, []);

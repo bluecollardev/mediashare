@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useAppSelector } from 'mediashare/store';
 import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/playlists';
-import { mapAvailableTags } from 'mediashare/store/modules/tags';
+import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { View, Text, ScrollView } from 'react-native';
@@ -20,9 +20,6 @@ const actionModes = { delete: 'delete', default: 'default' };
 const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PageProps) => {
   const dispatch = useDispatch();
 
-  const { tags = [] } = globalState;
-  const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
-
   const addToPlaylist = useRouteWithParams(routeNames.addItemsToPlaylist);
   const viewMediaItem = useViewMediaItem();
   const goToPlaylists = usePlaylists();
@@ -38,11 +35,14 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   const [title, setTitle] = useState(selected?.title);
   const [description, setDescription] = useState(selected?.description);
   const [category, setCategory] = useState(selected?.category);
-  const playlistTags = getPlaylistTags();
-  const [selectedTagKeys, setSelectedTagKeys] = useState(playlistTags);
   const [selectedItems, setSelectedItems] = useState([]);
   // @ts-ignore
   const [imageSrc, setImageSrc] = useState(selected?.imageSrc);
+
+  const { tags = [] } = globalState;
+  const availableTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
+  const initialPlaylistTags = getInitialPlaylistTags();
+  const [selectedTagKeys, setSelectedTagKeys] = useState(initialPlaylistTags);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -84,7 +84,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
             onCategoryChange={(e: any) => {
               setCategory(e);
             }}
-            availableTags={mappedTags}
+            availableTags={availableTags}
             tags={selectedTagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {
@@ -154,7 +154,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        {!isSelectable && <ActionButtons onActionClicked={() => savePlaylist()} onCancelClicked={cancelCb} actionLabel="Save" />}
+        {!isSelectable && <ActionButtons onActionClicked={savePlaylist} onCancelClicked={clearAndGoBack} actionLabel="Save" />}
         {isSelectable && (
           <ActionButtons
             onActionClicked={confirmDeletePlaylistItems}
@@ -167,14 +167,17 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
     </PageContainer>
   );
 
-  function getPlaylistTags() {
-    return selected?.tags?.map((tag) => (tag ? tag?.key : undefined)).filter((tag) => !!tag) || [];
+  function getInitialPlaylistTags() {
+    return selected?.tags?.map((tag) => {
+      return tag ? tag?.key : undefined;
+    }).filter((tag) => !!tag) || [];
   }
 
   async function saveWithIds(mediaIds: string[]) {
     // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
     // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
-    const selectedTags = selectedTagKeys.map((key) => tags.find((tag) => tag.key === key)).map(({ key, value }) => ({ key, value }));
+    const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
+
     await dispatch(
       updateUserPlaylist({
         _id: selected._id,
@@ -263,7 +266,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
     setSelectedItems([]);
   }
 
-  function cancelCb() {
+  function clearAndGoBack() {
     navigation.goBack();
     resetData();
   }

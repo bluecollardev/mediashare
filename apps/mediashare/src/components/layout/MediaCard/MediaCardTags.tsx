@@ -12,7 +12,7 @@ export const MediaCardTags: React.FC<MediaCardTagsProps> = ({ tags = [] as any[]
     <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
       {Array.isArray(tags) && tags.length > 0 && tags.map((tag, idx) => {
         return (
-          <View key={`${tag?._id}_${idx}`} style={{ flex: 0, marginLeft: 3, marginRight: 3 }}>
+          <View key={`${tag?._id}_${idx}`} style={{ flex: 0, marginLeft: 3, marginRight: 3, marginBottom: 10 }}>
             <Chip>{tag?.value || 'Unknown'}</Chip>
           </View>
         );

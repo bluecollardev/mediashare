@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { mapAvailableTags } from 'mediashare/store/modules/tags';
+import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { useAppSelector } from 'mediashare/store';
 import { deleteMediaItem, updateMediaItem } from 'mediashare/store/modules/media-items';
 // TODO: Fix update dto! Not sure why it's not being exported normally...
@@ -49,10 +49,10 @@ const MediaItemEdit = ({
   const [description, setDescription] = useState(mediaItem?.description);
   const [category, setCategory] = useState();
 
-  const mediaItemTags = getItemTags();
-  const [selectedTagKeys, setSelectedTagKeys] = useState(mediaItemTags);
   const { tags = [] } = globalState;
-  const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isMediaTag), []);
+  const availableTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isMediaTag), []);
+  const initialMediaItemTags = getInitialMediaItemTags();
+  const [selectedTagKeys, setSelectedTagKeys] = useState(initialMediaItemTags);
 
   const [documentUri] = useState(mediaItem?.uri);
   const [thumbnail, setThumbnail] = useState(mediaItem?.thumbnail);
@@ -97,7 +97,7 @@ const MediaItemEdit = ({
             onCategoryChange={(e: any) => {
               setCategory(e);
             }}
-            availableTags={mappedTags}
+            availableTags={availableTags}
             tags={selectedTagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {
@@ -135,26 +135,22 @@ const MediaItemEdit = ({
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons onActionClicked={saveItem} onCancelClicked={cancelCb} actionLabel="Save" />
+        <ActionButtons onActionClicked={saveItem} onCancelClicked={clearAndGoBack} actionLabel="Save" />
       </PageActions>
     </PageContainer>
   );
 
-  function getItemTags() {
-    return mediaItem?.tags?.map((tag) => (tag ? tag?.key : undefined)).filter((tag) => !!tag) || [];
-  }
-
-  function resetData() {}
-
-  function cancelCb() {
-    navigation.goBack();
-    resetData();
+  function getInitialMediaItemTags() {
+    return mediaItem?.tags?.map((tag) => {
+      return tag ? tag?.key : undefined;
+    }).filter((tag) => !!tag) || [];
   }
 
   async function saveItem() {
     // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
     // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
-    const selectedTags = selectedTagKeys.map((key) => tags.find((tag) => tag.key === key)).map(({ key, value }) => ({ key, value }));
+    const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
+
     const dto: UpdateMediaItemDto & { _id } = {
       _id: mediaId,
       title,
@@ -172,6 +168,13 @@ const MediaItemEdit = ({
   async function deleteItem() {
     await dispatch(deleteMediaItem({ id: mediaId, key: mediaItem.uri }));
     mediaItems().then();
+  }
+
+  function resetData() {}
+
+  function clearAndGoBack() {
+    navigation.goBack();
+    resetData();
   }
 };
 

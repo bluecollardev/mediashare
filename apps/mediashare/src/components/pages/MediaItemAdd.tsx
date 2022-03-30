@@ -22,10 +22,10 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState(MediaCategoryType.Free);
 
+  const { tags = [] } = globalState;
+  const availableTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isMediaTag), []);
   const initialTagKeys = [];
   const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
-  const { tags = [] } = globalState;
-  const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isMediaTag), []);
 
   const [mediaUri, setMediaUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
@@ -40,7 +40,6 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
     options.push(value);
   }
 
-  const cancelCb = clearAndGoBack;
   const goToMediaItems = useMediaItems();
 
   return (
@@ -58,7 +57,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
             onCategoryChange={(e: any) => {
               setCategory(e);
             }}
-            availableTags={mappedTags}
+            availableTags={availableTags}
             tags={selectedTagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {
@@ -85,7 +84,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons onActionClicked={() => saveItem()} onCancelClicked={cancelCb} actionLabel="Save" disableAction={!isValid()} />
+        <ActionButtons onActionClicked={saveItem} onCancelClicked={clearAndGoBack} actionLabel="Save" disableAction={!isValid()} />
       </PageActions>
     </PageContainer>
   );
@@ -123,13 +122,17 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
     goToMediaItems();
   }
 
-  function clearAndGoBack() {
+  function resetData() {
     setTitle('');
     setCategory(MediaCategoryType.Free);
     setSelectedTagKeys([] as any[]);
     setDescription('');
     setThumbnail('');
+  }
+
+  function clearAndGoBack() {
     goToMediaItems().then();
+    resetData();
   }
 };
 

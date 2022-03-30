@@ -17,7 +17,6 @@ export function useRouteName(key: RouteConfigKeyType) {
 
 export function useRouteWithParams(key: EnumLiteralsOf<typeof routeNames>) {
   const nav = useNavigation();
-
   // @ts-ignore
   return (params: { [x: string]: string }) => nav.navigate(key, params);
 }

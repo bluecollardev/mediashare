@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { ScrollView, Text } from 'react-native';
 import { Button } from 'react-native-paper';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { useGoBack, useRouteWithParams } from 'mediashare/hooks/NavigationHooks';
+import { useRouteWithParams } from 'mediashare/hooks/NavigationHooks';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
 import { findMediaItems } from 'mediashare/store/modules/media-items';
@@ -16,37 +16,22 @@ import { CreatePlaylistDto, PlaylistCategoryType } from 'mediashare/rxjs-api';
 import { theme } from 'mediashare/styles';
 
 // @ts-ignore
-const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
+const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
   const dispatch = useDispatch();
 
-  const { tags = [] } = globalState;
-  const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
-
   const author = useAppSelector((state) => state?.user.username);
-  const [title, setTitle] = useState();
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState();
   const [category, setCategory] = useState(PlaylistCategoryType.Free);
-  const [selectedTagKeys, setSelectedTagKeys] = useState([]);
   const [loaded, setIsLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selected, setSelected] = useState([]);
-  const goBack = useGoBack();
+  const { tags = [] } = globalState;
+  const availableTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
+  const initialTagKeys = [];
+  const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
+
   const edit = useRouteWithParams(routeNames.playlistEdit);
-
-  const clearAndGoBack = function () {
-    // @ts-ignore
-    setTitle('');
-    setCategory(PlaylistCategoryType.Free);
-    setSelectedTagKeys([]);
-    // @ts-ignore
-    setDescription('');
-    setIsLoaded(false);
-    goBack();
-  };
-
-  const cancelCb = clearAndGoBack;
 
   const isValid = function () {
     return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category);
@@ -84,7 +69,7 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
             category={category}
             categoryOptions={options}
             onCategoryChange={setCategory as any}
-            availableTags={mappedTags}
+            availableTags={availableTags}
             tags={selectedTagKeys}
             tagOptions={options}
             onTagChange={(e: any) => {
@@ -110,7 +95,7 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons onActionClicked={() => savePlaylist()} onCancelClicked={cancelCb} actionLabel="Save" disableAction={!isValid()} />
+        <ActionButtons onActionClicked={savePlaylist} onCancelClicked={() => clearAndGoBack} actionLabel="Save" disableAction={!isValid()} />
       </PageActions>
     </PageContainer>
   );
@@ -121,8 +106,8 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
       description,
       imageSrc,
       category: category,
-      tags: tags as any[],
-      mediaIds: selected,
+      tags: selectedTagKeys as any[],
+      mediaIds: [],
     };
 
     // @ts-ignore TODO: Fix types on dispatch?
@@ -135,6 +120,20 @@ const PlaylistAdd = ({ globalState = { tags: [] } }: PageProps) => {
 
   async function editPlaylist(playlistId) {
     edit({ playlistId });
+  }
+
+  function resetData() {
+    setTitle('');
+    setCategory(PlaylistCategoryType.Free);
+    setSelectedTagKeys([]);
+    // @ts-ignore
+    setDescription('');
+    setIsLoaded(false);
+  }
+
+  function clearAndGoBack() {
+    navigation.goBack();
+    resetData();
   }
 };
 
