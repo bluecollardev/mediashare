@@ -4,12 +4,12 @@ import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { DataService } from '@api';
+import { FilterableDataService } from '@api';
 import { UserService } from '@api-modules/auth/user.service';
 import { PlaylistItemService } from '@api-modules/playlist-item/playlist-item.service';
 import { Playlist } from './entities/playlist.entity';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
-import { ObjectIdParameters, ContentSearchParameters, SearchParameters } from '@mediashare/shared';
+import { SearchParameters } from '@mediashare/shared';
 
 type CreatePlaylistParameters = {
   playlistId: ObjectId;
@@ -18,7 +18,7 @@ type CreatePlaylistParameters = {
 };
 
 @Injectable()
-export class PlaylistService extends DataService<Playlist, MongoRepository<Playlist>> {
+export class PlaylistService extends FilterableDataService<Playlist, MongoRepository<Playlist>> {
   constructor(
     @InjectRepository(Playlist)
     repository: MongoRepository<Playlist>,
@@ -37,31 +37,6 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
       });
   }
 
-  // We can't use the TypeORM driver for this, as it doesn't support weights, use the official Node.js driver instead
-  // TODO: Support weights and upgrade MongoDB, for now we're just going to remove description as we can't weight the results...
-  /* private createCollectionIndex() {
-    const db = this.repository.manager.queryRunner.databaseConnection.db('mediashare')
-    const collection = db.collection('playlists');
-    const await collection.createIndex();
-  } */
-
-  // TODO: Support weights and upgrade MongoDB, for now we're just going to remove description as we can't weight the results...
-  // private _collectionIndexName = 'title_text_description_text';
-  private _collectionIndexName = 'title_text';
-
-  get collectionIndexName() {
-    return this._collectionIndexName;
-  }
-
-  set collectionIndexName(name) {
-    this._collectionIndexName = name;
-  }
-
-  // TODO: Finish this later... options could be Elastic, Mongo Atlas Search or Apache Lucene
-  get useDistributedSearch() {
-    return false; // this.configService.get<string>('dbIsMongoAtlas');
-  }
-
   async createPlaylistWithItems(dto: CreatePlaylistDto & { createdBy: ObjectId }) {
     const playlist = await this.create({ ...dto, mediaIds: dto.mediaIds.map((id) => new ObjectId(id)) });
     return { playlist };
@@ -73,125 +48,15 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return this.playlistItemService.insertMany(mappedItems);
   }
 
-  getPlaylistById({ playlistId }: ObjectIdParameters) {
-    return this.repository
-      .aggregate([
-        {
-          $match: { _id: playlistId },
-        },
-        ...this.buildLookupFields(),
-        {
-          $unwind: { path: '$user' },
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: [
-                {
-                  _id: '$_id',
-                  author: '$user.username',
-                  title: '$title',
-                  description: '$description',
-                  imageSrc: '$imageSrc',
-                  mediaItems: '$mediaItems',
-                  category: '$category',
-                  tags: '$tags',
-                  shareCount: { $size: '$shareItems' },
-                  likesCount: { $size: '$likeItems' },
-                  viewCount: { $size: '$viewItems' },
-                  // shared: { $count: '$shareItems' }
-                  createdBy: '$user._id',
-                  createdAt: '$createdAt',
-                  updatedDate: '$updatedDate',
-                },
-              ],
-            },
-          },
-        },
-      ])
-      .next();
-  }
-
-  async getPlaylistsByUserId({ userId }: ObjectIdParameters = { userId: null }) {
-    return this.repository
-      .aggregate([
-        {
-          $match: {
-            createdBy: userId,
-          },
-        },
-        ...this.buildLookupFields(),
-        { $unwind: { path: '$user' } },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: [
-                {
-                  _id: '$_id',
-                  author: '$user.username',
-                  title: '$title',
-                  description: '$description',
-                  imageSrc: '$imageSrc',
-                  mediaItems: '$mediaItems',
-                  category: '$category',
-                  tags: '$tags',
-                  createdBy: '$user._id',
-                  createdAt: '$createdAt',
-                  updatedDate: '$updatedDate',
-                },
-              ],
-            },
-          },
-        },
-      ])
-      .toArray();
-  }
-
-  async searchPlaylists({ query, tags }: ContentSearchParameters) {
-    return this.repository
-      .aggregate([
-        ...this.buildAggregateQuery({ query, tags }),
-        ...this.buildLookupFields(),
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: [
-                {
-                  _id: '$_id',
-                  author: '$user.username',
-                  title: '$title',
-                  description: '$description',
-                  imageSrc: '$imageSrc',
-                  mediaItems: '$mediaItems',
-                  category: '$category',
-                  tags: '$tags',
-                  shareCount: { $size: '$shareItems' },
-                  likesCount: { $size: '$likeItems' },
-                  viewCount: { $size: '$viewItems' },
-                  // shared: { $count: '$shareItems' }
-                  createdBy: '$user._id',
-                  createdAt: '$createdAt',
-                  updatedDate: '$updatedDate',
-                },
-              ],
-            },
-          },
-        },
-      ])
-      .toArray();
-  }
-
-  private buildAggregateQuery(
-    {
-      userId,
-      query,
-      fullText = false,
-      // textMatchingMode = 'and',
-      tags,
-      // TODO: Complete support for tagsMatchingMode (it's not exposed via controller)
-      tagsMatchingMode = 'all' // all | any // TODO: Type this!
-    } : SearchParameters) {
-
+  protected buildAggregateQuery({
+    userId,
+    query,
+    fullText = false,
+    // textMatchingMode = 'and',
+    tags,
+    // TODO: Complete support for tagsMatchingMode (it's not exposed via controller)
+    tagsMatchingMode = 'all', // all | any // TODO: Type this!
+  }: SearchParameters) {
     let aggregateQuery = [];
 
     // Match by user ID first as it's indexed and this is the best way to reduce the number of results early
@@ -201,7 +66,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
           $match: {
             createdBy: userId,
           },
-        }
+        },
       ]);
     }
 
@@ -242,7 +107,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             // createdBy: userId,
             matchedTags: { $in: tags },
           },
-        })
+        });
       } else if (tagsMatchingMode === 'all') {
         aggregateQuery.push({
           $match: {
@@ -250,13 +115,11 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
             // createdBy: userId,
             matchedTags: { $all: tags },
           },
-        })
+        });
       }
     }
 
-    aggregateQuery = aggregateQuery.concat([
-      ...this.buildLookupFields()
-    ])
+    aggregateQuery = aggregateQuery.concat([...this.buildLookupFields()]);
 
     if (query) {
       aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
@@ -265,7 +128,7 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
     return aggregateQuery;
   }
 
-  private buildLookupFields() {
+  protected buildLookupFields() {
     return [
       {
         $lookup: {
@@ -308,5 +171,33 @@ export class PlaylistService extends DataService<Playlist, MongoRepository<Playl
         },
       },
     ];
+  }
+
+  protected replaceRoot(): object {
+    return {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: [
+            {
+              _id: '$_id',
+              author: '$user.username',
+              title: '$title',
+              description: '$description',
+              imageSrc: '$imageSrc',
+              mediaItems: '$mediaItems',
+              category: '$category',
+              tags: '$tags',
+              shareCount: { $size: '$shareItems' },
+              likesCount: { $size: '$likeItems' },
+              viewCount: { $size: '$viewItems' },
+              // shared: { $count: '$shareItems' }
+              createdBy: '$user._id',
+              createdAt: '$createdAt',
+              updatedDate: '$updatedDate',
+            },
+          ],
+        },
+      },
+    };
   }
 }

@@ -1,16 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ObjectId, OptionalId } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { DeepPartial, MongoRepository } from 'typeorm';
+import { SearchParameters } from '@mediashare/shared';
 import { BcBaseEntity } from '../entities/base.entity';
 import { ObjectIdGuard, StringIdGuard } from '@util-lib';
 import { IdType } from '@core-lib';
-import { clone } from 'remeda'
+import { clone } from 'remeda';
 
-export type MsDocumentType<T> = OptionalId<T>;
 /**
  * Base class to extend for interacting with the database through a repository pattern.
- *
  * Add new standard database interaction methods here. Abstract away complex & nonstandard ones
  * @export
  * @class DataService
@@ -19,7 +18,7 @@ export type MsDocumentType<T> = OptionalId<T>;
  */
 @Injectable()
 export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepository<E>> {
-  constructor(protected repository: R, private readonly logger: PinoLogger) {}
+  protected constructor(protected repository: R, protected readonly logger: PinoLogger) {}
 
   /**
    * Create a repository item
@@ -167,5 +166,25 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
     } catch (error) {
       this.logger.error(`${this.constructor.name}.insertMany failed with: ${error}`);
     }
+  }
+
+  /**
+   * Override this method when implementing aggregates.
+   * @protected
+   */
+  protected buildAggregateQuery({}: SearchParameters): any[] {
+    let aggregateQuery = [];
+
+    aggregateQuery = aggregateQuery.concat([...this.buildLookupFields()]);
+
+    return aggregateQuery;
+  }
+
+  /**
+   * Override this method when implementing aggregates.
+   * @protected
+   */
+  protected buildLookupFields() {
+    return [];
   }
 }

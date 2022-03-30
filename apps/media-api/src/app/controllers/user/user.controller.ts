@@ -5,7 +5,7 @@ import { GetUser, GetUserId } from '@api-core/decorators/user.decorator';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 import { UserService } from '@api-modules/auth/user.service';
 import { PlaylistService } from '../playlist/playlist.service';
-import { UserGetResponse, UserPostResponse } from './user-response.decorator';
+import { UserGetResponse, UserPostResponse } from './user.decorator';
 
 import { SessionUserInterface } from '@api-core/models/auth-user.model';
 import { MediaItemResponseDto } from '../media-item/dto/media-item-response.dto';
@@ -29,70 +29,6 @@ export class UserController {
     private shareItemService: ShareItemService,
     private mediaItemService: MediaItemService
   ) {}
-
-  @Get()
-  @UserGetResponse({ type: ProfileDto })
-  async getUser(@GetUserId() userId: ObjectId) {
-    return await this.userService.getUserById(userId);
-  }
-
-  @Put()
-  @UserPostResponse()
-  @ApiBody({ type: UpdateUserDto })
-  async update(@GetUserId() userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
-    return await this.userService.updateUser({ userId, updateUserDto });
-  }
-
-  @Post('logout')
-  @UseGuards(JwtAuthGuard)
-  logout(@Req() req: Request, @Res() res: Response) {
-    req.logout();
-    res.setHeader('Authorization', '');
-    res.setHeader('Id', '');
-    return res.status(HttpStatus.OK).send();
-  }
-
-  @Get('playlists')
-  @UseGuards(UserGuard)
-  @ApiBearerAuth()
-  @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
-  async getUserPlaylists(@GetUserId() userId: ObjectId) {
-    return await this.playlistService.getPlaylistsByUserId({ userId });
-  }
-
-  @Get('media-items')
-  @UseGuards(UserGuard)
-  @ApiBearerAuth()
-  @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
-  async getMediaItems(@GetUserId() userId: ObjectId) {
-    return await this.mediaItemService.findMediaItemsByUserId(userId);
-  }
-
-  @Get('media-items/shared')
-  @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
-  async getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
-    const { _id: userId } = user;
-    return await this.shareItemService.aggregateSharedMediaItems({ userId });
-  }
-  @Get('playlists/shared')
-  @UserGetResponse({ isArray: true, type: ShareItem })
-  async getSharedPlaylists(@GetUser() user: SessionUserInterface = null) {
-    const { _id: userId } = user;
-    return await this.shareItemService.aggregateSharedPlaylists({ userId });
-  }
-
-  @Get('media-items/shares')
-  @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
-  async getSharesMediaItems(@GetUser() user: SessionUserInterface = null) {
-    const { _id: userId } = user;
-    return await this.shareItemService.aggregateSharedMediaItems({ userId });
-  }
-  @Get('playlists/shares')
-  @UserGetResponse({ isArray: true, type: ShareItem })
-  async getSharesPlaylists(@GetUser() user: SessionUserInterface = null) {
-    const { _id: userId } = user;
-    return await this.shareItemService.aggregateSharesPlaylists({ createdBy: userId });
-  }
 
   @HttpCode(HttpStatus.OK)
   @Post('authorize')
@@ -124,5 +60,69 @@ export class UserController {
     if (!profile) return res.send(user);
 
     return res.send(profile);
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  logout(@Req() req: Request, @Res() res: Response) {
+    req.logout();
+    res.setHeader('Authorization', '');
+    res.setHeader('Id', '');
+    return res.status(HttpStatus.OK).send();
+  }
+
+  @Get()
+  @UserGetResponse({ type: ProfileDto })
+  async getUser(@GetUserId() userId: ObjectId) {
+    return await this.userService.getUserById(userId);
+  }
+
+  @Put()
+  @UserPostResponse()
+  @ApiBody({ type: UpdateUserDto })
+  async update(@GetUserId() userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.updateUser({ userId, updateUserDto });
+  }
+
+  @Get('playlists')
+  @UseGuards(UserGuard)
+  @ApiBearerAuth()
+  @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
+  getUserPlaylists(@GetUserId() userId: ObjectId) {
+    return this.playlistService.getByUserId(userId);
+  }
+
+  @Get('media-items')
+  @UseGuards(UserGuard)
+  @ApiBearerAuth()
+  @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
+  getMediaItems(@GetUserId() userId: ObjectId) {
+    return this.mediaItemService.getByUserId(userId);
+  }
+
+  @Get('media-items/shared')
+  @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
+  getSharedMediaItems(@GetUser() user: SessionUserInterface = null) {
+    const { _id: userId } = user;
+    return this.shareItemService.aggregateSharedMediaItems({ userId });
+  }
+  @Get('playlists/shared')
+  @UserGetResponse({ isArray: true, type: ShareItem })
+  getSharedPlaylists(@GetUser() user: SessionUserInterface = null) {
+    const { _id: userId } = user;
+    return this.shareItemService.aggregateSharedPlaylists({ userId });
+  }
+
+  @Get('media-items/shares')
+  @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
+  getSharesMediaItems(@GetUser() user: SessionUserInterface = null) {
+    const { _id: userId } = user;
+    return this.shareItemService.aggregateSharedMediaItems({ userId });
+  }
+  @Get('playlists/shares')
+  @UserGetResponse({ isArray: true, type: ShareItem })
+  getSharesPlaylists(@GetUser() user: SessionUserInterface = null) {
+    const { _id: userId } = user;
+    return this.shareItemService.aggregateSharesPlaylists({ createdBy: userId });
   }
 }

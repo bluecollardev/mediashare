@@ -55,11 +55,12 @@ export const MediaComponent = ({
         <MediaListItem
           key={`media_item_${_id}`}
           title={title}
+          titleStyle={styles.titleText}
           description={
-            <>
-              {author && <Text style={styles.username}>By @{author}</Text>}
+            <View style={styles.details}>
+              {author && <Text style={styles.username}>By {author}</Text>}
               <Text style={styles.description}>{shortenText(description || '', 80)}</Text>
-            </>
+            </View>
           }
           showThumbnail={true}
           showActions={showActions}
@@ -254,17 +255,30 @@ export default withLoadingSpinner((state) => {
 })(withGlobalStateConsumer(Media));
 
 const styles = StyleSheet.create({
+  titleText: {
+    marginBottom: 2,
+    color: theme.colors.text,
+    fontSize: 14,
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   author: {
     color: theme.colors.textDarker,
     fontSize: 12,
     marginBottom: 2,
   },
   username: {
+    flex: 0,
+    width: '100%',
     color: theme.colors.primary,
     fontSize: 12,
     marginBottom: 4,
   },
   description: {
+    flex: 0,
+    width: '100%',
     color: theme.colors.textDarker,
     fontSize: 12,
     marginTop: 2,

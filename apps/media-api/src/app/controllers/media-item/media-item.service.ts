@@ -1,49 +1,149 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { DataService } from '@api';
+import { FilterableDataService } from '@api';
 import { MediaItem } from './entities/media-item.entity';
-import { map } from 'remeda';
+import { SearchParameters } from '@mediashare/shared';
 
 @Injectable()
-export class MediaItemService extends DataService<MediaItem, MongoRepository<MediaItem>> {
-  static SEARCH_FIELDS = [
-    {
-      $lookup: {
-        from: 'user',
-        localField: 'userId',
-        foreignField: '_id',
-        as: 'user',
+export class MediaItemService extends FilterableDataService<MediaItem, MongoRepository<MediaItem>> {
+  constructor(
+    @InjectRepository(MediaItem)
+    repository: MongoRepository<MediaItem>,
+    logger: PinoLogger,
+    private configService: ConfigService
+  ) {
+    super(repository, logger);
+    this.repository
+      // TODO: Support weights and upgrade MongoDB, for now we're just going to remove description as we can't weight the results...
+      // .createCollectionIndex({ title: 'text', description: 'text' })
+      .createCollectionIndex({ title: 'text' })
+      .then((indexName) => {
+        this.collectionIndexName = indexName;
+      });
+  }
+
+  protected buildAggregateQuery({
+    userId,
+    query,
+    fullText = false,
+    // textMatchingMode = 'and',
+    tags,
+    // TODO: Complete support for tagsMatchingMode (it's not exposed via controller)
+    tagsMatchingMode = 'all', // all | any // TODO: Type this!
+  }: SearchParameters) {
+    let aggregateQuery = [];
+
+    // Match by user ID first as it's indexed and this is the best way to reduce the number of results early
+    if (userId) {
+      aggregateQuery = aggregateQuery.concat([
+        {
+          $match: {
+            createdBy: userId,
+          },
+        },
+      ]);
+    }
+
+    // Next, we want to match the text as it's also indexed
+    // TODO: fullText means a search on all index fields, this is only supported in MongoDB Atlas
+    // Not sure if we want to use Atlas as we can't self host... we can implement distributed search later...
+    if (query && fullText) {
+      // IMPORTANT! This shouldn't run at any time (fullText = false is hardcoded)
+      throw new Error('Elastic search has not been implemented');
+    } else if (query && !fullText) {
+      if (this.useDistributedSearch) {
+        throw new Error('Elastic search has not been implemented');
+      }
+      // Search all fields in the index
+      aggregateQuery = aggregateQuery.concat([
+        {
+          $match: {
+            $text: { $search: query },
+          },
+        },
+      ]);
+    }
+
+    // Tags are not indexed as they're nested in the documents, so do this last!
+    if (tags) {
+      aggregateQuery = aggregateQuery.concat([
+        {
+          $addFields: {
+            matchedTags: '$tags.key',
+          },
+        },
+      ]);
+
+      if (tagsMatchingMode === 'any') {
+        aggregateQuery.push({
+          $match: {
+            // TODO: User tags?
+            // createdBy: userId,
+            matchedTags: { $in: tags },
+          },
+        });
+      } else if (tagsMatchingMode === 'all') {
+        aggregateQuery.push({
+          $match: {
+            // TODO: User tags?
+            // createdBy: userId,
+            matchedTags: { $all: tags },
+          },
+        });
+      }
+    }
+
+    aggregateQuery = aggregateQuery.concat([...this.buildLookupFields()]);
+
+    if (query) {
+      aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
+    }
+
+    return aggregateQuery;
+  }
+
+  protected buildLookupFields() {
+    return [
+      {
+        $lookup: {
+          from: 'user',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
       },
-    },
-    {
-      $lookup: {
-        from: 'share_item',
-        localField: '_id',
-        foreignField: 'mediaId',
-        as: 'shareItems',
+      {
+        $lookup: {
+          from: 'share_item',
+          localField: '_id',
+          foreignField: 'mediaId',
+          as: 'shareItems',
+        },
       },
-    },
-    {
-      $lookup: {
-        from: 'view_item',
-        localField: '_id',
-        foreignField: 'mediaId',
-        as: 'viewItems',
+      {
+        $lookup: {
+          from: 'view_item',
+          localField: '_id',
+          foreignField: 'mediaId',
+          as: 'viewItems',
+        },
       },
-    },
-    {
-      $lookup: {
-        from: 'like_item',
-        localField: '_id',
-        foreignField: 'mediaId',
-        as: 'likeItems',
+      {
+        $lookup: {
+          from: 'like_item',
+          localField: '_id',
+          foreignField: 'mediaId',
+          as: 'likeItems',
+        },
       },
-    },
-    {
+    ];
+  }
+
+  protected replaceRoot(): object {
+    return {
       $replaceRoot: {
         newRoot: {
           _id: '$_id',
@@ -63,107 +163,6 @@ export class MediaItemService extends DataService<MediaItem, MongoRepository<Med
           updatedDate: '$updatedDate',
         },
       },
-    },
-  ];
-
-  constructor(
-    @InjectRepository(MediaItem)
-    mediaRepository: MongoRepository<MediaItem>,
-    logger: PinoLogger,
-    private configService: ConfigService,
-  ) {
-    super(mediaRepository, logger);
-    this.repository.createCollectionIndex({ title: 'text', description: 'text' }).then();
-  }
-
-  findPlaylistMedia(idStrings: ObjectId[]) {
-    return this.repository.find({
-      where: {
-        $or: map(idStrings, (id) => ({
-          _id: id,
-        })),
-      },
-    });
-  }
-
-  findMediaItemWithDetail(id: ObjectId) {
-    return this.repository
-      .aggregate([{ $match: { _id: id } }, ...MediaItemService.SEARCH_FIELDS]).next();
-  }
-
-  findMediaItemsByUserId(userId: ObjectId) {
-    return this.repository
-      .aggregate([
-        { $match: { createdBy: userId } },
-
-        // {
-        //   $lookup: {
-        //     from: 'user',
-        //     localField: 'createdBy',
-        //     foreignField: '_id',
-        //     as: 'user'
-        //   }
-        // }
-        // { $unwind: { path: '$user' } }
-        // {
-        //   $replaceRoot: {
-        //     newRoot: {
-        //       _id: '$_id',
-        //       author: '$user.username',
-        //       description: '$description',
-        //       category: '$category',
-        //       title: '$title',
-        //       userId: '$userId',
-        //       createdAt: '$createdAt',
-        //       updatedAt: '$updatedAt'
-        //     }
-        //   }
-        // }
-      ])
-      .toArray();
-  }
-  findPopularMediaItems() {
-    return this.repository
-      .aggregate([...MediaItemService.SEARCH_FIELDS, { $sort: { likesCount: -1 } }]).toArray();
-  }
-
-  searchMediaItems({ query, tags }: { query: string; tags?: string[] }) {
-    const buildAggregateQuery = () => {
-      let aggregateQuery = [];
-      if (query) {
-        aggregateQuery = aggregateQuery.concat([
-          {
-            $match: {
-              $text: { $search: query },
-            },
-          },
-        ]);
-      }
-
-      if (tags) {
-        aggregateQuery = aggregateQuery.concat([
-          {
-            $addFields: {
-              matchedTags: '$tags.key',
-            },
-          },
-          {
-            $match: {
-              // createdBy: userId,
-              matchedTags: { $in: tags },
-            },
-          },
-        ]);
-      }
-
-      if (query) {
-        aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
-      }
-
-      return aggregateQuery;
     };
-
-    return this.repository
-      .aggregate([...buildAggregateQuery()]).toArray();
   }
 }

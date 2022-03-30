@@ -84,7 +84,7 @@ describe('PlaylistService', () => {
         playlist: { _id: playlistId },
       } = inserted;
 
-      const aggregated = await service.getPlaylistById({ playlistId });
+      const aggregated = await service.getById({ playlistId });
       expect(aggregated).toHaveLength(playlistItems.length);
     });
   });

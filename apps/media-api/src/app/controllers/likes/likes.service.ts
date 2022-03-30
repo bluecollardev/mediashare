@@ -2,7 +2,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataService } from '@api-core/models/data-provider.model';
+import { DataService } from '@api';
 import { Like } from './entities/like.entity';
 
 @Injectable()

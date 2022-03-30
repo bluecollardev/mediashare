@@ -3,7 +3,6 @@ import { mockDataServiceFactory } from '../../factories/mock-data-service.factor
 import { TagService } from '@api-modules/tag/tag.service';
 import { TagsController } from './tags.controller';
 
-ß;
 describe('TagController', () => {
   let controller: TagsController;
 

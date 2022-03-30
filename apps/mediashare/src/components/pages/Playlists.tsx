@@ -49,7 +49,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
           titleStyle={styles.titleText}
           description={() => {
             return (
-              <View style={{ display: 'flex', flexDirection: 'column' }}>
+              <View style={styles.details}>
                 {!!author && <Text style={styles.username}>By {author}</Text>}
                 <Text style={{ ...styles.description }}>{shortenText(description || '', 80)}</Text>
                 <Text style={{ ...styles.videoCount }}>{mediaIds?.length || 0} videos</Text>
@@ -270,17 +270,25 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: 14,
   },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   author: {
     color: theme.colors.textDarker,
     fontSize: 12,
     marginBottom: 2,
   },
   username: {
+    flex: 0,
+    width: '100%',
     color: theme.colors.primary,
     fontSize: 12,
     marginBottom: 4,
   },
   description: {
+    flex: 0,
+    width: '100%',
     color: theme.colors.textDarker,
     fontSize: 12,
     marginTop: 2,

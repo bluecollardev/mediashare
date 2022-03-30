@@ -12,7 +12,7 @@ import { ObjectId } from 'mongodb';
 // import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 import { UserService } from '@api-modules/auth/user.service';
 import { BcRolesType, BC_ROLES } from '@core-lib';
-import { UserGetResponse, UserPostResponse } from './user-response.decorator';
+import { UserGetResponse, UserPostResponse } from './user.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
@@ -65,7 +65,7 @@ export class UsersController {
   @ApiHideProperty()
   @UserGetResponse({ type: PlaylistResponseDto, isArray: true })
   getPlaylists(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
-    return this.playlistService.getPlaylistsByUserId({ userId });
+    return this.playlistService.searchByUserId({ userId });
   }
 
   @Put(':userId/roles')
