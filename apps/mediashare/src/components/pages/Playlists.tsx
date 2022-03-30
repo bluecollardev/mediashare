@@ -145,7 +145,12 @@ export const Playlists = ({ globalState }: PageProps) => {
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>
-          <ActionButtons onActionClicked={confirmPlaylistsToShare} onCancelClicked={cancelPlaylistsToShare} actionLabel="Share With" actionIcon="group" />
+          <ActionButtons
+            onActionClicked={confirmPlaylistsToShare}
+            onCancelClicked={cancelPlaylistsToShare}
+            actionLabel="Share With"
+            actionIcon="group"
+          />
         </PageActions>
       )}
       {isSelectable && actionMode === actionModes.delete && (

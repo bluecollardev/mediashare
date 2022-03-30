@@ -7,7 +7,15 @@ import { loadProfile } from 'mediashare/store/modules/profile';
 import { useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB, Divider } from 'react-native-paper';
-import { PageActions, PageContainer, PageProps, AccountCard, SharedList, ActionButtons } from 'mediashare/components/layout';
+import {
+  PageActions,
+  PageContainer,
+  PageProps,
+  AccountCard,
+  SharedList,
+  ActionButtons,
+  AppDialog
+} from 'mediashare/components/layout';
 // import { filterUnique } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils';
 import { theme } from 'mediashare/styles';
@@ -49,6 +57,10 @@ const Profile = ({ route }: ProfileProps) => {
     clearCheckboxSelection();
   }, []);
 
+  const [showUnshareDialog, setShowUnshareDialog] = useState(false);
+  const [showUnshareItemDialog, setShowUnshareItemDialog] = useState(false);
+  const [itemToUnshare, setItemToUnshare] = useState(undefined as string);
+
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
     // { icon: 'person-remove', onPress: () => {}, color: theme.colors.text, styles: { backgroundColor: theme.colors.primary } },
@@ -57,6 +69,26 @@ const Profile = ({ route }: ProfileProps) => {
 
   return (
     <PageContainer>
+      <AppDialog
+        leftActionLabel="Cancel"
+        rightActionLabel="Revoke Access"
+        leftActionCb={() => closeUnshareDialog()}
+        rightActionCb={() => confirmItemsToUnshare()}
+        onDismiss={closeUnshareDialog}
+        showDialog={showUnshareDialog}
+        title="Revoke Access"
+        subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+      />
+      <AppDialog
+        leftActionLabel="Cancel"
+        rightActionLabel="Revoke Access"
+        leftActionCb={() => closeUnshareItemDialog()}
+        rightActionCb={() => confirmItemToUnshare()}
+        onDismiss={closeUnshareItemDialog}
+        showDialog={showUnshareItemDialog}
+        title="Revoke Access"
+        subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+      />
       <AccountCard
         title={fullName}
         email={email}
@@ -76,18 +108,19 @@ const Profile = ({ route }: ProfileProps) => {
         ) */}
       <Divider />
       <SharedList
+        key={clearSelectionKey}
         selectable={isSelectable}
         showActions={!isSelectable}
-        onDelete={deleteShareItem}
-        onView={viewShareItem}
+        onDelete={openUnshareItemDialog}
+        onView={viewItem}
         sharedItems={sharedItems}
         onChecked={updateSelection}
       />
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
           <ActionButtons
-            onActionClicked={confirmPlaylistsToUnshare}
-            onCancelClicked={cancelPlaylistsToUnshare}
+            onActionClicked={openUnshareDialog}
+            onCancelClicked={cancelItemsToUnshare}
             actionLabel="Revoke Access"
             actionButtonStyles={styles.deleteActionButton}
           />
@@ -109,19 +142,63 @@ const Profile = ({ route }: ProfileProps) => {
     </PageContainer>
   );
 
-  async function viewShareItem(playlistId: string, shareItemId: string) {
+  async function viewItem(playlistId: string, shareItemId: string) {
     await dispatch(readShareItem(shareItemId));
     await viewPlaylist({ playlistId });
   }
 
-  async function deleteShareItem(shareItemId: string) {
+  function openUnshareItemDialog(shareItemId: string) {
+    setItemToUnshare(shareItemId);
+    setShowUnshareItemDialog(true);
+  }
+
+  function closeUnshareItemDialog() {
+    setItemToUnshare(undefined);
+    setShowUnshareItemDialog(false);
+  }
+
+  async function confirmItemToUnshare() {
+    await unshareItem(itemToUnshare);
+    closeUnshareItemDialog();
+  }
+
+  async function unshareItem(shareItemId: string) {
     await dispatch(removeShareItem(shareItemId));
     await dispatch(loadProfile(userId));
   }
 
-  async function deleteShareItems() {
+  async function activateUnshareMode() {
+    setActionMode(actionModes.delete);
+    setIsSelectable(true);
+  }
+
+  function openUnshareDialog() {
+    setShowUnshareDialog(true);
+  }
+
+  function closeUnshareDialog() {
+    cancelItemsToUnshare();
+    setShowUnshareDialog(false);
+  }
+
+  async function confirmItemsToUnshare() {
+    await unshareItems();
+    closeUnshareDialog();
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+    unshareItems();
+  }
+
+  async function cancelItemsToUnshare() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  async function unshareItems() {
     selectedItems.map(async (shareItemId) => {
-      await deleteShareItem(shareItemId);
+      await unshareItem(shareItemId);
     }); // TODO: Find a real way to do this
     setTimeout(async () => {
       await dispatch(loadProfile(userId));
@@ -131,24 +208,6 @@ const Profile = ({ route }: ProfileProps) => {
   function updateSelection(bool: boolean, shareItemId: string) {
     const filtered = bool ? selectedItems.concat([shareItemId]) : selectedItems.filter((item) => item.shareItemId !== shareItemId);
     setSelectedItems(filtered);
-  }
-
-  async function activateUnshareMode() {
-    setActionMode(actionModes.delete);
-    setIsSelectable(true);
-  }
-
-  async function confirmPlaylistsToUnshare() {
-    setActionMode(actionModes.default);
-    clearCheckboxSelection();
-    setIsSelectable(false);
-    deleteShareItems();
-  }
-
-  async function cancelPlaylistsToUnshare() {
-    setActionMode(actionModes.default);
-    clearCheckboxSelection();
-    setIsSelectable(false);
   }
 
   function clearCheckboxSelection() {
