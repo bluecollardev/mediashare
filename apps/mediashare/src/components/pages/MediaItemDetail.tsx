@@ -11,8 +11,8 @@ const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
   const mediaItem = useAppSelector((state) => state.mediaItem?.entity);
   const { _id, title, description, category, author, uri, thumbnail } = mediaItem || {};
 
-  const tagKeys = (mediaItem?.tags || []).map((tag) => tag.key);
   const { tags = [] } = globalState;
+  const tagKeys = (mediaItem?.tags || []).map(({ key }) => key);
   const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isMediaTag), []);
 
   return (

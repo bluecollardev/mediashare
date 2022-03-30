@@ -49,8 +49,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   const items = mediaItems || [];
 
   const { tags = [] } = globalState;
-  const initialTagKeys = (selected?.tags || []).map((tag) => tag.key);
-  const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
+  const tagKeys = (selected?.tags || []).map(({ key }) => key);
   const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
 
   useEffect(() => {
@@ -96,24 +95,20 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
         />
         <ScrollView>
           <MediaCard
-            id={_id}
+            key={_id}
             title={title}
             author={author}
             description={description}
+            thumbnail={imageSrc}
+            showThumbnail={true}
+            category={category}
+            availableTags={mappedTags}
+            tags={tagKeys}
             showSocial={true}
             showActions={false}
-            showThumbnail={true}
-            thumbnail={imageSrc}
             likes={likesCount}
             shares={shareCount}
             views={viewCount}
-            category={category}
-            availableTags={mappedTags}
-            tags={selectedTagKeys}
-            // tagOptions={options}
-            onTagChange={(e: any) => {
-              setSelectedTagKeys(e);
-            }}
           >
             {/* TODO: Make this work and add it back in! */}
             {/* <Button

@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import SwitchSelector from 'react-native-switch-selector';
-
 import { TextField, MultiSelectIcon } from 'mediashare/components/form';
 import { DisplayPreviewOrVideo } from './DisplayPreviewOrVideo';
 import { MediaCardTitle } from './MediaCardTitle';
