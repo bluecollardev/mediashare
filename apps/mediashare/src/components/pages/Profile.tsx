@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'mediashare/store';
-import { removeShareItem, readShareItem } from 'mediashare/store/modules/share-items';
+import { removeShareItem, readShareItem } from 'mediashare/store/modules/shareItems';
 import { loadProfile } from 'mediashare/store/modules/profile';
 import { useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
@@ -17,7 +17,7 @@ import {
   AppDialog
 } from 'mediashare/components/layout';
 // import { filterUnique } from 'mediashare/utils';
-import { createRandomRenderKey } from 'mediashare/core/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
 
 interface ProfileProps extends PageProps {}

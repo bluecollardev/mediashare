@@ -8,9 +8,9 @@ import { DisplayPreviewOrVideo } from './DisplayPreviewOrVideo';
 import { MediaCardTitle } from './MediaCardTitle';
 import { MediaCardTags } from './MediaCardTags';
 import { MediaCardSocial } from './MediaCardSocial';
-import { mappedKeysToTags } from 'mediashare/store/modules/tags/utils';
+import { mappedKeysToTags } from 'mediashare/core/utils/tags';
 import { findInArray } from 'mediashare/utils';
-import { descriptionValidator, titleValidator } from 'mediashare/core/validators';
+import { titleValidator, descriptionValidator } from 'mediashare/core/utils/validators';
 import { useAppSelector } from 'mediashare/store';
 import { theme } from 'mediashare/styles';
 

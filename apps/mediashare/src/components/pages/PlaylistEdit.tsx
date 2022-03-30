@@ -26,7 +26,7 @@ import {
   AppDialog
 } from 'mediashare/components/layout';
 import { routeNames } from 'mediashare/routes';
-import { createRandomRenderKey } from 'mediashare/core/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { PlaylistCategoryType, MediaItem, MediaCategoryType } from 'mediashare/rxjs-api';
 import styles, { theme } from 'mediashare/styles';
 

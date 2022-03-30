@@ -11,7 +11,7 @@ import { List } from 'react-native-paper';
 import { PageContainer, PageProps, MediaCard, ActionButtons } from 'mediashare/components/layout';
 import { PlaylistsComponent } from './Playlists';
 import { filterUnique } from 'mediashare/utils';
-import { createRandomRenderKey } from 'mediashare/core/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 
 export const SharedList = () => {
   const { sharedItems } = useAppSelector((state) => state?.user);

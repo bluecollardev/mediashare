@@ -8,7 +8,7 @@ import { MultiSelectIcon } from 'mediashare/components/form/MultiSelect';
 import { ActionButtons } from './ActionButtons';
 import themeStyles, { theme } from 'mediashare/styles';
 
-import { mapAvailableTags } from 'mediashare/store/modules/tags/utils';
+import { mapAvailableTags } from 'mediashare/core/utils/tags';
 
 export interface AppHeaderProps {
   options?: any;

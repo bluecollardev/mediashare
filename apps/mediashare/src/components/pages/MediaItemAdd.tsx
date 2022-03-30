@@ -3,14 +3,13 @@ import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { addMediaItem } from 'mediashare/store/modules/media-items';
+import { addMediaItem } from 'mediashare/store/modules/mediaItems';
 import { CreateMediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
 import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps, ActionButtons, MediaCard, AppUpload, UploadPlaceholder  } from 'mediashare/components/layout';
-import { tagValidator, categoryValidator, descriptionValidator, titleValidator } from 'mediashare/core/validators';
-import { minLength } from 'mediashare/core/lib/Validators';
+import { minLength, titleValidator, descriptionValidator, categoryValidator, tagValidator } from 'mediashare/core/utils/validators';
 import { theme } from 'mediashare/styles';
 
 // @ts-ignore

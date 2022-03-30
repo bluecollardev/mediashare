@@ -5,7 +5,7 @@ import { Card, FAB, Subheading, Text } from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps, AccountCard, MediaListItem, ActionButtons } from 'mediashare/components/layout';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { createRandomRenderKey } from 'mediashare/core/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
 
 const SharedItems = ({ selectable = false }) => {

@@ -1,4 +1,4 @@
-import { findItemsIAmSharing, findItemsSharedWithMe } from 'mediashare/store/modules/share-items';
+import { findItemsIAmSharing, findItemsSharedWithMe } from 'mediashare/store/modules/shareItems';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'recompose';

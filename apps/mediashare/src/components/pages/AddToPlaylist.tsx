@@ -4,7 +4,7 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 import { useAppSelector } from 'mediashare/store';
 import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/playlists';
-import { findMediaItems } from 'mediashare/store/modules/media-items';
+import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { UpdatePlaylistDto } from 'mediashare/rxjs-api';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';

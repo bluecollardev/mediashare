@@ -1,19 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Tag } from 'mediashare/rxjs-api';
 
-import { makeEnum } from 'mediashare/store/core/factory';
+import { makeActions } from 'mediashare/store/factory';
 
 import { ApiService } from 'mediashare/store/apis';
 import { reducePendingState, reduceRejectedState, reduceFulfilledState } from 'mediashare/store/helpers';
 
 // Export tag utils
-export * from './utils';
+export * from '../../core/utils/tags';
 
-const TAG_ACTIONS = ['get_tags'] as const;
+const tagActionNames = ['get_tags'] as const;
 
-export const tagsActionTypes = makeEnum(TAG_ACTIONS);
+export const tagsActionTypes = makeActions(tagActionNames);
 
-export const getTags = createAsyncThunk(tagsActionTypes.getTags, async (undefined, { extra }) => {
+export const getTags = createAsyncThunk(tagsActionTypes.getTags.type, async (undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.tags.tagsControllerFindAll().toPromise();
 });
@@ -38,14 +38,11 @@ const tagsSlice = createSlice({
     builder
       .addCase(getTags.pending, reducePendingState())
       .addCase(getTags.rejected, reduceRejectedState())
-      .addCase(
-        getTags.fulfilled,
-        reduceFulfilledState((state, action) => ({ ...state, entities: action.payload }))
-      );
+      .addCase(getTags.fulfilled, reduceFulfilledState((state, action) => {
+        return ({ ...state, entities: action.payload })
+      }));
   },
 });
 
-// @ts-ignore
-const { reducer } = tagsSlice;
-// @ts-ignore
-export { reducer };
+export default tagsSlice;
+export const reducer = tagsSlice.reducer;

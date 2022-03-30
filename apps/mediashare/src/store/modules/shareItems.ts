@@ -1,35 +1,42 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { makeEnum } from 'mediashare/store/core/factory';
+import { makeActions } from 'mediashare/store/factory';
 
 import { ApiService } from 'mediashare/store/apis';
 import { ShareItemsResponseDto } from 'mediashare/rxjs-api';
 import { reducePendingState, reduceRejectedState, reduceFulfilledState } from 'mediashare/store/helpers';
 
-const SHARE_ITEM_ACTIONS = ['GET_SHARE_ITEM', 'REMOVE_SHARE_ITEM', 'FIND_ITEMS_I_AM_SHARING', 'FIND_ITEMS_SHARED_WITH_ME', 'READ_SHARE_ITEM'] as const;
+const shareItemActionNames = [
+  'get_share_item',
+  'remove_share_item',
+  'find_items_i_am_sharing',
+  'find_items_shared_with_me',
+  'read_share_item'
+] as const;
 
-export const shareItemsActionTypes = makeEnum(SHARE_ITEM_ACTIONS);
+export const shareItemsActionTypes = makeActions(shareItemActionNames);
 
-export const getShareItemById = createAsyncThunk(shareItemsActionTypes.getShareItem, async (id: string, { extra }) => {
+export const getShareItemById = createAsyncThunk(shareItemsActionTypes.getShareItem.type, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.shareItems.shareItemsControllerFindOne({ shareId: id }).toPromise();
 });
 
-export const findItemsIAmSharing = createAsyncThunk(shareItemsActionTypes.findItemsIAmSharing, async (opts: {} | undefined, { extra }) => {
+export const findItemsIAmSharing = createAsyncThunk(shareItemsActionTypes.findItemsIAmSharing.type, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.user.userControllerGetSharesPlaylists(opts).toPromise();
 });
 
-export const findItemsSharedWithMe = createAsyncThunk(shareItemsActionTypes.findItemsSharedWithMe, async (opts: {} | undefined, { extra }) => {
+export const findItemsSharedWithMe = createAsyncThunk(shareItemsActionTypes.findItemsSharedWithMe.type, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.shareItems.shareItemsControllerFindAll(opts).toPromise();
 });
-export const readShareItem = createAsyncThunk(shareItemsActionTypes.readShareItem, async (id: string, { extra }) => {
+
+export const readShareItem = createAsyncThunk(shareItemsActionTypes.readShareItem.type, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.shareItems.shareItemsControllerReadSharedItem({ shareId: id }).toPromise();
 });
 
-export const removeShareItem = createAsyncThunk(shareItemsActionTypes.removeShareItem, async (id: string, { extra }) => {
+export const removeShareItem = createAsyncThunk(shareItemsActionTypes.removeShareItem.type, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.shareItems.shareItemsControllerRemove({ shareId: id }).toPromise();
 });
@@ -72,5 +79,5 @@ const shareItemsSlice = createSlice({
   },
 });
 
-const { reducer } = shareItemsSlice;
-export { reducer };
+export default shareItemsSlice;
+export const reducer = shareItemsSlice.reducer;

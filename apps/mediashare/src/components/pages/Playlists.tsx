@@ -21,7 +21,7 @@ import {
   AppDialog,
 } from 'mediashare/components/layout';
 import { getAuthorText, getUsername, shortenText } from 'mediashare/utils';
-import { createRandomRenderKey } from 'mediashare/core/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
 
 export interface PlaylistsProps {

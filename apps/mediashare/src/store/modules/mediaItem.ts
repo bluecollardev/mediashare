@@ -2,8 +2,9 @@ import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
 import Config from 'mediashare/config';
-
-import { makeEnum } from 'mediashare/store/core/factory';
+import { makeActions } from 'mediashare/store/factory';
+import { apis, ApiService } from 'mediashare/store/apis';
+import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
 import {
   copyStorage,
   deleteStorage,
@@ -15,39 +16,34 @@ import {
   titleFromKey,
   uploadMediaToS3,
   uploadThumbnailToS3,
-} from './storage';
-import { getVideoPath, getThumbnailPath, getUploadPath, awsUrl, KeyFactory } from './key-factory';
-import { AwsMediaItem } from './aws-media-item.model';
-
-import { CreateMediaItemDto, MediaItemResponseDto, MediaCategoryType } from 'mediashare/rxjs-api';
-// TODO: Fix update dto! Not sure why it's not being exported normally...
-import { UpdateMediaItemDto } from 'mediashare/rxjs-api/models/UpdateMediaItemDto';
-import { apis, ApiService } from 'mediashare/store/apis';
-
-import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
+} from 'mediashare/core/aws/storage';
+import { getVideoPath, getThumbnailPath, getUploadPath, awsUrl, KeyFactory } from 'mediashare/core/aws/key-factory';
+import { AwsMediaItem } from 'mediashare/core/aws/aws-media-item.model';
+import { CreateMediaItemDto, UpdateMediaItemDto, MediaItemResponseDto, MediaCategoryType } from 'mediashare/rxjs-api';
 
 const s3Url = Config.AWS_URL;
 
-const MEDIA_ITEMS_ACTIONS = ['FIND_MEDIA_ITEMS'] as const;
-const MEDIA_ITEM_ACTIONS = [
-  'GET_MEDIA_ITEM',
-  'ADD_MEDIA_ITEM',
-  'UPDATE_MEDIA_ITEM',
-  'SHARE_MEDIA_ITEM',
-  'REMOVE_MEDIA_ITEM',
-  'UPLOAD_MEDIA_ITEM',
-  'FEED_MEDIA_ITEMS',
-  'SAVE_FEED_MEDIA_ITEMS',
-  'LOAD_USER_MEDIA_ITEMS',
+const mediaItemActionNames = [
+  'get_media_item',
+  'create_media_item_thumbnail',
+  'add_media_item',
+  'update_media_item',
+  'share_media_item',
+  'remove_media_item',
+  'upload_media_item',
+  'get_feed_media_items',
 ] as const;
-export const mediaItemActionTypes = makeEnum(MEDIA_ITEM_ACTIONS);
-export const mediaItemsActionTypes = makeEnum(MEDIA_ITEMS_ACTIONS);
+
+export const mediaItemActionTypes = makeActions(mediaItemActionNames);
+
 export const setActiveMediaItem = createAction<MediaItemResponseDto, 'setActiveMediaItem'>('setActiveMediaItem');
 export const clearActiveMediaItem = createAction('clearActiveMediaItem');
 export const selectMediaItem = createAction<{ isChecked: boolean; item: MediaItemResponseDto }, 'selectMediaItem'>('selectMediaItem');
 export const clearMediaItems = createAction('clearMediaItems');
 
-export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaItem, async ({ uri, mediaId }: { uri: string; mediaId: string }) => {
+export const getMediaItemById = createAsyncThunk(
+  mediaItemActionTypes.getMediaItem.type,
+  async ({ uri, mediaId }: { uri: string; mediaId: string }) => {
   const result = await forkJoin({
     mediaItem: apis.mediaItems.mediaItemControllerFindOne({ mediaId }).toPromise(),
     src: getStorage(uri),
@@ -56,12 +52,14 @@ export const getMediaItemById = createAsyncThunk(mediaItemActionTypes.getMediaIt
   return { mediaItem: result.mediaItem as MediaItemResponseDto, src: result.src };
 });
 
-export const createThumbnail = createAsyncThunk('preview', async ({ fileUri, key }: { fileUri: string; key: string }) => {
+export const createThumbnail = createAsyncThunk(
+  mediaItemActionTypes.createMediaItemThumbnail.type,
+  async ({ fileUri, key }: { fileUri: string; key: string }) => {
   return await uploadThumbnailToS3({ fileUri, key });
 });
 
 export const addMediaItem = createAsyncThunk(
-  mediaItemActionTypes.addMediaItem,
+  mediaItemActionTypes.addMediaItem.type,
   async (dto: Pick<CreateMediaItemDto, 'key' | 'title' | 'description' | 'summary' | 'category' | 'tags' | 'uri'>) => {
     const { uri: fileUri, title, category, tags = [], summary, description } = dto;
     try {
@@ -97,7 +95,7 @@ export const addMediaItem = createAsyncThunk(
   }
 );
 
-export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMediaItems, async () => {
+export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.getFeedMediaItems.type, async () => {
   // TODO: Non-overlapping types here!
   const feedMediaItems = (await listStorage(getUploadPath())) as unknown as AwsMediaItem[];
   return feedMediaItems
@@ -110,7 +108,7 @@ export const getFeedMediaItems = createAsyncThunk(mediaItemActionTypes.feedMedia
     }));
 });
 
-export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems, async ({ items }: { items: AwsMediaItem[] }) => {
+export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeedMediaItems.type, async ({ items }: { items: AwsMediaItem[] }) => {
   const createFeedItemThumbnail = async (key) => {
     try {
       // AWS will replace spaces with a '+' in the actual Object URL
@@ -159,11 +157,11 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActionTypes.saveFeed
   return await Promise.all(dtoPromises);
 });
 
-export const loadUserMediaItems = createAsyncThunk(mediaItemActionTypes.loadUserMediaItems, async () => {
+export const loadUserMediaItems = createAsyncThunk(mediaItemActionTypes.loadUserMediaItems.type, async () => {
   return await apis.user.userControllerGetMediaItems().toPromise();
 });
 
-export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem, async (item: UpdateMediaItemDto, { extra }) => {
+export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMediaItem.type, async (item: UpdateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.mediaItems
     .mediaItemControllerUpdate({
@@ -173,33 +171,22 @@ export const updateMediaItem = createAsyncThunk(mediaItemActionTypes.updateMedia
     .toPromise();
 });
 
-export const shareMediaItem = createAsyncThunk(
-  mediaItemActionTypes.shareMediaItem,
-  async (args: { id: string; userId: string; item: CreateMediaItemDto }, { extra }) => {
-    const { api } = extra as { api: ApiService };
-    return await api.mediaItems
-      .mediaItemControllerShare({
-        mediaId: args.id,
-        userId: args.userId,
-        createMediaItemDto: args.item,
-      })
-      .toPromise();
+export const shareMediaItem = createAsyncThunk(mediaItemActionTypes.shareMediaItem.type, async (args: { id: string; userId: string }, { extra }) => {
+  const { api } = extra as { api: ApiService };
+  return await api.mediaItems
+    .mediaItemControllerShare({
+      mediaId: args.id,
+      userId: args.userId,
+    })
+    .toPromise();
   }
 );
 
-export const deleteMediaItem = createAsyncThunk(mediaItemActionTypes.removeMediaItem, async (args: { id: string; key: string }, { extra }) => {
+export const deleteMediaItem = createAsyncThunk(mediaItemActionTypes.removeMediaItem.type, async (args: { id: string; key: string }, { extra }) => {
   const { api } = extra as { api: ApiService };
   const { id, key } = args;
   await deleteStorage(key);
   return await api.mediaItems.mediaItemControllerRemove({ mediaId: id }).toPromise();
-});
-
-export const findMediaItems = createAsyncThunk(mediaItemsActionTypes.findMediaItems, async (args: { text?: string; tags?: string[] }, { extra }) => {
-  const { api } = extra as { api: ApiService };
-  const { text, tags = [] } = args;
-  console.log(`Search args: ${JSON.stringify(args, null, 2)}`);
-  console.log(`Searching media items for: [text] ${text}, [tags] ${JSON.stringify(tags)}`);
-  return await api.mediaItems.mediaItemControllerFindAll({ text, tags }).toPromise();
 });
 
 export interface MediaItemInitialState {
@@ -237,7 +224,9 @@ const mediaItemSlice = createSlice({
         entity: undefined,
         mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
       }))
-      .addCase(getMediaItemById.rejected, (state) => ({ ...state, entity: undefined }))
+      .addCase(getMediaItemById.rejected, (state) => ({
+        ...state, entity: undefined
+      }))
       .addCase(getMediaItemById.fulfilled, (state, action) => ({
         ...state,
         entity: action.payload.mediaItem,
@@ -246,97 +235,31 @@ const mediaItemSlice = createSlice({
         loaded: true,
       }))
       .addCase(createThumbnail.fulfilled, (state, action) => ({
-        ...state,
-        mediaSrc: action.payload as string,
+        ...state, mediaSrc: action.payload as string
       }))
       .addCase(addMediaItem.pending, reducePendingState())
       .addCase(addMediaItem.rejected, reduceRejectedState())
-      .addCase(
-        addMediaItem.fulfilled,
-        reduceFulfilledState((state, action) => {
-          return {
-            ...state,
-            loading: false,
-            loaded: true,
-            getMediaItem: action.payload.uri,
-            mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
-          };
-        })
-      )
+      .addCase(addMediaItem.fulfilled, reduceFulfilledState((state, action) => ({
+        ...state,
+        loading: false,
+        loaded: true,
+        getMediaItem: action.payload.uri,
+        mediaSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/temp/background-comp.jpg',
+      })))
       // TODO: Are we using these? Where?
       .addCase(getFeedMediaItems.pending, reducePendingState())
       .addCase(getFeedMediaItems.rejected, reduceRejectedState())
-      .addCase(
-        getFeedMediaItems.fulfilled,
-        reduceFulfilledState((state, action) => {
-          return { ...state, feed: action.payload };
-        })
-      )
-      .addCase(setActiveMediaItem, (state, action) => {
-        return { ...state, entity: action.payload };
-      })
-      .addCase(clearActiveMediaItem, (state) => {
-        return { ...state, entity: undefined, createState: 'empty' };
-      });
+      .addCase(getFeedMediaItems.fulfilled, reduceFulfilledState((state, action) => ({
+        ...state, feed: action.payload
+      })))
+      .addCase(setActiveMediaItem, (state, action) => ({
+        ...state, entity: action.payload
+      }))
+      .addCase(clearActiveMediaItem, (state) => ({
+        ...state, entity: undefined, createState: 'empty'
+      }));
   },
 });
 
-export interface MediaItemsInitialState {
-  selected: MediaItemResponseDto[];
-  entities: MediaItemResponseDto[];
-  loading: boolean;
-  loaded: boolean;
-}
-
-export const MEDIA_ITEMS_INITIAL_STATE: MediaItemsInitialState = {
-  selected: [],
-  entities: [],
-  loading: false,
-  loaded: false,
-};
-
-const mediaItemsSlice = createSlice({
-  name: 'mediaItems',
-  initialState: MEDIA_ITEMS_INITIAL_STATE,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(findMediaItems.pending, reducePendingState())
-      .addCase(findMediaItems.rejected, reduceRejectedState())
-      .addCase(
-        findMediaItems.fulfilled,
-        reduceFulfilledState((state, action) => {
-          // console.log('findMediaItems success');
-          // console.log(action.payload);
-          return { ...state, entities: action.payload, loading: false, loaded: true };
-        })
-      )
-      .addCase(loadUserMediaItems.pending, reducePendingState())
-      .addCase(loadUserMediaItems.rejected, reduceRejectedState())
-      .addCase(
-        loadUserMediaItems.fulfilled,
-        reduceFulfilledState((state, action) => {
-          return { ...state, mediaItems: action.payload, loading: false, loaded: true };
-        })
-      )
-      .addCase(selectMediaItem, (state, action) => {
-        const updateSelection = function (bool: boolean, item: MediaItemResponseDto) {
-          const { selected } = state;
-          // Is it filtered?
-          // @ts-ignore
-          return bool ? selected.concat([item]) : selected.filter((item) => item._id !== item._id);
-        };
-        return { ...state, selected: updateSelection(action.payload.isChecked, action.payload.item) };
-      })
-      .addCase(clearMediaItems, (state) => {
-        return { ...state, entities: [] };
-      })
-      .addCase(saveFeedMediaItems.pending, reducePendingState())
-      .addCase(saveFeedMediaItems.rejected, reduceRejectedState())
-      .addCase(saveFeedMediaItems.fulfilled, reduceFulfilledState());
-  },
-});
-
-const mediaItemSliceReducer = mediaItemSlice.reducer;
-const mediaItemsSliceReducer = mediaItemsSlice.reducer;
-export { mediaItemSliceReducer as mediaItemReducer, mediaItemsSliceReducer as mediaItemsReducer };
+export default mediaItemSlice;
+export const reducer = mediaItemSlice.reducer;

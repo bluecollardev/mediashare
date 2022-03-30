@@ -7,12 +7,12 @@ import { switchMap, take } from 'rxjs/operators';
 import Config from 'mediashare/config';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
-import { thumbnailRoot } from 'mediashare/store/modules/media-items/key-factory';
-import { fetchAndPutToS3 } from 'mediashare/store/modules/media-items/storage';
+import { thumbnailRoot } from 'mediashare/core/aws/key-factory';
+import { fetchAndPutToS3 } from 'mediashare/core/aws/storage';
 import { loadUser, logout, updateAccount } from 'mediashare/store/modules/user';
 import { loadUsers } from 'mediashare/store/modules/users';
 import { loadProfile } from 'mediashare/store/modules/profile';
-import { findMediaItems } from 'mediashare/store/modules/media-items';
+import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useWindowDimensions, ScrollView, StyleSheet } from 'react-native';
 import { FAB, Divider, Card } from 'react-native-paper';
@@ -27,7 +27,7 @@ import {
   AccountCard,
   AppDialog
 } from 'mediashare/components/layout';
-import { createRandomRenderKey } from 'mediashare/core/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
 import * as build from 'mediashare/build';
 

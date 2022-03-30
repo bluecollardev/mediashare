@@ -2,10 +2,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import Config from 'mediashare/config';
 
-import { thumbnailRoot, awsUrl } from 'mediashare/store/modules/media-items/key-factory';
-import { fetchAndPutToS3 } from 'mediashare/store/modules/media-items/storage';
-import { createThumbnail } from 'mediashare/store/modules/media-items';
-import { setError } from 'mediashare/store/modules/app-state';
+import { thumbnailRoot, awsUrl } from 'mediashare/core/aws/key-factory';
+import { fetchAndPutToS3 } from 'mediashare/core/aws/storage';
+import { createThumbnail } from 'mediashare/store/modules/mediaItems';
+import { setError } from 'mediashare/store/modules/appState';
 
 import * as DocumentPicker from 'expo-document-picker';
 import { launchImageLibrary } from 'react-native-image-picker';

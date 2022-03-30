@@ -4,7 +4,7 @@ import { KeyboardAvoidingView, SafeAreaView, TouchableWithoutFeedback, View, Tex
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
 import { useAppSelector } from 'mediashare/store';
 import { useDispatch } from 'react-redux';
-import { clearError } from 'mediashare/store/modules/app-state';
+import { clearError } from 'mediashare/store/modules/appState';
 import { LoadingSpinnerProps } from 'mediashare/components/hoc/withLoadingSpinner';
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
 import { GlobalStateProps } from 'mediashare/core/globalState';

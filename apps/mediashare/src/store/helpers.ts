@@ -9,7 +9,9 @@ export const reduceRejectedState = (reducer?: (state, action) => any) => (state,
 };
 
 export const reduceFulfilledState = (reducer?: (state, action) => any) => (state, action) => {
-  const fulfilledStateProperties = reducer ? { ...state, loading: false, loaded: true } : { ...state, ...action.payload, loading: false, loaded: true };
+  const fulfilledStateProperties = reducer
+    ? { ...state, loading: false, loaded: true }
+    : { ...state, ...action.payload, loading: false, loaded: true };
   return reducer ? reducer(fulfilledStateProperties, action) : fulfilledStateProperties;
 };
 

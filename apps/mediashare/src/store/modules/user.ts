@@ -1,17 +1,15 @@
-import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import * as R from 'remeda';
-
-import { ActionsFactory } from 'mediashare/store/core/factory';
-// import { setKeyPair } from './keypair-store'; // TODO: Not compatible with react-native-web [https://github.com/expo/expo/issues/7744]
-import { signOut } from './auth';
-
-import { AuthorizeDto, ProfileDto, UpdateUserDto, BcRolesType } from 'mediashare/rxjs-api';
+import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import { makeActions } from 'mediashare/store/factory';
 import { apis } from 'mediashare/store/apis';
-
 import { reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
+// import { setKeyPair } from './keypair-store'; // TODO: Not compatible with react-native-web [https://github.com/expo/expo/issues/7744]
+import { AuthorizeDto, ProfileDto, UpdateUserDto, BcRolesType } from 'mediashare/rxjs-api';
+import { signOut } from '../../core/aws/auth';
 
 // We don't define any 'get' actions as they don't update state - use redux selectors instead
 const USER_ACTIONS = ['LOGIN', 'LOGOUT', 'UPDATE_ACCOUNT', 'DELETE_ACCOUNT', 'VALIDATE', 'LOAD_USER'] as const;
+
 const initialState: Pick<
   ProfileDto,
   'username' | 'firstName' | 'lastName' | '_id' | 'phoneNumber' | 'imageSrc' | 'email' | 'role' | 'sharedCount' | 'sharesCount' | 'likesCount' | 'sharedItems'
@@ -45,7 +43,7 @@ const pickUser = (user: ProfileDto) =>
     'sharesCount',
     'sharedItems',
   ]);
-export const UserActions = ActionsFactory(USER_ACTIONS, initialState);
+export const UserActions = makeActions(USER_ACTIONS);
 
 export const loginAction = createAsyncThunk(UserActions.login.type, async (authorizeDto: AuthorizeDto) => {
   return await apis.user.userControllerAuthorize({ authorizeDto }).toPromise();
@@ -80,14 +78,14 @@ const userReducer = createReducer(initialState, (builder) =>
       const { firstName, lastName, phoneNumber, email, imageSrc } = action.payload;
       return { ...state, firstName, lastName, phoneNumber, email, imageSrc };
     })
-    .addCase(loadUser.fulfilled, (state, action) => {
-      return { ...state, ...pickUser({ ...action.payload }) };
-    })
+    .addCase(loadUser.fulfilled, (state, action) => ({
+      ...state, ...pickUser({ ...action.payload })
+    }))
     .addCase(loginAction.pending, reducePendingState())
     .addCase(loginAction.rejected, reduceRejectedState())
-    .addCase(logout.fulfilled, () => {
-      return initialState;
-    })
+    .addCase(logout.fulfilled, () => ({
+      ...initialState
+    }))
     .addCase(logout.pending, reducePendingState())
     .addCase(logout.rejected, reduceRejectedState())
 );

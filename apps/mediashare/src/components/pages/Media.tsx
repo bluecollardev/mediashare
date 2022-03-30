@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { StyleSheet, FlatList, View } from 'react-native';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
-import { deleteMediaItem, findMediaItems } from 'mediashare/store/modules/media-items';
+import { deleteMediaItem, findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useEditMediaItem } from 'mediashare/hooks/NavigationHooks';
 import { MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
@@ -21,8 +21,8 @@ import {
   AppDialog
 } from 'mediashare/components/layout';
 import { shortenText } from 'mediashare/utils';
-import { createRandomRenderKey } from 'mediashare/core/utils';
-import { selectMediaItem } from 'mediashare/store/modules/media-items';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
+import { selectMediaItem } from 'mediashare/store/modules/mediaItems';
 import { theme } from 'mediashare/styles';
 
 export const MediaComponent = ({
