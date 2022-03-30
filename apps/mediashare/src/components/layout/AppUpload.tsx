@@ -100,5 +100,3 @@ export function AppUpload({
     onUploadComplete(mediaUri);
   }
 }
-
-export default AppUpload;

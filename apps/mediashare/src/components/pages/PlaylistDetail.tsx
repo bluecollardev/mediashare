@@ -10,15 +10,10 @@ import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB } from 'react-native-paper';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { PageContainer, PageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
-import { AppDialog } from 'mediashare/components/layout/AppDialog';
-import { MediaCard } from 'mediashare/components/layout/MediaCard';
-import { MediaList } from 'mediashare/components/layout/MediaList';
+import { PageContainer, PageContent, PageActions, PageProps, ActionButtons, AppDialog, MediaCard, MediaList } from 'mediashare/components/layout';
+import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 import * as build from 'mediashare/build';
 import { theme } from 'mediashare/styles';
-
-import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 
 // @ts-ignore
 export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps) => {

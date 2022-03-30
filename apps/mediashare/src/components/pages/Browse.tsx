@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { useAppSelector } from 'mediashare/store';
 import { findPlaylists, getUserPlaylists } from 'mediashare/store/modules/playlists';
-
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
-
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-
 import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
-
-import { PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
-import { MediaCard } from 'mediashare/components/layout/MediaCard';
+import { PageContainer, PageProps, MediaCard, ActionButtons } from 'mediashare/components/layout';
 import { PlaylistsComponent } from './Playlists';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-
 import { filterUnique } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils';
 

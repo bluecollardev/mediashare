@@ -2,21 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
-
 import { useAppSelector } from 'mediashare/store';
 import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/playlists';
 import { findMediaItems } from 'mediashare/store/modules/media-items';
 import { UpdatePlaylistDto } from 'mediashare/rxjs-api';
-
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useGoBack, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
-import { PageContainer, PageActions, PageProps, PageContent } from 'mediashare/components/layout/PageContainer';
-import { NoItems } from 'mediashare/components/layout/NoItems';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { MediaListType } from 'mediashare/components/layout/MediaList';
-import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
-
+import { PageContainer, PageActions, PageProps, PageContent, NoItems, ActionButtons, MediaListType, MediaListItem } from 'mediashare/components/layout';
 import { shortenText } from 'mediashare/utils';
 import { theme } from 'mediashare/styles';
 

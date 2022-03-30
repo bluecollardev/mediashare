@@ -14,7 +14,7 @@ import { View, ScrollView } from 'react-native';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
 import { AppDialog } from 'mediashare/components/layout/AppDialog';
 import { MediaCard } from 'mediashare/components/layout/MediaCard';
-import AppUpload from 'mediashare/components/layout/AppUpload';
+import { AppUpload } from 'mediashare/components/layout/AppUpload';
 import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
 import styles, { theme } from 'mediashare/styles';
 
@@ -71,7 +71,6 @@ const MediaItemEdit = ({
     return <Paragraph>Loading</Paragraph>;
   }
 
-  // @ts-ignore
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent>

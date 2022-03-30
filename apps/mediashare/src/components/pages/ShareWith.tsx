@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { routeNames } from 'mediashare/routes';
-
 import { useAppSelector } from 'mediashare/store';
 import { getUserPlaylists, shareUserPlaylist } from 'mediashare/store/modules/playlists';
 import { loadUsers } from 'mediashare/store/modules/users';
-
 import { useGoBack, useRouteName } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { ContactList } from 'mediashare/components/layout/ContactList';
-import { PageContainer, PageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
+import { PageContainer, PageContent, PageActions, PageProps, ActionButtons, ContactList } from 'mediashare/components/layout';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ShareWith = ({}: PageProps) => {

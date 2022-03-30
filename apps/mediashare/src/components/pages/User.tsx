@@ -7,7 +7,7 @@ import { Card, FAB, Subheading, Text } from 'react-native-paper';
 
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
-import AccountCard from 'mediashare/components/layout/AccountCard';
+import { AccountCard } from 'mediashare/components/layout/AccountCard';
 import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
 import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';

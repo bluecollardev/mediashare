@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
-
 import { useAppSelector } from 'mediashare/store';
-
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-
-import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { PageContainer, PageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
+import { PageContainer, PageContent, PageActions, PageProps, ActionButtons, MediaListItem } from 'mediashare/components/layout';
 
 export interface AddFromCollectionProps extends PageProps {
   onViewDetail: () => void;

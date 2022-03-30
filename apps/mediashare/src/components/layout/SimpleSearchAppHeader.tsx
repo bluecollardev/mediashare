@@ -3,7 +3,7 @@ import { Appbar, Searchbar } from 'react-native-paper';
 import { withGlobalStateConsumer, GlobalStateProps } from 'mediashare/core/globalState';
 import { theme } from 'mediashare/styles';
 
-export interface AppHeaderProps {
+interface AppHeaderProps {
   options?: any;
   back?: any;
   navigation?: any;

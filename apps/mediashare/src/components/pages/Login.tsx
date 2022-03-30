@@ -1,16 +1,12 @@
 import React, { Component, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
-
 import { loginAction } from 'mediashare/store/modules/user';
 import { RootState } from 'mediashare/store';
-
 import { Authenticator, SignIn, SignUp, Greetings, VerifyContact, ForgotPassword, AmplifyTheme, ConfirmSignIn } from 'aws-amplify-react-native';
-
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { Button, Card } from 'react-native-paper';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent } from 'mediashare/components/layout/PageContainer';
-
 import { theme } from 'mediashare/styles';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;

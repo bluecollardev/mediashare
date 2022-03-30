@@ -8,17 +8,11 @@ import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/h
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { View, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
-import { AppUpload } from 'mediashare/components/layout/AppUpload';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { MediaList } from 'mediashare/components/layout/MediaList';
-import { MediaCard } from 'mediashare/components/layout/MediaCard';
-import { UploadPlaceholder } from 'mediashare/components/layout/UploadPlaceholder';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps, AppUpload, MediaList, MediaCard, UploadPlaceholder } from 'mediashare/components/layout';
 import { routeNames } from 'mediashare/routes';
 import { createRandomRenderKey } from 'mediashare/core/utils';
-import styles, { theme } from 'mediashare/styles';
-
 import { PlaylistCategoryType, MediaItem, MediaCategoryType } from 'mediashare/rxjs-api';
+import styles, { theme } from 'mediashare/styles';
 
 const actionModes = { delete: 'delete', default: 'default' };
 

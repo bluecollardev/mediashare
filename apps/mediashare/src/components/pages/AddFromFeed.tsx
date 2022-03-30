@@ -2,18 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FlatList } from 'react-native';
 import { Subheading, Card } from 'react-native-paper';
-
 import { useAppSelector } from 'mediashare/store';
 import { getFeedMediaItems, saveFeedMediaItems } from 'mediashare/store/modules/media-items';
 import { AwsMediaItem } from 'mediashare/store/modules/media-items/aws-media-item.model';
-
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { PageContainer, PageContent, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
-import { NoItems } from 'mediashare/components/layout/NoItems';
+import { PageContainer, PageContent, PageActions, PageProps, NoItems, ActionButtons, MediaListItem } from 'mediashare/components/layout';
 import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const AddFromFeed = ({ navigation, globalState }: PageProps) => {

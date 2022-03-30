@@ -1,29 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { routeNames } from 'mediashare/routes';
-
 import { useAppSelector } from 'mediashare/store';
 import { getUserPlaylists, findPlaylists, removeUserPlaylist, selectPlaylistAction } from 'mediashare/store/modules/playlists';
-
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
-
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-
 import { FAB, Text, Divider } from 'react-native-paper';
 import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { View } from 'react-native';
-
-import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from 'mediashare/components/layout/PageContainer';
-import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { NoItems } from 'mediashare/components/layout/NoItems';
-
+import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps, MediaListItem, ActionButtons, NoItems } from 'mediashare/components/layout';
 import { getAuthorText, getUsername, shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils';
-
 import { theme } from 'mediashare/styles';
 
 export interface PlaylistsProps {

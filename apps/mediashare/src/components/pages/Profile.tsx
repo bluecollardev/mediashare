@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { useAppSelector } from 'mediashare/store';
 import { removeShareItem, readShareItem } from 'mediashare/store/modules/share-items';
 import { loadProfile } from 'mediashare/store/modules/profile';
-
 import { useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB, Divider } from 'react-native-paper';
-import { PageActions, PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
-import { AccountCard } from 'mediashare/components/layout/AccountCard';
-import { SharedList } from 'mediashare/components/layout/SharedList';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-
+import { PageActions, PageContainer, PageProps, AccountCard, SharedList, ActionButtons } from 'mediashare/components/layout';
 // import { filterUnique } from 'mediashare/utils';
-
 import { createRandomRenderKey } from 'mediashare/core/utils';
-
 import { theme } from 'mediashare/styles';
 
 interface ProfileProps extends PageProps {}

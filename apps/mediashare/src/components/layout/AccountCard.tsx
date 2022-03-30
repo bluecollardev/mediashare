@@ -174,5 +174,3 @@ const defaultStyles = StyleSheet.create({
     flexDirection: 'column',
   },
 });
-
-export default AccountCard;

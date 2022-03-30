@@ -4,8 +4,7 @@ import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { useAppSelector } from 'mediashare/store';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { PageContainer, PageContent, PageProps } from 'mediashare/components/layout/PageContainer';
-import { MediaCard } from 'mediashare/components/layout/MediaCard';
+import { PageContainer, PageContent, PageProps, MediaCard } from 'mediashare/components/layout';
 
 // @ts-ignore
 const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {

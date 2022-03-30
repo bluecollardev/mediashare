@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Caption, Checkbox, IconButton, List } from 'react-native-paper';
 
-import { theme } from 'mediashare/styles';
 import { MediaPreview } from './MediaPreview';
+import { theme } from 'mediashare/styles';
 
 export interface MediaListItemProps {
   navigation?: any;

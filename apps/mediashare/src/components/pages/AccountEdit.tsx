@@ -6,23 +6,17 @@ import * as R from 'remeda';
 import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { launchImageLibrary } from 'react-native-image-picker';
-
 import { UserDto } from 'mediashare/rxjs-api';
-
 import { useAppSelector } from 'mediashare/store';
 import { loadUser, updateAccount } from 'mediashare/store/modules/user';
 import { fetchAndPutToS3 } from 'mediashare/store/modules/media-items/storage';
 import { thumbnailRoot } from 'mediashare/store/modules/media-items/key-factory';
 import { loadProfile } from 'mediashare/store/modules/profile';
-
 import { routeNames } from 'mediashare/routes';
-
 import { useRouteWithParams } from 'mediashare/hooks/NavigationHooks';
 import { TextField } from 'mediashare/components/form/TextField';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { AccountCard } from 'mediashare/components/layout/AccountCard';
+import { PageContainer, PageProps, ActionButtons, AccountCard } from 'mediashare/components/layout';
 
 const awsUrl = Config.AWS_URL;
 interface AccountEditProps extends PageProps {}

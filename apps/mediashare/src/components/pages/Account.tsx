@@ -7,9 +7,7 @@ import * as R from 'remeda';
 import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import Config from 'mediashare/config';
-
 import { routeNames } from 'mediashare/routes';
-
 import { useAppSelector } from 'mediashare/store';
 import { thumbnailRoot } from 'mediashare/store/modules/media-items/key-factory';
 import { fetchAndPutToS3 } from 'mediashare/store/modules/media-items/storage';
@@ -18,25 +16,15 @@ import { loadUsers } from 'mediashare/store/modules/users';
 import { loadProfile } from 'mediashare/store/modules/profile';
 import { findMediaItems } from 'mediashare/store/modules/media-items';
 import { readShareItem } from 'mediashare/store/modules/share-items';
-
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-
 import { View, useWindowDimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';
-
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { useRouteWithParams, useViewPlaylistById, useViewProfileById } from 'mediashare/hooks/NavigationHooks';
-import { PageContainer, PageActions, PageProps } from 'mediashare/components/layout/PageContainer';
-import { ContactList } from 'mediashare/components/layout/ContactList';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { AccountCard } from 'mediashare/components/layout/AccountCard';
-import { SharedList } from 'mediashare/components/layout/SharedList';
-
-import * as build from 'mediashare/build';
-
+import { PageContainer, PageActions, PageProps, ContactList, ActionButtons, AccountCard, SharedList } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils';
-
 import styles, { theme } from 'mediashare/styles';
+import * as build from 'mediashare/build';
 
 const Contacts = ({ selectable = false, showActions = false }) => {
   // const manageContact = useRouteName(routeNames.user);

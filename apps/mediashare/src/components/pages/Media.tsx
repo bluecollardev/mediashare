@@ -1,31 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyleSheet, FlatList, View } from 'react-native';
-
 import { routeNames } from 'mediashare/routes';
-
 import { useAppSelector } from 'mediashare/store';
 import { deleteMediaItem, findMediaItems } from 'mediashare/store/modules/media-items';
-
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-
 import { useRouteName, useEditMediaItem } from 'mediashare/hooks/NavigationHooks';
-
 import { MediaItem, MediaItemDto } from 'mediashare/rxjs-api';
-
 import { RefreshControl } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from 'mediashare/components/layout/PageContainer';
-import { MediaListItem } from 'mediashare/components/layout/MediaListItem';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { NoItems } from 'mediashare/components/layout/NoItems';
-
+import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions, MediaListItem, ActionButtons, NoItems } from 'mediashare/components/layout';
 import { shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils';
-
-import { theme } from 'mediashare/styles';
 import { selectMediaItem } from 'mediashare/store/modules/media-items';
+import { theme } from 'mediashare/styles';
 
 export const MediaComponent = ({
   list = [],

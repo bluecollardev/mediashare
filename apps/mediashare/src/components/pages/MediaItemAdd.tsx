@@ -8,14 +8,10 @@ import { CreateMediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
 import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
 import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { ActionButtons } from 'mediashare/components/layout/ActionButtons';
-import { MediaCard } from 'mediashare/components/layout/MediaCard';
-import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from 'mediashare/components/layout/PageContainer';
+import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps, ActionButtons, MediaCard, AppUpload, UploadPlaceholder  } from 'mediashare/components/layout';
 import { tagValidator, categoryValidator, descriptionValidator, titleValidator } from 'mediashare/core/validators';
 import { minLength } from 'mediashare/core/lib/Validators';
 import { theme } from 'mediashare/styles';
-import { AppUpload } from 'mediashare/components/layout/AppUpload';
-import { UploadPlaceholder } from 'mediashare/components/layout/UploadPlaceholder';
 
 // @ts-ignore
 export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {

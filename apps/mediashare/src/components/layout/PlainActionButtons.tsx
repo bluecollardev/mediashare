@@ -21,7 +21,7 @@ interface Props {
   children?: any;
 }
 
-export const ActionButtons = ({
+export const PlainActionButtons = ({
   cancelCb,
   actionCb,
   actionLabel = 'Next',
