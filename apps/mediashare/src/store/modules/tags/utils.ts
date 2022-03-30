@@ -23,7 +23,7 @@ export const mappedKeysToTags = (mappedTagKeys: string[], availableTags: any[]) 
 // Mapped tag id is formatted as follows: `${key}:${id}`
 export const findMappedTagUsingKey = (mappedTags: any[], tagKey: string) => {
   return mappedTags.find(({ key }) => {
-    return key.split(':').shift() === tagKey;
+    return extractKey(key) === tagKey;
   });
 }
 
@@ -32,14 +32,17 @@ export const findMappedTagUsingKey = (mappedTags: any[], tagKey: string) => {
 export const mapSelectedTagKeysToTagKeyValue = (selectedTagKeys: string[], availableTags: any[]) => {
   return selectedTagKeys.map((selectedTagKey) => {
       return availableTags.find(({ key }) => {
-        return key === selectedTagKey
+        return extractKey(key) === extractKey(selectedTagKey);
       });
     })
     .map(({ key, value }) => ({
-      key: key.split(':').shift(),
+      key: extractKey(key),
       value
     }));
 }
+
+// Extract key from a string, this gets rid of the ObjectId in the string, returning just the key
+export const extractKey = (key) => key.split(':').shift();
 
 
 

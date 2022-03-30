@@ -173,64 +173,9 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
     }).filter((tag) => !!tag) || [];
   }
 
-  async function saveWithIds(mediaIds: string[]) {
-    // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
-    // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
-    const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
-
-    await dispatch(
-      updateUserPlaylist({
-        _id: selected._id,
-        title,
-        description,
-        mediaIds,
-        category: MediaCategoryType[category as any],
-        tags: (selectedTags || []) as any[],
-        imageSrc,
-      })
-    );
-  }
-
   async function loadData() {
     await dispatch(getPlaylistById(playlistId));
     setIsLoaded(true);
-  }
-
-  function clearCheckboxSelection() {
-    const randomKey = createRandomRenderKey();
-    setClearSelectionKey(randomKey);
-  }
-
-  // const [selected, setSelected] = useState(selectedItems.size);
-  function onAddItem(item: MediaItem) {
-    // setSelected(selectedItems.size);
-    const updatedItems = selectedItems.concat([item._id]);
-    setSelectedItems(updatedItems);
-  }
-
-  function onRemoveItem(selected: MediaItem) {
-    const updatedItems = selectedItems.filter((item) => item !== selected._id);
-    setSelectedItems(updatedItems);
-  }
-
-  async function activateDeleteMode() {
-    setActionMode(actionModes.delete);
-    setIsSelectable(true);
-  }
-
-  async function confirmDeletePlaylistItems() {
-    await savePlaylistItems();
-    setActionMode(actionModes.default);
-    clearCheckboxSelection();
-    setIsSelectable(false);
-    resetData();
-  }
-
-  async function cancelDeletePlaylistItems() {
-    setActionMode(actionModes.default);
-    clearCheckboxSelection();
-    setIsSelectable(false);
-    resetData();
   }
 
   async function savePlaylist() {
@@ -260,6 +205,61 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
 
     setIsLoaded(false);
     // await loadData();
+  }
+
+  async function saveWithIds(mediaIds: string[]) {
+    // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
+    // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
+    const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
+
+    await dispatch(
+      updateUserPlaylist({
+        _id: selected._id,
+        title,
+        description,
+        mediaIds,
+        category: MediaCategoryType[category as any],
+        tags: (selectedTags || []) as any[],
+        imageSrc,
+      })
+    );
+  }
+
+  // const [selected, setSelected] = useState(selectedItems.size);
+  function onAddItem(item: MediaItem) {
+    // setSelected(selectedItems.size);
+    const updatedItems = selectedItems.concat([item._id]);
+    setSelectedItems(updatedItems);
+  }
+
+  function onRemoveItem(selected: MediaItem) {
+    const updatedItems = selectedItems.filter((item) => item !== selected._id);
+    setSelectedItems(updatedItems);
+  }
+
+  function clearCheckboxSelection() {
+    const randomKey = createRandomRenderKey();
+    setClearSelectionKey(randomKey);
+  }
+
+  async function activateDeleteMode() {
+    setActionMode(actionModes.delete);
+    setIsSelectable(true);
+  }
+
+  async function confirmDeletePlaylistItems() {
+    await savePlaylistItems();
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+    resetData();
+  }
+
+  async function cancelDeletePlaylistItems() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+    resetData();
   }
 
   function resetData() {
