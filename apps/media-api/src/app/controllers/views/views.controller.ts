@@ -1,6 +1,6 @@
 import { Controller, Post, Param } from '@nestjs/common';
 import { ViewsService } from './views.service';
-import { ViewsPostResponse } from './decorators/views.decorator';
+import { ViewsPostResponse } from './views.decorator';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
