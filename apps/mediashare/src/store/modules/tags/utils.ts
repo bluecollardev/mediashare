@@ -17,7 +17,8 @@ export const mappedKeysToTags = (mappedTagKeys: string[], availableTags: any[]) 
   return [...mappedTagKeys]
     .map((mappedTagKey) => {
       return findMappedTagUsingKey(availableTags, mappedTagKey);
-    });
+    }) // Filter out undefined tags so things don't blow up if that happens
+    .filter((tag) => !!tag);
 }
 
 // Mapped tag id is formatted as follows: `${key}:${id}`

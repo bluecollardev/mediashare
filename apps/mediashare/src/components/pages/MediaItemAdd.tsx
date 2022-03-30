@@ -6,7 +6,7 @@ import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { addMediaItem } from 'mediashare/store/modules/media-items';
 import { CreateMediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
 import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
-import { mapAvailableTags } from 'mediashare/store/modules/tags';
+import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps, ActionButtons, MediaCard, AppUpload, UploadPlaceholder  } from 'mediashare/components/layout';
 import { tagValidator, categoryValidator, descriptionValidator, titleValidator } from 'mediashare/core/validators';
@@ -100,6 +100,10 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
   }
 
   async function saveItem() {
+    // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
+    // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
+    const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
+
     const dto: CreateMediaItemDto = {
       key: title,
       title,
@@ -109,7 +113,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
       isPlayable: true,
       uri: mediaUri,
       category: MediaCategoryType[category],
-      tags: selectedTagKeys || ([] as any[]),
+      tags: selectedTags || [],
       eTag: '',
     };
 

@@ -8,7 +8,7 @@ import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
 import { findMediaItems } from 'mediashare/store/modules/media-items';
 import { addUserPlaylist, getUserPlaylists, getPlaylistById } from 'mediashare/store/modules/playlists';
-import { mapAvailableTags } from 'mediashare/store/modules/tags';
+import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { titleValidator, descriptionValidator, categoryValidator } from 'mediashare/core/validators';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps, ActionButtons, MediaCard, AppUpload, UploadPlaceholder } from 'mediashare/components/layout';
@@ -101,12 +101,16 @@ const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
   );
 
   async function savePlaylist() {
+    // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
+    // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
+    const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
+
     const dto: CreatePlaylistDto = {
       title,
       description,
       imageSrc,
       category: category,
-      tags: selectedTagKeys as any[],
+      tags: selectedTags || [],
       mediaIds: [],
     };
 
