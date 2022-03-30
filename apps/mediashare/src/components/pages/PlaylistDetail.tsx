@@ -27,12 +27,10 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   const goToShareWith = useRouteName(routeNames.shareWith);
   const goToPlaylists = usePlaylists();
 
-  const { selected } = useAppSelector((state) => state.playlist);
+  const { loaded, selected } = useAppSelector((state) => state.playlist);
+  const [isLoaded, setIsLoaded] = useState(loaded);
+
   const appUserId = useAppSelector((state) => state.user?._id);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
   // @ts-ignore
   const {
     _id,
@@ -48,6 +46,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     mediaItems = [],
   } = selected || {};
   const items = mediaItems || [];
+  const allowEdit = createdBy === appUserId;
 
   const { tags = [] } = globalState;
   const tagKeys = (selected?.tags || []).map(({ key }) => key);
@@ -59,12 +58,10 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     }
   }, [isLoaded]);
 
-  // console.log(`Logged In User: ${appUserId}, Media Item Owned By: ${createdBy}`);
-
-  const allowEdit = createdBy === appUserId;
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const [fabState, setFabState] = useState({ open: false });
-  let fabActions = [];
+  let fabActions;
   if (allowEdit) {
     fabActions = [
       { icon: 'delete-forever', onPress: () => setShowDeleteDialog(true), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
@@ -138,11 +135,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
                 showCancel={false}
                 cancelIcon="rule"
-                // onCancelClicked={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
-                // cancelIconColor={isSelectable ? theme.colors.primary : theme.colors.disabled}
-                // disableAction={actionMode === actionModes.delete}
                 actionLabel="Add To Playlist"
-                // actionIcon={!(Array.isArray(items) && items.length > 0) ? 'playlist-add' : undefined}
                 actionIcon="playlist-add"
                 onActionClicked={() => addToPlaylist({ playlistId })}
               />

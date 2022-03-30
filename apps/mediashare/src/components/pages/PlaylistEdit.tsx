@@ -2,13 +2,29 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useAppSelector } from 'mediashare/store';
-import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/playlists';
+import {
+  getPlaylistById,
+  getUserPlaylists,
+  removeUserPlaylist,
+  updateUserPlaylist
+} from 'mediashare/store/modules/playlists';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { View, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps, ActionButtons, AppUpload, MediaList, MediaCard, UploadPlaceholder } from 'mediashare/components/layout';
+import {
+  PageContainer,
+  KeyboardAvoidingPageContent,
+  PageActions,
+  PageProps,
+  ActionButtons,
+  AppUpload,
+  MediaList,
+  MediaCard,
+  UploadPlaceholder,
+  AppDialog
+} from 'mediashare/components/layout';
 import { routeNames } from 'mediashare/routes';
 import { createRandomRenderKey } from 'mediashare/core/utils';
 import { PlaylistCategoryType, MediaItem, MediaCategoryType } from 'mediashare/rxjs-api';
@@ -27,22 +43,23 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   const { playlistId } = route.params;
 
   const { loaded, selected } = useAppSelector((state) => state?.playlist);
-
   const [isLoaded, setIsLoaded] = useState(loaded);
-  const [isSelectable, setIsSelectable] = useState(false);
-  const [actionMode, setActionMode] = useState(actionModes.default);
 
   const [title, setTitle] = useState(selected?.title);
   const [description, setDescription] = useState(selected?.description);
   const [category, setCategory] = useState(selected?.category);
-  const [selectedItems, setSelectedItems] = useState([]);
-  // @ts-ignore
   const [imageSrc, setImageSrc] = useState(selected?.imageSrc);
 
   const { tags = [] } = globalState;
   const availableTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
   const initialPlaylistTags = getInitialPlaylistTags();
   const [selectedTagKeys, setSelectedTagKeys] = useState(initialPlaylistTags);
+
+  const [actionMode, setActionMode] = useState(actionModes.default);
+  const [isSelectable, setIsSelectable] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -57,10 +74,6 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
 
-  const onUploadComplete = (uri: string) => {
-    setImageSrc(uri);
-  };
-
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
@@ -72,6 +85,16 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent>
+        <AppDialog
+          leftActionLabel="Cancel"
+          rightActionLabel="Delete"
+          leftActionCb={() => setShowDeleteDialog(false)}
+          rightActionCb={() => deletePlaylist()}
+          onDismiss={() => setShowDeleteDialog(false)}
+          showDialog={showDeleteDialog}
+          title="Delete Playlist"
+          subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+        />
         <ScrollView>
           <MediaCard
             title={title}
@@ -105,7 +128,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
                       compact
                       color={theme.colors.white}
                       style={styles.deleteItemButton}
-                      onPress={() => console.log('Do something!')}
+                      onPress={() => setShowDeleteDialog(true)}
                     >
                       {' '}
                     </Button>
@@ -176,6 +199,10 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   async function loadData() {
     await dispatch(getPlaylistById(playlistId));
     setIsLoaded(true);
+  }
+
+  function onUploadComplete(uri: string) {
+    setImageSrc(uri);
   }
 
   async function savePlaylist() {
@@ -260,6 +287,12 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
     clearCheckboxSelection();
     setIsSelectable(false);
     resetData();
+  }
+
+  async function deletePlaylist() {
+    await dispatch(removeUserPlaylist(playlistId));
+    await dispatch(getUserPlaylists({}));
+    await goToPlaylists();
   }
 
   function resetData() {
