@@ -8,7 +8,7 @@ import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/h
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { View, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps, AppUpload, MediaList, MediaCard, UploadPlaceholder } from 'mediashare/components/layout';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps, ActionButtons, AppUpload, MediaList, MediaCard, UploadPlaceholder } from 'mediashare/components/layout';
 import { routeNames } from 'mediashare/routes';
 import { createRandomRenderKey } from 'mediashare/core/utils';
 import { PlaylistCategoryType, MediaItem, MediaCategoryType } from 'mediashare/rxjs-api';
