@@ -114,7 +114,7 @@ const AccountNavigation = () => {
 const PublicStackNavigator = createStackNavigator();
 const PublicMainNavigation = () => {
   return (
-    <PublicStackNavigator.Navigator initialRouteName={'Login'}>
+    <PublicStackNavigator.Navigator initialRouteName="Login">
       <PublicStackNavigator.Screen {...routeConfig.login} component={Login} />
     </PublicStackNavigator.Navigator>
   );
@@ -140,7 +140,7 @@ function PrivateMainNavigation({ user, globalState }: PrivateMainNavigationProps
   const navigationTabListeners = createBottomTabListeners(globalState);
   return (
     <PrivateNavigator.Navigator
-      initialRouteName={'Account'}
+      initialRouteName="Account"
       activeColor={theme.colors.text}
       inactiveColor={theme.colors.primary}
       barStyle={{ backgroundColor: theme.colors.background }}
@@ -154,15 +154,15 @@ function PrivateMainNavigation({ user, globalState }: PrivateMainNavigationProps
       })}
     >
       {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen name={'Browse'} component={BrowseNavigation} listeners={navigationTabListeners} />
+        <PrivateNavigator.Screen name="Browse" component={BrowseNavigation} listeners={navigationTabListeners} />
       )}
 
       {(build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen name={'Playlists'} component={PlaylistsNavigation} listeners={navigationTabListeners} />
+        <PrivateNavigator.Screen name="Playlists" component={PlaylistsNavigation} listeners={navigationTabListeners} />
       )}
 
-      {build.forAdmin && <PrivateNavigator.Screen name={'Media'} component={MediaNavigation} listeners={navigationTabListeners} />}
-      <PrivateNavigator.Screen name={'Account'} component={AccountNavigation} initialParams={{ userId: user._id }} />
+      {build.forAdmin && <PrivateNavigator.Screen name="Media" component={MediaNavigation} listeners={navigationTabListeners} />}
+      <PrivateNavigator.Screen name="Account" component={AccountNavigation} initialParams={{ userId: user._id }} />
     </PrivateNavigator.Navigator>
   );
 }

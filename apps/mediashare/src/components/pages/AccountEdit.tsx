@@ -65,10 +65,10 @@ const AccountEdit = ({ route }: AccountEditProps) => {
         />
       </View>
       <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.container}>
-        <TextField onChangeText={(text) => onUpdate({ firstName: text })} label={'First Name'} value={state?.firstName} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ lastName: text })} label={'Last Name'} value={state?.lastName} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ email: text })} label={'Email'} value={state?.email} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label={'Phone Number'} value={state?.phoneNumber} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ firstName: text })} label="First Name" value={state?.firstName} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ lastName: text })} label="Last Name" value={state?.lastName} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ email: text })} label="Email" value={state?.email} disabled={!isLoaded} />
+        <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label="Phone Number" value={state?.phoneNumber} disabled={!isLoaded} />
       </ScrollView>
       <ActionButtons disableAction={withoutName()} disableCancel={withoutName()} onCancelClicked={cancel} onActionClicked={save} actionLabel="Save" />
     </PageContainer>

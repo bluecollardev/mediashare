@@ -85,14 +85,14 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     <PageContainer>
       <PageContent>
         <AppDialog
-          leftActionLabel={'Cancel'}
-          rightActionLabel={'Delete'}
+          leftActionLabel="Cancel"
+          rightActionLabel="Delete"
           leftActionCb={() => setShowDialog(false)}
           rightActionCb={() => deletePlaylist()}
           onDismiss={() => setShowDialog(false)}
           showDialog={showDialog}
-          title={'Delete Playlist'}
-          subtitle={'Are you sure you want to do this? This action is final and cannot be undone.'}
+          title="Delete Playlist"
+          subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
         <ScrollView>
           <MediaCard
@@ -147,7 +147,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
                 // disableAction={actionMode === actionModes.delete}
                 actionLabel="Add To Playlist"
                 // actionIcon={!(Array.isArray(items) && items.length > 0) ? 'playlist-add' : undefined}
-                actionIcon={'playlist-add'}
+                actionIcon="playlist-add"
                 onActionClicked={() => addToPlaylist({ playlistId })}
               />
             )}

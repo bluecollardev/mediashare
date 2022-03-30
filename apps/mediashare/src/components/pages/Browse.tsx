@@ -52,7 +52,7 @@ export const SharedBlock = () => {
               title={title}
               author={author}
               description={description}
-              category={'General'}
+              category="General"
               tags={['General']}
               thumbnail={imageSrc}
               showSocial={true}

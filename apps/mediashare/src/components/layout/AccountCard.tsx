@@ -45,7 +45,7 @@ export const AccountCard = ({
   //   <IconButton icon="delete-outline" color={theme.colors.text} size={20} onPress={onDelete} />
   //   <IconButton icon="play-circle-filled" color={theme.colors.text} size={20} onPress={onView} />
   // </View>
-  // <Menu.Item icon={'play-circle-filled'} onPress={() => {}} title="Watch" />
+  // <Menu.Item icon="play-circle-filled" onPress={() => {}} title="Watch" />
   return (
     <>
       <Card mode="elevated">
@@ -89,7 +89,7 @@ export const AccountCard = ({
           {withoutName() && (
             <Card>
               <Card.Title
-                title={'A name is required'}
+                title="A name is required"
                 left={(props) => <MaterialIcons {...props} name="warning" color={theme.colors.error} size={30} />}
                 // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
               />

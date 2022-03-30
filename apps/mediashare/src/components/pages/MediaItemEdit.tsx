@@ -75,14 +75,14 @@ const MediaItemEdit = ({
     <PageContainer>
       <KeyboardAvoidingPageContent>
         <AppDialog
-          leftActionLabel={'Cancel'}
-          rightActionLabel={'Delete'}
+          leftActionLabel="Cancel"
+          rightActionLabel="Delete"
           leftActionCb={() => setShowDialog(false)}
           rightActionCb={() => deleteItem()}
           onDismiss={() => setShowDialog(false)}
           showDialog={showDialog}
-          title={'Delete Media Item'}
-          subtitle={'Are you sure you want to do this? This action is final and cannot be undone.'}
+          title="Delete Media Item"
+          subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
         <ScrollView>
           <MediaCard

@@ -205,7 +205,7 @@ const LoginComponent = ({}: PageProps) => {
               <ForgotPassword />
               {/* <TOTPSetup /> */}
               {/* <Loading /> */}
-              <CustomVerify override={'ConfirmSignUp'} />
+              <CustomVerify override="ConfirmSignUp" />
             </Authenticator>
           )}
         </ScrollView>
