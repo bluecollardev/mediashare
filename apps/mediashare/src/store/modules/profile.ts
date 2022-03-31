@@ -1,34 +1,47 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
-import { ProfileDto } from 'mediashare/rxjs-api';
+import { makeActions } from 'mediashare/store/factory';
 import { ApiService } from 'mediashare/store/apis';
+import { ProfileDto } from 'mediashare/rxjs-api';
 
-interface InitialState {
+// Define these in snake case or our converter won't work... we need to fix that
+const profileActionNames = [
+  'get_user_by_id',
+] as const;
+
+export const profileActions = makeActions(profileActionNames);
+
+export const loadProfile = createAsyncThunk(profileActions.getUserById.type, async (userId: string | undefined, { extra  }) => {
+  const { api } = extra as { api: ApiService };
+  return userId ?
+    await api.users.usersControllerFindOne({ userId }).toPromise() :
+    await api.user.userControllerGetUser().toPromise();
+});
+
+interface ProfileState {
   entity: Partial<ProfileDto>;
+  loading: boolean;
+  loaded: boolean;
 }
 
-const INITIAL_STATE: InitialState = {
+export const profileInitialState: ProfileState = {
   entity: {
     sharedItems: [],
   } as Partial<ProfileDto>,
+  loading: false,
+  loaded: false,
 };
-
-// @ts-ignore
-const loadProfile = createAsyncThunk('getUserById', async (userId?: string, { extra }) => {
-  const { api } = extra as { api: ApiService };
-  return userId ? await api.users.usersControllerFindOne({ userId }).toPromise() : await api.user.userControllerGetUser().toPromise();
-});
 
 const profileSlice = createSlice({
   name: 'profile',
-  initialState: INITIAL_STATE,
+  initialState: profileInitialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(loadProfile.fulfilled, (state, action) => {
-      return { ...state, entity: action.payload };
-    });
+    builder
+      .addCase(loadProfile.fulfilled, (state, action) => ({
+        ...state, entity: action.payload, loading: false, loaded: true
+      }));
   },
 });
 
-const { reducer } = profileSlice;
-export { reducer, loadProfile };
+export default profileSlice;
+export const reducer = profileSlice.reducer;

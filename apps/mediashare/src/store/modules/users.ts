@@ -1,36 +1,48 @@
-import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
-
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { makeActions } from 'mediashare/store/factory';
+import { reducePendingState, reduceRejectedState, reduceFulfilledState } from 'mediashare/store/helpers';
+import { ApiService } from 'mediashare/store/apis';
 import { UserDto } from 'mediashare/rxjs-api';
-import { apis } from 'mediashare/store/apis';
 
-import { reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
+// Define these in snake case or our converter won't work... we need to fix that
+const usersActionNames = [
+  'load_users',
+] as const;
+
+export const usersActions = makeActions(usersActionNames);
+
+export const loadUsers = createAsyncThunk(usersActions.loadUsers.type, async (opts: {} | undefined, { extra }) => {
+  const { api } = extra as { api: ApiService };
+  return await api.users.usersControllerFindAll().toPromise();
+});
 
 export interface UsersState {
   entities: UserDto[];
+  selected: UserDto[];
   loading: boolean;
+  loaded: boolean;
 }
 
-// We don't define any 'get' actions as they don't update state - use redux selectors instead
-const usersActionNames = [
-  'load_users'
-] as const;
-
-export const ActionTypes = makeActions(usersActionNames);
-export const loadUsers = createAsyncThunk(ActionTypes.loadUsers.type, async () => {
-  return await apis.users.usersControllerFindAll().toPromise();
-});
-
-const initialState: UsersState = {
+export const usersInitialState: UsersState = {
   entities: [],
+  selected: [],
   loading: false,
+  loaded: false,
 };
 
-export const usersReducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(loadUsers.fulfilled, (state, action) => ({
-      ...state, entities: action.payload
-    }))
-    .addCase(loadUsers.rejected, reduceRejectedState())
-    .addCase(loadUsers.pending, reducePendingState());
+const usersSlice = createSlice({
+  name: 'users',
+  initialState: usersInitialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(loadUsers.pending, reducePendingState())
+      .addCase(loadUsers.rejected, reduceRejectedState())
+      .addCase(loadUsers.fulfilled, reduceFulfilledState((state, action) => ({
+        ...state, entities: action.payload, loading: false, loaded: true
+      })))
+  },
 });
+
+export default usersSlice;
+export const reducer = usersSlice.reducer;

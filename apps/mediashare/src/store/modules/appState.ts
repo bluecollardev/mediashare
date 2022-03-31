@@ -1,6 +1,7 @@
+// TODO: Clean this file up, so it looks liek the other ones....
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const INITIAL_STATE = {
+const appInitialState = {
   loading: false,
   error: {
     name: '',
@@ -11,7 +12,7 @@ const INITIAL_STATE = {
 
 const appStateSlice = createSlice({
   name: 'appState',
-  initialState: INITIAL_STATE,
+  initialState: appInitialState,
   reducers: {
     setError: (state, action: PayloadAction<{ name: string; message: string }>) => {
       const { name, message } = action.payload;

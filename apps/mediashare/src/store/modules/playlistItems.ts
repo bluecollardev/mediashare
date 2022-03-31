@@ -1,16 +1,21 @@
-import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+// TODO: This ISN'T COMPLETED OR WORKING!
+//  PLAYLIST ITEMS WILL BE REQUIRED FOR SORTING!
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { makeActions } from 'mediashare/store/factory';
+import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
 import { ApiService } from 'mediashare/store/apis';
-import { CreatePlaylistDto, UpdatePlaylistDto, CreatePlaylistResponseDto, PlaylistResponseDto, PlaylistItemResponseDto } from 'mediashare/rxjs-api';
-// import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
+import { CreatePlaylistDto, UpdatePlaylistDto, PlaylistItemResponseDto } from 'mediashare/rxjs-api';
 
-const playlistItemActionNames = ['add_user_playlist_item', 'update_user_playlist_item', 'remove_user_playlist_item'] as const;
+// Define these in snake case or our converter won't work... we need to fix that
+const playlistItemActionNames = [
+  'add_user_playlist_item',
+  'update_user_playlist_item',
+  'remove_user_playlist_item'
+] as const;
 
-export const playlistItemActionTypes = makeActions(playlistItemActionNames);
+export const playlistItemActions = makeActions(playlistItemActionNames);
 
-export const clearPlaylistAction = createAction('clearPlaylist');
-
-export const addUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.addUserPlaylistItem.type, async (playlist: CreatePlaylistDto, { extra }) => {
+export const addUserPlaylistItem = createAsyncThunk(playlistItemActions.addUserPlaylistItem.type, async (playlist: CreatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   // TODO: playlistControllerCreateItem does not exist!
   // @ts-ignore
@@ -18,35 +23,40 @@ export const addUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.addU
   return response.userPlaylists;
 });
 
-export const updateUserPlaylistItem = createAsyncThunk(playlistItemActionTypes.updateUserPlaylistItem.type, async (playlist: UpdatePlaylistDto, { extra }) => {
+export const updateUserPlaylistItem = createAsyncThunk(playlistItemActions.updateUserPlaylistItem.type, async (playlist: UpdatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.playlists
-    .playlistControllerUpdate({
-      playlistId: playlist._id,
-      updatePlaylistDto: playlist,
-    })
-    .toPromise();
+  return await api.playlists.playlistControllerUpdate({ playlistId: playlist._id, updatePlaylistDto: playlist }).toPromise();
 });
 
 export interface PlaylistItemsInitialState {
-  created: CreatePlaylistResponseDto | undefined;
-  selected: PlaylistResponseDto | undefined;
+  // entities: PlaylistResponseDto[] | PlaylistItemResponseDto[];
+  // selected: PlaylistResponseDto[] | PlaylistItemResponseDto[];
+  entities: PlaylistItemResponseDto[];
+  selected: PlaylistItemResponseDto[];
   loading: boolean;
   loaded: boolean;
 }
 
-export const PLAYLIST_ITEMS_INITIAL_STATE: PlaylistItemsInitialState = {
-  created: undefined,
-  selected: undefined,
+export const playlistsItemsInitialState: PlaylistItemsInitialState = {
+  entities: [],
+  selected: [],
   loading: false,
   loaded: false,
 };
 
 const playlistItemsSlice = createSlice({
   name: 'playlistItems',
-  initialState: PLAYLIST_ITEMS_INITIAL_STATE,
+  initialState: playlistsItemsInitialState,
   reducers: {},
-  extraReducers: (builder) => {}
+  extraReducers: (builder) => {
+    builder
+      .addCase(addUserPlaylistItem.pending, reducePendingState())
+      .addCase(addUserPlaylistItem.rejected, reduceRejectedState())
+      .addCase(addUserPlaylistItem.fulfilled, reduceFulfilledState())
+      .addCase(updateUserPlaylistItem.pending, reducePendingState())
+      .addCase(updateUserPlaylistItem.rejected, reduceRejectedState())
+      .addCase(updateUserPlaylistItem.fulfilled, reduceFulfilledState())
+  }
 });
 
 export default playlistItemsSlice;

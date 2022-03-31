@@ -1,9 +1,9 @@
+// TODO: Clean this file up, so it looks liek the other ones....
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
-import { CreatePlaylistDto } from 'mediashare/rxjs-api';
-import { playlists } from 'mediashare/store/apis';
-
 import { reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
+import { CreatePlaylistDto } from 'mediashare/rxjs-api';
+
+import { playlists } from 'mediashare/store/apis';
 
 function initialStateFactory(): CreatePlaylistDto & { loading: boolean } {
   return {
@@ -18,8 +18,6 @@ function initialStateFactory(): CreatePlaylistDto & { loading: boolean } {
   };
 }
 
-const CREATE_PLAYLIST_KEY = 'createPlaylist' as const;
-
 // const actions = makeActions(['addItem', 'removeItem', 'setDescription', 'setCreatedBy', 'setTitle', 'setCategory', 'setTag']);
 
 const createPlaylist = createAsyncThunk('createPlaylist', async function (createPlaylistDto: CreatePlaylistDto) {
@@ -28,15 +26,13 @@ const createPlaylist = createAsyncThunk('createPlaylist', async function (create
 
 const slice = createSlice({
   initialState: initialStateFactory(),
-  name: CREATE_PLAYLIST_KEY,
+  name: 'createPlaylist',
   reducers: {
     setMediaIds: (state, action) => {
       const mediaIds = action.payload;
       return { ...state, mediaIds };
     },
-    setCreatedBy: (state, action) => {
-      return { ...state, createdBy: action.payload };
-    },
+    setCreatedBy: (state, action) => ({ ...state, createdBy: action.payload }),
     setTitle: (state, action) => ({ ...state, title: action.payload }),
     setCategory: (state, action) => ({ ...state, category: action.payload }),
     setTags: (state, action) => ({ ...state, tags: action.payload }),
@@ -53,9 +49,5 @@ const slice = createSlice({
   },
 });
 
-const {
-  actions: { setCategory, setTags, setDescription, setMediaIds, setTitle },
-  reducer,
-} = slice;
-
+const { actions: { setCategory, setTags, setDescription, setMediaIds, setTitle }, reducer, } = slice;
 export { reducer, setCategory, setTags, setDescription, setMediaIds, setTitle, createPlaylist };

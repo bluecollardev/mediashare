@@ -1,30 +1,31 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Tag } from 'mediashare/rxjs-api';
-
 import { makeActions } from 'mediashare/store/factory';
-
-import { ApiService } from 'mediashare/store/apis';
 import { reducePendingState, reduceRejectedState, reduceFulfilledState } from 'mediashare/store/helpers';
+import { ApiService } from 'mediashare/store/apis';
+import { Tag } from 'mediashare/rxjs-api';
 
 // Export tag utils
 export * from '../../core/utils/tags';
 
-const tagActionNames = ['get_tags'] as const;
+// Define these in snake case or our converter won't work... we need to fix that
+const tagActionNames = [
+  'get_tags',
+] as const;
 
-export const tagsActionTypes = makeActions(tagActionNames);
+export const tagsActions = makeActions(tagActionNames);
 
-export const getTags = createAsyncThunk(tagsActionTypes.getTags.type, async (undefined, { extra }) => {
+export const getTags = createAsyncThunk(tagsActions.getTags.type, async (opts: {} | undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.tags.tagsControllerFindAll().toPromise();
 });
 
-interface InitialState {
+interface TagsState {
   entities: Tag[];
   loading: boolean;
   loaded: boolean;
 }
 
-const INITIAL_STATE: InitialState = {
+const tagsInitialState: TagsState = {
   entities: [],
   loading: false,
   loaded: false,
@@ -32,15 +33,15 @@ const INITIAL_STATE: InitialState = {
 
 const tagsSlice = createSlice({
   name: 'tagsSlice',
-  initialState: INITIAL_STATE,
+  initialState: tagsInitialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getTags.pending, reducePendingState())
       .addCase(getTags.rejected, reduceRejectedState())
-      .addCase(getTags.fulfilled, reduceFulfilledState((state, action) => {
-        return ({ ...state, entities: action.payload })
-      }));
+      .addCase(getTags.fulfilled, reduceFulfilledState((state, action) => ({
+        ...state, entities: action.payload, loading: false, loaded: true
+      })))
   },
 });
 
