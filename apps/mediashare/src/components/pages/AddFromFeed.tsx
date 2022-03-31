@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { FlatList } from 'react-native';
 import { Subheading, Card } from 'react-native-paper';
 import { useAppSelector } from 'mediashare/store';
-import { getFeedMediaItems, saveFeedMediaItems } from 'mediashare/store/modules/mediaItems';
+import { getFeedMediaItems, saveFeedMediaItems } from 'mediashare/store/modules/mediaItem';
 import { AwsMediaItem } from 'mediashare/core/aws/aws-media-item.model';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';

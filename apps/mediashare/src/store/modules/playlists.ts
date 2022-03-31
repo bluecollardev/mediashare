@@ -22,7 +22,7 @@ export const findPlaylists = createAsyncThunk(playlistsActions.findPlaylists.typ
   return await api.playlists.playlistControllerFindAll({ text, tags }).toPromise();
 });
 
-export const getUserPlaylists = createAsyncThunk(playlistsActions.getUserPlaylists.type, async (opts: {} | undefined, { extra }) => {
+export const getUserPlaylists = createAsyncThunk(playlistsActions.getUserPlaylists.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.user.userControllerGetUserPlaylists().toPromise();
 });

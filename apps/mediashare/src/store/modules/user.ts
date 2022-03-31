@@ -22,14 +22,14 @@ export const loginAction = createAsyncThunk(userActions.login.type, async (autho
   return await api.user.userControllerAuthorize({ authorizeDto }).toPromise();
 });
 
-export const logout = createAsyncThunk(userActions.logout.type, async (opts: {} | undefined, { extra }) => {
+export const logout = createAsyncThunk(userActions.logout.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   await api.user.userControllerLogout().toPromise();
   // await setKeyPair('token', ''); // TODO: Not compatible with react-native-web [https://github.com/expo/expo/issues/7744]
   await signOut();
 });
 
-export const loadUser = createAsyncThunk(userActions.loadUser.type, async (opts: {} | undefined, { extra }) => {
+export const loadUser = createAsyncThunk(userActions.loadUser.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.user.userControllerGetUser().toPromise();
 });

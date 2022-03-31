@@ -31,7 +31,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const user = useAppSelector((state) => state.profile.entity);
+  const user = useAppSelector((state) => state?.profile?.entity);
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
   const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
   const fullName = state?.firstName || state?.lastName ? `${state?.firstName} ${state?.lastName}` : 'Unnamed User';

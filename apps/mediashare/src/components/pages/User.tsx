@@ -9,7 +9,7 @@ import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
 
 const SharedItems = ({ selectable = false }) => {
-  const sharedItems = useAppSelector((state) => state.user.sharedItems) || [];
+  const sharedItems = useAppSelector((state) => state?.user?.entity?.sharedItems) || [];
   return (
     <View>
       <View
@@ -73,7 +73,7 @@ export const User = ({}: PageProps) => {
     { key: 'shared', title: 'Shared Items', icon: 'movie' },
   ]); */
 
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state?.user?.entity);
   useEffect(() => {
     async function loadData() {
       // await dispatch(findMediaItems({}));

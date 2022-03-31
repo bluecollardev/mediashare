@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
-import { getUserPlaylists, shareUserPlaylist } from 'mediashare/store/modules/playlists';
+import { shareUserPlaylist } from 'mediashare/store/modules/playlist';
+import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 import { loadUsers } from 'mediashare/store/modules/users';
 import { useGoBack, useRouteName } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
@@ -16,8 +17,8 @@ const ShareWith = ({}: PageProps) => {
   const goBack = useGoBack();
   const viewPlaylists = useRouteName(routeNames.playlists);
 
-  const users = useAppSelector((state) => state.users.entities);
-  const playlists = useAppSelector((state) => state.userPlaylists.selected);
+  const users = useAppSelector((state) => state?.users?.entities);
+  const playlists = useAppSelector((state) => state?.userPlaylists?.selected);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const ShareWith = ({}: PageProps) => {
   );
 
   async function loadData() {
-    await dispatch(getUserPlaylists({}));
+    await dispatch(getUserPlaylists());
   }
 
   function updateSelectedUsers(bool: boolean, userId: string) {

@@ -8,7 +8,7 @@ import { PageContainer, PageContent, PageProps, MediaCard } from 'mediashare/com
 
 // @ts-ignore
 const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
-  const mediaItem = useAppSelector((state) => state.mediaItem?.entity);
+  const mediaItem = useAppSelector((state) => state?.mediaItem?.entity);
   const { _id, title, description, category, author, uri, thumbnail } = mediaItem || {};
 
   const { tags = [] } = globalState;

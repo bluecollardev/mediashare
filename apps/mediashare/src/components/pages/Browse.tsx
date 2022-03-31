@@ -14,7 +14,7 @@ import { filterUnique } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 
 export const SharedList = () => {
-  const { sharedItems } = useAppSelector((state) => state?.user);
+  const { sharedItems } = useAppSelector((state) => state?.user?.entity);
   // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
   const list = filterUnique(sharedItems, 'title') || [];
 
@@ -32,7 +32,7 @@ export const SharedList = () => {
 };
 export const SharedBlock = () => {
   const randomKey = createRandomRenderKey();
-  const { sharedItems } = useAppSelector((state) => state?.user);
+  const { sharedItems } = useAppSelector((state) => state?.user?.entity);
   const list = filterUnique(sharedItems, 'playlistId') || [];
   let sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));

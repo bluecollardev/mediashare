@@ -11,7 +11,7 @@ export interface AddFromCollectionState {}
 
 export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollectionProps) => {
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
-  const items = useAppSelector((state) => state.mediaItems.entities);
+  const items = useAppSelector((state) => state?.mediaItems?.entities);
 
   return (
     <PageContainer>

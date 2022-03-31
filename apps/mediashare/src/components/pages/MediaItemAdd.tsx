@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { addMediaItem } from 'mediashare/store/modules/mediaItems';
+import { addMediaItem } from 'mediashare/store/modules/mediaItem';
 import { CreateMediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
 import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
@@ -16,7 +16,7 @@ import { theme } from 'mediashare/styles';
 export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
   const dispatch = useDispatch();
 
-  // const author = useAppSelector((state) => state?.user.username);
+  // const author = useAppSelector((state) => state?.user?.entity?.username);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState(MediaCategoryType.Free);
@@ -29,7 +29,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
   const [mediaUri, setMediaUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
   const [uploading, setUploading] = useState(false);
-  // const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
+  // const mediaSrc = useAppSelector((state) => state?.mediaItem?.mediaSrc);
   const isValid = function () {
     return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !minLength(1)(mediaUri);
   };

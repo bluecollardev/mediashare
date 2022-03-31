@@ -59,7 +59,7 @@ export function PageActions({ children, style }: PageActionsProps) {
 
 export function PageContainer({ children }: PageContainerProps) {
   const dispatch = useDispatch();
-  const app = useAppSelector((state) => state.app);
+  const app = useAppSelector((state) => state?.app);
   // const [visible, setVisible] = useState(false);
   const hideDialog = function () {
     dispatch(clearError());

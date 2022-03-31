@@ -4,7 +4,8 @@ import { ScrollView } from 'react-native';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
-import { getUserPlaylists, getPlaylistById, removeUserPlaylist, selectPlaylistAction } from 'mediashare/store/modules/playlists';
+import { getPlaylistById, removeUserPlaylist } from 'mediashare/store/modules/playlist';
+import { getUserPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
 import { loadUsers } from 'mediashare/store/modules/users';
 import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
@@ -27,10 +28,10 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   const goToShareWith = useRouteName(routeNames.shareWith);
   const goToPlaylists = usePlaylists();
 
-  const { loaded, selected } = useAppSelector((state) => state.playlist);
+  const { loaded, selected } = useAppSelector((state) => state?.playlist);
   const [isLoaded, setIsLoaded] = useState(loaded);
 
-  const appUserId = useAppSelector((state) => state.user?._id);
+  const appUserId = useAppSelector((state) => state?.user?.entity?._id);
   // @ts-ignore
   const {
     _id,
@@ -181,14 +182,14 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   }
 
   async function sharePlaylist() {
-    await dispatch(selectPlaylistAction({ isChecked: true, plist: selected as PlaylistResponseDto }));
+    await dispatch(selectPlaylist({ isChecked: true, plist: selected as PlaylistResponseDto }));
     goToShareWith();
   }
 
   // TODO: This is unused! Implement or remove ASAP!
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function cancelSharePlaylist() {
-    dispatch(selectPlaylistAction({ isChecked: false, plist: selected as PlaylistResponseDto }));
+    dispatch(selectPlaylist({ isChecked: false, plist: selected as PlaylistResponseDto }));
   }
 
   async function editPlaylist() {
@@ -197,7 +198,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
 
   async function deletePlaylist() {
     await dispatch(removeUserPlaylist(playlistId));
-    await dispatch(getUserPlaylists({}));
+    await dispatch(getUserPlaylists());
     await goToPlaylists();
   }
 };

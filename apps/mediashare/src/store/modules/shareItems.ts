@@ -21,14 +21,14 @@ export const getShareItemById = createAsyncThunk(shareItemsActions.getShareItem.
   return await api.shareItems.shareItemsControllerFindOne({ shareId: id }).toPromise();
 });
 
-export const findItemsIAmSharing = createAsyncThunk(shareItemsActions.findItemsIAmSharing.type, async (opts: {} | undefined, { extra }) => {
+export const findItemsIAmSharing = createAsyncThunk(shareItemsActions.findItemsIAmSharing.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.user.userControllerGetSharesPlaylists(opts).toPromise();
+  return await api.user.userControllerGetSharesPlaylists().toPromise();
 });
 
-export const findItemsSharedWithMe = createAsyncThunk(shareItemsActions.findItemsSharedWithMe.type, async (opts: {} | undefined, { extra }) => {
+export const findItemsSharedWithMe = createAsyncThunk(shareItemsActions.findItemsSharedWithMe.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.shareItems.shareItemsControllerFindAll(opts).toPromise();
+  return await api.shareItems.shareItemsControllerFindAll().toPromise();
 });
 
 export const readShareItem = createAsyncThunk(shareItemsActions.readShareItem.type, async (id: string, { extra }) => {

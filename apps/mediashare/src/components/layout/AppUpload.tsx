@@ -4,7 +4,7 @@ import Config from 'mediashare/config';
 
 import { thumbnailRoot, awsUrl } from 'mediashare/core/aws/key-factory';
 import { fetchAndPutToS3 } from 'mediashare/core/aws/storage';
-import { createThumbnail } from 'mediashare/store/modules/mediaItems';
+import { createThumbnail } from 'mediashare/store/modules/mediaItem';
 import { setError } from 'mediashare/store/modules/appState';
 
 import * as DocumentPicker from 'expo-document-picker';

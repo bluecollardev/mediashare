@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { useAppSelector } from 'mediashare/store';
-import { deleteMediaItem, updateMediaItem } from 'mediashare/store/modules/mediaItems';
+import { deleteMediaItem, updateMediaItem } from 'mediashare/store/modules/mediaItem';
 // TODO: Fix update dto! Not sure why it's not being exported normally...
 import { UpdateMediaItemDto } from 'mediashare/rxjs-api/models/UpdateMediaItemDto';
 import { MediaCategoryType } from 'mediashare/rxjs-api';

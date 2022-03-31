@@ -36,7 +36,7 @@ export const AccountCard = ({
 }: AccountCardProps) => {
   const [visible, setVisible] = useState(false);
 
-  const user = useAppSelector((state) => state.profile.entity);
+  const user = useAppSelector((state) => state?.profile?.entity);
   const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
   const [state] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 

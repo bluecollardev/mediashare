@@ -25,7 +25,7 @@ export const SharedList = ({
   onView = () => undefined,
   onChecked = () => undefined,
 }: SharedListProps) => {
-  const { _id } = useAppSelector((state) => state.user);
+  const { _id } = useAppSelector((state) => state?.user?.entity);
 
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
   const data = R.map(R.keys(mappedSharedItems), (key) => {

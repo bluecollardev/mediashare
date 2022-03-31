@@ -94,7 +94,7 @@ const MediaNavigation = () => {
 
 const AccountStackNavigator = createStackNavigator();
 const AccountNavigation = () => {
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state?.user?.entity);
 
   return (
     <AccountStackNavigator.Navigator initialRouteName={user.firstName ? 'Account' : 'accountEdit'}>
@@ -214,8 +214,8 @@ function App() {
   //   checkToken();
   // }, []);
 
-  const user = useAppSelector((state) => state.user);
-  const loading = useAppSelector((state) => state.app.loading);
+  const user = useAppSelector((state) => state?.user?.entity);
+  const loading = useAppSelector((state) => state?.app?.loading);
   useEffect(() => {
     setIsLoggedIn(user?._id?.length > 0);
   }, [user]);

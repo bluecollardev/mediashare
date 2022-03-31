@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
-import { getUserPlaylists, findPlaylists, removeUserPlaylist, selectPlaylistAction } from 'mediashare/store/modules/playlists';
+import { removeUserPlaylist } from 'mediashare/store/modules/playlist';
+import { getUserPlaylists, findPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
@@ -190,7 +191,7 @@ export const Playlists = ({ globalState }: PageProps) => {
     if (args.text || args.tags.length > 0) {
       await dispatch(findPlaylists(args));
     } else {
-      await dispatch(getUserPlaylists({}));
+      await dispatch(getUserPlaylists());
     }
   }
 
@@ -256,7 +257,7 @@ export const Playlists = ({ globalState }: PageProps) => {
   }
 
   function updateSelection(bool, item) {
-    dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
+    dispatch(selectPlaylist({ isChecked: bool, plist: item }));
   }
 
   function clearCheckboxSelection() {

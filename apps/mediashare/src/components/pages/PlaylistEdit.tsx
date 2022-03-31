@@ -2,12 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useAppSelector } from 'mediashare/store';
-import {
-  getPlaylistById,
-  getUserPlaylists,
-  removeUserPlaylist,
-  updateUserPlaylist
-} from 'mediashare/store/modules/playlists';
+import { getPlaylistById, removeUserPlaylist, updateUserPlaylist } from 'mediashare/store/modules/playlist';
+import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
@@ -291,7 +287,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
 
   async function deletePlaylist() {
     await dispatch(removeUserPlaylist(playlistId));
-    await dispatch(getUserPlaylists({}));
+    await dispatch(getUserPlaylists());
     await goToPlaylists();
   }
 

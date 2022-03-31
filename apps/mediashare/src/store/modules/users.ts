@@ -11,7 +11,7 @@ const usersActionNames = [
 
 export const usersActions = makeActions(usersActionNames);
 
-export const loadUsers = createAsyncThunk(usersActions.loadUsers.type, async (opts: {} | undefined, { extra }) => {
+export const loadUsers = createAsyncThunk(usersActions.loadUsers.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.users.usersControllerFindAll().toPromise();
 });

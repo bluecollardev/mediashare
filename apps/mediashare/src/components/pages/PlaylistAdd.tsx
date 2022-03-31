@@ -7,7 +7,8 @@ import { useRouteWithParams } from 'mediashare/hooks/NavigationHooks';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
 import { findMediaItems } from 'mediashare/store/modules/mediaItems';
-import { addUserPlaylist, getUserPlaylists, getPlaylistById } from 'mediashare/store/modules/playlists';
+import { getPlaylistById, addUserPlaylist } from 'mediashare/store/modules/playlist';
+import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { titleValidator, descriptionValidator, categoryValidator } from 'mediashare/core/utils/validators';
@@ -19,7 +20,7 @@ import { theme } from 'mediashare/styles';
 const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
   const dispatch = useDispatch();
 
-  const author = useAppSelector((state) => state?.user.username);
+  const author = useAppSelector((state) => state?.user?.entity?.username);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState();
   const [category, setCategory] = useState(PlaylistCategoryType.Free);
@@ -117,7 +118,7 @@ const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
     // @ts-ignore TODO: Fix types on dispatch?
     const { payload } = await dispatch(addUserPlaylist(dto));
     const playlistId = payload.playlist._id;
-    await dispatch(getUserPlaylists({}));
+    await dispatch(getUserPlaylists());
     await dispatch(getPlaylistById(playlistId));
     editPlaylist(playlistId);
   }

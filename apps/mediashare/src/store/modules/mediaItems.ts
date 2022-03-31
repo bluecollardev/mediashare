@@ -14,7 +14,7 @@ const mediaItemsActionNames = [
 
 export const mediaItemsActions = makeActions(mediaItemsActionNames);
 
-export const loadUserMediaItems = createAsyncThunk(mediaItemsActions.loadUserMediaItems.type, async (opts: {} | undefined, { extra }) => {
+export const loadUserMediaItems = createAsyncThunk(mediaItemsActions.loadUserMediaItems.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.user.userControllerGetMediaItems().toPromise();
 });

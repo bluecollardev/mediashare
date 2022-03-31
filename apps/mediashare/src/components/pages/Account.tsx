@@ -44,13 +44,13 @@ export const Account = ({ globalState }: PageProps) => {
 
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state?.user?.entity);
   const userId = user?._id || null;
   const { firstName, lastName, email, phoneNumber, likesCount, sharesCount, sharedCount } = user;
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
-  const contacts = useAppSelector((state) => state.users.entities);
+  const contacts = useAppSelector((state) => state?.users?.entities);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [isSelectable, setIsSelectable] = useState(false);
   const [selectedItems, setSelectedItems] = React.useState([]);

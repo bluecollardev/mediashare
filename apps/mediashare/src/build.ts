@@ -1,8 +1,8 @@
 import Config from './config';
-import { makeActions } from 'mediashare/store/factory';
+import { makeEnum } from 'mediashare/core/utils/factory';
 
 const userLevels = ['admin', 'free', 'subscriber'] as const;
-export const userTypes = makeActions(userLevels);
+export const userTypes = makeEnum(userLevels);
 
 // @ts-ignore
 export const userType = Config.BUILD_FOR || userTypes.admin;

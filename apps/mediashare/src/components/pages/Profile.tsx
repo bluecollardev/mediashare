@@ -31,9 +31,7 @@ const Profile = ({ route }: ProfileProps) => {
 
   const viewPlaylist = useViewPlaylistById();
 
-  const profile = useAppSelector((state) => {
-    return state.profile.entity;
-  });
+  const profile = useAppSelector((state) => state?.profile?.entity)
 
   const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';

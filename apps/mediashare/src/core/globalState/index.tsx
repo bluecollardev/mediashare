@@ -34,8 +34,8 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
   return function GlobalStateProvider(props: any) {
     const { history, location } = props;
 
-    const loading = useAppSelector((state) => state?.app.loading);
-    const user = useAppSelector((state) => state?.user);
+    const loading = useAppSelector((state) => state?.app?.loading);
+    const user = useAppSelector((state) => state?.user?.entity);
     const tags = useAppSelector((state) => state?.tags?.entities || []);
     const authenticatedAndLoggedIn = user?._id?.length > 0;
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authenticatedAndLoggedIn);
@@ -88,8 +88,8 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
 
     async function loadUserData() {
       await dispatch(loadUser());
-      await dispatch(findItemsIAmSharing({}));
-      await dispatch(findItemsSharedWithMe({}));
+      await dispatch(findItemsIAmSharing());
+      await dispatch(findItemsSharedWithMe());
     }
   };
 };
