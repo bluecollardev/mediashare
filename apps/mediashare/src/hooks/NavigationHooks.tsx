@@ -99,7 +99,7 @@ export function usePlaylists() {
   const nav = useRouteName(routeNames.playlists);
   const dispatch = useDispatch();
   return async function () {
-    await dispatch(getUserPlaylists({}));
+    await dispatch(getUserPlaylists());
     nav();
   };
 }
