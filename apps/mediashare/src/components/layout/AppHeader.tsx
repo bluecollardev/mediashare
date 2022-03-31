@@ -2,13 +2,10 @@ import React, { useMemo, useState } from 'react';
 import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-native';
 import { Appbar, Card, Portal, Searchbar } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-
 import { withGlobalStateConsumer, GlobalStateProps } from 'mediashare/core/globalState';
 import { MultiSelectIcon } from 'mediashare/components/form/MultiSelect';
 import { ActionButtons } from './ActionButtons';
 import themeStyles, { theme } from 'mediashare/styles';
-
-import { mapAvailableTags } from 'mediashare/core/utils/tags';
 
 export interface AppHeaderProps {
   options?: any;
@@ -62,14 +59,15 @@ const AppHeaderComponent = ({
     tags: [],
   },
 }: AppHeaderProps) => {
-  const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
-  const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
-  const [searchIsActive, setSearchIsActive] = useState(false);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const { setSearchFilters } = globalState;
 
+  const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
   const placeholder = `Search ${title}`;
 
+  const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
+  const [searchIsActive, setSearchIsActive] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [searchTags, setSearchTags] = useState([]);
 
   const mappedTags = useMemo(() => {
     const availableTags = Array.isArray(globalState?.tags) ? globalState.tags : [];
@@ -90,7 +88,7 @@ const AppHeaderComponent = ({
                 transparent
                 visible={searchIsActive}
                 onRequestClose={() => {
-                  disableSearch();
+                  closeSearchConsole();
                 }}
               >
                 <ModalContentWrapper>
@@ -105,7 +103,6 @@ const AppHeaderComponent = ({
                           alignSelf: 'stretch',
                           backgroundColor: 'transparent',
                         },
-                        // styles.container
                       ]}
                     >
                       <Card>
@@ -116,13 +113,13 @@ const AppHeaderComponent = ({
                             placeholder="Keywords"
                             value={searchText}
                             onChangeText={(text) => updateSearchText(text)}
-                            onIconPress={() => disableSearch()}
+                            onIconPress={() => closeSearchConsole()}
                             icon=""
                             // icon="arrow-back-ios"
                             clearIcon="clear"
                             autoCapitalize="none"
                           />
-                          {/* <Appbar.Action icon="close" onPress={() => disableSearch()} /> */}
+                          {/* <Appbar.Action icon="close" onPress={() => closeSearchConsole()} /> */}
                           <SectionedMultiSelect
                             colors={{
                               primary: theme.colors.primary,
@@ -164,8 +161,8 @@ const AppHeaderComponent = ({
                             searchPlaceholderText="Enter Text"
                             selectText="Select Tags"
                             confirmText="Done"
-                            onSelectedItemsChange={onSelectedTagsChange}
-                            selectedItems={selectedTags}
+                            onSelectedItemsChange={updateSearchTags}
+                            selectedItems={searchTags}
                             expandDropDowns={false}
                             readOnlyHeadings={false}
                             showDropDowns={true}
@@ -178,8 +175,8 @@ const AppHeaderComponent = ({
                       </Card>
                       <ActionButtons
                         containerStyles={{ marginHorizontal: 0 }}
-                        onActionClicked={() => disableSearch()}
-                        onCancelClicked={() => disableSearch()}
+                        onActionClicked={() => submitSearch()}
+                        onCancelClicked={() => closeSearchConsole()}
                       />
                     </View>
                   </BackdropView>
@@ -196,46 +193,43 @@ const AppHeaderComponent = ({
         title={title}
         titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginRight: searchable && searchIsFiltering ? '-30%' : '0%' }}
       />
-      {searchable && searchIsFiltering && <Appbar.Action icon="filter-list" color={theme.colors.primary} onPress={() => enableSearch()} />}
-      {searchable && !searchIsActive && <Appbar.Action icon="search" color="#ffffff" onPress={() => enableSearch()} />}
+      {searchable && searchIsFiltering && <Appbar.Action icon="filter-list" color={theme.colors.primary} onPress={() => openSearchConsole()} />}
+      {searchable && !searchIsActive && <Appbar.Action icon="search" color="#ffffff" onPress={() => openSearchConsole()} />}
     </Appbar.Header>
   );
-
-  function onSelectedTagsChange(tags) {
-    setSelectedTags(tags);
-    updateSearchTags(tags);
-  }
-
-  function enableSearch() {
-    setSearchIsActive(true);
-  }
-  function disableSearch() {
-    setSearchIsActive(false);
-  }
 
   function viewAsList() {
     setDisplayMode('list');
     globalState?.setDisplayMode('list');
   }
+
   function viewAsArticles() {
     setDisplayMode('article');
     globalState?.setDisplayMode('article');
   }
 
-  // TODO: Throttle the search we don't want this poppin' off more than it needs to
-  function updateSearchText(searchText) {
-    const { setSearchFilters } = globalState;
-    // Set the in-component state value
-    setSearchText(searchText);
-    // Set the global value
-    setSearchFilters({ text: searchText, tags: [...selectedTags] });
+  function openSearchConsole() {
+    setSearchIsActive(true);
   }
 
-  function updateSearchTags(searchTags = []) {
-    const { setSearchFilters } = globalState;
+  function closeSearchConsole() {
+    setSearchIsActive(false);
+  }
+
+  function updateSearchText(value) {
     // Set the in-component state value
-    // Set the global value
+    setSearchText(value);
+  }
+
+  function updateSearchTags(values) {
+    // Set the in-component state value
+    setSearchTags(values);
+  }
+
+  function submitSearch() {
+    // Update global search filters
     setSearchFilters({ text: searchText, tags: [...searchTags] });
+    closeSearchConsole(); // Close the search
   }
 
   function renderDisplayControls() {
@@ -249,3 +243,6 @@ const AppHeaderComponent = ({
 };
 
 export const AppHeader = withGlobalStateConsumer(AppHeaderComponent);
+
+
+
