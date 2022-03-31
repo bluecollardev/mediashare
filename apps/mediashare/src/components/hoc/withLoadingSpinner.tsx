@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAppSelector } from 'mediashare/store';
-import { LoadingOverlay } from 'mediashare/components/LoadingOverlay';
+import { LoadingOverlay } from 'mediashare/components/layout/LoadingOverlay';
 
 export interface LoadingSpinnerProps {
   startLoad?: () => {};

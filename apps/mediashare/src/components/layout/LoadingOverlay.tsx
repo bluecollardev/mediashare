@@ -5,14 +5,10 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 interface LoadingOverlayProps {
   show?: boolean;
-  onDismiss?: any;
   title?: string;
-  subtitle?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const LoadingOverlay = ({ show = false, onDismiss, title, subtitle }: LoadingOverlayProps) => {
-  // @ts-ignore
+export const LoadingOverlay = ({ show = false, title = '' }: LoadingOverlayProps) => {
   return (
     <Portal>
       {show && (
@@ -23,6 +19,3 @@ export const LoadingOverlay = ({ show = false, onDismiss, title, subtitle }: Loa
     </Portal>
   );
 };
-
-export default LoadingOverlay;
-// export default withLoadingSpinner(undefined)(LoadingOverlay);
