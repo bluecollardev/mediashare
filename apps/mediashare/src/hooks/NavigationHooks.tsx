@@ -2,8 +2,10 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { EnumLiteralsOf } from 'mediashare/core/generics';
 import { routeConfig, routeNames } from 'mediashare/routes';
-import { findMediaItems, getMediaItemById } from 'mediashare/store/modules/mediaItems';
-import { getUserPlaylists, getPlaylistById } from 'mediashare/store/modules/playlists';
+import { getMediaItemById } from 'mediashare/store/modules/mediaItem';
+import { findMediaItems } from 'mediashare/store/modules/mediaItems';
+import { getPlaylistById } from 'mediashare/store/modules/playlist';
+import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 
 type RouteConfigKeyType = EnumLiteralsOf<typeof routeNames>;
 // @ts-ignore
