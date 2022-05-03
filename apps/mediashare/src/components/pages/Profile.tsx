@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-
-import { useAppSelector } from '../../store';
-import { removeShareItem, readShareItem } from '../../store/modules/share-items';
-import { loadProfile } from '../../store/modules/profile';
-
-import { useViewPlaylistById } from '../../hooks/NavigationHooks';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { useAppSelector } from 'mediashare/store';
+import { removeShareItem, readShareItem } from 'mediashare/store/modules/shareItems';
+import { loadProfile } from 'mediashare/store/modules/profile';
+import { useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB, Divider } from 'react-native-paper';
-import { PageActions, PageContainer, PageProps } from '../layout/PageContainer';
-import { AccountCard } from '../layout/AccountCard';
-import { SharedList } from '../layout/SharedList';
-import { ActionButtons } from '../layout/ActionButtons';
-
-// import { filterUnique } from '../../utils';
-
-import { createRandomRenderKey } from '../../core/utils';
-
-import { theme } from '../../styles';
+import {
+  PageActions,
+  PageContainer,
+  PageProps,
+  AccountCard,
+  SharedList,
+  ActionButtons,
+  AppDialog
+} from 'mediashare/components/layout';
+// import { filterUnique } from 'mediashare/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
+import { theme } from 'mediashare/styles';
 
 interface ProfileProps extends PageProps {}
 
@@ -25,46 +26,59 @@ const actionModes = { delete: 'delete', default: 'default' };
 
 const Profile = ({ route }: ProfileProps) => {
   const { userId } = route.params;
-  // const [loaded, setLoaded] = useState(false);
-  // const userId = '6149b54a19531dd4c6b0df59';
+
   const dispatch = useDispatch();
-  // const userRole = useAppSelector((state) => state.user.role);
-  // const isAdmin = userRole === 'admin';
-  // const accountEdit = useRouteWithParams(routeNames.accountEdit);
-  const profile = useAppSelector((state) => {
-    return state.profile.entity;
-  });
-
-  const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
-
-  const [isSelectable, setIsSelectable] = useState(false);
-  const [actionMode, setActionMode] = useState(actionModes.default);
-  const [selectedItems, setSelectedItems] = React.useState([]);
 
   const viewPlaylist = useViewPlaylistById();
 
+  const profile = useAppSelector((state) => state?.profile?.entity)
+
+  const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
+  const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
+
+  const [actionMode, setActionMode] = useState(actionModes.default);
+  const [isSelectable, setIsSelectable] = useState(false);
+  const [selectedItems, setSelectedItems] = React.useState([]);
+  const [showUnshareDialog, setShowUnshareDialog] = useState(false);
+  const [showUnshareItemDialog, setShowUnshareItemDialog] = useState(false);
+  const [itemToUnshare, setItemToUnshare] = useState(undefined as string);
+
   useEffect(() => {
     dispatch(loadProfile(userId));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
-
-  const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
-  // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
-  // const uniqueSharedItems = filterUnique(sharedItems, 'shareItemId') || [];
-
-  const [fabState, setFabState] = useState({ open: false });
-  const fabActions = [
-    // { icon: 'person-remove', onPress: () => {}, color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
-  ];
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
   }, []);
 
+  const [fabState, setFabState] = useState({ open: false });
+  const fabActions = [
+    { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+  ];
+
   return (
     <PageContainer>
+      <AppDialog
+        leftActionLabel="Cancel"
+        rightActionLabel="Revoke Access"
+        leftActionCb={() => closeUnshareDialog()}
+        rightActionCb={() => confirmItemsToUnshare()}
+        onDismiss={closeUnshareDialog}
+        showDialog={showUnshareDialog}
+        title="Revoke Access"
+        subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+      />
+      <AppDialog
+        leftActionLabel="Cancel"
+        rightActionLabel="Revoke Access"
+        leftActionCb={() => closeUnshareItemDialog()}
+        rightActionCb={() => confirmItemToUnshare()}
+        onDismiss={closeUnshareItemDialog}
+        showDialog={showUnshareItemDialog}
+        title="Revoke Access"
+        subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+      />
       <AccountCard
         title={fullName}
         email={email}
@@ -77,28 +91,23 @@ const Profile = ({ route }: ProfileProps) => {
         showActions={!isSelectable}
         isCurrentUser={false}
       />
-      {/* isAdmin && (
-          <Button mode="outlined" style={{ margin: 15 }} onPress={() => accountEdit({ userId: profile._id })}>
-            Edit Profile
-          </Button>
-        ) */}
       <Divider />
       <SharedList
+        key={clearSelectionKey}
         selectable={isSelectable}
         showActions={!isSelectable}
-        onDelete={deleteShareItem}
-        onView={viewShareItem}
+        onDelete={openUnshareItemDialog}
+        onView={viewItem}
         sharedItems={sharedItems}
         onChecked={updateSelection}
       />
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
           <ActionButtons
-            actionCb={confirmPlaylistsToUnshare}
-            cancelCb={cancelPlaylistsToUnshare}
-            actionLabel="Unshare"
-            cancelLabel="Cancel"
-            rightIcon="delete"
+            onActionClicked={openUnshareDialog}
+            onCancelClicked={cancelItemsToUnshare}
+            actionLabel="Revoke Access"
+            actionButtonStyles={styles.deleteActionButton}
           />
         </PageActions>
       )}
@@ -118,28 +127,29 @@ const Profile = ({ route }: ProfileProps) => {
     </PageContainer>
   );
 
-  async function viewShareItem(playlistId: string, shareItemId: string) {
+  async function viewItem(playlistId: string, shareItemId: string) {
     await dispatch(readShareItem(shareItemId));
     await viewPlaylist({ playlistId });
   }
 
-  async function deleteShareItem(shareItemId: string) {
+  function openUnshareItemDialog(shareItemId: string) {
+    setItemToUnshare(shareItemId);
+    setShowUnshareItemDialog(true);
+  }
+
+  function closeUnshareItemDialog() {
+    setItemToUnshare(undefined);
+    setShowUnshareItemDialog(false);
+  }
+
+  async function confirmItemToUnshare() {
+    await unshareItem(itemToUnshare);
+    closeUnshareItemDialog();
+  }
+
+  async function unshareItem(shareItemId: string) {
     await dispatch(removeShareItem(shareItemId));
     await dispatch(loadProfile(userId));
-  }
-
-  async function deleteShareItems() {
-    selectedItems.map(async (shareItemId) => {
-      await deleteShareItem(shareItemId);
-    }) // TODO: Find a real way to do this
-    setTimeout(async () => {
-      await dispatch(loadProfile(userId));
-    }, 2500)
-  }
-
-  function updateSelection(bool: boolean, shareItemId: string) {
-    const filtered = bool ? selectedItems.concat([shareItemId]) : selectedItems.filter((item) => item.shareItemId !== shareItemId);
-    setSelectedItems(filtered);
   }
 
   async function activateUnshareMode() {
@@ -147,17 +157,42 @@ const Profile = ({ route }: ProfileProps) => {
     setIsSelectable(true);
   }
 
-  async function confirmPlaylistsToUnshare() {
-    setActionMode(actionModes.default);
-    clearCheckboxSelection();
-    setIsSelectable(false);
-    deleteShareItems();
+  function openUnshareDialog() {
+    setShowUnshareDialog(true);
   }
 
-  async function cancelPlaylistsToUnshare() {
+  function closeUnshareDialog() {
+    cancelItemsToUnshare();
+    setShowUnshareDialog(false);
+  }
+
+  async function confirmItemsToUnshare() {
+    await unshareItems();
+    closeUnshareDialog();
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
+    unshareItems();
+  }
+
+  function cancelItemsToUnshare() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+  }
+
+  async function unshareItems() {
+    selectedItems.map(async (shareItemId) => {
+      await unshareItem(shareItemId);
+    }); // TODO: Find a real way to do this, this timeout is JANKY
+    setTimeout(async () => {
+      await dispatch(loadProfile(userId));
+    }, 2500);
+  }
+
+  function updateSelection(bool: boolean, shareItemId: string) {
+    const filtered = bool ? selectedItems.concat([shareItemId]) : selectedItems.filter((item) => item.shareItemId !== shareItemId);
+    setSelectedItems(filtered);
   }
 
   function clearCheckboxSelection() {
@@ -166,4 +201,10 @@ const Profile = ({ route }: ProfileProps) => {
   }
 };
 
-export default withLoadingSpinner(Profile);
+export default withLoadingSpinner(undefined)(Profile);
+
+const styles = StyleSheet.create({
+  deleteActionButton: {
+    backgroundColor: theme.colors.error,
+  },
+});

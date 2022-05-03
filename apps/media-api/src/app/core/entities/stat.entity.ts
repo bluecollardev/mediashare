@@ -1,4 +1,4 @@
-import { Column, Entity } from 'typeorm';
+import { Entity } from 'typeorm';
 import { KeyPair } from './keypair.entity';
 
 @Entity('stat')

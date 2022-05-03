@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { PlaylistCategoryType } from './';
+import { PlaylistCategoryType, TagKeyValue } from './';
 
 /**
  * @export
@@ -37,7 +37,7 @@ export interface UpdatePlaylistDto {
    * @type {string}
    * @memberof UpdatePlaylistDto
    */
-  imageSrc: string;
+  imageSrc?: string;
   /**
    * @type {PlaylistCategoryType}
    * @memberof UpdatePlaylistDto
@@ -48,4 +48,9 @@ export interface UpdatePlaylistDto {
    * @memberof UpdatePlaylistDto
    */
   mediaIds?: Array<string>;
+  /**
+   * @type {Array<TagKeyValue>}
+   * @memberof UpdatePlaylistDto
+   */
+  tags: Array<TagKeyValue> | null;
 }

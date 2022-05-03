@@ -1,7 +1,7 @@
 import { ApiObjectId, ApiString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import { BC_ROLES } from '@core-lib';
-import { BcRolesType } from '../../../core/types/roles.type';
+import { BcRolesType } from '@api-core/types/roles.type';
 
 class ProfileShareItem {
   @ApiString()

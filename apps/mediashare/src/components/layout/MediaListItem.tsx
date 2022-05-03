@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Caption, Checkbox, IconButton, List } from 'react-native-paper';
 
-import styles, { theme } from '../../styles';
 import { MediaPreview } from './MediaPreview';
+import { theme } from 'mediashare/styles';
 
 export interface MediaListItemProps {
   navigation?: any;
@@ -55,32 +55,34 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
 
   return (
     <List.Item
-      title={title}
+      title={title || null}
+      titleNumberOfLines={3}
+      titleStyle={defaultStyles.titleText}
       description={description}
-      descriptionNumberOfLines={1}
+      descriptionNumberOfLines={3}
       // It doesn't feel right to have the whole thing be a tap target when we're displaying actions on the left
       onPress={showActions !== 'left' ? onPress : undefined}
       left={() =>
         selectable ? (
-          <View style={styles.mediaListItem}>
+          <View style={defaultStyles.mediaListItem}>
             <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.success : theme.colors.disabled} />
             {showThumbnail ? image ? <MediaPreview {...mediaPreviewProps} /> : <MediaPreview {...mediaPreviewProps} /> : null}
           </View>
         ) : showThumbnail ? (
           image ? (
-            <View style={styles.mediaListItem}>
+            <View style={defaultStyles.mediaListItem}>
               {showActions === 'left' && <IconButton icon={iconLeft} color={iconLeftColor} onPress={onViewDetail} />}
               <MediaPreview {...mediaPreviewProps} showPlayableIcon={showPlayableIcon} />
             </View>
           ) : (
-            <View style={styles.mediaListItem}>
+            <View style={defaultStyles.mediaListItem}>
               {showActions === 'left' && <IconButton icon={iconLeft} color={iconLeftColor} onPress={onViewDetail} />}
               <MediaPreview {...mediaPreviewProps} />
             </View>
           )
         ) : null
       }
-      right={() => (showActions === 'right' || showActions === true) && <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} />}
+      right={() => (showActions === 'right' || showActions === true ? <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} /> : null)}
       {...rest}
     />
   );
@@ -94,3 +96,19 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
     }
   }
 };
+
+const defaultStyles: any = StyleSheet.create({
+  mediaListItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  mediaListItemThumbnail: {
+    marginLeft: 5,
+    marginRight: 10,
+  },
+  titleText: {
+    color: theme.colors.text,
+    fontSize: 13,
+  },
+});

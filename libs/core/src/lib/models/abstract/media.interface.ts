@@ -1,8 +1,9 @@
 import { Stats } from '../stats.model';
-import { TagInterface } from '../tag.model';
-import { IdType } from '../../types/id.type';
+
+import { IdType } from '../../types';
 import { BcBaseInterface } from '../bc-base.interface';
 import { MediaCategoryType } from '../../models';
+import { TagInterface } from '../tag.model';
 
 export interface Media extends BcBaseInterface {
   displayFileName: string;

@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { Entity, Column } from 'typeorm';
-import { BcEntity } from '../../../core';
+import { BcEntity } from '@api-core/entities/base.entity';
 import { BcRolesType, BC_ROLES } from '@core-lib';
 @Entity()
 export class User extends BcEntity {

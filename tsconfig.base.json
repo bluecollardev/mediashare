@@ -15,11 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@api": ["apps/media-api/src/app"],
+      "@api-core/*": ["apps/media-api/src/app/core/*"],
+      "@api-modules/*": ["apps/media-api/src/app/modules/*"],
       "@core-lib": ["libs/core/src/index.ts"],
-      "@util-lib": ["libs/utility/src/index.ts"],
-      "@api": ["apps/media-api/src/app/index.ts"],
       "@mediashare/api-lib": ["libs/api-lib/src/index.ts"],
-      "@mediashare/shared": ["libs/shared/src/index.ts"]
+      "@mediashare/shared": ["libs/shared/src/index.ts"],
+      "@util-lib": ["libs/utility/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", "scripts", "**/*.script.ts"]

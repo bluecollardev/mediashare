@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { ShareItem } from '../models';
+import { ShareItem, ShareItemsResponseDto } from '../models';
 
 export interface ShareItemsControllerFindOneRequest {
   shareId: string;
@@ -33,16 +33,16 @@ export interface ShareItemsControllerRemoveRequest {
 export class ShareItemsApi extends BaseAPI {
   /**
    */
-  shareItemsControllerFindAll(): Observable<Array<ShareItem>>;
-  shareItemsControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItem>>>;
-  shareItemsControllerFindAll(opts?: OperationOpts): Observable<Array<ShareItem> | RawAjaxResponse<Array<ShareItem>>> {
+  shareItemsControllerFindAll(): Observable<Array<ShareItemsResponseDto>>;
+  shareItemsControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItemsResponseDto>>>;
+  shareItemsControllerFindAll(opts?: OperationOpts): Observable<Array<ShareItemsResponseDto> | RawAjaxResponse<Array<ShareItemsResponseDto>>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
     };
 
-    return this.request<Array<ShareItem>>(
+    return this.request<Array<ShareItemsResponseDto>>(
       {
         url: '/api/share-items',
         method: 'GET',

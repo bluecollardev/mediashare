@@ -1,5 +1,4 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { DynamicModule, Module } from '@nestjs/common';
 
 @Module({
   imports: [],

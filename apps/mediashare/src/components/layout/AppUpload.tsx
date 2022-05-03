@@ -1,22 +1,21 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import Config from '../../config';
+import Config from 'mediashare/config';
 
-import { thumbnailRoot, awsUrl } from '../../store/modules/media-items/key-factory';
-import { fetchAndPutToS3 } from '../../store/modules/media-items/storage';
-import { createThumbnail } from '../../store/modules/media-items';
-import { setError } from '../../store/modules/app-state';
+import { thumbnailRoot, awsUrl } from 'mediashare/core/aws/key-factory';
+import { fetchAndPutToS3 } from 'mediashare/core/aws/storage';
+import { createThumbnail } from 'mediashare/store/modules/mediaItem';
+import { setError } from 'mediashare/store/modules/appState';
 
 import * as DocumentPicker from 'expo-document-picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Button } from 'react-native-paper';
 
-import { theme } from '../../styles';
+import { theme } from 'mediashare/styles';
 
 interface AppUploadProps {
-  startLoad?: any;
-  endLoad?: any;
-  onUpload: (uri) => any;
+  onUploadStart?: () => any;
+  onUploadComplete?: (uri) => any;
   uploadMode: 'video' | 'photo';
   label?: string;
   children?: any;
@@ -24,7 +23,14 @@ interface AppUploadProps {
 
 const maxUpload = parseInt(Config.MAX_UPLOAD, 10) || 104857600;
 
-export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = 'Upload Picture', children }: AppUploadProps) {
+export function AppUpload({
+  uploadMode = 'photo',
+  onUploadStart = () => undefined,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onUploadComplete = (uri) => undefined,
+  label = 'Upload Picture',
+  children,
+}: AppUploadProps) {
   const dispatch = useDispatch();
   label = label || (uploadMode === 'video' ? 'Upload Video' : uploadMode === 'photo' ? 'Upload Photo' : 'Upload File');
 
@@ -59,23 +65,24 @@ export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = '
       return;
     }
 
-    console.log('Video upload response');
-    console.log(video);
+    onUploadStart();
+
     try {
-      console.log('Dispatching createThumbnail action');
-      console.log(JSON.stringify({ key: video.name, fileUri: video.uri }, null, 2));
       await dispatch(createThumbnail({ key: video.name, fileUri: video.uri }));
     } catch (err) {
       console.log('Dispatching createThumbnail action failed');
+      onUploadComplete('');
       console.log(err);
     }
 
-    handleUploadSuccess(video);
+    handleUploadComplete(video);
     // setDocumentUri(document.uri || '');
   }
 
   async function uploadPhoto() {
     launchImageLibrary({ mediaType: 'photo', quality: 0.5, maxWidth: 400, maxHeight: 400 }, function (res) {
+      onUploadStart();
+
       if (!res.assets) {
         return;
       }
@@ -84,14 +91,12 @@ export function AppUpload({ uploadMode = 'photo', onUpload = () => {}, label = '
       fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
         // eslint-disable-next-line no-shadow
         const image = awsUrl + res.key;
-        handleUploadSuccess(image);
+        handleUploadComplete(image);
       });
     });
   }
 
-  async function handleUploadSuccess(media) {
-    onUpload(media);
+  async function handleUploadComplete(mediaUri) {
+    onUploadComplete(mediaUri);
   }
 }
-
-export default AppUpload;

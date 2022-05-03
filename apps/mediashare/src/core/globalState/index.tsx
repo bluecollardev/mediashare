@@ -1,40 +1,65 @@
+import { findItemsIAmSharing, findItemsSharedWithMe } from 'mediashare/store/modules/shareItems';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { compose } from 'recompose';
 
-import { useAppSelector } from '../../store';
+import { useAppSelector } from 'mediashare/store';
+import { getTags } from 'mediashare/store/modules/tags';
+import { loadUser } from 'mediashare/store/modules/user';
+import { Tag } from 'mediashare/rxjs-api';
 
 export interface GlobalStateProps {
-  loading?: boolean;
-  isLoggedIn?: boolean;
   history?: any;
   location?: any;
+  loading?: boolean;
+  isLoggedIn?: boolean;
+  loadUserData?: () => void;
   search?: any;
   setSearchFilters?: Function;
+  tags?: Tag[];
+  displayMode?: 'list' | 'article';
+  setDisplayMode: (value) => void;
 }
 
 export const GlobalState = React.createContext<GlobalStateProps>({} as GlobalStateProps);
 
 export const INITIAL_SEARCH_FILTERS = {
   text: '',
+  tags: [],
 };
+
+export const INITIAL_DISPLAY_MODE = 'list';
 
 export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
   return function GlobalStateProvider(props: any) {
     const { history, location } = props;
 
-    const loading = useAppSelector((state) => state?.app.loading);
-    const user = useAppSelector((state) => state?.user);
+    const loading = useAppSelector((state) => state?.app?.loading);
+    const user = useAppSelector((state) => state?.user?.entity);
+    const tags = useAppSelector((state) => state?.tags?.entities || []);
     const authenticatedAndLoggedIn = user?._id?.length > 0;
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authenticatedAndLoggedIn);
     const [searchFilters, setSearchFilters] = useState(INITIAL_SEARCH_FILTERS);
+    const [displayMode, setDisplayMode] = useState(INITIAL_DISPLAY_MODE);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
       if (authenticatedAndLoggedIn) {
-        console.log('authenticatedAndLoggedIn is true, run setIsLoggedIn effect');
+        console.log('[GlobalStateProvider] authenticatedAndLoggedIn is true, run setIsLoggedIn effect');
         setIsLoggedIn(authenticatedAndLoggedIn);
       }
     }, [authenticatedAndLoggedIn]);
-    console.log(`are we logged in? ${authenticatedAndLoggedIn}`);
+
+    useEffect(() => {
+      const loadTags = async () => {
+        await dispatch(getTags());
+      };
+
+      if (isLoggedIn) {
+        loadTags().then();
+      }
+    }, [isLoggedIn]);
 
     const providerValue = getProviderValue() as GlobalStateProps;
     return (
@@ -49,12 +74,22 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
         location,
         loading,
         isLoggedIn,
+        loadUserData,
         setSearchFilters,
         search: {
           filters: { ...searchFilters },
         },
+        tags,
+        displayMode,
+        setDisplayMode,
       } as GlobalStateProps;
       return value;
+    }
+
+    async function loadUserData() {
+      await dispatch(loadUser());
+      await dispatch(findItemsIAmSharing());
+      await dispatch(findItemsSharedWithMe());
     }
   };
 };

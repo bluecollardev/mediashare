@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayNotEmpty, IsArray } from 'class-validator';
+import { IsArray } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { ApiDecoratorOptions, apiDecoratorDefaults } from '../models';
 const objectId = new ObjectId();

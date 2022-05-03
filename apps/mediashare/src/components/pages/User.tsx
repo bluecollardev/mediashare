@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react';
-
-import { useAppSelector } from '../../store';
-
+import { useAppSelector } from 'mediashare/store';
 import { ScrollView, View } from 'react-native';
 import { Card, FAB, Subheading, Text } from 'react-native-paper';
-
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from '../layout/PageContainer';
-import AccountCard from '../layout/AccountCard';
-import { MediaListItem } from '../layout/MediaListItem';
-import { ActionButtons } from '../layout/ActionButtons';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps, AccountCard, MediaListItem, ActionButtons } from 'mediashare/components/layout';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
-import { createRandomRenderKey } from '../../core/utils';
-
-import { theme } from '../../styles';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
+import { theme } from 'mediashare/styles';
 
 const SharedItems = ({ selectable = false }) => {
-  const sharedItems = useAppSelector((state) => state.user.sharedItems) || [];
+  const sharedItems = useAppSelector((state) => state?.user?.entity?.sharedItems) || [];
   return (
     <View>
       <View
@@ -81,7 +73,7 @@ export const User = ({}: PageProps) => {
     { key: 'shared', title: 'Shared Items', icon: 'movie' },
   ]); */
 
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state?.user?.entity);
   useEffect(() => {
     async function loadData() {
       // await dispatch(findMediaItems({}));
@@ -92,7 +84,6 @@ export const User = ({}: PageProps) => {
     if (!isLoaded) {
       loadData().then();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
   const [fabState, setFabState] = useState({ open: false });
@@ -116,7 +107,7 @@ export const User = ({}: PageProps) => {
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Unshare" cancelLabel="Cancel" rightIcon="delete" />
+          <ActionButtons onActionClicked={confirmDelete} onCancelClicked={cancelDelete} actionLabel="Unshare" actionIcon="delete" />
         </PageActions>
       )}
       {!isSelectable && (
@@ -141,13 +132,13 @@ export const User = ({}: PageProps) => {
     setIsSelectable(true);
   }
 
-  async function confirmDelete() {
+  function confirmDelete() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
   }
 
-  async function cancelDelete() {
+  function cancelDelete() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
@@ -159,4 +150,4 @@ export const User = ({}: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(User);
+export default withLoadingSpinner(undefined)(User);

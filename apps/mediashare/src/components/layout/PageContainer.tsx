@@ -1,16 +1,13 @@
 import React, { ReactNode } from 'react';
-import themeStyles, { theme } from '../../styles';
-import { KeyboardAvoidingView, SafeAreaView, ScrollView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
+import styles, { theme } from 'mediashare/styles';
+import { KeyboardAvoidingView, SafeAreaView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
-import { useAppSelector } from '../../store';
+import { useAppSelector } from 'mediashare/store';
 import { useDispatch } from 'react-redux';
-import { clearError } from '../../store/modules/app-state';
-import { LoadingSpinnerProps } from '../hoc/withLoadingSpinner';
-
-import styles from '../../styles';
-// import { StackScreenProps } from '@react-navigation/stack';
+import { clearError } from 'mediashare/store/modules/appState';
+import { LoadingSpinnerProps } from 'mediashare/components/hoc/withLoadingSpinner';
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs';
-import { GlobalStateProps } from '../../core/globalState';
+import { GlobalStateProps } from 'mediashare/core/globalState';
 type withProps<T1, T2> = T1 & T2;
 type WithNavProps = withProps<MaterialBottomTabScreenProps<any>, LoadingSpinnerProps>;
 
@@ -30,21 +27,20 @@ export interface PageContentProps {
   style?: any;
 }
 
-export function PageContent({ refreshControl, children }: PageContentProps) {
+export function PageContent({ children }: PageContentProps) {
   return (
     <View style={styles.pageContent}>
-      {/*<Searchbar style={{ marginBottom: 15 }} placeholder="" value={''} />*/}
-      <ScrollView refreshControl={refreshControl}>{children}</ScrollView>
+      <View>{children}</View>
     </View>
   );
 }
 
-export function KeyboardAvoidingPageContent({ refreshControl, children }: PageContentProps) {
+export function KeyboardAvoidingPageContent({ children }: PageContentProps) {
   return (
     <View style={styles.pageContent}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.pageContent}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView refreshControl={refreshControl}>{children}</ScrollView>
+          <>{children}</>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </View>
@@ -63,14 +59,14 @@ export function PageActions({ children, style }: PageActionsProps) {
 
 export function PageContainer({ children }: PageContainerProps) {
   const dispatch = useDispatch();
-  const app = useAppSelector((state) => state.app);
+  const app = useAppSelector((state) => state?.app);
   // const [visible, setVisible] = useState(false);
   const hideDialog = function () {
     dispatch(clearError());
     // setVisible(false);
   };
   return (
-    <SafeAreaView style={themeStyles.pageContainer}>
+    <SafeAreaView style={styles.pageContainer}>
       <Portal>
         <Dialog visible={app.hasError} onDismiss={hideDialog}>
           <Card.Title

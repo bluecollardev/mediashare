@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { EnumLiteralsOf } from '../core/lib/Generics';
-import { routeConfig, routeNames } from '../routes';
-import { findMediaItems, getMediaItemById } from '../store/modules/media-items';
-import { getUserPlaylists, getPlaylistById } from '../store/modules/playlists';
+import { EnumLiteralsOf } from 'mediashare/core/generics';
+import { routeConfig, routeNames } from 'mediashare/routes';
+import { getMediaItemById } from 'mediashare/store/modules/mediaItem';
+import { findMediaItems } from 'mediashare/store/modules/mediaItems';
+import { getPlaylistById } from 'mediashare/store/modules/playlist';
+import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 
 type RouteConfigKeyType = EnumLiteralsOf<typeof routeNames>;
 // @ts-ignore
@@ -17,7 +19,6 @@ export function useRouteName(key: RouteConfigKeyType) {
 
 export function useRouteWithParams(key: EnumLiteralsOf<typeof routeNames>) {
   const nav = useNavigation();
-
   // @ts-ignore
   return (params: { [x: string]: string }) => nav.navigate(key, params);
 }
@@ -98,7 +99,7 @@ export function usePlaylists() {
   const nav = useRouteName(routeNames.playlists);
   const dispatch = useDispatch();
   return async function () {
-    await dispatch(getUserPlaylists({}));
+    await dispatch(getUserPlaylists());
     nav();
   };
 }

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { ShareItemsController } from './share-items.controller';
 
 describe('ShareItemsController', () => {
@@ -17,7 +17,7 @@ describe('ShareItemsController', () => {
       ],
     }).compile();
 
-    controller = module.get<ShareItemsController>(ShareItemsController);
+    controller = module.get(ShareItemsController);
   });
 
   it('should be defined', () => {

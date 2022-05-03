@@ -3,13 +3,14 @@ import { StyleSheet, View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 
 import { MediaListItem } from './MediaListItem';
-import { MediaItem, MediaItemDto } from '../../rxjs-api';
+import { MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
 
-import { shortenText } from '../../utils';
+import { shortenText } from 'mediashare/utils';
 
-export type MediaListType = Omit<Pick<MediaItemDto, keyof MediaItem>, 'category'>;
+// TODO: Why do we have TWO types, try to get this down to one!
+export type MediaListType = MediaItemResponseDto | MediaItem;
 
-import { theme } from '../../styles';
+import { theme } from 'mediashare/styles';
 
 interface MediaListProps {
   list: MediaListType[];
@@ -31,18 +32,19 @@ export const MediaList = ({
   onViewDetail = () => {},
 }: MediaListProps) => {
   return (
-    <View>
+    <View style={{ marginBottom: 25 }}>
       {list.map((item, idx, arr) => {
         const { _id, title, description, thumbnail } = item;
         return (
           <View key={`item_${_id}`}>
             <MediaListItem
               title={title}
-              description={
+              titleStyle={defaultStyles.titleText}
+              /* description={
                 <>
-                  <Text style={styles.description}>{shortenText(description, 52)}</Text>
+                  <Text style={defaultStyles.description}>{shortenText(description || '', 80)}</Text>
                 </>
-              }
+              } */
               image={thumbnail}
               selectable={selectable}
               showThumbnail={showThumbnail}
@@ -58,7 +60,11 @@ export const MediaList = ({
   );
 };
 
-const styles = StyleSheet.create({
+const defaultStyles = StyleSheet.create({
+  titleText: {
+    color: theme.colors.text,
+    fontSize: 13,
+  },
   description: {
     color: theme.colors.textDarker,
     fontSize: 12,

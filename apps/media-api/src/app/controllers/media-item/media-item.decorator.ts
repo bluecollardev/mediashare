@@ -1,17 +1,25 @@
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
-import { UseJwtGuard } from '../../modules/auth/auth.decorator';
+import { UseJwtGuard } from '@api-modules/auth/auth.decorator';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
-import { MediaItemDto } from './dto/media-item.dto';
+import { UpdateMediaItemDto } from './dto/update-media-item.dto';
+import { MediaItemResponseDto } from './dto/media-item-response.dto';
 import { MediaItem } from './entities/media-item.entity';
 
-function MediaPostResponse({ isArray = false, type = MediaItem, description }: ApiControllerDecoratorParams = {}) {
+export function MediaGetResponse({ isArray = false, type = MediaItemResponseDto }: ApiControllerDecoratorParams = {}) {
+  return applyDecorators(ApiResponse({ type, isArray, status: 200 }), UseJwtGuard());
+}
+
+export function MediaPostResponse({ isArray = false, type = MediaItem, description }: ApiControllerDecoratorParams = {}) {
   return applyDecorators(ApiResponse({ description, type, status: 201, isArray }), ApiBody({ type: CreateMediaItemDto }), UseJwtGuard());
 }
 
-const MediaGetResponse = function ({ isArray = false, type = MediaItemDto }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ type, isArray, status: 200 }), UseJwtGuard());
-};
+export function MediaPutResponse({ isArray = false, type = MediaItem, description }: ApiControllerDecoratorParams = {}) {
+  return applyDecorators(ApiResponse({ description, type, status: 200, isArray }), ApiBody({ type: UpdateMediaItemDto }), UseJwtGuard());
+}
 
-export { MediaGetResponse, MediaPostResponse };
+export function MediaShareResponse({ isArray = false, type = ShareItem, description }: ApiControllerDecoratorParams = {}) {
+  return applyDecorators(ApiResponse({ description, type, status: 201, isArray }), UseJwtGuard());
+}

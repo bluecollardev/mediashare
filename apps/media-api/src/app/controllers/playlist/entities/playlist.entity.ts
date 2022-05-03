@@ -1,10 +1,11 @@
-import { BcEntity } from '@api';
-import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY } from '@core-lib';
-import { ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
-import { ApiProperty, IntersectionType } from '@nestjs/swagger';
-import { ObjectId } from 'mongodb';
 import { Column, Entity, Index } from 'typeorm';
-import { PlaylistItem } from '../../../modules/playlist-item/entities/playlist-item.entity';
+import { ObjectId } from 'mongodb';
+import { ApiProperty, IntersectionType } from '@nestjs/swagger';
+import { ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
+import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY } from '@core-lib';
+import { BcEntity } from '@api-core/entities/base.entity';
+import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
+import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
 
 @Entity('playlist')
 export class Playlist extends BcEntity implements PlaylistInterface {
@@ -32,6 +33,10 @@ export class Playlist extends BcEntity implements PlaylistInterface {
   @Column('category')
   @ApiProperty({ enum: PLAYLIST_CATEGORY, name: 'category', enumName: 'PlaylistCategoryType' })
   category: PlaylistCategoryType;
+
+  @ApiProperty({ type: TagKeyValue, isArray: true, nullable: true })
+  @Column({ name: 'tags', array: true, nullable: true })
+  tags: TagKeyValue[];
 }
 
 class PlaylistResponseFields {

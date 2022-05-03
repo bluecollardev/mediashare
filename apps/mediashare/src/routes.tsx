@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AppHeader } from './components/layout/AppHeader';
+import { AppHeader } from 'mediashare/components/layout';
 
 const routeConfig = {
   login: {
@@ -9,11 +9,11 @@ const routeConfig = {
   },
   browse: {
     name: 'browse',
-    options: { title: 'My Feed', header: (props) => <AppHeader {...props} searchable={false} /> },
+    options: { title: 'My Feed', header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={true} /> },
   },
   playlists: {
     name: 'playlists',
-    options: { title: 'Playlists', header: (props) => <AppHeader {...props} searchable={true} /> },
+    options: { title: 'Playlists', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" /> },
   },
   playlistAdd: {
     name: 'playlistAdd',
@@ -29,7 +29,7 @@ const routeConfig = {
   },
   media: {
     name: 'media',
-    options: { title: 'Media Library', header: (props) => <AppHeader {...props} searchable={true} /> },
+    options: { title: 'Media Library', header: (props) => <AppHeader {...props} searchable={true} searchTarget="media" /> },
   },
   mediaItemAdd: {
     name: 'addMediaItem',
@@ -53,7 +53,7 @@ const routeConfig = {
   },
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
-    options: { title: 'Add To Playlist', header: (props) => <AppHeader {...props} searchable={true} /> },
+    options: { title: 'Add To Playlist', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" /> },
   },
   shareWith: {
     name: 'shareWith',
@@ -65,7 +65,7 @@ const routeConfig = {
   },
   account: {
     name: 'account',
-    options: { title: 'Account', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'My Account', header: (props) => <AppHeader {...props} /> },
   },
   accountEdit: {
     name: 'accountEdit',

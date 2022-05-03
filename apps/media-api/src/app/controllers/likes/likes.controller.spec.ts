@@ -11,7 +11,7 @@ describe('LikesController', () => {
       providers: [LikesService],
     }).compile();
 
-    controller = module.get<LikesController>(LikesController);
+    controller = module.get(LikesController) as LikesController;
   });
 
   it('should be defined', () => {

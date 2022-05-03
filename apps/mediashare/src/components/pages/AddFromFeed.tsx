@@ -1,87 +1,109 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { useAppSelector } from '../../store';
-import { getFeedMediaItems, saveFeedMediaItems } from '../../store/modules/media-items';
-
-import { useMediaItems } from '../../hooks/NavigationHooks';
-import { ActionButtons } from '../layout/ActionButtons';
-import { MediaListItem } from '../layout/MediaListItem';
-
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
+import { FlatList } from 'react-native';
 import { Subheading, Card } from 'react-native-paper';
-import { AwsMediaItem } from '../../store/modules/media-items/aws-media-item.model';
+import { useAppSelector } from 'mediashare/store';
+import { getFeedMediaItems, saveFeedMediaItems } from 'mediashare/store/modules/mediaItem';
+import { AwsMediaItem } from 'mediashare/core/aws/aws-media-item.model';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { PageContainer, PageContent, PageActions, PageProps, NoItems, ActionButtons, MediaListItem } from 'mediashare/components/layout';
+import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const AddFromFeed = ({ navigation }: PageProps) => {
+export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
   const dispatch = useDispatch();
 
   const goToMediaItems = useMediaItems();
   const selectedItems = new Set<AwsMediaItem>();
 
-  const addItemCb = function (item: AwsMediaItem) {
-    selectedItems.add(item);
-  };
-  const removeItemCb = function (item: AwsMediaItem) {
-    selectedItems.delete(item);
-  };
-
-  const [loaded, setIsLoaded] = useState(false);
-  const items = useAppSelector((state) => state.mediaItem.feed);
-
-  const saveMedia = async function () {
-    if (selectedItems.size < 1) {
-      return;
-    }
-    const items = Array.from(selectedItems.values());
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const result = await dispatch(saveFeedMediaItems({ items }));
-    goToMediaItems();
-  };
-
+  const entities = useAppSelector((state) => state?.mediaItem?.feed);
+  const { loading, loaded } = useAppSelector((state) => state?.mediaItem);
+  const [isLoaded, setIsLoaded] = useState(loaded);
   useEffect(() => {
-    const loadData = async function () {
-      await dispatch(getFeedMediaItems());
+    if (loaded && !isLoaded) {
       setIsLoaded(true);
-    };
-
-    if (!loaded) {
-      loadData().then(() => {});
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaded, dispatch]);
+  }, [loaded]);
+
+  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
+  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
+  useEffect(() => {
+    const currentSearchFilters = globalState?.search;
+    if (!isLoaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
+      setPrevSearchFilters(currentSearchFilters);
+      loadData().then();
+    }
+  }, [isLoaded, globalState, searchFilters]);
 
   return (
     <PageContainer>
       <PageContent>
-        {(!items || items.length === 0) && loaded && (
+        {(!entities || entities.length === 0) && loaded && (
           <Card>
             <Card.Content>
               <Subheading style={{ textAlign: 'center' }}>There are no items to import in your bucket.</Subheading>
             </Card.Content>
           </Card>
         )}
-        {items?.map((item, idx) => {
-          const { key, size, lastModified } = item;
-          return (
-            <MediaListItem
-              showActions={false}
-              key={idx}
-              title={key}
-              description={`${size} - ${lastModified}`}
-              checked={false}
-              onChecked={(v) => (v ? addItemCb(item) : removeItemCb(item))}
-            />
-          );
-        })}
+        {isLoaded ? (
+          <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} />
+        ) : (
+          <NoItems text={loading ? 'Loading...' : 'There are no items in your S3 bucket.'} />
+        )}
       </PageContent>
       <PageActions>
-        <ActionButtons actionCb={saveMedia} rightIcon="check-circle" actionLabel="Add Media" cancelLabel="Back" cancelCb={goToMediaItems} />
+        <ActionButtons onActionClicked={saveItems} actionLabel="Add Media" onCancelClicked={goToMediaItems} />
       </PageActions>
     </PageContainer>
   );
+
+  function renderVirtualizedListItem(item) {
+    const { key, size, lastModified } = item;
+    return (
+      <MediaListItem
+        showActions={false}
+        key={`s3_item_${key}`}
+        title={key}
+        description={`${size} - ${lastModified}`}
+        checked={false}
+        onChecked={(v) => (v ? addItem(item) : removeItem(item))}
+      />
+    );
+  }
+
+  async function loadData() {
+    const { search } = globalState;
+    const args = {
+      text: search?.filters?.text ? search.filters.text : '',
+      tags: search?.filters?.tags || [],
+    };
+
+    if (args.text || args.tags.length > 0) {
+      await dispatch(getFeedMediaItems());
+    } else {
+      await dispatch(getFeedMediaItems());
+    }
+  }
+
+  function addItem(item: AwsMediaItem) {
+    selectedItems.add(item);
+  }
+
+  function removeItem(item: AwsMediaItem) {
+    selectedItems.delete(item);
+  }
+
+  async function saveItems() {
+    if (selectedItems.size < 1) {
+      return;
+    }
+    const items = Array.from(selectedItems.values());
+    await dispatch(saveFeedMediaItems({ items }));
+    goToMediaItems();
+  }
 };
 
-export default withLoadingSpinner(AddFromFeed);
+export default withLoadingSpinner((state) => {
+  return !(Array.isArray(state?.mediaItem?.feed) && state?.mediaItem?.feed?.length > 0);
+})(withGlobalStateConsumer(AddFromFeed));

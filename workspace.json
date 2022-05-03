@@ -1,10 +1,52 @@
 {
   "version": 2,
-  "cli": {
-    "defaultCollection": "@nrwl/nest"
-  },
-  "defaultProject": "media-api",
   "projects": {
+    "api-lib": {
+      "root": "libs/api-lib",
+      "sourceRoot": "libs/api-lib/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api-lib/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api-lib"],
+          "options": {
+            "jestConfig": "libs/api-lib/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "core": {
+      "root": "libs/core",
+      "sourceRoot": "libs/core/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/core/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/core"],
+          "options": {
+            "jestConfig": "libs/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
     "media-api": {
       "root": "apps/media-api",
       "sourceRoot": "apps/media-api/src",
@@ -12,17 +54,13 @@
       "prefix": "media-api",
       "targets": {
         "build": {
-          "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "executor": "@nrwl/node:webpack",
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/media-api",
             "main": "apps/media-api/src/main.ts",
             "tsConfig": "apps/media-api/tsconfig.app.json",
-            "assets": [
-              "apps/media-api/src/assets"
-            ],
+            "assets": ["apps/media-api/src/assets"],
             "generatePackageJson": false
           },
           "configurations": {
@@ -40,7 +78,7 @@
           }
         },
         "serve": {
-          "executor": "@nrwl/node:execute",
+          "executor": "@nrwl/node:node",
           "options": {
             "buildTarget": "media-api:build"
           }
@@ -48,22 +86,74 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/media-api/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["apps/media-api/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/media-api"
-          ],
+          "outputs": ["coverage/apps/media-api"],
           "options": {
             "jestConfig": "apps/media-api/jest.config.js",
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
+    },
+    "media-auth": {
+      "root": "apps/media-auth",
+      "sourceRoot": "apps/media-auth/src",
+      "projectType": "application",
+      "prefix": "media-auth",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:webpack",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/media-auth",
+            "main": "apps/media-auth/src/main.ts",
+            "tsConfig": "apps/media-auth/tsconfig.app.json",
+            "assets": ["apps/media-auth/src/assets"],
+            "generatePackageJson": false
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/media-auth/src/environments/environment.ts",
+                  "with": "apps/media-auth/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:node",
+          "options": {
+            "buildTarget": "media-auth:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/media-auth/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/media-auth"],
+          "options": {
+            "jestConfig": "apps/media-auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
     },
     "mediashare": {
       "root": "apps/mediashare",
@@ -89,9 +179,7 @@
         },
         "bundle-ios": {
           "executor": "@nrwl/react-native:bundle",
-          "outputs": [
-            "apps/mediashare/build"
-          ],
+          "outputs": ["apps/mediashare/build"],
           "options": {
             "entryFile": "apps/mediashare/src/main.tsx",
             "platform": "ios",
@@ -104,10 +192,7 @@
         },
         "build-android": {
           "executor": "@nrwl/react-native:build-android",
-          "outputs": [
-            "apps/mediashare/android/app/build/outputs/bundle",
-            "apps/mediashare/android/app/build/outputs/apk"
-          ],
+          "outputs": ["apps/mediashare/android/app/build/outputs/bundle", "apps/mediashare/android/app/build/outputs/apk"],
           "options": {}
         },
         "bundle-android": {
@@ -121,10 +206,9 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/mediashare/**/*.{js,ts,tsx}"
-            ]
-          }
+            "lintFilePatterns": ["apps/mediashare/**/*.{js,ts,tsx}"]
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "sync-deps": {
           "executor": "@nrwl/react-native:sync-deps",
@@ -137,117 +221,8 @@
             "passWithNoTests": true
           }
         }
-      }
-    },
-    "core": {
-      "root": "libs/core",
-      "sourceRoot": "libs/core/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/core/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/core"
-          ],
-          "options": {
-            "jestConfig": "libs/core/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "media-auth": {
-      "root": "apps/media-auth",
-      "sourceRoot": "apps/media-auth/src",
-      "projectType": "application",
-      "prefix": "media-auth",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
-          "options": {
-            "outputPath": "dist/apps/media-auth",
-            "main": "apps/media-auth/src/main.ts",
-            "tsConfig": "apps/media-auth/tsconfig.app.json",
-            "assets": [
-              "apps/media-auth/src/assets"
-            ],
-            "generatePackageJson": false
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/media-auth/src/environments/environment.ts",
-                  "with": "apps/media-auth/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "media-auth:build"
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/media-auth/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/media-auth"
-          ],
-          "options": {
-            "jestConfig": "apps/media-auth/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-lib": {
-      "root": "libs/api-lib",
-      "sourceRoot": "libs/api-lib/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/api-lib/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/api-lib"
-          ],
-          "options": {
-            "jestConfig": "libs/api-lib/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
+      },
+      "tags": []
     },
     "shared": {
       "root": "libs/shared",
@@ -257,22 +232,20 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/shared/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["libs/shared/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared"
-          ],
+          "outputs": ["coverage/libs/shared"],
           "options": {
             "jestConfig": "libs/shared/jest.config.js",
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     }
   }
 }

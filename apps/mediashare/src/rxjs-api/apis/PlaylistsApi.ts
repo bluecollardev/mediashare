@@ -13,7 +13,16 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, HttpQuery, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { CreatePlaylistDto, CreatePlaylistResponseDto, Playlist, PlaylistItemResponseDto, PlaylistResponseDto, ShareItem, UpdatePlaylistDto } from '../models';
+import {
+  CreatePlaylistDto,
+  CreatePlaylistResponseDto,
+  MediaItemResponseDto,
+  Playlist,
+  PlaylistItemResponseDto,
+  PlaylistResponseDto,
+  ShareItem,
+  UpdatePlaylistDto,
+} from '../models';
 
 export interface PlaylistControllerCreateRequest {
   createPlaylistDto: CreatePlaylistDto;
@@ -21,6 +30,7 @@ export interface PlaylistControllerCreateRequest {
 
 export interface PlaylistControllerFindAllRequest {
   text?: string;
+  tags?: Array<string>;
 }
 
 export interface PlaylistControllerFindOneRequest {
@@ -78,10 +88,13 @@ export class PlaylistsApi extends BaseAPI {
 
   /**
    */
-  playlistControllerFindAll({ text }: PlaylistControllerFindAllRequest): Observable<Array<PlaylistItemResponseDto>>;
-  playlistControllerFindAll({ text }: PlaylistControllerFindAllRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
+  playlistControllerFindAll({ text, tags }: PlaylistControllerFindAllRequest): Observable<Array<PlaylistItemResponseDto>>;
   playlistControllerFindAll(
-    { text }: PlaylistControllerFindAllRequest,
+    { text, tags }: PlaylistControllerFindAllRequest,
+    opts?: OperationOpts
+  ): Observable<RawAjaxResponse<Array<PlaylistItemResponseDto>>>;
+  playlistControllerFindAll(
+    { text, tags }: PlaylistControllerFindAllRequest,
     opts?: OperationOpts
   ): Observable<Array<PlaylistItemResponseDto> | RawAjaxResponse<Array<PlaylistItemResponseDto>>> {
     const headers: HttpHeaders = {
@@ -94,6 +107,9 @@ export class PlaylistsApi extends BaseAPI {
 
     if (text != null) {
       query['text'] = text;
+    }
+    if (tags != null) {
+      query['tags'] = tags;
     }
 
     return this.request<Array<PlaylistItemResponseDto>>(
@@ -126,6 +142,27 @@ export class PlaylistsApi extends BaseAPI {
     return this.request<PlaylistResponseDto>(
       {
         url: '/api/playlists/{playlistId}'.replace('{playlistId}', encodeURI(playlistId)),
+        method: 'GET',
+        headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  playlistControllerFindPopular(): Observable<Array<MediaItemResponseDto>>;
+  playlistControllerFindPopular(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemResponseDto>>>;
+  playlistControllerFindPopular(opts?: OperationOpts): Observable<Array<MediaItemResponseDto> | RawAjaxResponse<Array<MediaItemResponseDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
+    return this.request<Array<MediaItemResponseDto>>(
+      {
+        url: '/api/playlists/popular',
         method: 'GET',
         headers,
       },

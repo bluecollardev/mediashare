@@ -1,35 +1,35 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
+import { ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { addMediaItem } from 'mediashare/store/modules/mediaItem';
+import { CreateMediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
+import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
+import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps, ActionButtons, MediaCard, AppUpload, UploadPlaceholder  } from 'mediashare/components/layout';
+import { minLength, titleValidator, descriptionValidator, categoryValidator, tagValidator } from 'mediashare/core/utils/validators';
+import { theme } from 'mediashare/styles';
 
-import { addMediaItem } from '../../store/modules/media-items';
-
-import { CreateMediaItemDto, MediaCategoryType } from '../../rxjs-api';
-
-import { useMediaItems } from '../../hooks/NavigationHooks';
-
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { ActionButtons } from '../layout/ActionButtons';
-import { MediaCard } from '../layout/MediaCard';
-import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps } from '../layout/PageContainer';
-import { categoryValidator, descriptionValidator, titleValidator } from '../layout/formConfig';
-
-import { minLength } from '../../core/lib/Validators';
-import { theme } from '../../styles';
-import { AppUpload } from '../layout/AppUpload';
-import { UploadPlaceholder } from '../layout/UploadPlaceholder';
-
-export const MediaItemAdd = ({}: PageProps) => {
+// @ts-ignore
+export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
   const dispatch = useDispatch();
 
-  // const author = useAppSelector((state) => state?.user.username);
+  // const author = useAppSelector((state) => state?.user?.entity?.username);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState(MediaCategoryType.Free);
+
+  const { tags = [] } = globalState;
+  const availableTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isMediaTag), []);
+  const initialTagKeys = [];
+  const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
+
   const [mediaUri, setMediaUri] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
-  // const mediaSrc = useAppSelector((state) => state.mediaItem.mediaSrc);
+  const [uploading, setUploading] = useState(false);
+  // const mediaSrc = useAppSelector((state) => state?.mediaItem?.mediaSrc);
   const isValid = function () {
     return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category) && !minLength(1)(mediaUri);
   };
@@ -39,88 +39,106 @@ export const MediaItemAdd = ({}: PageProps) => {
     options.push(value);
   }
 
-  const actionLabel = 'Save';
-  const cancelLabel = 'Cancel';
-  const cancelCb = clearAndGoBack;
   const goToMediaItems = useMediaItems();
 
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent>
-        <MediaCard
-          title={title}
-          description={description}
-          mediaSrc={mediaUri}
-          showThumbnail={!!mediaUri}
-          thumbnail={thumbnail}
-          category={category}
-          categoryOptions={options}
-          onCategoryChange={(e: any) => {
-            setCategory(e);
-          }}
-          onTitleChange={setTitle}
-          onDescriptionChange={setDescription}
-          isEdit={true}
-          isPlayable={true}
-          topDrawer={() =>
-            !mediaUri ? (
-              <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
-                <UploadPlaceholder buttonText="Upload Media" />
-              </AppUpload>
-            ) : (
-              <AppUpload uploadMode="video" onUpload={onUploadSuccess}>
-                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
-                  Replace Media
-                </Button>
-              </AppUpload>
-            )
-          }
-        />
+        <ScrollView>
+          <MediaCard
+            title={title}
+            description={description}
+            mediaSrc={mediaUri}
+            showThumbnail={!!mediaUri}
+            thumbnail={thumbnail}
+            category={category}
+            categoryOptions={options}
+            onCategoryChange={(e: any) => {
+              setCategory(e);
+            }}
+            availableTags={availableTags}
+            tags={selectedTagKeys}
+            tagOptions={options}
+            onTagChange={(e: any) => {
+              setSelectedTagKeys(e);
+            }}
+            onTitleChange={setTitle}
+            onDescriptionChange={setDescription}
+            isEdit={true}
+            isPlayable={true}
+            topDrawer={() =>
+              !mediaUri ? (
+                <AppUpload uploadMode="video" onUploadStart={onUploadStart} onUploadComplete={onUploadComplete}>
+                  <UploadPlaceholder uploading={uploading} uploaded={!!mediaUri} buttonText="Upload Media" />
+                </AppUpload>
+              ) : (
+                <AppUpload uploadMode="video" onUploadStart={onUploadStart} onUploadComplete={onUploadComplete}>
+                  <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
+                    Replace Media
+                  </Button>
+                </AppUpload>
+              )
+            }
+          />
+        </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons
-          actionCb={() => saveItem()}
-          cancelCb={cancelCb}
-          actionLabel={actionLabel}
-          cancelLabel={cancelLabel}
-          disableAction={!isValid()}
-          rightIcon="check-circle"
-        />
+        <ActionButtons onActionClicked={saveItem} onCancelClicked={clearAndGoBack} actionLabel="Save" disableAction={!isValid()} />
       </PageActions>
     </PageContainer>
   );
 
-  async function onUploadSuccess(media) {
+  async function onUploadStart() {
+    setUploading(true);
+    setMediaUri('');
+  }
+
+  async function onUploadComplete(media) {
+    setUploading(false);
     setMediaUri(media.uri || '');
   }
 
   async function saveItem() {
+    // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
+    // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
+    const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
+
     const dto: CreateMediaItemDto = {
+      key: title,
       title,
-      category: MediaCategoryType[category],
       description,
       summary: '',
+      thumbnail: thumbnail,
       isPlayable: true,
       uri: mediaUri,
-      thumbnail: thumbnail,
-      key: title,
+      category: MediaCategoryType[category],
+      tags: selectedTags || [],
       eTag: '',
     };
+
     await dispatch(addMediaItem(dto));
 
     setCategory(MediaCategoryType.Free);
+    setSelectedTagKeys([]);
     setDescription('');
     setThumbnail('');
     goToMediaItems();
+  }
+
+  function resetData() {
+    setTitle('');
+    setCategory(MediaCategoryType.Free);
+    setSelectedTagKeys([] as any[]);
+    setDescription('');
+    setThumbnail('');
   }
 
   function clearAndGoBack() {
-    setTitle('');
-    setCategory(MediaCategoryType.Free);
-    setDescription('');
-    setThumbnail('');
-    goToMediaItems();
+    goToMediaItems().then();
+    resetData();
   }
 };
 
-export default withLoadingSpinner(MediaItemAdd);
+export default withLoadingSpinner((state) => {
+  return !!state?.mediaItem?.loading || false;
+})(withGlobalStateConsumer(MediaItemAdd));

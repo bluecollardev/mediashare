@@ -3,10 +3,10 @@ import { DarkTheme } from 'react-native-paper';
 
 const theme = {
   ...DarkTheme,
-  roundness: 2,
+  roundness: 0,
   colors: {
     ...DarkTheme.colors,
-    background: '#222222',
+    background: 'rgba(30,30,30,1)',
     success: '#9ECD3B',
     primary: '#00B8EC',
     default: '#BDC1C6',
@@ -16,12 +16,14 @@ const theme = {
     textDarker: '#BDC1C6',
     text: 'rgba(255,255,255,1)',
     error: 'rgba(242,22,81,1)',
+    white: '#ffffff',
   },
   fonts: {
-    medium: { fontFamily: 'Roboto_500Medium', fontWeight: '500' },
-    light: { fontFamily: 'Roboto_300Light', fontWeight: '300' },
-    regular: { fontFamily: 'Roboto_400Regular', fontWeight: '400' },
-    thin: { fontFamily: 'Roboto_100Thin', fontWeight: '100' },
+    bold: { fontFamily: 'Poppins_700Bold', fontWeight: '700' },
+    medium: { fontFamily: 'Poppins_500Medium', fontWeight: '500' },
+    light: { fontFamily: 'Poppins_300Light', fontWeight: '300' },
+    regular: { fontFamily: 'Poppins_400Regular', fontWeight: '400' },
+    thin: { fontFamily: 'Poppins_100Thin', fontWeight: '100' },
   },
 } as const;
 
@@ -39,26 +41,8 @@ const styles: any = StyleSheet.create({
   pageActions: {
     display: 'flex',
     width: '100%',
-    height: 50, // Make sure actionButtons is the same height!
+    height: 41, // Make sure actionButtons is the same height!
     backgroundColor: 'transparent',
-  },
-  actionButtons: {
-    display: 'flex',
-    flexDirection: 'row',
-    height: 50, // Make sure this is the same height as pageActions!
-    borderTopWidth: 1,
-    borderColor: 'transparent',
-  },
-  actionButton: {
-    flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'center',
-  },
-  deleteActionButton: {
-    flex: 0,
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    width: 30,
   },
   mediaListItem: {
     display: 'flex',
@@ -123,22 +107,28 @@ const styles: any = StyleSheet.create({
   textField: {
     marginBottom: 10,
     backgroundColor: theme.colors.surface,
+    fontSize: 13
   },
   changeImageButton: {
     borderTopWidth: 0,
-    borderRadius: 0
+    borderRadius: 0,
+    textTransform: 'none',
+    fontWeight: 'normal'
   },
   deleteItemButton: {
-    borderTopWidth: 0,
+    borderWidth: 1,
     borderRightWidth: 0,
-    borderRadius: 0
+    borderRadius: 0,
+    borderColor: theme.colors.defaultBorder,
+    backgroundColor: theme.colors.error,
+    color: theme.colors.white,
   },
   itemControls: {
     display: 'flex',
     flexDirection: 'row',
     borderTopColor: theme.colors.defaultBorder,
-    borderTopWidth: 1
-  }
+    borderTopWidth: 1,
+  },
 });
 
 export default styles;

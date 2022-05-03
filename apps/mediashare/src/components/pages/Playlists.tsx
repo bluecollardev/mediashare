@@ -1,31 +1,29 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { routeNames } from '../../routes';
-
-import { useAppSelector } from '../../store';
-import { getUserPlaylists, findPlaylists, removeUserPlaylist, selectPlaylistAction } from '../../store/modules/playlists';
-
-import { PlaylistResponseDto } from '../../rxjs-api';
-
-import { withGlobalStateConsumer } from '../../core/globalState';
-import { useLoadPlaylistData } from '../../hooks/useLoadData';
-import { useRouteName, useViewPlaylistById } from '../../hooks/NavigationHooks';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-
+import { routeNames } from 'mediashare/routes';
+import { useAppSelector } from 'mediashare/store';
+import { removeUserPlaylist } from 'mediashare/store/modules/playlist';
+import { getUserPlaylists, findPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
+import { PlaylistResponseDto } from 'mediashare/rxjs-api';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB, Text, Divider } from 'react-native-paper';
-import { RefreshControl, StyleSheet } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { View } from 'react-native';
-
-import { PageActions, PageContainer, KeyboardAvoidingPageContent, PageProps } from '../layout/PageContainer';
-import { MediaListItem } from '../layout/MediaListItem';
-import { ActionButtons } from '../layout/ActionButtons';
-import { NoItems } from '../layout/NoItems';
-
-import { getAuthorText, getUsername, shortenText } from '../../utils';
-import { createRandomRenderKey } from '../../core/utils';
-
-import { theme } from '../../styles';
+import {
+  PageActions,
+  PageContainer,
+  KeyboardAvoidingPageContent,
+  PageProps,
+  MediaListItem,
+  ActionButtons,
+  NoItems,
+  AppDialog,
+} from 'mediashare/components/layout';
+import { getAuthorText, getUsername, shortenText } from 'mediashare/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
+import { theme } from 'mediashare/styles';
 
 export interface PlaylistsProps {
   list: PlaylistResponseDto[];
@@ -36,95 +34,82 @@ export interface PlaylistsProps {
   onChecked?: (checked: boolean, item?: any) => void;
 }
 
-/* export function mapPlaylists(playlist: PlaylistResponseDto[]) {
-  const list = playlist.map((item) => {
-    const keyed = {
-      id: item._id,
-      title: item.title,
-      description: `${item?.mediaItems?.length || 0} Videos`,
-      key: item._id,
-      ...item,
-    };
-    return keyed;
-  });
-  return list;
-} */
-
-export const PlaylistsComponent = ({
-  list = [],
-  onViewDetailClicked,
-  selectable = false,
-  showActions = true,
-  onChecked = () => undefined
-}: PlaylistsProps) => {
+export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable = false, showActions = true, onChecked = () => undefined }: PlaylistsProps) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
-  return (
-    <View>
-      {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-      {sortedList.map((item, idx) => {
-        const { title, author, description, mediaIds = [], imageSrc } = item;
-        // console.log(`Dumping playlist item: ${JSON.stringify(item, null, 2)}`);
-        return (
-          <View key={`playlists_item_${item._id}`}>
-            <MediaListItem
-              key={`playlist_${item._id}`}
-              title={title}
-              titleStyle={styles.title}
-              description={() => (
-                <>
-                  {/* <Text style={styles.author}>By {getAuthorText(creator)}</Text> */}
-                  {author && <Text style={styles.username}>By @{author}</Text>}
-                  <Text style={styles.description}>{shortenText(description, 52)}</Text>
-                  <Text style={styles.videoCount}>{mediaIds?.length || 0} videos</Text>
-                </>
-              )}
-              showThumbnail={true}
-              image={imageSrc}
-              showActions={showActions}
-              selectable={selectable}
-              onViewDetail={() => onViewDetailClicked(item)}
-              onChecked={(checked) => onChecked(checked, item)}
-            />
-            <Divider key={`playlist_divider_${item._id}`} />
-          </View>
-        );
-      })}
-    </View>
-  );
+  return <FlatList data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />;
+
+  function renderVirtualizedListItem(item) {
+    const { _id = '', title = '', author = '', description = '', mediaIds = [], imageSrc = '' } = item;
+    return (
+      <>
+        <MediaListItem
+          key={`playlist_${_id}`}
+          title={title}
+          titleStyle={styles.titleText}
+          description={() => {
+            return (
+              <View style={styles.details}>
+                {!!author && <Text style={styles.username}>By {author}</Text>}
+                {/* <Text style={{ ...styles.description }}>{shortenText(description || '', 80)}</Text> */}
+                <Text style={{ ...styles.videoCount }}>{mediaIds?.length || 0} videos</Text>
+              </View>
+            );
+          }}
+          showThumbnail={true}
+          image={imageSrc}
+          showActions={showActions}
+          selectable={selectable}
+          onViewDetail={() => onViewDetailClicked(item)}
+          onChecked={(checked) => onChecked(checked, item)}
+        />
+        <Divider key={`playlist_divider_${item._id}`} />
+      </>
+    );
+  }
 };
 
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
 export const Playlists = ({ globalState }: PageProps) => {
-  // console.log(`Playlists > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
+  const dispatch = useDispatch();
+
   const shareWith = useRouteName(routeNames.shareWith);
   const createPlaylist = useRouteName(routeNames.playlistAdd);
   const viewPlaylist = useViewPlaylistById();
 
-  const dispatch = useDispatch();
-
-  // TODO: A generic data loader is a good idea, but we can do it later, use useAppSelector for now
-  // const [{ state, loaded }] = useLoadPlaylistData();
-  // TODO: Type check entities and selected?
-  // TODO: Clean up this area!
-  const [{ loaded }] = useLoadPlaylistData();
-  const { entities = [] as any[], selected = [] as any[] } = useAppSelector((state) => state.userPlaylists);
-  const [isLoaded, setIsLoaded] = useState(loaded);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
 
+  // TODO: A generic data loader is a good idea, but we can do it later, use useAppSelector for now
+  // const [{ state, loaded }] = useLoadPlaylistData();
+  const { loading, loaded, entities = [] as any[], selected = [] as any[] } = useAppSelector((state) => state?.userPlaylists);
+  const [isLoaded, setIsLoaded] = useState(loaded);
+  useEffect(() => {
+    if (loaded && !isLoaded) {
+      setIsLoaded(true);
+    }
+  }, [loaded]);
+
   const onRefresh = useCallback(refresh, [dispatch]);
-  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
+  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
+  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
-    if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
+    if (!isLoaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
       setPrevSearchFilters(currentSearchFilters);
-      loadData();
+      loadData().then();
     }
-  }, [isLoaded, globalState]);
+  }, [isLoaded, globalState, searchFilters]);
+
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions = [
@@ -133,15 +118,20 @@ export const Playlists = ({ globalState }: PageProps) => {
     { icon: 'library-add', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
   ];
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
-  useEffect(() => {
-    clearCheckboxSelection();
-  }, []);
-
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        {loaded && entities.length > 0 ? (
+        <AppDialog
+          leftActionLabel="Cancel"
+          rightActionLabel="Delete"
+          leftActionCb={() => closeDeleteDialog()}
+          rightActionCb={() => confirmPlaylistsToDelete()}
+          onDismiss={closeDeleteDialog}
+          showDialog={showDeleteDialog}
+          title="Delete Playlists"
+          subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+        />
+        {isLoaded ? (
           <PlaylistsComponent
             key={clearSelectionKey}
             list={entities}
@@ -151,17 +141,28 @@ export const Playlists = ({ globalState }: PageProps) => {
             onChecked={updateSelection}
           />
         ) : (
-          <NoItems />
+          <NoItems text={loading ? 'Loading...' : 'You have not created any playlists yet.'} />
         )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>
-          <ActionButtons actionCb={confirmPlaylistsToShare} cancelCb={cancelPlaylistsToShare} actionLabel="Share With" cancelLabel="Cancel" rightIcon="group" />
+          <ActionButtons
+            onActionClicked={confirmPlaylistsToShare}
+            onCancelClicked={cancelPlaylistsToShare}
+            actionLabel="Share With"
+            actionIcon="group"
+          />
         </PageActions>
       )}
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons actionCb={confirmPlaylistsToDelete} cancelCb={cancelPlaylistsToDelete} actionLabel="Delete" cancelLabel="Cancel" rightIcon="delete" />
+          <ActionButtons
+            onActionClicked={openDeleteDialog}
+            onCancelClicked={cancelPlaylistsToDelete}
+            actionLabel="Delete"
+            actionIcon="delete"
+            actionButtonStyles={styles.deleteActionButton}
+          />
         </PageActions>
       )}
       {!isSelectable && (
@@ -182,70 +183,65 @@ export const Playlists = ({ globalState }: PageProps) => {
 
   async function loadData() {
     const { search } = globalState;
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Playlists.loadData > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
-    // console.log(globalState);
-    if (search.filters.text) {
-      // console.log('Dispatch findPlaylists');
+    const args = {
+      text: search?.filters?.text ? search.filters.text : '',
+      tags: search?.filters?.tags || [],
+    };
+
+    if (args.text || args.tags.length > 0) {
       await dispatch(findPlaylists(args));
     } else {
-      // console.log('Dispatch getUserPlaylists');
-      await dispatch(getUserPlaylists({}));
+      await dispatch(getUserPlaylists());
     }
-    setIsLoaded(true);
   }
 
   async function refresh() {
     setRefreshing(true);
-    const { search } = globalState;
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Playlists.refresh > Dispatch with args: ${JSON.stringify(args, null, 2)}`);
-    // console.log(globalState);
-    if (search.filters.text) {
-      // console.log('Dispatch findPlaylists');
-      await dispatch(findPlaylists(args));
-    } else {
-      // console.log('Dispatch getUserPlaylists');
-      await dispatch(getUserPlaylists({}));
-    }
+    await loadData();
     setRefreshing(false);
   }
 
-  async function updateSelection(bool, item) {
-    dispatch(selectPlaylistAction({ isChecked: bool, plist: item }));
-  }
-
-  async function activateShareMode() {
+  function activateShareMode() {
     setActionMode(actionModes.share);
     setIsSelectable(true);
   }
 
-  async function confirmPlaylistsToShare() {
+  function confirmPlaylistsToShare() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
     shareWith();
   }
 
-  async function cancelPlaylistsToShare() {
+  function cancelPlaylistsToShare() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
   }
 
-  async function activateDeleteMode() {
+  function activateDeleteMode() {
     setActionMode(actionModes.delete);
     setIsSelectable(true);
   }
 
+  function openDeleteDialog() {
+    setShowDeleteDialog(true);
+  }
+
+  function closeDeleteDialog() {
+    cancelPlaylistsToDelete();
+    setShowDeleteDialog(false);
+  }
+
   async function confirmPlaylistsToDelete() {
     await deletePlaylists();
+    closeDeleteDialog();
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
   }
 
-  async function cancelPlaylistsToDelete() {
+  function cancelPlaylistsToDelete() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
@@ -254,10 +250,14 @@ export const Playlists = ({ globalState }: PageProps) => {
   async function deletePlaylists() {
     selected.map(async (item) => {
       await dispatch(removeUserPlaylist(item._id));
-    }) // TODO: Find a real way to do this
+    }); // TODO: Find a real way to do this
     setTimeout(() => {
-      loadData()
-    }, 2500)
+      loadData();
+    }, 2500);
+  }
+
+  function updateSelection(bool, item) {
+    dispatch(selectPlaylist({ isChecked: bool, plist: item }));
   }
 
   function clearCheckboxSelection() {
@@ -266,11 +266,19 @@ export const Playlists = ({ globalState }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(Playlists));
+export default withLoadingSpinner((state) => {
+  return !!state?.userPlaylists?.loading || false;
+})(withGlobalStateConsumer(Playlists));
 
 const styles = StyleSheet.create({
-  title: {
+  titleText: {
     marginBottom: 2,
+    color: theme.colors.text,
+    fontSize: 13,
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
   },
   author: {
     color: theme.colors.textDarker,
@@ -278,11 +286,15 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   username: {
+    flex: 0,
+    width: '100%',
     color: theme.colors.primary,
     fontSize: 12,
     marginBottom: 4,
   },
   description: {
+    flex: 0,
+    width: '100%',
     color: theme.colors.textDarker,
     fontSize: 12,
     marginTop: 2,
@@ -293,5 +305,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 2,
     fontWeight: 'bold',
+  },
+  deleteActionButton: {
+    backgroundColor: theme.colors.error,
   },
 });
