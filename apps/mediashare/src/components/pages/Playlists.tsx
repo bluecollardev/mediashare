@@ -41,7 +41,8 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
   return <FlatList data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />;
 
   function renderVirtualizedListItem(item) {
-    const { _id = '', title = '', author = '', description = '', mediaIds = [], imageSrc = '' } = item;
+    // TODO: Can we have just one or the other, either mediaIds or mediaItems?
+    const { _id = '', title = '', author = '', description = '', mediaIds = [], mediaItems = [], imageSrc = '' } = item;
     return (
       <>
         <MediaListItem
@@ -53,7 +54,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
               <View style={styles.details}>
                 {!!author && <Text style={styles.username}>By {author}</Text>}
                 {/* <Text style={{ ...styles.description }}>{shortenText(description || '', 80)}</Text> */}
-                <Text style={{ ...styles.videoCount }}>{mediaIds?.length || 0} videos</Text>
+                <Text style={{ ...styles.videoCount }}>{mediaIds?.length || mediaItems?.length || 0} videos</Text>
               </View>
             );
           }}
