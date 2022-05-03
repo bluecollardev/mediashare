@@ -29,11 +29,11 @@ export const MediaCardTitle: React.FC<MediaCardTitleProps> = ({
       style={{ marginTop: 25, marginBottom: 25 }}
       title={<Title style={defaultStyles.titleText}>{title}</Title>}
       titleStyle={defaultStyles.title}
+      titleNumberOfLines={2}
       // TODO: Stupid component doesn't render right on Android if we use a View to wrap, but then the whole f*cking thing appears on a single line!
       subtitle={
         <View style={defaultStyles.subtitle}>
           <Text style={defaultStyles.author}>By {getAuthorText(creator)}</Text>
-          <Text style={defaultStyles.username}>{getUsername(creator)}</Text>
         </View>
       }
       subtitleStyle={defaultStyles.subtitle}
@@ -60,7 +60,7 @@ const defaultStyles = StyleSheet.create({
   },
   titleText: {
     color: theme.colors.text,
-    fontSize: 16,
+    fontSize: 13,
   },
   subtitle: {
     display: 'flex',

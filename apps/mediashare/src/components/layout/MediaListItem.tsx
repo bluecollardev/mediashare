@@ -56,9 +56,10 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   return (
     <List.Item
       title={title || null}
+      titleNumberOfLines={3}
       titleStyle={defaultStyles.titleText}
       description={description}
-      descriptionNumberOfLines={1}
+      descriptionNumberOfLines={3}
       // It doesn't feel right to have the whole thing be a tap target when we're displaying actions on the left
       onPress={showActions !== 'left' ? onPress : undefined}
       left={() =>
@@ -108,6 +109,6 @@ const defaultStyles: any = StyleSheet.create({
   },
   titleText: {
     color: theme.colors.text,
-    fontSize: 14,
+    fontSize: 13,
   },
 });

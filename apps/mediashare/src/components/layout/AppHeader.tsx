@@ -109,7 +109,8 @@ const AppHeaderComponent = ({
                         <Card.Title title={placeholder} />
                         <Card.Content style={{ height: '85%', paddingBottom: 50 }}>
                           <Searchbar
-                            style={{ width: '100%' }}
+                            style={{ width: '100%', marginTop: 15 }}
+                            inputStyle={{ fontSize: 13 }}
                             placeholder="Keywords"
                             value={searchText}
                             onChangeText={(text) => updateSearchText(text)}
@@ -149,8 +150,14 @@ const AppHeaderComponent = ({
                                 borderColor: theme.colors.defaultBorder,
                                 backgroundColor: theme.colors.surface,
                               },
+                              selectToggleText: {
+                                fontSize: 13
+                              },
                               chipContainer: {
                                 marginTop: 10,
+                              },
+                              itemText: {
+                                fontSize: 14
                               },
                             }}
                             items={mappedTags}
