@@ -14,7 +14,7 @@ import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner
 import { titleValidator, descriptionValidator, categoryValidator } from 'mediashare/core/utils/validators';
 import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps, ActionButtons, MediaCard, AppUpload, UploadPlaceholder } from 'mediashare/components/layout';
 import { CreatePlaylistDto, PlaylistCategoryType } from 'mediashare/rxjs-api';
-import { theme } from 'mediashare/styles';
+import styles, { theme } from 'mediashare/styles';
 
 // @ts-ignore
 const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
@@ -86,7 +86,16 @@ const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
                 </AppUpload>
               ) : (
                 <AppUpload uploadMode="photo" onUploadComplete={onUploadComplete}>
-                  <Button mode="outlined" dark color={theme.colors.default} compact uppercase={false}>
+                  <Button
+                    icon="cloud-upload"
+                    mode="outlined"
+                    dark
+                    color={theme.colors.default}
+                    compact
+                    uppercase={false}
+                    style={styles.changeImageButton}
+                    labelStyle={styles.changeImageButtonLabel}
+                  >
                     <Text>Change Cover Photo</Text>
                   </Button>
                 </AppUpload>

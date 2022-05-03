@@ -131,7 +131,16 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
                   </View>
                   <View style={{ flex: 4 }}>
                     <AppUpload uploadMode="photo" onUploadComplete={onUploadComplete}>
-                      <Button mode="outlined" dark color={theme.colors.default} compact uppercase={false} style={styles.changeImageButton}>
+                      <Button
+                        icon="cloud-upload"
+                        mode="outlined"
+                        dark
+                        color={theme.colors.default}
+                        compact
+                        uppercase={false}
+                        style={styles.changeImageButton}
+                        labelStyle={styles.changeImageButtonLabel}
+                      >
                         <Text>Change Cover Photo</Text>
                       </Button>
                     </AppUpload>

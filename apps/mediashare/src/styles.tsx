@@ -107,17 +107,22 @@ const styles: any = StyleSheet.create({
   textField: {
     marginBottom: 10,
     backgroundColor: theme.colors.surface,
-    fontSize: 13
+    fontSize: 13,
   },
   changeImageButton: {
     borderTopWidth: 0,
     borderRadius: 0,
+    height: 39
+  },
+  changeImageButtonLabel: {
     textTransform: 'none',
-    fontWeight: 'normal'
+    fontWeight: '300',
+    fontSize: 12,
   },
   deleteItemButton: {
     borderWidth: 1,
     borderRightWidth: 0,
+    borderTopWidth: 0,
     borderRadius: 0,
     borderColor: theme.colors.defaultBorder,
     backgroundColor: theme.colors.error,

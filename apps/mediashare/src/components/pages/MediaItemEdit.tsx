@@ -124,7 +124,16 @@ const MediaItemEdit = ({
                 </View>
                 <View style={{ flex: 4 }}>
                   <AppUpload uploadMode="photo" onUploadComplete={setThumbnail}>
-                    <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact uppercase={false} style={styles.changeImageButton}>
+                    <Button
+                      icon="cloud-upload"
+                      mode="outlined"
+                      dark
+                      color={theme.colors.default}
+                      compact
+                      uppercase={false}
+                      style={styles.changeImageButton}
+                      labelStyle={styles.changeImageButtonLabel}
+                    >
                       Change Preview Image
                     </Button>
                   </AppUpload>
