@@ -1,8 +1,9 @@
 {
   "name": "mediashare",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
+    "app:bump-version": "npx react-native-version --never-amend",
     "app:ios:clean-pods": "cd ios && bash ./purge-pod-artifacts.sh && cd ..",
     "app:ios:install-pods": "cd ios && pod install --clean-install && cd ..",
     "app:ios:refresh-pods": "yarn app:ios:clean-pods && yarn app:ios:install-pods",

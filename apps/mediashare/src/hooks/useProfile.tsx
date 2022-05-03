@@ -8,7 +8,7 @@ import { loadUser } from 'mediashare/store/modules/user';
 import { loadUsers } from 'mediashare/store/modules/users';
 import { useViewPlaylist } from './NavigationHooks';
 
-export const useProfile = function (userId?: string) {
+export function useProfile(userId?: string) {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
   const playlist = useViewPlaylist();
