@@ -59,8 +59,8 @@ export const MediaComponent = ({
           titleStyle={styles.titleText}
           description={
             <View style={styles.details}>
-              {author && <Text style={styles.username}>By {author}</Text>}
-              <Text style={styles.description}>{shortenText(description || '', 80)}</Text>
+              {!!author && <Text style={styles.username}>By {author}</Text>}
+              {/* <Text style={styles.description}>{shortenText(description || '', 80)}</Text> */}
             </View>
           }
           showThumbnail={true}
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   titleText: {
     marginBottom: 2,
     color: theme.colors.text,
-    fontSize: 14,
+    fontSize: 13,
   },
   details: {
     display: 'flex',
