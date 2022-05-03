@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-
-import { View, StyleSheet, Text } from 'react-native';
-import { Divider, Menu } from 'react-native-paper';
+import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { View, StyleSheet, Text } from 'react-native';
+import { Divider } from 'react-native-paper';
 import { MediaListItem } from './MediaListItem';
-import { theme } from '../../styles';
+import { theme } from 'mediashare/styles';
 
 interface ShareItemCardProps {
   date: string;
@@ -19,13 +18,13 @@ interface ShareItemCardProps {
 }
 
 export function ShareItemCard({ date, title, onDelete, onView, onChecked, image, read, selectable, showActions }: ShareItemCardProps) {
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
   return (
     <View style={styles.sharedItem}>
       <MediaListItem
         key={title}
         title={title}
-        titleStyle={styles.title}
+        titleStyle={styles.titleText}
         description={
           <View style={styles.description}>
             <MaterialIcons style={styles.visibilityIcon} name={read ? 'visibility' : 'visibility-off'} size={16} />
@@ -49,8 +48,10 @@ export function ShareItemCard({ date, title, onDelete, onView, onChecked, image,
 }
 
 const styles = StyleSheet.create({
-  title: {
+  titleText: {
     marginBottom: 4,
+    color: theme.colors.text,
+    fontSize: 14,
   },
   description: {
     display: 'flex',

@@ -1,23 +1,21 @@
-import { Controller, Get, Body, Put, Param, Delete, UseGuards, HttpCode, Request } from '@nestjs/common';
+import { Controller, Get, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
 import { UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
-import { PlaylistService } from '../playlist/services/playlist.service';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
-
+import { PlaylistService } from '../playlist/playlist.service';
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { ObjectId } from 'mongodb';
-
-// import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
-import { UserService } from '../../modules/auth/user.service';
+// import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
+import { UserService } from '@api-modules/auth/user.service';
 import { BcRolesType, BC_ROLES } from '@core-lib';
-import { UserGetResponse, UserPostResponse } from './decorators/user-response.decorator';
+import { UserGetResponse, UserPostResponse } from './user.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
-import RouteTokens from '../../modules/app-config/constants/open-api.constants';
+import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
 import { ProfileDto } from './dto/profile.dto';
-import { UserGuard } from '../../modules/auth/guards/user.guard';
+import { UserGuard } from '@api-modules/auth/guards/user.guard';
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -26,8 +24,8 @@ import { map } from 'rxjs/operators';
 export class UsersController {
   constructor(private readonly userService: UserService, private playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
-  @UserGetResponse({ isArray: true })
   @Get()
+  @UserGetResponse({ isArray: true })
   async findAll(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
     return from(this.userService.findAll()).pipe(map((users) => users.filter((user) => user._id !== userId)));
   }
@@ -51,24 +49,26 @@ export class UsersController {
   remove(@Param('userId') userId: string): Promise<DeleteResult> {
     return this.userService.remove(userId);
   }
+
   @Put(RouteTokens.USER_ID)
-  @UserPostResponse({ type: UserDto })
   @ApiBody({ type: UpdateUserDto })
   @ApiParam({ name: 'userId', type: String, required: true })
+  @UserPostResponse({ type: UserDto })
   update(@Param('userId', new ObjectIdPipe()) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser({ userId, updateUserDto });
   }
+
   @Get(':userId/playlists')
-  @UserGetResponse({ type: PlaylistResponseDto, isArray: true })
   @ApiParam({ name: 'userId', type: String, required: true })
   @ApiHideProperty()
+  @UserGetResponse({ type: PlaylistResponseDto, isArray: true })
   getPlaylists(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
-    return this.playlistService.getPlaylistByUserId({ userId });
+    return this.playlistService.getByUserId(userId);
   }
 
   @Put(':userId/roles')
-  @UserPostResponse({ type: UserDto })
   @ApiBody({ enum: BC_ROLES })
+  @UserPostResponse({ type: UserDto })
   setRoles(@Param('userId') id: string, @Body() params: { roles: BcRolesType[] }) {
     const { roles = [] } = params;
     return this.userService.setRoles(id, roles);

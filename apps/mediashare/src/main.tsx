@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import App from './Application';
 import { store } from './store';
+import App from './Application';
 
 export default function init() {
   return (

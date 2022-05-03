@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { View, StyleSheet } from 'react-native';
 import { Avatar, Button, Checkbox, Divider, Headline, IconButton, List, Text } from 'react-native-paper';
-import { theme } from '../../styles';
+import { theme } from 'mediashare/styles';
 
 interface ContactListItemProps {
   userId: string;
@@ -41,26 +41,27 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
     <View>
       <List.Item
         key={userId}
-        style={styles.listItem}
+        style={defaultStyles.listItem}
         onPress={onPress}
         title={title}
+        titleStyle={defaultStyles.titleText}
         description={
           <>
-            <Text style={styles.description}>{description}</Text>
+            <Text style={defaultStyles.description}>{description}</Text>
           </>
         }
         left={() =>
           selectable ? (
-            <View style={styles.leftOuterWrapper}>
+            <View style={defaultStyles.leftOuterWrapper}>
               <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.success : theme.colors.disabled} />
-              <View style={styles.avatarWrapper}>
+              <View style={defaultStyles.avatarWrapper}>
                 <Avatar.Image source={avatar ? { uri: avatar } : undefined} size={40} />
               </View>
             </View>
           ) : (
-            <View style={styles.leftOuterWrapper}>
-              <View style={styles.letterLabelWrapper}>{showLetterLabel && <Headline style={styles.headline}>{title[0]}</Headline>}</View>
-              <View style={styles.avatarWrapper}>
+            <View style={defaultStyles.leftOuterWrapper}>
+              <View style={defaultStyles.letterLabelWrapper}>{showLetterLabel && <Headline style={defaultStyles.headline}>{title[0]}</Headline>}</View>
+              <View style={defaultStyles.avatarWrapper}>
                 <Avatar.Image source={avatar ? { uri: avatar } : undefined} size={40} />
               </View>
             </View>
@@ -72,7 +73,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
           ) : (
             <View>
               {showFollow && (
-                <Button mode={selectable ? 'contained' : 'outlined'} style={styles.followButton} disabled={selectable}>
+                <Button mode={selectable ? 'contained' : 'outlined'} style={defaultStyles.followButton} disabled={selectable}>
                   Following
                 </Button>
               )}
@@ -94,7 +95,11 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
   }
 };
 
-const styles = StyleSheet.create({
+const defaultStyles = StyleSheet.create({
+  titleText: {
+    color: theme.colors.text,
+    fontSize: 14,
+  },
   description: {
     color: theme.colors.textDarker,
     fontSize: 12,
@@ -104,7 +109,7 @@ const styles = StyleSheet.create({
   listItem: { margin: 0, justifyContent: 'center' },
   leftOuterWrapper: { flexDirection: 'row', width: 100, justifyContent: 'space-between' },
   letterLabelWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
-  headline: { marginLeft: 10, color: theme.colors.primary },
+  headline: { marginLeft: 10, color: theme.colors.default },
   avatarWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
   followButton: { justifyContent: 'center', borderColor: theme.colors.primary, transform: [{ scale: 0.75 }] },
 });

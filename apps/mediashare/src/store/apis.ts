@@ -10,9 +10,10 @@ import {
   ShareItemsApi,
   UserApi,
   UsersApi,
+  TagsApi,
   ViewsApi,
-} from '../rxjs-api';
-import Config from '../config';
+} from 'mediashare/rxjs-api';
+import Config from 'mediashare/config';
 
 function apiFactory() {
   function middlewareFactory() {
@@ -52,8 +53,6 @@ function apiFactory() {
     return [cookieMiddleware];
   }
 
-  console.log(`servers: ${JSON.stringify(servers)}`);
-  console.log(`using configuration: ${JSON.stringify(Config.API_SERVER)}`);
   const configuration = new Configuration({
     basePath: servers[Config.API_SERVER].getUrl(),
     middleware: middlewareFactory(),
@@ -67,6 +66,7 @@ function apiFactory() {
     user: new UserApi(configuration),
     users: new UsersApi(configuration),
     views: new ViewsApi(configuration),
+    tags: new TagsApi(configuration),
     configuration,
   };
 }
@@ -74,6 +74,6 @@ function apiFactory() {
 const apis = apiFactory();
 export type ApiService = typeof apis;
 
-const { mediaItems, shareItems, playlists, user, users, configuration } = apis;
+const { mediaItems, shareItems, playlists, user, users, views, tags, configuration } = apis;
 
-export { apis, mediaItems, shareItems, playlists, user, users, configuration };
+export { apis, mediaItems, shareItems, playlists, user, users, views, tags, configuration };

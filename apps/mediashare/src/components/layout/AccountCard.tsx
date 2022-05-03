@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Avatar, Caption, Title, Subheading, Card, Menu, IconButton } from 'react-native-paper';
-
-import { theme } from '../../styles';
-import { useAppSelector } from '../../store';
+import { useAppSelector } from 'mediashare/store';
+import { theme } from 'mediashare/styles';
 import * as R from 'remeda';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import * as build from 'mediashare/build';
+
 
 interface AccountCardProps {
   image: string;
@@ -36,21 +36,21 @@ export const AccountCard = ({
 }: AccountCardProps) => {
   const [visible, setVisible] = useState(false);
 
-  const user = useAppSelector((state) => state.profile.entity);
+  const user = useAppSelector((state) => state?.profile?.entity);
   const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
   const [state] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
   // <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />
-  // <View style={styles.buttonContainer}>
+  // <View styles={defaultStyles.buttonContainer}>
   //   <IconButton icon="delete-outline" color={theme.colors.text} size={20} onPress={onDelete} />
   //   <IconButton icon="play-circle-filled" color={theme.colors.text} size={20} onPress={onView} />
   // </View>
-  // <Menu.Item icon={'play-circle-filled'} onPress={() => {}} title="Watch" />
+  // <Menu.Item icon="play-circle-filled" onPress={() => {}} title="Watch" />
   return (
     <>
       <Card mode="elevated">
         <Card.Title
-          style={styles.header}
+          style={defaultStyles.header}
           left={() =>
             image ? (
               <TouchableWithoutFeedback onPress={onProfileImageClicked}>
@@ -62,11 +62,11 @@ export const AccountCard = ({
               </TouchableWithoutFeedback>
             )
           }
-          leftStyle={styles.left}
-          title={<Title style={styles.titleText}>{title}</Title>}
-          titleStyle={styles.title}
-          subtitle={<Subheading style={styles.subtitleText}>{email}</Subheading>}
-          subtitleStyle={styles.subtitle}
+          leftStyle={defaultStyles.left}
+          title={<Title style={defaultStyles.titleText}>{title}</Title>}
+          titleStyle={defaultStyles.title}
+          subtitle={<Subheading style={defaultStyles.subtitleText}>{email}</Subheading>}
+          subtitleStyle={defaultStyles.subtitle}
           right={() =>
             showActions ? (
               <Menu
@@ -79,17 +79,17 @@ export const AccountCard = ({
                 }
               >
                 {isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Delete Account" />}
-                {!isCurrentUser && <Menu.Item icon="person-remove" onPress={() => {}} title="Unfollow" />}
+                {build.forAdmin && !isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Deactivate" />}
               </Menu>
             ) : null
           }
-          rightStyle={styles.right}
+          rightStyle={defaultStyles.right}
         />
         <Card.Content>
           {withoutName() && (
             <Card>
               <Card.Title
-                title={'A name is required'}
+                title="A name is required"
                 left={(props) => <MaterialIcons {...props} name="warning" color={theme.colors.error} size={30} />}
                 // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
               />
@@ -97,16 +97,16 @@ export const AccountCard = ({
           )}
         </Card.Content>
         {showSocial && (
-          <View style={styles.social}>
-            <View style={styles.labelledElement}>
+          <View style={defaultStyles.social}>
+            <View style={defaultStyles.labelledElement}>
               <Subheading>{likes}</Subheading>
               <Caption>Likes</Caption>
             </View>
-            <View style={styles.labelledElement}>
+            <View style={defaultStyles.labelledElement}>
               <Subheading>{shares}</Subheading>
               <Caption>Shares</Caption>
             </View>
-            <View style={styles.labelledElement}>
+            <View style={defaultStyles.labelledElement}>
               <Subheading>{shared}</Subheading>
               <Caption>Shared</Caption>
             </View>
@@ -117,7 +117,7 @@ export const AccountCard = ({
   );
 };
 
-const styles = StyleSheet.create({
+const defaultStyles = StyleSheet.create({
   header: {
     paddingTop: 30,
     paddingBottom: 10,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: theme.colors.text,
-    fontSize: 18,
+    fontSize: 16,
   },
   subtitleText: {
     fontSize: 11,
@@ -174,5 +174,3 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
 });
-
-export default AccountCard;

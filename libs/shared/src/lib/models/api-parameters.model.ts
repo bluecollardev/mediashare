@@ -1,13 +1,23 @@
 import { ObjectId } from 'mongodb';
 
-class ObjectIdParameters {
-  userId: ObjectId;
-  playlistId: ObjectId;
-  mediaId: ObjectId;
-  playlistItemId: ObjectId;
-  createdBy: ObjectId;
+interface IObjectIdParameters {
+  userId?: ObjectId;
+  playlistId?: ObjectId;
+  mediaId?: ObjectId;
+  playlistItemId?: ObjectId;
+  createdBy?: ObjectId;
 }
 
-export type OptionalObjectIdParameters = Partial<ObjectIdParameters>;
+export type ObjectIdParameters = Partial<IObjectIdParameters>;
 
-export { ObjectIdParameters };
+interface IContentSearchParameters {
+  query?: string;
+  fullText?: boolean; // Search all text fields?
+  textMatchingMode?: 'and' | 'or';
+  tags?: string[];
+  tagsMatchingMode?: 'any' | 'all';
+}
+
+export type ContentSearchParameters = Partial<IContentSearchParameters>
+
+export type SearchParameters = Partial<ObjectIdParameters & ContentSearchParameters>;

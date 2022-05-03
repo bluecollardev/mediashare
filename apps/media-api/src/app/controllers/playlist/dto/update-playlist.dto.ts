@@ -1,3 +1,4 @@
+import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
 import { PlaylistCategoryType, PLAYLIST_CATEGORY } from '@core-lib';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsArray } from 'class-validator';
@@ -10,4 +11,7 @@ export class UpdatePlaylistDto extends PickType(Playlist, ['title', 'category', 
 
   @ApiProperty({ enum: PLAYLIST_CATEGORY, name: 'category', enumName: 'PlaylistCategoryType' })
   category: PlaylistCategoryType;
+
+  @ApiProperty({ type: TagKeyValue, name: 'tags', isArray: true, nullable: true })
+  tags: TagKeyValue[];
 }

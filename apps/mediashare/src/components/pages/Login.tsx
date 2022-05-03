@@ -1,16 +1,13 @@
 import React, { Component, useState } from 'react';
+import { ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
-
-import { loginAction } from '../../store/modules/user';
-import { RootState } from '../../store';
-
+import { loginAction } from 'mediashare/store/modules/user';
+import { RootState } from 'mediashare/store';
 import { Authenticator, SignIn, SignUp, Greetings, VerifyContact, ForgotPassword, AmplifyTheme, ConfirmSignIn } from 'aws-amplify-react-native';
-
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { Button, Card } from 'react-native-paper';
-import { PageContainer, PageProps, KeyboardAvoidingPageContent } from '../layout/PageContainer';
-
-import { theme } from '../../styles';
+import { PageContainer, PageProps, KeyboardAvoidingPageContent } from 'mediashare/components/layout/PageContainer';
+import { theme } from 'mediashare/styles';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -36,9 +33,7 @@ const MyTheme = Object.assign({}, AmplifyTheme, {
     justifyContent: 'space-around',
     paddingTop: 20,
     width: '100%',
-    // TODO: Use our real background color
-    // backgroundColor: theme.colors.background,
-    backgroundColor: '#222222',
+    backgroundColor: theme.colors.background,
   },
   section: {
     flex: 1,
@@ -194,24 +189,26 @@ const LoginComponent = ({}: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent>
-        <Card elevation={0}>
-          <Card.Cover resizeMode="contain" source={require('../../assets/af-logo.png')} style={{ backgroundColor: theme.colors.background }} />
-        </Card>
-        {show && (
-          <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={true}>
-            {/* <MyCustomSignUp override={'SignUp'} /> */}
-            <SignIn />
-            <SignUp />
-            <Greetings />
-            <ConfirmSignIn />
+        <ScrollView>
+          <Card elevation={0}>
+            <Card.Cover resizeMode="contain" source={require('mediashare/assets/af-logo.png')} style={{ backgroundColor: theme.colors.background }} />
+          </Card>
+          {show && (
+            <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={true}>
+              {/* <MyCustomSignUp override={'SignUp'} /> */}
+              <SignIn />
+              <SignUp />
+              <Greetings />
+              <ConfirmSignIn />
 
-            <VerifyContact />
-            <ForgotPassword />
-            {/* <TOTPSetup /> */}
-            {/* <Loading /> */}
-            <CustomVerify override={'ConfirmSignUp'} />
-          </Authenticator>
-        )}
+              <VerifyContact />
+              <ForgotPassword />
+              {/* <TOTPSetup /> */}
+              {/* <Loading /> */}
+              <CustomVerify override="ConfirmSignUp" />
+            </Authenticator>
+          )}
+        </ScrollView>
       </KeyboardAvoidingPageContent>
     </PageContainer>
   );
@@ -238,4 +235,4 @@ class CustomVerify extends Component<any> {
   }
 }
 
-export default withLoadingSpinner(LoginComponent);
+export default withLoadingSpinner(undefined)(LoginComponent);

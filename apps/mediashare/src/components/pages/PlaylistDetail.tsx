@@ -1,41 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { ScrollView } from 'react-native';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { routeNames } from 'mediashare/routes';
+import { useAppSelector } from 'mediashare/store';
+import { getPlaylistById, removeUserPlaylist } from 'mediashare/store/modules/playlist';
+import { getUserPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
+import { loadUsers } from 'mediashare/store/modules/users';
+import { mapAvailableTags } from 'mediashare/store/modules/tags';
+import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { FAB } from 'react-native-paper';
+import { PageContainer, PageContent, PageActions, PageProps, ActionButtons, AppDialog, MediaCard, MediaList } from 'mediashare/components/layout';
+import { PlaylistResponseDto } from 'mediashare/rxjs-api';
+import * as build from 'mediashare/build';
+import { theme } from 'mediashare/styles';
 
-import { routeNames } from '../../routes';
+// @ts-ignore
+export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps) => {
+  const dispatch = useDispatch();
 
-import { useAppSelector } from '../../store';
-import {
-  getUserPlaylists,
-  getPlaylistById,
-  removeUserPlaylist,
-  updateUserPlaylist,
-  selectPlaylistAction
-} from '../../store/modules/playlists';
-import { loadUsers } from '../../store/modules/users';
-
-import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from '../../hooks/NavigationHooks';
-
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-
-import { Button, FAB, Divider, IconButton } from 'react-native-paper';
-
-import AppDialog from '../layout/AppDialog';
-import { MediaCard } from '../layout/MediaCard';
-import { MediaList } from '../layout/MediaList';
-import { ListActionButton } from '../layout/ListActionButton';
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { ActionButtons } from '../layout/ActionButtons';
-
-import { MediaItem, PlaylistResponseDto } from '../../rxjs-api';
-
-import * as build from '../../build';
-
-import { createRandomRenderKey } from '../../core/utils';
-
-import { theme } from '../../styles';
-import { View } from 'react-native';
-
-export const PlaylistDetail = ({ route }: PageProps) => {
   const { playlistId = '' } = route?.params || {};
 
   const edit = useRouteWithParams(routeNames.playlistEdit);
@@ -44,116 +28,133 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   const goToShareWith = useRouteName(routeNames.shareWith);
   const goToPlaylists = usePlaylists();
 
-  const dispatch = useDispatch();
+  const { loaded, selected } = useAppSelector((state) => state?.playlist);
+  const [isLoaded, setIsLoaded] = useState(loaded);
 
-  const { selected } = useAppSelector((state) => state.playlist);
-  const appUserId = useAppSelector((state) => state.user?._id);
-  const [showDialog, setShowDialog] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-
+  const appUserId = useAppSelector((state) => state?.user?.entity?._id);
   // @ts-ignore
-  const { _id, title = '', author = '', createdBy, description = '', imageSrc, category, shareCount = 0, viewCount = 0, likesCount = 0, mediaItems = [] } =
-    selected || {};
+  const {
+    _id,
+    title = '',
+    author = '',
+    createdBy,
+    description = '',
+    imageSrc,
+    category,
+    shareCount = 0,
+    viewCount = 0,
+    likesCount = 0,
+    mediaItems = [],
+  } = selected || {};
   const items = mediaItems || [];
+  const allowEdit = createdBy === appUserId;
+
+  const { tags = [] } = globalState;
+  const tagKeys = (selected?.tags || []).map(({ key }) => key);
+  const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
 
   useEffect(() => {
     if (!isLoaded) {
-      loadData();
+      loadData().then();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
-  // console.log(`Logged In User: ${appUserId}, Media Item Owned By: ${createdBy}`);
-  // console.log(selected);
-
-  const allowEdit = createdBy === appUserId;
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const [fabState, setFabState] = useState({ open: false });
-  let fabActions = [];
+  let fabActions;
   if (allowEdit) {
     fabActions = [
-      { icon: 'delete-forever', onPress: () => setShowDialog(true), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+      { icon: 'delete-forever', onPress: () => setShowDeleteDialog(true), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
       { icon: 'share', onPress: () => sharePlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
       { icon: 'edit', onPress: () => editPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
     ];
   } else {
-    fabActions = [{ icon: 'share', onPress: (() => sharePlaylist()), color: theme.colors.text, style: { backgroundColor: theme.colors.text } }];
+    fabActions = [{ icon: 'share', onPress: () => sharePlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } }];
+  }
+
+  // Don't display anything unless we have a selected playlist
+  // TODO: Show loader!
+  if (!selected) {
+    return null;
   }
 
   return (
     <PageContainer>
       <PageContent>
         <AppDialog
-          leftActionLabel={'Cancel'}
-          rightActionLabel={'Delete'}
-          leftActionCb={() => setShowDialog(false)}
+          leftActionLabel="Cancel"
+          rightActionLabel="Delete"
+          leftActionCb={() => setShowDeleteDialog(false)}
           rightActionCb={() => deletePlaylist()}
-          onDismiss={() => setShowDialog(false)}
-          showDialog={showDialog}
-          title={'Delete Playlist'}
-          subtitle={'Are you sure you want to do this? This action is final and cannot be undone.'}
+          onDismiss={() => setShowDeleteDialog(false)}
+          showDialog={showDeleteDialog}
+          title="Delete Playlist"
+          subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
-        <MediaCard
-          id={_id}
-          title={title}
-          author={author}
-          description={description}
-          showSocial={true}
-          showActions={false}
-          showThumbnail={true}
-          thumbnail={imageSrc}
-          likes={likesCount}
-          shares={shareCount}
-          views={viewCount}
-          category={category}
-        >
-          <Button
-            icon="live-tv"
-            color={theme.colors.default}
-            mode="outlined"
-            style={{ width: '100%', marginBottom: 10 }}
-            compact
-            dark
-            onPress={() => (items && items.length > 0 ? viewMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
+        <ScrollView>
+          <MediaCard
+            key={_id}
+            title={title}
+            author={author}
+            description={description}
+            thumbnail={imageSrc}
+            showThumbnail={true}
+            category={category}
+            availableTags={mappedTags}
+            tags={tagKeys}
+            showSocial={true}
+            showActions={false}
+            likes={likesCount}
+            shares={shareCount}
+            views={viewCount}
           >
-            Play From Beginning
-          </Button>
-        </MediaCard>
-        <Divider />
-        {!build.forFreeUser && allowEdit && (
-          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
-            {/*<IconButton
-              icon="rule"
-              color={isSelectable ? theme.colors.primary : theme.colors.disabled}
-              style={{ flex: 0, width: 28, marginTop: 10, marginBottom: 10, marginRight: 10 }}
-              onPress={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
-            />*/}
-            <Button
-              icon="playlist-add"
-              color={theme.colors.accent}
-              mode="contained"
-              style={{ flex: 1, marginTop: 10, marginBottom: 10 }}
-              onPress={() => addToPlaylist({ playlistId })}
-              // disabled={actionMode === actionModes.delete}
-              compact
-              dark
-            >
-              Add To Playlist
-            </Button>
-          </View>
-        )}
-        <MediaList
-          onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
-          list={items}
-          showThumbnail={true}
-          // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
-          selectable={false}
-        />
+            {/* TODO: Make this work and add it back in! */}
+            {/* <Button
+                icon="live-tv"
+                color={theme.colors.default}
+                mode="outlined"
+                styles={{ width: '100%', marginTop: 25, marginBottom: 25 }}
+                compact
+                dark
+                onPress={() => (items && items.length > 0 ? viewMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
+              >
+                Play From Beginning
+              </Button>
+              <Divider /> */}
+            {!allowEdit && (
+              <ActionButtons
+                containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
+                showCancel={false}
+                showAction={true}
+                actionLabel="Play from Beginning"
+                actionIcon="live-tv"
+              />
+            )}
+            {!build.forFreeUser && allowEdit && (
+              <ActionButtons
+                containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
+                showCancel={false}
+                cancelIcon="rule"
+                actionLabel="Add To Playlist"
+                actionIcon="playlist-add"
+                onActionClicked={() => addToPlaylist({ playlistId })}
+              />
+            )}
+            <MediaList
+              onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
+              list={items}
+              showThumbnail={true}
+              // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
+              selectable={false}
+            />
+          </MediaCard>
+        </ScrollView>
       </PageContent>
       <PageActions>
         {/* TODO: Selectively display depending if the user has scrolled up past the upper button */}
         {/*!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
-          <ListActionButton icon="playlist-add" label="Add To Playlist" actionCb={() => addToPlaylist({ playlistId })} />
+          <ListActionButton icon="playlist-add" label="Add To Playlist" onActionClicked={() => addToPlaylist({ playlistId })} />
         )*/}
       </PageActions>
       {!build.forFreeUser && (
@@ -181,12 +182,14 @@ export const PlaylistDetail = ({ route }: PageProps) => {
   }
 
   async function sharePlaylist() {
-    await dispatch(selectPlaylistAction({ isChecked: true, plist: selected as PlaylistResponseDto }));
+    await dispatch(selectPlaylist({ isChecked: true, plist: selected as PlaylistResponseDto }));
     goToShareWith();
   }
 
+  // TODO: This is unused! Implement or remove ASAP!
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function cancelSharePlaylist() {
-    dispatch(selectPlaylistAction({ isChecked: false, plist: selected as PlaylistResponseDto }));
+    dispatch(selectPlaylist({ isChecked: false, plist: selected as PlaylistResponseDto }));
   }
 
   async function editPlaylist() {
@@ -195,9 +198,9 @@ export const PlaylistDetail = ({ route }: PageProps) => {
 
   async function deletePlaylist() {
     await dispatch(removeUserPlaylist(playlistId));
-    await dispatch(getUserPlaylists({}));
+    await dispatch(getUserPlaylists());
     await goToPlaylists();
   }
 };
 
-export default withLoadingSpinner(PlaylistDetail);
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(PlaylistDetail));

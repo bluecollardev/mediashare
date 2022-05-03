@@ -1,12 +1,12 @@
 import React from 'react';
 import * as R from 'remeda';
 
-import { ProfileShareItem } from '../../rxjs-api';
+import { ProfileShareItem } from 'mediashare/rxjs-api';
 
 import { View, StyleSheet, SectionList } from 'react-native';
 import { Card } from 'react-native-paper';
 import { ShareItemCard } from './ShareItemCard';
-import { useAppSelector } from '../../store';
+import { useAppSelector } from 'mediashare/store';
 
 interface SharedListProps {
   sharedItems: ProfileShareItem[];
@@ -17,21 +17,29 @@ interface SharedListProps {
   onChecked?: (bool: boolean, userId: string) => void;
 }
 
-export const SharedList = ({ sharedItems, selectable, showActions, onDelete = () => undefined, onView = () => undefined, onChecked = () => undefined }: SharedListProps) => {
- const { _id } = useAppSelector((state) => state.user)
+export const SharedList = ({
+  sharedItems,
+  selectable,
+  showActions,
+  onDelete = () => undefined,
+  onView = () => undefined,
+  onChecked = () => undefined,
+}: SharedListProps) => {
+  const { _id } = useAppSelector((state) => state?.user?.entity);
 
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
   const data = R.map(R.keys(mappedSharedItems), (key) => {
-    const heading = mappedSharedItems[key][0].authorId === _id
-      ? "Subscribes To"
-      : mappedSharedItems[key][0].authorId !== _id
-      ? `Shared by ${mappedSharedItems[key][0].authorName}`
-      : 'Shared by Unknown User'
-    return ({
+    const heading =
+      mappedSharedItems[key][0].authorId === _id
+        ? 'Shared with Subscriber'
+        : mappedSharedItems[key][0].authorId !== _id
+        ? `Shared by ${mappedSharedItems[key][0].authorName}`
+        : 'Shared by Unknown User';
+    return {
       title: `${heading}`,
       count: mappedSharedItems[key].length,
       data: mappedSharedItems[key],
-    })
+    };
   });
 
   return (
@@ -70,6 +78,6 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   sectionHeaderTitle: {
-    fontSize: 16,
+    fontSize: 14,
   },
 });

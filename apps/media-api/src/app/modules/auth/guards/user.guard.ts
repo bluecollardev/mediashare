@@ -1,6 +1,4 @@
-import { CanActivate, Inject, ExecutionContext, Logger, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { timeout } from 'rxjs/operators';
+import { CanActivate, Inject, ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { UserService } from '../user.service';
 

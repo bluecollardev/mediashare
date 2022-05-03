@@ -1,16 +1,7 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-
-import { getUserPlaylists } from '../../store/modules/playlists';
-import { useAppSelector } from '../../store';
-
-// import { ActivityIndicator } from 'react-native-paper';
-
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-
-import { MediaListItem } from '../layout/MediaListItem';
-import { ActionButtons } from '../layout/ActionButtons';
-import { PageContainer, PageContent, PageActions, PageProps } from '../layout/PageContainer';
+import { useAppSelector } from 'mediashare/store';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { PageContainer, PageContent, PageActions, PageProps, ActionButtons, MediaListItem } from 'mediashare/components/layout';
 
 export interface AddFromCollectionProps extends PageProps {
   onViewDetail: () => void;
@@ -19,9 +10,8 @@ export interface AddFromCollectionProps extends PageProps {
 export interface AddFromCollectionState {}
 
 export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollectionProps) => {
-  const dispatch = useDispatch();
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
-  const items = useAppSelector((state) => state.mediaItems.entities);
+  const items = useAppSelector((state) => state?.mediaItems?.entities);
 
   return (
     <PageContainer>
@@ -42,14 +32,10 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
         })}
       </PageContent>
       <PageActions>
-        <ActionButtons actionCb={() => {}} cancelCb={() => {}} />
+        <ActionButtons onActionClicked={() => {}} onCancelClicked={() => {}} />
       </PageActions>
     </PageContainer>
   );
-
-  async function loadData() {
-    await dispatch(getUserPlaylists({}));
-  }
 
   function updateMediaItem(add: boolean, selected: any) {
     const updatedItems = add ? selectedPlaylists.concat([selected]) : selectedPlaylists.filter((item) => item._id !== selected._id);
@@ -57,4 +43,4 @@ export const AddFromCollection = ({ onViewDetail = () => {} }: AddFromCollection
   }
 };
 
-export default withLoadingSpinner(AddFromCollection);
+export default withLoadingSpinner(undefined)(AddFromCollection);

@@ -1,67 +1,248 @@
-import React, { useState } from 'react';
-import { Appbar, Searchbar } from 'react-native-paper';
-import { withGlobalStateConsumer, GlobalStateProps } from '../../core/globalState';
-import { theme } from '../../styles';
+import React, { useMemo, useState } from 'react';
+import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-native';
+import { Appbar, Card, Portal, Searchbar } from 'react-native-paper';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import { withGlobalStateConsumer, GlobalStateProps } from 'mediashare/core/globalState';
+import { MultiSelectIcon } from 'mediashare/components/form/MultiSelect';
+import { ActionButtons } from './ActionButtons';
+import themeStyles, { theme } from 'mediashare/styles';
 
 export interface AppHeaderProps {
   options?: any;
   back?: any;
   navigation?: any;
   searchable?: boolean;
+  searchTarget?: 'playlists' | 'media' | undefined;
+  showDisplayControls?: boolean;
   globalState?: GlobalStateProps;
 }
 
-const AppHeaderComponent = ({ options, back, navigation, searchable = false, globalState }: AppHeaderProps) => {
-  // console.log(`AppHeaderComponent > Dumping global state: ${JSON.stringify(globalState, null, 2)}`);
-  const [searchIsActive, setSearchIsActive] = useState(false);
+const ModalContentWrapper = (props) => {
+  const { modalWithSafeAreaView, children } = props;
+  const Component = modalWithSafeAreaView ? SafeAreaView : View;
+  return (
+    <Component
+      style={[
+        { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' },
+        // styles.modalWrapper
+      ]}
+    >
+      {children}
+    </Component>
+  );
+};
+
+const BackdropView = (props) => {
+  const { modalWithTouchable, children } = props;
+  const Wrapper = modalWithTouchable ? TouchableWithoutFeedback : null;
+
+  return Wrapper ? (
+    <Wrapper onPress={() => undefined}>
+      <View {...props}>{children}</View>
+    </Wrapper>
+  ) : (
+    <View {...props} />
+  );
+};
+
+const AppHeaderComponent = ({
+  options,
+  back,
+  navigation,
+  searchable = false,
+  searchTarget = undefined,
+  showDisplayControls = false,
+  globalState = {
+    displayMode: 'list',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setDisplayMode: (value) => undefined,
+    tags: [],
+  },
+}: AppHeaderProps) => {
+  const { setSearchFilters } = globalState;
+
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
-
-  const enableSearch = () => setSearchIsActive(true);
-  const disableSearch = () => setSearchIsActive(false);
-
   const placeholder = `Search ${title}`;
 
+  const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
+  const [searchIsActive, setSearchIsActive] = useState(false);
   const [searchText, setSearchText] = useState('');
-  const updateSearchText = (text) => {
-    const { setSearchFilters } = globalState;
-    // TODO: We have to throttle this!
-    setSearchText(text);
-    setSearchFilters({ text });
-  };
+  const [searchTags, setSearchTags] = useState([]);
 
-  // console.log(`AppHeader > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
+  const mappedTags = useMemo(() => {
+    const availableTags = Array.isArray(globalState?.tags) ? globalState.tags : [];
+    if (searchTarget === 'playlists') return availableTags.filter((tag) => tag.isPlaylistTag);
+    if (searchTarget === 'media') return availableTags.filter((tag) => tag.isMediaTag);
+    return availableTags;
+  }, []);
+
+  const [displayMode, setDisplayMode] = useState(globalState?.displayMode);
 
   return (
     <Appbar.Header style={{ backgroundColor: theme.colors.background }}>
       {searchable && searchIsActive && (
-        <>
-          <Searchbar
-            style={{ width: '100%' }}
-            placeholder={placeholder}
-            value={searchText}
-            onChangeText={(text) => updateSearchText(text)}
-            onIconPress={() => disableSearch()}
-            icon="arrow-back-ios"
-            clearIcon="clear"
-          />
-          <Appbar.Action icon="close" onPress={() => disableSearch()} />
-        </>
+        <Portal>
+          <SafeAreaView style={themeStyles.pageContainer}>
+            <View>
+              <Modal
+                transparent
+                visible={searchIsActive}
+                onRequestClose={() => {
+                  closeSearchConsole();
+                }}
+              >
+                <ModalContentWrapper>
+                  <BackdropView>
+                    <View
+                      style={[
+                        {
+                          overflow: 'hidden',
+                          marginHorizontal: 18,
+                          marginVertical: 26,
+                          borderRadius: 6,
+                          alignSelf: 'stretch',
+                          backgroundColor: 'transparent',
+                        },
+                      ]}
+                    >
+                      <Card>
+                        <Card.Title title={placeholder} />
+                        <Card.Content style={{ height: '85%', paddingBottom: 50 }}>
+                          <Searchbar
+                            style={{ width: '100%' }}
+                            placeholder="Keywords"
+                            value={searchText}
+                            onChangeText={(text) => updateSearchText(text)}
+                            onIconPress={() => closeSearchConsole()}
+                            icon=""
+                            // icon="arrow-back-ios"
+                            clearIcon="clear"
+                            autoCapitalize="none"
+                          />
+                          {/* <Appbar.Action icon="close" onPress={() => closeSearchConsole()} /> */}
+                          <SectionedMultiSelect
+                            colors={{
+                              primary: theme.colors.primary,
+                              text: '#fff',
+                              subText: '#fff',
+                              searchPlaceholderTextColor: theme.colors.placeholder,
+                              selectToggleTextColor: theme.colors.placeholder,
+                              searchSelectionColor: '#fff',
+                              itemBackground: 'transparent',
+                              subItemBackground: 'transparent',
+                            }}
+                            styles={{
+                              searchTextInput: {
+                                color: '#fff',
+                              },
+                              searchBar: {
+                                backgroundColor: '#000',
+                              },
+                              container: {
+                                backgroundColor: '#000',
+                              },
+                              selectToggle: {
+                                marginVertical: 10,
+                                paddingLeft: 15,
+                                paddingRight: 10,
+                                borderWidth: 1,
+                                borderColor: theme.colors.defaultBorder,
+                                backgroundColor: theme.colors.surface,
+                              },
+                              chipContainer: {
+                                marginTop: 10,
+                              },
+                            }}
+                            items={mappedTags}
+                            IconRenderer={MultiSelectIcon}
+                            uniqueKey="key"
+                            displayKey="value"
+                            subKey="children"
+                            searchPlaceholderText="Enter Text"
+                            selectText="Select Tags"
+                            confirmText="Done"
+                            onSelectedItemsChange={updateSearchTags}
+                            selectedItems={searchTags}
+                            expandDropDowns={false}
+                            readOnlyHeadings={false}
+                            showDropDowns={true}
+                            parentChipsRemoveChildren={true}
+                            showCancelButton={true}
+                            modalWithTouchable={false}
+                            modalWithSafeAreaView={false}
+                          />
+                        </Card.Content>
+                      </Card>
+                      <ActionButtons
+                        containerStyles={{ marginHorizontal: 0 }}
+                        onActionClicked={() => submitSearch()}
+                        onCancelClicked={() => closeSearchConsole()}
+                      />
+                    </View>
+                  </BackdropView>
+                </ModalContentWrapper>
+              </Modal>
+            </View>
+          </SafeAreaView>
+        </Portal>
       )}
-      {searchable && !searchIsActive && (
-        <>
-          {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
-          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingLeft: '15%' }} />
-          <Appbar.Action icon="search" color="#ffffff" onPress={() => enableSearch()} />
-        </>
-      )}
-      {!searchable && (
-        <>
-          {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
-          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingRight: back ? '15%' : 0 }} />
-        </>
-      )}
+
+      {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
+      {showDisplayControls && renderDisplayControls()}
+      <Appbar.Content
+        title={title}
+        titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginRight: searchable && searchIsFiltering ? '-30%' : '0%' }}
+      />
+      {searchable && searchIsFiltering && <Appbar.Action icon="filter-list" color={theme.colors.primary} onPress={() => openSearchConsole()} />}
+      {searchable && !searchIsActive && <Appbar.Action icon="search" color="#ffffff" onPress={() => openSearchConsole()} />}
     </Appbar.Header>
   );
+
+  function viewAsList() {
+    setDisplayMode('list');
+    globalState?.setDisplayMode('list');
+  }
+
+  function viewAsArticles() {
+    setDisplayMode('article');
+    globalState?.setDisplayMode('article');
+  }
+
+  function openSearchConsole() {
+    setSearchIsActive(true);
+  }
+
+  function closeSearchConsole() {
+    setSearchIsActive(false);
+  }
+
+  function updateSearchText(value) {
+    // Set the in-component state value
+    setSearchText(value);
+  }
+
+  function updateSearchTags(values) {
+    // Set the in-component state value
+    setSearchTags(values);
+  }
+
+  function submitSearch() {
+    // Update global search filters
+    setSearchFilters({ text: searchText, tags: [...searchTags] });
+    closeSearchConsole(); // Close the search
+  }
+
+  function renderDisplayControls() {
+    return (
+      <>
+        {displayMode === 'article' && <Appbar.Action icon="view-list" color="#ffffff" onPress={() => viewAsList()} />}
+        {displayMode === 'list' && <Appbar.Action icon="article" color="#ffffff" onPress={() => viewAsArticles()} />}
+      </>
+    );
+  }
 };
 
 export const AppHeader = withGlobalStateConsumer(AppHeaderComponent);
+
+
+

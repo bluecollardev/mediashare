@@ -1,7 +1,7 @@
 import React from 'react';
 import * as R from 'remeda';
 import { NonEmptyArray } from 'remeda/dist/commonjs/_types';
-import { UserDto } from '../../rxjs-api';
+import { UserDto } from 'mediashare/rxjs-api';
 import { List } from 'react-native-paper';
 import { ContactListItem } from './ContactListItem';
 
@@ -19,7 +19,8 @@ export const ContactList: React.FC<ContactListProps> = ({
   contacts = [],
   selectable,
   onChecked = () => undefined,
-  showActions, onViewDetail = () => undefined,
+  showActions,
+  onViewDetail = () => undefined,
 }) => {
   const namedContacts = contacts.filter((user) => !!user.firstName || !!user.lastName);
   const unnamedContacts = contacts.filter((user) => !user.firstName && !user.lastName);

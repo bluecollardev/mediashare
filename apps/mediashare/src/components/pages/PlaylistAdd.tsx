@@ -1,57 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { useGoBack, useRouteWithParams } from '../../hooks/NavigationHooks';
-
-import { routeNames } from '../../routes';
-
-import { useAppSelector } from '../../store';
-import { findMediaItems } from '../../store/modules/media-items';
-import { addUserPlaylist, getUserPlaylists, getPlaylistById } from '../../store/modules/playlists';
-
-import { CreatePlaylistDto, PlaylistCategoryType } from '../../rxjs-api';
-
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-
-import { ActionButtons } from '../layout/ActionButtons';
-import { MediaCard } from '../layout/MediaCard';
-import { titleValidator, descriptionValidator, categoryValidator } from '../layout/formConfig';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps } from '../layout/PageContainer';
-import { AppUpload } from '../layout/AppUpload';
-
-import { UploadPlaceholder } from '../layout/UploadPlaceholder';
-import { theme } from '../../styles';
+import { ScrollView, Text } from 'react-native';
 import { Button } from 'react-native-paper';
-import { withGlobalStateConsumer } from '../../core/globalState';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { useRouteWithParams } from 'mediashare/hooks/NavigationHooks';
+import { routeNames } from 'mediashare/routes';
+import { useAppSelector } from 'mediashare/store';
+import { findMediaItems } from 'mediashare/store/modules/mediaItems';
+import { getPlaylistById, addUserPlaylist } from 'mediashare/store/modules/playlist';
+import { getUserPlaylists } from 'mediashare/store/modules/playlists';
+import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { titleValidator, descriptionValidator, categoryValidator } from 'mediashare/core/utils/validators';
+import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps, ActionButtons, MediaCard, AppUpload, UploadPlaceholder } from 'mediashare/components/layout';
+import { CreatePlaylistDto, PlaylistCategoryType } from 'mediashare/rxjs-api';
+import { theme } from 'mediashare/styles';
 
-const PlaylistAdd = ({ globalState }: PageProps) => {
+// @ts-ignore
+const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
   const dispatch = useDispatch();
 
-  const author = useAppSelector((state) => state?.user.username);
-  const [title, setTitle] = useState();
+  const author = useAppSelector((state) => state?.user?.entity?.username);
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState();
   const [category, setCategory] = useState(PlaylistCategoryType.Free);
   const [loaded, setIsLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selected, setSelected] = useState([]);
-  const goBack = useGoBack();
+  const { tags = [] } = globalState;
+  const availableTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
+  const initialTagKeys = [];
+  const [selectedTagKeys, setSelectedTagKeys] = useState(initialTagKeys);
+
   const edit = useRouteWithParams(routeNames.playlistEdit);
-
-  const clearAndGoBack = function () {
-    // @ts-ignore
-    setTitle('');
-    setCategory(PlaylistCategoryType.Free);
-    // @ts-ignore
-    setDescription('');
-    setIsLoaded(false);
-    goBack();
-  };
-
-  const actionLabel = 'Create';
-  const cancelLabel = 'Cancel';
-  const cancelCb = clearAndGoBack;
 
   const isValid = function () {
     return !titleValidator(title) && !descriptionValidator(description) && !categoryValidator(category);
@@ -63,7 +44,7 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
     options.push(value);
   }
 
-  const onUpload = (uri: string) => {
+  const onUploadComplete = (uri: string) => {
     setImageSrc(uri);
   };
 
@@ -71,7 +52,6 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
     if (!loaded) {
       const { search } = globalState;
       const args = { text: search?.filters?.text ? search.filters.text : '' };
-      // console.log(`PlaylistAdd.useEffect > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
       dispatch(findMediaItems(args));
       setIsLoaded(true);
     }
@@ -80,59 +60,65 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        <MediaCard
-          title={title}
-          author={author}
-          description={description}
-          showThumbnail={!!imageSrc}
-          thumbnail={imageSrc}
-          category={category}
-          categoryOptions={options}
-          onCategoryChange={setCategory as any}
-          onTitleChange={setTitle as any}
-          onDescriptionChange={setDescription as any}
-          isEdit={true}
-          topDrawer={() =>
-            !imageSrc ? (
-              <AppUpload uploadMode="photo" onUpload={onUpload}>
-                <UploadPlaceholder buttonText="Add Cover Photo" />
-              </AppUpload>
-            ) : (
-              <AppUpload uploadMode="photo" onUpload={onUpload}>
-                <Button icon="cloud-upload" mode="outlined" dark color={theme.colors.default} compact>
-                  Change Cover Photo
-                </Button>
-              </AppUpload>
-            )
-          }
-        />
+        <ScrollView>
+          <MediaCard
+            title={title}
+            author={author}
+            description={description}
+            showThumbnail={!!imageSrc}
+            thumbnail={imageSrc}
+            category={category}
+            categoryOptions={options}
+            onCategoryChange={setCategory as any}
+            availableTags={availableTags}
+            tags={selectedTagKeys}
+            tagOptions={options}
+            onTagChange={(e: any) => {
+              setSelectedTagKeys(e);
+            }}
+            onTitleChange={setTitle as any}
+            onDescriptionChange={setDescription as any}
+            isEdit={true}
+            topDrawer={() =>
+              !imageSrc ? (
+                <AppUpload uploadMode="photo" onUploadComplete={onUploadComplete}>
+                  <UploadPlaceholder buttonText="Add Cover Photo" />
+                </AppUpload>
+              ) : (
+                <AppUpload uploadMode="photo" onUploadComplete={onUploadComplete}>
+                  <Button mode="outlined" dark color={theme.colors.default} compact uppercase={false}>
+                    <Text>Change Cover Photo</Text>
+                  </Button>
+                </AppUpload>
+              )
+            }
+          />
+        </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons
-          rightIcon="check-circle"
-          actionCb={() => savePlaylist()}
-          cancelCb={cancelCb}
-          actionLabel={actionLabel}
-          cancelLabel={cancelLabel}
-          disableAction={!isValid()}
-        />
+        <ActionButtons onActionClicked={savePlaylist} onCancelClicked={() => clearAndGoBack} actionLabel="Save" disableAction={!isValid()} />
       </PageActions>
     </PageContainer>
   );
 
   async function savePlaylist() {
+    // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
+    // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
+    const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
+
     const dto: CreatePlaylistDto = {
       title,
-      category: category,
       description,
-      mediaIds: selected,
       imageSrc,
+      category: category,
+      tags: selectedTags || [],
+      mediaIds: [],
     };
 
     // @ts-ignore TODO: Fix types on dispatch?
     const { payload } = await dispatch(addUserPlaylist(dto));
     const playlistId = payload.playlist._id;
-    await dispatch(getUserPlaylists({}));
+    await dispatch(getUserPlaylists());
     await dispatch(getPlaylistById(playlistId));
     editPlaylist(playlistId);
   }
@@ -140,6 +126,20 @@ const PlaylistAdd = ({ globalState }: PageProps) => {
   async function editPlaylist(playlistId) {
     edit({ playlistId });
   }
+
+  function resetData() {
+    setTitle('');
+    setCategory(PlaylistCategoryType.Free);
+    setSelectedTagKeys([]);
+    // @ts-ignore
+    setDescription('');
+    setIsLoaded(false);
+  }
+
+  function clearAndGoBack() {
+    navigation.goBack();
+    resetData();
+  }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(PlaylistAdd));
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(PlaylistAdd));

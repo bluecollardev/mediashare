@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { MediaCategoryType } from './';
+import { MediaCategoryType, TagKeyValue } from './';
 
 /**
  * @export
@@ -27,6 +27,11 @@ export interface CreateMediaItemDto {
    * @type {string}
    * @memberof CreateMediaItemDto
    */
+  title: string;
+  /**
+   * @type {string}
+   * @memberof CreateMediaItemDto
+   */
   summary: string;
   /**
    * @type {string}
@@ -37,17 +42,17 @@ export interface CreateMediaItemDto {
    * @type {string}
    * @memberof CreateMediaItemDto
    */
-  title: string;
-  /**
-   * @type {string}
-   * @memberof CreateMediaItemDto
-   */
   uri: string;
   /**
    * @type {MediaCategoryType}
    * @memberof CreateMediaItemDto
    */
   category: MediaCategoryType;
+  /**
+   * @type {Array<TagKeyValue>}
+   * @memberof CreateMediaItemDto
+   */
+  tags?: Array<TagKeyValue> | null;
   /**
    * @type {string}
    * @memberof CreateMediaItemDto

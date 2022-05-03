@@ -44,6 +44,7 @@ describe('ProfileService', () => {
     const logger = module.get(PinoLogger);
     service = new ProfileService(repository, logger);
   });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });

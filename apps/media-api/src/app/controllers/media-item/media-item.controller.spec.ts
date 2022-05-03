@@ -8,7 +8,7 @@ import { MediaItemService } from './media-item.service';
 import { reveal, stub } from 'jest-auto-stub';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { ObjectId } from 'mongodb';
-import { ShareItemService } from '../../modules/share-item/services/share-item.service';
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 
 describe('MediaItemController', () => {
   let controller: MediaItemController;
@@ -137,12 +137,10 @@ describe('MediaItemController', () => {
       const mediaId = new ObjectId();
       const createdBy = new ObjectId();
 
-      reveal(mockMediaService).findOne.mockReturnValueOnce(
-        new Promise((resolve) => resolve({ userId: userId } as any))
-      );
+      reveal(mockMediaService).findOne.mockReturnValueOnce(new Promise((resolve) => resolve({ userId: userId } as any)));
       const resultMock = { _id: new ObjectId(), userId, mediaId, read: false, createdBy, title: 'sometime' };
 
-      reveal(mockShareItemService).createMediashareItem.mockReturnValueOnce(
+      reveal(mockShareItemService).createMediaShareItem.mockReturnValueOnce(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         new Promise((resolve) => resolve(resultMock))

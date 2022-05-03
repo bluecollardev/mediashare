@@ -57,11 +57,9 @@ describe('MediaItemService', () => {
     it('should find mediaItems by a given userId', async () => {
       const mediaItemDtos = testData.media;
 
-      const inserted = await service.insertMany(
-        mediaItemDtos.map((item) => ({ ...item, userId: userFactory.user._id }))
-      );
+      const inserted = await service.insertMany(mediaItemDtos.map((item) => ({ ...item, userId: userFactory.user._id })));
 
-      const result = await service.findMediaItemsByUserId(userFactory.userId);
+      const result = await service.searchByUserId(userFactory.userId);
 
       expect(result).toBeDefined();
       expect(result).toHaveLength(inserted.length);

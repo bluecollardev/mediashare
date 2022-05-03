@@ -32,4 +32,4 @@ async function bootstrap() {
   // const port = config.get('auth.msApiPort') || 4444;
 }
 
-bootstrap();
+bootstrap().then();

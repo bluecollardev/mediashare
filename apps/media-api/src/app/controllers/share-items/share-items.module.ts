@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ShareItemsController } from './share-items.controller';
-import { ShareItemModule } from '../../modules/share-item/share-item.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtStrategy } from '../../modules/auth/jwt.strategy';
-import { AuthModule } from '../../modules/auth/auth.module';
-import { ShareItem } from '../../modules/share-item/entities/share-item.entity';
+import { AuthModule } from '@api-modules/auth/auth.module';
+import { JwtStrategy } from '@api-modules/auth/jwt.strategy';
+import { ShareItemsController } from './share-items.controller';
+import { ShareItemModule } from '@api-modules/share-item/share-item.module';
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 
 @Module({
   imports: [ShareItemModule, TypeOrmModule.forFeature([ShareItem]), AuthModule],

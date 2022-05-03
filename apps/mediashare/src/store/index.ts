@@ -5,8 +5,8 @@ import thunk from 'redux-thunk';
 
 import { apis } from './apis';
 import { rootReducer as reducer } from './reducers';
-import { loading, setError } from './modules/app-state';
-import { clearMediaItems } from './modules/media-items';
+import { loading, setError } from './modules/appState';
+import { clearMediaItems } from './modules/mediaItems';
 
 const errorMiddleware: Middleware = function exampleMiddleware(store) {
   return function wrapDispatch(next) {

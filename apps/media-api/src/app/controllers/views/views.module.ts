@@ -3,7 +3,7 @@ import { ViewsService } from './views.service';
 import { ViewsController } from './views.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ViewItem } from './entities/view-item.entity';
-import { AuthModule } from '../../modules/auth/auth.module';
+import { AuthModule } from '@api-modules/auth/auth.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ViewItem]), AuthModule],

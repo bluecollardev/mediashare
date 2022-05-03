@@ -1,107 +1,121 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { StyleSheet, View } from 'react-native';
-
-import { routeNames } from '../../routes';
-
-import { useAppSelector } from '../../store';
-import { deleteMediaItem, findMediaItems } from '../../store/modules/media-items';
-
-import { withGlobalStateConsumer } from '../../core/globalState';
-
-import { useRouteName, useEditMediaItem } from '../../hooks/NavigationHooks';
-
-import { MediaItem, MediaItemDto } from '../../rxjs-api';
-
+import { StyleSheet, FlatList, View } from 'react-native';
+import { routeNames } from 'mediashare/routes';
+import { useAppSelector } from 'mediashare/store';
+import { deleteMediaItem } from 'mediashare/store/modules/mediaItem';
+import { findMediaItems } from 'mediashare/store/modules/mediaItems';
+import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { useRouteName, useEditMediaItem } from 'mediashare/hooks/NavigationHooks';
+import { MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
 import { RefreshControl } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';
-import { withLoadingSpinner } from '../hoc/withLoadingSpinner';
-import { PageContainer, PageProps, KeyboardAvoidingPageContent, PageActions } from '../layout/PageContainer';
-import { MediaListItem } from '../layout/MediaListItem';
-import { ActionButtons } from '../layout/ActionButtons';
-import { NoItems } from '../layout/NoItems';
-
-import { shortenText } from '../../utils';
-import { createRandomRenderKey } from '../../core/utils';
-
-import { theme } from '../../styles';
-import { selectMediaItem } from '../../store/modules/media-items';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import {
+  PageContainer,
+  PageProps,
+  KeyboardAvoidingPageContent,
+  PageActions,
+  MediaListItem,
+  ActionButtons,
+  NoItems,
+  AppDialog
+} from 'mediashare/components/layout';
+import { shortenText } from 'mediashare/utils';
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
+import { selectMediaItem } from 'mediashare/store/modules/mediaItems';
+import { theme } from 'mediashare/styles';
 
 export const MediaComponent = ({
   list = [],
   selectable,
   showActions = true,
   onViewDetail,
-  onChecked = () => undefined
+  onChecked = () => undefined,
 }: {
   navigation: any;
-  list: MediaItemDto[];
+  list: MediaItemResponseDto[];
   onViewDetail: any;
   selectable: boolean;
   showActions?: boolean;
   onChecked?: (checked: boolean, item?: any) => void;
 }) => {
-  const sortedList = list.map((item) => item);
+  const sortedList = list.map((item) => item) || [];
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
   return (
     <View>
-      {sortedList.map((item) => {
-        const { _id, title, author, description, thumbnail } = item;
-        return (
-          <View key={`medias_${_id}`}>
-            <MediaListItem
-              key={`media_item_${_id}`}
-              title={title}
-              description={
-                <>
-                  {author && <Text style={styles.username}>By @{author}</Text>}
-                  <Text style={styles.description}>{shortenText(description, 52)}</Text>
-                </>
-              }
-              showThumbnail={true}
-              showActions={showActions}
-              image={thumbnail}
-              iconRight="edit"
-              iconRightColor={theme.colors.default}
-              selectable={selectable}
-              onViewDetail={() => onViewDetail(item)}
-              onChecked={(checked) => onChecked(checked, item)}
-            />
-            <Divider key={`media_item_divider_${_id}`} />
-          </View>
-        );
-      })}
+      <FlatList data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `media_item_${_id}`} />
     </View>
   );
+
+  function renderVirtualizedListItem(item) {
+    const { _id = '', title = '', author, description = '', thumbnail } = item;
+    return (
+      <>
+        <MediaListItem
+          key={`media_item_${_id}`}
+          title={title}
+          titleStyle={styles.titleText}
+          description={
+            <View style={styles.details}>
+              {author && <Text style={styles.username}>By {author}</Text>}
+              <Text style={styles.description}>{shortenText(description || '', 80)}</Text>
+            </View>
+          }
+          showThumbnail={true}
+          showActions={showActions}
+          image={thumbnail}
+          iconRight="edit"
+          iconRightColor={theme.colors.default}
+          selectable={selectable}
+          onViewDetail={() => onViewDetail(item)}
+          onChecked={(checked) => onChecked(checked, item)}
+        />
+        <Divider key={`media_item_divider_${_id}`} />
+      </>
+    );
+  }
 };
 
 const actionModes = { delete: 'delete', default: 'default' };
 
 export const Media = ({ navigation, globalState }: PageProps) => {
-  // console.log(`Media > Dump current search filters: ${JSON.stringify(globalState?.search, null, 2)}`);
+  const dispatch = useDispatch();
 
   const addFromFeed = useRouteName(routeNames.addFromFeed);
   const addMedia = useRouteName(routeNames.mediaItemAdd);
   const editMedia = useEditMediaItem();
 
-  const dispatch = useDispatch();
-
-  const { loaded, entities, selected } = useAppSelector((state) => state.mediaItems);
-  const [isLoaded, setIsLoaded] = useState(loaded);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
 
+  const { loading, loaded, entities, selected } = useAppSelector((state) => state?.mediaItems);
+  const [isLoaded, setIsLoaded] = useState(loaded);
+  useEffect(() => {
+    if (loaded && !isLoaded) {
+      setIsLoaded(true);
+    }
+  }, [loaded]);
+
   const onRefresh = useCallback(refresh, [dispatch]);
-  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
+  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
+  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
-    if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
+    if (!isLoaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
       setPrevSearchFilters(currentSearchFilters);
-      loadData();
+      loadData().then();
     }
-  }, [isLoaded, globalState]);
+  }, [isLoaded, globalState, searchFilters]);
+
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const [fabState, setState] = useState({ open: false });
   const fabActions = [
@@ -110,15 +124,20 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     { icon: 'library-add', onPress: addMedia, color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
   ];
 
-  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
-  useEffect(() => {
-    clearCheckboxSelection();
-  }, []);
-
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        {loaded && entities.length > 0 ? (
+        <AppDialog
+          leftActionLabel="Cancel"
+          rightActionLabel="Delete"
+          leftActionCb={() => closeDeleteDialog()}
+          rightActionCb={() => confirmItemsToDelete()}
+          onDismiss={closeDeleteDialog}
+          showDialog={showDeleteDialog}
+          title="Delete Media Items"
+          subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+        />
+        {isLoaded ? (
           <MediaComponent
             key={clearSelectionKey}
             navigation={navigation}
@@ -129,12 +148,18 @@ export const Media = ({ navigation, globalState }: PageProps) => {
             onChecked={updateSelection}
           />
         ) : (
-          <NoItems />
+          <NoItems text={loading ? 'Loading...' : 'Please import or upload a media item.'} />
         )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
-          <ActionButtons actionCb={confirmDelete} cancelCb={cancelDelete} actionLabel="Delete" cancelLabel="Cancel" rightIcon="delete" />
+          <ActionButtons
+            onActionClicked={openDeleteDialog}
+            onCancelClicked={cancelItemsToDelete}
+            actionLabel="Delete"
+            actionIcon="delete"
+            actionButtonStyles={styles.deleteActionButton}
+          />
         </PageActions>
       )}
       {!isSelectable && (
@@ -155,22 +180,23 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     </PageContainer>
   );
 
+  /**
+   * We use server-side filtering for text, and client-side filtering on tags.
+   * This will change once we have cloud search on tags implemented.
+   */
   async function loadData() {
     const { search } = globalState;
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Media.loadData > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
-    // console.log(globalState);
-    dispatch(findMediaItems(args));
-    setIsLoaded(true);
+    const args = {
+      text: search?.filters?.text ? search.filters.text : '',
+      tags: search?.filters?.tags || [],
+    };
+
+    await dispatch(findMediaItems(args));
   }
 
   async function refresh() {
     setRefreshing(true);
-    const { search } = globalState;
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
-    // console.log(`Media.refresh > Dispatch findMediaItems with args: ${JSON.stringify(args, null, 2)}`);
-    // console.log(globalState);
-    await dispatch(findMediaItems(args));
+    await loadData();
     setRefreshing(false);
   }
 
@@ -178,19 +204,29 @@ export const Media = ({ navigation, globalState }: PageProps) => {
     editMedia({ mediaId: item._id, uri: item.uri });
   }
 
-  async function activateDeleteMode() {
+  function activateDeleteMode() {
     setActionMode(actionModes.delete);
     setIsSelectable(true);
   }
 
-  async function confirmDelete() {
+  function openDeleteDialog() {
+    setShowDeleteDialog(true);
+  }
+
+  function closeDeleteDialog() {
+    cancelItemsToDelete();
+    setShowDeleteDialog(false);
+  }
+
+  async function confirmItemsToDelete() {
     await deleteItems();
+    closeDeleteDialog();
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
   }
 
-  async function cancelDelete() {
+  function cancelItemsToDelete() {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
@@ -199,10 +235,10 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   async function deleteItems() {
     selected.map(async (item) => {
       await dispatch(deleteMediaItem({ id: item._id, key: item.uri }));
-    }) // TODO: Find a real way to do this
+    }); // TODO: Find a real way to do this
     setTimeout(() => {
-      loadData()
-    }, 2500)
+      loadData();
+    }, 2500);
   }
 
   async function updateSelection(bool, item) {
@@ -215,20 +251,35 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   }
 };
 
-export default withLoadingSpinner(withGlobalStateConsumer(Media));
+export default withLoadingSpinner((state) => {
+  return !!state?.mediaItems?.loading || false;
+})(withGlobalStateConsumer(Media));
 
 const styles = StyleSheet.create({
+  titleText: {
+    marginBottom: 2,
+    color: theme.colors.text,
+    fontSize: 14,
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   author: {
     color: theme.colors.textDarker,
     fontSize: 12,
     marginBottom: 2,
   },
   username: {
+    flex: 0,
+    width: '100%',
     color: theme.colors.primary,
     fontSize: 12,
     marginBottom: 4,
   },
   description: {
+    flex: 0,
+    width: '100%',
     color: theme.colors.textDarker,
     fontSize: 12,
     marginTop: 2,
@@ -239,5 +290,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 2,
     fontWeight: 'bold',
+  },
+  deleteActionButton: {
+    backgroundColor: theme.colors.error,
   },
 });

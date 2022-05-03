@@ -1,4 +1,5 @@
-import { BcEntity } from '@api';
+import { BcEntity } from '@api-core/entities/base.entity';
+import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
 import { MediaCategoryType, MEDIA_CATEGORY, MEDIA_ITEM_ENTITY } from '@core-lib';
 import { ApiLongString, ApiObjectId, ApiString, ApiTextString, ApiUriString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
@@ -11,7 +12,7 @@ export const MEDIA_TOKEN = MEDIA_ITEM_ENTITY;
 export class MediaItem extends BcEntity {
   constructor(props: Partial<MediaItem> = {}) {
     super();
-    Object.assign(this, props);
+    Object.assign(this as any, props);
   }
   @Column()
   @IsBoolean()
@@ -42,6 +43,10 @@ export class MediaItem extends BcEntity {
   @Column()
   @ApiProperty({ enum: MEDIA_CATEGORY, name: 'category', enumName: 'MediaCategoryType' })
   category: MediaCategoryType;
+
+  @ApiProperty({ type: TagKeyValue, isArray: true, nullable: true })
+  @Column({ name: 'tags', array: true, nullable: true })
+  tags: TagKeyValue[];
 
   @Column()
   @ApiString()

@@ -1,8 +1,9 @@
-import { MediaItem } from '../entities/media-item.entity';
 import { IsIn } from 'class-validator';
-import { ApiProperty, OmitType, PickType } from '@nestjs/swagger';
-import { MediaCategoryType, MEDIA_CATEGORY, Stats } from '@core-lib';
-import { ApiString, ApiLongString, ApiTextString, ApiUriString } from '@mediashare/shared';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiString, ApiLongString, ApiTextString, ApiUriString, ApiDecoratorOptions } from '@mediashare/shared';
+import { MediaCategoryType, MEDIA_CATEGORY } from '@core-lib';
+import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
+import { MediaItem } from '../entities/media-item.entity';
 
 const OPTIONAL_MEDIA_DTO_KEYS = ['_id', 'createdAt', 'updatedDate', 'userId', 'createdBy'] as const;
 export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_DTO_KEYS]) {
@@ -22,10 +23,13 @@ export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_D
   @IsIn(MEDIA_CATEGORY)
   category: MediaCategoryType;
 
-  @ApiString({ required: true })
+  @ApiProperty({ type: TagKeyValue, required: false, isArray: true, nullable: true })
+  tags: TagKeyValue[];
+
+  @ApiString(<ApiDecoratorOptions>{ required: true })
   key: string;
 
-  @ApiLongString({ required: true })
+  @ApiLongString(<ApiDecoratorOptions>{ required: true })
   thumbnail?: string;
 
   @ApiString()
