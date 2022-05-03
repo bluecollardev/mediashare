@@ -7,6 +7,11 @@ import { KeyFactory, KeyFactoryProps, mediaRoot, uploadRoot, videoRoot } from '.
 export const validVideoFormats = ['mp4', 'mov', 'wmv', 'flv', 'avi', 'webm', 'mkv'];
 export const validImageFormats = ['jpg', 'jpeg', 'png', 'gif', 'tiff', 'bmp'];
 
+export const videoThumbnailDefaultOptions = {
+  quality: 0.6,
+  width: 720
+}
+
 export interface StorageOptions {
   title?: string;
   description?: string;
@@ -171,7 +176,7 @@ export async function fetchAndPutToS3({ fileUri, key, options }: { fileUri: stri
 async function getVideoThumbnailFromUri(fileUri) {
   let item;
   try {
-    item = await VideoThumbnails.getThumbnailAsync(fileUri);
+    item = await VideoThumbnails.getThumbnailAsync(fileUri, videoThumbnailDefaultOptions);
   } catch (err) {
     console.log('[getVideoThumbnailFromUri] Error getting thumbnail, getThumbnailAsync failed');
     console.log('[getVideoThumbnailFromUri] Make sure the file at [$fileUri] exists');
