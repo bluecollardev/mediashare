@@ -157,8 +157,14 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                 borderColor: theme.colors.defaultBorder,
                 backgroundColor: theme.colors.surface,
               },
+              selectToggleText: {
+                fontSize: 13
+              },
               chipContainer: {
                 marginTop: 10,
+              },
+              itemText: {
+                fontSize: 14
               },
             }}
             items={availableTags}
@@ -182,7 +188,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         </Card>
         <Card elevation={elevation} style={{ position: 'relative', marginBottom: 25, borderColor: theme.colors.defaultBorder, borderWidth: 1, padding: 0.5 }}>
           <SwitchSelector
-            fontSize={15}
+            fontSize={13}
             textColor={theme.colors.text}
             borderColor={theme.colors.defaultBorder}
             selectedColor={theme.colors.primary}
@@ -198,9 +204,9 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         </Card>
         <View>{children}</View>
         {/* Description can be the longest field so we've moved it to last when we're in edit mode */}
-        <Card elevation={elevation} style={{ marginBottom: 25 }}>
+        <Card elevation={elevation} style={{ marginTop: 25, marginBottom: 25 }}>
           <TextField
-            style={{ height: 500, overflow: 'scroll', backgroundColor: theme.colors.surface }}
+            style={{ height: 500, overflow: 'scroll', backgroundColor: theme.colors.surface, fontSize: 13 }}
             multiline={true}
             label="Description"
             value={description}

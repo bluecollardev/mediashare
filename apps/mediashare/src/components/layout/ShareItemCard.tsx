@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   description: {
+    marginTop: 5,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

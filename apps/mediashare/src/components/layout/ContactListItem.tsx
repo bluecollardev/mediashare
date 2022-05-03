@@ -98,7 +98,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
 const defaultStyles = StyleSheet.create({
   titleText: {
     color: theme.colors.text,
-    fontSize: 14,
+    fontSize: 13,
   },
   description: {
     color: theme.colors.textDarker,

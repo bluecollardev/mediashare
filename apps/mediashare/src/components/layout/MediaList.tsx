@@ -32,7 +32,7 @@ export const MediaList = ({
   onViewDetail = () => {},
 }: MediaListProps) => {
   return (
-    <View>
+    <View style={{ marginBottom: 25 }}>
       {list.map((item, idx, arr) => {
         const { _id, title, description, thumbnail } = item;
         return (
@@ -40,11 +40,11 @@ export const MediaList = ({
             <MediaListItem
               title={title}
               titleStyle={defaultStyles.titleText}
-              description={
+              /* description={
                 <>
                   <Text style={defaultStyles.description}>{shortenText(description || '', 80)}</Text>
                 </>
-              }
+              } */
               image={thumbnail}
               selectable={selectable}
               showThumbnail={showThumbnail}
@@ -63,7 +63,7 @@ export const MediaList = ({
 const defaultStyles = StyleSheet.create({
   titleText: {
     color: theme.colors.text,
-    fontSize: 14,
+    fontSize: 13,
   },
   description: {
     color: theme.colors.textDarker,
