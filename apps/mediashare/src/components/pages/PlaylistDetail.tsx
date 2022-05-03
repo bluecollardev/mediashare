@@ -27,6 +27,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   const viewMediaItem = useViewMediaItem();
   const goToShareWith = useRouteName(routeNames.shareWith);
   const goToPlaylists = usePlaylists();
+  const playFromBeginning = useViewMediaItem();
 
   const { loaded, selected } = useAppSelector((state) => state?.playlist);
   const [isLoaded, setIsLoaded] = useState(loaded);
@@ -122,11 +123,14 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
                 Play From Beginning
               </Button>
               <Divider /> */}
-            {!allowEdit && (
+            {!allowEdit && mediaItems.length > 0 && (
               <ActionButtons
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
                 showCancel={false}
                 showAction={true}
+                onActionClicked={async () => {
+                  playFromBeginning({ mediaId: mediaItems[0]._id, uri: mediaItems[0].uri })
+                }}
                 actionLabel="Play from Beginning"
                 actionIcon="live-tv"
               />
