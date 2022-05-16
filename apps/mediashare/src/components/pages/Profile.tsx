@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+
 import { StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from 'mediashare/store';
 import { removeShareItem, readShareItem } from 'mediashare/store/modules/shareItems';
 import { loadProfile } from 'mediashare/store/modules/profile';
-import { useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
+import { useProfile } from 'mediashare/hooks/useProfile';
+import { useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB, Divider } from 'react-native-paper';
 import {
@@ -31,7 +32,7 @@ const Profile = ({ route }: ProfileProps) => {
 
   const viewPlaylist = useViewPlaylistById();
 
-  const profile = useAppSelector((state) => state?.profile?.entity)
+  const profile = useProfile();
 
   const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';

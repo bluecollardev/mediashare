@@ -112,7 +112,7 @@ const styles: any = StyleSheet.create({
   changeImageButton: {
     borderTopWidth: 0,
     borderRadius: 0,
-    height: 39
+    height: 39,
   },
   changeImageButtonLabel: {
     textTransform: 'none',

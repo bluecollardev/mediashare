@@ -6,7 +6,7 @@ import { useAppSelector } from 'mediashare/store';
 import { deleteMediaItem } from 'mediashare/store/modules/mediaItem';
 import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { useRouteName, useEditMediaItem } from 'mediashare/hooks/NavigationHooks';
+import { useRouteName, useEditMediaItem } from 'mediashare/hooks/navigation';
 import { MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
 import { RefreshControl } from 'react-native';
 import { FAB, Text, Divider } from 'react-native-paper';

@@ -5,7 +5,7 @@ import { useAppSelector } from 'mediashare/store';
 import { getPlaylistById, removeUserPlaylist, updateUserPlaylist } from 'mediashare/store/modules/playlist';
 import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
-import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
+import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { View, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -19,7 +19,7 @@ import {
   MediaList,
   MediaCard,
   UploadPlaceholder,
-  AppDialog
+  AppDialog,
 } from 'mediashare/components/layout';
 import { routeNames } from 'mediashare/routes';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
@@ -196,9 +196,13 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   );
 
   function getInitialPlaylistTags() {
-    return selected?.tags?.map((tag) => {
-      return tag ? tag?.key : undefined;
-    }).filter((tag) => !!tag) || [];
+    return (
+      selected?.tags
+        ?.map((tag) => {
+          return tag ? tag?.key : undefined;
+        })
+        .filter((tag) => !!tag) || []
+    );
   }
 
   async function loadData() {

@@ -6,7 +6,7 @@ import { ProfileShareItem } from 'mediashare/rxjs-api';
 import { View, StyleSheet, SectionList } from 'react-native';
 import { Card } from 'react-native-paper';
 import { ShareItemCard } from './ShareItemCard';
-import { useAppSelector } from 'mediashare/store';
+import { useUser } from 'mediashare/hooks/useUser';
 
 interface SharedListProps {
   sharedItems: ProfileShareItem[];
@@ -25,7 +25,7 @@ export const SharedList = ({
   onView = () => undefined,
   onChecked = () => undefined,
 }: SharedListProps) => {
-  const { _id } = useAppSelector((state) => state?.user?.entity);
+  const { _id } = useUser();
 
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
   const data = R.map(R.keys(mappedSharedItems), (key) => {

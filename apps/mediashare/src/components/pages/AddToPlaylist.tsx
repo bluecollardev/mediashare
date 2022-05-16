@@ -8,7 +8,7 @@ import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { UpdatePlaylistDto } from 'mediashare/rxjs-api';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { useGoBack, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
+import { useGoBack, useViewMediaItem } from 'mediashare/hooks/navigation';
 import { PageContainer, PageActions, PageProps, PageContent, NoItems, ActionButtons, MediaListType, MediaListItem } from 'mediashare/components/layout';
 import { shortenText } from 'mediashare/utils';
 import { theme } from 'mediashare/styles';

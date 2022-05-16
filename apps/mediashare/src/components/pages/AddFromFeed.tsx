@@ -8,7 +8,7 @@ import { AwsMediaItem } from 'mediashare/core/aws/aws-media-item.model';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { PageContainer, PageContent, PageActions, PageProps, NoItems, ActionButtons, MediaListItem } from 'mediashare/components/layout';
-import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
+import { useMediaItems } from 'mediashare/hooks/navigation';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const AddFromFeed = ({ navigation, globalState }: PageProps) => {

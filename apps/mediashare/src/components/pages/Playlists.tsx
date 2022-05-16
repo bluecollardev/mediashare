@@ -6,7 +6,7 @@ import { removeUserPlaylist } from 'mediashare/store/modules/playlist';
 import { getUserPlaylists, findPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
+import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB, Text, Divider } from 'react-native-paper';
 import { FlatList, RefreshControl, StyleSheet } from 'react-native';
@@ -147,12 +147,7 @@ export const Playlists = ({ globalState }: PageProps) => {
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>
-          <ActionButtons
-            onActionClicked={confirmPlaylistsToShare}
-            onCancelClicked={cancelPlaylistsToShare}
-            actionLabel="Share With"
-            actionIcon="group"
-          />
+          <ActionButtons onActionClicked={confirmPlaylistsToShare} onCancelClicked={cancelPlaylistsToShare} actionLabel="Share With" actionIcon="group" />
         </PageActions>
       )}
       {isSelectable && actionMode === actionModes.delete && (

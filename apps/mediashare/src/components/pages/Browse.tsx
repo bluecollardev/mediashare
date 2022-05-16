@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from 'mediashare/store';
-import { findPlaylists, getUserPlaylists } from 'mediashare/store/modules/playlists';
+// import { findPlaylists, getUserPlaylists } from 'mediashare/store/modules/playlists';
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
+import { useUser } from 'mediashare/hooks/useUser';
+import { useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
@@ -14,7 +13,7 @@ import { filterUnique } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 
 export const SharedList = () => {
-  const { sharedItems } = useAppSelector((state) => state?.user?.entity);
+  const { sharedItems } = useUser();
   // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
   const list = filterUnique(sharedItems, 'title') || [];
 
@@ -32,7 +31,7 @@ export const SharedList = () => {
 };
 export const SharedBlock = () => {
   const randomKey = createRandomRenderKey();
-  const { sharedItems } = useAppSelector((state) => state?.user?.entity);
+  const { sharedItems } = useUser();
   const list = filterUnique(sharedItems, 'playlistId') || [];
   let sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
@@ -85,8 +84,6 @@ export const Browse = ({
     setDisplayMode: (value) => undefined,
   },
 }: PageProps) => {
-  const dispatch = useDispatch();
-
   const [isLoaded, setIsLoaded] = useState(false);
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
 

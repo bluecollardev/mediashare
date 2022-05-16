@@ -7,7 +7,7 @@ import { deleteMediaItem, updateMediaItem } from 'mediashare/store/modules/media
 // TODO: Fix update dto! Not sure why it's not being exported normally...
 import { UpdateMediaItemDto } from 'mediashare/rxjs-api/models/UpdateMediaItemDto';
 import { MediaCategoryType } from 'mediashare/rxjs-api';
-import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
+import { useMediaItems } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { Button, Paragraph } from 'react-native-paper';
 import { View, ScrollView } from 'react-native';
@@ -150,9 +150,13 @@ const MediaItemEdit = ({
   );
 
   function getInitialMediaItemTags() {
-    return mediaItem?.tags?.map((tag) => {
-      return tag ? tag?.key : undefined;
-    }).filter((tag) => !!tag) || [];
+    return (
+      mediaItem?.tags
+        ?.map((tag) => {
+          return tag ? tag?.key : undefined;
+        })
+        .filter((tag) => !!tag) || []
+    );
   }
 
   async function saveItem() {

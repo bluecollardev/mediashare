@@ -1,18 +1,25 @@
-import { findItemsIAmSharing, findItemsSharedWithMe } from 'mediashare/store/modules/shareItems';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'recompose';
-
 import { useAppSelector } from 'mediashare/store';
-import { getTags } from 'mediashare/store/modules/tags';
+import { useUser } from 'mediashare/hooks/useUser';
 import { loadUser } from 'mediashare/store/modules/user';
-import { Tag } from 'mediashare/rxjs-api';
+import { getTags } from 'mediashare/store/modules/tags';
+import { findItemsIAmSharing, findItemsSharedWithMe } from 'mediashare/store/modules/shareItems';
+import { BcRolesType, ProfileDto, Tag } from 'mediashare/rxjs-api';
 
 export interface GlobalStateProps {
   history?: any;
   location?: any;
   loading?: boolean;
   isLoggedIn?: boolean;
+  user?: Partial<ProfileDto>;
+  roles?: BcRolesType[];
+  build?: {
+    forFreeUser: boolean,
+    forSubscriber: boolean,
+    forAdmin: boolean
+  },
   loadUserData?: () => void;
   search?: any;
   setSearchFilters?: Function;
@@ -29,27 +36,22 @@ export const INITIAL_SEARCH_FILTERS = {
 };
 
 export const INITIAL_DISPLAY_MODE = 'list';
+export const DEFAULT_USER_ROLE = 'free';
 
 export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
   return function GlobalStateProvider(props: any) {
     const { history, location } = props;
 
     const loading = useAppSelector((state) => state?.app?.loading);
-    const user = useAppSelector((state) => state?.user?.entity);
     const tags = useAppSelector((state) => state?.tags?.entities || []);
-    const authenticatedAndLoggedIn = user?._id?.length > 0;
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authenticatedAndLoggedIn);
+
     const [searchFilters, setSearchFilters] = useState(INITIAL_SEARCH_FILTERS);
     const [displayMode, setDisplayMode] = useState(INITIAL_DISPLAY_MODE);
 
-    const dispatch = useDispatch();
+    const user = useUser();
+    const { roles, isLoggedIn, build } = user;
 
-    useEffect(() => {
-      if (authenticatedAndLoggedIn) {
-        console.log('[GlobalStateProvider] authenticatedAndLoggedIn is true, run setIsLoggedIn effect');
-        setIsLoggedIn(authenticatedAndLoggedIn);
-      }
-    }, [authenticatedAndLoggedIn]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
       const loadTags = async () => {
@@ -74,6 +76,9 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
         location,
         loading,
         isLoggedIn,
+        user,
+        roles,
+        build,
         loadUserData,
         setSearchFilters,
         search: {

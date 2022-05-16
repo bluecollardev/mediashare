@@ -1,36 +1,34 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { forkJoin, from } from 'rxjs';
-import { findMediaItems } from 'mediashare/store/modules/mediaItems';
-import { loadProfile } from 'mediashare/store/modules/profile';
-import { removeShareItem, readShareItem } from 'mediashare/store/modules/shareItems';
-import { loadUser } from 'mediashare/store/modules/user';
-import { loadUsers } from 'mediashare/store/modules/users';
-import { useViewPlaylist } from './NavigationHooks';
+import { useAppSelector } from 'mediashare/store';
+import { DEFAULT_USER_ROLE } from 'mediashare/core/globalState';
+import { BcRolesType } from 'mediashare/rxjs-api';
 
-export function useProfile(userId?: string) {
-  const [loaded, setLoaded] = useState(false);
-  const dispatch = useDispatch();
-  const playlist = useViewPlaylist();
+export function useProfile() {
+  const profile = useAppSelector((state) => state?.profile?.entity);
+  const role = useAppSelector((state) => state?.profile?.entity?.role) || DEFAULT_USER_ROLE;
 
-  const onDelete = function (itemId: string) {
-    // @ts-ignore
-    from(dispatch(removeShareItem(itemId))).subscribe(() => {
-      setLoaded(false);
-    });
-  };
-
-  const onView = function (playlistId: string, shareItemId: string) {
-    dispatch(readShareItem(shareItemId));
-    setLoaded(false);
-    playlist({ playlistId });
-  };
+  // TODO: If dynamic roles are implemented, update this
+  const roles = [role].filter((r) => !!r);
+  const [build, setBuild] = useState({
+    forFreeUser: false,
+    forSubscriber: false,
+    forAdmin: false,
+  })
 
   useEffect(() => {
-    if (!loaded) {
-      forkJoin([dispatch(findMediaItems({})), dispatch(loadUsers()), dispatch(loadUser()), dispatch(loadProfile(userId))]).subscribe(() => setLoaded(true));
+    if (profile) {
+      setBuild({
+        // TODO: Guest is just for unregistered users... we can update this later
+        forFreeUser: roles.includes(BcRolesType.Guest) || roles.includes(BcRolesType.Free),
+        forSubscriber: roles.includes(BcRolesType.Subscriber),
+        forAdmin: roles.includes(BcRolesType.Admin),
+      })
     }
-  }, [loaded, dispatch, userId]);
+  }, [profile]);
 
-  return { onView, onDelete, setLoaded };
-};
+  return {
+    ...profile,
+    roles,
+    build
+  }
+}

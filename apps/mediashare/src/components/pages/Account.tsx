@@ -17,7 +17,8 @@ import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useWindowDimensions, ScrollView, StyleSheet } from 'react-native';
 import { FAB, Divider, Card } from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { useRouteWithParams, useViewProfileById } from 'mediashare/hooks/NavigationHooks';
+import { useRouteWithParams, useViewProfileById } from 'mediashare/hooks/navigation';
+import { useUser } from 'mediashare/hooks/useUser';
 import {
   PageContainer,
   PageActions,
@@ -29,7 +30,6 @@ import {
 } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
-import * as build from 'mediashare/build';
 
 const actionModes = { delete: 'delete', default: 'default' };
 const awsUrl = Config.AWS_URL;
@@ -44,9 +44,9 @@ export const Account = ({ globalState }: PageProps) => {
 
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const user = useAppSelector((state) => state?.user?.entity);
+  const user = useUser();
   const userId = user?._id || null;
-  const { firstName, lastName, email, phoneNumber, likesCount, sharesCount, sharedCount } = user;
+  const { firstName, lastName, email, phoneNumber, likesCount, sharesCount, sharedCount, build } = user;
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 

@@ -13,7 +13,8 @@ import { fetchAndPutToS3 } from 'mediashare/core/aws/storage';
 import { thumbnailRoot } from 'mediashare/core/aws/key-factory';
 import { loadProfile } from 'mediashare/store/modules/profile';
 import { routeNames } from 'mediashare/routes';
-import { useRouteWithParams } from 'mediashare/hooks/NavigationHooks';
+import { useRouteWithParams } from 'mediashare/hooks/navigation';
+import { useProfile } from 'mediashare/hooks/useProfile';
 import { TextField } from 'mediashare/components/form/TextField';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { PageContainer, PageProps, ActionButtons, AccountCard } from 'mediashare/components/layout';
@@ -31,8 +32,8 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const user = useAppSelector((state) => state?.profile?.entity);
-  const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
+  const profile = useProfile();
+  const [state, setState] = useState(R.pick(profile, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
   const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
   const fullName = state?.firstName || state?.lastName ? `${state?.firstName} ${state?.lastName}` : 'Unnamed User';
 
@@ -95,7 +96,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
   }
 
   function cancel() {
-    setState(user);
+    setState(profile);
     viewAccount({ userId });
   }
 

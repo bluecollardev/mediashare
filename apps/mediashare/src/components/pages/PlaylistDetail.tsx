@@ -8,12 +8,11 @@ import { getPlaylistById, removeUserPlaylist } from 'mediashare/store/modules/pl
 import { getUserPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
 import { loadUsers } from 'mediashare/store/modules/users';
 import { mapAvailableTags } from 'mediashare/store/modules/tags';
-import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
+import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB } from 'react-native-paper';
 import { PageContainer, PageContent, PageActions, PageProps, ActionButtons, AppDialog, MediaCard, MediaList } from 'mediashare/components/layout';
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
-import * as build from 'mediashare/build';
 import { theme } from 'mediashare/styles';
 
 // @ts-ignore
@@ -50,7 +49,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   const items = mediaItems || [];
   const allowEdit = createdBy === appUserId;
 
-  const { tags = [] } = globalState;
+  const { tags = [], build } = globalState;
   const tagKeys = (selected?.tags || []).map(({ key }) => key);
   const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
 
@@ -129,7 +128,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
                 showCancel={false}
                 showAction={true}
                 onActionClicked={async () => {
-                  playFromBeginning({ mediaId: mediaItems[0]._id, uri: mediaItems[0].uri })
+                  playFromBeginning({ mediaId: mediaItems[0]._id, uri: mediaItems[0].uri });
                 }}
                 actionLabel="Play from Beginning"
                 actionIcon="live-tv"

@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Avatar, Caption, Title, Subheading, Card, Menu, IconButton } from 'react-native-paper';
-import { useAppSelector } from 'mediashare/store';
+import { useProfile } from 'mediashare/hooks/useProfile';
 import { theme } from 'mediashare/styles';
 import * as R from 'remeda';
-import * as build from 'mediashare/build';
 
 
 interface AccountCardProps {
@@ -36,9 +35,9 @@ export const AccountCard = ({
 }: AccountCardProps) => {
   const [visible, setVisible] = useState(false);
 
-  const user = useAppSelector((state) => state?.profile?.entity);
+  const profile = useProfile();
   const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
-  const [state] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
+  const [state] = useState(R.pick(profile, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
   // <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />
   // <View styles={defaultStyles.buttonContainer}>
@@ -79,7 +78,7 @@ export const AccountCard = ({
                 }
               >
                 {isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Delete Account" />}
-                {build.forAdmin && !isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Deactivate" />}
+                {profile?.build?.forAdmin && !isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Deactivate" />}
               </Menu>
             ) : null
           }

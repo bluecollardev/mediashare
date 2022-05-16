@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { ScrollView, Text } from 'react-native';
 import { Button } from 'react-native-paper';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { useRouteWithParams } from 'mediashare/hooks/NavigationHooks';
+import { useRouteWithParams } from 'mediashare/hooks/navigation';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
 import { findMediaItems } from 'mediashare/store/modules/mediaItems';
@@ -12,7 +12,16 @@ import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { titleValidator, descriptionValidator, categoryValidator } from 'mediashare/core/utils/validators';
-import { PageContainer, KeyboardAvoidingPageContent, PageActions, PageProps, ActionButtons, MediaCard, AppUpload, UploadPlaceholder } from 'mediashare/components/layout';
+import {
+  PageContainer,
+  KeyboardAvoidingPageContent,
+  PageActions,
+  PageProps,
+  ActionButtons,
+  MediaCard,
+  AppUpload,
+  UploadPlaceholder,
+} from 'mediashare/components/layout';
 import { CreatePlaylistDto, PlaylistCategoryType } from 'mediashare/rxjs-api';
 import styles, { theme } from 'mediashare/styles';
 

@@ -3,13 +3,14 @@ import { useAppSelector } from 'mediashare/store';
 import { ScrollView, View } from 'react-native';
 import { Card, FAB, Subheading, Text } from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
+import { useUser } from 'mediashare/hooks/useUser';
 import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps, AccountCard, MediaListItem, ActionButtons } from 'mediashare/components/layout';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { theme } from 'mediashare/styles';
 
 const SharedItems = ({ selectable = false }) => {
-  const sharedItems = useAppSelector((state) => state?.user?.entity?.sharedItems) || [];
+  const { sharedItems = [] } = useUser();
   return (
     <View>
       <View
@@ -63,8 +64,6 @@ const SharedItems = ({ selectable = false }) => {
 const actionModes = { delete: 'delete', default: 'default' };
 
 export const User = ({}: PageProps) => {
-  // const dispatch = useDispatch();
-
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
@@ -73,7 +72,7 @@ export const User = ({}: PageProps) => {
     { key: 'shared', title: 'Shared Items', icon: 'movie' },
   ]); */
 
-  const user = useAppSelector((state) => state?.user?.entity);
+  const user = useUser();
   useEffect(() => {
     async function loadData() {
       // await dispatch(findMediaItems({}));
