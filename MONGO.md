@@ -6,7 +6,6 @@ mongorestore | creates a new database or adds data to an existing database. By d
 
 `mongorestore --drop --uri mongodb+srv://msuser:<PASSWORD>@cluster0.8x36b.mongodb.net`
 
-
 mongodump | creates a binary export of the contents of a database
 
 `mongodump --uri mongodb+srv://msuser:<PASSWORD>@cluster0.8x36b.mongodb.net/<DATABASE>`
