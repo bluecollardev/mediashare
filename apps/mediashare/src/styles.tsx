@@ -19,11 +19,18 @@ const theme = {
     white: '#ffffff',
   },
   fonts: {
+    /* Poppins (Google Web Fonts)
     bold: { fontFamily: 'Poppins_700Bold', fontWeight: '700' },
     medium: { fontFamily: 'Poppins_500Medium', fontWeight: '500' },
     light: { fontFamily: 'Poppins_300Light', fontWeight: '300' },
     regular: { fontFamily: 'Poppins_400Regular', fontWeight: '400' },
     thin: { fontFamily: 'Poppins_100Thin', fontWeight: '100' },
+    */
+    bold: { fontFamily: 'CircularStd-Black' },
+    medium: { fontFamily: 'CircularStd-Bold' },
+    regular: { fontFamily: 'CircularStd-Medium' },
+    light: { fontFamily: 'CircularStd-Book' },
+    thin: { fontFamily: 'CircularStd-Light' },
   },
 } as const;
 
@@ -92,7 +99,7 @@ const styles: any = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 20,
+    fontSize: 22,
     marginBottom: 15,
     alignItems: 'center',
   },
@@ -107,7 +114,7 @@ const styles: any = StyleSheet.create({
   textField: {
     marginBottom: 10,
     backgroundColor: theme.colors.surface,
-    fontSize: 13,
+    fontSize: 15,
   },
   changeImageButton: {
     borderTopWidth: 0,
@@ -117,7 +124,7 @@ const styles: any = StyleSheet.create({
   changeImageButtonLabel: {
     textTransform: 'none',
     fontWeight: '300',
-    fontSize: 12,
+    fontSize: 14,
   },
   deleteItemButton: {
     borderWidth: 1,

@@ -109,6 +109,6 @@ const defaultStyles: any = StyleSheet.create({
   },
   titleText: {
     color: theme.colors.text,
-    fontSize: 13,
+    fontSize: 15,
   },
 });

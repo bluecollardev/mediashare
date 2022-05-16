@@ -13,7 +13,7 @@ export const MediaCardTags: React.FC<MediaCardTagsProps> = ({ tags = [] as any[]
       {Array.isArray(tags) && tags.length > 0 && tags.map((tag, idx) => {
         return (
           <View key={`${tag?._id}_${idx}`} style={{ flex: 0, marginLeft: 3, marginRight: 3, marginBottom: 10 }}>
-            <Chip textStyle={{ fontSize: 13 }}>{tag?.value || 'Unknown'}</Chip>
+            <Chip textStyle={{ fontSize: 15 }}>{tag?.value || 'Unknown'}</Chip>
           </View>
         );
       })}

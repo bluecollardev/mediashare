@@ -110,7 +110,7 @@ const AppHeaderComponent = ({
                         <Card.Content style={{ height: '85%', paddingBottom: 50 }}>
                           <Searchbar
                             style={{ width: '100%', marginTop: 15 }}
-                            inputStyle={{ fontSize: 13 }}
+                            inputStyle={{ fontSize: 15 }}
                             placeholder="Keywords"
                             value={searchText}
                             onChangeText={(text) => updateSearchText(text)}
@@ -151,13 +151,13 @@ const AppHeaderComponent = ({
                                 backgroundColor: theme.colors.surface,
                               },
                               selectToggleText: {
-                                fontSize: 13
+                                fontSize: 15
                               },
                               chipContainer: {
                                 marginTop: 10,
                               },
                               itemText: {
-                                fontSize: 14
+                                fontSize: 16
                               },
                             }}
                             items={mappedTags}
@@ -198,7 +198,7 @@ const AppHeaderComponent = ({
       {showDisplayControls && renderDisplayControls()}
       <Appbar.Content
         title={title}
-        titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginRight: searchable && searchIsFiltering ? '-30%' : '0%' }}
+        titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20, marginRight: searchable && searchIsFiltering ? '-30%' : '0%' }}
       />
       {searchable && searchIsFiltering && <Appbar.Action icon="filter-list" color={theme.colors.primary} onPress={() => openSearchConsole()} />}
       {searchable && !searchIsActive && <Appbar.Action icon="search" color="#ffffff" onPress={() => openSearchConsole()} />}

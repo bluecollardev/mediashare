@@ -185,17 +185,15 @@ const PublicMainNavigationWithGlobalState = withGlobalStateProvider(PublicMainNa
 const PrivateMainNavigationWithGlobalState = withGlobalStateProvider(PrivateMainNavigation);
 
 function App() {
-  // TODO: Fix font loading on Android
   const [fontsLoaded] = useFonts({
-    Poppins_500Medium,
-    Poppins_900Black,
-    Poppins_700Bold,
-    Poppins_100Thin,
-    Poppins_300Light,
-    Poppins_400Regular,
+    'CircularStd-Black': require('./assets/fonts/CircularStd-Black.otf'),
+    'CircularStd-Bold': require('./assets/fonts/CircularStd-Bold.otf'),
+    'CircularStd-Medium': require('./assets/fonts/CircularStd-Medium.otf'),
+    'CircularStd-Book': require('./assets/fonts/CircularStd-Book.otf'),
+    'CircularStd-Light': require('./assets/fonts/CircularStd-Light.otf'),
   });
-
   // const fontsLoaded = true;
+
   // Amplify.configure(awsmobile);
   // clearLogin();
 

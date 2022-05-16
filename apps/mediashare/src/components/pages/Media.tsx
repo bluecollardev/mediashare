@@ -21,7 +21,7 @@ import {
   NoItems,
   AppDialog
 } from 'mediashare/components/layout';
-import { shortenText } from 'mediashare/utils';
+// import { shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { selectMediaItem } from 'mediashare/store/modules/mediaItems';
 import { theme } from 'mediashare/styles';
@@ -59,7 +59,7 @@ export const MediaComponent = ({
           titleStyle={styles.titleText}
           description={
             <View style={styles.details}>
-              {!!author && <Text style={styles.username}>By {author}</Text>}
+              {!!author && <Text style={styles.username}>@{author}</Text>}
               {/* <Text style={styles.description}>{shortenText(description || '', 80)}</Text> */}
             </View>
           }
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   titleText: {
     marginBottom: 2,
     color: theme.colors.text,
-    fontSize: 13,
+    fontSize: 15,
   },
   details: {
     display: 'flex',
@@ -267,27 +267,27 @@ const styles = StyleSheet.create({
   },
   author: {
     color: theme.colors.textDarker,
-    fontSize: 12,
+    fontSize: 14,
     marginBottom: 2,
   },
   username: {
     flex: 0,
     width: '100%',
     color: theme.colors.primary,
-    fontSize: 12,
+    fontSize: 14,
     marginBottom: 4,
   },
   description: {
     flex: 0,
     width: '100%',
     color: theme.colors.textDarker,
-    fontSize: 12,
+    fontSize: 14,
     marginTop: 2,
     marginBottom: 4,
   },
   videoCount: {
     color: theme.colors.textDarker,
-    fontSize: 12,
+    fontSize: 14,
     marginBottom: 2,
     fontWeight: 'bold',
   },

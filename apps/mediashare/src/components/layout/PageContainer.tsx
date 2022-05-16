@@ -75,7 +75,7 @@ export function PageContainer({ children }: PageContainerProps) {
             // right={(props) => <IconButton {...props} icon="more-vert" onPress={() => {}} />}
           />
           <Card.Content style={{ maxHeight: '80%', overflow: 'scroll' }}>
-            <Text style={{ fontSize: 11 }}>{app.error.message}</Text>
+            <Text style={{ fontSize: 13 }}>{app.error.message}</Text>
           </Card.Content>
           <Dialog.Actions style={{ paddingTop: 0 }}>
             <Button mode="text" dark color={theme.colors.primary} onPress={hideDialog}>

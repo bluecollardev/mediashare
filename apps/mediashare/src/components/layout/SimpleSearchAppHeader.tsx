@@ -48,14 +48,14 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
       {searchable && !searchIsActive && (
         <>
           {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
-          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingLeft: '15%' }} />
+          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20, paddingLeft: '15%' }} />
           <Appbar.Action icon="search" color="#ffffff" onPress={() => enableSearch()} />
         </>
       )}
       {!searchable && (
         <>
           {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
-          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, paddingRight: back ? '15%' : 0 }} />
+          <Appbar.Content title={title} titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20, paddingRight: back ? '15%' : 0 }} />
         </>
       )}
     </Appbar.Header>

@@ -62,22 +62,19 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
     return (
       <>
         <MediaListItem
-          key={`playlist_${_id}`}
+          key={`add_to_playlist_${_id}`}
           title={title}
-          titleStyle={styles.title}
-          description={() => {
-            return (
-              <View style={{ display: 'flex', flexDirection: 'column' }}>
-                {!!author && <Text style={styles.username}>By {author}</Text>}
-                <Text style={{ ...styles.description }}>{shortenText(description || '', 80)}</Text>
-                <Text style={{ ...styles.videoCount }}>{mediaIds?.length || 0} videos</Text>
-              </View>
-            );
-          }}
-          image={thumbnail}
+          titleStyle={styles.titleText}
+          description={
+            <View style={styles.details}>
+              {!!author && <Text style={styles.username}>@{author}</Text>}
+              {/* <Text style={styles.description}>{shortenText(description || '', 80)}</Text> */}
+            </View>
+          }
           showThumbnail={true}
-          selectable={true}
           showActions={true}
+          image={thumbnail}
+          selectable={true}
           onViewDetail={() => {
             viewMediaItem({ mediaId: item._id, uri: item.uri }).then();
           }}
@@ -140,30 +137,34 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
+  titleText: {
     marginBottom: 2,
+    color: theme.colors.text,
+    fontSize: 15,
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
   },
   author: {
     color: theme.colors.textDarker,
-    fontSize: 12,
+    fontSize: 14,
     marginBottom: 2,
   },
   username: {
+    flex: 0,
+    width: '100%',
     color: theme.colors.primary,
-    fontSize: 12,
+    fontSize: 14,
     marginBottom: 4,
   },
   description: {
+    flex: 0,
+    width: '100%',
     color: theme.colors.textDarker,
-    fontSize: 12,
+    fontSize: 14,
     marginTop: 2,
     marginBottom: 4,
-  },
-  videoCount: {
-    color: theme.colors.textDarker,
-    fontSize: 12,
-    marginBottom: 2,
-    fontWeight: 'bold',
   },
 });
 

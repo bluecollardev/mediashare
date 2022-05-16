@@ -158,13 +158,13 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                 backgroundColor: theme.colors.surface,
               },
               selectToggleText: {
-                fontSize: 13
+                fontSize: 15
               },
               chipContainer: {
                 marginTop: 10,
               },
               itemText: {
-                fontSize: 14
+                fontSize: 16
               },
             }}
             items={availableTags}
@@ -206,7 +206,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         {/* Description can be the longest field so we've moved it to last when we're in edit mode */}
         <Card elevation={elevation} style={{ marginTop: 25, marginBottom: 25 }}>
           <TextField
-            style={{ height: 500, overflow: 'scroll', backgroundColor: theme.colors.surface, fontSize: 13 }}
+            style={{ height: 500, overflow: 'scroll', backgroundColor: theme.colors.surface, fontSize: 15 }}
             multiline={true}
             label="Description"
             value={description}
@@ -244,27 +244,27 @@ const defaultStyles = StyleSheet.create({
   },
   titleText: {
     color: theme.colors.text,
-    fontSize: 16,
+    fontSize: 18,
   },
   subtitle: {
     display: 'flex',
     flexDirection: 'column',
   },
   author: {
-    fontSize: 12,
+    fontSize: 14,
   },
   username: {
     color: theme.colors.primary,
-    fontSize: 12,
+    fontSize: 14,
   },
   description: {
     marginBottom: 15,
-    fontSize: 13,
+    fontSize: 15,
   },
   descriptionWithSocial: {
     marginTop: 15,
     marginBottom: 30,
-    fontSize: 13,
+    fontSize: 15,
   },
   card: {
     paddingTop: 5,

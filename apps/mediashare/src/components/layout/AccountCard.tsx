@@ -136,10 +136,10 @@ const defaultStyles = StyleSheet.create({
   },
   titleText: {
     color: theme.colors.text,
-    fontSize: 16,
+    fontSize: 18,
   },
   subtitleText: {
-    fontSize: 11,
+    fontSize: 13,
     color: theme.colors.primary,
   },
   left: {
