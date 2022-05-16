@@ -66,6 +66,7 @@ export class UsersController {
     return this.playlistService.getByUserId(userId);
   }
 
+  // TODO: Remove this?
   @Put(':userId/roles')
   @ApiBody({ enum: BC_ROLES })
   @UserPostResponse({ type: UserDto })
@@ -73,4 +74,6 @@ export class UsersController {
     const { roles = [] } = params;
     return this.userService.setRoles(id, roles);
   }
+
+  // New Auth stuff
 }

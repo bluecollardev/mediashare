@@ -17,6 +17,7 @@ import { GlobalExceptionFilter } from '@api-core/exception-filters/global-except
 import * as session from 'express-session';
 import MongoStore from 'connect-mongo';
 import * as compression from 'compression';
+import * as bodyParser from 'body-parser';
 
 const port = process.env.PORT || 3456;
 
@@ -65,6 +66,8 @@ async function bootstrap() {
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(compression());
+    app.use(bodyParser.json({ limit: '5mb' }));
+    app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
     app.use(
       session({
