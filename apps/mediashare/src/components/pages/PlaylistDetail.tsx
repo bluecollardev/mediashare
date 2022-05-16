@@ -154,12 +154,6 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
           </MediaCard>
         </ScrollView>
       </PageContent>
-      <PageActions>
-        {/* TODO: Selectively display depending if the user has scrolled up past the upper button */}
-        {/*!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
-          <ListActionButton icon="playlist-add" label="Add To Playlist" onActionClicked={() => addToPlaylist({ playlistId })} />
-        )*/}
-      </PageActions>
       {!build.forFreeUser && (
         <FAB.Group
           visible={true}
