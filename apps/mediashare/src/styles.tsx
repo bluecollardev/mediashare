@@ -26,10 +26,10 @@ const theme = {
     regular: { fontFamily: 'Poppins_400Regular', fontWeight: '400' },
     thin: { fontFamily: 'Poppins_100Thin', fontWeight: '100' },
     */
-    bold: { fontFamily: 'CircularStd-Black' },
-    medium: { fontFamily: 'CircularStd-Bold' },
-    regular: { fontFamily: 'CircularStd-Medium' },
-    light: { fontFamily: 'CircularStd-Book' },
+    // bold: { fontFamily: 'CircularStd-Black' },
+    medium: { fontFamily: 'CircularStd-Medium' },
+    regular: { fontFamily: 'CircularStd-Book' },
+    light: { fontFamily: 'CircularStd-Light' },
     thin: { fontFamily: 'CircularStd-Light' },
   },
 } as const;
