@@ -192,7 +192,7 @@ export interface MediaItemState {
   file: any;
   entity: MediaItemResponseDto | undefined;
   mediaSrc: string;
-  feed: AwsMediaItem[];
+  feed: { entities: AwsMediaItem[], loading: boolean, loaded: boolean };
   loaded: boolean;
   createState: 'submitting' | 'progress' | 'empty';
 }
@@ -204,7 +204,7 @@ export const mediaItemInitialState: MediaItemState = {
   file: null,
   mediaSrc: mediaPlaceholder,
   createState: 'empty',
-  feed: null,
+  feed: { entities: [] as AwsMediaItem[], loading: false, loaded: false },
   loaded: false,
 };
 
@@ -240,10 +240,14 @@ const mediaItemSlice = createSlice({
       .addCase(deleteMediaItem.rejected, reduceRejectedState())
       .addCase(deleteMediaItem.fulfilled, reduceFulfilledState())
       // TODO: Are we using these? Where?
-      .addCase(getFeedMediaItems.pending, reducePendingState())
-      .addCase(getFeedMediaItems.rejected, reduceRejectedState())
+      .addCase(getFeedMediaItems.pending, reducePendingState((state) => ({
+        ...state, feed: { entities: [], loading: true, loaded: false }
+      })))
+      .addCase(getFeedMediaItems.rejected, reduceRejectedState((state) => ({
+        ...state, feed: { entities: [], loading: false, loaded: true }
+      })))
       .addCase(getFeedMediaItems.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, feed: action.payload, loading: false, loaded: true
+        ...state, feed: { entities: Array.isArray(action.payload) ? action.payload : [], loading: false, loaded: true }
       })))
       .addCase(saveFeedMediaItems.pending, reducePendingState())
       .addCase(saveFeedMediaItems.rejected, reduceRejectedState())
