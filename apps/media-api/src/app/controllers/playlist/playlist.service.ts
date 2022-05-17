@@ -180,7 +180,9 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
           $mergeObjects: [
             {
               _id: '$_id',
-              author: '$user.username',
+              userId: '$user._id',
+              username: '$user.username',
+              author: '$author',
               title: '$title',
               description: '$description',
               imageSrc: '$imageSrc',

@@ -45,16 +45,15 @@ export class MediaItemController {
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
   @MediaGetResponse({ isArray: true })
-  findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
+  async findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
-
-    return query || tags ? this.mediaItemService.search({ query, tags: parsedTags }) : this.mediaItemService.findAll();
+    return query || tags ? await this.mediaItemService.search({ query, tags: parsedTags }) : await this.mediaItemService.findAll();
   }
 
   @Get('popular')
   @MediaGetResponse({ isArray: true })
-  findPopular() {
-    return this.mediaItemService.getPopular();
+  async findPopular() {
+    return await this.mediaItemService.getPopular();
   }
 
   @UseGuards(JwtAuthGuard)

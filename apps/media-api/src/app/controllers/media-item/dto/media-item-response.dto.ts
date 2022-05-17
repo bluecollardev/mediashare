@@ -1,9 +1,20 @@
+import { ApiString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
 import { MediaItem } from '../entities/media-item.entity';
 
 export class MediaItemResponseDto extends MediaItem {
-  @ApiProperty({ type: String, name: 'author' })
-  @IsString()
+  @ApiString()
+  username: string;
+
+  @ApiString()
   author: string;
+
+  @ApiProperty({ type: 'number' })
+  shareCount?: number;
+
+  @ApiProperty({ type: 'number' })
+  viewCount?: number;
+
+  @ApiProperty({ type: 'number' })
+  likesCount?: number;
 }

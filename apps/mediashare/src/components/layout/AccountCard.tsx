@@ -6,7 +6,6 @@ import { useProfile } from 'mediashare/hooks/useProfile';
 import { theme } from 'mediashare/styles';
 import * as R from 'remeda';
 
-
 interface AccountCardProps {
   image: string;
   likes?: number;

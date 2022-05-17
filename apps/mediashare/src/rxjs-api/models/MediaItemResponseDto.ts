@@ -87,10 +87,25 @@ export interface MediaItemResponseDto {
    * @type {string}
    * @memberof MediaItemResponseDto
    */
-  author: string;
+  username: string;
   /**
    * @type {string}
    * @memberof MediaItemResponseDto
    */
-  username: string;
+  author: string;
+  /**
+   * @type {number}
+   * @memberof MediaItemResponseDto
+   */
+  shareCount: number;
+  /**
+   * @type {number}
+   * @memberof MediaItemResponseDto
+   */
+  viewCount: number;
+  /**
+   * @type {number}
+   * @memberof MediaItemResponseDto
+   */
+  likesCount: number;
 }

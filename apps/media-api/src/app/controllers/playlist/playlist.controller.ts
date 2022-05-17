@@ -35,8 +35,8 @@ export class PlaylistController {
   @Get(':playlistId')
   @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   @PlaylistGetResponse()
-  findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
-    const response = this.playlistService.getById(playlistId);
+  async findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
+    const response = await this.playlistService.getById(playlistId);
     if (!response) throw notFoundResponse('playlist', { args: { playlistId } });
     return response;
   }
@@ -45,15 +45,15 @@ export class PlaylistController {
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
   @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
-  findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
+  async findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
-    return query || tags ? this.playlistService.search({ query, tags: parsedTags }) : this.playlistService.findAll();
+    return query || tags ? await this.playlistService.search({ query, tags: parsedTags }) : await this.playlistService.findAll();
   }
 
   @Get('popular')
   @MediaGetResponse({ isArray: true })
-  findPopular() {
-    return this.playlistService.getPopular();
+  async findPopular() {
+    return await this.playlistService.getPopular();
   }
 
   @UseGuards(JwtAuthGuard)

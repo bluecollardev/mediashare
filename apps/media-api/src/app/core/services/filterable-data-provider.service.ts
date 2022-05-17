@@ -45,24 +45,54 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
     return false; // this.configService.get<string>('dbIsMongoAtlas');
   }
 
+
   getById(id) {
-    return this.repository.aggregate([{ $match: { _id: id } }, ...this.buildLookupFields(), { $unwind: { path: '$user' } }, this.replaceRoot()]).next();
+    return this.repository
+      .aggregate([
+        { $match: { _id: id } },
+        ...this.buildLookupFields(),
+        { $unwind: { path: '$user' } },
+        { $addFields: { author: { $concat: ['$user.firstName', ' ', '$user.lastName'] } } },
+        this.replaceRoot(),
+      ])
+      .next();
   }
 
   getByUserId(userId: ObjectId) {
     return this.repository
-      .aggregate([{ $match: { createdBy: userId } }, ...this.buildLookupFields(), { $unwind: { path: '$user' } }, this.replaceRoot()])
+      .aggregate([
+        { $match: { createdBy: userId } },
+        ...this.buildLookupFields(),
+        { $unwind: { path: '$user' } },
+        { $addFields: { author: { $concat: ['$user.firstName', ' ', '$user.lastName'] } } },
+        this.replaceRoot(),
+      ])
       .toArray();
   }
 
   getPopular() {
     return this.repository
-      .aggregate([...this.buildAggregateQuery({}), ...this.buildLookupFields(), { $sort: { likesCount: -1 } }, this.replaceRoot()])
+      .aggregate([
+        ...this.buildAggregateQuery({}),
+        ...this.buildLookupFields(),
+        { $unwind: { path: '$user' } },
+        { $addFields: { author: { $concat: ['$user.firstName', ' ', '$user.lastName'] } } },
+        { $sort: { likesCount: -1 } },
+        this.replaceRoot(),
+      ])
       .toArray();
   }
 
   search({ query, tags }: SearchParameters) {
-    return this.repository.aggregate([...this.buildAggregateQuery({ query, tags }), ...this.buildLookupFields(), this.replaceRoot()]).toArray();
+    return this.repository
+      .aggregate([
+        ...this.buildAggregateQuery({ query, tags }),
+        ...this.buildLookupFields(),
+        { $unwind: { path: '$user' } },
+        { $addFields: { author: { $concat: ['$user.firstName', ' ', '$user.lastName'] } } },
+        this.replaceRoot(),
+      ])
+      .toArray();
   }
 
   protected abstract buildAggregateQuery(params: SearchParameters): any[];

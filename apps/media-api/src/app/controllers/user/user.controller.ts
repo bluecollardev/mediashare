@@ -88,16 +88,16 @@ export class UserController {
   @UseGuards(UserGuard)
   @ApiBearerAuth()
   @PlaylistGetResponse({ isArray: true, type: PlaylistResponseDto })
-  getUserPlaylists(@GetUserId() userId: ObjectId) {
-    return this.playlistService.getByUserId(userId);
+  async getUserPlaylists(@GetUserId() userId: ObjectId) {
+    return await this.playlistService.getByUserId(userId);
   }
 
   @Get('media-items')
   @UseGuards(UserGuard)
   @ApiBearerAuth()
   @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
-  getMediaItems(@GetUserId() userId: ObjectId) {
-    return this.mediaItemService.getByUserId(userId);
+  async getMediaItems(@GetUserId() userId: ObjectId) {
+    return await this.mediaItemService.getByUserId(userId);
   }
 
   @Get('media-items/shared')

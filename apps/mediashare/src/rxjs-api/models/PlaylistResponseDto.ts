@@ -77,12 +77,12 @@ export interface PlaylistResponseDto {
    * @type {string}
    * @memberof PlaylistResponseDto
    */
-  author: string;
+  username: string;
   /**
    * @type {string}
    * @memberof PlaylistResponseDto
    */
-  username: string;
+  author: string;
   /**
    * @type {Array<MediaItem>}
    * @memberof PlaylistResponseDto
