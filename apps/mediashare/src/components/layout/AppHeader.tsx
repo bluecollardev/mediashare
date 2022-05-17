@@ -151,13 +151,13 @@ const AppHeaderComponent = ({
                                 backgroundColor: theme.colors.surface,
                               },
                               selectToggleText: {
-                                fontSize: 15
+                                fontSize: 15,
                               },
                               chipContainer: {
                                 marginTop: 10,
                               },
                               itemText: {
-                                fontSize: 16
+                                fontSize: 16,
                               },
                             }}
                             items={mappedTags}
@@ -250,6 +250,3 @@ const AppHeaderComponent = ({
 };
 
 export const AppHeader = withGlobalStateConsumer(AppHeaderComponent);
-
-
-

@@ -13,7 +13,7 @@ export function useProfile() {
     forFreeUser: false,
     forSubscriber: false,
     forAdmin: false,
-  })
+  });
 
   useEffect(() => {
     if (profile) {
@@ -22,13 +22,13 @@ export function useProfile() {
         forFreeUser: roles.includes(BcRolesType.Guest) || roles.includes(BcRolesType.Free),
         forSubscriber: roles.includes(BcRolesType.Subscriber),
         forAdmin: roles.includes(BcRolesType.Admin),
-      })
+      });
     }
   }, [profile]);
 
   return {
     ...profile,
     roles,
-    build
-  }
+    build,
+  };
 }

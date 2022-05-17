@@ -44,11 +44,6 @@ export interface MediaItemResponseDto {
    */
   userId: string;
   /**
-   * @type {boolean}
-   * @memberof MediaItemResponseDto
-   */
-  isPlayable: boolean;
-  /**
    * @type {string}
    * @memberof MediaItemResponseDto
    */
@@ -69,10 +64,20 @@ export interface MediaItemResponseDto {
    */
   uri: string;
   /**
+   * @type {string}
+   * @memberof MediaItemResponseDto
+   */
+  thumbnail: string;
+  /**
+   * @type {boolean}
+   * @memberof MediaItemResponseDto
+   */
+  isPlayable?: boolean;
+  /**
    * @type {MediaCategoryType}
    * @memberof MediaItemResponseDto
    */
-  category: MediaCategoryType;
+  category?: MediaCategoryType;
   /**
    * @type {Array<TagKeyValue>}
    * @memberof MediaItemResponseDto
@@ -82,10 +87,10 @@ export interface MediaItemResponseDto {
    * @type {string}
    * @memberof MediaItemResponseDto
    */
-  thumbnail: string;
+  author: string;
   /**
    * @type {string}
    * @memberof MediaItemResponseDto
    */
-  author: string;
+  username: string;
 }

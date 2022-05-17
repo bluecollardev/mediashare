@@ -19,7 +19,7 @@ import {
   MediaListItem,
   ActionButtons,
   NoItems,
-  AppDialog
+  AppDialog,
 } from 'mediashare/components/layout';
 // import { shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';

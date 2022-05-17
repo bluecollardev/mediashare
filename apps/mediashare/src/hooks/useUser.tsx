@@ -15,7 +15,7 @@ export function useUser() {
     forFreeUser: false,
     forSubscriber: false,
     forAdmin: false,
-  })
+  });
 
   useEffect(() => {
     if (authenticatedAndLoggedIn) {
@@ -26,7 +26,7 @@ export function useUser() {
         forFreeUser: roles.includes(BcRolesType.Guest) || roles.includes(BcRolesType.Free),
         forSubscriber: roles.includes(BcRolesType.Subscriber),
         forAdmin: roles.includes(BcRolesType.Admin),
-      })
+      });
     }
   }, [authenticatedAndLoggedIn]);
 
@@ -34,6 +34,6 @@ export function useUser() {
     ...user,
     roles,
     isLoggedIn,
-    build
-  }
+    build,
+  };
 }

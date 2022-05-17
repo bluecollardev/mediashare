@@ -57,7 +57,7 @@ export interface PlaylistResponseDto {
    * @type {string}
    * @memberof PlaylistResponseDto
    */
-  imageSrc?: string;
+  imageSrc: string;
   /**
    * @type {Array<string>}
    * @memberof PlaylistResponseDto
@@ -67,7 +67,7 @@ export interface PlaylistResponseDto {
    * @type {PlaylistCategoryType}
    * @memberof PlaylistResponseDto
    */
-  category: PlaylistCategoryType;
+  category?: PlaylistCategoryType;
   /**
    * @type {Array<TagKeyValue>}
    * @memberof PlaylistResponseDto
@@ -78,6 +78,11 @@ export interface PlaylistResponseDto {
    * @memberof PlaylistResponseDto
    */
   author: string;
+  /**
+   * @type {string}
+   * @memberof PlaylistResponseDto
+   */
+  username: string;
   /**
    * @type {Array<MediaItem>}
    * @memberof PlaylistResponseDto

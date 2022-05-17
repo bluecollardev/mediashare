@@ -100,7 +100,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 
   const mappedSelectedTags = useMemo(() => mappedKeysToTags(tags, availableTags), []);
   const mappedSelectedTagKeys = useMemo(() => {
-    return mappedSelectedTags.map(({ key }) => key)
+    return mappedSelectedTags.map(({ key }) => key);
   }, []);
   const [selectedTagKeys, setSelectedTagKeys] = useState(mappedSelectedTagKeys);
   const onSelectedTagsChange = (newTags) => {
@@ -158,13 +158,13 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                 backgroundColor: theme.colors.surface,
               },
               selectToggleText: {
-                fontSize: 15
+                fontSize: 15,
               },
               chipContainer: {
                 marginTop: 10,
               },
               itemText: {
-                fontSize: 16
+                fontSize: 16,
               },
             }}
             items={availableTags}

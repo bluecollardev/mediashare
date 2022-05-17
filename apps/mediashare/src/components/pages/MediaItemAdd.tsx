@@ -8,7 +8,16 @@ import { CreateMediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
 import { useMediaItems } from 'mediashare/hooks/navigation';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps, ActionButtons, MediaCard, AppUpload, UploadPlaceholder  } from 'mediashare/components/layout';
+import {
+  KeyboardAvoidingPageContent,
+  PageActions,
+  PageContainer,
+  PageProps,
+  ActionButtons,
+  MediaCard,
+  AppUpload,
+  UploadPlaceholder,
+} from 'mediashare/components/layout';
 import { minLength, titleValidator, descriptionValidator, categoryValidator, tagValidator } from 'mediashare/core/utils/validators';
 import { theme } from 'mediashare/styles';
 

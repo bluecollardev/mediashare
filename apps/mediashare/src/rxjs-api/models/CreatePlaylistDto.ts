@@ -32,12 +32,12 @@ export interface CreatePlaylistDto {
    * @type {string}
    * @memberof CreatePlaylistDto
    */
-  imageSrc?: string;
+  imageSrc: string;
   /**
    * @type {PlaylistCategoryType}
    * @memberof CreatePlaylistDto
    */
-  category: PlaylistCategoryType;
+  category?: PlaylistCategoryType;
   /**
    * @type {Array<string>}
    * @memberof CreatePlaylistDto
