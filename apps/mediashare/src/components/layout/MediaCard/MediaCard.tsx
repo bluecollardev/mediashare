@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
@@ -9,17 +9,15 @@ import { MediaCardTitle } from './MediaCardTitle';
 import { MediaCardTags } from './MediaCardTags';
 import { MediaCardSocial } from './MediaCardSocial';
 import { mappedKeysToTags } from 'mediashare/core/utils/tags';
-import { findInArray } from 'mediashare/utils';
 import { titleValidator, descriptionValidator } from 'mediashare/core/utils/validators';
-import { useAppSelector } from 'mediashare/store';
 import { theme, components } from 'mediashare/styles';
 
-import { UserDto } from 'mediashare/rxjs-api';
+import { AuthorProfileDto } from 'mediashare/rxjs-api';
 
 export interface MediaCardProps {
   id?: string;
   title?: string;
-  author?: string | string[];
+  authorProfile?: AuthorProfileDto;
   description?: string;
   showSocial?: any | boolean;
   showActions?: boolean;
@@ -51,7 +49,7 @@ export interface MediaCardProps {
 
 export const MediaCard: React.FC<MediaCardProps> = ({
   title = '',
-  author = 'Anonymous',
+  authorProfile = {} as AuthorProfileDto,
   description = '',
   mediaSrc,
   showSocial = false,
@@ -84,14 +82,6 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   views = 0,
   shares = 0,
 }: MediaCardProps) => {
-  const users = useAppSelector((state) => state.users?.entities);
-  const [creator, setCreator] = useState({} as UserDto);
-  useEffect(() => {
-    const primaryAuthor = Array.isArray(author) ? author[0] : author;
-    const user = findInArray(users, 'username', primaryAuthor);
-    setCreator(user);
-  }, [users]);
-
   const [selectedCategories, setSelectedCategories] = useState([]);
   const onSelectedCategoriesChange = (categories) => {
     setSelectedCategories(categories);
@@ -186,7 +176,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     <Card style={defaultStyles.card} elevation={elevation}>
       <DisplayPreviewOrVideo key={mediaSrc} mediaSrc={mediaSrc} isPlayable={isPlayable} showThumbnail={showThumbnail} thumbnail={thumbnail} />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
-      <MediaCardTitle title={title} creator={creator} showThumbnail={true} showActions={showActions} onActionsClicked={onActionsClicked} />
+      <MediaCardTitle title={title} authorProfile={authorProfile} showThumbnail={true} showActions={showActions} onActionsClicked={onActionsClicked} />
       <Card.Content style={{ marginBottom: 15 }}>
         <MediaCardTags tags={mappedSelectedTags} />
       </Card.Content>

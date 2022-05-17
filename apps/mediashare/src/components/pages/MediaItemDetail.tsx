@@ -5,11 +5,24 @@ import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { useAppSelector } from 'mediashare/store';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { PageContainer, PageContent, PageProps, MediaCard } from 'mediashare/components/layout';
+import { AuthorProfileDto } from 'mediashare/rxjs-api';
 
 // @ts-ignore
 const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
   const mediaItem = useAppSelector((state) => state?.mediaItem?.entity);
-  const { _id, title, description, category, author, uri, thumbnail } = mediaItem || {};
+  const {
+    _id,
+    title = '',
+    authorProfile = {} as AuthorProfileDto,
+    createdBy,
+    description = '',
+    thumbnail,
+    uri,
+    category,
+    shareCount = 0,
+    viewCount = 0,
+    likesCount = 0,
+  } = mediaItem || {};
 
   const { tags = [] } = globalState;
   const tagKeys = (mediaItem?.tags || []).map(({ key }) => key);
@@ -22,7 +35,7 @@ const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
           <MediaCard
             key={_id}
             title={title}
-            author={author}
+            authorProfile={authorProfile}
             description={description}
             mediaSrc={uri}
             thumbnail={thumbnail}
@@ -33,9 +46,9 @@ const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
             showSocial={true}
             showActions={false}
             isPlayable={true}
-            // likes={likesCount}
-            // shares={shareCount}
-            // views={viewCount}
+            likes={likesCount}
+            shares={shareCount}
+            views={viewCount}
           />
         </ScrollView>
       </PageContent>
