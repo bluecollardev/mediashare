@@ -43,13 +43,14 @@ export const SharedBlock = () => {
     <List.Section>
       {sortedList.map((item) => {
         // @ts-ignore
-        const { playlistId, title, description, author, imageSrc, sharedCount, sharesCount, likesCount } = item;
+        const { playlistId, title, description, author, username, imageSrc, sharedCount, sharesCount, likesCount } = item;
         return (
           <View key={`shared_block_${randomKey}_${playlistId}`} style={{ padding: 0, paddingTop: 0 }}>
             <MediaCard
               elevation={1}
               title={title}
               author={author}
+              // username={username}
               description={description}
               category="General"
               tags={['General']}

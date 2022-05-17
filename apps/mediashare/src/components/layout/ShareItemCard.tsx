@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     color: theme.colors.text,
     fontSize: 16,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   description: {
     marginTop: 5,

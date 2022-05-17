@@ -245,6 +245,7 @@ const defaultStyles = StyleSheet.create({
   titleText: {
     color: theme.colors.text,
     fontSize: 18,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   subtitle: {
     display: 'flex',
@@ -260,11 +261,15 @@ const defaultStyles = StyleSheet.create({
   description: {
     marginBottom: 15,
     fontSize: 15,
+    color: theme.colors.text,
+    fontFamily: theme.fonts.thin.fontFamily,
   },
   descriptionWithSocial: {
     marginTop: 15,
     marginBottom: 30,
     fontSize: 15,
+    color: theme.colors.text,
+    fontFamily: theme.fonts.thin.fontFamily,
   },
   card: {
     paddingTop: 5,

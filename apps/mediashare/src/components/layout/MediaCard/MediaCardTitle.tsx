@@ -61,6 +61,7 @@ const defaultStyles = StyleSheet.create({
   titleText: {
     color: theme.colors.text,
     fontSize: 15,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   subtitle: {
     display: 'flex',

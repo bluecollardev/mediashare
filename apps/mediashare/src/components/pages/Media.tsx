@@ -50,7 +50,7 @@ export const MediaComponent = ({
   );
 
   function renderVirtualizedListItem(item) {
-    const { _id = '', title = '', author, description = '', thumbnail } = item;
+    const { _id = '', title = '', author = '', username = '', description = '', thumbnail } = item;
     return (
       <>
         <MediaListItem
@@ -58,10 +58,9 @@ export const MediaComponent = ({
           title={title}
           titleStyle={styles.titleText}
           description={
-            <View style={styles.details}>
-              {!!author && <Text style={styles.username}>@{author}</Text>}
-              {/* <Text style={styles.description}>{shortenText(description || '', 80)}</Text> */}
-            </View>
+            <MediaListItem.Description
+              data={{ author, username, description }}
+            />
           }
           showThumbnail={true}
           showActions={showActions}
@@ -260,6 +259,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     color: theme.colors.text,
     fontSize: 15,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   details: {
     display: 'flex',

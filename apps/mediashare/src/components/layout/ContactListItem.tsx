@@ -99,6 +99,7 @@ const defaultStyles = StyleSheet.create({
   titleText: {
     color: theme.colors.text,
     fontSize: 15,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   description: {
     color: theme.colors.textDarker,

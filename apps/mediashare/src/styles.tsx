@@ -26,9 +26,9 @@ const theme = {
     regular: { fontFamily: 'Poppins_400Regular', fontWeight: '400' },
     thin: { fontFamily: 'Poppins_100Thin', fontWeight: '100' },
     */
-    // bold: { fontFamily: 'CircularStd-Black' },
-    medium: { fontFamily: 'CircularStd-Medium' },
-    regular: { fontFamily: 'CircularStd-Book' },
+    bold: { fontFamily: 'CircularStd-Bold' },
+    medium: { fontFamily: 'CircularStd-Book' },
+    regular: { fontFamily: 'CircularStd-Light' },
     light: { fontFamily: 'CircularStd-Light' },
     thin: { fontFamily: 'CircularStd-Light' },
   },
@@ -40,8 +40,6 @@ const styles: any = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   pageContent: {
-    paddingTop: 5,
-    paddingHorizontal: 5,
     height: '100%',
     flex: 1,
   },
@@ -115,6 +113,7 @@ const styles: any = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: theme.colors.surface,
     fontSize: 15,
+    fontFamily: theme.fonts.thin.fontFamily,
   },
   changeImageButton: {
     borderTopWidth: 0,

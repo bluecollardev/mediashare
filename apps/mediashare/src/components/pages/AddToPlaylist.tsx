@@ -10,7 +10,7 @@ import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useGoBack, useViewMediaItem } from 'mediashare/hooks/navigation';
 import { PageContainer, PageActions, PageProps, PageContent, NoItems, ActionButtons, MediaListType, MediaListItem } from 'mediashare/components/layout';
-import { shortenText } from 'mediashare/utils';
+
 import { theme } from 'mediashare/styles';
 
 export const AddToPlaylist = ({ route, globalState }: PageProps) => {
@@ -58,19 +58,14 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   );
 
   function renderVirtualizedListItem(item) {
-    const { _id = '', title = '', author = '', description = '', mediaIds = [], thumbnail = '' } = item;
+    const { _id = '', title = '', author = '', username = '', thumbnail = '' } = item;
     return (
       <>
         <MediaListItem
           key={`add_to_playlist_${_id}`}
           title={title}
           titleStyle={styles.titleText}
-          description={
-            <View style={styles.details}>
-              {!!author && <Text style={styles.username}>@{author}</Text>}
-              {/* <Text style={styles.description}>{shortenText(description || '', 80)}</Text> */}
-            </View>
-          }
+          description={<MediaListItem.Description data={{ author, username }} />}
           showThumbnail={true}
           showActions={true}
           image={thumbnail}
@@ -138,33 +133,8 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
 
 const styles = StyleSheet.create({
   titleText: {
-    marginBottom: 2,
-    color: theme.colors.text,
-    fontSize: 15,
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  author: {
-    color: theme.colors.textDarker,
-    fontSize: 14,
-    marginBottom: 2,
-  },
-  username: {
-    flex: 0,
-    width: '100%',
-    color: theme.colors.primary,
-    fontSize: 14,
     marginBottom: 4,
-  },
-  description: {
-    flex: 0,
-    width: '100%',
-    color: theme.colors.textDarker,
-    fontSize: 14,
-    marginTop: 2,
-    marginBottom: 4,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
 });
 

@@ -136,10 +136,12 @@ const defaultStyles = StyleSheet.create({
   titleText: {
     color: theme.colors.text,
     fontSize: 18,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   subtitleText: {
     fontSize: 13,
     color: theme.colors.primary,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   left: {
     flex: 0,

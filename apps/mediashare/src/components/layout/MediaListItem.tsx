@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { Caption, Checkbox, IconButton, List } from 'react-native-paper';
 
 import { MediaPreview } from './MediaPreview';
+import { MediaListItemDescription } from './MediaListItemDescription';
 import { theme } from 'mediashare/styles';
 
 export interface MediaListItemProps {
@@ -26,10 +27,11 @@ export interface MediaListItemProps {
   titleStyle?: any;
 }
 
-export const MediaListItem: React.FC<MediaListItemProps> = ({
+const MediaListItem = ({
   checked,
   image,
   title,
+  titleStyle = {},
   description,
   onViewDetail,
   onChecked = () => {},
@@ -57,7 +59,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
     <List.Item
       title={title || null}
       titleNumberOfLines={3}
-      titleStyle={defaultStyles.titleText}
+      titleStyle={{ ...defaultStyles.titleText, ...titleStyle }}
       description={description}
       descriptionNumberOfLines={3}
       // It doesn't feel right to have the whole thing be a tap target when we're displaying actions on the left
@@ -82,7 +84,7 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
           )
         ) : null
       }
-      right={() => (showActions === 'right' || showActions === true ? <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} /> : null)}
+      right={() => (showActions === 'right' || showActions === true ? <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} style={defaultStyles.iconButton} /> : null)}
       {...rest}
     />
   );
@@ -97,6 +99,9 @@ export const MediaListItem: React.FC<MediaListItemProps> = ({
   }
 };
 
+MediaListItem.Description = MediaListItemDescription;
+export { MediaListItem };
+
 const defaultStyles: any = StyleSheet.create({
   mediaListItem: {
     display: 'flex',
@@ -110,5 +115,10 @@ const defaultStyles: any = StyleSheet.create({
   titleText: {
     color: theme.colors.text,
     fontSize: 15,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
+  iconButton: {
+    marginRight: 0,
+
+  }
 });
