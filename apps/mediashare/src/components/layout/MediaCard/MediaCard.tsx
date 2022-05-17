@@ -164,7 +164,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
                 marginTop: 10,
               },
               itemText: {
-                fontSize: 16,
+                fontSize: 15,
               },
             }}
             items={availableTags}
@@ -251,12 +251,23 @@ const defaultStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
   },
+  createdBy: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%'
+  },
   author: {
-    fontSize: 14,
+    color: theme.colors.text,
+    fontFamily: theme.fonts.thin.fontFamily,
+    fontSize: 13,
+    marginBottom: 2,
   },
   username: {
-    color: theme.colors.primary,
-    fontSize: 14,
+    color: theme.colors.textDarker,
+    fontFamily: theme.fonts.thin.fontFamily,
+    fontSize: 13,
+    marginBottom: 2,
+    marginLeft: 2,
   },
   description: {
     marginBottom: 15,

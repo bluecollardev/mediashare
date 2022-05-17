@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   titleText: {
     marginBottom: 4,
     color: theme.colors.text,
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: theme.fonts.medium.fontFamily,
   },
   description: {

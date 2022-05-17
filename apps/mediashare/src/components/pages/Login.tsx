@@ -65,13 +65,13 @@ const MyTheme = Object.assign({}, AmplifyTheme, {
     marginBottom: 20,
   },
   sectionFooterLink: {
-    fontSize: 16,
+    fontSize: 15,
     color: theme.colors.textDarker,
     alignItems: 'baseline',
     textAlign: 'center',
   },
   sectionFooterLinkDisabled: {
-    fontSize: 16,
+    fontSize: 15,
     color: theme.colors.textDarker,
     alignItems: 'baseline',
     textAlign: 'center',
@@ -123,7 +123,7 @@ const MyTheme = Object.assign({}, AmplifyTheme, {
   },
   buttonText: {
     color: theme.colors.text,
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
   },
   formField: {

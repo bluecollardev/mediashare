@@ -157,7 +157,7 @@ const AppHeaderComponent = ({
                                 marginTop: 10,
                               },
                               itemText: {
-                                fontSize: 16,
+                                fontSize: 15,
                               },
                             }}
                             items={mappedTags}

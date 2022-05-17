@@ -261,36 +261,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: theme.fonts.medium.fontFamily,
   },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  author: {
-    color: theme.colors.textDarker,
-    fontSize: 14,
-    marginBottom: 2,
-  },
-  username: {
-    flex: 0,
-    width: '100%',
-    color: theme.colors.primary,
-    fontSize: 14,
-    marginBottom: 4,
-  },
-  description: {
-    flex: 0,
-    width: '100%',
-    color: theme.colors.textDarker,
-    fontSize: 14,
-    marginTop: 2,
-    marginBottom: 4,
-  },
-  videoCount: {
-    color: theme.colors.textDarker,
-    fontSize: 14,
-    marginBottom: 2,
-    fontWeight: 'bold',
-  },
   deleteActionButton: {
     backgroundColor: theme.colors.error,
   },
