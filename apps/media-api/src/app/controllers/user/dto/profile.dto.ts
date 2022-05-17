@@ -6,19 +6,25 @@ import { BcRolesType } from '@api-core/types/roles.type';
 class ProfileShareItem {
   @ApiString()
   createdAt: string;
+
   @ApiString()
   authorImage;
+
   @ApiString()
   authorName;
+
   @ApiString()
   author: string;
+
   @ApiObjectId()
   authorId: string;
+
   @ApiString()
   imageSrc: string;
 
   @ApiObjectId()
   playlistId;
+
   @ApiObjectId()
   shareItemId: string;
 
@@ -38,25 +44,34 @@ export class ProfileDto {
 
   @ApiString()
   imageSrc: string;
+
   @ApiString()
   firstName: string;
+
   @ApiString()
   lastName: string;
+
   @ApiString()
   email: string;
+
   @ApiProperty({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType' })
   role: BcRolesType;
+
   @ApiString()
   phoneNumber: string;
+
   @ApiString()
   username: string;
 
   @ApiProperty({ type: () => ProfileShareItem, isArray: true })
   sharedItems: ProfileShareItem;
+
   @ApiProperty({ type: Number })
   sharedCount: number;
+
   @ApiProperty({ type: Number })
   sharesCount: number;
+
   @ApiProperty({ type: Number })
   likesCount: number;
 }

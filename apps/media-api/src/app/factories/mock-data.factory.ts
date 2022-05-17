@@ -52,7 +52,7 @@ export class UserFactory extends DataFn {
       _id: ObjectIdGuard(_id),
       createdAt: new Date(),
       email,
-      roles: ['user'],
+      roles: ['subscriber'],
     };
   }
 

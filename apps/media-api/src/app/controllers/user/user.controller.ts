@@ -47,7 +47,7 @@ export class UserController {
     if (!user) {
       const newUser = await this.userService.create({
         ...valid,
-        role: 'user',
+        role: 'subscriber',
         // TODO: Replace this string!
         imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
       });

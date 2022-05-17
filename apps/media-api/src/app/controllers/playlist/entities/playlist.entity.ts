@@ -1,7 +1,7 @@
 import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
-import { ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
+import { ApiObjectId, ApiString, ApiLongString } from '@mediashare/shared';
 import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY } from '@core-lib';
 import { BcEntity } from '@api-core/entities/base.entity';
 import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
@@ -9,29 +9,29 @@ import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.
 
 @Entity('playlist')
 export class Playlist extends BcEntity implements PlaylistInterface {
-  @Column('title')
+  @ApiObjectId()
+  @Column({ nullable: false, unique: false })
+  @Index('userId', { unique: false })
+  userId: ObjectId;
+
+  @Column({ nullable: true, type: 'text' })
   @ApiString()
   title: string;
 
-  @Column('description')
-  @ApiTextString()
+  @Column({ nullable: true, type: 'text' })
+  @ApiLongString()
   description: string;
 
-  @Column('imageSrc')
-  @ApiProperty({ required: false })
-  imageSrc: string;
+  @Column({ nullable: true })
+  @ApiString()
+  imageSrc?: string;
 
   @Column('mediaIds')
   @ApiProperty({ type: String, isArray: true, nullable: true })
   mediaIds: ObjectId[];
 
-  @ApiObjectId()
-  @Column('userId')
-  @Index('userId', { unique: false })
-  userId: ObjectId;
-
-  @Column('category')
-  @ApiProperty({ enum: PLAYLIST_CATEGORY, name: 'category', enumName: 'PlaylistCategoryType' })
+  @Column({ nullable: true })
+  @ApiProperty({ enum: PLAYLIST_CATEGORY, name: 'category', enumName: 'PlaylistCategoryType', required: false })
   category: PlaylistCategoryType;
 
   @ApiProperty({ type: TagKeyValue, isArray: true, nullable: true })

@@ -5,6 +5,7 @@ import { PlaylistItemResponseDto } from '../../playlist/dto/playlist-response.dt
 export class ShareItemsResponseDto {
   @ApiProperty({ name: 'sharedMedia', type: () => PlaylistItemResponseDto, description: 'all items that are shared with a particular user' })
   sharedMedia: MediaItem[];
+
   @ApiProperty({ name: 'sharedPlaylists', type: () => PlaylistItemResponseDto, description: 'all items that are shared with a particular user' })
   sharedPlaylists: PlaylistItemResponseDto[];
 }
