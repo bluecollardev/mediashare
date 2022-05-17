@@ -26,7 +26,7 @@ const Profile = ({ route }: ProfileProps) => {
 
   const profile = useProfile();
 
-  const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
+  const { username, firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
 
   const [actionMode, setActionMode] = useState(actionModes.default);
@@ -72,6 +72,7 @@ const Profile = ({ route }: ProfileProps) => {
       />
       <AccountCard
         title={fullName}
+        username={username}
         email={email}
         phoneNumber={phoneNumber}
         image={imageSrc}
