@@ -221,7 +221,7 @@ const defaultStyles = StyleSheet.create({
   createdBy: {
     display: 'flex',
     flexDirection: 'row',
-    width: '100%'
+    width: '100%',
   },
   author: {
     color: theme.colors.text,

@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { MediaCategoryType, TagKeyValue } from './';
+import { AuthorProfileDto, MediaCategoryType, TagKeyValue } from './';
 
 /**
  * @export
@@ -93,6 +93,11 @@ export interface MediaItemResponseDto {
    * @memberof MediaItemResponseDto
    */
   author: string;
+  /**
+   * @type {AuthorProfileDto}
+   * @memberof MediaItemResponseDto
+   */
+  authorProfile: AuthorProfileDto;
   /**
    * @type {number}
    * @memberof MediaItemResponseDto

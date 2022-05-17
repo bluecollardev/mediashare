@@ -1,3 +1,4 @@
+export * from './AuthorProfileDto';
 export * from './AuthorizeDto';
 export * from './BcRolesType';
 export * from './CreateMediaItemDto';

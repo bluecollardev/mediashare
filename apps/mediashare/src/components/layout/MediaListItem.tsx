@@ -84,7 +84,11 @@ const MediaListItem = ({
           )
         ) : null
       }
-      right={() => (showActions === 'right' || showActions === true ? <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} style={defaultStyles.iconButton} /> : null)}
+      right={() =>
+        showActions === 'right' || showActions === true ? (
+          <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} style={defaultStyles.iconButton} />
+        ) : null
+      }
       {...rest}
     />
   );
@@ -119,6 +123,5 @@ const defaultStyles: any = StyleSheet.create({
   },
   iconButton: {
     marginRight: 0,
-
-  }
+  },
 });

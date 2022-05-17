@@ -48,10 +48,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
           title={title}
           titleStyle={styles.titleText}
           description={
-            <MediaListItem.Description
-              data={{ author, username, description, itemCount: mediaIds?.length || mediaItems?.length || 0 }}
-              showItemCount={true}
-            />
+            <MediaListItem.Description data={{ author, username, description, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />
           }
           showThumbnail={true}
           image={imageSrc}

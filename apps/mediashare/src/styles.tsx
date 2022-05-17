@@ -201,9 +201,9 @@ const components = {
         fontSize: 15,
         fontFamily: theme.fonts.thin.fontFamily,
       },
-    }
-  }
-}
+    },
+  },
+};
 
 export default styles;
 

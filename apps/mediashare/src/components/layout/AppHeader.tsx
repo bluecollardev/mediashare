@@ -162,7 +162,13 @@ const AppHeaderComponent = ({
       {showDisplayControls && renderDisplayControls()}
       <Appbar.Content
         title={title}
-        titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20, fontFamily: theme.fonts.medium.fontFamily, marginRight: searchable && searchIsFiltering ? '-30%' : '0%' }}
+        titleStyle={{
+          textAlign: 'center',
+          fontWeight: 'bold',
+          fontSize: 20,
+          fontFamily: theme.fonts.medium.fontFamily,
+          marginRight: searchable && searchIsFiltering ? '-30%' : '0%',
+        }}
       />
       {searchable && searchIsFiltering && <Appbar.Action icon="filter-list" color={theme.colors.primary} onPress={() => openSearchConsole()} />}
       {searchable && !searchIsActive && <Appbar.Action icon="search" color="#ffffff" onPress={() => openSearchConsole()} />}

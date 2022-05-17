@@ -38,7 +38,7 @@ export const AccountCard = ({
 
   const profile = useProfile();
   const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
-  const [state] = useState(R.pick(profile, ['username', 'email', 'firstName',  'lastName', 'phoneNumber', 'imageSrc']));
+  const [state] = useState(R.pick(profile, ['username', 'email', 'firstName', 'lastName', 'phoneNumber', 'imageSrc']));
 
   // <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />
   // <View styles={defaultStyles.buttonContainer}>
@@ -70,7 +70,6 @@ export const AccountCard = ({
               <Subheading style={{ ...defaultStyles.subtitleText, color: theme.colors.primary }}>@{username}</Subheading>
               <Subheading style={{ ...defaultStyles.subtitleText }}>{email}</Subheading>
             </View>
-
           }
           subtitleStyle={defaultStyles.subtitle}
           right={() =>
@@ -134,7 +133,7 @@ const defaultStyles = StyleSheet.create({
     alignSelf: 'flex-start',
     justifyContent: 'flex-start',
     height: 20,
-    marginBottom: 4
+    marginBottom: 4,
   },
   subtitle: {
     marginLeft: 15,

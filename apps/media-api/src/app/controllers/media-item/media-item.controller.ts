@@ -10,8 +10,6 @@ import { CreateDto } from '@api-core/decorators/create-dto.decorator';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 
-import { AppConfigService } from '@api-modules/app-config/app-config.provider';
-
 import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
@@ -19,6 +17,7 @@ import { MediaItem } from './entities/media-item.entity';
 import { MediaGetResponse, MediaPostResponse, MediaPutResponse, MediaShareResponse } from './media-item.decorator';
 import { notFoundResponse } from '@api-core/functors/http-errors.functor';
 
+import { AppConfigService } from '@api-modules/app-config/app-config.provider';
 import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 
@@ -36,7 +35,7 @@ export class MediaItemController {
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @MediaGetResponse()
   async findOne(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId) {
-    const response = await this.mediaItemService.findOne(mediaId);
+    const response = await this.mediaItemService.getById(mediaId);
     if (!response) throw notFoundResponse('mediaItem', { args: { mediaId } });
     return response;
   }
@@ -47,7 +46,8 @@ export class MediaItemController {
   @MediaGetResponse({ isArray: true })
   async findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
-    return query || tags ? await this.mediaItemService.search({ query, tags: parsedTags }) : await this.mediaItemService.findAll();
+    // Always search, we want to run the aggregate query in every case
+    return query || tags ? await this.mediaItemService.search({ query, tags: parsedTags }) : await this.mediaItemService.search({});
   }
 
   @Get('popular')

@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { MediaItem, PlaylistCategoryType, TagKeyValue } from './';
+import { AuthorProfileDto, MediaItem, PlaylistCategoryType, TagKeyValue } from './';
 
 /**
  * @export
@@ -83,6 +83,11 @@ export interface PlaylistResponseDto {
    * @memberof PlaylistResponseDto
    */
   author: string;
+  /**
+   * @type {AuthorProfileDto}
+   * @memberof PlaylistResponseDto
+   */
+  authorProfile: AuthorProfileDto;
   /**
    * @type {Array<MediaItem>}
    * @memberof PlaylistResponseDto

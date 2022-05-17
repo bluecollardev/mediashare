@@ -21,7 +21,14 @@ interface MediaListItemDescriptionProps {
 }
 
 // mediaIds?.length || mediaItems?.length || 0
-export const MediaListItemDescription = ({ data, showAuthor = true, showUsername = true, showDescription = false, showItemCount = false, maxChars = 25 }: MediaListItemDescriptionProps) => {
+export const MediaListItemDescription = ({
+  data,
+  showAuthor = true,
+  showUsername = true,
+  showDescription = false,
+  showItemCount = false,
+  maxChars = 25,
+}: MediaListItemDescriptionProps) => {
   const { username = '', author = '', description = '', itemCount = 0 } = data;
   return (
     <View style={styles.details}>
@@ -34,8 +41,8 @@ export const MediaListItemDescription = ({ data, showAuthor = true, showUsername
       {showItemCount && <Text style={{ ...styles.videoCount }}>{itemCount} videos</Text>}
       {showDescription && <Text style={styles.description}>{shortenText(description || '', maxChars)}</Text>}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   details: {
@@ -45,7 +52,7 @@ const styles = StyleSheet.create({
   createdBy: {
     display: 'flex',
     flexDirection: 'row',
-    width: '100%'
+    width: '100%',
   },
   author: {
     color: theme.colors.text,
@@ -77,4 +84,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-

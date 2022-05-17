@@ -10,6 +10,7 @@ apis/UsersApi.ts
 apis/ViewsApi.ts
 apis/index.ts
 index.ts
+models/AuthorProfileDto.ts
 models/AuthorizeDto.ts
 models/BcRolesType.ts
 models/CreateMediaItemDto.ts

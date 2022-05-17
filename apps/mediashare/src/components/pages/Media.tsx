@@ -57,11 +57,7 @@ export const MediaComponent = ({
           key={`media_item_${_id}`}
           title={title}
           titleStyle={styles.titleText}
-          description={
-            <MediaListItem.Description
-              data={{ author, username, description }}
-            />
-          }
+          description={<MediaListItem.Description data={{ author, username, description }} />}
           showThumbnail={true}
           showActions={showActions}
           image={thumbnail}

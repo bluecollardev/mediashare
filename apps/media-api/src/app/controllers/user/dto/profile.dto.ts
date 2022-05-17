@@ -35,6 +35,20 @@ class ProfileShareItem {
   title: string;
 }
 
+export class AuthorProfileDto {
+  @ApiObjectId()
+  authorId: string;
+
+  @ApiString()
+  authorName;
+
+  @ApiString()
+  authorUsername: string;
+
+  @ApiString()
+  authorImage;
+}
+
 export class ProfileDto {
   @ApiString()
   _id: string;

@@ -45,14 +45,23 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
     return false; // this.configService.get<string>('dbIsMongoAtlas');
   }
 
-
   getById(id) {
     return this.repository
       .aggregate([
         { $match: { _id: id } },
         ...this.buildLookupFields(),
         { $unwind: { path: '$user' } },
-        { $addFields: { author: { $concat: ['$user.firstName', ' ', '$user.lastName'] } } },
+        {
+          $addFields: {
+            author: { $concat: ['$user.firstName', ' ', '$user.lastName'] },
+            authorProfile: {
+              authorId: '$user._id',
+              authorName: { $concat: ['$user.firstName', ' ', '$user.lastName'] },
+              authorUsername: '$user.username',
+              authorImage: '$user.imageSrc',
+            },
+          },
+        },
         this.replaceRoot(),
       ])
       .next();
@@ -64,7 +73,17 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
         { $match: { createdBy: userId } },
         ...this.buildLookupFields(),
         { $unwind: { path: '$user' } },
-        { $addFields: { author: { $concat: ['$user.firstName', ' ', '$user.lastName'] } } },
+        {
+          $addFields: {
+            author: { $concat: ['$user.firstName', ' ', '$user.lastName'] },
+            authorProfile: {
+              authorId: '$user._id',
+              authorName: { $concat: ['$user.firstName', ' ', '$user.lastName'] },
+              authorUsername: '$user.username',
+              authorImage: '$user.imageSrc',
+            },
+          },
+        },
         this.replaceRoot(),
       ])
       .toArray();
@@ -76,7 +95,17 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
         ...this.buildAggregateQuery({}),
         ...this.buildLookupFields(),
         { $unwind: { path: '$user' } },
-        { $addFields: { author: { $concat: ['$user.firstName', ' ', '$user.lastName'] } } },
+        {
+          $addFields: {
+            author: { $concat: ['$user.firstName', ' ', '$user.lastName'] },
+            authorProfile: {
+              authorId: '$user._id',
+              authorName: { $concat: ['$user.firstName', ' ', '$user.lastName'] },
+              authorUsername: '$user.username',
+              authorImage: '$user.imageSrc',
+            },
+          },
+        },
         { $sort: { likesCount: -1 } },
         this.replaceRoot(),
       ])
@@ -89,7 +118,17 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
         ...this.buildAggregateQuery({ query, tags }),
         ...this.buildLookupFields(),
         { $unwind: { path: '$user' } },
-        { $addFields: { author: { $concat: ['$user.firstName', ' ', '$user.lastName'] } } },
+        {
+          $addFields: {
+            author: { $concat: ['$user.firstName', ' ', '$user.lastName'] },
+            authorProfile: {
+              authorId: '$user._id',
+              authorName: { $concat: ['$user.firstName', ' ', '$user.lastName'] },
+              authorUsername: '$user.username',
+              authorImage: '$user.imageSrc',
+            },
+          },
+        },
         this.replaceRoot(),
       ])
       .toArray();

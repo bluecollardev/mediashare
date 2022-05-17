@@ -183,6 +183,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
               userId: '$user._id',
               username: '$user.username',
               author: '$author',
+              authorProfile: '$authorProfile',
               title: '$title',
               description: '$description',
               imageSrc: '$imageSrc',

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
-import { DeepPartial, MongoRepository } from 'typeorm';
+import { DeepPartial, FindOneOptions, MongoRepository } from 'typeorm';
 import { SearchParameters } from '@mediashare/shared';
 import { BcBaseEntity } from '../entities/base.entity';
 import { ObjectIdGuard, StringIdGuard } from '@util-lib';
@@ -45,14 +45,15 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
    * Find a document by Id
    *
    * @param {string} id
+   * @param opts
    * @return {*}
    * @memberof DataService
    */
-  async findOne(id: IdType): Promise<E> {
+  async findOne(id: IdType, opts: FindOneOptions | undefined = undefined): Promise<E> {
     this.logger.info(`${this.constructor.name}findOne props`, id);
     const _id = StringIdGuard(id);
     try {
-      const document = await this.repository.findOne(_id);
+      const document = await this.repository.findOne(_id, opts);
       this.logger.info(`${this.constructor.name} findOne result`, document);
       return clone(document);
     } catch (error) {
