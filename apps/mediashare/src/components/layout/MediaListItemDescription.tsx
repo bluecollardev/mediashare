@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
+import { AuthorProfileDto } from 'mediashare/rxjs-api';
 import { shortenText } from 'mediashare/utils';
 import { theme } from 'mediashare/styles';
 
 interface MediaListItemDescriptionData {
-  author?: string;
-  username?: string;
+  authorProfile?: AuthorProfileDto;
   description?: string;
   itemCount?: string | number;
 }
@@ -29,13 +29,13 @@ export const MediaListItemDescription = ({
   showItemCount = false,
   maxChars = 25,
 }: MediaListItemDescriptionProps) => {
-  const { username = '', author = '', description = '', itemCount = 0 } = data;
+  const { authorProfile, description = '', itemCount = 0 } = data;
   return (
     <View style={styles.details}>
       {(showAuthor || showUsername) && (
         <View style={styles.createdBy}>
-          {showAuthor && <Text style={styles.author}>{author}</Text>}
-          {showUsername && <Text style={styles.username}>@{username}</Text>}
+          {showAuthor && <Text style={styles.author}>{authorProfile?.authorName}</Text>}
+          {showUsername && <Text style={styles.username}>@{authorProfile?.authorUsername}</Text>}
         </View>
       )}
       {showItemCount && <Text style={{ ...styles.videoCount }}>{itemCount} videos</Text>}

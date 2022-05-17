@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { Divider, Text } from 'react-native-paper';
+import { FlatList, StyleSheet } from 'react-native';
+import { Divider } from 'react-native-paper';
 import { useAppSelector } from 'mediashare/store';
 import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/playlist';
 import { findMediaItems } from 'mediashare/store/modules/mediaItems';
-import { UpdatePlaylistDto } from 'mediashare/rxjs-api';
+import { AuthorProfileDto, UpdatePlaylistDto } from 'mediashare/rxjs-api';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useGoBack, useViewMediaItem } from 'mediashare/hooks/navigation';
@@ -58,14 +58,14 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   );
 
   function renderVirtualizedListItem(item) {
-    const { _id = '', title = '', author = '', username = '', thumbnail = '' } = item;
+    const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, thumbnail = '' } = item;
     return (
       <>
         <MediaListItem
           key={`add_to_playlist_${_id}`}
           title={title}
           titleStyle={styles.titleText}
-          description={<MediaListItem.Description data={{ author, username }} />}
+          description={<MediaListItem.Description data={{ authorProfile }} />}
           showThumbnail={true}
           showActions={true}
           image={thumbnail}

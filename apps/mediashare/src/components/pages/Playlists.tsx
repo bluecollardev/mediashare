@@ -4,7 +4,7 @@ import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
 import { removeUserPlaylist } from 'mediashare/store/modules/playlist';
 import { getUserPlaylists, findPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
-import { PlaylistResponseDto } from 'mediashare/rxjs-api';
+import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
@@ -40,7 +40,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
 
   function renderVirtualizedListItem(item) {
     // TODO: Can we have just one or the other, either mediaIds or mediaItems?
-    const { _id = '', title = '', author = '', username = '', description = '', mediaIds = [], mediaItems = [], imageSrc = '' } = item;
+    const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, description = '', mediaIds = [], mediaItems = [], imageSrc = '' } = item;
     return (
       <>
         <MediaListItem
@@ -48,7 +48,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
           title={title}
           titleStyle={styles.titleText}
           description={
-            <MediaListItem.Description data={{ author, username, description, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />
+            <MediaListItem.Description data={{ authorProfile, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />
           }
           showThumbnail={true}
           image={imageSrc}

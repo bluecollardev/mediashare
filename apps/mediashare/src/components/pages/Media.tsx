@@ -7,9 +7,9 @@ import { deleteMediaItem } from 'mediashare/store/modules/mediaItem';
 import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useEditMediaItem } from 'mediashare/hooks/navigation';
-import { MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
+import { AuthorProfileDto, MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
 import { RefreshControl } from 'react-native';
-import { FAB, Text, Divider } from 'react-native-paper';
+import { FAB, Divider } from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import {
   PageContainer,
@@ -21,7 +21,6 @@ import {
   NoItems,
   AppDialog,
 } from 'mediashare/components/layout';
-// import { shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { selectMediaItem } from 'mediashare/store/modules/mediaItems';
 import { theme } from 'mediashare/styles';
@@ -50,14 +49,14 @@ export const MediaComponent = ({
   );
 
   function renderVirtualizedListItem(item) {
-    const { _id = '', title = '', author = '', username = '', description = '', thumbnail } = item;
+    const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, description = '', thumbnail } = item;
     return (
       <>
         <MediaListItem
           key={`media_item_${_id}`}
           title={title}
           titleStyle={styles.titleText}
-          description={<MediaListItem.Description data={{ author, username, description }} />}
+          description={<MediaListItem.Description data={{ authorProfile, description }} />}
           showThumbnail={true}
           showActions={showActions}
           image={thumbnail}
