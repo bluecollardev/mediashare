@@ -12,6 +12,7 @@ interface AccountCardProps {
   shares?: number;
   shared?: number;
   title: string;
+  username: string;
   email: string;
   phoneNumber: string;
   showSocial?: boolean;
@@ -22,6 +23,7 @@ interface AccountCardProps {
 
 export const AccountCard = ({
   title,
+  username,
   email,
   image,
   likes,
@@ -36,7 +38,7 @@ export const AccountCard = ({
 
   const profile = useProfile();
   const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
-  const [state] = useState(R.pick(profile, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
+  const [state] = useState(R.pick(profile, ['username', 'email', 'firstName',  'lastName', 'phoneNumber', 'imageSrc']));
 
   // <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />
   // <View styles={defaultStyles.buttonContainer}>
@@ -63,7 +65,13 @@ export const AccountCard = ({
           leftStyle={defaultStyles.left}
           title={<Title style={defaultStyles.titleText}>{title}</Title>}
           titleStyle={defaultStyles.title}
-          subtitle={<Subheading style={defaultStyles.subtitleText}>{email}</Subheading>}
+          subtitle={
+            <View>
+              <Subheading style={{ ...defaultStyles.subtitleText, color: theme.colors.primary }}>@{username}</Subheading>
+              <Subheading style={{ ...defaultStyles.subtitleText }}>{email}</Subheading>
+            </View>
+
+          }
           subtitleStyle={defaultStyles.subtitle}
           right={() =>
             showActions ? (
@@ -126,12 +134,10 @@ const defaultStyles = StyleSheet.create({
     alignSelf: 'flex-start',
     justifyContent: 'flex-start',
     height: 20,
+    marginBottom: 4
   },
   subtitle: {
     marginLeft: 15,
-    flexDirection: 'row',
-    alignSelf: 'flex-start',
-    justifyContent: 'flex-start',
   },
   titleText: {
     color: theme.colors.text,
@@ -140,8 +146,9 @@ const defaultStyles = StyleSheet.create({
   },
   subtitleText: {
     fontSize: 13,
-    color: theme.colors.primary,
-    fontFamily: theme.fonts.medium.fontFamily,
+    color: theme.colors.textDarker,
+    fontFamily: theme.fonts.thin.fontFamily,
+    lineHeight: 15,
   },
   left: {
     flex: 0,

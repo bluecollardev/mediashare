@@ -5,7 +5,7 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { withGlobalStateConsumer, GlobalStateProps } from 'mediashare/core/globalState';
 import { MultiSelectIcon } from 'mediashare/components/form/MultiSelect';
 import { ActionButtons } from './ActionButtons';
-import themeStyles, { theme } from 'mediashare/styles';
+import themeStyles, { theme, components } from 'mediashare/styles';
 
 export interface AppHeaderProps {
   options?: any;
@@ -122,44 +122,8 @@ const AppHeaderComponent = ({
                           />
                           {/* <Appbar.Action icon="close" onPress={() => closeSearchConsole()} /> */}
                           <SectionedMultiSelect
-                            colors={{
-                              primary: theme.colors.primary,
-                              text: '#fff',
-                              subText: '#fff',
-                              searchPlaceholderTextColor: theme.colors.placeholder,
-                              selectToggleTextColor: theme.colors.placeholder,
-                              searchSelectionColor: '#fff',
-                              itemBackground: 'transparent',
-                              subItemBackground: 'transparent',
-                            }}
-                            styles={{
-                              searchTextInput: {
-                                color: '#fff',
-                              },
-                              searchBar: {
-                                backgroundColor: '#000',
-                              },
-                              container: {
-                                backgroundColor: '#000',
-                              },
-                              selectToggle: {
-                                marginVertical: 10,
-                                paddingLeft: 15,
-                                paddingRight: 10,
-                                borderWidth: 1,
-                                borderColor: theme.colors.defaultBorder,
-                                backgroundColor: theme.colors.surface,
-                              },
-                              selectToggleText: {
-                                fontSize: 15,
-                              },
-                              chipContainer: {
-                                marginTop: 10,
-                              },
-                              itemText: {
-                                fontSize: 15,
-                              },
-                            }}
+                            colors={components.multiSelect.colors}
+                            styles={components.multiSelect.styles}
                             items={mappedTags}
                             IconRenderer={MultiSelectIcon}
                             uniqueKey="key"

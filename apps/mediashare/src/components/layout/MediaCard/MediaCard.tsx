@@ -12,9 +12,9 @@ import { mappedKeysToTags } from 'mediashare/core/utils/tags';
 import { findInArray } from 'mediashare/utils';
 import { titleValidator, descriptionValidator } from 'mediashare/core/utils/validators';
 import { useAppSelector } from 'mediashare/store';
-import { theme } from 'mediashare/styles';
+import { theme, components } from 'mediashare/styles';
 
-import { UserDto, Tag } from 'mediashare/rxjs-api';
+import { UserDto } from 'mediashare/rxjs-api';
 
 export interface MediaCardProps {
   id?: string;
@@ -116,7 +116,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         <DisplayPreviewOrVideo key={mediaSrc} mediaSrc={mediaSrc} isPlayable={isPlayable} showThumbnail={showThumbnail} thumbnail={thumbnail} />
       )}
       {topDrawer && <TopDrawer />}
-      <View style={{ marginBottom: 25 }}>
+      <View style={defaultStyles.container}>
         <Card elevation={elevation} style={{ marginTop: 25, marginBottom: 0 }}>
           <TextField
             label="Title"
@@ -129,44 +129,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         </Card>
         <Card elevation={elevation} style={{ marginBottom: 25 }}>
           <SectionedMultiSelect
-            colors={{
-              primary: theme.colors.primary,
-              text: '#fff',
-              subText: '#fff',
-              searchPlaceholderTextColor: theme.colors.placeholder,
-              selectToggleTextColor: theme.colors.placeholder,
-              searchSelectionColor: '#fff',
-              itemBackground: 'transparent',
-              subItemBackground: 'transparent',
-            }}
-            styles={{
-              searchTextInput: {
-                color: '#fff',
-              },
-              searchBar: {
-                backgroundColor: '#000',
-              },
-              container: {
-                backgroundColor: '#000',
-              },
-              selectToggle: {
-                marginVertical: 10,
-                paddingLeft: 15,
-                paddingRight: 10,
-                borderWidth: 1,
-                borderColor: theme.colors.defaultBorder,
-                backgroundColor: theme.colors.surface,
-              },
-              selectToggleText: {
-                fontSize: 15,
-              },
-              chipContainer: {
-                marginTop: 10,
-              },
-              itemText: {
-                fontSize: 15,
-              },
-            }}
+            colors={components.multiSelect.colors}
+            styles={components.multiSelect.styles}
             items={availableTags}
             IconRenderer={MultiSelectIcon}
             uniqueKey="key"
@@ -236,6 +200,9 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 };
 
 const defaultStyles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 10,
+  },
   avatar: {
     width: 50,
   },

@@ -96,11 +96,6 @@ const styles: any = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  text: {
-    fontSize: 22,
-    marginBottom: 15,
-    alignItems: 'center',
-  },
   mt: {
     marginTop: 18,
   },
@@ -123,7 +118,7 @@ const styles: any = StyleSheet.create({
   changeImageButtonLabel: {
     textTransform: 'none',
     fontWeight: '300',
-    fontSize: 14,
+    fontSize: 15,
   },
   deleteItemButton: {
     borderWidth: 1,
@@ -142,6 +137,74 @@ const styles: any = StyleSheet.create({
   },
 });
 
+const components = {
+  multiSelect: {
+    colors: {
+      primary: theme.colors.primary,
+      text: theme.colors.text,
+      subText: theme.colors.text,
+      searchPlaceholderTextColor: theme.colors.placeholder,
+      selectToggleTextColor: theme.colors.placeholder,
+      searchSelectionColor: theme.colors.text,
+      itemBackground: 'transparent',
+      subItemBackground: 'transparent',
+    },
+    styles: {
+      searchTextInput: {
+        color: theme.colors.text,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+      searchBar: {
+        backgroundColor: '#000',
+      },
+      container: {
+        backgroundColor: '#000',
+      },
+      selectToggle: {
+        marginVertical: 10,
+        paddingLeft: 15,
+        paddingRight: 10,
+        borderWidth: 1,
+        borderColor: theme.colors.defaultBorder,
+        backgroundColor: theme.colors.surface,
+      },
+      selectToggleText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.thin.fontFamily,
+        color: theme.colors.text,
+      },
+      chipContainer: {
+        marginTop: 10,
+      },
+      parentChipText: {
+        fontSize: 13,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+      chipText: {
+        fontSize: 13,
+        fontFamily: theme.fonts.thin.fontFamily,
+        color: theme.colors.text,
+      },
+      selectedItemText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+      itemText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+      selectedSubItemText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+      subItemText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+    }
+  }
+}
+
 export default styles;
 
-export { theme };
+export { theme, components };

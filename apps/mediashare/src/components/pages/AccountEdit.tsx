@@ -7,7 +7,6 @@ import { from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { UserDto } from 'mediashare/rxjs-api';
-import { useAppSelector } from 'mediashare/store';
 import { loadUser, updateAccount } from 'mediashare/store/modules/user';
 import { fetchAndPutToS3 } from 'mediashare/core/aws/storage';
 import { thumbnailRoot } from 'mediashare/core/aws/key-factory';
@@ -33,7 +32,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const profile = useProfile();
-  const [state, setState] = useState(R.pick(profile, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
+  const [state, setState] = useState(R.pick(profile, ['username', 'email', 'firstName', 'lastName', 'phoneNumber', 'imageSrc']));
   const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
   const fullName = state?.firstName || state?.lastName ? `${state?.firstName} ${state?.lastName}` : 'Unnamed User';
 
@@ -53,6 +52,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
       <View>
         <AccountCard
           title={fullName}
+          username={state?.username}
           email={state?.email}
           phoneNumber={state?.phoneNumber}
           image={state?.imageSrc}
@@ -65,11 +65,19 @@ const AccountEdit = ({ route }: AccountEditProps) => {
           onProfileImageClicked={() => getDocument()}
         />
       </View>
-      <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.container}>
-        <TextField onChangeText={(text) => onUpdate({ firstName: text })} label="First Name" value={state?.firstName} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ lastName: text })} label="Last Name" value={state?.lastName} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ email: text })} label="Email" value={state?.email} disabled={!isLoaded} />
-        <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label="Phone Number" value={state?.phoneNumber} disabled={!isLoaded} />
+      <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.formContainer}>
+        <View style={styles.formSection}>
+          <TextField label="Account Type" value={state?.role} disabled={true} />
+          <TextField onChangeText={(text) => onUpdate({ username: text })} label="Username*" value={state?.username} disabled={!isLoaded} />
+        </View>
+        <View style={styles.formSection}>
+          <TextField onChangeText={(text) => onUpdate({ firstName: text })} label="First Name*" value={state?.firstName} disabled={!isLoaded} />
+          <TextField onChangeText={(text) => onUpdate({ lastName: text })} label="Last Name*" value={state?.lastName} disabled={!isLoaded} />
+        </View>
+        <View style={styles.formSection}>
+          <TextField onChangeText={(text) => onUpdate({ email: text })} label="Email*" value={state?.email} disabled={!isLoaded} />
+          <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label="Phone Number*" value={state?.phoneNumber} disabled={!isLoaded} />
+        </View>
       </ScrollView>
       <ActionButtons disableAction={withoutName()} disableCancel={withoutName()} onCancelClicked={cancel} onActionClicked={save} actionLabel="Save" />
     </PageContainer>
@@ -116,8 +124,12 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 15,
+  formContainer: {
+    padding: 10,
+    paddingTop: 20,
+  },
+  formSection: {
+    marginBottom: 20,
   },
   title: {
     fontWeight: 'bold',

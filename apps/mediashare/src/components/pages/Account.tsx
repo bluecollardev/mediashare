@@ -38,7 +38,7 @@ export const Account = ({ globalState }: PageProps) => {
 
   const user = useUser();
   const userId = user?._id || null;
-  const { firstName, lastName, email, phoneNumber, likesCount, sharesCount, sharedCount, build } = user;
+  const { username, firstName, lastName, email, phoneNumber, likesCount, sharesCount, sharedCount, build } = user;
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
@@ -94,6 +94,7 @@ export const Account = ({ globalState }: PageProps) => {
       />
       <AccountCard
         title={fullName}
+        username={username}
         email={email}
         phoneNumber={phoneNumber}
         image={user.imageSrc}
