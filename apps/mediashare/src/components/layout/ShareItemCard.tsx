@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 13,
     color: theme.colors.textDarker,
+    fontFamily: theme.fonts.thin.fontFamily,
   },
   visibilityIcon: {
     flex: 0,
