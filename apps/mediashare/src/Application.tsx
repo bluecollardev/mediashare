@@ -99,7 +99,6 @@ const AccountNavigation = () => {
       <AccountStackNavigator.Screen {...routeConfig.account} component={Account} />
       <AccountStackNavigator.Screen {...routeConfig.profile} component={Profile} />
       <AccountStackNavigator.Screen {...routeConfig.accountEdit} component={AccountEdit} initialParams={{ userId: null }} />
-      <AccountStackNavigator.Screen {...routeConfig.user} component={User} />
       <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
       <AccountStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
       <AccountStackNavigator.Screen {...routeConfig.playlistEdit} component={PlaylistEdit} />

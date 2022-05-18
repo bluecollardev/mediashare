@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { findPlaylists, getUserPlaylists } from 'mediashare/store/modules/playlists';
-import { PlaylistResponseDto } from 'mediashare/rxjs-api';
+import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { useUser } from 'mediashare/hooks/useUser';
 import { useViewPlaylistById } from 'mediashare/hooks/navigation';
@@ -29,6 +28,7 @@ export const SharedList = () => {
 
   return <PlaylistsComponent list={sortedList} onViewDetailClicked={viewPlaylist} />;
 };
+
 export const SharedBlock = () => {
   const randomKey = createRandomRenderKey();
   const { sharedItems } = useUser();
@@ -43,14 +43,13 @@ export const SharedBlock = () => {
     <List.Section>
       {sortedList.map((item) => {
         // @ts-ignore
-        const { playlistId, title, description, author, username, imageSrc, sharedCount, sharesCount, likesCount } = item;
+        const { playlistId, title, description, authorProfile = {} as AuthorProfileDto, imageSrc, sharedCount, sharesCount, likesCount } = item;
         return (
           <View key={`shared_block_${randomKey}_${playlistId}`} style={{ padding: 0, paddingTop: 0 }}>
             <MediaCard
               elevation={1}
               title={title}
-              author={author}
-              // username={username}
+              authorProfile={authorProfile}
               description={description}
               category="General"
               tags={['General']}
