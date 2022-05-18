@@ -1,6 +1,6 @@
-import { CanActivate, Inject, ExecutionContext, Injectable } from '@nestjs/common';
-import { AuthService } from '../auth.service';
-import { UserService } from '../user.service';
+import { AuthService } from '@api-modules/auth/auth.service';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { UserService } from './user.service';
 
 @Injectable()
 export class UserGuard implements CanActivate {
@@ -8,13 +8,9 @@ export class UserGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-
     const { authorization } = req.headers;
-
     const res = this.authSvc.validateToken(authorization.split(' ')[1]);
-    const user = await this.userSvc.findByQuery({ sub: res.sub });
-    req.session.user = user;
-
+    req.session.user = await this.userSvc.findByQuery({ sub: res.sub });
     return res as any;
   }
 }

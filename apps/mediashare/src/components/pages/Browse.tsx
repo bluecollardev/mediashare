@@ -1,64 +1,64 @@
-import React, { useEffect, useState } from 'react';
-import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
+import { mapAvailableTags } from 'mediashare/core/utils/tags';
+import { useAppSelector } from 'mediashare/store';
+import React, { useEffect, useMemo, useState } from 'react';
+import { AuthorProfileDto } from 'mediashare/rxjs-api';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { useUser } from 'mediashare/hooks/useUser';
 import { useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
 import { PageContainer, PageProps, MediaCard, ActionButtons } from 'mediashare/components/layout';
 import { PlaylistsComponent } from './Playlists';
-import { filterUnique } from 'mediashare/utils';
+import { filterUnique, shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 
-export const SharedList = () => {
-  const { sharedItems } = useUser();
-  // TODO: We're converting to set to filter out dupes, fix the actual issue, this is just a temporary workaround
-  const list = filterUnique(sharedItems, 'title') || [];
-
-  let sortedList = list.map((item) => {
-    // const { mediaIds, description } = item;
-    // const itemDescription = `${shortenText(description, 40)}\n${mediaIds.length || 0} videos`;
-    // Hack to set playlist id as we're just casting a SharedItemDto to a PlaylistDto
-    return Object.assign({}, item, { _id: item.playlistId }) as unknown as PlaylistResponseDto;
-  });
+export const SharedList = ({ globalState }) => {
+  const { entities } = useAppSelector((state) => state?.shareItems?.sharedWithUser)
+  // TODO: There are dupes, this is just a temporary workaround; we shouldn't be able to create dupe share items
+  const list = filterUnique(entities, '_id') || [];
 
   const viewPlaylistAction = useViewPlaylistById();
-  const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item.playlistId });
+  const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
 
-  return <PlaylistsComponent list={sortedList} onViewDetailClicked={viewPlaylist} />;
+  return <PlaylistsComponent list={list} onViewDetailClicked={viewPlaylist} />;
 };
 
-export const SharedBlock = () => {
+export const SharedBlock = ({ globalState }) => {
+  const { tags = [] } = globalState;
+
   const randomKey = createRandomRenderKey();
-  const { sharedItems } = useUser();
-  const list = filterUnique(sharedItems, 'playlistId') || [];
-  let sortedList = list.map((item) => item);
-  sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
+  const { entities } = useAppSelector((state) => state?.shareItems?.sharedWithUser)
+  // TODO: There are dupes, this is just a temporary workaround; we shouldn't be able to create dupe share items
+  const list = filterUnique(entities, '_id') || [];
+  list.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
   const viewPlaylistAction = useViewPlaylistById();
-  const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item.playlistId });
+  const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
 
   return (
     <List.Section>
-      {sortedList.map((item) => {
+      {list.map((item) => {
         // @ts-ignore
-        const { playlistId, title, description, authorProfile = {} as AuthorProfileDto, imageSrc, sharedCount, sharesCount, likesCount } = item;
+        const { _id, title, description, authorProfile = {} as AuthorProfileDto, imageSrc, category, shareCount, viewCount, likesCount } = item;
+        const tagKeys = (item?.tags || []).map(({ key }) => key);
+        const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
         return (
-          <View key={`shared_block_${randomKey}_${playlistId}`} style={{ padding: 0, paddingTop: 0 }}>
+          <View key={`shared_block_${randomKey}_${_id}`} style={{ padding: 0, paddingTop: 0 }}>
             <MediaCard
               elevation={1}
               title={title}
               authorProfile={authorProfile}
-              description={description}
-              category="General"
-              tags={['General']}
+              description={shortenText(description, 200)}
               thumbnail={imageSrc}
+              showThumbnail={true}
+              category={category}
+              availableTags={mappedTags}
+              tags={tagKeys}
               showSocial={true}
               showActions={false}
-              showThumbnail={true}
-              shares={sharesCount}
-              views={sharedCount}
+              showDescription={true}
+              shares={shareCount}
+              views={viewCount}
               likes={likesCount}
             >
               <ActionButtons
@@ -101,10 +101,12 @@ export const Browse = ({
 
   return (
     <PageContainer>
-      {globalState?.displayMode === 'list' && <SharedList />}
+      {globalState?.displayMode === 'list' && (
+        <SharedList globalState={globalState} />
+      )}
       {globalState?.displayMode === 'article' && (
         <ScrollView>
-          <SharedBlock />
+          <SharedBlock globalState={globalState} />
         </ScrollView>
       )}
     </PageContainer>

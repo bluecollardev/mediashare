@@ -2,8 +2,8 @@ import { ObjectId } from 'mongodb';
 
 interface IObjectIdParameters {
   userId?: ObjectId;
-  playlistId?: ObjectId;
   mediaId?: ObjectId;
+  playlistId?: ObjectId;
   playlistItemId?: ObjectId;
   createdBy?: ObjectId;
 }
@@ -18,6 +18,6 @@ interface IContentSearchParameters {
   tagsMatchingMode?: 'any' | 'all';
 }
 
-export type ContentSearchParameters = Partial<IContentSearchParameters>
+export type ContentSearchParameters = Partial<IContentSearchParameters>;
 
 export type SearchParameters = Partial<ObjectIdParameters & ContentSearchParameters>;

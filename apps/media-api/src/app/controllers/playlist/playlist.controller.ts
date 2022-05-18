@@ -4,24 +4,22 @@ import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swa
 
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
+import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
 import { PLAYLIST_CATEGORY } from '@core-lib';
 import { CreateDto } from '@api-core/decorators/create-dto.decorator';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 
-import { PlaylistService } from './playlist.service';
 import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse, PlaylistShareResponse } from './playlist.decorator';
-import { MediaGetResponse } from '../media-item/media-item.decorator';
 import { notFoundResponse } from '@api-core/functors/http-errors.functor';
+import { PlaylistService } from './playlist.service';
+import { PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
-import { PlaylistItemResponseDto } from './dto/playlist-response.dto';
-
 import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 
-const PLAYLIST_ID_TOKEN = ':playlistId';
 @ApiTags('playlists')
 @Controller('playlists')
 export class PlaylistController {
@@ -32,7 +30,7 @@ export class PlaylistController {
     return { categories: PLAYLIST_CATEGORY };
   }
 
-  @Get(':playlistId')
+  @Get(RouteTokens.PLAYLIST_ID)
   @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   @PlaylistGetResponse()
   async findOne(@Param('playlistId', new ObjectIdPipe()) playlistId: ObjectId) {
@@ -44,14 +42,14 @@ export class PlaylistController {
   @Get()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
-  @PlaylistGetResponse({ isArray: true, type: PlaylistItemResponseDto })
+  @PlaylistGetResponse({ type: PlaylistResponseDto, isArray: true })
   async findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
     return query || tags ? await this.playlistService.search({ query, tags: parsedTags }) : await this.playlistService.findAll();
   }
 
   @Get('popular')
-  @MediaGetResponse({ isArray: true })
+  @PlaylistGetResponse({ isArray: true })
   async findPopular() {
     return await this.playlistService.getPopular();
   }
@@ -71,7 +69,7 @@ export class PlaylistController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @Put(':playlistId')
+  @Put(RouteTokens.PLAYLIST_ID)
   @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   @ApiBody({ type: UpdatePlaylistDto })
   @PlaylistPutResponse()
@@ -83,13 +81,13 @@ export class PlaylistController {
     });
   }
 
-  @Delete(PLAYLIST_ID_TOKEN)
+  @Delete(RouteTokens.PLAYLIST_ID)
   @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   async remove(@Param('playlistId') playlistId: string) {
     return await this.playlistService.remove(playlistId);
   }
 
-  @Post(':playlistId/share/:userId')
+  @Post(`${RouteTokens.PLAYLIST_ID}/share/${RouteTokens.USER_ID}`)
   @ApiParam({ name: 'playlistId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
   @PlaylistShareResponse({ type: ShareItem, isArray: true })

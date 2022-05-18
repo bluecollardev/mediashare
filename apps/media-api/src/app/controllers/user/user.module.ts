@@ -2,7 +2,7 @@ import { UserController } from './user.controller';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { User } from '@api-modules/user/entities/user.entity';
 import { PlaylistService } from '../playlist/playlist.service';
 import { Playlist } from '../playlist/entities/playlist.entity';
 import { PlaylistItemService } from '@api-modules/playlist-item/playlist-item.service';
@@ -19,7 +19,7 @@ import { AppConfigService } from '@api-modules/app-config/app-config.provider';
   imports: [AuthModule, TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]), ShareItemModule, AppConfigModule],
   controllers: [UserController, UsersController],
   providers: [PlaylistService, PlaylistItemService, MediaItemService, AppConfigService],
-  exports: []
+  exports: [],
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

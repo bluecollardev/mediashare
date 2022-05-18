@@ -176,7 +176,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
   protected buildAggregateQuery({}: SearchParameters): any[] {
     let aggregateQuery = [];
 
-    aggregateQuery = aggregateQuery.concat([...this.buildLookupFields()]);
+    aggregateQuery = aggregateQuery.concat([...this.buildFields()]);
 
     return aggregateQuery;
   }
@@ -185,7 +185,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
    * Override this method when implementing aggregates.
    * @protected
    */
-  protected buildLookupFields() {
+  protected buildFields() {
     return [];
   }
 }

@@ -3,7 +3,7 @@ import { ApiDecoratorOptions, ApiEmail, ApiName, ApiObjectId, ApiPastDate, ApiSt
 import { ObjectId } from 'mongodb';
 import { MediaItemResponseDto } from '../../media-item/dto/media-item-response.dto';
 import { PlaylistResponseDto } from '../../playlist/dto/playlist-response.dto';
-import { User } from '../entities/user.entity';
+import { User } from '../../../modules/user/entities/user.entity';
 import { BC_ROLES } from '@core-lib';
 import { BcRolesType } from '@api-core/types/roles.type';
 

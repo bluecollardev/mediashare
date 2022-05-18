@@ -23,7 +23,6 @@ models/MediaItem.ts
 models/MediaItemResponseDto.ts
 models/Playlist.ts
 models/PlaylistCategoryType.ts
-models/PlaylistItemResponseDto.ts
 models/PlaylistResponseDto.ts
 models/ProfileDto.ts
 models/ProfileShareItem.ts

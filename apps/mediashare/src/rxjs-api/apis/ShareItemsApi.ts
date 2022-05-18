@@ -13,17 +13,17 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { ShareItem, ShareItemsResponseDto } from '../models';
+import { MediaItemResponseDto, PlaylistResponseDto, ShareItem, ShareItemsResponseDto } from '../models';
 
-export interface ShareItemsControllerFindOneRequest {
+export interface ShareItemsControllerFindShareItemRequest {
   shareId: string;
 }
 
-export interface ShareItemsControllerReadSharedItemRequest {
+export interface ShareItemsControllerReadShareItemRequest {
   shareId: string;
 }
 
-export interface ShareItemsControllerRemoveRequest {
+export interface ShareItemsControllerRemoveShareItemRequest {
   shareId: string;
 }
 
@@ -33,9 +33,9 @@ export interface ShareItemsControllerRemoveRequest {
 export class ShareItemsApi extends BaseAPI {
   /**
    */
-  shareItemsControllerFindAll(): Observable<Array<ShareItemsResponseDto>>;
-  shareItemsControllerFindAll(opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItemsResponseDto>>>;
-  shareItemsControllerFindAll(opts?: OperationOpts): Observable<Array<ShareItemsResponseDto> | RawAjaxResponse<Array<ShareItemsResponseDto>>> {
+  shareItemsControllerFindItemsSharedByUser(): Observable<Array<ShareItemsResponseDto>>;
+  shareItemsControllerFindItemsSharedByUser(opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItemsResponseDto>>>;
+  shareItemsControllerFindItemsSharedByUser(opts?: OperationOpts): Observable<Array<ShareItemsResponseDto> | RawAjaxResponse<Array<ShareItemsResponseDto>>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
@@ -44,7 +44,7 @@ export class ShareItemsApi extends BaseAPI {
 
     return this.request<Array<ShareItemsResponseDto>>(
       {
-        url: '/api/share-items',
+        url: '/api/share-items/shared-by-user',
         method: 'GET',
         headers,
       },
@@ -54,10 +54,120 @@ export class ShareItemsApi extends BaseAPI {
 
   /**
    */
-  shareItemsControllerFindOne({ shareId }: ShareItemsControllerFindOneRequest): Observable<ShareItem>;
-  shareItemsControllerFindOne({ shareId }: ShareItemsControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
-  shareItemsControllerFindOne({ shareId }: ShareItemsControllerFindOneRequest, opts?: OperationOpts): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
-    throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerFindOne');
+  shareItemsControllerFindItemsSharedWithUser(): Observable<Array<ShareItemsResponseDto>>;
+  shareItemsControllerFindItemsSharedWithUser(opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItemsResponseDto>>>;
+  shareItemsControllerFindItemsSharedWithUser(opts?: OperationOpts): Observable<Array<ShareItemsResponseDto> | RawAjaxResponse<Array<ShareItemsResponseDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
+    return this.request<Array<ShareItemsResponseDto>>(
+      {
+        url: '/api/share-items/shared-with-user',
+        method: 'GET',
+        headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  shareItemsControllerFindMediaItemsSharedByUser(): Observable<Array<MediaItemResponseDto>>;
+  shareItemsControllerFindMediaItemsSharedByUser(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemResponseDto>>>;
+  shareItemsControllerFindMediaItemsSharedByUser(opts?: OperationOpts): Observable<Array<MediaItemResponseDto> | RawAjaxResponse<Array<MediaItemResponseDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
+    return this.request<Array<MediaItemResponseDto>>(
+      {
+        url: '/api/share-items/shared-by-user/media-items',
+        method: 'GET',
+        headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  shareItemsControllerFindMediaItemsSharedWithUser(): Observable<Array<MediaItemResponseDto>>;
+  shareItemsControllerFindMediaItemsSharedWithUser(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemResponseDto>>>;
+  shareItemsControllerFindMediaItemsSharedWithUser(
+    opts?: OperationOpts
+  ): Observable<Array<MediaItemResponseDto> | RawAjaxResponse<Array<MediaItemResponseDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
+    return this.request<Array<MediaItemResponseDto>>(
+      {
+        url: '/api/share-items/shared-with-user/media-items',
+        method: 'GET',
+        headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  shareItemsControllerFindPlaylistsSharedByUser(): Observable<Array<PlaylistResponseDto>>;
+  shareItemsControllerFindPlaylistsSharedByUser(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistResponseDto>>>;
+  shareItemsControllerFindPlaylistsSharedByUser(opts?: OperationOpts): Observable<Array<PlaylistResponseDto> | RawAjaxResponse<Array<PlaylistResponseDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
+    return this.request<Array<PlaylistResponseDto>>(
+      {
+        url: '/api/share-items/shared-by-user/playlists',
+        method: 'GET',
+        headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  shareItemsControllerFindPlaylistsSharedWithUser(): Observable<Array<PlaylistResponseDto>>;
+  shareItemsControllerFindPlaylistsSharedWithUser(opts?: OperationOpts): Observable<RawAjaxResponse<Array<PlaylistResponseDto>>>;
+  shareItemsControllerFindPlaylistsSharedWithUser(opts?: OperationOpts): Observable<Array<PlaylistResponseDto> | RawAjaxResponse<Array<PlaylistResponseDto>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
+    return this.request<Array<PlaylistResponseDto>>(
+      {
+        url: '/api/share-items/shared-with-user/playlists',
+        method: 'GET',
+        headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  shareItemsControllerFindShareItem({ shareId }: ShareItemsControllerFindShareItemRequest): Observable<ShareItem>;
+  shareItemsControllerFindShareItem({ shareId }: ShareItemsControllerFindShareItemRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
+  shareItemsControllerFindShareItem(
+    { shareId }: ShareItemsControllerFindShareItemRequest,
+    opts?: OperationOpts
+  ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
+    throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerFindShareItem');
 
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
@@ -77,13 +187,13 @@ export class ShareItemsApi extends BaseAPI {
 
   /**
    */
-  shareItemsControllerReadSharedItem({ shareId }: ShareItemsControllerReadSharedItemRequest): Observable<ShareItem>;
-  shareItemsControllerReadSharedItem({ shareId }: ShareItemsControllerReadSharedItemRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
-  shareItemsControllerReadSharedItem(
-    { shareId }: ShareItemsControllerReadSharedItemRequest,
+  shareItemsControllerReadShareItem({ shareId }: ShareItemsControllerReadShareItemRequest): Observable<ShareItem>;
+  shareItemsControllerReadShareItem({ shareId }: ShareItemsControllerReadShareItemRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
+  shareItemsControllerReadShareItem(
+    { shareId }: ShareItemsControllerReadShareItemRequest,
     opts?: OperationOpts
   ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
-    throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerReadSharedItem');
+    throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerReadShareItem');
 
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
@@ -103,10 +213,13 @@ export class ShareItemsApi extends BaseAPI {
 
   /**
    */
-  shareItemsControllerRemove({ shareId }: ShareItemsControllerRemoveRequest): Observable<ShareItem>;
-  shareItemsControllerRemove({ shareId }: ShareItemsControllerRemoveRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
-  shareItemsControllerRemove({ shareId }: ShareItemsControllerRemoveRequest, opts?: OperationOpts): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
-    throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerRemove');
+  shareItemsControllerRemoveShareItem({ shareId }: ShareItemsControllerRemoveShareItemRequest): Observable<ShareItem>;
+  shareItemsControllerRemoveShareItem({ shareId }: ShareItemsControllerRemoveShareItemRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ShareItem>>;
+  shareItemsControllerRemoveShareItem(
+    { shareId }: ShareItemsControllerRemoveShareItemRequest,
+    opts?: OperationOpts
+  ): Observable<ShareItem | RawAjaxResponse<ShareItem>> {
+    throwIfNullOrUndefined(shareId, 'shareId', 'shareItemsControllerRemoveShareItem');
 
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null

@@ -74,16 +74,6 @@ export interface PlaylistResponseDto {
    */
   tags: Array<TagKeyValue> | null;
   /**
-   * @type {string}
-   * @memberof PlaylistResponseDto
-   */
-  username: string;
-  /**
-   * @type {string}
-   * @memberof PlaylistResponseDto
-   */
-  author: string;
-  /**
    * @type {AuthorProfileDto}
    * @memberof PlaylistResponseDto
    */

@@ -11,7 +11,6 @@ export * from './MediaItem';
 export * from './MediaItemResponseDto';
 export * from './Playlist';
 export * from './PlaylistCategoryType';
-export * from './PlaylistItemResponseDto';
 export * from './PlaylistResponseDto';
 export * from './ProfileDto';
 export * from './ProfileShareItem';

@@ -21,6 +21,7 @@ export interface MediaCardProps {
   description?: string;
   showSocial?: any | boolean;
   showActions?: boolean;
+  showDescription?: boolean;
   showThumbnail?: boolean;
   thumbnail?: string;
   mediaSrc?: string | null;
@@ -54,6 +55,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   mediaSrc,
   showSocial = false,
   showActions = false,
+  showDescription = true,
   showThumbnail = true,
   thumbnail = null,
   onActionsClicked = () => {},
@@ -183,7 +185,9 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
         {showSocial && <MediaCardSocial likes={likes} shares={shares} views={views} />}
         {children}
-        <Paragraph style={showSocial ? defaultStyles.descriptionWithSocial : defaultStyles.description}>{description}</Paragraph>
+        {showDescription && (
+          <Paragraph style={showSocial ? defaultStyles.descriptionWithSocial : defaultStyles.description}>{description}</Paragraph>
+        )}
       </Card.Content>
     </Card>
   );

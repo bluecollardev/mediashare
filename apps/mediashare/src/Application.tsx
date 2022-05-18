@@ -13,15 +13,7 @@ import { store, useAppSelector } from './store';
 import { routeConfig } from './routes';
 import { useUser } from 'mediashare/hooks/useUser';
 import { theme } from './styles';
-import {
-  Poppins_100Thin,
-  Poppins_300Light,
-  Poppins_400Regular,
-  Poppins_500Medium,
-  Poppins_700Bold,
-  Poppins_900Black,
-  useFonts,
-} from '@expo-google-fonts/poppins';
+import { useFonts } from 'expo-font';
 
 import { createBottomTabListeners } from './screenListeners';
 import { GlobalStateProps, withGlobalStateProvider } from './core/globalState';
@@ -41,7 +33,6 @@ import MediaItemDetail from './components/pages/MediaItemDetail';
 import MediaItemEdit from './components/pages/MediaItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
-import User from './components/pages/User';
 import AccountEdit from './components/pages/AccountEdit';
 import Profile from './components/pages/Profile';
 
@@ -191,7 +182,6 @@ function App() {
     'CircularStd-Book': require('./assets/fonts/CircularStd-Book.otf'),
     'CircularStd-Light': require('./assets/fonts/CircularStd-Light.otf'),
   });
-  // const fontsLoaded = true;
 
   // Amplify.configure(awsmobile);
   // clearLogin();

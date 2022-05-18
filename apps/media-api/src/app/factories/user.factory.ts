@@ -1,5 +1,5 @@
 import * as Faker from 'faker';
-import { User } from '../controllers/user/entities/user.entity';
+import { User } from '../modules/user/entities/user.entity';
 
 export function userFactory() {
   return new User();

@@ -84,16 +84,6 @@ export interface MediaItemResponseDto {
    */
   tags: Array<TagKeyValue> | null;
   /**
-   * @type {string}
-   * @memberof MediaItemResponseDto
-   */
-  username: string;
-  /**
-   * @type {string}
-   * @memberof MediaItemResponseDto
-   */
-  author: string;
-  /**
    * @type {AuthorProfileDto}
    * @memberof MediaItemResponseDto
    */
