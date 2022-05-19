@@ -158,13 +158,25 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            crunchPngs false
+        }
+        staging {
+          // Caution! In production, you need to generate your own keystore file.
+          // see https://reactnative.dev/docs/signed-apk-android.
+          signingConfig signingConfigs.debug
+          minifyEnabled enableProguardInReleaseBuilds
+          matchingFallbacks = ['release', 'debug']
+          proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+          crunchPngs false
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
+            matchingFallbacks = ['release', 'debug']
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            crunchPngs false
         }
     }
 
@@ -224,6 +236,11 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
+project.ext.envConfigFiles = [
+  debug: ".env.development",
+  staging: ".env.production",
+  release: ".env.production",
+]
+
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-// 2nd line, add a new apply:
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"

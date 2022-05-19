@@ -142,12 +142,13 @@ const defaultStyles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: 18,
     fontFamily: theme.fonts.medium.fontFamily,
+    lineHeight: 30,
   },
   subtitleText: {
     fontSize: 13,
     color: theme.colors.textDarker,
     fontFamily: theme.fonts.thin.fontFamily,
-    lineHeight: 15,
+    lineHeight: 20,
   },
   left: {
     flex: 0,

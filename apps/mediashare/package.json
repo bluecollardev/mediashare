@@ -9,15 +9,20 @@
     "app:ios:refresh-pods": "yarn app:ios:clean-pods && yarn app:ios:install-pods",
     "app:modules:rebuild": "rm -rf ./node_modules && yarn install",
     "link:react-native-config": "react-native link react-native-config",
-    "run:android:prod": "react-native run-android",
+    "run:android:local": "react-native run-android --variant=debug",
+    "run:android:staging": "react-native run-android --variant=staging",
+    "run:android:prod": "react-native run-android --variant=release",
+    "run:android:logger": "adb logcat *:S ReactNative:V ReactNativeJS:V",
     "run:ios:local": "react-native run-ios --scheme 'Mediashare Development'",
+    "run:ios:staging": "react-native run-ios --scheme 'Mediashare Pro'",
     "run:ios:prod": "react-native run-ios --scheme 'Mediashare Pro'",
     "serve:ios:local": "yarn app:ios:refresh-pods && react-native run-ios --scheme 'Mediashare Development'",
     "serve:ios:prod": "yarn app:ios:refresh-pods && react-native run-ios --scheme 'Mediashare Pro'",
     "test": "jest",
     "utils:lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "utils:sort-pkg": "npx sort-package-json",
-    "utils:update": "git pull --rebase"
+    "utils:update": "git pull --rebase",
+    "utils:adb:map": "adb reverse tcp:5000 tcp:5000"
   },
   "jest": {
     "moduleFileExtensions": [

@@ -185,9 +185,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
         {showSocial && <MediaCardSocial likes={likes} shares={shares} views={views} />}
         {children}
-        {showDescription && (
-          <Paragraph style={showSocial ? defaultStyles.descriptionWithSocial : defaultStyles.description}>{description}</Paragraph>
-        )}
+        {showDescription && <Paragraph style={showSocial ? defaultStyles.descriptionWithSocial : defaultStyles.description}>{description}</Paragraph>}
       </Card.Content>
     </Card>
   );

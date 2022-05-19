@@ -33,9 +33,7 @@ export class UserController {
   @ApiResponse({ type: ProfileDto, isArray: false, status: 200 })
   @ApiBody({ type: AuthorizeDto })
   async authorize(@Req() req: Request, @Res() res: Response) {
-    console.log(req);
     const { accessToken = null, idToken = null } = req.body as any;
-
     const valid = this.userService.validateToken({ token: accessToken, idToken });
     if (!valid) throw new UnauthorizedException();
     const user = await this.userService.findByQuery({ sub: valid.sub });
