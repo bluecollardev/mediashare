@@ -44,11 +44,6 @@ export interface MediaItem {
    */
   userId: string;
   /**
-   * @type {boolean}
-   * @memberof MediaItem
-   */
-  isPlayable: boolean;
-  /**
    * @type {string}
    * @memberof MediaItem
    */
@@ -69,18 +64,23 @@ export interface MediaItem {
    */
   uri: string;
   /**
+   * @type {string}
+   * @memberof MediaItem
+   */
+  thumbnail: string;
+  /**
+   * @type {boolean}
+   * @memberof MediaItem
+   */
+  isPlayable?: boolean;
+  /**
    * @type {MediaCategoryType}
    * @memberof MediaItem
    */
-  category: MediaCategoryType;
+  category?: MediaCategoryType;
   /**
    * @type {Array<TagKeyValue>}
    * @memberof MediaItem
    */
   tags: Array<TagKeyValue> | null;
-  /**
-   * @type {string}
-   * @memberof MediaItem
-   */
-  thumbnail: string;
 }

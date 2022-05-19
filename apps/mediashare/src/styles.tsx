@@ -19,11 +19,18 @@ const theme = {
     white: '#ffffff',
   },
   fonts: {
+    /* Poppins (Google Web Fonts)
     bold: { fontFamily: 'Poppins_700Bold', fontWeight: '700' },
     medium: { fontFamily: 'Poppins_500Medium', fontWeight: '500' },
     light: { fontFamily: 'Poppins_300Light', fontWeight: '300' },
     regular: { fontFamily: 'Poppins_400Regular', fontWeight: '400' },
     thin: { fontFamily: 'Poppins_100Thin', fontWeight: '100' },
+    */
+    bold: { fontFamily: 'CircularStd-Bold' },
+    medium: { fontFamily: 'CircularStd-Book' },
+    regular: { fontFamily: 'CircularStd-Light' },
+    light: { fontFamily: 'CircularStd-Light' },
+    thin: { fontFamily: 'CircularStd-Light' },
   },
 } as const;
 
@@ -33,8 +40,6 @@ const styles: any = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   pageContent: {
-    paddingTop: 5,
-    paddingHorizontal: 5,
     height: '100%',
     flex: 1,
   },
@@ -91,11 +96,6 @@ const styles: any = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  text: {
-    fontSize: 20,
-    marginBottom: 15,
-    alignItems: 'center',
-  },
   mt: {
     marginTop: 18,
   },
@@ -107,7 +107,8 @@ const styles: any = StyleSheet.create({
   textField: {
     marginBottom: 10,
     backgroundColor: theme.colors.surface,
-    fontSize: 13,
+    fontSize: 15,
+    fontFamily: theme.fonts.thin.fontFamily,
   },
   changeImageButton: {
     borderTopWidth: 0,
@@ -117,7 +118,7 @@ const styles: any = StyleSheet.create({
   changeImageButtonLabel: {
     textTransform: 'none',
     fontWeight: '300',
-    fontSize: 12,
+    fontSize: 15,
   },
   deleteItemButton: {
     borderWidth: 1,
@@ -136,6 +137,74 @@ const styles: any = StyleSheet.create({
   },
 });
 
+const components = {
+  multiSelect: {
+    colors: {
+      primary: theme.colors.primary,
+      text: theme.colors.text,
+      subText: theme.colors.text,
+      searchPlaceholderTextColor: theme.colors.placeholder,
+      selectToggleTextColor: theme.colors.placeholder,
+      searchSelectionColor: theme.colors.text,
+      itemBackground: 'transparent',
+      subItemBackground: 'transparent',
+    },
+    styles: {
+      searchTextInput: {
+        color: theme.colors.text,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+      searchBar: {
+        backgroundColor: '#000',
+      },
+      container: {
+        backgroundColor: '#000',
+      },
+      selectToggle: {
+        marginVertical: 10,
+        paddingLeft: 15,
+        paddingRight: 10,
+        borderWidth: 1,
+        borderColor: theme.colors.defaultBorder,
+        backgroundColor: theme.colors.surface,
+      },
+      selectToggleText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.thin.fontFamily,
+        color: theme.colors.text,
+      },
+      chipContainer: {
+        marginTop: 10,
+      },
+      parentChipText: {
+        fontSize: 13,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+      chipText: {
+        fontSize: 13,
+        fontFamily: theme.fonts.thin.fontFamily,
+        color: theme.colors.text,
+      },
+      selectedItemText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+      itemText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+      selectedSubItemText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+      subItemText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.thin.fontFamily,
+      },
+    },
+  },
+};
+
 export default styles;
 
-export { theme };
+export { theme, components };

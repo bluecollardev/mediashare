@@ -16,10 +16,10 @@ export interface GlobalStateProps {
   user?: Partial<ProfileDto>;
   roles?: BcRolesType[];
   build?: {
-    forFreeUser: boolean,
-    forSubscriber: boolean,
-    forAdmin: boolean
-  },
+    forFreeUser: boolean;
+    forSubscriber: boolean;
+    forAdmin: boolean;
+  };
   loadUserData?: () => void;
   search?: any;
   setSearchFilters?: Function;

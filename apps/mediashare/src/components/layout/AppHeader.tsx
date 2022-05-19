@@ -5,7 +5,7 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { withGlobalStateConsumer, GlobalStateProps } from 'mediashare/core/globalState';
 import { MultiSelectIcon } from 'mediashare/components/form/MultiSelect';
 import { ActionButtons } from './ActionButtons';
-import themeStyles, { theme } from 'mediashare/styles';
+import themeStyles, { theme, components } from 'mediashare/styles';
 
 export interface AppHeaderProps {
   options?: any;
@@ -110,7 +110,7 @@ const AppHeaderComponent = ({
                         <Card.Content style={{ height: '85%', paddingBottom: 50 }}>
                           <Searchbar
                             style={{ width: '100%', marginTop: 15 }}
-                            inputStyle={{ fontSize: 13 }}
+                            inputStyle={{ fontSize: 15 }}
                             placeholder="Keywords"
                             value={searchText}
                             onChangeText={(text) => updateSearchText(text)}
@@ -122,44 +122,8 @@ const AppHeaderComponent = ({
                           />
                           {/* <Appbar.Action icon="close" onPress={() => closeSearchConsole()} /> */}
                           <SectionedMultiSelect
-                            colors={{
-                              primary: theme.colors.primary,
-                              text: '#fff',
-                              subText: '#fff',
-                              searchPlaceholderTextColor: theme.colors.placeholder,
-                              selectToggleTextColor: theme.colors.placeholder,
-                              searchSelectionColor: '#fff',
-                              itemBackground: 'transparent',
-                              subItemBackground: 'transparent',
-                            }}
-                            styles={{
-                              searchTextInput: {
-                                color: '#fff',
-                              },
-                              searchBar: {
-                                backgroundColor: '#000',
-                              },
-                              container: {
-                                backgroundColor: '#000',
-                              },
-                              selectToggle: {
-                                marginVertical: 10,
-                                paddingLeft: 15,
-                                paddingRight: 10,
-                                borderWidth: 1,
-                                borderColor: theme.colors.defaultBorder,
-                                backgroundColor: theme.colors.surface,
-                              },
-                              selectToggleText: {
-                                fontSize: 13
-                              },
-                              chipContainer: {
-                                marginTop: 10,
-                              },
-                              itemText: {
-                                fontSize: 14
-                              },
-                            }}
+                            colors={components.multiSelect.colors}
+                            styles={components.multiSelect.styles}
                             items={mappedTags}
                             IconRenderer={MultiSelectIcon}
                             uniqueKey="key"
@@ -198,7 +162,13 @@ const AppHeaderComponent = ({
       {showDisplayControls && renderDisplayControls()}
       <Appbar.Content
         title={title}
-        titleStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginRight: searchable && searchIsFiltering ? '-30%' : '0%' }}
+        titleStyle={{
+          textAlign: 'center',
+          fontWeight: 'bold',
+          fontSize: 20,
+          fontFamily: theme.fonts.medium.fontFamily,
+          marginRight: searchable && searchIsFiltering ? '-30%' : '0%',
+        }}
       />
       {searchable && searchIsFiltering && <Appbar.Action icon="filter-list" color={theme.colors.primary} onPress={() => openSearchConsole()} />}
       {searchable && !searchIsActive && <Appbar.Action icon="search" color="#ffffff" onPress={() => openSearchConsole()} />}
@@ -250,6 +220,3 @@ const AppHeaderComponent = ({
 };
 
 export const AppHeader = withGlobalStateConsumer(AppHeaderComponent);
-
-
-

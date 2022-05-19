@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
+// import { ConfigService } from '@nestjs/config';
 import { FilterableDataService } from '@api';
 import { MediaItem } from './entities/media-item.entity';
 import { SearchParameters } from '@mediashare/shared';
@@ -12,8 +12,8 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
   constructor(
     @InjectRepository(MediaItem)
     repository: MongoRepository<MediaItem>,
-    logger: PinoLogger,
-    private configService: ConfigService
+    logger: PinoLogger
+    // private configService: ConfigService
   ) {
     super(repository, logger);
     this.repository
@@ -96,7 +96,7 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
       }
     }
 
-    aggregateQuery = aggregateQuery.concat([...this.buildLookupFields()]);
+    aggregateQuery = aggregateQuery.concat([...this.buildFields()]);
 
     if (query) {
       aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
@@ -105,38 +105,21 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
     return aggregateQuery;
   }
 
-  protected buildLookupFields() {
+  protected buildFields() {
     return [
+      { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'author' } },
+      // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'mediaId', as: 'shareItems' } },
+      // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'mediaId', as: 'viewItems' } },
+      // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'mediaId', as: 'likeItems' } },
+      { $unwind: { path: '$author' } },
       {
-        $lookup: {
-          from: 'user',
-          localField: 'userId',
-          foreignField: '_id',
-          as: 'user',
-        },
-      },
-      {
-        $lookup: {
-          from: 'share_item',
-          localField: '_id',
-          foreignField: 'mediaId',
-          as: 'shareItems',
-        },
-      },
-      {
-        $lookup: {
-          from: 'view_item',
-          localField: '_id',
-          foreignField: 'mediaId',
-          as: 'viewItems',
-        },
-      },
-      {
-        $lookup: {
-          from: 'like_item',
-          localField: '_id',
-          foreignField: 'mediaId',
-          as: 'likeItems',
+        $addFields: {
+          authorProfile: {
+            authorId: '$author._id',
+            authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
+            authorUsername: '$author.username',
+            authorImage: '$author.imageSrc',
+          },
         },
       },
     ];
@@ -146,21 +129,27 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
     return {
       $replaceRoot: {
         newRoot: {
-          _id: '$_id',
-          title: '$title',
-          description: '$description',
-          author: '$user.username',
-          userId: '$userId',
-          uri: '$uri',
-          thumbnail: '$thumbnail',
-          category: '$category',
-          tags: '$tags',
-          shareCount: { $size: '$shareItems' },
-          likesCount: { $size: '$likeItems' },
-          viewCount: { $size: '$viewItems' },
-          createdAt: '$createdAt',
-          createdBy: '$user._id',
-          updatedDate: '$updatedDate',
+          $mergeObjects: [
+            {
+              _id: '$_id',
+              userId: '$author._id',
+              username: '$author.username',
+              author: '$author',
+              authorProfile: '$authorProfile',
+              title: '$title',
+              description: '$description',
+              uri: '$uri',
+              thumbnail: '$thumbnail',
+              category: '$category',
+              tags: '$tags',
+              // shareCount: { $size: '$shareItems' },
+              // likesCount: { $size: '$likeItems' },
+              // viewCount: { $size: '$viewItems' },
+              createdBy: '$author._id',
+              createdAt: '$createdAt',
+              updatedDate: '$updatedDate',
+            },
+          ],
         },
       },
     };

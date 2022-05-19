@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { PlaylistItemResponseDto } from './';
+import { MediaItemResponseDto, PlaylistResponseDto } from './';
 
 /**
  * @export
@@ -19,15 +19,13 @@ import { PlaylistItemResponseDto } from './';
  */
 export interface ShareItemsResponseDto {
   /**
-   * all items that are shared with a particular user
-   * @type {PlaylistItemResponseDto}
+   * @type {MediaItemResponseDto}
    * @memberof ShareItemsResponseDto
    */
-  sharedMedia: PlaylistItemResponseDto;
+  mediaItems: MediaItemResponseDto;
   /**
-   * all items that are shared with a particular user
-   * @type {PlaylistItemResponseDto}
+   * @type {PlaylistResponseDto}
    * @memberof ShareItemsResponseDto
    */
-  sharedPlaylists: PlaylistItemResponseDto;
+  playlists: PlaylistResponseDto;
 }

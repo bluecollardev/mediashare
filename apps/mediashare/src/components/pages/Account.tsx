@@ -19,15 +19,7 @@ import { FAB, Divider, Card } from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { useRouteWithParams, useViewProfileById } from 'mediashare/hooks/navigation';
 import { useUser } from 'mediashare/hooks/useUser';
-import {
-  PageContainer,
-  PageActions,
-  PageProps,
-  ContactList,
-  ActionButtons,
-  AccountCard,
-  AppDialog
-} from 'mediashare/components/layout';
+import { PageContainer, PageActions, PageProps, ContactList, ActionButtons, AccountCard, AppDialog } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
 
@@ -46,7 +38,7 @@ export const Account = ({ globalState }: PageProps) => {
 
   const user = useUser();
   const userId = user?._id || null;
-  const { firstName, lastName, email, phoneNumber, likesCount, sharesCount, sharedCount, build } = user;
+  const { username, firstName, lastName, email, phoneNumber, likesCount, sharesCount, sharedCount, build } = user;
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
@@ -102,6 +94,7 @@ export const Account = ({ globalState }: PageProps) => {
       />
       <AccountCard
         title={fullName}
+        username={username}
         email={email}
         phoneNumber={phoneNumber}
         image={user.imageSrc}

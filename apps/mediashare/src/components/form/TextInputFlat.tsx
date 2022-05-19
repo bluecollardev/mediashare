@@ -63,6 +63,8 @@ const TextInputFlat = ({
 }: ChildTextInputProps) => {
   const isAndroid = Platform.OS === 'android';
   const { colors, fonts } = theme;
+  // Hack to use thin font style
+  // const font = fonts.thin;
   const font = fonts.regular;
   const hasActiveOutline = parentState.focused || error;
 

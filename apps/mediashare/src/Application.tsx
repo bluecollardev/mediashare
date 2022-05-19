@@ -13,15 +13,7 @@ import { store, useAppSelector } from './store';
 import { routeConfig } from './routes';
 import { useUser } from 'mediashare/hooks/useUser';
 import { theme } from './styles';
-import {
-  Poppins_100Thin,
-  Poppins_300Light,
-  Poppins_400Regular,
-  Poppins_500Medium,
-  Poppins_700Bold,
-  Poppins_900Black,
-  useFonts,
-} from '@expo-google-fonts/poppins';
+import { useFonts } from 'expo-font';
 
 import { createBottomTabListeners } from './screenListeners';
 import { GlobalStateProps, withGlobalStateProvider } from './core/globalState';
@@ -41,7 +33,6 @@ import MediaItemDetail from './components/pages/MediaItemDetail';
 import MediaItemEdit from './components/pages/MediaItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
-import User from './components/pages/User';
 import AccountEdit from './components/pages/AccountEdit';
 import Profile from './components/pages/Profile';
 
@@ -99,7 +90,6 @@ const AccountNavigation = () => {
       <AccountStackNavigator.Screen {...routeConfig.account} component={Account} />
       <AccountStackNavigator.Screen {...routeConfig.profile} component={Profile} />
       <AccountStackNavigator.Screen {...routeConfig.accountEdit} component={AccountEdit} initialParams={{ userId: null }} />
-      <AccountStackNavigator.Screen {...routeConfig.user} component={User} />
       <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
       <AccountStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
       <AccountStackNavigator.Screen {...routeConfig.playlistEdit} component={PlaylistEdit} />
@@ -185,17 +175,14 @@ const PublicMainNavigationWithGlobalState = withGlobalStateProvider(PublicMainNa
 const PrivateMainNavigationWithGlobalState = withGlobalStateProvider(PrivateMainNavigation);
 
 function App() {
-  // TODO: Fix font loading on Android
   const [fontsLoaded] = useFonts({
-    Poppins_500Medium,
-    Poppins_900Black,
-    Poppins_700Bold,
-    Poppins_100Thin,
-    Poppins_300Light,
-    Poppins_400Regular,
+    'CircularStd-Black': require('./assets/fonts/CircularStd-Black.otf'),
+    'CircularStd-Bold': require('./assets/fonts/CircularStd-Bold.otf'),
+    'CircularStd-Medium': require('./assets/fonts/CircularStd-Medium.otf'),
+    'CircularStd-Book': require('./assets/fonts/CircularStd-Book.otf'),
+    'CircularStd-Light': require('./assets/fonts/CircularStd-Light.otf'),
   });
 
-  // const fontsLoaded = true;
   // Amplify.configure(awsmobile);
   // clearLogin();
 

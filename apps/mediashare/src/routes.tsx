@@ -59,17 +59,13 @@ const routeConfig = {
     name: 'shareWith',
     options: { title: 'Share With', header: (props) => <AppHeader {...props} searchable={true} /> },
   },
-  user: {
-    name: 'user',
-    options: { title: 'Edit Contact', header: (props) => <AppHeader {...props} /> },
-  },
   account: {
     name: 'account',
     options: { title: 'My Account', header: (props) => <AppHeader {...props} /> },
   },
   accountEdit: {
     name: 'accountEdit',
-    options: { title: 'Update Profile', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Update Account', header: (props) => <AppHeader {...props} /> },
   },
   profile: {
     name: 'profile',

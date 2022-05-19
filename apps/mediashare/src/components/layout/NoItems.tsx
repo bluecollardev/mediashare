@@ -8,7 +8,7 @@ interface NoItemsProps {
 export const NoItems = ({ text = 'There are no items in your collection.' }: NoItemsProps) => (
   <Card style={{ width: '100%', height: '50%' }}>
     <Card.Content>
-      <Subheading style={{ textAlign: 'center', fontSize: 13 }}>{text}</Subheading>
+      <Subheading style={{ textAlign: 'center', fontSize: 15 }}>{text}</Subheading>
     </Card.Content>
   </Card>
 );

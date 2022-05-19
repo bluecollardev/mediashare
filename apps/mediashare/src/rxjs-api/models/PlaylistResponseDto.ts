@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { MediaItem, PlaylistCategoryType, TagKeyValue } from './';
+import { AuthorProfileDto, MediaItem, PlaylistCategoryType, TagKeyValue } from './';
 
 /**
  * @export
@@ -57,7 +57,7 @@ export interface PlaylistResponseDto {
    * @type {string}
    * @memberof PlaylistResponseDto
    */
-  imageSrc?: string;
+  imageSrc: string;
   /**
    * @type {Array<string>}
    * @memberof PlaylistResponseDto
@@ -67,17 +67,17 @@ export interface PlaylistResponseDto {
    * @type {PlaylistCategoryType}
    * @memberof PlaylistResponseDto
    */
-  category: PlaylistCategoryType;
+  category?: PlaylistCategoryType;
   /**
    * @type {Array<TagKeyValue>}
    * @memberof PlaylistResponseDto
    */
   tags: Array<TagKeyValue> | null;
   /**
-   * @type {string}
+   * @type {AuthorProfileDto}
    * @memberof PlaylistResponseDto
    */
-  author: string;
+  authorProfile: AuthorProfileDto;
   /**
    * @type {Array<MediaItem>}
    * @memberof PlaylistResponseDto

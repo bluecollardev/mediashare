@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { View, StyleSheet } from 'react-native';
 import { Avatar, Button, Checkbox, Divider, Headline, IconButton, List, Text } from 'react-native-paper';
 import { theme } from 'mediashare/styles';
@@ -98,11 +97,12 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
 const defaultStyles = StyleSheet.create({
   titleText: {
     color: theme.colors.text,
-    fontSize: 13,
+    fontSize: 15,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   description: {
     color: theme.colors.textDarker,
-    fontSize: 12,
+    fontSize: 13,
     marginTop: 4,
     marginBottom: 4,
   },
@@ -113,5 +113,3 @@ const defaultStyles = StyleSheet.create({
   avatarWrapper: { display: 'flex', justifyContent: 'center', alignContent: 'center' },
   followButton: { justifyContent: 'center', borderColor: theme.colors.primary, transform: [{ scale: 0.75 }] },
 });
-
-export default ContactListItem;

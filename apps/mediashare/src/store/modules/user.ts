@@ -8,12 +8,7 @@ import { AuthorizeDto, ProfileDto, UpdateUserDto, BcRolesType } from 'mediashare
 import { pick, clone } from 'remeda';
 
 // Define these in snake case or our converter won't work... we need to fix that
-const userActionNames = [
-  'login',
-  'logout',
-  'load_user',
-  'update_account',
-] as const;
+const userActionNames = ['login', 'logout', 'load_user', 'update_account'] as const;
 
 export const userActions = makeActions(userActionNames);
 
@@ -34,18 +29,21 @@ export const loadUser = createAsyncThunk(userActions.loadUser.type, async (opts 
   return await api.user.userControllerGetUser().toPromise();
 });
 
-export const updateAccount = createAsyncThunk(userActions.updateAccount.type, async ({ updateUserDto, userId }: { updateUserDto: UpdateUserDto; userId?: string }, { extra }) => {
-  const { api } = extra as { api: ApiService };
-  // TODO: If no userId, that means we're updating the account owner's account? Or was that for our previous hardcoded user?
-  return userId
-    ? await api.users.usersControllerUpdate({ userId, updateUserDto }).toPromise()
-    : await api.user.userControllerUpdate({ updateUserDto }).toPromise();
-});
+export const updateAccount = createAsyncThunk(
+  userActions.updateAccount.type,
+  async ({ updateUserDto, userId }: { updateUserDto: UpdateUserDto; userId?: string }, { extra }) => {
+    const { api } = extra as { api: ApiService };
+    // TODO: If no userId, that means we're updating the account owner's account? Or was that for our previous hardcoded user?
+    return userId
+      ? await api.users.usersControllerUpdate({ userId, updateUserDto }).toPromise()
+      : await api.user.userControllerUpdateUser({ updateUserDto }).toPromise();
+  }
+);
 
 export const defaultUserProfile: Pick<
   ProfileDto,
   'username' | 'firstName' | 'lastName' | '_id' | 'phoneNumber' | 'imageSrc' | 'email' | 'role' | 'sharedCount' | 'sharesCount' | 'likesCount' | 'sharedItems'
-  > = {
+> = {
   username: '',
   firstName: '',
   lastName: '',
@@ -98,23 +96,35 @@ const userSlice = createSlice({
       .addCase(loginAction.pending, reducePendingState())
       .addCase(loginAction.rejected, reduceRejectedState())
       .addCase(loginAction.fulfilled, (state, action) => ({
-        ...state, entity: { ...pickUser(action.payload) }, loading: false, loaded: true
+        ...state,
+        entity: { ...pickUser(action.payload) },
+        loading: false,
+        loaded: true,
       }))
       .addCase(logout.pending, reducePendingState())
       .addCase(logout.rejected, reduceRejectedState())
-      .addCase(logout.fulfilled, reduceFulfilledState(() => ({
-        ...userInitialState
-      })))
+      .addCase(
+        logout.fulfilled,
+        reduceFulfilledState(() => ({
+          ...userInitialState,
+        }))
+      )
       .addCase(loadUser.pending, reducePendingState())
       .addCase(loadUser.rejected, reduceRejectedState())
       .addCase(loadUser.fulfilled, (state, action) => ({
-        ...state, entity: { ...pickUser(action.payload) }, loading: false, loaded: true
+        ...state,
+        entity: { ...pickUser(action.payload) },
+        loading: false,
+        loaded: true,
       }))
       .addCase(updateAccount.pending, reducePendingState())
       .addCase(updateAccount.rejected, reduceRejectedState())
       .addCase(updateAccount.fulfilled, (state, action) => ({
-        ...state, entity: { ...pickUser(action.payload) }, loading: false, loaded: true
-      }))
+        ...state,
+        entity: { ...pickUser(action.payload) },
+        loading: false,
+        loaded: true,
+      }));
   },
 });
 

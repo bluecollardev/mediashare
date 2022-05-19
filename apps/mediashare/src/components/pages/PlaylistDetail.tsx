@@ -11,8 +11,8 @@ import { mapAvailableTags } from 'mediashare/store/modules/tags';
 import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB } from 'react-native-paper';
-import { PageContainer, PageContent, PageActions, PageProps, ActionButtons, AppDialog, MediaCard, MediaList } from 'mediashare/components/layout';
-import { PlaylistResponseDto } from 'mediashare/rxjs-api';
+import { PageContainer, PageContent, PageProps, ActionButtons, AppDialog, MediaCard, MediaList } from 'mediashare/components/layout';
+import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { theme } from 'mediashare/styles';
 
 // @ts-ignore
@@ -36,7 +36,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   const {
     _id,
     title = '',
-    author = '',
+    authorProfile = {} as AuthorProfileDto,
     createdBy,
     description = '',
     imageSrc,
@@ -46,6 +46,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     likesCount = 0,
     mediaItems = [],
   } = selected || {};
+
   const items = mediaItems || [];
   const allowEdit = createdBy === appUserId;
 
@@ -96,7 +97,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
           <MediaCard
             key={_id}
             title={title}
-            author={author}
+            authorProfile={authorProfile}
             description={description}
             thumbnail={imageSrc}
             showThumbnail={true}
@@ -154,12 +155,6 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
           </MediaCard>
         </ScrollView>
       </PageContent>
-      <PageActions>
-        {/* TODO: Selectively display depending if the user has scrolled up past the upper button */}
-        {/*!build.forFreeUser && allowEdit && (!selectedItems || selectedItems.length === 0) && (
-          <ListActionButton icon="playlist-add" label="Add To Playlist" onActionClicked={() => addToPlaylist({ playlistId })} />
-        )*/}
-      </PageActions>
       {!build.forFreeUser && (
         <FAB.Group
           visible={true}

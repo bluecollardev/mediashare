@@ -6,6 +6,7 @@ import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
 import { MediaItem } from '../entities/media-item.entity';
 
 const OPTIONAL_MEDIA_DTO_KEYS = ['_id', 'createdAt', 'updatedDate', 'userId', 'createdBy'] as const;
+
 export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_DTO_KEYS]) {
   @ApiProperty({ required: true })
   @ApiString()

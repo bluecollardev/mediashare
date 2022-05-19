@@ -8,15 +8,7 @@ import { useProfile } from 'mediashare/hooks/useProfile';
 import { useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB, Divider } from 'react-native-paper';
-import {
-  PageActions,
-  PageContainer,
-  PageProps,
-  AccountCard,
-  SharedList,
-  ActionButtons,
-  AppDialog
-} from 'mediashare/components/layout';
+import { PageActions, PageContainer, PageProps, AccountCard, SharedList, ActionButtons, AppDialog } from 'mediashare/components/layout';
 // import { filterUnique } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
@@ -34,7 +26,7 @@ const Profile = ({ route }: ProfileProps) => {
 
   const profile = useProfile();
 
-  const { firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
+  const { username, firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
 
   const [actionMode, setActionMode] = useState(actionModes.default);
@@ -54,9 +46,7 @@ const Profile = ({ route }: ProfileProps) => {
   }, []);
 
   const [fabState, setFabState] = useState({ open: false });
-  const fabActions = [
-    { icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
-  ];
+  const fabActions = [{ icon: 'rule', onPress: () => activateUnshareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } }];
 
   return (
     <PageContainer>
@@ -82,6 +72,7 @@ const Profile = ({ route }: ProfileProps) => {
       />
       <AccountCard
         title={fullName}
+        username={username}
         email={email}
         phoneNumber={phoneNumber}
         image={imageSrc}

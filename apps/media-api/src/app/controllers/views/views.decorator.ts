@@ -4,6 +4,6 @@ import { ApiResponse } from '@nestjs/swagger';
 import { UseJwtGuard } from '@api-modules/auth/auth.decorator';
 import { ViewItem } from './entities/view-item.entity';
 
-export function ViewsPostResponse({ isArray = false, type = ViewItem, description }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ description, type, status: 201, isArray }), UseJwtGuard());
+export function ViewsPostResponse({ type = ViewItem, isArray = false, description }: ApiControllerDecoratorParams = {}) {
+  return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), UseJwtGuard());
 }

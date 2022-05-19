@@ -50,7 +50,8 @@ describe('MediaItemController', () => {
 
       reveal(mockMediaService).create.mockReturnValueOnce(new Promise((resolve) => resolve(expected)));
 
-      const mediaItemResponse = await controller.create(mediaItemDto); //, userFactory.createSessionUser());
+      const createdBy = new ObjectId();
+      const mediaItemResponse = await controller.create(mediaItemDto, createdBy); //, userFactory.createSessionUser());
 
       expect(mediaItemResponse).toBeDefined();
       expect(mediaItemResponse).toEqual(expected);
@@ -66,7 +67,8 @@ describe('MediaItemController', () => {
 
       reveal(mockMediaService).create.mockReturnValueOnce(new Promise((resolve) => resolve(expected)));
 
-      const mediaItemResponse = await controller.create(mediaItemDto); //, sessionUser);
+      const createdBy = new ObjectId();
+      const mediaItemResponse = await controller.create(mediaItemDto, createdBy); //, sessionUser);
 
       expect(mediaItemResponse).toBeDefined();
       expect(mediaItemResponse).toEqual(expected);

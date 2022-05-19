@@ -68,6 +68,8 @@ const TextInputOutlined = ({
   const adornmentConfig = getAdornmentConfig({ left, right });
 
   const { colors, fonts } = theme;
+  // Hack to use thin font style
+  // const font = fonts.thin;
   const font = fonts.regular;
   const hasActiveOutline = parentState.focused || error;
 

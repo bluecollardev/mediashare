@@ -55,7 +55,7 @@ const mediaItemActionNames = [
 
 export const mediaItemActions = makeActions(mediaItemActionNames);
 
-export const getMediaItemById = createAsyncThunk(mediaItemActions.getMediaItem.type, async ({ uri, mediaId }: { uri: string; mediaId: string }, { extra}) => {
+export const getMediaItemById = createAsyncThunk(mediaItemActions.getMediaItem.type, async ({ uri, mediaId }: { uri: string; mediaId: string }, { extra }) => {
   const { api } = extra as { api: ApiService };
   const result = await forkJoin({
     mediaItem: api.mediaItems.mediaItemControllerFindOne({ mediaId }).toPromise(),
@@ -69,40 +69,43 @@ export const createThumbnail = createAsyncThunk(mediaItemActions.createMediaItem
   return await uploadThumbnailToS3({ fileUri, key });
 });
 
-export const addMediaItem = createAsyncThunk(mediaItemActions.addMediaItem.type, async (dto: Pick<CreateMediaItemDto, 'key' | 'title' | 'description' | 'summary' | 'category' | 'tags' | 'uri'>, { extra }) => {
-  const { api } = extra as { api: ApiService };
-  const { uri: fileUri, title, category, tags = [], summary, description } = dto;
-  try {
-    const options = { description: dto.description, summary: dto.summary, contentType: 'video/mp4' };
-    const sanitizedKey = sanitizeKey(`${title}.${getFileExtension(fileUri)}`);
-    const { video, thumbnail } = await uploadMediaToS3({ fileUri, key: sanitizedKey, options });
-    if (!video) {
-      throw new Error('[addMediaItem] video upload to S3 failed');
-    }
-    if (!thumbnail) {
-      console.warn('[addMediaItem] thumbnail generation failed');
-    }
+export const addMediaItem = createAsyncThunk(
+  mediaItemActions.addMediaItem.type,
+  async (dto: Pick<CreateMediaItemDto, 'key' | 'title' | 'description' | 'summary' | 'category' | 'tags' | 'uri'>, { extra }) => {
+    const { api } = extra as { api: ApiService };
+    const { uri: fileUri, title, category, tags = [], summary, description } = dto;
+    try {
+      const options = { description: dto.description, summary: dto.summary, contentType: 'video/mp4' };
+      const sanitizedKey = sanitizeKey(`${title}.${getFileExtension(fileUri)}`);
+      const { video, thumbnail } = await uploadMediaToS3({ fileUri, key: sanitizedKey, options });
+      if (!video) {
+        throw new Error('[addMediaItem] video upload to S3 failed');
+      }
+      if (!thumbnail) {
+        console.warn('[addMediaItem] thumbnail generation failed');
+      }
 
-    const { videoKey } = KeyFactory(sanitizedKey);
-    const createMediaItemDto: CreateMediaItemDto = {
-      key: videoKey,
-      title,
-      description,
-      summary,
-      category: category || MediaCategoryType.Free,
-      tags: tags || [],
-      thumbnail: awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg',
-      // video: awsUrl + getVideoPath(sanitizedKey),
-      uri: awsUrl + getVideoPath(sanitizedKey),
-      isPlayable: true,
-      eTag: '',
-    };
+      const { videoKey } = KeyFactory(sanitizedKey);
+      const createMediaItemDto: CreateMediaItemDto = {
+        key: videoKey,
+        title,
+        description,
+        summary,
+        category: category || MediaCategoryType.Free,
+        tags: tags || [],
+        thumbnail: awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg',
+        // video: awsUrl + getVideoPath(sanitizedKey),
+        uri: awsUrl + getVideoPath(sanitizedKey),
+        isPlayable: true,
+        eTag: '',
+      };
 
-    return await api.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
-  } catch (err) {
-    console.log(err);
+      return await api.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
+    } catch (err) {
+      console.log(err);
+    }
   }
-});
+);
 
 export const updateMediaItem = createAsyncThunk(mediaItemActions.updateMediaItem.type, async (item: UpdateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
@@ -148,36 +151,36 @@ export const saveFeedMediaItems = createAsyncThunk(mediaItemActions.saveFeedMedi
   const { api } = extra as { api: ApiService };
 
   const dtoPromises = items
-  .map((item) => {
-    // Copy storage will sanitize the 'to' key automatically
-    const s3KeyString = item.key;
-    copyStorage(s3KeyString);
-    return item;
-  })
-  .map(async (item) => {
-    const sanitizedKey = sanitizeKey(item.key);
-    // TODO: Is there a better way to set the title?
-    const automaticTitle = titleFromKey(item.key);
-    // TODO: Fix the thumbnail? We're doing this two ways...
-    // const thumbnailUrl = await createFeedItemThumbnail(item.key);
-    await createFeedItemThumbnail(item.key);
-    const { videoKey } = KeyFactory(sanitizedKey);
-    const createMediaItemDto: CreateMediaItemDto = {
-      key: videoKey,
-      title: automaticTitle,
-      description: `${item.size} - ${item.lastModified}`,
-      summary: '',
-      category: MediaCategoryType.Free,
-      tags: [],
-      thumbnail: awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg',
-      // video: awsUrl + getVideoPath(sanitizedKey),
-      uri: awsUrl + getVideoPath(sanitizedKey),
-      isPlayable: true,
-      eTag: item.etag,
-    };
-    // await deleteStorage(dto.title)), // TODO: DON'T DELETE THE ITEM FROM S3 STORAGE UPLOAD BUCKET UNTIL WE ARE READY FOR PROD
-    return await api.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
-  });
+    .map((item) => {
+      // Copy storage will sanitize the 'to' key automatically
+      const s3KeyString = item.key;
+      copyStorage(s3KeyString);
+      return item;
+    })
+    .map(async (item) => {
+      const sanitizedKey = sanitizeKey(item.key);
+      // TODO: Is there a better way to set the title?
+      const automaticTitle = titleFromKey(item.key);
+      // TODO: Fix the thumbnail? We're doing this two ways...
+      // const thumbnailUrl = await createFeedItemThumbnail(item.key);
+      await createFeedItemThumbnail(item.key);
+      const { videoKey } = KeyFactory(sanitizedKey);
+      const createMediaItemDto: CreateMediaItemDto = {
+        key: videoKey,
+        title: automaticTitle,
+        description: `${item.size} - ${item.lastModified}`,
+        summary: '',
+        category: MediaCategoryType.Free,
+        tags: [],
+        thumbnail: awsUrl + getThumbnailPath(sanitizedKey) + '.jpeg',
+        // video: awsUrl + getVideoPath(sanitizedKey),
+        uri: awsUrl + getVideoPath(sanitizedKey),
+        isPlayable: true,
+        eTag: item.etag,
+      };
+      // await deleteStorage(dto.title)), // TODO: DON'T DELETE THE ITEM FROM S3 STORAGE UPLOAD BUCKET UNTIL WE ARE READY FOR PROD
+      return await api.mediaItems.mediaItemControllerCreate({ createMediaItemDto }).toPromise();
+    });
 
   return await Promise.all(dtoPromises);
 });
@@ -192,7 +195,7 @@ export interface MediaItemState {
   file: any;
   entity: MediaItemResponseDto | undefined;
   mediaSrc: string;
-  feed: { entities: AwsMediaItem[], loading: boolean, loaded: boolean };
+  feed: { entities: AwsMediaItem[]; loading: boolean; loaded: boolean };
   loaded: boolean;
   createState: 'submitting' | 'progress' | 'empty';
 }
@@ -215,20 +218,36 @@ const mediaItemSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getMediaItemById.pending, (state) => ({
-        ...state, entity: undefined, mediaSrc: mediaPlaceholder, loading: true, loaded: false
+        ...state,
+        entity: undefined,
+        mediaSrc: mediaPlaceholder,
+        loading: true,
+        loaded: false,
       }))
       .addCase(getMediaItemById.rejected, (state) => ({ ...state, entity: undefined }))
       .addCase(getMediaItemById.fulfilled, (state, action) => ({
-        ...state, entity: action.payload.mediaItem, mediaSrc: action.payload.src as string, loading: false, loaded: true
+        ...state,
+        entity: action.payload.mediaItem,
+        mediaSrc: action.payload.src as string,
+        loading: false,
+        loaded: true,
       }))
       .addCase(createThumbnail.fulfilled, (state, action) => ({
-        ...state, mediaSrc: action.payload as string
+        ...state,
+        mediaSrc: action.payload as string,
       }))
       .addCase(addMediaItem.pending, reducePendingState())
       .addCase(addMediaItem.rejected, reduceRejectedState())
-      .addCase(addMediaItem.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, getMediaItem: action.payload.uri, mediaSrc: mediaPlaceholder, loading: false, loaded: true
-      })))
+      .addCase(
+        addMediaItem.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          getMediaItem: action.payload.uri,
+          mediaSrc: mediaPlaceholder,
+          loading: false,
+          loaded: true,
+        }))
+      )
       // TODO: Finish implementing these!
       .addCase(updateMediaItem.pending, reducePendingState())
       .addCase(updateMediaItem.rejected, reduceRejectedState())
@@ -240,24 +259,43 @@ const mediaItemSlice = createSlice({
       .addCase(deleteMediaItem.rejected, reduceRejectedState())
       .addCase(deleteMediaItem.fulfilled, reduceFulfilledState())
       // TODO: Are we using these? Where?
-      .addCase(getFeedMediaItems.pending, reducePendingState((state) => ({
-        ...state, feed: { entities: [], loading: true, loaded: false }
-      })))
-      .addCase(getFeedMediaItems.rejected, reduceRejectedState((state) => ({
-        ...state, feed: { entities: [], loading: false, loaded: true }
-      })))
-      .addCase(getFeedMediaItems.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, feed: { entities: Array.isArray(action.payload) ? action.payload : [], loading: false, loaded: true }
-      })))
+      .addCase(
+        getFeedMediaItems.pending,
+        reducePendingState((state) => ({
+          ...state,
+          feed: { entities: [], loading: true, loaded: false },
+        }))
+      )
+      .addCase(
+        getFeedMediaItems.rejected,
+        reduceRejectedState((state) => ({
+          ...state,
+          feed: { entities: [], loading: false, loaded: true },
+        }))
+      )
+      .addCase(
+        getFeedMediaItems.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          feed: { entities: Array.isArray(action.payload) ? action.payload : [], loading: false, loaded: true },
+        }))
+      )
       .addCase(saveFeedMediaItems.pending, reducePendingState())
       .addCase(saveFeedMediaItems.rejected, reduceRejectedState())
       .addCase(saveFeedMediaItems.fulfilled, reduceFulfilledState())
       .addCase(setActiveMediaItem, (state, action) => ({
-        ...state, entity: action.payload, loading: false, loaded: true
+        ...state,
+        entity: action.payload,
+        loading: false,
+        loaded: true,
       }))
       .addCase(clearActiveMediaItem, (state) => ({
-        ...state, entity: undefined, createState: 'empty', loading: false, loaded: true
-      }))
+        ...state,
+        entity: undefined,
+        createState: 'empty',
+        loading: false,
+        loaded: true,
+      }));
   },
 });
 
