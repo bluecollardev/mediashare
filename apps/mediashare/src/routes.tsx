@@ -5,7 +5,7 @@ import { AppHeader } from 'mediashare/components/layout';
 const routeConfig = {
   login: {
     name: 'login',
-    options: { title: ' ', header: (props) => <AppHeader {...props} searchable={false} /> },
+    options: { title: '', header: () => null },
   },
   browse: {
     name: 'browse',
