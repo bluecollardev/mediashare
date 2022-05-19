@@ -4,13 +4,12 @@ import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
 import { removeUserPlaylist } from 'mediashare/store/modules/playlist';
 import { getUserPlaylists, findPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
-import { PlaylistResponseDto } from 'mediashare/rxjs-api';
+import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/NavigationHooks';
+import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { FAB, Text, Divider } from 'react-native-paper';
+import { FAB, Divider } from 'react-native-paper';
 import { FlatList, RefreshControl, StyleSheet } from 'react-native';
-import { View } from 'react-native';
 import {
   PageActions,
   PageContainer,
@@ -21,7 +20,6 @@ import {
   NoItems,
   AppDialog,
 } from 'mediashare/components/layout';
-import { getAuthorText, getUsername, shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
 
@@ -41,22 +39,15 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
   return <FlatList data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />;
 
   function renderVirtualizedListItem(item) {
-    const { _id = '', title = '', author = '', description = '', mediaIds = [], imageSrc = '' } = item;
+    // TODO: Can we have just one or the other, either mediaIds or mediaItems?
+    const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, description = '', mediaIds = [], mediaItems = [], imageSrc = '' } = item;
     return (
       <>
         <MediaListItem
           key={`playlist_${_id}`}
           title={title}
           titleStyle={styles.titleText}
-          description={() => {
-            return (
-              <View style={styles.details}>
-                {!!author && <Text style={styles.username}>By {author}</Text>}
-                {/* <Text style={{ ...styles.description }}>{shortenText(description || '', 80)}</Text> */}
-                <Text style={{ ...styles.videoCount }}>{mediaIds?.length || 0} videos</Text>
-              </View>
-            );
-          }}
+          description={<MediaListItem.Description data={{ authorProfile, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />}
           showThumbnail={true}
           image={imageSrc}
           showActions={showActions}
@@ -146,12 +137,7 @@ export const Playlists = ({ globalState }: PageProps) => {
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>
-          <ActionButtons
-            onActionClicked={confirmPlaylistsToShare}
-            onCancelClicked={cancelPlaylistsToShare}
-            actionLabel="Share With"
-            actionIcon="group"
-          />
+          <ActionButtons onActionClicked={confirmPlaylistsToShare} onCancelClicked={cancelPlaylistsToShare} actionLabel="Share With" actionIcon="group" />
         </PageActions>
       )}
       {isSelectable && actionMode === actionModes.delete && (
@@ -272,39 +258,8 @@ export default withLoadingSpinner((state) => {
 
 const styles = StyleSheet.create({
   titleText: {
-    marginBottom: 2,
-    color: theme.colors.text,
-    fontSize: 13,
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  author: {
-    color: theme.colors.textDarker,
-    fontSize: 12,
-    marginBottom: 2,
-  },
-  username: {
-    flex: 0,
-    width: '100%',
-    color: theme.colors.primary,
-    fontSize: 12,
     marginBottom: 4,
-  },
-  description: {
-    flex: 0,
-    width: '100%',
-    color: theme.colors.textDarker,
-    fontSize: 12,
-    marginTop: 2,
-    marginBottom: 4,
-  },
-  videoCount: {
-    color: theme.colors.textDarker,
-    fontSize: 12,
-    marginBottom: 2,
-    fontWeight: 'bold',
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   deleteActionButton: {
     backgroundColor: theme.colors.error,

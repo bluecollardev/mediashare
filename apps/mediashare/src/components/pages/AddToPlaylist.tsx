@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { Divider, Text } from 'react-native-paper';
+import { FlatList, StyleSheet } from 'react-native';
+import { Divider } from 'react-native-paper';
 import { useAppSelector } from 'mediashare/store';
 import { getPlaylistById, updateUserPlaylist } from 'mediashare/store/modules/playlist';
 import { findMediaItems } from 'mediashare/store/modules/mediaItems';
-import { UpdatePlaylistDto } from 'mediashare/rxjs-api';
+import { AuthorProfileDto, UpdatePlaylistDto } from 'mediashare/rxjs-api';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { useGoBack, useViewMediaItem } from 'mediashare/hooks/NavigationHooks';
+import { useGoBack, useViewMediaItem } from 'mediashare/hooks/navigation';
 import { PageContainer, PageActions, PageProps, PageContent, NoItems, ActionButtons, MediaListType, MediaListItem } from 'mediashare/components/layout';
-import { shortenText } from 'mediashare/utils';
+
 import { theme } from 'mediashare/styles';
 
 export const AddToPlaylist = ({ route, globalState }: PageProps) => {
@@ -58,26 +58,18 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   );
 
   function renderVirtualizedListItem(item) {
-    const { _id = '', title = '', author = '', description = '', mediaIds = [], thumbnail = '' } = item;
+    const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, thumbnail = '' } = item;
     return (
       <>
         <MediaListItem
-          key={`playlist_${_id}`}
+          key={`add_to_playlist_${_id}`}
           title={title}
-          titleStyle={styles.title}
-          description={() => {
-            return (
-              <View style={{ display: 'flex', flexDirection: 'column' }}>
-                {!!author && <Text style={styles.username}>By {author}</Text>}
-                <Text style={{ ...styles.description }}>{shortenText(description || '', 80)}</Text>
-                <Text style={{ ...styles.videoCount }}>{mediaIds?.length || 0} videos</Text>
-              </View>
-            );
-          }}
-          image={thumbnail}
+          titleStyle={styles.titleText}
+          description={<MediaListItem.Description data={{ authorProfile }} />}
           showThumbnail={true}
-          selectable={true}
           showActions={true}
+          image={thumbnail}
+          selectable={true}
           onViewDetail={() => {
             viewMediaItem({ mediaId: item._id, uri: item.uri }).then();
           }}
@@ -140,30 +132,9 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    marginBottom: 2,
-  },
-  author: {
-    color: theme.colors.textDarker,
-    fontSize: 12,
-    marginBottom: 2,
-  },
-  username: {
-    color: theme.colors.primary,
-    fontSize: 12,
+  titleText: {
     marginBottom: 4,
-  },
-  description: {
-    color: theme.colors.textDarker,
-    fontSize: 12,
-    marginTop: 2,
-    marginBottom: 4,
-  },
-  videoCount: {
-    color: theme.colors.textDarker,
-    fontSize: 12,
-    marginBottom: 2,
-    fontWeight: 'bold',
+    fontFamily: theme.fonts.medium.fontFamily,
   },
 });
 

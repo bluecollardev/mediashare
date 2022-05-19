@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { MediaCategoryType, TagKeyValue } from './';
+import { AuthorProfileDto, MediaCategoryType, TagKeyValue } from './';
 
 /**
  * @export
@@ -44,11 +44,6 @@ export interface MediaItemResponseDto {
    */
   userId: string;
   /**
-   * @type {boolean}
-   * @memberof MediaItemResponseDto
-   */
-  isPlayable: boolean;
-  /**
    * @type {string}
    * @memberof MediaItemResponseDto
    */
@@ -69,23 +64,43 @@ export interface MediaItemResponseDto {
    */
   uri: string;
   /**
+   * @type {string}
+   * @memberof MediaItemResponseDto
+   */
+  thumbnail: string;
+  /**
+   * @type {boolean}
+   * @memberof MediaItemResponseDto
+   */
+  isPlayable?: boolean;
+  /**
    * @type {MediaCategoryType}
    * @memberof MediaItemResponseDto
    */
-  category: MediaCategoryType;
+  category?: MediaCategoryType;
   /**
    * @type {Array<TagKeyValue>}
    * @memberof MediaItemResponseDto
    */
   tags: Array<TagKeyValue> | null;
   /**
-   * @type {string}
+   * @type {AuthorProfileDto}
    * @memberof MediaItemResponseDto
    */
-  thumbnail: string;
+  authorProfile: AuthorProfileDto;
   /**
-   * @type {string}
+   * @type {number}
    * @memberof MediaItemResponseDto
    */
-  author: string;
+  shareCount: number;
+  /**
+   * @type {number}
+   * @memberof MediaItemResponseDto
+   */
+  viewCount: number;
+  /**
+   * @type {number}
+   * @memberof MediaItemResponseDto
+   */
+  likesCount: number;
 }

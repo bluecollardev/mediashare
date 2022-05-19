@@ -17,6 +17,7 @@ import { GlobalExceptionFilter } from '@api-core/exception-filters/global-except
 import * as session from 'express-session';
 import MongoStore from 'connect-mongo';
 import * as compression from 'compression';
+import * as bodyParser from 'body-parser';
 
 const port = process.env.PORT || 3456;
 
@@ -28,9 +29,11 @@ async function bootstrap() {
 
     app.useLogger(app.get(Logger));
 
-    app.useGlobalPipes(new ValidationPipe({
-      enableDebugMessages: false
-    }));
+    app.useGlobalPipes(
+      new ValidationPipe({
+        enableDebugMessages: false,
+      })
+    );
     app.useGlobalFilters(new GlobalExceptionFilter());
 
     const [host, globalPrefix, title, mongoUrl, dbName, collectionName, secret, isDev] = [
@@ -41,7 +44,7 @@ async function bootstrap() {
       appConfig.get('sessionDbName'),
       appConfig.get('sessionCollection'),
       appConfig.get('sessionSecret'),
-      appConfig.get('env') === 'development'
+      appConfig.get('env') === 'development',
     ] as const;
 
     app.setGlobalPrefix(globalPrefix);
@@ -50,13 +53,13 @@ async function bootstrap() {
 
     /* SWAGGER */
     const config = new DocumentBuilder()
-    .setTitle(title)
-    .setDescription('Media Share API')
-    .setVersion('1.0')
-    .addServer(`http://localhost:${port}`, 'development server')
-    .addServer(`https://bcdevmediashare.herokuapp.com`, `production`)
-    .addBearerAuth()
-    .build();
+      .setTitle(title)
+      .setDescription('Media Share API')
+      .setVersion('1.0')
+      .addServer(`http://localhost:${port}`, 'development server')
+      .addServer(`https://bcdevmediashare.herokuapp.com`, `production`)
+      .addBearerAuth()
+      .build();
 
     const document = SwaggerModule.createDocument(app, config);
 
@@ -65,17 +68,19 @@ async function bootstrap() {
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(compression());
+    app.use(bodyParser.json({ limit: '5mb' }));
+    app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
     app.use(
       session({
         store: MongoStore.create({
           mongoUrl,
           dbName,
-          collectionName
+          collectionName,
         }),
 
         secret,
-        resave: false
+        resave: false,
       })
     );
 
@@ -91,7 +96,6 @@ async function bootstrap() {
     console.error('API bootstrapping failed!');
     throw err;
   }
-
 }
 
 bootstrap().then();

@@ -1,21 +1,22 @@
 import { Controller, Get, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
-import { UserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiTags } from '@nestjs/swagger';
-import { User } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
-import { PlaylistService } from '../playlist/playlist.service';
-import { ShareItemService } from '@api-modules/share-item/share-item.service';
+
 import { ObjectId } from 'mongodb';
 // import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
-import { UserService } from '@api-modules/auth/user.service';
-import { BcRolesType, BC_ROLES } from '@core-lib';
-import { UserGetResponse, UserPostResponse } from './user.decorator';
 import { ObjectIdPipe } from '@mediashare/shared';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
-import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
+import { BcRolesType, BC_ROLES } from '@core-lib';
+import { UserGuard } from '@api-modules/user/user.guard';
+import { UserService } from '@api-modules/user/user.service';
+import { UserGetResponse, UserPostResponse } from './user.decorator';
+import { User } from '@api-modules/user/entities/user.entity';
+import { UserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { ProfileDto } from './dto/profile.dto';
-import { UserGuard } from '@api-modules/auth/guards/user.guard';
+import { PlaylistService } from '../playlist/playlist.service';
+import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -66,6 +67,7 @@ export class UsersController {
     return this.playlistService.getByUserId(userId);
   }
 
+  // TODO: Remove this?
   @Put(':userId/roles')
   @ApiBody({ enum: BC_ROLES })
   @UserPostResponse({ type: UserDto })
@@ -73,4 +75,6 @@ export class UsersController {
     const { roles = [] } = params;
     return this.userService.setRoles(id, roles);
   }
+
+  // New Auth stuff
 }

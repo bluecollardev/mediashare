@@ -25,7 +25,10 @@ const errorMiddleware: Middleware = function exampleMiddleware(store) {
 export const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
+    getDefaultMiddleware({
+      // We have a larger than normal state tree, as we load lots of data when user initially logs in (default is 32ms, increase to 128ms)
+      serializableCheck: { warnAfter: 128 },
+    })
       .prepend(thunk.withExtraArgument({ api: apis }))
       .concat(errorMiddleware),
 });

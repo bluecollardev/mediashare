@@ -6,10 +6,10 @@ import { useAppSelector } from 'mediashare/store';
 import { deleteMediaItem } from 'mediashare/store/modules/mediaItem';
 import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { useRouteName, useEditMediaItem } from 'mediashare/hooks/NavigationHooks';
-import { MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
+import { useRouteName, useEditMediaItem } from 'mediashare/hooks/navigation';
+import { AuthorProfileDto, MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
 import { RefreshControl } from 'react-native';
-import { FAB, Text, Divider } from 'react-native-paper';
+import { FAB, Divider } from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import {
   PageContainer,
@@ -19,9 +19,8 @@ import {
   MediaListItem,
   ActionButtons,
   NoItems,
-  AppDialog
+  AppDialog,
 } from 'mediashare/components/layout';
-import { shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { selectMediaItem } from 'mediashare/store/modules/mediaItems';
 import { theme } from 'mediashare/styles';
@@ -50,19 +49,14 @@ export const MediaComponent = ({
   );
 
   function renderVirtualizedListItem(item) {
-    const { _id = '', title = '', author, description = '', thumbnail } = item;
+    const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, description = '', thumbnail } = item;
     return (
       <>
         <MediaListItem
           key={`media_item_${_id}`}
           title={title}
           titleStyle={styles.titleText}
-          description={
-            <View style={styles.details}>
-              {!!author && <Text style={styles.username}>By {author}</Text>}
-              {/* <Text style={styles.description}>{shortenText(description || '', 80)}</Text> */}
-            </View>
-          }
+          description={<MediaListItem.Description data={{ authorProfile, description }} />}
           showThumbnail={true}
           showActions={showActions}
           image={thumbnail}
@@ -259,37 +253,8 @@ const styles = StyleSheet.create({
   titleText: {
     marginBottom: 2,
     color: theme.colors.text,
-    fontSize: 13,
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  author: {
-    color: theme.colors.textDarker,
-    fontSize: 12,
-    marginBottom: 2,
-  },
-  username: {
-    flex: 0,
-    width: '100%',
-    color: theme.colors.primary,
-    fontSize: 12,
-    marginBottom: 4,
-  },
-  description: {
-    flex: 0,
-    width: '100%',
-    color: theme.colors.textDarker,
-    fontSize: 12,
-    marginTop: 2,
-    marginBottom: 4,
-  },
-  videoCount: {
-    color: theme.colors.textDarker,
-    fontSize: 12,
-    marginBottom: 2,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   deleteActionButton: {
     backgroundColor: theme.colors.error,

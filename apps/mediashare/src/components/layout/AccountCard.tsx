@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Avatar, Caption, Title, Subheading, Card, Menu, IconButton } from 'react-native-paper';
-import { useAppSelector } from 'mediashare/store';
+import { useProfile } from 'mediashare/hooks/useProfile';
 import { theme } from 'mediashare/styles';
 import * as R from 'remeda';
-import * as build from 'mediashare/build';
-
 
 interface AccountCardProps {
   image: string;
@@ -14,6 +12,7 @@ interface AccountCardProps {
   shares?: number;
   shared?: number;
   title: string;
+  username: string;
   email: string;
   phoneNumber: string;
   showSocial?: boolean;
@@ -24,6 +23,7 @@ interface AccountCardProps {
 
 export const AccountCard = ({
   title,
+  username,
   email,
   image,
   likes,
@@ -36,9 +36,9 @@ export const AccountCard = ({
 }: AccountCardProps) => {
   const [visible, setVisible] = useState(false);
 
-  const user = useAppSelector((state) => state?.profile?.entity);
+  const profile = useProfile();
   const withoutName = () => state?.firstName?.length < 1 || state?.lastName?.length < 1;
-  const [state] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
+  const [state] = useState(R.pick(profile, ['username', 'email', 'firstName', 'lastName', 'phoneNumber', 'imageSrc']));
 
   // <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />
   // <View styles={defaultStyles.buttonContainer}>
@@ -65,7 +65,12 @@ export const AccountCard = ({
           leftStyle={defaultStyles.left}
           title={<Title style={defaultStyles.titleText}>{title}</Title>}
           titleStyle={defaultStyles.title}
-          subtitle={<Subheading style={defaultStyles.subtitleText}>{email}</Subheading>}
+          subtitle={
+            <View>
+              <Subheading style={{ ...defaultStyles.subtitleText, color: theme.colors.primary }}>@{username}</Subheading>
+              <Subheading style={{ ...defaultStyles.subtitleText }}>{email}</Subheading>
+            </View>
+          }
           subtitleStyle={defaultStyles.subtitle}
           right={() =>
             showActions ? (
@@ -79,7 +84,7 @@ export const AccountCard = ({
                 }
               >
                 {isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Delete Account" />}
-                {build.forAdmin && !isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Deactivate" />}
+                {profile?.build?.forAdmin && !isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Deactivate" />}
               </Menu>
             ) : null
           }
@@ -128,20 +133,21 @@ const defaultStyles = StyleSheet.create({
     alignSelf: 'flex-start',
     justifyContent: 'flex-start',
     height: 20,
+    marginBottom: 4,
   },
   subtitle: {
     marginLeft: 15,
-    flexDirection: 'row',
-    alignSelf: 'flex-start',
-    justifyContent: 'flex-start',
   },
   titleText: {
     color: theme.colors.text,
-    fontSize: 16,
+    fontSize: 18,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   subtitleText: {
-    fontSize: 11,
-    color: theme.colors.primary,
+    fontSize: 13,
+    color: theme.colors.textDarker,
+    fontFamily: theme.fonts.thin.fontFamily,
+    lineHeight: 15,
   },
   left: {
     flex: 0,

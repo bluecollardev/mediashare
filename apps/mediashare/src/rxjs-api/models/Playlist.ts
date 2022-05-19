@@ -57,7 +57,7 @@ export interface Playlist {
    * @type {string}
    * @memberof Playlist
    */
-  imageSrc?: string;
+  imageSrc: string;
   /**
    * @type {Array<string>}
    * @memberof Playlist
@@ -67,7 +67,7 @@ export interface Playlist {
    * @type {PlaylistCategoryType}
    * @memberof Playlist
    */
-  category: PlaylistCategoryType;
+  category?: PlaylistCategoryType;
   /**
    * @type {Array<TagKeyValue>}
    * @memberof Playlist

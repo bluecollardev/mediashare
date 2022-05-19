@@ -37,12 +37,12 @@ export interface UpdatePlaylistDto {
    * @type {string}
    * @memberof UpdatePlaylistDto
    */
-  imageSrc?: string;
+  imageSrc: string;
   /**
    * @type {PlaylistCategoryType}
    * @memberof UpdatePlaylistDto
    */
-  category: PlaylistCategoryType;
+  category?: PlaylistCategoryType;
   /**
    * @type {Array<string>}
    * @memberof UpdatePlaylistDto

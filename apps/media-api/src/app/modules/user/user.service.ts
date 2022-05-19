@@ -5,12 +5,12 @@ import { PinoLogger } from 'nestjs-pino';
 import { DataService } from '@api';
 import { ClientProxy } from '@nestjs/microservices';
 
-import { User } from '../../controllers/user/entities/user.entity';
 import { ObjectId } from 'mongodb';
 import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
-import { AuthService } from './auth.service';
+import { User } from './entities/user.entity';
 import { UpdateUserDto } from '../../controllers/user/dto/update-user.dto';
-import { omit }from 'remeda';
+import { AuthService } from '@api-modules/auth/auth.service';
+import { omit } from 'remeda';
 
 @Injectable()
 export class UserService extends DataService<User, MongoRepository<User>> {
@@ -25,6 +25,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     super(repository, logger);
   }
 
+  // TODO: Finish this!
   validateToken({ token, idToken }: { token: string; idToken: string }) {
     const { email, phone_number: phoneNumber } = this.authSvc.decodeIdToken(idToken);
 
@@ -35,6 +36,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
   setRoles(_id: string, roles: BcRolesType[]) {
     return this.client.send({ role: 'auth', cmd: 'setRoles' }, { _id, roles }).toPromise();
   }
+
   updateUser({ userId, updateUserDto }: { userId: ObjectId; updateUserDto: UpdateUserDto }) {
     return this.update(userId, omit(updateUserDto, ['role']));
   }
@@ -42,76 +44,16 @@ export class UserService extends DataService<User, MongoRepository<User>> {
   getUserById(id: ObjectId) {
     return this.repository
       .aggregate([
-        {
-          $match: {
-            _id: id,
-          },
-        },
-        {
-          $lookup: {
-            from: 'share_item',
-            localField: '_id',
-            foreignField: 'userId',
-            as: 'shareItems',
-          },
-        },
-
-        {
-          $lookup: {
-            from: 'likes',
-            localField: '_id',
-            foreignField: 'createdBy',
-            as: 'likes',
-          },
-        },
-        {
-          $lookup: {
-            from: 'share_item',
-            localField: '_id',
-            foreignField: 'createdBy',
-            as: 'shares',
-          },
-        },
-        {
-          $addFields: { shared: '$shareItems' },
-        },
-
-        {
-          $unwind: {
-            path: '$shareItems',
-            preserveNullAndEmptyArrays: false,
-          },
-        },
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'shareItems.createdBy',
-            foreignField: '_id',
-            as: 'author',
-          },
-        },
-        {
-          $unwind: {
-            path: '$author',
-            preserveNullAndEmptyArrays: false,
-          },
-        },
-
-        {
-          $lookup: {
-            from: 'playlist',
-            localField: 'shareItems.playlistId',
-            foreignField: '_id',
-            as: 'playlist',
-          },
-        },
-
-        {
-          $unwind: {
-            path: '$playlist',
-            preserveNullAndEmptyArrays: false,
-          },
-        },
+        { $match: { _id: id } },
+        { $lookup: { from: 'share_item', localField: '_id', foreignField: 'userId', as: 'shareItems' } },
+        { $lookup: { from: 'likes', localField: '_id', foreignField: 'createdBy', as: 'likes' } },
+        { $lookup: { from: 'share_item', localField: '_id', foreignField: 'createdBy', as: 'shares' } },
+        { $addFields: { shared: '$shareItems' } },
+        { $unwind: { path: '$shareItems', preserveNullAndEmptyArrays: false } },
+        { $lookup: { from: 'user', localField: 'shareItems.createdBy', foreignField: '_id', as: 'author' } },
+        { $unwind: { path: '$author', preserveNullAndEmptyArrays: false } },
+        { $lookup: { from: 'playlist', localField: 'shareItems.playlistId', foreignField: '_id', as: 'playlist' } },
+        { $unwind: { path: '$playlist', preserveNullAndEmptyArrays: false } },
         {
           $replaceRoot: {
             newRoot: {
@@ -143,7 +85,6 @@ export class UserService extends DataService<User, MongoRepository<User>> {
             },
           },
         },
-
         {
           $group: {
             _id: '$_id',
@@ -157,7 +98,6 @@ export class UserService extends DataService<User, MongoRepository<User>> {
             sharedCount: { $first: '$sharedCount' },
             sharesCount: { $first: '$sharesCount' },
             likesCount: { $first: '$likesCount' },
-
             sharedItems: {
               $push: '$$ROOT',
             },

@@ -50,7 +50,7 @@ export const ContactList: React.FC<ContactListProps> = ({
                 <ContactListItem
                   key={`contact_${item._id}`}
                   title={fullName}
-                  description={item.username}
+                  description={`@${item.username}`}
                   avatar={item.imageSrc}
                   showLetterLabel={!idx && (!!firstName || !!lastName)}
                   userId={item._id}

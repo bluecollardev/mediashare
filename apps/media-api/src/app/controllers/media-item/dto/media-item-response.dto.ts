@@ -1,9 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
 import { MediaItem } from '../entities/media-item.entity';
+import { AuthorProfileDto } from '../../user/dto/profile.dto';
 
 export class MediaItemResponseDto extends MediaItem {
-  @ApiProperty({ type: String, name: 'author' })
-  @IsString()
-  author: string;
+  @ApiProperty({ type: () => AuthorProfileDto })
+  authorProfile: AuthorProfileDto;
+
+  @ApiProperty({ type: 'number' })
+  shareCount?: number;
+
+  @ApiProperty({ type: 'number' })
+  viewCount?: number;
+
+  @ApiProperty({ type: 'number' })
+  likesCount?: number;
 }

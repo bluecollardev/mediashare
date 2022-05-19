@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -9,20 +9,11 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import Amplify, { Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
-import { ProfileDto } from './rxjs-api';
-import * as build from './build';
 import { store, useAppSelector } from './store';
 import { routeConfig } from './routes';
+import { useUser } from 'mediashare/hooks/useUser';
 import { theme } from './styles';
-import {
-  Poppins_100Thin,
-  Poppins_300Light,
-  Poppins_400Regular,
-  Poppins_500Medium,
-  Poppins_700Bold,
-  Poppins_900Black,
-  useFonts,
-} from '@expo-google-fonts/poppins';
+import { useFonts } from 'expo-font';
 
 import { createBottomTabListeners } from './screenListeners';
 import { GlobalStateProps, withGlobalStateProvider } from './core/globalState';
@@ -42,12 +33,10 @@ import MediaItemDetail from './components/pages/MediaItemDetail';
 import MediaItemEdit from './components/pages/MediaItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
-import User from './components/pages/User';
 import AccountEdit from './components/pages/AccountEdit';
 import Profile from './components/pages/Profile';
 
 // const deviceWidth = Dimensions.get('window').width;
-// const DrawerNavigator = createDrawerNavigator();
 
 const BrowseStackNavigator = createStackNavigator();
 const BrowseNavigation = () => {
@@ -94,14 +83,13 @@ const MediaNavigation = () => {
 
 const AccountStackNavigator = createStackNavigator();
 const AccountNavigation = () => {
-  const user = useAppSelector((state) => state?.user?.entity);
+  const user = useUser();
 
   return (
-    <AccountStackNavigator.Navigator initialRouteName={user.firstName ? 'Account' : 'accountEdit'}>
+    <AccountStackNavigator.Navigator initialRouteName={user?.firstName ? 'Account' : 'accountEdit'}>
       <AccountStackNavigator.Screen {...routeConfig.account} component={Account} />
       <AccountStackNavigator.Screen {...routeConfig.profile} component={Profile} />
       <AccountStackNavigator.Screen {...routeConfig.accountEdit} component={AccountEdit} initialParams={{ userId: null }} />
-      <AccountStackNavigator.Screen {...routeConfig.user} component={User} />
       <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
       <AccountStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
       <AccountStackNavigator.Screen {...routeConfig.playlistEdit} component={PlaylistEdit} />
@@ -132,11 +120,11 @@ export const tabNavigationIconsMap = {
 const PrivateNavigator = createBottomTabNavigator();
 
 interface PrivateMainNavigationProps {
-  user: Partial<ProfileDto>;
   globalState: GlobalStateProps;
 }
 
-function PrivateMainNavigation({ user, globalState }: PrivateMainNavigationProps) {
+function PrivateMainNavigation({ globalState }: PrivateMainNavigationProps) {
+  const { user, build } = globalState;
   const navigationTabListeners = createBottomTabListeners(globalState);
   return (
     <PrivateNavigator.Navigator
@@ -163,7 +151,7 @@ function PrivateMainNavigation({ user, globalState }: PrivateMainNavigationProps
 
       {build.forAdmin && <PrivateNavigator.Screen name="Media" component={MediaNavigation} listeners={navigationTabListeners} />}
 
-      <PrivateNavigator.Screen name="Account" component={AccountNavigation} listeners={navigationTabListeners} initialParams={{ userId: user._id }} />
+      <PrivateNavigator.Screen name="Account" component={AccountNavigation} listeners={navigationTabListeners} initialParams={{ userId: user?._id }} />
     </PrivateNavigator.Navigator>
   );
 }
@@ -176,32 +164,27 @@ Amplify.configure({
   },
 });
 
-async function fakeLogin() {
+async function clearLogin() {
   await Auth.signOut();
   await Auth.currentCredentials();
 }
 
-fakeLogin().then();
+clearLogin().then();
 
 const PublicMainNavigationWithGlobalState = withGlobalStateProvider(PublicMainNavigation);
 const PrivateMainNavigationWithGlobalState = withGlobalStateProvider(PrivateMainNavigation);
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
-
-  // TODO: Fix font loading on Android
   const [fontsLoaded] = useFonts({
-    Poppins_500Medium,
-    Poppins_900Black,
-    Poppins_700Bold,
-    Poppins_100Thin,
-    Poppins_300Light,
-    Poppins_400Regular,
+    'CircularStd-Black': require('./assets/fonts/CircularStd-Black.otf'),
+    'CircularStd-Bold': require('./assets/fonts/CircularStd-Bold.otf'),
+    'CircularStd-Medium': require('./assets/fonts/CircularStd-Medium.otf'),
+    'CircularStd-Book': require('./assets/fonts/CircularStd-Book.otf'),
+    'CircularStd-Light': require('./assets/fonts/CircularStd-Light.otf'),
   });
 
-  // const fontsLoaded = true;
   // Amplify.configure(awsmobile);
-  // fakeLogin();
+  // clearLogin();
 
   // This is disabled until I figure out what causes the session to be wack
   // useEffect(() => {
@@ -214,11 +197,8 @@ function App() {
   //   checkToken();
   // }, []);
 
-  const user = useAppSelector((state) => state?.user?.entity);
   const loading = useAppSelector((state) => state?.app?.loading);
-  useEffect(() => {
-    setIsLoggedIn(user?._id?.length > 0);
-  }, [user]);
+  const { isLoggedIn } = useUser();
 
   const customTheme = { ...theme };
   if (!fontsLoaded) {
@@ -235,7 +215,7 @@ function App() {
         >
           {isLoggedIn ? (
             <NavigationContainer>
-              <PrivateMainNavigationWithGlobalState user={user} />
+              <PrivateMainNavigationWithGlobalState />
             </NavigationContainer>
           ) : (
             <NavigationContainer>

@@ -5,10 +5,19 @@ import { Button } from 'react-native-paper';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { addMediaItem } from 'mediashare/store/modules/mediaItem';
 import { CreateMediaItemDto, MediaCategoryType } from 'mediashare/rxjs-api';
-import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
+import { useMediaItems } from 'mediashare/hooks/navigation';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { KeyboardAvoidingPageContent, PageActions, PageContainer, PageProps, ActionButtons, MediaCard, AppUpload, UploadPlaceholder  } from 'mediashare/components/layout';
+import {
+  KeyboardAvoidingPageContent,
+  PageActions,
+  PageContainer,
+  PageProps,
+  ActionButtons,
+  MediaCard,
+  AppUpload,
+  UploadPlaceholder,
+} from 'mediashare/components/layout';
 import { minLength, titleValidator, descriptionValidator, categoryValidator, tagValidator } from 'mediashare/core/utils/validators';
 import { theme } from 'mediashare/styles';
 

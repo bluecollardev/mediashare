@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import { CreateMediaItemDto } from '../controllers/media-item/dto/create-media-item.dto';
 import { MediaItem } from '../controllers/media-item/entities/media-item.entity';
 import { CreateUserDto } from '../controllers/user/dto/create-user.dto';
-import { User } from '../controllers/user/entities/user.entity';
+import { User } from '../modules/user/entities/user.entity';
 
 import { range } from 'remeda';
 import { Playlist } from '../controllers/playlist/entities/playlist.entity';
@@ -52,7 +52,7 @@ export class UserFactory extends DataFn {
       _id: ObjectIdGuard(_id),
       createdAt: new Date(),
       email,
-      roles: ['user'],
+      roles: ['subscriber'],
     };
   }
 

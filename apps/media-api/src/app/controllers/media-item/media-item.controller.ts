@@ -1,42 +1,39 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Res, HttpStatus, UseGuards, Query } from '@nestjs/common';
-import { Response } from 'express';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
-import { MEDIA_CATEGORY } from '@core-lib';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
+import { MEDIA_CATEGORY } from '@core-lib';
 import { CreateDto } from '@api-core/decorators/create-dto.decorator';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 
-import { AppConfigService } from '@api-modules/app-config/app-config.provider';
-
+import { MediaGetResponse, MediaPostResponse, MediaPutResponse, MediaShareResponse } from './media-item.decorator';
+import { notFoundResponse } from '@api-core/functors/http-errors.functor';
 import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 import { MediaItem } from './entities/media-item.entity';
-import { MediaGetResponse, MediaPostResponse, MediaPutResponse, MediaShareResponse } from './media-item.decorator';
-import { notFoundResponse } from '@api-core/functors/http-errors.functor';
-
 import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 
 @ApiTags('media-items')
 @Controller('media-items')
 export class MediaItemController {
-  constructor(private readonly mediaItemService: MediaItemService, private shareItemService: ShareItemService, private configSvc: AppConfigService) {}
+  constructor(private readonly mediaItemService: MediaItemService, private shareItemService: ShareItemService) {}
 
   @Get('categories')
   getCategories() {
     return MEDIA_CATEGORY;
   }
 
-  @Get(':mediaId')
+  @Get(RouteTokens.MEDIA_ITEM_ID)
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @MediaGetResponse()
   async findOne(@Param('mediaId', new ObjectIdPipe()) mediaId: ObjectId) {
-    const response = await this.mediaItemService.findOne(mediaId);
+    const response = await this.mediaItemService.getById(mediaId);
     if (!response) throw notFoundResponse('mediaItem', { args: { mediaId } });
     return response;
   }
@@ -45,16 +42,16 @@ export class MediaItemController {
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
   @MediaGetResponse({ isArray: true })
-  findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
+  async findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
-
-    return query || tags ? this.mediaItemService.search({ query, tags: parsedTags }) : this.mediaItemService.findAll();
+    // Always search, we want to run the aggregate query in every case
+    return query || tags ? await this.mediaItemService.search({ query, tags: parsedTags }) : await this.mediaItemService.search({});
   }
 
   @Get('popular')
   @MediaGetResponse({ isArray: true })
-  findPopular() {
-    return this.mediaItemService.getPopular();
+  async findPopular() {
+    return await this.mediaItemService.getPopular();
   }
 
   @UseGuards(JwtAuthGuard)
@@ -91,7 +88,7 @@ export class MediaItemController {
     return deleted;
   }
 
-  @Post(':mediaId/share/:userId')
+  @Post(`${RouteTokens.MEDIA_ITEM_ID}/share/${RouteTokens.USER_ID}`)
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
   @MediaShareResponse({ type: ShareItem })

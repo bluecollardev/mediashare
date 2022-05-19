@@ -4,10 +4,10 @@ import { ApiResponse } from '@nestjs/swagger';
 import { UseJwtGuard } from '@api-modules/auth/auth.decorator';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 
-export function ShareItemGetResponse({ isArray = false, type = ShareItem }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ type, isArray, status: 200 }), UseJwtGuard());
+export function ShareItemGetResponse({ type = ShareItem, isArray = false, description }: ApiControllerDecoratorParams = {}) {
+  return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), UseJwtGuard());
 }
 
-export function ShareItemPostResponse({ isArray = false, type = ShareItem, description }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ description, type, status: 201, isArray }), UseJwtGuard());
+export function ShareItemPostResponse({ type = ShareItem, isArray = false, description }: ApiControllerDecoratorParams = {}) {
+  return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), UseJwtGuard());
 }

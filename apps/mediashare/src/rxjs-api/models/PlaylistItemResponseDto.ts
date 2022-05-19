@@ -39,11 +39,6 @@ export interface PlaylistItemResponseDto {
    */
   userId: string;
   /**
-   * @type {boolean}
-   * @memberof PlaylistItemResponseDto
-   */
-  isPlayable: boolean;
-  /**
    * @type {string}
    * @memberof PlaylistItemResponseDto
    */
@@ -64,20 +59,25 @@ export interface PlaylistItemResponseDto {
    */
   uri: string;
   /**
+   * @type {string}
+   * @memberof PlaylistItemResponseDto
+   */
+  thumbnail: string;
+  /**
+   * @type {boolean}
+   * @memberof PlaylistItemResponseDto
+   */
+  isPlayable?: boolean;
+  /**
    * @type {MediaCategoryType}
    * @memberof PlaylistItemResponseDto
    */
-  category: MediaCategoryType;
+  category?: MediaCategoryType;
   /**
    * @type {Array<TagKeyValue>}
    * @memberof PlaylistItemResponseDto
    */
   tags: Array<TagKeyValue> | null;
-  /**
-   * @type {string}
-   * @memberof PlaylistItemResponseDto
-   */
-  thumbnail: string;
   /**
    * @type {string}
    * @memberof PlaylistItemResponseDto
