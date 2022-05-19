@@ -72,7 +72,6 @@ const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
         <ScrollView>
           <MediaCard
             title={title}
-            author={author}
             description={description}
             showThumbnail={!!imageSrc}
             thumbnail={imageSrc}
