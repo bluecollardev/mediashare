@@ -18,6 +18,7 @@
  */
 export enum BcRolesType {
   Guest = 'guest',
-  User = 'user',
+  Free = 'free',
+  Subscriber = 'subscriber',
   Admin = 'admin',
 }

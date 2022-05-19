@@ -44,11 +44,6 @@ export interface UpdateMediaItemDto {
    */
   userId?: string;
   /**
-   * @type {boolean}
-   * @memberof UpdateMediaItemDto
-   */
-  isPlayable?: boolean;
-  /**
    * @type {string}
    * @memberof UpdateMediaItemDto
    */
@@ -69,6 +64,16 @@ export interface UpdateMediaItemDto {
    */
   uri?: string;
   /**
+   * @type {string}
+   * @memberof UpdateMediaItemDto
+   */
+  thumbnail?: string;
+  /**
+   * @type {boolean}
+   * @memberof UpdateMediaItemDto
+   */
+  isPlayable?: boolean;
+  /**
    * @type {MediaCategoryType}
    * @memberof UpdateMediaItemDto
    */
@@ -78,9 +83,4 @@ export interface UpdateMediaItemDto {
    * @memberof UpdateMediaItemDto
    */
   tags?: Array<TagKeyValue> | null;
-  /**
-   * @type {string}
-   * @memberof UpdateMediaItemDto
-   */
-  thumbnail?: string;
 }

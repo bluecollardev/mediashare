@@ -5,7 +5,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { FilterableDataService } from '@api';
-import { UserService } from '@api-modules/auth/user.service';
+import { UserService } from '@api-modules/user/user.service';
 import { PlaylistItemService } from '@api-modules/playlist-item/playlist-item.service';
 import { Playlist } from './entities/playlist.entity';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
@@ -119,7 +119,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
       }
     }
 
-    aggregateQuery = aggregateQuery.concat([...this.buildLookupFields()]);
+    aggregateQuery = aggregateQuery.concat([...this.buildFields()]);
 
     if (query) {
       aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
@@ -128,46 +128,22 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
     return aggregateQuery;
   }
 
-  protected buildLookupFields() {
+  protected buildFields() {
     return [
+      { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'author' } },
+      { $lookup: { from: 'media_item', localField: 'mediaIds', foreignField: '_id', as: 'mediaItems' } },
+      { $lookup: { from: 'share_item', localField: '_id', foreignField: 'playlistId', as: 'shareItems' } },
+      { $lookup: { from: 'view_item', localField: '_id', foreignField: 'playlistId', as: 'viewItems' } },
+      { $lookup: { from: 'like_item', localField: '_id', foreignField: 'playlistId', as: 'likeItems' } },
+      { $unwind: { path: '$author' } },
       {
-        $lookup: {
-          from: 'media_item',
-          localField: 'mediaIds',
-          foreignField: '_id',
-          as: 'mediaItems',
-        },
-      },
-      {
-        $lookup: {
-          from: 'user',
-          localField: 'createdBy',
-          foreignField: '_id',
-          as: 'user',
-        },
-      },
-      {
-        $lookup: {
-          from: 'share_item',
-          localField: '_id',
-          foreignField: 'playlistId',
-          as: 'shareItems',
-        },
-      },
-      {
-        $lookup: {
-          from: 'view_item',
-          localField: '_id',
-          foreignField: 'playlistId',
-          as: 'viewItems',
-        },
-      },
-      {
-        $lookup: {
-          from: 'like_item',
-          localField: '_id',
-          foreignField: 'playlistId',
-          as: 'likeItems',
+        $addFields: {
+          authorProfile: {
+            authorId: '$author._id',
+            authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
+            authorUsername: '$author.username',
+            authorImage: '$author.imageSrc',
+          },
         },
       },
     ];
@@ -180,7 +156,9 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
           $mergeObjects: [
             {
               _id: '$_id',
-              author: '$user.username',
+              userId: '$author._id',
+              username: '$author.username',
+              authorProfile: '$authorProfile',
               title: '$title',
               description: '$description',
               imageSrc: '$imageSrc',
@@ -190,8 +168,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
               shareCount: { $size: '$shareItems' },
               likesCount: { $size: '$likeItems' },
               viewCount: { $size: '$viewItems' },
-              // shared: { $count: '$shareItems' }
-              createdBy: '$user._id',
+              createdBy: '$author._id',
               createdAt: '$createdAt',
               updatedDate: '$updatedDate',
             },

@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   container: { display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center', flexDirection: 'column', height: 75 },
   title: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 20,
     color: '#fff',
   },
 });

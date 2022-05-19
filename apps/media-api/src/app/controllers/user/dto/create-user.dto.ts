@@ -1,14 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-
 import { ApiDecoratorOptions, ApiEmail, ApiName, ApiObjectId, ApiPastDate, ApiString } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
 import { MediaItemResponseDto } from '../../media-item/dto/media-item-response.dto';
 import { PlaylistResponseDto } from '../../playlist/dto/playlist-response.dto';
-import { User } from '../entities/user.entity';
+import { User } from '../../../modules/user/entities/user.entity';
 import { BC_ROLES } from '@core-lib';
 import { BcRolesType } from '@api-core/types/roles.type';
 
-const uuidExample = '1731ee8a-8f27-53af-805d-2ee2e705f0e2';
 export class CreateUserDto {
   @ApiName(<ApiDecoratorOptions>{ required: true })
   firstName: string;
@@ -35,10 +33,13 @@ export class UserDto implements User {
 
   @ApiString()
   username: string;
+
   @ApiString()
   firstName: string;
+
   @ApiString()
   lastName: string;
+
   @ApiProperty({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType' }) role: BcRolesType;
 
   @ApiString()
@@ -64,6 +65,7 @@ export class UserDto implements User {
 
   @ApiProperty()
   sharedPlaylists?: ObjectId[];
+
   @ApiProperty()
   sharedMediaItems?: ObjectId[];
 

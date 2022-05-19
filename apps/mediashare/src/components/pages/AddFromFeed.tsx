@@ -8,7 +8,7 @@ import { AwsMediaItem } from 'mediashare/core/aws/aws-media-item.model';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { PageContainer, PageContent, PageActions, PageProps, NoItems, ActionButtons, MediaListItem } from 'mediashare/components/layout';
-import { useMediaItems } from 'mediashare/hooks/NavigationHooks';
+import { useMediaItems } from 'mediashare/hooks/navigation';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
@@ -17,8 +17,8 @@ export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
   const goToMediaItems = useMediaItems();
   const selectedItems = new Set<AwsMediaItem>();
 
-  const entities = useAppSelector((state) => state?.mediaItem?.feed);
-  const { loading, loaded } = useAppSelector((state) => state?.mediaItem);
+  const entities = useAppSelector((state) => state?.mediaItem?.feed?.entities) || [];
+  const { loading, loaded } = useAppSelector((state) => state?.mediaItem?.feed);
   const [isLoaded, setIsLoaded] = useState(loaded);
   useEffect(() => {
     if (loaded && !isLoaded) {
@@ -105,5 +105,5 @@ export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
 };
 
 export default withLoadingSpinner((state) => {
-  return !(Array.isArray(state?.mediaItem?.feed) && state?.mediaItem?.feed?.length > 0);
+  return !!state?.mediaItems?.feed?.loading || false;
 })(withGlobalStateConsumer(AddFromFeed));

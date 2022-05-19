@@ -19,11 +19,6 @@ import { MediaCategoryType, TagKeyValue } from './';
  */
 export interface CreateMediaItemDto {
   /**
-   * @type {boolean}
-   * @memberof CreateMediaItemDto
-   */
-  isPlayable: boolean;
-  /**
    * @type {string}
    * @memberof CreateMediaItemDto
    */
@@ -44,6 +39,16 @@ export interface CreateMediaItemDto {
    */
   uri: string;
   /**
+   * @type {string}
+   * @memberof CreateMediaItemDto
+   */
+  thumbnail: string;
+  /**
+   * @type {boolean}
+   * @memberof CreateMediaItemDto
+   */
+  isPlayable?: boolean;
+  /**
    * @type {MediaCategoryType}
    * @memberof CreateMediaItemDto
    */
@@ -53,11 +58,6 @@ export interface CreateMediaItemDto {
    * @memberof CreateMediaItemDto
    */
   tags?: Array<TagKeyValue> | null;
-  /**
-   * @type {string}
-   * @memberof CreateMediaItemDto
-   */
-  thumbnail: string;
   /**
    * @type {string}
    * @memberof CreateMediaItemDto

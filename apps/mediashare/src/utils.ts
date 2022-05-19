@@ -32,6 +32,10 @@ export function shortenText(str, maxLen, separator: RegExp = undefined) {
   return `${str.substring(0, idx < 0 ? idx : idx + maxLen)}...`;
 }
 
+/**
+ * @deprecated Remove this when we've finished implementing authorProfile
+ * @param user
+ */
 export function getUserFullName(user) {
   if (!user) {
     return 'Unknown';
@@ -40,10 +44,18 @@ export function getUserFullName(user) {
   return !!firstName || !!lastName ? `${firstName} ${lastName}` : 'Unknown';
 }
 
+/**
+ * @deprecated Remove this when we've finished implementing authorProfile
+ * @param user
+ */
 export function getAuthorText(user) {
   return `${getUserFullName(user)}`;
 }
 
+/**
+ * @deprecated Remove this when we've finished implementing authorProfile
+ * @param user
+ */
 export function getUsername(user = { username: 'Unknown' }) {
   return user.username ? `${user.username}` : 'anonymous';
 }

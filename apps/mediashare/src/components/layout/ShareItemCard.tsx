@@ -51,7 +51,8 @@ const styles = StyleSheet.create({
   titleText: {
     marginBottom: 4,
     color: theme.colors.text,
-    fontSize: 14,
+    fontSize: 15,
+    fontFamily: theme.fonts.medium.fontFamily,
   },
   description: {
     marginTop: 5,
@@ -60,8 +61,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   date: {
-    fontSize: 11,
+    fontSize: 13,
     color: theme.colors.textDarker,
+    fontFamily: theme.fonts.thin.fontFamily,
   },
   visibilityIcon: {
     flex: 0,
