@@ -86,57 +86,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="58efc052-a20a-4664-aee3-d8926aa63ddf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.env" beforeDir="false" afterPath="$PROJECT_DIR$/../.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.env.development" beforeDir="false" afterPath="$PROJECT_DIR$/../.env.development" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/../.env.production" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/100.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/100.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/1024.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/1024.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/114.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/114.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/120.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/120.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/128.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/128.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/144.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/144.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/152.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/152.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/16.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/16.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/167.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/167.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/172.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/172.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/180.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/180.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/196.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/196.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/20.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/20.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/216.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/216.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/256.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/256.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/29.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/29.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/32.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/32.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/40.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/40.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/48.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/48.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/50.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/50.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/512.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/512.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/55.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/55.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/57.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/57.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/58.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/58.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/60.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/64.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/64.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/72.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/72.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/76.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/76.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/80.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/80.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/87.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/87.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/88.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Images.xcassets/AppIcon.appiconset/88.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Mediashare/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Mediashare/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/components/layout/MediaCard/MediaCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/layout/MediaCard/MediaCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/components/pages/Browse.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/pages/Browse.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../src/config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../yarn.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../assets/AppIcons-white.zip" beforeDir="false" afterPath="$PROJECT_DIR$/../../../assets/AppIcons-white.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../assets/appstore.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../assets/appstore.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../assets/playstore.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../assets/playstore.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,12 +103,7 @@
       <state>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="MediashareTechnology" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -296,5 +241,9 @@
       <screen x="0" y="25" width="1920" height="1055" />
     </state>
     <state x="424" y="211" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1920.1055/-1792.25.1792.1095@0.25.1920.1055" timestamp="1652968508559" />
+    <state x="100" y="125" width="1720" height="855" key="AVDManager" timestamp="1653017564626">
+      <screen x="0" y="25" width="1920" height="1055" />
+    </state>
+    <state x="100" y="125" width="1720" height="855" key="AVDManager/0.25.1920.1055/-1792.25.1792.1095@0.25.1920.1055" timestamp="1653017564626" />
   </component>
 </project>
