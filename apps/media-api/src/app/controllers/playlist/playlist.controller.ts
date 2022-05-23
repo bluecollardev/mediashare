@@ -97,7 +97,7 @@ export class PlaylistController {
     @GetUserId() createdBy: ObjectId,
     @Res() response: Response
   ) {
-    const shareItem = await this.shareItemService.createPlaylistShareItem({ createdBy, userId, playlistId });
+    const shareItem = await this.shareItemService.createPlaylistShareItem({ createdBy, userId, playlistId, title: '' });
     return response.status(HttpStatus.CREATED).send(shareItem);
   }
 }
