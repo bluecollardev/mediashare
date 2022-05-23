@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native';
 import { Avatar, Caption, Title, Subheading, Card, Menu, IconButton } from 'react-native-paper';
 import { useProfile } from 'mediashare/hooks/useProfile';
 import { theme } from 'mediashare/styles';
@@ -132,22 +132,27 @@ const defaultStyles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-start',
     justifyContent: 'flex-start',
-    height: 20,
-    marginBottom: 4,
   },
   subtitle: {
     marginLeft: 15,
   },
+  // TODO: Fix Typography line height on Android vs iOS
   titleText: {
     color: theme.colors.text,
     fontSize: 18,
     fontFamily: theme.fonts.medium.fontFamily,
+    lineHeight: Platform.OS === 'android' ? 28 : 24,
+    includeFontPadding: false,
+    textAlignVertical: 'top',
   },
   subtitleText: {
     fontSize: 13,
     color: theme.colors.textDarker,
     fontFamily: theme.fonts.thin.fontFamily,
-    lineHeight: 15,
+    lineHeight: 16,
+    includeFontPadding: false,
+    textAlignVertical: 'top',
+    minHeight: 'auto',
   },
   left: {
     flex: 0,

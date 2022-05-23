@@ -86,10 +86,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="58efc052-a20a-4664-aee3-d8926aa63ddf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.env" beforeDir="false" afterPath="$PROJECT_DIR$/../.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.env.development" beforeDir="false" afterPath="$PROJECT_DIR$/../.env.development" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/../.env.production" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -97,7 +93,6 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/lucas/.android/avd/Pixel_3a_API_30_x86.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -108,12 +103,7 @@
       <state>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="MediashareTechnology" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -166,7 +156,6 @@
       <option name="ARTIFACT_NAME" value="" />
       <option name="PM_INSTALL_OPTIONS" value="" />
       <option name="ALL_USERS" value="false" />
-      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
@@ -174,7 +163,6 @@
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
       <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
       <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
       <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
@@ -247,5 +235,15 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="424" y="211" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1652968508559">
+      <screen x="0" y="25" width="1920" height="1055" />
+    </state>
+    <state x="424" y="211" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1920.1055/-1792.25.1792.1095@0.25.1920.1055" timestamp="1652968508559" />
+    <state x="100" y="125" width="1720" height="855" key="AVDManager" timestamp="1653017564626">
+      <screen x="0" y="25" width="1920" height="1055" />
+    </state>
+    <state x="100" y="125" width="1720" height="855" key="AVDManager/0.25.1920.1055/-1792.25.1792.1095@0.25.1920.1055" timestamp="1653017564626" />
   </component>
 </project>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { Caption, Checkbox, IconButton, List } from 'react-native-paper';
 
 import { MediaPreview } from './MediaPreview';
@@ -120,6 +120,7 @@ const defaultStyles: any = StyleSheet.create({
     color: theme.colors.text,
     fontSize: 15,
     fontFamily: theme.fonts.medium.fontFamily,
+    lineHeight: Platform.OS === 'android' ? 20 : 18,
   },
   iconButton: {
     marginRight: 0,

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import SwitchSelector from 'react-native-switch-selector';
@@ -185,9 +185,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       <Card.Content style={{ marginTop: 0, marginBottom: 30 }}>
         {showSocial && <MediaCardSocial likes={likes} shares={shares} views={views} />}
         {children}
-        {showDescription && (
-          <Paragraph style={showSocial ? defaultStyles.descriptionWithSocial : defaultStyles.description}>{description}</Paragraph>
-        )}
+        {showDescription && <Paragraph style={showSocial ? defaultStyles.descriptionWithSocial : defaultStyles.description}>{description}</Paragraph>}
       </Card.Content>
     </Card>
   );
@@ -197,38 +195,9 @@ const defaultStyles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
   },
-  avatar: {
-    width: 50,
-  },
-  title: {
-    marginBottom: 4,
-  },
-  titleText: {
-    color: theme.colors.text,
-    fontSize: 18,
-    fontFamily: theme.fonts.medium.fontFamily,
-  },
-  subtitle: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  createdBy: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: '100%',
-  },
-  author: {
-    color: theme.colors.text,
-    fontFamily: theme.fonts.thin.fontFamily,
-    fontSize: 13,
-    marginBottom: 2,
-  },
-  username: {
-    color: theme.colors.textDarker,
-    fontFamily: theme.fonts.thin.fontFamily,
-    fontSize: 13,
-    marginBottom: 2,
-    marginLeft: 2,
+  card: {
+    paddingTop: 5,
+    margin: 0,
   },
   description: {
     marginBottom: 15,
@@ -242,9 +211,5 @@ const defaultStyles = StyleSheet.create({
     fontSize: 15,
     color: theme.colors.text,
     fontFamily: theme.fonts.thin.fontFamily,
-  },
-  card: {
-    paddingTop: 5,
-    margin: 0,
   },
 });

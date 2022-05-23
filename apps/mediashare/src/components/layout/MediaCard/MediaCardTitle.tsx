@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, Card, IconButton, Title, Text } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 
 import { getAuthorText } from 'mediashare/utils';
 import { theme } from 'mediashare/styles';
@@ -65,6 +65,7 @@ const defaultStyles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: 15,
     fontFamily: theme.fonts.medium.fontFamily,
+    lineHeight: Platform.OS === 'android' ? 24 : 20,
   },
   subtitle: {
     display: 'flex',
