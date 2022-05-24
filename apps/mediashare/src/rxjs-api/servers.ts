@@ -38,7 +38,8 @@ export class ServerConfiguration<T extends { [key: string]: string }> {
   }
 }
 
-const server1 = new ServerConfiguration<{}>('http://localhost:5000', {}, 'development server');
-const server2 = new ServerConfiguration<{}>('https://bcdevmediashare.herokuapp.com', {}, 'production');
+const server1 = new ServerConfiguration<{}>('http://localhost:5000', {}, 'local dev');
+const server2 = new ServerConfiguration<{}>('https://mediashare-api-staging.herokuapp.com', {}, 'staging');
+const server3 = new ServerConfiguration<{}>('https://mediashare-api-prod.herokuapp.com', {}, 'production');
 
-export const servers = [server1, server2];
+export const servers = [server1, server2, server3];
