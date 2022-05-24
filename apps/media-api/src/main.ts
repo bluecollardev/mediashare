@@ -55,7 +55,7 @@ async function bootstrap() {
     const config = new DocumentBuilder()
       .setTitle(title)
       .setDescription('Mediashare API')
-      .setVersion('0.1.4')
+      .setVersion('0.1.5')
       .addServer(`http://localhost:${port}`, 'local dev')
       .addServer(`https://mediashare-api-staging.herokuapp.com`, `staging`)
       .addServer(`https://mediashare-api-prod.herokuapp.com`, `production`)
