@@ -54,10 +54,11 @@ async function bootstrap() {
     /* SWAGGER */
     const config = new DocumentBuilder()
       .setTitle(title)
-      .setDescription('Media Share API')
-      .setVersion('1.0')
-      .addServer(`http://localhost:${port}`, 'development server')
-      .addServer(`https://bcdevmediashare.herokuapp.com`, `production`)
+      .setDescription('Mediashare API')
+      .setVersion('0.1.4')
+      .addServer(`http://localhost:${port}`, 'local dev')
+      .addServer(`https://mediashare-api-staging.herokuapp.com`, `staging`)
+      .addServer(`https://mediashare-api-prod.herokuapp.com`, `production`)
       .addBearerAuth()
       .build();
 
