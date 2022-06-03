@@ -46,9 +46,11 @@ const PlaylistItemEdit = ({
   const playlistItem = useAppSelector((state) => state?.playlistItem?.entity);
 
   const [showDialog, setShowDialog] = useState(false);
+
   const [title, setTitle] = useState(playlistItem?.title);
   const [description, setDescription] = useState(playlistItem?.description);
   const [category, setCategory] = useState();
+  const [sortIndex, setSortIndex] = useState('');
 
   const { tags = [] } = globalState;
   const availableTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isMediaTag), []);
@@ -91,6 +93,7 @@ const PlaylistItemEdit = ({
             key={playlistItemId}
             title={title}
             description={description}
+            sortIndex={sortIndex}
             mediaSrc={documentUri}
             thumbnail={thumbnail}
             showThumbnail={true}
