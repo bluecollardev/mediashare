@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import SwitchSelector from 'react-native-switch-selector';
@@ -19,6 +19,7 @@ export interface MediaCardProps {
   title?: string;
   authorProfile?: AuthorProfileDto;
   description?: string;
+  sortIndex?: string;
   showSocial?: any | boolean;
   showActions?: boolean;
   showDescription?: boolean;
@@ -38,6 +39,7 @@ export interface MediaCardProps {
   onActionsClicked?: () => void;
   onTitleChange?: (value: string) => void;
   onDescriptionChange?: (value: string) => void;
+  onSortIndexChange?: (value: string) => void;
   onTagChange?: (value: string) => void;
   tagOptions?: any[];
   onCategoryChange?: (value: string) => void;
@@ -52,6 +54,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   title = '',
   authorProfile = {} as AuthorProfileDto,
   description = '',
+  sortIndex = undefined,
   mediaSrc,
   showSocial = false,
   showActions = false,
@@ -74,6 +77,8 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   onTitleChange = (value: string) => {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onDescriptionChange = (value: string) => {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onSortIndexChange = (value: string) => {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onCategoryChange = (value: string) => {},
   categoryOptions = [],
@@ -109,7 +114,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       )}
       {topDrawer && <TopDrawer />}
       <View style={defaultStyles.container}>
-        <Card elevation={elevation} style={{ marginTop: 25, marginBottom: 0 }}>
+        <Card elevation={elevation} style={{ marginTop: 25, marginBottom: 15 }}>
           <TextField
             label="Title"
             value={title}
@@ -119,7 +124,20 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             disabled={isReadOnly}
           />
         </Card>
-        <Card elevation={elevation} style={{ marginBottom: 25 }}>
+        {sortIndex !== undefined && (
+          <Card elevation={elevation} style={{ marginBottom: 15 }}>
+            <TextField
+              style={{ backgroundColor: theme.colors.surface, fontSize: 15 }}
+              multiline={true}
+              label="Sort Index"
+              value={sortIndex}
+              numberOfLines={1}
+              onChangeText={(text) => onSortIndexChange(text)}
+              disabled={isReadOnly}
+            />
+          </Card>
+        )}
+        <Card elevation={elevation} style={{ marginBottom: 15 }}>
           <SectionedMultiSelect
             colors={components.multiSelect.colors}
             styles={components.multiSelect.styles}
