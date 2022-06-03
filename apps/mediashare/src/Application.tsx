@@ -20,7 +20,6 @@ import { GlobalStateProps, withGlobalStateProvider } from './core/globalState';
 
 import Login from './components/pages/Login';
 import Browse from './components/pages/Browse';
-import AddFromCollection from './components/pages/AddFromCollection';
 import MediaItemAdd from './components/pages/MediaItemAdd';
 import AddFromFeed from './components/pages/AddFromFeed';
 import Playlists from './components/pages/Playlists';
@@ -63,8 +62,6 @@ const PlaylistsNavigation = () => {
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistItemEdit} component={PlaylistItemEdit} />
-      {/* TODO: Do we even use AddFromCollection, anywhere? */}
-      <PlaylistsStackNavigator.Screen {...routeConfig.addFromMedia} component={AddFromCollection} />
       <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} component={ShareWith} />
     </PlaylistsStackNavigator.Navigator>
   );
