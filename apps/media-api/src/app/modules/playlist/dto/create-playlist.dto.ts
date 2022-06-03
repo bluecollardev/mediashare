@@ -8,6 +8,6 @@ export class CreatePlaylistDto extends PickType(Playlist, ['category', 'title', 
   @IsArray()
   mediaIds: string[];
 
-  @ApiProperty({ type: TagKeyValue, isArray: true, nullable: true })
+  @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
   tags: TagKeyValue[];
 }

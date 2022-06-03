@@ -48,7 +48,7 @@ export class MediaItem extends BcEntity {
   @ApiProperty({ enum: MEDIA_CATEGORY, name: 'category', enumName: 'MediaCategoryType', required: false })
   category: MediaCategoryType;
 
-  @ApiProperty({ type: TagKeyValue, isArray: true, nullable: true })
+  @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
   @Column({ name: 'tags', array: true, nullable: true })
   tags: TagKeyValue[];
 }

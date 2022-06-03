@@ -59,8 +59,7 @@ export const getMediaItemById = createAsyncThunk(mediaItemActions.getMediaItem.t
   const result = await forkJoin({
     mediaItem: api.mediaItems.mediaItemControllerFindOne({ mediaId }).toPromise(),
     src: getStorage(uri),
-  })
-  .toPromise();
+  }).toPromise();
   api.views.viewsControllerCreateMediaView({ mediaId }).pipe(take(1)).subscribe();
   return { mediaItem: result.mediaItem as MediaItemResponseDto, src: result.src };
 });

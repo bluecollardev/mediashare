@@ -24,7 +24,7 @@ export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_D
   @IsIn(MEDIA_CATEGORY)
   category: MediaCategoryType;
 
-  @ApiProperty({ type: TagKeyValue, required: false, isArray: true, nullable: true })
+  @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
   tags: TagKeyValue[];
 
   @ApiString(<ApiDecoratorOptions>{ required: true })

@@ -1,29 +1,8 @@
-import { ApiObjectId } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { ObjectId } from 'mongodb';
-import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
 import { Playlist } from '../entities/playlist.entity';
+import { PlaylistItemResponseDto } from '@api-modules/playlist-item/dto/playlist-item-response.dto';
 
-class CreatePlaylistItemResponseDto implements Pick<PlaylistItem, 'mediaId' | 'userId' | 'playlistId' | '_id'> {
-  @ApiObjectId()
-  mediaId: ObjectId;
-
-  @ApiObjectId()
-  userId: ObjectId;
-
-  @ApiObjectId()
-  playlistId: ObjectId;
-
-  @ApiObjectId()
-  _id: ObjectId;
+export class CreatePlaylistResponseDto extends Playlist {
+  @ApiProperty({ type: () => PlaylistItemResponseDto, isArray: true })
+  playlistItems: PlaylistItemResponseDto[];
 }
-
-class CreatePlaylistResponseDto {
-  @ApiProperty({ readOnly: true, type: Playlist })
-  playlist: Playlist;
-
-  @ApiProperty({ type: CreatePlaylistItemResponseDto })
-  playlistItems: CreatePlaylistItemResponseDto[];
-}
-
-export { Playlist, CreatePlaylistResponseDto };

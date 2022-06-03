@@ -78,26 +78,59 @@ const playlistSlice = createSlice({
     builder
       .addCase(addUserPlaylist.pending, reducePendingState())
       .addCase(addUserPlaylist.rejected, reduceRejectedState())
-      .addCase(addUserPlaylist.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, created: action.payload, loading: false, loaded: true
-      })))
-      .addCase(getPlaylistById.pending, reducePendingState((state) => ({
-        ...state, selected: undefined, loading: true, loaded: false
-      })))
+      .addCase(
+        addUserPlaylist.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          created: action.payload,
+          loading: false,
+          loaded: true,
+        }))
+      )
+      .addCase(
+        getPlaylistById.pending,
+        reducePendingState((state) => ({
+          ...state,
+          selected: undefined,
+          loading: true,
+          loaded: false,
+        }))
+      )
       .addCase(getPlaylistById.rejected, reduceRejectedState())
-      .addCase(getPlaylistById.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, selected: action.payload, loading: false, loaded: true
-      })))
-      .addCase(removeUserPlaylist.pending, reducePendingState((state) => ({
-        ...state, selected: undefined, loading: true, loaded: false
-      })))
+      .addCase(
+        getPlaylistById.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          selected: action.payload,
+          loading: false,
+          loaded: true,
+        }))
+      )
+      .addCase(
+        removeUserPlaylist.pending,
+        reducePendingState((state) => ({
+          ...state,
+          selected: undefined,
+          loading: true,
+          loaded: false,
+        }))
+      )
       .addCase(removeUserPlaylist.rejected, reduceRejectedState())
-      .addCase(removeUserPlaylist.fulfilled, reduceFulfilledState((state) => ({
-        ...state, selected: undefined, loading: false, loaded: true
-      })))
+      .addCase(
+        removeUserPlaylist.fulfilled,
+        reduceFulfilledState((state) => ({
+          ...state,
+          selected: undefined,
+          loading: false,
+          loaded: true,
+        }))
+      )
       .addCase(clearUserPlaylist, (state) => ({
-        ...state, created: undefined, loading: false, loaded: true
-      }))
+        ...state,
+        created: undefined,
+        loading: false,
+        loaded: true,
+      }));
   },
 });
 

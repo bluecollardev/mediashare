@@ -1,10 +1,9 @@
-import { ApiProperty, IntersectionType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { ApiObjectId, ApiString, ApiLongString } from '@mediashare/shared';
 import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
 import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
-import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
 import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY } from '@core-lib';
 
 @Entity('playlist')
@@ -34,14 +33,7 @@ export class Playlist extends BcEntity implements PlaylistInterface {
   @ApiProperty({ enum: PLAYLIST_CATEGORY, name: 'category', enumName: 'PlaylistCategoryType', required: false })
   category: PlaylistCategoryType;
 
-  @ApiProperty({ type: TagKeyValue, isArray: true, nullable: true })
+  @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
   @Column({ name: 'tags', array: true, nullable: true })
   tags: TagKeyValue[];
 }
-
-class PlaylistResponseFields {
-  @ApiProperty({ type: PlaylistItem, isArray: true })
-  playlistItems: Readonly<PlaylistItem[]>;
-}
-
-export class PlaylistByUserResponseDto extends IntersectionType(PlaylistResponseFields, Playlist) {}
