@@ -15,7 +15,7 @@ import {
   useViewPlaylistItemById,
   useEditPlaylistItemById,
   usePlaylists,
-  useViewMediaItemById
+  useViewMediaItemById,
 } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB } from 'react-native-paper';
@@ -159,9 +159,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
               list={items}
               showThumbnail={true}
               onViewDetail={(item) =>
-                allowEdit
-                  ? editPlaylistItem({ mediaId: item._id, uri: item.uri, playlistId })
-                  : viewPlaylistItem({ mediaId: item._id, uri: item.uri })
+                allowEdit ? editPlaylistItem({ mediaId: item._id, uri: item.uri, playlistId }) : viewPlaylistItem({ mediaId: item._id, uri: item.uri })
               }
               selectable={false}
               actionIconRight={allowEdit ? 'edit' : undefined}
@@ -220,15 +218,14 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     } else if (mediaId) {
       viewMediaItemById({ mediaId, uri });
     }
-
   }
 
   async function editPlaylistItem({ playlistId = undefined, playlistItemId = undefined, mediaId = undefined, uri = undefined }) {
     let itemId = mediaId;
     if (!playlistItemId) {
       // Create the playlist item
-      const { payload } = await dispatch(addPlaylistItem({ playlistId, mediaId, sortIndex: 0 })) as any;
-      itemId = payload._id
+      const { payload } = (await dispatch(addPlaylistItem({ playlistId, mediaId, sortIndex: 0 }))) as any;
+      itemId = payload._id;
     }
     editPlaylistItemById({ playlistItemId: itemId });
   }

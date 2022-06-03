@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { CreatePlaylistItemResponseDto, Playlist } from './';
+import { PlaylistCategoryType, PlaylistItemResponseDto, TagKeyValue } from './';
 
 /**
  * @export
@@ -19,13 +19,63 @@ import { CreatePlaylistItemResponseDto, Playlist } from './';
  */
 export interface CreatePlaylistResponseDto {
   /**
-   * @type {Playlist}
+   * @type {string}
    * @memberof CreatePlaylistResponseDto
    */
-  readonly playlist: Playlist;
+  readonly _id: string;
   /**
-   * @type {CreatePlaylistItemResponseDto}
+   * @type {string}
    * @memberof CreatePlaylistResponseDto
    */
-  playlistItems: CreatePlaylistItemResponseDto;
+  readonly createdAt: string;
+  /**
+   * @type {string}
+   * @memberof CreatePlaylistResponseDto
+   */
+  readonly updatedDate?: string;
+  /**
+   * @type {string}
+   * @memberof CreatePlaylistResponseDto
+   */
+  createdBy: string;
+  /**
+   * @type {string}
+   * @memberof CreatePlaylistResponseDto
+   */
+  userId: string;
+  /**
+   * @type {string}
+   * @memberof CreatePlaylistResponseDto
+   */
+  title: string;
+  /**
+   * @type {string}
+   * @memberof CreatePlaylistResponseDto
+   */
+  description: string;
+  /**
+   * @type {string}
+   * @memberof CreatePlaylistResponseDto
+   */
+  imageSrc: string;
+  /**
+   * @type {Array<string>}
+   * @memberof CreatePlaylistResponseDto
+   */
+  mediaIds: Array<string> | null;
+  /**
+   * @type {PlaylistCategoryType}
+   * @memberof CreatePlaylistResponseDto
+   */
+  category?: PlaylistCategoryType;
+  /**
+   * @type {Array<TagKeyValue>}
+   * @memberof CreatePlaylistResponseDto
+   */
+  tags: Array<TagKeyValue> | null;
+  /**
+   * @type {Array<PlaylistItemResponseDto>}
+   * @memberof CreatePlaylistResponseDto
+   */
+  playlistItems: Array<PlaylistItemResponseDto>;
 }

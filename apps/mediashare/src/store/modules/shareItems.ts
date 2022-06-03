@@ -78,66 +78,111 @@ const shareItemsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getShareItemById.pending, reducePendingState((state) => ({
-        ...state,
-        shareItem: { entity: undefined, loading: true, loaded: false },
-      })))
-      .addCase(getShareItemById.rejected, reduceRejectedState((state) => ({
-        ...state,
-        shareItem: { entity: undefined, loading: false, loaded: true },
-      })))
-      .addCase(getShareItemById.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state,
-        shareItem: { entity: action.payload, loading: false, loaded: true },
-      })))
-      .addCase(readShareItem.pending, reducePendingState((state) => ({
-        ...state,
-        shareItem: { entity: undefined, loading: true, loaded: false },
-      })))
-      .addCase(readShareItem.rejected, reduceRejectedState((state) => ({
-        ...state,
-        shareItem: { entity: undefined, loading: false, loaded: true },
-      })))
-      .addCase(readShareItem.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state,
-        shareItem: { entity: action.payload, loading: false, loaded: true },
-      })))
-      .addCase(removeShareItem.pending, reducePendingState((state) => ({
-        ...state,
-        shareItem: { entity: undefined, loading: true, loaded: false },
-      })))
-      .addCase(removeShareItem.rejected, reduceRejectedState((state) => ({
-        ...state,
-        shareItem: { entity: undefined, loading: false, loaded: true },
-      })))
-      .addCase(removeShareItem.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state,
-        shareItem: { entity: action.payload, loading: false, loaded: true },
-      })))
-      .addCase(findItemsIAmSharing.pending, reducePendingState((state) => ({
-        ...state,
-        sharedByUser: { entities: [], loading: true, loaded: false },
-      })))
-      .addCase(findItemsIAmSharing.rejected, reduceRejectedState((state) => ({
-        ...state,
-        sharedByUser: { entities: [], loading: false, loaded: true },
-      })))
-      .addCase(findItemsIAmSharing.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state,
-        sharedByUser: { entities: Array.isArray(action.payload.playlists) ? action.payload.playlists : [], loading: false, loaded: true },
-      })))
-      .addCase(findItemsSharedWithMe.pending, reducePendingState((state) => ({
-        ...state,
-        sharedWithUser: { entities: [], loading: true, loaded: false },
-      })))
-      .addCase(findItemsSharedWithMe.rejected, reduceRejectedState((state) => ({
-        ...state,
-        sharedWithUser: { entities: [], loading: false, loaded: true },
-      })))
-      .addCase(findItemsSharedWithMe.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state,
-        sharedWithUser: { entities: Array.isArray(action.payload.playlists) ? action.payload.playlists : [], loading: false, loaded: true },
-      })));
+      .addCase(
+        getShareItemById.pending,
+        reducePendingState((state) => ({
+          ...state,
+          shareItem: { entity: undefined, loading: true, loaded: false },
+        }))
+      )
+      .addCase(
+        getShareItemById.rejected,
+        reduceRejectedState((state) => ({
+          ...state,
+          shareItem: { entity: undefined, loading: false, loaded: true },
+        }))
+      )
+      .addCase(
+        getShareItemById.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          shareItem: { entity: action.payload, loading: false, loaded: true },
+        }))
+      )
+      .addCase(
+        readShareItem.pending,
+        reducePendingState((state) => ({
+          ...state,
+          shareItem: { entity: undefined, loading: true, loaded: false },
+        }))
+      )
+      .addCase(
+        readShareItem.rejected,
+        reduceRejectedState((state) => ({
+          ...state,
+          shareItem: { entity: undefined, loading: false, loaded: true },
+        }))
+      )
+      .addCase(
+        readShareItem.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          shareItem: { entity: action.payload, loading: false, loaded: true },
+        }))
+      )
+      .addCase(
+        removeShareItem.pending,
+        reducePendingState((state) => ({
+          ...state,
+          shareItem: { entity: undefined, loading: true, loaded: false },
+        }))
+      )
+      .addCase(
+        removeShareItem.rejected,
+        reduceRejectedState((state) => ({
+          ...state,
+          shareItem: { entity: undefined, loading: false, loaded: true },
+        }))
+      )
+      .addCase(
+        removeShareItem.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          shareItem: { entity: action.payload, loading: false, loaded: true },
+        }))
+      )
+      .addCase(
+        findItemsIAmSharing.pending,
+        reducePendingState((state) => ({
+          ...state,
+          sharedByUser: { entities: [], loading: true, loaded: false },
+        }))
+      )
+      .addCase(
+        findItemsIAmSharing.rejected,
+        reduceRejectedState((state) => ({
+          ...state,
+          sharedByUser: { entities: [], loading: false, loaded: true },
+        }))
+      )
+      .addCase(
+        findItemsIAmSharing.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          sharedByUser: { entities: Array.isArray(action.payload.playlists) ? action.payload.playlists : [], loading: false, loaded: true },
+        }))
+      )
+      .addCase(
+        findItemsSharedWithMe.pending,
+        reducePendingState((state) => ({
+          ...state,
+          sharedWithUser: { entities: [], loading: true, loaded: false },
+        }))
+      )
+      .addCase(
+        findItemsSharedWithMe.rejected,
+        reduceRejectedState((state) => ({
+          ...state,
+          sharedWithUser: { entities: [], loading: false, loaded: true },
+        }))
+      )
+      .addCase(
+        findItemsSharedWithMe.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          sharedWithUser: { entities: Array.isArray(action.payload.playlists) ? action.payload.playlists : [], loading: false, loaded: true },
+        }))
+      );
   },
 });
 

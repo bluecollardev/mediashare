@@ -20,33 +20,30 @@ export const getPlaylistItemById = createAsyncThunk(
     const result = await forkJoin({
       playlistItem: api.playlistItems.playlistItemControllerFindOne({ playlistItemId }).toPromise(),
       src: getStorage(uri),
-    })
-    .toPromise();
+    }).toPromise();
     // TODO: Update views, we don't have anything that handles playlist items
     // api.views.viewsControllerCreateMediaView({ playlistItemId }).pipe(take(1)).subscribe();
     return { playlistItem: result.playlistItem as PlaylistItemResponseDto, src: result.src };
   }
 );
 
-export const addPlaylistItem = createAsyncThunk(
-  playlistItemActions.addPlaylistItem.type,
-  async (createPlaylistItemDto: CreatePlaylistItemDto, { extra }) => {
+export const addPlaylistItem = createAsyncThunk(playlistItemActions.addPlaylistItem.type, async (createPlaylistItemDto: CreatePlaylistItemDto, { extra }) => {
+  const { api } = extra as { api: ApiService };
+  return await api.playlistItems.playlistItemControllerCreate({ createPlaylistItemDto }).toPromise();
+});
+
+export const updatePlaylistItem = createAsyncThunk(
+  playlistItemActions.updatePlaylistItem.type,
+  async (updatePlaylistItemDto: UpdatePlaylistItemDto, { extra }) => {
     const { api } = extra as { api: ApiService };
     return await api.playlistItems
-      .playlistItemControllerCreate({ createPlaylistItemDto })
+      .playlistItemControllerUpdate({
+        playlistItemId: updatePlaylistItemDto._id,
+        updatePlaylistItemDto,
+      })
       .toPromise();
   }
 );
-
-export const updatePlaylistItem = createAsyncThunk(playlistItemActions.updatePlaylistItem.type, async (updatePlaylistItemDto: UpdatePlaylistItemDto, { extra }) => {
-  const { api } = extra as { api: ApiService };
-  return await api.playlistItems
-    .playlistItemControllerUpdate({
-      playlistItemId: updatePlaylistItemDto._id,
-      updatePlaylistItemDto,
-    })
-    .toPromise();
-});
 
 export const sharePlaylistItem = createAsyncThunk(playlistItemActions.sharePlaylistItem.type, async (args: { id: string; userId: string }, { extra }) => {
   const { api } = extra as { api: ApiService };

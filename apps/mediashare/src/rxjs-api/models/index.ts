@@ -4,7 +4,6 @@ export * from './BcRolesType';
 export * from './CreateMediaItemDto';
 export * from './CreatePlaylistDto';
 export * from './CreatePlaylistItemDto';
-export * from './CreatePlaylistItemResponseDto';
 export * from './CreatePlaylistResponseDto';
 export * from './Like';
 export * from './MediaCategoryType';

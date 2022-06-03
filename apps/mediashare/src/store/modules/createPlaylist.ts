@@ -49,5 +49,8 @@ const slice = createSlice({
   },
 });
 
-const { actions: { setCategory, setTags, setDescription, setMediaIds, setTitle }, reducer, } = slice;
+const {
+  actions: { setCategory, setTags, setDescription, setMediaIds, setTitle },
+  reducer,
+} = slice;
 export { reducer, setCategory, setTags, setDescription, setMediaIds, setTitle, createPlaylist };

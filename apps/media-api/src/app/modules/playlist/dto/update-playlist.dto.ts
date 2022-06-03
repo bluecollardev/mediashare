@@ -12,6 +12,6 @@ export class UpdatePlaylistDto extends PickType(Playlist, ['title', 'category', 
   @ApiProperty({ enum: PLAYLIST_CATEGORY, name: 'category', enumName: 'PlaylistCategoryType' })
   category: PlaylistCategoryType;
 
-  @ApiProperty({ type: TagKeyValue, name: 'tags', isArray: true, nullable: true })
+  @ApiProperty({ type: () => TagKeyValue, name: 'tags', isArray: true, nullable: true })
   tags: TagKeyValue[];
 }
