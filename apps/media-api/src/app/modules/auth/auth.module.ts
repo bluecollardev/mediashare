@@ -1,18 +1,20 @@
+import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MediaItem } from '../../controllers/media-item/entities/media-item.entity';
-import { Playlist } from '../../controllers/playlist/entities/playlist.entity';
-import { User } from '../user/entities/user.entity';
-import { AppConfigModule } from '../app-config/app-config.module';
-import { AppConfigService } from '../app-config/app-config.provider';
-import { PlaylistItem } from '../playlist-item/entities/playlist-item.entity';
-import { ShareItemModule } from '../share-item/share-item.module';
+import { JwtModule } from '@nestjs/jwt';
+import { AppConfigModule } from '@api-modules/app-config/app-config.module';
+import { AppConfigService } from '@api-modules/app-config/app-config.provider';
+import { UserService } from '@api-modules/user/user.service';
+import { User } from '@api-modules/user/entities/user.entity';
+import { Playlist } from '@api-modules/playlist/entities/playlist.entity';
+import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
+import { MediaItem } from '@api-modules/media-item/entities/media-item.entity';
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { AuthService } from './auth.service';
+import { ShareItemModule } from '@api-modules/share-item/share-item.module';
 import { LocalStrategy } from './local.strategy';
 import { SessionSerializer } from './session.serializer';
-import { UserService } from '../user/user.service';
-import { JwtModule } from '@nestjs/jwt';
 import { accessKey } from './keys';
 
 @Module({
@@ -41,11 +43,10 @@ import { accessKey } from './keys';
         ignoreExpiration: true,
       },
     }),
-    TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem]),
-    ShareItemModule,
+    TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem, ShareItem]),
   ],
   controllers: [],
-  providers: [LocalStrategy, SessionSerializer, AuthService, UserService],
-  exports: [ClientsModule, SessionSerializer, LocalStrategy, AuthService, UserService, AppConfigModule],
+  providers: [LocalStrategy, SessionSerializer, AuthService, UserService, ShareItemService],
+  exports: [ClientsModule, SessionSerializer, LocalStrategy, AuthService, UserService, ShareItemService, AppConfigModule],
 })
 export class AuthModule {}

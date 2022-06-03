@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PinoLogger } from 'nestjs-pino';
-
 import { getMongoRepository, MongoRepository } from 'typeorm';
 import { userPropsFactory } from '../../factories/user.factory';
 import { mockLoggerFactory } from '../../factories/mock-logger.factory';

@@ -1,5 +1,5 @@
-import { ObjectId } from 'mongodb';
 import { Entity, Column } from 'typeorm';
+import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
 import { BcRolesType, BC_ROLES } from '@core-lib';
 

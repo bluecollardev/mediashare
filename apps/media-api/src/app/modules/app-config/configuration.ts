@@ -1,8 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
 
-// console.log(process.env.NODE_ENV);
-
 export const appValidationSchema = Joi.object({
   APP_NAME: Joi.string().default('MediashareApi'),
   APP_ENV: Joi.string().valid('development', 'production', 'test', 'provision').default('development'),

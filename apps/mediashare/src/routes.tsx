@@ -27,6 +27,10 @@ const routeConfig = {
     name: 'playlistEdit',
     options: { title: 'Edit Playlist', header: (props) => <AppHeader {...props} /> },
   },
+  playlistItemEdit: {
+    name: 'playlistItemEdit',
+    options: { title: 'Edit Playlist Item', header: (props) => <AppHeader {...props} /> },
+  },
   media: {
     name: 'media',
     options: { title: 'Media Library', header: (props) => <AppHeader {...props} searchable={true} searchTarget="media" /> },

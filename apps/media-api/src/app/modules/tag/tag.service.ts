@@ -1,8 +1,8 @@
-import { DataService } from '@api';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
+import { DataService } from '@api';
 import { Tag } from '@api-core/entities/tag.entity';
 
 @Injectable()

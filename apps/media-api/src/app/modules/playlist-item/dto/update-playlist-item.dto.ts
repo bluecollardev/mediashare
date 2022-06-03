@@ -1,13 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { ApiProperty } from '@nestjs/swagger';
-import { ObjectId } from 'mongodb';
-import { CreatePlaylistItemDto } from './create-playlist-item.dto';
+import { PartialType } from '@nestjs/swagger';
+import { PlaylistItem } from '../entities/playlist-item.entity';
 
-export class UpdatePlaylistItemDto extends PartialType(CreatePlaylistItemDto) {
-  @ApiProperty({ required: false })
-  userId?: ObjectId;
-  @ApiProperty({ required: false })
-  playlistId?: ObjectId;
-  @ApiProperty({ required: false })
-  mediaId?: ObjectId;
-}
+export class UpdatePlaylistItemDto extends PartialType(PlaylistItem) {}
