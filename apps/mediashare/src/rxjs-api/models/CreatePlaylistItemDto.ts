@@ -11,8 +11,6 @@
  * Do not edit the class manually.
  */
 
-import { MediaCategoryType, TagKeyValue } from './';
-
 /**
  * @export
  * @interface CreatePlaylistItemDto
@@ -22,60 +20,15 @@ export interface CreatePlaylistItemDto {
    * @type {string}
    * @memberof CreatePlaylistItemDto
    */
-  title: string;
-  /**
-   * @type {string}
-   * @memberof CreatePlaylistItemDto
-   */
-  summary: string;
-  /**
-   * @type {string}
-   * @memberof CreatePlaylistItemDto
-   */
-  description: string;
-  /**
-   * @type {string}
-   * @memberof CreatePlaylistItemDto
-   */
-  uri: string;
-  /**
-   * @type {string}
-   * @memberof CreatePlaylistItemDto
-   */
-  thumbnail: string;
-  /**
-   * @type {boolean}
-   * @memberof CreatePlaylistItemDto
-   */
-  isPlayable?: boolean;
-  /**
-   * @type {MediaCategoryType}
-   * @memberof CreatePlaylistItemDto
-   */
-  category: MediaCategoryType;
-  /**
-   * @type {Array<TagKeyValue>}
-   * @memberof CreatePlaylistItemDto
-   */
-  tags?: Array<TagKeyValue> | null;
+  playlistId: string;
   /**
    * @type {string}
    * @memberof CreatePlaylistItemDto
    */
   mediaId: string;
   /**
-   * @type {string}
+   * @type {number}
    * @memberof CreatePlaylistItemDto
    */
-  playlistId: string;
-  /**
-   * @type {string}
-   * @memberof CreatePlaylistItemDto
-   */
-  key: string;
-  /**
-   * @type {string}
-   * @memberof CreatePlaylistItemDto
-   */
-  eTag: string;
+  sortIndex: number;
 }

@@ -87,10 +87,10 @@ export interface UpdatePlaylistItemDto {
    * @type {string}
    * @memberof UpdatePlaylistItemDto
    */
-  mediaId?: string;
+  playlistId?: string;
   /**
    * @type {string}
    * @memberof UpdatePlaylistItemDto
    */
-  playlistId?: string;
+  mediaId?: string;
 }

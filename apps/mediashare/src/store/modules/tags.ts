@@ -16,7 +16,7 @@ export const tagsActions = makeActions(tagActionNames);
 
 export const getTags = createAsyncThunk(tagsActions.getTags.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.tags.tagsControllerFindAll().toPromise();
+  return await api.tags.tagControllerFindAll().toPromise();
 });
 
 interface TagsState {

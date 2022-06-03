@@ -16,11 +16,17 @@ import { UpdatePlaylistItemDto } from './dto/update-playlist-item.dto';
 import { PlaylistItem } from './entities/playlist-item.entity';
 import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
+import { MediaItemService } from '@api-modules/media-item/media-item.service';
+import { MediaItem } from '@api-modules/media-item/entities/media-item.entity';
 
 @ApiTags('playlist-items')
 @Controller('playlist-items')
 export class PlaylistItemController {
-  constructor(private readonly playlistItemService: PlaylistItemService, private shareItemService: ShareItemService) {}
+  constructor(
+    private readonly playlistItemService: PlaylistItemService,
+    private mediaItemService: MediaItemService,
+    private shareItemService: ShareItemService
+  ) {}
 
   @Get('categories')
   getCategories() {
@@ -57,11 +63,18 @@ export class PlaylistItemController {
   @Post()
   @PlaylistItemPostResponse()
   async create(@CreateDto() createPlaylistItemDto: CreatePlaylistItemDto, @GetUserId() createdBy: ObjectId) {
+    const playlistId = new ObjectId(createPlaylistItemDto?.playlistId);
+    const mediaId = new ObjectId(createPlaylistItemDto?.mediaId);
+    const sortIndex = createPlaylistItemDto?.sortIndex;
+    const mediaItem: Omit<MediaItem, '_id'> = await this.mediaItemService.getById(mediaId);
     const playlistItem: Omit<PlaylistItem, '_id'> = {
       isPlayable: false,
       uri: '',
-      ...createPlaylistItemDto,
+      ...mediaItem,
       userId: createdBy,
+      playlistId,
+      mediaId,
+      sortIndex,
       createdBy,
     };
     return await this.playlistItemService.create({ ...playlistItem });

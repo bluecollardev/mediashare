@@ -5,11 +5,9 @@ import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
 import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
-import { MediaCategoryType, MEDIA_CATEGORY, MEDIA_ITEM_ENTITY } from '@core-lib';
+import { MediaCategoryType, MEDIA_CATEGORY } from '@core-lib';
 
-export const MEDIA_TOKEN = MEDIA_ITEM_ENTITY;
-
-@Entity(MEDIA_TOKEN)
+@Entity('media_item')
 export class MediaItem extends BcEntity {
   constructor(props: Partial<MediaItem> = {}) {
     super();

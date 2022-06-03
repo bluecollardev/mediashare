@@ -20,6 +20,7 @@ interface MediaListProps {
   removeItem?: (item?: MediaListType) => void;
   onViewDetail?: (item: MediaListType) => void;
   selectable?: boolean;
+  actionIconRight?: string;
 }
 
 export const MediaList = ({
@@ -28,8 +29,9 @@ export const MediaList = ({
   showActions = true,
   addItem = () => {},
   removeItem = () => {},
-  selectable,
   onViewDetail = () => {},
+  selectable,
+  actionIconRight,
 }: MediaListProps) => {
   return (
     <View style={{ marginBottom: 25 }}>
@@ -51,6 +53,7 @@ export const MediaList = ({
               showActions={showActions}
               onChecked={(v) => (v ? addItem(item) : removeItem(item))}
               onViewDetail={() => onViewDetail(item)}
+              iconRight={actionIconRight}
             />
             {idx !== arr.length && <Divider />}
           </View>

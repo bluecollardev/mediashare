@@ -87,12 +87,12 @@ export interface PlaylistItemResponseDto {
    * @type {string}
    * @memberof PlaylistItemResponseDto
    */
-  mediaId: string;
+  playlistId: string;
   /**
    * @type {string}
    * @memberof PlaylistItemResponseDto
    */
-  playlistId: string;
+  mediaId: string;
   /**
    * @type {AuthorProfileDto}
    * @memberof PlaylistItemResponseDto

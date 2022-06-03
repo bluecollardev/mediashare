@@ -8,7 +8,7 @@ import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { AuthorProfileDto, UpdatePlaylistDto } from 'mediashare/rxjs-api';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { useGoBack, useViewMediaItem } from 'mediashare/hooks/navigation';
+import { useGoBack, useViewMediaItemById } from 'mediashare/hooks/navigation';
 import { PageContainer, PageActions, PageProps, PageContent, NoItems, ActionButtons, MediaListType, MediaListItem } from 'mediashare/components/layout';
 
 import { theme } from 'mediashare/styles';
@@ -17,7 +17,7 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
   const { playlistId } = route.params;
 
   const dispatch = useDispatch();
-  const viewMediaItem = useViewMediaItem();
+  const viewMediaItem = useViewMediaItemById();
   const goBack = useGoBack();
 
   const playlist = useAppSelector((state) => state?.playlist?.selected);
