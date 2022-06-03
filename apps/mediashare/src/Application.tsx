@@ -31,6 +31,7 @@ import AddToPlaylist from './components/pages/AddToPlaylist';
 import Media from './components/pages/Media';
 import MediaItemDetail from './components/pages/MediaItemDetail';
 import MediaItemEdit from './components/pages/MediaItemEdit';
+import PlaylistItemEdit from './components/pages/PLaylistItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
 import AccountEdit from './components/pages/AccountEdit';
@@ -61,6 +62,8 @@ const PlaylistsNavigation = () => {
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} component={PlaylistEdit} />
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistItemEdit} component={PlaylistItemEdit} />
+      {/* TODO: Do we even use AddFromCollection, anywhere? */}
       <PlaylistsStackNavigator.Screen {...routeConfig.addFromMedia} component={AddFromCollection} />
       <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} component={ShareWith} />
     </PlaylistsStackNavigator.Navigator>

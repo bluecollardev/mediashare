@@ -30,8 +30,7 @@
     "start:debug": "nodemon --config nodemon-debug.json",
     "start:mobile": "cd apps/mediashare && yarn ios",
     "start:prod": "pm2-runtime start pm2.yaml --env production",
-    "start:ts": "ts-node -r tsconfig-paths/register --project tsconfig.base.json apps/media-api/src/main.ts",
-    "start": "nx serve",
+    "start:ts": "ts-node -r tsconfig-paths/register --project tsconfig.base.json apps/media-api/src/main.ts",dfdfdff
     "stop:db": "docker-compose down mediapostgres db",
     "stop:dev": "docker-compose -p mediashare down",
     "stop:services": "docker-compose down",

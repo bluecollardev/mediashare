@@ -4,11 +4,10 @@ import { MongoRepository } from 'typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { DataService } from '@api';
 import { ClientProxy } from '@nestjs/microservices';
-
 import { ObjectId } from 'mongodb';
 import { BcRolesType } from 'libs/core/src/lib/models/roles.enum';
 import { User } from './entities/user.entity';
-import { UpdateUserDto } from '../../controllers/user/dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthService } from '@api-modules/auth/auth.service';
 import { omit } from 'remeda';
 
