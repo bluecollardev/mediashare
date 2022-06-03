@@ -87,10 +87,10 @@ export interface PlaylistItem {
    * @type {string}
    * @memberof PlaylistItem
    */
-  mediaId: string;
+  playlistId: string;
   /**
    * @type {string}
    * @memberof PlaylistItem
    */
-  playlistId: string;
+  mediaId: string;
 }

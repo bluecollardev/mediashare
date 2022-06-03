@@ -86,7 +86,9 @@ const MediaListItem = ({
       }
       right={() =>
         showActions === 'right' || showActions === true ? (
-          <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} style={defaultStyles.iconButton} />
+          <View style={defaultStyles.iconRightWrapper}>
+            <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} style={defaultStyles.iconButton} />
+          </View>
         ) : null
       }
       {...rest}
@@ -121,6 +123,12 @@ const defaultStyles: any = StyleSheet.create({
     fontSize: 15,
     fontFamily: theme.fonts.medium.fontFamily,
     lineHeight: Platform.OS === 'android' ? 20 : 18,
+  },
+  iconRightWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: '100%',
   },
   iconButton: {
     marginRight: 0,

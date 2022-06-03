@@ -1,5 +1,5 @@
 import { Entity } from 'typeorm';
 import { BcBaseEntity } from '@api-core/entities/base.entity';
 
-@Entity()
+@Entity('profile')
 export class Profile extends BcBaseEntity<Profile> {}

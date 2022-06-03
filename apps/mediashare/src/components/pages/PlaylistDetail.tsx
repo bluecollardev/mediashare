@@ -5,10 +5,18 @@ import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
 import { getPlaylistById, removeUserPlaylist } from 'mediashare/store/modules/playlist';
+import { addPlaylistItem } from 'mediashare/store/modules/playlistItem';
 import { getUserPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
 import { loadUsers } from 'mediashare/store/modules/users';
 import { mapAvailableTags } from 'mediashare/store/modules/tags';
-import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/navigation';
+import {
+  useRouteName,
+  useRouteWithParams,
+  useViewPlaylistItemById,
+  useEditPlaylistItemById,
+  usePlaylists,
+  useViewMediaItemById
+} from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB } from 'react-native-paper';
 import { PageContainer, PageContent, PageProps, ActionButtons, AppDialog, MediaCard, MediaList } from 'mediashare/components/layout';
@@ -23,10 +31,12 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
 
   const edit = useRouteWithParams(routeNames.playlistEdit);
   const addToPlaylist = useRouteWithParams(routeNames.addItemsToPlaylist);
-  const viewMediaItem = useViewMediaItem();
+  const viewMediaItemById = useViewMediaItemById();
+  const viewPlaylistItemById = useViewPlaylistItemById();
+  const editPlaylistItemById = useEditPlaylistItemById();
   const goToShareWith = useRouteName(routeNames.shareWith);
   const goToPlaylists = usePlaylists();
-  const playFromBeginning = useViewMediaItem();
+  const playFromBeginning = useViewPlaylistItemById();
 
   const { loaded, selected } = useAppSelector((state) => state?.playlist);
   const [isLoaded, setIsLoaded] = useState(loaded);
@@ -118,7 +128,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
                 styles={{ width: '100%', marginTop: 25, marginBottom: 25 }}
                 compact
                 dark
-                onPress={() => (items && items.length > 0 ? viewMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
+                onPress={() => (items && items.length > 0 ? viewPlaylistItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
               >
                 Play From Beginning
               </Button>
@@ -146,11 +156,15 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
               />
             )}
             <MediaList
-              onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
               list={items}
               showThumbnail={true}
-              // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
+              onViewDetail={(item) =>
+                allowEdit
+                  ? editPlaylistItem({ mediaId: item._id, uri: item.uri, playlistId })
+                  : viewPlaylistItem({ mediaId: item._id, uri: item.uri })
+              }
               selectable={false}
+              actionIconRight={allowEdit ? 'edit' : undefined}
             />
           </MediaCard>
         </ScrollView>
@@ -198,6 +212,25 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     await dispatch(removeUserPlaylist(playlistId));
     await dispatch(getUserPlaylists());
     await goToPlaylists();
+  }
+
+  async function viewPlaylistItem({ playlistItemId = undefined, mediaId = undefined, uri = undefined }) {
+    if (playlistItemId) {
+      viewPlaylistItemById({ playlistItemId, uri });
+    } else if (mediaId) {
+      viewMediaItemById({ mediaId, uri });
+    }
+
+  }
+
+  async function editPlaylistItem({ playlistId = undefined, playlistItemId = undefined, mediaId = undefined, uri = undefined }) {
+    let itemId = mediaId;
+    if (!playlistItemId) {
+      // Create the playlist item
+      const { payload } = await dispatch(addPlaylistItem({ playlistId, mediaId, sortIndex: 0 })) as any;
+      itemId = payload._id
+    }
+    editPlaylistItemById({ playlistItemId: itemId });
   }
 };
 

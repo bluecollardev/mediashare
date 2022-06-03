@@ -20,7 +20,7 @@ function initialStateFactory(): CreatePlaylistDto & { loading: boolean } {
 
 // const actions = makeActions(['addItem', 'removeItem', 'setDescription', 'setCreatedBy', 'setTitle', 'setCategory', 'setTag']);
 
-const createPlaylist = createAsyncThunk('createPlaylist', async function (createPlaylistDto: CreatePlaylistDto) {
+const createPlaylist = createAsyncThunk('createPlaylist', async (createPlaylistDto: CreatePlaylistDto) => {
   return await playlists.playlistControllerCreate({ createPlaylistDto }).toPromise();
 });
 

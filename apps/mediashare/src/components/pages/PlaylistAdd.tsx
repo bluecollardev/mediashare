@@ -134,7 +134,7 @@ const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
 
     // @ts-ignore TODO: Fix types on dispatch?
     const { payload } = await dispatch(addUserPlaylist(dto));
-    const playlistId = payload.playlist._id;
+    const playlistId = payload._id;
     await dispatch(getUserPlaylists());
     await dispatch(getPlaylistById(playlistId));
     editPlaylist(playlistId);

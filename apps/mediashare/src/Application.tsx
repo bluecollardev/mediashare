@@ -31,7 +31,7 @@ import AddToPlaylist from './components/pages/AddToPlaylist';
 import Media from './components/pages/Media';
 import MediaItemDetail from './components/pages/MediaItemDetail';
 import MediaItemEdit from './components/pages/MediaItemEdit';
-import PlaylistItemEdit from './components/pages/PLaylistItemEdit';
+import PlaylistItemEdit from './components/pages/PlaylistItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
 import AccountEdit from './components/pages/AccountEdit';

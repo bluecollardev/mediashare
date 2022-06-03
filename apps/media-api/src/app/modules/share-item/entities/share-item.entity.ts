@@ -4,7 +4,7 @@ import { IsBoolean } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
 
-@Entity()
+@Entity('share_item')
 export class ShareItem extends BcEntity {
   @ApiObjectId(<ApiDecoratorOptions>{ readOnly: true })
   @Column({ name: 'userId' })

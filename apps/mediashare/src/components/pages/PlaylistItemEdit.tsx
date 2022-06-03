@@ -7,7 +7,8 @@ import { deletePlaylistItem, updatePlaylistItem } from 'mediashare/store/modules
 // TODO: Fix update dto! Not sure why it's not being exported normally...
 import { UpdatePlaylistItemDto } from 'mediashare/rxjs-api/models/UpdatePlaylistItemDto';
 import { MediaCategoryType } from 'mediashare/rxjs-api';
-import { usePlaylistItems } from 'mediashare/hooks/navigation';
+// TODO: We don't have playlist items, per se... just media items for now, revisit this and confirm
+// import { usePlaylistItems } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { Button, Paragraph } from 'react-native-paper';
 import { View, ScrollView } from 'react-native';
@@ -56,7 +57,8 @@ const PlaylistItemEdit = ({
 
   const [documentUri] = useState(playlistItem?.uri);
   const [thumbnail, setThumbnail] = useState(playlistItem?.thumbnail);
-  const playlistItems = usePlaylistItems();
+  // TODO: Fix this! We don't really have a list of playlist items do we?
+  const playlistItems = []; // usePlaylistItems();
 
   useEffect(() => {
     if (playlistItem) {
@@ -175,12 +177,14 @@ const PlaylistItemEdit = ({
     };
 
     await dispatch(updatePlaylistItem(dto));
-    playlistItems().then();
+    // TODO: Fix this!
+    // playlistItems().then();
   }
 
   async function deleteItem() {
     await dispatch(deletePlaylistItem({ id: playlistItemId, key: playlistItem.uri }));
-    playlistItems().then();
+    // TODO: Fix this!
+    // playlistItems().then();
   }
 
   function resetData() {}

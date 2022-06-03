@@ -27,15 +27,15 @@ export const getPlaylistById = createAsyncThunk(playlistActions.getPlaylistById.
   return response;
 });
 
-export const addUserPlaylist = createAsyncThunk(playlistActions.addUserPlaylist.type, async (playlist: CreatePlaylistDto, { extra }) => {
+export const addUserPlaylist = createAsyncThunk(playlistActions.addUserPlaylist.type, async (createPlaylistDto: CreatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.playlists.playlistControllerCreate({ createPlaylistDto: playlist }).toPromise();
+  return await api.playlists.playlistControllerCreate({ createPlaylistDto }).toPromise();
 });
 
-export const updateUserPlaylist = createAsyncThunk(playlistActions.updateUserPlaylist.type, async (playlist: UpdatePlaylistDto, { extra }) => {
+export const updateUserPlaylist = createAsyncThunk(playlistActions.updateUserPlaylist.type, async (updatePlaylistDto: UpdatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Fix _id property on UpdatePlaylistDto!
-  return await api.playlists.playlistControllerUpdate({ playlistId: playlist._id, updatePlaylistDto: playlist }).toPromise();
+  return await api.playlists.playlistControllerUpdate({ playlistId: updatePlaylistDto._id, updatePlaylistDto }).toPromise();
 });
 
 export const shareUserPlaylist = createAsyncThunk(
