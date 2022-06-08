@@ -1,6 +1,6 @@
 {
   "name": "mediashare",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "scripts": {
     "app:bump-version": "npx react-native-version --never-amend",
