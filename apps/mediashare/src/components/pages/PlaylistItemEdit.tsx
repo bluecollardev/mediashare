@@ -8,8 +8,7 @@ import { deletePlaylistItem, updatePlaylistItem } from 'mediashare/store/modules
 // TODO: Fix update dto! Not sure why it's not being exported normally...
 import { UpdatePlaylistItemDto } from 'mediashare/rxjs-api/models/UpdatePlaylistItemDto';
 import { MediaCategoryType } from 'mediashare/rxjs-api';
-// TODO: We don't have playlist items, per se... just media items for now, revisit this and confirm
-// import { usePlaylistItems } from 'mediashare/hooks/navigation';
+import { useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { Button, Paragraph } from 'react-native-paper';
 import { View, ScrollView } from 'react-native';
@@ -38,6 +37,8 @@ const PlaylistItemEdit = ({
 }: PageProps) => {
   const dispatch = useDispatch();
 
+  const viewPlaylistById = useViewPlaylistById();
+
   const options = [];
   for (const value in MediaCategoryType) {
     options.push(value);
@@ -60,8 +61,6 @@ const PlaylistItemEdit = ({
 
   const [documentUri] = useState(playlistItem?.uri);
   const [thumbnail, setThumbnail] = useState(playlistItem?.thumbnail);
-  // TODO: Fix this! We don't really have a list of playlist items do we?
-  // const playlistItems = []; // usePlaylistItems();
 
   useEffect(() => {
     if (playlistItem) {
@@ -179,11 +178,11 @@ const PlaylistItemEdit = ({
       isPlayable: true,
       category: MediaCategoryType[category as any],
       tags: selectedTags || [],
+      sortIndex: Number(sortIndex),
     };
 
     await dispatch(updatePlaylistItem(dto));
-    // TODO: Fix this!
-    // playlistItems().then();
+    await viewPlaylistById({ playlistId: playlistItem?.playlistId });
   }
 
   async function deleteItem() {
