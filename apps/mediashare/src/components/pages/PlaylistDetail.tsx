@@ -63,7 +63,6 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   const tagKeys = (selected?.tags || []).map(({ key }) => key);
   const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
   const items = selectMappedPlaylistMediaItems(selected) || [];
-  console.log(items);
 
   useEffect(() => {
     if (!isLoaded) {
