@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ApiObjectId, ApiString, ApiLongString } from '@mediashare/shared';
+import { ApiObjectId, ApiString, ApiLongString, ApiTextString } from '@mediashare/shared';
 import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
@@ -18,7 +18,7 @@ export class Playlist extends BcEntity implements PlaylistInterface {
   title: string;
 
   @Column({ nullable: true, type: 'text' })
-  @ApiLongString()
+  @ApiTextString()
   description: string;
 
   @Column({ nullable: true })
