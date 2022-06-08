@@ -137,54 +137,39 @@ const playlistSlice = createSlice({
 export default playlistSlice;
 export const reducer = playlistSlice.reducer;
 
-
 export const selectActivePlaylistItems = (selected) => selected?.playlistItems || [];
 export const selectActiveMediaItems = (selected) => selected?.mediaItems || [];
-export const selectPlaylistMediaItems = createSelector(
-  selectActivePlaylistItems,
-  selectActiveMediaItems,
-  (playlistItems, mediaItems) => {
-    return mediaItems.map((mediaItem) => {
-      const playlistItem = playlistItems.find((item) => item.mediaId === mediaItem._id);
-      console.log('[selectPlaylistMediaItems] playlist items');
-      console.log(playlistItems);
-      console.log('[selectPlaylistMediaItems] playlist item');
-      console.log(playlistItem);
-      return {
-        mediaItem,
-        mediaItemId: mediaItem._id,
-        playlistItem,
-        playlistItemId: playlistItem?._id
-      }
-    })
+export const selectPlaylistMediaItems = createSelector(selectActivePlaylistItems, selectActiveMediaItems, (playlistItems, mediaItems) => {
+  return mediaItems.map((mediaItem) => {
+    const playlistItem = playlistItems.find((item) => item.mediaId === mediaItem._id);
+    console.log('[selectPlaylistMediaItems] playlist items');
+    console.log(playlistItems);
+    console.log('[selectPlaylistMediaItems] playlist item');
+    console.log(playlistItem);
+    return {
+      mediaItem,
+      mediaItemId: mediaItem._id,
+      playlistItem,
+      playlistItemId: playlistItem?._id,
+    };
+  });
+});
+
+export const selectMappedPlaylistMediaItems = createSelector(selectPlaylistMediaItems, (playlistMediaItems) => {
+  const mapped = playlistMediaItems.map((pmi) => {
+    return {
+      ...(pmi?.playlistItem ? pmi?.playlistItem : pmi.mediaItem),
+      _id: pmi?.playlistItem?._id || pmi?.mediaItem?._id,
+      playlistItemId: pmi?.playlistItem?._id,
+      mediaItemId: pmi?.mediaItem?._id,
+      sortIndex: Math.abs(pmi?.playlistItem?.sortIndex || 0),
+    };
   });
 
-export const selectMappedPlaylistMediaItems = createSelector(
-  selectPlaylistMediaItems,
-  (playlistMediaItems) => {
-    const mapped = playlistMediaItems.map((pmi) => {
-      return {
-        ...(pmi?.playlistItem ? pmi?.playlistItem : pmi.mediaItem),
-        _id: pmi?.playlistItem?._id || pmi?.mediaItem?._id,
-        playlistItemId: pmi?.playlistItem?._id,
-        mediaItemId: pmi?.mediaItem?._id,
-        sortIndex: Math.abs(pmi?.playlistItem?.sortIndex || 0)
-      }
-    });
-
-    mapped.sort((a, b) => {
-      return (a.sortIndex > b.sortIndex) ? 1 : ((a.sortIndex < b.sortIndex) ? -1 : 0);
-    });
-    console.log('[selectMappedPlaylistMediaItems] sorted playlist media items')
-    console.log(mapped.map(({ playlistItemId, mediaItemId, sortIndex }) => ({
-      playlistItemId,
-      mediaItemId,
-      sortIndex
-    })));
-
-    const withSortIndex = mapped.filter((item) => item.sortIndex > 0);
-    const withoutSortIndex = mapped.filter((item) => item.sortIndex === 0);
-    const sorted = [...withSortIndex, ...withoutSortIndex]; // Always place unsorted items at the bottom
-    console.log(sorted);
-    return sorted;
+  mapped.sort((a, b) => {
+    return a.sortIndex > b.sortIndex ? 1 : a.sortIndex < b.sortIndex ? -1 : 0;
   });
+  const withSortIndex = mapped.filter((item) => item.sortIndex > 0);
+  const withoutSortIndex = mapped.filter((item) => item.sortIndex === 0);
+  return [...withSortIndex, ...withoutSortIndex]; // Always place unsorted items at the bottom
+});

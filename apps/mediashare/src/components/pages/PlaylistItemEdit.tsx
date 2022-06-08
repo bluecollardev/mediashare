@@ -50,8 +50,8 @@ const PlaylistItemEdit = ({
 
   const [title, setTitle] = useState(playlistItem?.title);
   const [description, setDescription] = useState(playlistItem?.description);
-  const [category, setCategory] = useState();
-  const [sortIndex, setSortIndex] = useState('');
+  const [category, setCategory] = useState(playlistItem?.category);
+  const [sortIndex, setSortIndex] = useState(String(playlistItem?.sortIndex));
 
   const { tags = [] } = globalState;
   const availableTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isMediaTag), []);
@@ -61,7 +61,7 @@ const PlaylistItemEdit = ({
   const [documentUri] = useState(playlistItem?.uri);
   const [thumbnail, setThumbnail] = useState(playlistItem?.thumbnail);
   // TODO: Fix this! We don't really have a list of playlist items do we?
-  const playlistItems = []; // usePlaylistItems();
+  // const playlistItems = []; // usePlaylistItems();
 
   useEffect(() => {
     if (playlistItem) {
@@ -94,7 +94,7 @@ const PlaylistItemEdit = ({
             key={playlistItemId}
             title={title}
             description={description}
-            sortIndex={sortIndex}
+            sortIndex={String(sortIndex)}
             mediaSrc={documentUri}
             thumbnail={thumbnail}
             showThumbnail={true}
@@ -111,6 +111,7 @@ const PlaylistItemEdit = ({
             }}
             onTitleChange={setTitle}
             onDescriptionChange={setDescription}
+            onSortIndexChange={setSortIndex}
             isEdit={true}
             isPlayable={true}
             topDrawer={() => (

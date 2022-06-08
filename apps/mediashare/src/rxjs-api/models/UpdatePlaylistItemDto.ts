@@ -93,4 +93,9 @@ export interface UpdatePlaylistItemDto {
    * @memberof UpdatePlaylistItemDto
    */
   mediaId?: string;
+  /**
+   * @type {number}
+   * @memberof UpdatePlaylistItemDto
+   */
+  sortIndex?: number;
 }

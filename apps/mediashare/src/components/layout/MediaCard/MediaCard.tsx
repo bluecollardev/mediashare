@@ -54,7 +54,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   title = '',
   authorProfile = {} as AuthorProfileDto,
   description = '',
-  sortIndex = undefined,
+  sortIndex = undefined as string,
   mediaSrc,
   showSocial = false,
   showActions = false,
@@ -127,12 +127,13 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         {sortIndex !== undefined && (
           <Card elevation={elevation} style={{ marginBottom: 15 }}>
             <TextField
+              keyboardType='numeric'
               style={{ backgroundColor: theme.colors.surface, fontSize: 15 }}
               multiline={true}
               label="Sort Index"
               value={sortIndex}
               numberOfLines={1}
-              onChangeText={(text) => onSortIndexChange(text)}
+              onChangeText={(textValue) => onSortIndexChange(textValue.replace(/[^0-9]/g, ''))}
               disabled={isReadOnly}
             />
           </Card>

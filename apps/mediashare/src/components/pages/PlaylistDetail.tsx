@@ -215,7 +215,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     console.log(item);
     return allowEdit
       ? editPlaylistMediaItem({ playlistItemId: item.playlistItemId, mediaId: item.mediaItemId, uri: item.uri, playlistId })
-      : viewPlaylistMediaItem({ mediaId: item._id, uri: item.uri })
+      : viewPlaylistMediaItem({ mediaId: item._id, uri: item.uri });
   }
 
   async function viewPlaylistMediaItem({ playlistItemId = undefined, mediaId = undefined, uri = undefined }) {
