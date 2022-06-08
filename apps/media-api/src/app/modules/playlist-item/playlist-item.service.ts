@@ -132,6 +132,8 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
           $mergeObjects: [
             {
               _id: '$_id',
+              playlistId: '$playlistId',
+              mediaId: '$mediaId',
               userId: '$author._id',
               username: '$author.username',
               author: '$author',
@@ -145,6 +147,7 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
               tags: '$tags',
               // shareCount: { $size: '$shareItems' },
               // likesCount: { $size: '$likeItems' },
+              // viewCount: { $size: '$viewItems' },
               // viewCount: { $size: '$viewItems' },
               createdBy: '$author._id',
               createdAt: '$createdAt',

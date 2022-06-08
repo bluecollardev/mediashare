@@ -56,7 +56,7 @@ const MediaItemEdit = ({
 
   const [documentUri] = useState(mediaItem?.uri);
   const [thumbnail, setThumbnail] = useState(mediaItem?.thumbnail);
-  const mediaItems = useMediaItems();
+  const viewMediaItems = useMediaItems();
 
   useEffect(() => {
     if (mediaItem) {
@@ -175,12 +175,12 @@ const MediaItemEdit = ({
     };
 
     await dispatch(updateMediaItem(dto));
-    mediaItems().then();
+    await viewMediaItems();
   }
 
   async function deleteItem() {
     await dispatch(deleteMediaItem({ id: mediaId, key: mediaItem.uri }));
-    mediaItems().then();
+    await viewMediaItems();
   }
 
   function resetData() {}
