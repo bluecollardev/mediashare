@@ -93,4 +93,9 @@ export interface PlaylistItem {
    * @memberof PlaylistItem
    */
   mediaId: string;
+  /**
+   * @type {number}
+   * @memberof PlaylistItem
+   */
+  sortIndex: number;
 }

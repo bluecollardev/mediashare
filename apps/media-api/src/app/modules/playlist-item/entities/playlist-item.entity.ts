@@ -1,5 +1,4 @@
-// import { ApiObjectId, ObjectIdPipe } from '@mediashare/shared';
-// import { Transform } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, Index } from 'typeorm';
 import { ApiObjectId } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
@@ -31,6 +30,7 @@ export class PlaylistItem extends MediaItem {
   @Index('userId', { unique: false })
   userId: ObjectId;
 
+  @ApiProperty({ type: Number })
   @Column()
   sortIndex: number;
 }

@@ -138,6 +138,7 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
               authorProfile: '$authorProfile',
               title: '$title',
               description: '$description',
+              sortIndex: '$sortIndex',
               uri: '$uri',
               thumbnail: '$thumbnail',
               category: '$category',

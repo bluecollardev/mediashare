@@ -94,6 +94,11 @@ export interface PlaylistItemResponseDto {
    */
   mediaId: string;
   /**
+   * @type {number}
+   * @memberof PlaylistItemResponseDto
+   */
+  sortIndex: number;
+  /**
    * @type {AuthorProfileDto}
    * @memberof PlaylistItemResponseDto
    */
