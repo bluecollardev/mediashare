@@ -2,6 +2,7 @@
 apis/DefaultApi.ts
 apis/LikesApi.ts
 apis/MediaItemsApi.ts
+apis/PlaylistItemsApi.ts
 apis/PlaylistsApi.ts
 apis/ShareItemsApi.ts
 apis/TagsApi.ts
@@ -15,7 +16,7 @@ models/AuthorizeDto.ts
 models/BcRolesType.ts
 models/CreateMediaItemDto.ts
 models/CreatePlaylistDto.ts
-models/CreatePlaylistItemResponseDto.ts
+models/CreatePlaylistItemDto.ts
 models/CreatePlaylistResponseDto.ts
 models/Like.ts
 models/MediaCategoryType.ts
@@ -23,6 +24,8 @@ models/MediaItem.ts
 models/MediaItemResponseDto.ts
 models/Playlist.ts
 models/PlaylistCategoryType.ts
+models/PlaylistItem.ts
+models/PlaylistItemResponseDto.ts
 models/PlaylistResponseDto.ts
 models/ProfileDto.ts
 models/ProfileShareItem.ts
@@ -32,6 +35,7 @@ models/Tag.ts
 models/TagKeyValue.ts
 models/UpdateMediaItemDto.ts
 models/UpdatePlaylistDto.ts
+models/UpdatePlaylistItemDto.ts
 models/UpdateUserDto.ts
 models/UserDto.ts
 models/ViewItem.ts

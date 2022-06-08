@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ObjectId } from 'mongodb';
 import { ApiString } from '@mediashare/shared';
+import { Column, Entity } from 'typeorm';
+import { ObjectId } from 'mongodb';
 import { KeyPair } from './keypair.entity';
 import { TagInterface } from '@core-lib';
 // TODO: Fix index
 // import { Column, Entity, Index } from 'typeorm';
-import { Column, Entity } from 'typeorm';
 
 @Entity('tags')
 // @Index('key', { unique: true })

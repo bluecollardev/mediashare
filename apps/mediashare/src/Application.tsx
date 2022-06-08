@@ -20,7 +20,6 @@ import { GlobalStateProps, withGlobalStateProvider } from './core/globalState';
 
 import Login from './components/pages/Login';
 import Browse from './components/pages/Browse';
-import AddFromCollection from './components/pages/AddFromCollection';
 import MediaItemAdd from './components/pages/MediaItemAdd';
 import AddFromFeed from './components/pages/AddFromFeed';
 import Playlists from './components/pages/Playlists';
@@ -31,6 +30,7 @@ import AddToPlaylist from './components/pages/AddToPlaylist';
 import Media from './components/pages/Media';
 import MediaItemDetail from './components/pages/MediaItemDetail';
 import MediaItemEdit from './components/pages/MediaItemEdit';
+import PlaylistItemEdit from './components/pages/PlaylistItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
 import AccountEdit from './components/pages/AccountEdit';
@@ -61,7 +61,7 @@ const PlaylistsNavigation = () => {
       <PlaylistsStackNavigator.Screen {...routeConfig.playlistEdit} component={PlaylistEdit} />
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
       <PlaylistsStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
-      <PlaylistsStackNavigator.Screen {...routeConfig.addFromMedia} component={AddFromCollection} />
+      <PlaylistsStackNavigator.Screen {...routeConfig.playlistItemEdit} component={PlaylistItemEdit} />
       <PlaylistsStackNavigator.Screen {...routeConfig.shareWith} component={ShareWith} />
     </PlaylistsStackNavigator.Navigator>
   );

@@ -4,11 +4,19 @@ import { ScrollView } from 'react-native';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
-import { getPlaylistById, removeUserPlaylist } from 'mediashare/store/modules/playlist';
+import { getPlaylistById, removeUserPlaylist, selectMappedPlaylistMediaItems } from 'mediashare/store/modules/playlist';
+import { addPlaylistItem } from 'mediashare/store/modules/playlistItem';
 import { getUserPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
 import { loadUsers } from 'mediashare/store/modules/users';
 import { mapAvailableTags } from 'mediashare/store/modules/tags';
-import { usePlaylists, useRouteName, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/navigation';
+import {
+  useRouteName,
+  useRouteWithParams,
+  useViewPlaylistItemById,
+  useEditPlaylistItemById,
+  usePlaylists,
+  useViewMediaItemById,
+} from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB } from 'react-native-paper';
 import { PageContainer, PageContent, PageProps, ActionButtons, AppDialog, MediaCard, MediaList } from 'mediashare/components/layout';
@@ -23,10 +31,12 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
 
   const edit = useRouteWithParams(routeNames.playlistEdit);
   const addToPlaylist = useRouteWithParams(routeNames.addItemsToPlaylist);
-  const viewMediaItem = useViewMediaItem();
+  const viewMediaItemById = useViewMediaItemById();
+  const viewPlaylistItemById = useViewPlaylistItemById();
+  const editPlaylistItemById = useEditPlaylistItemById();
   const goToShareWith = useRouteName(routeNames.shareWith);
   const goToPlaylists = usePlaylists();
-  const playFromBeginning = useViewMediaItem();
+  const playFromBeginning = useViewPlaylistItemById();
 
   const { loaded, selected } = useAppSelector((state) => state?.playlist);
   const [isLoaded, setIsLoaded] = useState(loaded);
@@ -44,15 +54,15 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     shareCount = 0,
     viewCount = 0,
     likesCount = 0,
-    mediaItems = [],
+    // mediaItems = [],
   } = selected || {};
 
-  const items = mediaItems || [];
   const allowEdit = createdBy === appUserId;
 
   const { tags = [], build } = globalState;
   const tagKeys = (selected?.tags || []).map(({ key }) => key);
   const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
+  const items = selectMappedPlaylistMediaItems(selected) || [];
 
   useEffect(() => {
     if (!isLoaded) {
@@ -118,18 +128,18 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
                 styles={{ width: '100%', marginTop: 25, marginBottom: 25 }}
                 compact
                 dark
-                onPress={() => (items && items.length > 0 ? viewMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
+                onPress={() => (items && items.length > 0 ? viewPlaylistMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
               >
                 Play From Beginning
               </Button>
               <Divider /> */}
-            {!allowEdit && mediaItems.length > 0 && (
+            {!allowEdit && items.length > 0 && (
               <ActionButtons
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
                 showCancel={false}
                 showAction={true}
                 onActionClicked={async () => {
-                  playFromBeginning({ mediaId: mediaItems[0]._id, uri: mediaItems[0].uri });
+                  playFromBeginning({ mediaId: items[0]._id, uri: items[0].uri });
                 }}
                 actionLabel="Play from Beginning"
                 actionIcon="live-tv"
@@ -146,11 +156,11 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
               />
             )}
             <MediaList
-              onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
               list={items}
               showThumbnail={true}
-              // TODO: This is disabled on purpose I'm thinking we don't want to manage items in multiple places just yet!
+              onViewDetail={activatePlaylistDetail}
               selectable={false}
+              actionIconRight={allowEdit ? 'edit' : undefined}
             />
           </MediaCard>
         </ScrollView>
@@ -198,6 +208,39 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     await dispatch(removeUserPlaylist(playlistId));
     await dispatch(getUserPlaylists());
     await goToPlaylists();
+  }
+
+  function activatePlaylistDetail(item) {
+    console.log('activatePlaylistDetail');
+    console.log(item);
+    return allowEdit
+      ? editPlaylistMediaItem({ playlistItemId: item.playlistItemId, mediaId: item.mediaItemId, uri: item.uri, playlistId })
+      : viewPlaylistMediaItem({ mediaId: item._id, uri: item.uri });
+  }
+
+  async function viewPlaylistMediaItem({ playlistItemId = undefined, mediaId = undefined, uri = undefined }) {
+    console.log('viewPlaylistMediaItem');
+    if (playlistItemId) {
+      viewPlaylistItemById({ playlistItemId, uri });
+    } else if (mediaId) {
+      viewMediaItemById({ mediaId, uri });
+    }
+  }
+
+  async function editPlaylistMediaItem({ playlistId = undefined, playlistItemId = undefined, mediaId = undefined, uri = undefined }) {
+    console.log('editPlaylistMediaItem');
+    let itemId = playlistItemId || mediaId;
+    if (!playlistItemId) {
+      // Create the playlist item
+      console.log('creating playlist item');
+      const { payload } = (await dispatch(addPlaylistItem({ playlistId, mediaId, sortIndex: 0 }))) as any;
+      console.log('dumping payload');
+      itemId = payload._id;
+      console.log(payload);
+      console.log('reload playlist');
+      await dispatch(getPlaylistById(playlistId));
+    }
+    editPlaylistItemById({ playlistItemId: itemId });
   }
 };
 

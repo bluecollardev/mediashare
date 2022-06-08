@@ -4,18 +4,18 @@ import { Module } from '@nestjs/common';
 import { LoggerModule } from 'nestjs-pino';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
-
-import { AppConfigService } from './modules/app-config/app-config.provider';
-import { AppConfigModule } from './modules/app-config/app-config.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { UserModule } from './controllers/user/user.module';
-import { MediaItemModule } from './controllers/media-item/media-item.module';
-import { ProfileModule } from './controllers/profile/profile.module';
-import { PlaylistModule } from './controllers/playlist/playlist.module';
-import { ShareItemsModule } from './controllers/share-items/share-items.module';
-import { ViewsModule } from './controllers/views/views.module';
-import { LikesModule } from './controllers/likes/likes.module';
-import { TagsModule } from './controllers/tags/tags.module';
+import { AppConfigService } from '@api-modules/app-config/app-config.provider';
+import { AppConfigModule } from '@api-modules/app-config/app-config.module';
+import { AuthModule } from '@api-modules/auth/auth.module';
+import { UserModule } from '@api-modules/user/user.module';
+import { ProfileModule } from '@api-modules/profile/profile.module';
+import { MediaItemModule } from '@api-modules/media-item/media-item.module';
+import { PlaylistItemModule } from '@api-modules/playlist-item/playlist-item.module';
+import { PlaylistModule } from '@api-modules/playlist/playlist.module';
+import { ShareItemModule } from '@api-modules/share-item/share-item.module';
+import { ViewsModule } from '@api-modules/views/views.module';
+import { LikesModule } from '@api-modules/likes/likes.module';
+import { TagModule } from '@api-modules/tag/tag.module';
 
 @Module({
   imports: [
@@ -51,13 +51,14 @@ import { TagsModule } from './controllers/tags/tags.module';
       defaultStrategy: 'jwt',
     }),
     UserModule,
-    MediaItemModule,
     ProfileModule,
+    MediaItemModule,
+    PlaylistItemModule,
     PlaylistModule,
     ViewsModule,
-    ShareItemsModule,
+    ShareItemModule,
     LikesModule,
-    TagsModule,
+    TagModule,
   ],
   controllers: [AppController],
   providers: [AppService],

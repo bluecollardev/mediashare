@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import configuration, { appValidationSchema } from './configuration';
-import { AppConfigService } from './app-config.provider';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration, { appValidationSchema } from './configuration';
 import databaseConfiguration from './database.configuration';
+import { AppConfigService } from './app-config.provider';
 /**
  * Import and provide app configuration related classes.
  *

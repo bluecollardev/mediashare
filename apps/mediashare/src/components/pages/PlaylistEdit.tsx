@@ -5,7 +5,7 @@ import { useAppSelector } from 'mediashare/store';
 import { getPlaylistById, removeUserPlaylist, updateUserPlaylist } from 'mediashare/store/modules/playlist';
 import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
-import { usePlaylists, useRouteWithParams, useViewMediaItem } from 'mediashare/hooks/navigation';
+import { usePlaylists, useRouteWithParams, useViewMediaItemById } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { View, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -33,7 +33,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   const dispatch = useDispatch();
 
   const addToPlaylist = useRouteWithParams(routeNames.addItemsToPlaylist);
-  const viewMediaItem = useViewMediaItem();
+  const viewMediaItem = useViewMediaItemById();
   const goToPlaylists = usePlaylists();
 
   const { playlistId } = route.params;

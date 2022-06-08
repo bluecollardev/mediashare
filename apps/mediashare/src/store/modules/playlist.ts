@@ -1,4 +1,4 @@
-import { createAsyncThunk, createAction, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction, createSlice, createSelector } from '@reduxjs/toolkit';
 import { makeActions } from 'mediashare/store/factory';
 import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
 import { ApiService } from 'mediashare/store/apis';
@@ -27,15 +27,15 @@ export const getPlaylistById = createAsyncThunk(playlistActions.getPlaylistById.
   return response;
 });
 
-export const addUserPlaylist = createAsyncThunk(playlistActions.addUserPlaylist.type, async (playlist: CreatePlaylistDto, { extra }) => {
+export const addUserPlaylist = createAsyncThunk(playlistActions.addUserPlaylist.type, async (createPlaylistDto: CreatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.playlists.playlistControllerCreate({ createPlaylistDto: playlist }).toPromise();
+  return await api.playlists.playlistControllerCreate({ createPlaylistDto }).toPromise();
 });
 
-export const updateUserPlaylist = createAsyncThunk(playlistActions.updateUserPlaylist.type, async (playlist: UpdatePlaylistDto, { extra }) => {
+export const updateUserPlaylist = createAsyncThunk(playlistActions.updateUserPlaylist.type, async (updatePlaylistDto: UpdatePlaylistDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   // @ts-ignore - TODO: Fix _id property on UpdatePlaylistDto!
-  return await api.playlists.playlistControllerUpdate({ playlistId: playlist._id, updatePlaylistDto: playlist }).toPromise();
+  return await api.playlists.playlistControllerUpdate({ playlistId: updatePlaylistDto._id, updatePlaylistDto }).toPromise();
 });
 
 export const shareUserPlaylist = createAsyncThunk(
@@ -78,28 +78,98 @@ const playlistSlice = createSlice({
     builder
       .addCase(addUserPlaylist.pending, reducePendingState())
       .addCase(addUserPlaylist.rejected, reduceRejectedState())
-      .addCase(addUserPlaylist.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, created: action.payload, loading: false, loaded: true
-      })))
-      .addCase(getPlaylistById.pending, reducePendingState((state) => ({
-        ...state, selected: undefined, loading: true, loaded: false
-      })))
+      .addCase(
+        addUserPlaylist.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          created: action.payload,
+          loading: false,
+          loaded: true,
+        }))
+      )
+      .addCase(
+        getPlaylistById.pending,
+        reducePendingState((state) => ({
+          ...state,
+          selected: undefined,
+          loading: true,
+          loaded: false,
+        }))
+      )
       .addCase(getPlaylistById.rejected, reduceRejectedState())
-      .addCase(getPlaylistById.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, selected: action.payload, loading: false, loaded: true
-      })))
-      .addCase(removeUserPlaylist.pending, reducePendingState((state) => ({
-        ...state, selected: undefined, loading: true, loaded: false
-      })))
+      .addCase(
+        getPlaylistById.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          selected: action.payload,
+          loading: false,
+          loaded: true,
+        }))
+      )
+      .addCase(
+        removeUserPlaylist.pending,
+        reducePendingState((state) => ({
+          ...state,
+          selected: undefined,
+          loading: true,
+          loaded: false,
+        }))
+      )
       .addCase(removeUserPlaylist.rejected, reduceRejectedState())
-      .addCase(removeUserPlaylist.fulfilled, reduceFulfilledState((state) => ({
-        ...state, selected: undefined, loading: false, loaded: true
-      })))
+      .addCase(
+        removeUserPlaylist.fulfilled,
+        reduceFulfilledState((state) => ({
+          ...state,
+          selected: undefined,
+          loading: false,
+          loaded: true,
+        }))
+      )
       .addCase(clearUserPlaylist, (state) => ({
-        ...state, created: undefined, loading: false, loaded: true
-      }))
+        ...state,
+        created: undefined,
+        loading: false,
+        loaded: true,
+      }));
   },
 });
 
 export default playlistSlice;
 export const reducer = playlistSlice.reducer;
+
+export const selectActivePlaylistItems = (selected) => selected?.playlistItems || [];
+export const selectActiveMediaItems = (selected) => selected?.mediaItems || [];
+export const selectPlaylistMediaItems = createSelector(selectActivePlaylistItems, selectActiveMediaItems, (playlistItems, mediaItems) => {
+  return mediaItems.map((mediaItem) => {
+    const playlistItem = playlistItems.find((item) => item.mediaId === mediaItem._id);
+    console.log('[selectPlaylistMediaItems] playlist items');
+    console.log(playlistItems);
+    console.log('[selectPlaylistMediaItems] playlist item');
+    console.log(playlistItem);
+    return {
+      mediaItem,
+      mediaItemId: mediaItem._id,
+      playlistItem,
+      playlistItemId: playlistItem?._id,
+    };
+  });
+});
+
+export const selectMappedPlaylistMediaItems = createSelector(selectPlaylistMediaItems, (playlistMediaItems) => {
+  const mapped = playlistMediaItems.map((pmi) => {
+    return {
+      ...(pmi?.playlistItem ? pmi?.playlistItem : pmi.mediaItem),
+      _id: pmi?.playlistItem?._id || pmi?.mediaItem?._id,
+      playlistItemId: pmi?.playlistItem?._id,
+      mediaItemId: pmi?.mediaItem?._id,
+      sortIndex: Math.abs(pmi?.playlistItem?.sortIndex || 0),
+    };
+  });
+
+  mapped.sort((a, b) => {
+    return a.sortIndex > b.sortIndex ? 1 : a.sortIndex < b.sortIndex ? -1 : 0;
+  });
+  const withSortIndex = mapped.filter((item) => item.sortIndex > 0);
+  const withoutSortIndex = mapped.filter((item) => item.sortIndex === 0);
+  return [...withSortIndex, ...withoutSortIndex]; // Always place unsorted items at the bottom
+});

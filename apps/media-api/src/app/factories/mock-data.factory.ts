@@ -1,12 +1,12 @@
 import * as Faker from 'faker';
 import { ObjectId } from 'mongodb';
-import { CreateMediaItemDto } from '../controllers/media-item/dto/create-media-item.dto';
-import { MediaItem } from '../controllers/media-item/entities/media-item.entity';
-import { CreateUserDto } from '../controllers/user/dto/create-user.dto';
+import { CreateMediaItemDto } from '../modules/media-item/dto/create-media-item.dto';
+import { MediaItem } from '../modules/media-item/entities/media-item.entity';
+import { CreateUserDto } from '../modules/user/dto/create-user.dto';
 import { User } from '../modules/user/entities/user.entity';
 
 import { range } from 'remeda';
-import { Playlist } from '../controllers/playlist/entities/playlist.entity';
+import { Playlist } from '../modules/playlist/entities/playlist.entity';
 import { SessionUserInterface } from '../core/models/auth-user.model';
 
 import { ObjectIdGuard } from '@util-lib';

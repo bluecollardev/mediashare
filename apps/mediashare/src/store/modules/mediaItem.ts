@@ -50,7 +50,6 @@ const mediaItemActionNames = [
   'upload_media_item',
   'get_feed_media_items',
   'save_feed_media_items',
-  'clear_active_media_item',
 ] as const;
 
 export const mediaItemActions = makeActions(mediaItemActionNames);
@@ -107,12 +106,12 @@ export const addMediaItem = createAsyncThunk(
   }
 );
 
-export const updateMediaItem = createAsyncThunk(mediaItemActions.updateMediaItem.type, async (item: UpdateMediaItemDto, { extra }) => {
+export const updateMediaItem = createAsyncThunk(mediaItemActions.updateMediaItem.type, async (updateMediaItemDto: UpdateMediaItemDto, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.mediaItems
     .mediaItemControllerUpdate({
-      mediaId: item._id,
-      updateMediaItemDto: item,
+      mediaId: updateMediaItemDto._id,
+      updateMediaItemDto,
     })
     .toPromise();
 });
@@ -258,7 +257,6 @@ const mediaItemSlice = createSlice({
       .addCase(deleteMediaItem.pending, reducePendingState())
       .addCase(deleteMediaItem.rejected, reduceRejectedState())
       .addCase(deleteMediaItem.fulfilled, reduceFulfilledState())
-      // TODO: Are we using these? Where?
       .addCase(
         getFeedMediaItems.pending,
         reducePendingState((state) => ({

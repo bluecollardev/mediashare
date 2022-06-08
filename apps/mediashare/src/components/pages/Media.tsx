@@ -6,7 +6,7 @@ import { useAppSelector } from 'mediashare/store';
 import { deleteMediaItem } from 'mediashare/store/modules/mediaItem';
 import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { useRouteName, useEditMediaItem } from 'mediashare/hooks/navigation';
+import { useRouteName, useEditMediaItemById } from 'mediashare/hooks/navigation';
 import { AuthorProfileDto, MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
 import { RefreshControl } from 'react-native';
 import { FAB, Divider } from 'react-native-paper';
@@ -79,7 +79,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
 
   const addFromFeed = useRouteName(routeNames.addFromFeed);
   const addMedia = useRouteName(routeNames.mediaItemAdd);
-  const editMedia = useEditMediaItem();
+  const editMedia = useEditMediaItemById();
 
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
