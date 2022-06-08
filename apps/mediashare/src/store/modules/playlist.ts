@@ -1,4 +1,4 @@
-import { createAsyncThunk, createAction, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction, createSlice, createSelector } from '@reduxjs/toolkit';
 import { makeActions } from 'mediashare/store/factory';
 import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
 import { ApiService } from 'mediashare/store/apis';
@@ -136,3 +136,40 @@ const playlistSlice = createSlice({
 
 export default playlistSlice;
 export const reducer = playlistSlice.reducer;
+
+
+export const selectActivePlaylistItems = (selected) => selected?.playlistItems || [];
+export const selectActiveMediaItems = (selected) => selected?.mediaItems || [];
+export const selectPlaylistMediaItems = createSelector(
+  selectActivePlaylistItems,
+  selectActiveMediaItems,
+  (playlistItems, mediaItems) => {
+    return mediaItems.map((mediaItem) => {
+      const playlistItem = playlistItems.find((item) => item.mediaId === mediaItem._id);
+      console.log('[selectPlaylistMediaItems] playlist items');
+      console.log(playlistItems);
+      console.log('[selectPlaylistMediaItems] playlist item');
+      console.log(playlistItem);
+      return {
+        mediaItem,
+        mediaItemId: mediaItem._id,
+        playlistItem,
+        playlistItemId: playlistItem?._id
+      }
+    })
+  });
+
+export const selectMappedPlaylistMediaItems = createSelector(
+  selectPlaylistMediaItems,
+  (playlistMediaItems) => {
+    console.log('[selectMappedPlaylistMediaItems] playlist media items');
+    console.log(playlistMediaItems);
+    return playlistMediaItems.map((pmi) => {
+      return {
+        ...(pmi?.playlistItem ? pmi?.playlistItem : pmi.mediaItem),
+        _id: pmi?.playlistItem?._id || pmi?.mediaItem?._id,
+        playlistItemId: pmi?.playlistItem?._id,
+        mediaItemId: pmi?.mediaItem?._id
+      }
+    })
+  });
