@@ -28,7 +28,7 @@ export class MediaItem extends BcEntity {
   summary: string;
 
   @Column({ nullable: true, type: 'text' })
-  @ApiLongString()
+  @ApiTextString()
   description: string;
 
   @Column()

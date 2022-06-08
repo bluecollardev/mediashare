@@ -127,7 +127,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         {sortIndex !== undefined && (
           <Card elevation={elevation} style={{ marginBottom: 15 }}>
             <TextField
-              keyboardType='numeric'
+              keyboardType="numeric"
               style={{ backgroundColor: theme.colors.surface, fontSize: 15 }}
               multiline={true}
               label="Sort Index"
