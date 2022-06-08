@@ -27,6 +27,10 @@ const routeConfig = {
     name: 'playlistEdit',
     options: { title: 'Edit Playlist', header: (props) => <AppHeader {...props} /> },
   },
+  playlistItemEdit: {
+    name: 'playlistItemEdit',
+    options: { title: 'Edit Playlist Item', header: (props) => <AppHeader {...props} /> },
+  },
   media: {
     name: 'media',
     options: { title: 'Media Library', header: (props) => <AppHeader {...props} searchable={true} searchTarget="media" /> },
@@ -46,10 +50,6 @@ const routeConfig = {
   addFromFeed: {
     name: 'addFromFeed',
     options: { title: 'Import From S3 Bucket', header: (props) => <AppHeader {...props} /> },
-  },
-  addFromMedia: {
-    name: 'addFromMedia',
-    options: { title: 'Add From Library', header: (props) => <AppHeader {...props} /> },
   },
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',

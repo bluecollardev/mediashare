@@ -3,12 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 
 import { MediaListItem } from './MediaListItem';
-import { MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
-
-import { shortenText } from 'mediashare/utils';
+import { PlaylistItem } from 'mediashare/rxjs-api';
+// import { shortenText } from 'mediashare/utils';
 
 // TODO: Why do we have TWO types, try to get this down to one!
-export type MediaListType = MediaItemResponseDto | MediaItem;
+export type MediaListType = PlaylistItem;
 
 import { theme } from 'mediashare/styles';
 
@@ -20,6 +19,7 @@ interface MediaListProps {
   removeItem?: (item?: MediaListType) => void;
   onViewDetail?: (item: MediaListType) => void;
   selectable?: boolean;
+  actionIconRight?: string;
 }
 
 export const MediaList = ({
@@ -28,13 +28,15 @@ export const MediaList = ({
   showActions = true,
   addItem = () => {},
   removeItem = () => {},
-  selectable,
   onViewDetail = () => {},
+  selectable,
+  actionIconRight,
 }: MediaListProps) => {
   return (
     <View style={{ marginBottom: 25 }}>
       {list.map((item, idx, arr) => {
-        const { _id, title, description, thumbnail } = item;
+        // const { _id, title, description, thumbnail } = item;
+        const { _id, title, thumbnail } = item;
         return (
           <View key={`item_${_id}`}>
             <MediaListItem
@@ -51,6 +53,7 @@ export const MediaList = ({
               showActions={showActions}
               onChecked={(v) => (v ? addItem(item) : removeItem(item))}
               onViewDetail={() => onViewDetail(item)}
+              iconRight={actionIconRight}
             />
             {idx !== arr.length && <Divider />}
           </View>

@@ -136,8 +136,8 @@ android {
         applicationId "oi.bluecollardev.mediashare"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "0.1.5"
+        versionCode 9
+        versionName "0.1.6"
     }
     splits {
         abi {

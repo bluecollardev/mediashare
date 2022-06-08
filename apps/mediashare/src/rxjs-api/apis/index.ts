@@ -1,6 +1,7 @@
 export * from './DefaultApi';
 export * from './LikesApi';
 export * from './MediaItemsApi';
+export * from './PlaylistItemsApi';
 export * from './PlaylistsApi';
 export * from './ShareItemsApi';
 export * from './TagsApi';

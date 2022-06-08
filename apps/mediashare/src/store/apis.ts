@@ -4,6 +4,7 @@ import {
   MediaItemsApi,
   Middleware,
   PlaylistsApi,
+  PlaylistItemsApi,
   RequestArgs,
   ResponseArgs,
   servers,
@@ -63,6 +64,7 @@ function apiFactory() {
     mediaItems: new MediaItemsApi(configuration),
     shareItems: new ShareItemsApi(configuration),
     playlists: new PlaylistsApi(configuration),
+    playlistItems: new PlaylistItemsApi(configuration),
     user: new UserApi(configuration),
     users: new UsersApi(configuration),
     views: new ViewsApi(configuration),
@@ -74,6 +76,6 @@ function apiFactory() {
 const apis = apiFactory();
 export type ApiService = typeof apis;
 
-const { mediaItems, shareItems, playlists, user, users, views, tags, configuration } = apis;
+const { mediaItems, shareItems, playlists, playlistItems, user, users, views, tags, configuration } = apis;
 
-export { apis, mediaItems, shareItems, playlists, user, users, views, tags, configuration };
+export { apis, mediaItems, shareItems, playlists, playlistItems, user, users, views, tags, configuration };

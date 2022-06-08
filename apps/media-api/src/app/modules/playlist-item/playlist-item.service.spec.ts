@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { PinoLogger } from 'nestjs-pino';
-import { MongoRepository, getMongoRepository } from 'typeorm';
+import { getMongoRepository, MongoRepository } from 'typeorm';
 import { userDataFactory, UserFactory } from '../../factories/mock-data.factory';
 import { mockLoggerFactory } from '../../factories/mock-logger.factory';
 import { PlaylistItem } from './entities/playlist-item.entity';
@@ -25,7 +25,7 @@ describe('PlaylistItemService', () => {
           url: 'mongodb://localhost:27017/',
           host: 'localhost',
           port: 27017,
-          database: 'playlistitems',
+          database: 'test',
           entities: [PlaylistItem],
           ssl: false,
           useUnifiedTopology: true,
@@ -39,7 +39,6 @@ describe('PlaylistItemService', () => {
           useClass: MongoRepository,
         },
         { provide: PinoLogger, useValue: mockLoggerFactory() },
-        // UserService,
       ],
     }).compile();
 
@@ -54,15 +53,16 @@ describe('PlaylistItemService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('insertMany', () => {
-    it('should insert many playlistItems', async () => {
-      const { playlistDto } = testData;
+  describe('findPlaylistItemsByUserId', () => {
+    it('should find playlistItems by a given userId', async () => {
+      const playlistItemDtos = testData.media;
 
-      const result = await service.insertMany(playlistDto);
+      const inserted = await service.insertMany(playlistItemDtos.map((item) => ({ ...item, userId: userFactory.user._id })));
+
+      /* const result = await service.searchByUserId(userFactory.userId);
 
       expect(result).toBeDefined();
-
-      expect(result).toHaveLength(playlistDto.length);
+      expect(result).toHaveLength(inserted.length); */
     });
   });
 });
