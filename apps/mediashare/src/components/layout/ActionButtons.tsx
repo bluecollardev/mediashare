@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
+import { TouchableWithoutFeedback, View, StyleSheet , ActivityIndicator} from 'react-native';
 import { IconButton, Text } from 'react-native-paper';
 import { theme } from 'mediashare/styles';
 
@@ -38,9 +38,9 @@ export function ActionButtons({
   disableAction = false,
   onActionClicked = () => undefined,
   actionLabel = 'Done',
-  actionIcon = undefined, // or eg. 'check-circle',
+  // actionIcon = undefined, // or eg. 'check-circle',
   actionIconColor = theme.colors.white,
-  // loading = false,
+  loading = false,
   containerStyles = {},
   actionButtonsStyles = {},
   cancelButtonTouchableStyles = {},
@@ -71,14 +71,16 @@ export function ActionButtons({
           <TouchableWithoutFeedback
             accessibilityRole="button"
             onPress={() => {
-              if (!disableAction) {
+              if (!disableAction && !loading) {
+                console.log(' click one')
                 onActionClicked();
               }
             }}
             style={{ ...defaultStyles.actionButtonTouchable, ...actionButtonTouchableStyles }}
           >
             <View style={{ ...defaultStyles.actionButton, ...actionButtonStyles, ...(disableAction ? defaultStyles.actionButtonDisabled : {}) }}>
-              {actionIcon && <IconButton color={actionIconColor} icon={actionIcon} />}
+              {loading && <ActivityIndicator size="small" color={actionIconColor}  style={{paddingRight: 15}} />}
+               {/* <IconButton color={actionIconColor} icon={actionIcon} /> */}
               {!!actionLabel && (
                 <Text
                   style={{ ...defaultStyles.actionButtonLabel, ...actionButtonLabelStyles, ...(disableAction ? defaultStyles.actionButtonLabelDisabled : {}) }}
