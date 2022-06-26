@@ -44,6 +44,7 @@ const MediaItemEdit = ({
   const { mediaId } = route?.params || {};
   const mediaItem = useAppSelector((state) => state?.mediaItem?.entity);
 
+  const [isSaved, setIsSaved] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [title, setTitle] = useState(mediaItem?.title);
   const [description, setDescription] = useState(mediaItem?.description);
@@ -144,7 +145,7 @@ const MediaItemEdit = ({
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons onActionClicked={saveItem} onCancelClicked={clearAndGoBack} actionLabel="Save" />
+        <ActionButtons loading={isSaved} onActionClicked={saveItem} onCancelClicked={clearAndGoBack} actionLabel="Save" />
       </PageActions>
     </PageContainer>
   );
@@ -160,6 +161,8 @@ const MediaItemEdit = ({
   }
 
   async function saveItem() {
+    setIsSaved(true)
+
     // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
     // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
     const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
@@ -175,6 +178,7 @@ const MediaItemEdit = ({
     };
 
     await dispatch(updateMediaItem(dto));
+    setIsSaved(false)
     await viewMediaItems();
   }
 

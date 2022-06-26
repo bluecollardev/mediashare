@@ -33,6 +33,7 @@ const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState();
   const [category, setCategory] = useState(PlaylistCategoryType.Free);
+  const [isSaved, setIsSaved] = useState(false);
   const [loaded, setIsLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
 
@@ -113,12 +114,13 @@ const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons onActionClicked={savePlaylist} onCancelClicked={() => clearAndGoBack} actionLabel="Save" disableAction={!isValid()} />
+        <ActionButtons  loading={isSaved} onActionClicked={savePlaylist} onCancelClicked={() => clearAndGoBack} actionLabel="Save" disableAction={!isValid()} />
       </PageActions>
     </PageContainer>
   );
 
   async function savePlaylist() {
+    setIsSaved(true)
     // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
     // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
     const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
@@ -137,6 +139,7 @@ const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
     const playlistId = payload._id;
     await dispatch(getUserPlaylists());
     await dispatch(getPlaylistById(playlistId));
+    setIsSaved(false)
     editPlaylist(playlistId);
   }
 
