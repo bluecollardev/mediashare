@@ -105,4 +105,30 @@ export class UserService extends DataService<User, MongoRepository<User>> {
       ])
       .next();
   }
+
+  async getUserAll() {
+    const resultUsers = await this.repository
+      .aggregate([
+        { $lookup: { from: 'share_item', localField: '_id', foreignField: 'userId', as: 'sharedMediaItems' } },
+        { $addFields: { shared: '$sharedMediaItems' } },
+        {
+          $group: {
+            _id: '$_id',
+            username: { $first: '$username' },
+            phoneNumber: { $first: '$phoneNumber' },
+            email: { $first: '$email' },
+            sub: { $first: '$sub' },
+            firstName: { $first: '$firstName' },
+            lastName: { $first: '$lastName' },
+            imageSrc: { $first: '$imageSrc' },
+            role: { $first: '$role' },
+            createdAt:  { $first: '$createdAt' }, 
+            updatedDate: { $first: '$updatedDate' }, 
+            sharedMediaItems: { $first: '$sharedMediaItems' },
+          },
+        },
+      ])
+      .toArray();
+    return resultUsers;
+  }
 }

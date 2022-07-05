@@ -30,6 +30,14 @@ export class UsersController {
     return from(this.userService.findAll()).pipe(map((users) => users.filter((user) => user._id !== userId)));
   }
 
+  @Get('all')
+  @UserGetResponse({ isArray: true })
+  async findAllUsers() {
+    const result = this.userService.getUserAll();
+    return result
+  
+  }
+
   @Get(RouteTokens.USER_ID)
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserGetResponse({ type: ProfileDto })
