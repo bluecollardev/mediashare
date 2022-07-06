@@ -1,4 +1,4 @@
-import { Controller, Param, HttpCode, UseGuards, HttpStatus, Get, Delete, Post,  Body, } from '@nestjs/common';
+import { Controller, Param, HttpCode, UseGuards, HttpStatus, Get, Delete, Post, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
@@ -76,8 +76,8 @@ export class ShareItemController {
   }
 
   @Post('unshare-all-items')
-  @ApiBody({ type: ShareItemsDto, isArray: true})
-  async removeShareItemAll(@Body() shareId: ShareItemsDto ) {
-   console.log('test ---', shareId )
+  @ApiBody({ type: ShareItemsDto, isArray: true })
+  async removeShareItemAll(@Body() shareItems: ShareItemsDto) {
+     await this.shareItemService.removeShareItemAll(shareItems)
   }
 }

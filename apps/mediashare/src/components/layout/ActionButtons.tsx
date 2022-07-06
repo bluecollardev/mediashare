@@ -72,7 +72,6 @@ export function ActionButtons({
             accessibilityRole="button"
             onPress={() => {
               if (!disableAction && !loading) {
-                console.log(' click one')
                 onActionClicked();
               }
             }}

@@ -34,8 +34,7 @@ export class UsersController {
   @UserGetResponse({ isArray: true })
   async findAllUsers() {
     const result = this.userService.getUserAll();
-    return result
-  
+    return result;
   }
 
   @Get(RouteTokens.USER_ID)

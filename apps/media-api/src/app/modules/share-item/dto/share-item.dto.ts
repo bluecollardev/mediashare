@@ -14,16 +14,4 @@ export class ShareItemsResponseDto {
 export class ShareItemsDto {
   @ApiProperty()
   userId: ObjectId;
-
-  @ApiProperty()
-  playlistId: ObjectId;
-
-  @ApiProperty()
-  mediaId: ObjectId;
-
-  @ApiProperty()
-  read: boolean;
-
-  @ApiProperty()
-  title: string;
 }

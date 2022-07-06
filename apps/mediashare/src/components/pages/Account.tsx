@@ -22,6 +22,7 @@ import { useUser } from 'mediashare/hooks/useUser';
 import { PageContainer, PageActions, PageProps, ContactList, ActionButtons, AccountCard, AppDialog } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
+import { removeShareItemAll } from 'mediashare/store/modules/shareItems';
 
 const actionModes = { delete: 'delete', default: 'default' };
 const awsUrl = Config.AWS_URL;
@@ -46,6 +47,7 @@ export const Account = ({ globalState }: PageProps) => {
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [isSelectable, setIsSelectable] = useState(false);
   const [selectedItems, setSelectedItems] = React.useState([]);
+
   const [showUnshareDialog, setShowUnshareDialog] = useState(false);
 
   useEffect(() => {
@@ -216,7 +218,6 @@ export const Account = ({ globalState }: PageProps) => {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
-    unshareItems();
   }
 
   function cancelItemsToUnshare() {
@@ -225,23 +226,23 @@ export const Account = ({ globalState }: PageProps) => {
     setIsSelectable(false);
   }
 
-  function unshareItems() {
-    selectedItems.map(async (shareItemId) => {
-      // await unshareItem(shareItemId);
-    }); // TODO: Find a real way to do this, using contactId
-    /* setTimeout(async () => {
-      await dispatch(loadProfile(userId));
-    }, 2500); */
+  async function unshareItems() {
+    await dispatch(removeShareItemAll(selectedItems));
+    setSelectedItems([])
   }
 
   function updateSelection(bool: boolean, shareItemId: string) {
-    const filtered = bool ? selectedItems.concat([shareItemId]) : selectedItems.filter((item) => item.shareItemId !== shareItemId);
-    setSelectedItems(filtered);
+    if (bool) {
+      setSelectedItems((prevState) => [...prevState, shareItemId]);
+    } else {
+      setSelectedItems((prevState) => [...prevState.filter((item) => item !== shareItemId)]);
+    }
   }
 
   function clearCheckboxSelection() {
     const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
+    setSelectedItems([])
   }
 };
 

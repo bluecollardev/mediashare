@@ -6,6 +6,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { CreateMediaShareItemDto, CreatePlaylistShareItemDto } from './dto/create-share-item.dto';
 import { ShareItem } from './entities/share-item.entity';
+import { ShareItemsDto } from './dto/share-item.dto';
 
 @Injectable()
 export class ShareItemService extends DataService<ShareItem, MongoRepository<ShareItem>> {
@@ -40,7 +41,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   async getItemsSharedByUser(userId: ObjectId) {
     return {
       mediaItems: await this.getMediaItemsSharedByUser(userId),
-      playlists: await this.getPlaylistsSharedByUser(userId)
+      playlists: await this.getPlaylistsSharedByUser(userId),
     };
   }
 
@@ -130,7 +131,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   async getItemsSharedWithUser(userId: ObjectId) {
     return {
       mediaItems: await this.getMediaItemsSharedWithUser(userId),
-      playlists: await this.getPlaylistsSharedWithUser(userId)
+      playlists: await this.getPlaylistsSharedWithUser(userId),
     };
   }
 
@@ -215,5 +216,16 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
         },
       ])
       .toArray();
+  }
+
+  async removeShareItemAll(shareItems: ShareItemsDto): Promise<boolean> {
+    try {
+      for (const key in shareItems) {
+        await this.repository.delete({ userId: new ObjectId(shareItems[key]) });
+      }
+      return true;
+    } catch (error) {
+      throw new Error('fail delete');
+    }
   }
 }

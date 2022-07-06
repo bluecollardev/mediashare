@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { removeShareItem, readShareItem } from 'mediashare/store/modules/shareItems';
+import { removeShareItem, readShareItem, removeShareItemAll } from 'mediashare/store/modules/shareItems';
 import { loadProfile } from 'mediashare/store/modules/profile';
 import { useProfile } from 'mediashare/hooks/useProfile';
 import { useViewPlaylistById } from 'mediashare/hooks/navigation';
@@ -164,7 +164,6 @@ const Profile = ({ route }: ProfileProps) => {
     setActionMode(actionModes.default);
     clearCheckboxSelection();
     setIsSelectable(false);
-    unshareItems();
   }
 
   function cancelItemsToUnshare() {
@@ -174,22 +173,22 @@ const Profile = ({ route }: ProfileProps) => {
   }
 
   async function unshareItems() {
-    selectedItems.map(async (shareItemId) => {
-      await unshareItem(shareItemId);
-    }); // TODO: Find a real way to do this, this timeout is JANKY
-    setTimeout(async () => {
-      await dispatch(loadProfile(userId));
-    }, 2500);
+    await dispatch(removeShareItemAll(selectedItems));
+    setSelectedItems([])
   }
 
   function updateSelection(bool: boolean, shareItemId: string) {
-    const filtered = bool ? selectedItems.concat([shareItemId]) : selectedItems.filter((item) => item.shareItemId !== shareItemId);
-    setSelectedItems(filtered);
+    if (bool) {
+      setSelectedItems((prevState) => [...prevState, shareItemId]);
+    } else {
+      setSelectedItems((prevState) => [...prevState.filter((item) => item !== shareItemId)]);
+    }
   }
 
   function clearCheckboxSelection() {
     const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
+    setSelectedItems([])
   }
 };
 
