@@ -23,16 +23,16 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
   const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
   return <View
   style={{
-    aspectRatio: 1 / 1,
+    aspectRatio: 16 / 9,
     width: '100%',
-    height: 250,
+    height: 'auto', 
     marginLeft: 'auto',
     marginRight: 'auto',
   }}
 >
   
  { mediaDisplayMode === 'image' && !isDefaultImage ? (
-    <ImageBackground source={{ uri: imageSrc }} resizeMode="cover" style={{ width: '100%', height: '100%' }}>
+    <ImageBackground source={{ uri: imageSrc }} resizeMode="contain" style={{ width: '100%', height: '100%' }}>
       {isPlayable && (
         <TouchableWithoutFeedback onPress={toggleMediaMode}>
           <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
