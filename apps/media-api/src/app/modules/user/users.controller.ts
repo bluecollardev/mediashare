@@ -33,7 +33,7 @@ export class UsersController {
   @Get('all')
   @UserGetResponse({ isArray: true })
   async findAllUsers() {
-    const result = this.userService.getUserAll();
+    const result = await this.userService.getUserAll();
     return result;
   }
 
