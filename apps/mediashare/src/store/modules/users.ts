@@ -11,7 +11,7 @@ export const usersActions = makeActions(usersActionNames);
 
 export const loadUsers = createAsyncThunk(usersActions.loadUsers.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.users.usersControllerFindAllUsers().toPromise();
+  return await api.users.usersControllerFindAll().toPromise();
 });
 
 export interface UsersState {

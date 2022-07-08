@@ -174,7 +174,7 @@ const Profile = ({ route }: ProfileProps) => {
 
   async function unshareItems() {
     await dispatch(removeShareItemAll(selectedItems));
-    setSelectedItems([])
+    setSelectedItems([]);
   }
 
   function updateSelection(bool: boolean, shareItemId: string) {
@@ -188,7 +188,7 @@ const Profile = ({ route }: ProfileProps) => {
   function clearCheckboxSelection() {
     const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
-    setSelectedItems([])
+    setSelectedItems([]);
   }
 };
 

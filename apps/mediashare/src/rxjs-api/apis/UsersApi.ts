@@ -64,27 +64,6 @@ export class UsersApi extends BaseAPI {
 
   /**
    */
-  usersControllerFindAllUsers(): Observable<Array<UserDto>>;
-  usersControllerFindAllUsers(opts?: OperationOpts): Observable<RawAjaxResponse<Array<UserDto>>>;
-  usersControllerFindAllUsers(opts?: OperationOpts): Observable<Array<UserDto> | RawAjaxResponse<Array<UserDto>>> {
-    const headers: HttpHeaders = {
-      ...(this.configuration.username != null && this.configuration.password != null
-        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
-        : undefined),
-    };
-
-    return this.request<Array<UserDto>>(
-      {
-        url: '/api/users/all',
-        method: 'GET',
-        headers,
-      },
-      opts?.responseOpts
-    );
-  }
-
-  /**
-   */
   usersControllerFindOne({ userId }: UsersControllerFindOneRequest): Observable<ProfileDto>;
   usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ProfileDto>>;
   usersControllerFindOne({ userId }: UsersControllerFindOneRequest, opts?: OperationOpts): Observable<ProfileDto | RawAjaxResponse<ProfileDto>> {

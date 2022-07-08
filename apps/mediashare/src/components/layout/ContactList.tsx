@@ -22,7 +22,15 @@ export const ContactList: React.FC<ContactListProps> = ({
   showActions,
   onViewDetail = () => undefined,
 }) => {
-  const namedContacts = contacts.filter((user) => !!user.firstName || !!user.lastName).filter((e) => e.sharedMediaItems.length > 0);
+  const namedContacts = contacts
+    .filter((user) => !!user.firstName || !!user.lastName)
+    .filter((e) => {
+      if (e?.sharedMediaItems) {
+        return e.sharedMediaItems.length > 0;
+      }
+      return e;
+    });
+
   const unnamedContacts = contacts.filter((user) => !user.firstName && !user.lastName);
   const mappedAndKeyed = R.values(
     R.groupBy(namedContacts, (user) => (user?.firstName ? user.firstName[0].toUpperCase() : user.username[0].toUpperCase()))

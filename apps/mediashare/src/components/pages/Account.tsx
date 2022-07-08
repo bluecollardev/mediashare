@@ -228,7 +228,7 @@ export const Account = ({ globalState }: PageProps) => {
 
   async function unshareItems() {
     await dispatch(removeShareItemAll(selectedItems));
-    setSelectedItems([])
+    setSelectedItems([]);
   }
 
   function updateSelection(bool: boolean, shareItemId: string) {
@@ -242,7 +242,7 @@ export const Account = ({ globalState }: PageProps) => {
   function clearCheckboxSelection() {
     const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
-    setSelectedItems([])
+    setSelectedItems([]);
   }
 };
 

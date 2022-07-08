@@ -131,4 +131,10 @@ export class UserService extends DataService<User, MongoRepository<User>> {
       .toArray();
     return resultUsers;
   }
+
+  async getUserAllWithJwt(jwt: string) {
+    const result = await this.authSvc.validateToken(jwt);
+    const users = await this.getUserAll();
+    return users.filter((e) => e.email != result.username);
+  }
 }
