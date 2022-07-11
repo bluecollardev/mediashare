@@ -232,11 +232,9 @@ export const Account = ({ globalState }: PageProps) => {
   }
 
   function updateSelection(bool: boolean, shareItemId: string) {
-    if (bool) {
-      setSelectedItems((prevState) => [...prevState, shareItemId]);
-    } else {
-      setSelectedItems((prevState) => [...prevState.filter((item) => item !== shareItemId)]);
-    }
+    bool
+      ? setSelectedItems((prevState) => [...prevState, shareItemId])
+      : setSelectedItems((prevState) => [...prevState.filter((item) => item !== shareItemId)]);
   }
 
   function clearCheckboxSelection() {
