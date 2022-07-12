@@ -76,8 +76,8 @@ export class ShareItemController {
   }
 
   @Post('unshare-all-items')
-  @ApiBody({ type: ShareItemsDto, isArray: true })
-  async removeShareItemAll(@Body() shareItems: ShareItemsDto) {
-    await this.shareItemService.removeShareItemAll(shareItems);
+  @ApiBody({ type: () => ShareItemsDto })
+  async removeShareItemAll(@Body() shareItemsDto: ShareItemsDto) {
+    await this.shareItemService.removeShareItemAll(shareItemsDto.shareItemIds);
   }
 }

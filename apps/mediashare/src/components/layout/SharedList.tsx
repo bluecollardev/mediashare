@@ -58,7 +58,7 @@ export const SharedList = ({
             )
           : null
       }
-      keyExtractor={(item) => item.shareItemId}
+      keyExtractor={(item) => item.shareId}
       renderItem={({ item }) => {
         return (
           <View>
@@ -69,9 +69,9 @@ export const SharedList = ({
               image={item.imageSrc}
               selectable={selectable}
               showActions={showActions}
-              onDelete={() => onDelete(item.shareItemId)}
-              onView={() => onView(item.playlistId, item.shareItemId)}
-              onChecked={(checked) => onChecked(checked, item.shareItemId)}
+              onDelete={() => onDelete(item.shareId)}
+              onView={() => onView(item.playlistId, item.shareId)}
+              onChecked={(checked) => onChecked(checked, item.shareId)}
             />
           </View>
         );

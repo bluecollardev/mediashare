@@ -32,9 +32,9 @@ export const removeShareItem = createAsyncThunk(shareItemsActions.removeShareIte
   return await api.shareItems.shareItemControllerRemoveShareItem({ shareId: id }).toPromise();
 });
 
-export const removeShareItemAll = createAsyncThunk(shareItemsActions.removeShareItemAll.type, async (shareId: ShareItemsDto[], { extra }) => {
+export const removeShareItemAll = createAsyncThunk(shareItemsActions.removeShareItemAll.type, async (shareIds: string[], { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.shareItems.shareItemControllerRemoveShareItemAll({ shareItemsDto: shareId }).toPromise();
+  return await api.shareItems.shareItemControllerRemoveShareItemAll({ shareItemsDto: { shareItemIds: shareIds } }).toPromise();
 });
 
 export const findItemsSharedByMe = createAsyncThunk(shareItemsActions.findItemsSharedByUser.type, async (opts = undefined, { extra }) => {

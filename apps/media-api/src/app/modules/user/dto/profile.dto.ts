@@ -26,7 +26,7 @@ class ProfileShareItem {
   playlistId;
 
   @ApiObjectId()
-  shareItemId: string;
+  shareId: string;
 
   @ApiProperty({ type: 'boolean' })
   read: boolean;
