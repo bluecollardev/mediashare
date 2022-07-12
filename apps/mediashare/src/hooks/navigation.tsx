@@ -12,6 +12,12 @@ type RouteConfigKeyType = EnumLiteralsOf<typeof routeNames>;
 // @ts-ignore
 type RouteParentKeyType = keyof Pick<typeof routeConfig, 'Browse' | 'Media' | 'Playlists' | 'Account'>;
 
+export function useGoToLogin(key: RouteConfigKeyType) {
+  const nav = useNavigation();
+  // @ts-ignore
+  return () => nav.navigate('Public');
+}
+
 export function useRouteName(key: RouteConfigKeyType) {
   const nav = useNavigation();
   // @ts-ignore

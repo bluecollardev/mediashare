@@ -17,7 +17,7 @@ import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useWindowDimensions, ScrollView, StyleSheet } from 'react-native';
 import { FAB, Divider, Card } from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { useRouteWithParams, useViewProfileById } from 'mediashare/hooks/navigation';
+import { useGoToLogin, useRouteWithParams, useViewProfileById } from 'mediashare/hooks/navigation';
 import { useUser } from 'mediashare/hooks/useUser';
 import { PageContainer, PageActions, PageProps, ContactList, ActionButtons, AccountCard, AppDialog } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
@@ -30,6 +30,7 @@ const awsUrl = Config.AWS_URL;
 export const Account = ({ globalState }: PageProps) => {
   const dispatch = useDispatch();
 
+  const goToLogin = useGoToLogin(routeNames.login);
   const viewAccount = useRouteWithParams(routeNames.account);
   const editProfile = useRouteWithParams(routeNames.accountEdit);
   const viewProfileById = useViewProfileById();
@@ -196,6 +197,8 @@ export const Account = ({ globalState }: PageProps) => {
 
   async function accountLogout() {
     await dispatch(logout());
+    goToLogin();
+
   }
 
   function activateUnshareMode() {
