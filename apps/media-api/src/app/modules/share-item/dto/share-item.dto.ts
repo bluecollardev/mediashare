@@ -12,6 +12,6 @@ export class ShareItemsResponseDto {
 }
 
 export class ShareItemsDto {
-  @ApiProperty()
-  userId: ObjectId;
+  @ApiProperty({ name: 'shareItemIds', type: () => String, isArray: true })
+  shareItemIds: string[];
 }

@@ -28,7 +28,7 @@ export interface ShareItemControllerRemoveShareItemRequest {
 }
 
 export interface ShareItemControllerRemoveShareItemAllRequest {
-  shareItemsDto: Array<ShareItemsDto>;
+  shareItemsDto: ShareItemsDto;
 }
 
 /**

@@ -48,7 +48,7 @@ export const AccountCard = ({
   // <Menu.Item icon="play-circle-filled" onPress={() => {}} title="Watch" />
   return (
     <>
-      <Card mode="elevated">
+      <Card mode="elevated" style={defaultStyles.card}>
         <Card.Title
           style={defaultStyles.header}
           left={() =>
@@ -123,6 +123,9 @@ export const AccountCard = ({
 };
 
 const defaultStyles = StyleSheet.create({
+  card: {
+    paddingBottom: 15,
+  },
   header: {
     paddingTop: 30,
     paddingBottom: 10,

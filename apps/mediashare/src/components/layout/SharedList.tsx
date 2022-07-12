@@ -15,6 +15,7 @@ interface SharedListProps {
   onView?: any;
   selectable?: boolean;
   onChecked?: (bool: boolean, userId: string) => void;
+  renderSectionHeader?: boolean;
 }
 
 export const SharedList = ({
@@ -24,9 +25,11 @@ export const SharedList = ({
   onDelete = () => undefined,
   onView = () => undefined,
   onChecked = () => undefined,
+  renderSectionHeader = false,
 }: SharedListProps) => {
   const { _id } = useUser();
 
+  // TODO: Make some use of this or remove it!
   const mappedSharedItems: Record<string, ProfileShareItem[]> = R.groupBy(sharedItems, (item) => item.author);
   const data = R.map(R.keys(mappedSharedItems), (key) => {
     const heading =
@@ -46,12 +49,16 @@ export const SharedList = ({
     <SectionList
       style={{ height: '100%' }}
       sections={data}
-      renderSectionHeader={({ section }) => (
-        <Card mode="outlined" style={styles.sectionHeader}>
-          <Card.Title titleStyle={styles.sectionHeaderTitle} title={section.title} subtitle={`${section.count.toString()} items`} />
-        </Card>
-      )}
-      keyExtractor={(item) => item.shareItemId}
+      renderSectionHeader={
+        renderSectionHeader
+          ? ({ section }) => (
+              <Card mode="outlined" style={styles.sectionHeader}>
+                <Card.Title titleStyle={styles.sectionHeaderTitle} title={section.title} subtitle={`${section.count.toString()} items`} />
+              </Card>
+            )
+          : null
+      }
+      keyExtractor={(item) => item.shareId}
       renderItem={({ item }) => {
         return (
           <View>
@@ -62,9 +69,9 @@ export const SharedList = ({
               image={item.imageSrc}
               selectable={selectable}
               showActions={showActions}
-              onDelete={() => onDelete(item.shareItemId)}
-              onView={() => onView(item.playlistId, item.shareItemId)}
-              onChecked={(checked) => onChecked(checked, item.shareItemId)}
+              onDelete={() => onDelete(item.shareId)}
+              onView={() => onView(item.playlistId, item.shareId)}
+              onChecked={(checked) => onChecked(checked, item.shareId)}
             />
           </View>
         );

@@ -34,7 +34,9 @@ import PlaylistItemEdit from './components/pages/PlaylistItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
 import AccountEdit from './components/pages/AccountEdit';
-import Profile from './components/pages/Profile';
+import Contact from './components/pages/Contact';
+import SharedWithContact from './components/pages/SharedWithContact';
+import SharedByContact from './components/pages/SharedByContact';
 
 // const deviceWidth = Dimensions.get('window').width;
 
@@ -88,7 +90,9 @@ const AccountNavigation = () => {
   return (
     <AccountStackNavigator.Navigator initialRouteName={user?.firstName ? 'Account' : 'accountEdit'}>
       <AccountStackNavigator.Screen {...routeConfig.account} component={Account} />
-      <AccountStackNavigator.Screen {...routeConfig.profile} component={Profile} />
+      <AccountStackNavigator.Screen {...routeConfig.contact} component={Contact} />
+      <AccountStackNavigator.Screen {...routeConfig.sharedByContact} component={SharedByContact} />
+      <AccountStackNavigator.Screen {...routeConfig.sharedWithContact} component={SharedWithContact} />
       <AccountStackNavigator.Screen {...routeConfig.accountEdit} component={AccountEdit} initialParams={{ userId: null }} />
       <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
       <AccountStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />

@@ -13,7 +13,7 @@ import { filterUnique, shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 
 export const SharedList = ({ globalState }) => {
-  const { entities } = useAppSelector((state) => state?.shareItems?.sharedWithUser);
+  const { entities } = useAppSelector((state) => state?.shareItems?.sharedWithMe);
   // TODO: There are dupes, this is just a temporary workaround; we shouldn't be able to create dupe share items
   const list = filterUnique(entities, '_id') || [];
 
@@ -27,7 +27,7 @@ export const SharedBlock = ({ globalState }) => {
   const { tags = [] } = globalState;
 
   const randomKey = createRandomRenderKey();
-  const { entities } = useAppSelector((state) => state?.shareItems?.sharedWithUser);
+  const { entities } = useAppSelector((state) => state?.shareItems?.sharedWithMe);
   // TODO: There are dupes, this is just a temporary workaround; we shouldn't be able to create dupe share items
   const list = filterUnique(entities, '_id') || [];
   list.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));

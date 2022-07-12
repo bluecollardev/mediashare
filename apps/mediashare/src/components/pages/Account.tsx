@@ -110,7 +110,7 @@ export const Account = ({ globalState }: PageProps) => {
       />
       <Divider />
       <Card mode="outlined" style={styles.sectionHeader}>
-        <Card.Title titleStyle={styles.sectionHeaderTitle} title="Subscribers" />
+        <Card.Title titleStyle={styles.sectionHeaderTitle} title="My Connections" />
       </Card>
       {/* <Highlights highlights={state.highlights} /> */}
       {!build.forFreeUser && (
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
   sectionHeaderTitle: {
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 18,
   },
   deleteActionButton: {
     backgroundColor: theme.colors.error,

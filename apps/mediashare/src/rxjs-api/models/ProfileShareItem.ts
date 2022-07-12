@@ -55,7 +55,7 @@ export interface ProfileShareItem {
    * @type {string}
    * @memberof ProfileShareItem
    */
-  shareItemId: string;
+  shareId: string;
   /**
    * @type {boolean}
    * @memberof ProfileShareItem

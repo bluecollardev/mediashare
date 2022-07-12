@@ -36,9 +36,23 @@ export function useGoBack() {
 }
 
 export function useViewProfileById() {
-  const nav = useRouteWithParams(routeNames.profile);
+  const nav = useRouteWithParams(routeNames.contact);
   return function (userId) {
     nav({ userId });
+  };
+}
+
+export function useViewItemsSharedByMe() {
+  const nav = useRouteWithParams(routeNames.sharedWithContact);
+  return function (contactUserId) {
+    nav({ userId: contactUserId });
+  };
+}
+
+export function useViewItemsSharedWithMe() {
+  const nav = useRouteWithParams(routeNames.sharedByContact);
+  return function (contactUserId) {
+    nav({ userId: contactUserId });
   };
 }
 

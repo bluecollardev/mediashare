@@ -67,9 +67,17 @@ const routeConfig = {
     name: 'accountEdit',
     options: { title: 'Update Account', header: (props) => <AppHeader {...props} /> },
   },
-  profile: {
-    name: 'profile',
-    options: { title: 'Subscriber', header: (props) => <AppHeader {...props} /> },
+  contact: {
+    name: 'contact',
+    options: { title: 'Contact', header: (props) => <AppHeader {...props} /> },
+  },
+  sharedWithContact: {
+    name: 'sharedWithContact',
+    options: { title: `Items You're Sharing`, header: (props) => <AppHeader {...props} /> },
+  },
+  sharedByContact: {
+    name: 'sharedByContact',
+    options: { title: `Items They're Sharing`, header: (props) => <AppHeader {...props} /> },
   },
 } as const;
 type RouteEnumKeys = keyof typeof routeConfig;

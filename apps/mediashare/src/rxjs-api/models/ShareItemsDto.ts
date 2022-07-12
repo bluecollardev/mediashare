@@ -17,8 +17,8 @@
  */
 export interface ShareItemsDto {
   /**
-   * @type {object}
+   * @type {Array<string>}
    * @memberof ShareItemsDto
    */
-  userId: object;
+  shareItemIds: Array<string>;
 }

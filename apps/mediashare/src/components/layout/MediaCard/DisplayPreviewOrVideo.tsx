@@ -21,41 +21,34 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
   const [mediaDisplayMode, setMediaDisplayMode] = useState(initialMediaDisplayMode);
 
   const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
-  return <View
-  style={{
-    aspectRatio: 16 / 9,
-    width: '100%',
-    height: 'auto', 
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  }}
->
-  
- { mediaDisplayMode === 'image' && !isDefaultImage ? (
-    <ImageBackground source={{ uri: imageSrc }} resizeMode="contain" style={{ width: '100%', height: '100%' }}>
-      {isPlayable && (
-        <TouchableWithoutFeedback onPress={toggleMediaMode}>
-          <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-            <Button icon="play-circle-filled" color="#ffffff" labelStyle={{ fontSize: 50 }}>
-              {' '}
-            </Button>
-          </View>
-        </TouchableWithoutFeedback>
-      )}
-    </ImageBackground>
-  ) : mediaDisplayMode === 'video' && mediaSrc ? (
-    <>
-      {/* TODO: This react-native-video version doesn't work with web and the lib has over a thousand open issues */}
-      <Video
-        source={{ uri: mediaSrc }}
-        poster={imageSrc}
-        style={{ width: '100%', height: '100%',  }}
-        resizeMode="contain"
-        controls={true}
-        paused={false}
-      />
-      {/* Use expo-av + expo-video-player */}
-      {/* <Video
+  return (
+    <View
+      style={{
+        aspectRatio: 16 / 9,
+        width: '100%',
+        height: 'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      }}
+    >
+      {mediaDisplayMode === 'image' && !isDefaultImage ? (
+        <ImageBackground source={{ uri: imageSrc }} resizeMode="contain" style={{ width: '100%', height: '100%' }}>
+          {isPlayable && (
+            <TouchableWithoutFeedback onPress={toggleMediaMode}>
+              <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                <Button icon="play-circle-filled" color="#ffffff" labelStyle={{ fontSize: 50 }}>
+                  {' '}
+                </Button>
+              </View>
+            </TouchableWithoutFeedback>
+          )}
+        </ImageBackground>
+      ) : mediaDisplayMode === 'video' && mediaSrc ? (
+        <>
+          {/* TODO: This react-native-video version doesn't work with web and the lib has over a thousand open issues */}
+          <Video source={{ uri: mediaSrc }} poster={imageSrc} style={{ width: '100%', height: '100%' }} resizeMode="contain" controls={true} paused={false} />
+          {/* Use expo-av + expo-video-player */}
+          {/* <Video
           styles={{
             height: 300,
           }}
@@ -68,8 +61,10 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
             },
           }}
         /> */}
-    </>
-  ) : null }</View>;
+        </>
+      ) : null}
+    </View>
+  );
 
   function toggleMediaMode() {
     const current = mediaDisplayMode as MediaDisplayMode;
