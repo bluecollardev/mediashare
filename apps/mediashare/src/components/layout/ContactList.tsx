@@ -13,19 +13,21 @@ export interface ContactListProps {
   onViewDetail?: (userId) => void;
   onChecked?: (bool: boolean, userId: string) => void;
   selectable?: boolean;
+  showAll?: boolean;
 }
 
 export const ContactList: React.FC<ContactListProps> = ({
   contacts = [],
   selectable,
   onChecked = () => undefined,
+  showAll = false,
   showActions,
   onViewDetail = () => undefined,
 }) => {
   const namedContacts = contacts
     .filter((user) => !!user.firstName || !!user.lastName)
     .filter((e) => {
-      if (e?.sharedMediaItems) {
+      if (!showAll && e?.sharedMediaItems) {
         return e.sharedMediaItems.length > 0;
       }
       return e;
