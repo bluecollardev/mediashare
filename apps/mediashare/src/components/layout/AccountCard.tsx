@@ -124,7 +124,7 @@ export const AccountCard = ({
 
 const defaultStyles = StyleSheet.create({
   card: {
-    paddingBottom: 15
+    paddingBottom: 15,
   },
   header: {
     paddingTop: 30,

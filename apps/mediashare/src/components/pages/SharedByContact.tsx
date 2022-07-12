@@ -3,13 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { ScrollView, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import {
-  removeShareItem,
-  readShareItem,
-  removeShareItemAll,
-  findItemsSharedByMe,
-  findItemsSharedWithMe
-} from 'mediashare/store/modules/shareItems';
+import { removeShareItem, readShareItem, removeShareItemAll, findItemsSharedByMe, findItemsSharedWithMe } from 'mediashare/store/modules/shareItems';
 import { loadProfile } from 'mediashare/store/modules/profile';
 import { useProfile } from 'mediashare/hooks/useProfile';
 import { useViewPlaylistById } from 'mediashare/hooks/navigation';
@@ -43,8 +37,7 @@ const SharedByContact = ({ route }: SharedByContactProps) => {
   const [showUnshareItemDialog, setShowUnshareItemDialog] = useState(false);
   const [itemToUnshare, setItemToUnshare] = useState(undefined as string);
 
-  const itemsSharedByContact = (useAppSelector((state) => state?.shareItems?.sharedWithMe?.entities) || [])
-    .filter((item) => item.sharedByUserId === userId)
+  const itemsSharedByContact = (useAppSelector((state) => state?.shareItems?.sharedWithMe?.entities) || []).filter((item) => item.sharedByUserId === userId);
 
   useEffect(() => {
     dispatch(loadProfile(userId));

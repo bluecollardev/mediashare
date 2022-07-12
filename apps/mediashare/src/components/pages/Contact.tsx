@@ -3,10 +3,7 @@ import React, { useEffect } from 'react';
 
 import { StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import {
-  findItemsSharedByMe,
-  findItemsSharedWithMe
-} from 'mediashare/store/modules/shareItems';
+import { findItemsSharedByMe, findItemsSharedWithMe } from 'mediashare/store/modules/shareItems';
 import { loadProfile } from 'mediashare/store/modules/profile';
 import { useProfile } from 'mediashare/hooks/useProfile';
 import { useViewItemsSharedByMe, useViewItemsSharedWithMe } from 'mediashare/hooks/navigation';
@@ -18,7 +15,7 @@ import { PageContainer, PageProps, AccountCard, ListItem } from 'mediashare/comp
 interface ContactProps extends PageProps {}
 
 const Contact = ({ route, globalState }: ContactProps) => {
-  const accountId = globalState?.user?._id
+  const accountId = globalState?.user?._id;
   const { userId } = route.params;
 
   const dispatch = useDispatch();
@@ -31,11 +28,9 @@ const Contact = ({ route, globalState }: ContactProps) => {
   const { username, firstName, lastName, email, phoneNumber, imageSrc } = profile || {};
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
 
-  const itemsSharedWithContact = (useAppSelector((state) => state?.shareItems?.sharedByMe?.entities) || [])
-    .filter((item) => item.sharedWithUserId === userId)
+  const itemsSharedWithContact = (useAppSelector((state) => state?.shareItems?.sharedByMe?.entities) || []).filter((item) => item.sharedWithUserId === userId);
 
-  const itemsSharedByContact = (useAppSelector((state) => state?.shareItems?.sharedWithMe?.entities) || [])
-    .filter((item) => item.sharedByUserId === userId)
+  const itemsSharedByContact = (useAppSelector((state) => state?.shareItems?.sharedWithMe?.entities) || []).filter((item) => item.sharedByUserId === userId);
 
   useEffect(() => {
     dispatch(loadProfile(userId));
@@ -94,5 +89,4 @@ const Contact = ({ route, globalState }: ContactProps) => {
 
 export default withLoadingSpinner(undefined)(Contact);
 
-const styles = StyleSheet.create({
-});
+const styles = StyleSheet.create({});

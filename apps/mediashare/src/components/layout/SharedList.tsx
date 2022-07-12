@@ -25,7 +25,7 @@ export const SharedList = ({
   onDelete = () => undefined,
   onView = () => undefined,
   onChecked = () => undefined,
-  renderSectionHeader = false
+  renderSectionHeader = false,
 }: SharedListProps) => {
   const { _id } = useUser();
 
@@ -49,11 +49,15 @@ export const SharedList = ({
     <SectionList
       style={{ height: '100%' }}
       sections={data}
-      renderSectionHeader={renderSectionHeader ? ({ section }) => (
-        <Card mode="outlined" style={styles.sectionHeader}>
-          <Card.Title titleStyle={styles.sectionHeaderTitle} title={section.title} subtitle={`${section.count.toString()} items`} />
-        </Card>
-      ) : null}
+      renderSectionHeader={
+        renderSectionHeader
+          ? ({ section }) => (
+              <Card mode="outlined" style={styles.sectionHeader}>
+                <Card.Title titleStyle={styles.sectionHeaderTitle} title={section.title} subtitle={`${section.count.toString()} items`} />
+              </Card>
+            )
+          : null
+      }
       keyExtractor={(item) => item.shareItemId}
       renderItem={({ item }) => {
         return (

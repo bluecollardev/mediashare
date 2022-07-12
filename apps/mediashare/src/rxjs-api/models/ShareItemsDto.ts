@@ -20,5 +20,5 @@ export interface ShareItemsDto {
    * @type {object}
    * @memberof ShareItemsDto
    */
-  userId: object;
+  shareItemId: object;
 }
