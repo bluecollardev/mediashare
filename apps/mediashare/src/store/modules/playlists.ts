@@ -4,12 +4,14 @@ import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'm
 import { ApiService } from 'mediashare/store/apis';
 // import { PlaylistResponseDto, PlaylistItemResponseDto } from 'mediashare/rxjs-api';
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
+import { mediaItemsActions } from 'mediashare/store/modules/mediaItems';
 
 // Define these in snake case or our converter won't work... we need to fix that
 const playlistsActionNames = [
   'find_playlists',
   'get_user_playlists',
   'select_playlist',
+  'clear_playlists'
 ] as const;
 
 export const playlistsActions = makeActions(playlistsActionNames);
@@ -28,6 +30,8 @@ export const getUserPlaylists = createAsyncThunk(playlistsActions.getUserPlaylis
 });
 
 export const selectPlaylist = createAction<{ isChecked: boolean; plist: PlaylistResponseDto }, typeof playlistsActions.selectPlaylist.type>(playlistsActions.selectPlaylist.type);
+
+export const clearPlaylists = createAction(playlistsActions.clearPlaylists.type);
 
 export interface PlaylistsState {
   // entities: PlaylistResponseDto[] | PlaylistItemResponseDto[];
@@ -69,6 +73,11 @@ const playlistsSlice = createSlice({
         };
         return { ...state, selected: updateSelection(action.payload.isChecked, action.payload.plist), loading: false, loaded: true };
       })
+      .addCase(clearPlaylists, (state) => ({
+        // TODO: Shouldn't we be clearing selected media items?
+        ...state, selected: [], loading: false, loaded: true
+        // ...state, entities: [], loading: false, loaded: true
+      }))
   },
 });
 

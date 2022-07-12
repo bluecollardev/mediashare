@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
 import { shareUserPlaylist } from 'mediashare/store/modules/playlist';
-import { getUserPlaylists } from 'mediashare/store/modules/playlists';
+import { clearPlaylists, getUserPlaylists } from 'mediashare/store/modules/playlists';
 import { loadUsers } from 'mediashare/store/modules/users';
 import { useGoBack, useRouteName } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
@@ -61,7 +61,7 @@ const ShareWith = ({}: PageProps) => {
         playlistIds: playlists.map((playlist) => playlist._id),
       })
     );
-
+    await dispatch(clearPlaylists())
     setIsLoaded(false);
     viewPlaylists();
   }

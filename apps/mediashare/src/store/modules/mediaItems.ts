@@ -72,7 +72,7 @@ const mediaItemsSlice = createSlice({
         };
         return { ...state, selected: updateSelection(action.payload.isChecked, action.payload.item), loading: false, loaded: true };
       })
-      .addCase(mediaItemsActions.clearMediaItems, (state) => ({
+      .addCase(clearMediaItems, (state) => ({
         // TODO: Shouldn't we be clearing selected media items?
         ...state, selected: [], loading: false, loaded: true
         // ...state, entities: [], loading: false, loaded: true
