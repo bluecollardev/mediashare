@@ -51,7 +51,6 @@ export class UserController {
       return res.send(profile);
     }
     const profile = await this.userService.getUserById(user._id);
-    console.log(profile);
     if (!profile) return res.send(user);
 
     return res.send(profile);

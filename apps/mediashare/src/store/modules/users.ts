@@ -5,9 +5,7 @@ import { ApiService } from 'mediashare/store/apis';
 import { UserDto } from 'mediashare/rxjs-api';
 
 // Define these in snake case or our converter won't work... we need to fix that
-const usersActionNames = [
-  'load_users',
-] as const;
+const usersActionNames = ['load_users'] as const;
 
 export const usersActions = makeActions(usersActionNames);
 
@@ -38,9 +36,15 @@ const usersSlice = createSlice({
     builder
       .addCase(loadUsers.pending, reducePendingState())
       .addCase(loadUsers.rejected, reduceRejectedState())
-      .addCase(loadUsers.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, entities: action.payload, loading: false, loaded: true
-      })))
+      .addCase(
+        loadUsers.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          entities: action.payload,
+          loading: false,
+          loaded: true,
+        }))
+      );
   },
 });
 

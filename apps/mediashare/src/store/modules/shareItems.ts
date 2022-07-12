@@ -3,10 +3,17 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { makeActions } from 'mediashare/store/factory';
 import { reducePendingState, reduceRejectedState, reduceFulfilledState } from 'mediashare/store/helpers';
 import { ApiService } from 'mediashare/store/apis';
-import { ShareItemsResponseDto } from 'mediashare/rxjs-api';
+import { ShareItemsDto } from 'mediashare/rxjs-api';
 
 // Define these in snake case or our converter won't work... we need to fix that
-const shareItemActionNames = ['get_share_item', 'remove_share_item', 'find_items_i_am_sharing', 'find_items_shared_with_me', 'read_share_item'] as const;
+const shareItemActionNames = [
+  'get_share_item',
+  'remove_share_item',
+  'remove_share_item_all',
+  'find_items_i_am_sharing',
+  'find_items_shared_with_me',
+  'read_share_item',
+] as const;
 
 export const shareItemsActions = makeActions(shareItemActionNames);
 
@@ -23,6 +30,11 @@ export const readShareItem = createAsyncThunk(shareItemsActions.readShareItem.ty
 export const removeShareItem = createAsyncThunk(shareItemsActions.removeShareItem.type, async (id: string, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.shareItems.shareItemControllerRemoveShareItem({ shareId: id }).toPromise();
+});
+
+export const removeShareItemAll = createAsyncThunk(shareItemsActions.removeShareItemAll.type, async (shareId: ShareItemsDto[], { extra }) => {
+  const { api } = extra as { api: ApiService };
+  return await api.shareItems.shareItemControllerRemoveShareItemAll({ shareItemsDto: shareId }).toPromise();
 });
 
 export const findItemsIAmSharing = createAsyncThunk(shareItemsActions.findItemsIAmSharing.type, async (opts = undefined, { extra }) => {

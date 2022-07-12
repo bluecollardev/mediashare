@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { MediaItemResponseDto, PlaylistResponseDto, ShareItem, ShareItemsResponseDto } from '../models';
+import { MediaItemResponseDto, PlaylistResponseDto, ShareItem, ShareItemsDto, ShareItemsResponseDto } from '../models';
 
 export interface ShareItemControllerFindShareItemRequest {
   shareId: string;
@@ -25,6 +25,10 @@ export interface ShareItemControllerReadShareItemRequest {
 
 export interface ShareItemControllerRemoveShareItemRequest {
   shareId: string;
+}
+
+export interface ShareItemControllerRemoveShareItemAllRequest {
+  shareItemsDto: Array<ShareItemsDto>;
 }
 
 /**
@@ -232,6 +236,34 @@ export class ShareItemsApi extends BaseAPI {
         url: '/api/share-items/{shareId}'.replace('{shareId}', encodeURI(shareId)),
         method: 'DELETE',
         headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  shareItemControllerRemoveShareItemAll({ shareItemsDto }: ShareItemControllerRemoveShareItemAllRequest): Observable<void>;
+  shareItemControllerRemoveShareItemAll(
+    { shareItemsDto }: ShareItemControllerRemoveShareItemAllRequest,
+    opts?: OperationOpts
+  ): Observable<void | RawAjaxResponse<void>>;
+  shareItemControllerRemoveShareItemAll(
+    { shareItemsDto }: ShareItemControllerRemoveShareItemAllRequest,
+    opts?: OperationOpts
+  ): Observable<void | RawAjaxResponse<void>> {
+    throwIfNullOrUndefined(shareItemsDto, 'shareItemsDto', 'shareItemControllerRemoveShareItemAll');
+
+    const headers: HttpHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    return this.request<void>(
+      {
+        url: '/api/share-items/unshare-all-items',
+        method: 'POST',
+        headers,
+        body: shareItemsDto,
       },
       opts?.responseOpts
     );

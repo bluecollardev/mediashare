@@ -1,11 +1,11 @@
-import { Controller, Param, HttpCode, UseGuards, HttpStatus, Get, Delete, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Param, HttpCode, UseGuards, HttpStatus, Get, Delete, Post, Body } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import { ShareItemService } from './share-item.service';
-import { ShareItemsResponseDto } from './dto/share-item.dto';
+import { ShareItemsDto, ShareItemsResponseDto } from './dto/share-item.dto';
 import { ShareItemGetResponse } from './share-item.decorator';
 import { ShareItem } from './entities/share-item.entity';
 import { MediaItemResponseDto } from '@api-modules/media-item/dto/media-item-response.dto';
@@ -73,5 +73,11 @@ export class ShareItemController {
   @ShareItemGetResponse()
   async removeShareItem(@Param('shareId', new ObjectIdPipe()) shareId: ObjectId) {
     return await this.shareItemService.remove(shareId);
+  }
+
+  @Post('unshare-all-items')
+  @ApiBody({ type: ShareItemsDto, isArray: true })
+  async removeShareItemAll(@Body() shareItems: ShareItemsDto) {
+    await this.shareItemService.removeShareItemAll(shareItems);
   }
 }

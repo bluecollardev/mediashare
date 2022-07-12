@@ -59,9 +59,11 @@ const MediaListItem = ({
     <List.Item
       title={title || null}
       titleNumberOfLines={3}
+      titleEllipsizeMode="tail"
       titleStyle={{ ...defaultStyles.titleText, ...titleStyle }}
-      description={description}
+      description={() => <>{description}</>}
       descriptionNumberOfLines={3}
+      descriptionEllipsizeMode="tail"
       // It doesn't feel right to have the whole thing be a tap target when we're displaying actions on the left
       onPress={showActions !== 'left' ? onPress : undefined}
       left={() =>

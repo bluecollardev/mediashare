@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards, Get, Put, Delete } from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, Get, Put, Delete, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiTags } from '@nestjs/swagger';
 import { DeleteResult } from 'typeorm';
 import { ObjectId } from 'mongodb';
@@ -16,8 +16,7 @@ import { ProfileDto } from './dto/profile.dto';
 import { PlaylistService } from '@api-modules/playlist/playlist.service';
 import { PlaylistResponseDto } from '@api-modules/playlist/dto/playlist-response.dto';
 import { ShareItemService } from '@api-modules/share-item/share-item.service';
-import { from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Request } from 'express';
 
 @ApiTags('users')
 @Controller('users')
@@ -25,9 +24,12 @@ export class UsersController {
   constructor(private readonly userService: UserService, private playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
   @Get()
+  @ApiBearerAuth()
   @UserGetResponse({ isArray: true })
-  async findAll(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
-    return from(this.userService.findAll()).pipe(map((users) => users.filter((user) => user._id !== userId)));
+  async findAll(@Req() request: Request) {
+    const jwt = request.headers.authorization.replace('Bearer ', '');
+    const result = await this.userService.getUserAllWithJwt(jwt);
+    return result;
   }
 
   @Get(RouteTokens.USER_ID)
