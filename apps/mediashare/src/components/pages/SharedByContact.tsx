@@ -1,8 +1,15 @@
+import { useAppSelector } from 'mediashare/store';
 import React, { useEffect, useState } from 'react';
 
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { removeShareItem, readShareItem, removeShareItemAll } from 'mediashare/store/modules/shareItems';
+import {
+  removeShareItem,
+  readShareItem,
+  removeShareItemAll,
+  findItemsSharedByUser,
+  findItemsSharedWithUser
+} from 'mediashare/store/modules/shareItems';
 import { loadProfile } from 'mediashare/store/modules/profile';
 import { useProfile } from 'mediashare/hooks/useProfile';
 import { useViewPlaylistById } from 'mediashare/hooks/navigation';
@@ -13,11 +20,11 @@ import { PageActions, PageContainer, PageProps, AccountCard, SharedList, ActionB
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
 
-interface ProfileProps extends PageProps {}
+interface SharedByContactProps extends PageProps {}
 
 const actionModes = { delete: 'delete', default: 'default' };
 
-const Profile = ({ route }: ProfileProps) => {
+const SharedByContact = ({ route }: SharedByContactProps) => {
   const { userId } = route.params;
 
   const dispatch = useDispatch();
@@ -26,7 +33,7 @@ const Profile = ({ route }: ProfileProps) => {
 
   const profile = useProfile();
 
-  const { username, firstName, lastName, email, phoneNumber, imageSrc, sharedItems = [], likesCount, sharesCount, sharedCount } = profile || {};
+  const { username, firstName, lastName, email, phoneNumber, imageSrc, likesCount, sharesCount, sharedCount } = profile || {};
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
 
   const [actionMode, setActionMode] = useState(actionModes.default);
@@ -36,8 +43,13 @@ const Profile = ({ route }: ProfileProps) => {
   const [showUnshareItemDialog, setShowUnshareItemDialog] = useState(false);
   const [itemToUnshare, setItemToUnshare] = useState(undefined as string);
 
+  const itemsSharedByContact = (useAppSelector((state) => state?.shareItems?.sharedWithUser?.entities) || [])
+    .filter((item) => item.sharedByUserId === userId)
+
   useEffect(() => {
     dispatch(loadProfile(userId));
+    dispatch(findItemsSharedByUser());
+    dispatch(findItemsSharedWithUser());
   }, [userId]);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
@@ -76,11 +88,8 @@ const Profile = ({ route }: ProfileProps) => {
         email={email}
         phoneNumber={phoneNumber}
         image={imageSrc}
-        likes={likesCount}
-        shares={sharesCount}
-        shared={sharedCount}
-        showSocial={true}
-        showActions={!isSelectable}
+        showSocial={false}
+        showActions={false}
         isCurrentUser={false}
       />
       <Divider />
@@ -90,7 +99,7 @@ const Profile = ({ route }: ProfileProps) => {
         showActions={!isSelectable}
         onDelete={openUnshareItemDialog}
         onView={viewItem}
-        sharedItems={sharedItems}
+        sharedItems={itemsSharedByContact}
         onChecked={updateSelection}
       />
       {isSelectable && actionMode === actionModes.delete && (
@@ -142,6 +151,8 @@ const Profile = ({ route }: ProfileProps) => {
   async function unshareItem(shareItemId: string) {
     await dispatch(removeShareItem(shareItemId));
     await dispatch(loadProfile(userId));
+    await dispatch(findItemsSharedByUser());
+    await dispatch(findItemsSharedWithUser());
   }
 
   async function activateUnshareMode() {
@@ -174,6 +185,8 @@ const Profile = ({ route }: ProfileProps) => {
 
   async function unshareItems() {
     await dispatch(removeShareItemAll(selectedItems));
+    await dispatch(findItemsSharedByUser());
+    await dispatch(findItemsSharedWithUser());
     setSelectedItems([]);
   }
 
@@ -190,7 +203,7 @@ const Profile = ({ route }: ProfileProps) => {
   }
 };
 
-export default withLoadingSpinner(undefined)(Profile);
+export default withLoadingSpinner(undefined)(SharedByContact);
 
 const styles = StyleSheet.create({
   deleteActionButton: {

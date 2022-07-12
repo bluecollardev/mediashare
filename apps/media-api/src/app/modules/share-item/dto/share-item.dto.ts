@@ -13,5 +13,5 @@ export class ShareItemsResponseDto {
 
 export class ShareItemsDto {
   @ApiProperty()
-  userId: ObjectId;
+  shareItemId: ObjectId;
 }

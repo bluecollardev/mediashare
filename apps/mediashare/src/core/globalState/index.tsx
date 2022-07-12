@@ -5,7 +5,7 @@ import { useAppSelector } from 'mediashare/store';
 import { useUser } from 'mediashare/hooks/useUser';
 import { loadUser } from 'mediashare/store/modules/user';
 import { getTags } from 'mediashare/store/modules/tags';
-import { findItemsIAmSharing, findItemsSharedWithMe } from 'mediashare/store/modules/shareItems';
+import { findItemsSharedByUser, findItemsSharedWithUser } from 'mediashare/store/modules/shareItems';
 import { BcRolesType, ProfileDto, Tag } from 'mediashare/rxjs-api';
 
 export interface GlobalStateProps {
@@ -93,8 +93,8 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
 
     async function loadUserData() {
       await dispatch(loadUser());
-      await dispatch(findItemsIAmSharing());
-      await dispatch(findItemsSharedWithMe());
+      await dispatch(findItemsSharedByUser());
+      await dispatch(findItemsSharedWithUser());
     }
   };
 };

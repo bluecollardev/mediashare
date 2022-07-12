@@ -11,6 +11,7 @@ export * from './Highlights';
 export * from './LabelledAvatar';
 export * from './LabelledElement';
 export * from './ListActionButton';
+export * from './ListItem';
 export * from './MediaList';
 export * from './MediaListItem';
 export * from './MediaPreview';

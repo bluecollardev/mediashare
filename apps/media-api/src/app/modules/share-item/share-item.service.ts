@@ -221,7 +221,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   async removeShareItemAll(shareItems: ShareItemsDto): Promise<boolean> {
     try {
       for (const key in shareItems) {
-        await this.repository.delete({ userId: new ObjectId(shareItems[key]) });
+        await this.repository.delete({ _id: new ObjectId(shareItems[parseInt(key)]) });
       }
       return true;
     } catch (error) {
