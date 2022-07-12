@@ -7,8 +7,8 @@ import {
   removeShareItem,
   readShareItem,
   removeShareItemAll,
-  findItemsSharedByUser,
-  findItemsSharedWithUser
+  findItemsSharedByMe,
+  findItemsSharedWithMe
 } from 'mediashare/store/modules/shareItems';
 import { loadProfile } from 'mediashare/store/modules/profile';
 import { useProfile } from 'mediashare/hooks/useProfile';
@@ -43,13 +43,13 @@ const SharedByContact = ({ route }: SharedByContactProps) => {
   const [showUnshareItemDialog, setShowUnshareItemDialog] = useState(false);
   const [itemToUnshare, setItemToUnshare] = useState(undefined as string);
 
-  const itemsSharedByContact = (useAppSelector((state) => state?.shareItems?.sharedWithUser?.entities) || [])
+  const itemsSharedByContact = (useAppSelector((state) => state?.shareItems?.sharedWithMe?.entities) || [])
     .filter((item) => item.sharedByUserId === userId)
 
   useEffect(() => {
     dispatch(loadProfile(userId));
-    dispatch(findItemsSharedByUser());
-    dispatch(findItemsSharedWithUser());
+    dispatch(findItemsSharedByMe());
+    dispatch(findItemsSharedWithMe());
   }, [userId]);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
@@ -151,8 +151,8 @@ const SharedByContact = ({ route }: SharedByContactProps) => {
   async function unshareItem(shareItemId: string) {
     await dispatch(removeShareItem(shareItemId));
     await dispatch(loadProfile(userId));
-    await dispatch(findItemsSharedByUser());
-    await dispatch(findItemsSharedWithUser());
+    await dispatch(findItemsSharedByMe());
+    await dispatch(findItemsSharedWithMe());
   }
 
   async function activateUnshareMode() {
@@ -185,8 +185,8 @@ const SharedByContact = ({ route }: SharedByContactProps) => {
 
   async function unshareItems() {
     await dispatch(removeShareItemAll(selectedItems));
-    await dispatch(findItemsSharedByUser());
-    await dispatch(findItemsSharedWithUser());
+    await dispatch(findItemsSharedByMe());
+    await dispatch(findItemsSharedWithMe());
     setSelectedItems([]);
   }
 

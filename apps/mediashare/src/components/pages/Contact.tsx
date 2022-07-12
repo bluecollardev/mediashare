@@ -4,12 +4,12 @@ import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import {
-  findItemsSharedByUser,
-  findItemsSharedWithUser
+  findItemsSharedByMe,
+  findItemsSharedWithMe
 } from 'mediashare/store/modules/shareItems';
 import { loadProfile } from 'mediashare/store/modules/profile';
 import { useProfile } from 'mediashare/hooks/useProfile';
-import { useViewItemsSharedByUser, useViewItemsSharedWithUser } from 'mediashare/hooks/navigation';
+import { useViewItemsSharedByMe, useViewItemsSharedWithMe } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB, Divider } from 'react-native-paper';
 import { PageContainer, PageProps, AccountCard, ListItem } from 'mediashare/components/layout';
@@ -23,24 +23,24 @@ const Contact = ({ route, globalState }: ContactProps) => {
 
   const dispatch = useDispatch();
 
-  const viewSharedByContact = useViewItemsSharedWithUser();
-  const viewSharedWithContact = useViewItemsSharedByUser();
+  const viewSharedByContact = useViewItemsSharedWithMe();
+  const viewSharedWithContact = useViewItemsSharedByMe();
 
   const profile = useProfile();
 
   const { username, firstName, lastName, email, phoneNumber, imageSrc } = profile || {};
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
 
-  const itemsSharedWithContact = (useAppSelector((state) => state?.shareItems?.sharedByUser?.entities) || [])
+  const itemsSharedWithContact = (useAppSelector((state) => state?.shareItems?.sharedByMe?.entities) || [])
     .filter((item) => item.sharedWithUserId === userId)
 
-  const itemsSharedByContact = (useAppSelector((state) => state?.shareItems?.sharedWithUser?.entities) || [])
+  const itemsSharedByContact = (useAppSelector((state) => state?.shareItems?.sharedWithMe?.entities) || [])
     .filter((item) => item.sharedByUserId === userId)
 
   useEffect(() => {
     dispatch(loadProfile(userId));
-    dispatch(findItemsSharedByUser());
-    dispatch(findItemsSharedWithUser());
+    dispatch(findItemsSharedByMe());
+    dispatch(findItemsSharedWithMe());
   }, [userId]);
 
   // const [fabState, setFabState] = useState({ open: false });

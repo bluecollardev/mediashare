@@ -37,12 +37,12 @@ export const removeShareItemAll = createAsyncThunk(shareItemsActions.removeShare
   return await api.shareItems.shareItemControllerRemoveShareItemAll({ shareItemsDto: shareId }).toPromise();
 });
 
-export const findItemsSharedByUser = createAsyncThunk(shareItemsActions.findItemsSharedByUser.type, async (opts = undefined, { extra }) => {
+export const findItemsSharedByMe = createAsyncThunk(shareItemsActions.findItemsSharedByUser.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.shareItems.shareItemControllerFindItemsSharedByUser().toPromise();
 });
 
-export const findItemsSharedWithUser = createAsyncThunk(shareItemsActions.findItemsSharedWithUser.type, async (opts = undefined, { extra }) => {
+export const findItemsSharedWithMe = createAsyncThunk(shareItemsActions.findItemsSharedWithUser.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.shareItems.shareItemControllerFindItemsSharedWithUser().toPromise();
 });
@@ -62,21 +62,21 @@ interface ShareItemState {
 
 const shareItemsInitialState: {
   shareItem: ShareItemState;
-  sharedByUser: ShareItemsState;
-  sharedWithUser: ShareItemsState;
+  sharedByMe: ShareItemsState;
+  sharedWithMe: ShareItemsState;
 } = {
   shareItem: {
     entity: undefined,
     loading: false,
     loaded: false,
   },
-  sharedByUser: {
+  sharedByMe: {
     selected: [],
     entities: [],
     loading: false,
     loaded: false,
   },
-  sharedWithUser: {
+  sharedWithMe: {
     selected: [],
     entities: [],
     loading: false,
@@ -154,45 +154,45 @@ const shareItemsSlice = createSlice({
         }))
       )
       .addCase(
-        findItemsSharedByUser.pending,
+        findItemsSharedByMe.pending,
         reducePendingState((state) => ({
           ...state,
-          sharedByUser: { entities: [], loading: true, loaded: false },
+          sharedByMe: { entities: [], loading: true, loaded: false },
         }))
       )
       .addCase(
-        findItemsSharedByUser.rejected,
+        findItemsSharedByMe.rejected,
         reduceRejectedState((state) => ({
           ...state,
-          sharedByUser: { entities: [], loading: false, loaded: true },
+          sharedByMe: { entities: [], loading: false, loaded: true },
         }))
       )
       .addCase(
-        findItemsSharedByUser.fulfilled,
+        findItemsSharedByMe.fulfilled,
         reduceFulfilledState((state, action) => ({
           ...state,
-          sharedByUser: { entities: Array.isArray(action.payload.playlists) ? action.payload.playlists : [], loading: false, loaded: true },
+          sharedByMe: { entities: Array.isArray(action.payload.playlists) ? action.payload.playlists : [], loading: false, loaded: true },
         }))
       )
       .addCase(
-        findItemsSharedWithUser.pending,
+        findItemsSharedWithMe.pending,
         reducePendingState((state) => ({
           ...state,
-          sharedWithUser: { entities: [], loading: true, loaded: false },
+          sharedWithMe: { entities: [], loading: true, loaded: false },
         }))
       )
       .addCase(
-        findItemsSharedWithUser.rejected,
+        findItemsSharedWithMe.rejected,
         reduceRejectedState((state) => ({
           ...state,
-          sharedWithUser: { entities: [], loading: false, loaded: true },
+          sharedWithMe: { entities: [], loading: false, loaded: true },
         }))
       )
       .addCase(
-        findItemsSharedWithUser.fulfilled,
+        findItemsSharedWithMe.fulfilled,
         reduceFulfilledState((state, action) => ({
           ...state,
-          sharedWithUser: { entities: Array.isArray(action.payload.playlists) ? action.payload.playlists : [], loading: false, loaded: true },
+          sharedWithMe: { entities: Array.isArray(action.payload.playlists) ? action.payload.playlists : [], loading: false, loaded: true },
         }))
       );
   },

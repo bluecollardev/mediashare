@@ -42,14 +42,14 @@ export function useViewProfileById() {
   };
 }
 
-export function useViewItemsSharedByUser() {
+export function useViewItemsSharedByMe() {
   const nav = useRouteWithParams(routeNames.sharedWithContact);
   return function (contactUserId) {
     nav({ userId: contactUserId });
   };
 }
 
-export function useViewItemsSharedWithUser() {
+export function useViewItemsSharedWithMe() {
   const nav = useRouteWithParams(routeNames.sharedByContact);
   return function (contactUserId) {
     nav({ userId: contactUserId });

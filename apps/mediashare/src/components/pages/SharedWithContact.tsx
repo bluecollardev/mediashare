@@ -7,8 +7,8 @@ import {
   removeShareItem,
   readShareItem,
   removeShareItemAll,
-  findItemsSharedByUser,
-  findItemsSharedWithUser
+  findItemsSharedByMe,
+  findItemsSharedWithMe
 } from 'mediashare/store/modules/shareItems';
 import { loadProfile } from 'mediashare/store/modules/profile';
 import { useProfile } from 'mediashare/hooks/useProfile';
@@ -43,13 +43,13 @@ const SharedWithContact = ({ route }: SharedWithContactProps) => {
   const [showUnshareItemDialog, setShowUnshareItemDialog] = useState(false);
   const [itemToUnshare, setItemToUnshare] = useState(undefined as string);
 
-  const itemsSharedWithContact = (useAppSelector((state) => state?.shareItems?.sharedByUser?.entities) || [])
+  const itemsSharedWithContact = (useAppSelector((state) => state?.shareItems?.sharedByMe?.entities) || [])
   .filter((item) => item.sharedWithUserId === userId)
 
   useEffect(() => {
     dispatch(loadProfile(userId));
-    dispatch(findItemsSharedByUser());
-    dispatch(findItemsSharedWithUser());
+    dispatch(findItemsSharedByMe());
+    dispatch(findItemsSharedWithMe());
   }, [userId]);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
@@ -151,8 +151,8 @@ const SharedWithContact = ({ route }: SharedWithContactProps) => {
   async function unshareItem(shareItemId: string) {
     await dispatch(removeShareItem(shareItemId));
     await dispatch(loadProfile(userId));
-    await dispatch(findItemsSharedByUser());
-    await dispatch(findItemsSharedWithUser());
+    await dispatch(findItemsSharedByMe());
+    await dispatch(findItemsSharedWithMe());
   }
 
   async function activateUnshareMode() {
@@ -185,8 +185,8 @@ const SharedWithContact = ({ route }: SharedWithContactProps) => {
 
   async function unshareItems() {
     await dispatch(removeShareItemAll(selectedItems));
-    await dispatch(findItemsSharedByUser());
-    await dispatch(findItemsSharedWithUser());
+    await dispatch(findItemsSharedByMe());
+    await dispatch(findItemsSharedWithMe());
     setSelectedItems([]);
   }
 
