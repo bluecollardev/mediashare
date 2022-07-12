@@ -31,7 +31,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   async createPlaylistShareItem({ userId, playlistId, createdBy, title }: CreatePlaylistShareItemDto): Promise<ShareItem> {
     return await this.create({
       userId: new ObjectId(userId),
-      mediaId: new ObjectId(playlistId),
+      playlistId: new ObjectId(playlistId),
       createdBy: new ObjectId(createdBy),
       title,
       read: false,

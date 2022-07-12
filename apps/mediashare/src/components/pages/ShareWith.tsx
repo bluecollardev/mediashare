@@ -37,7 +37,7 @@ const ShareWith = ({}: PageProps) => {
   return (
     <PageContainer>
       <PageContent>
-        <ContactList contacts={users} showGroups={true} selectable={true} onChecked={updateSelectedUsers} />
+        <ContactList contacts={users} showGroups={true} selectable={true} onChecked={updateSelectedUsers} showAll={true} />
       </PageContent>
       <PageActions>
         <ActionButtons onCancelClicked={goBack} onActionClicked={sharePlaylists} actionLabel="Confirm" />
