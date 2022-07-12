@@ -21,8 +21,18 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
   const [mediaDisplayMode, setMediaDisplayMode] = useState(initialMediaDisplayMode);
 
   const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
-  return mediaDisplayMode === 'image' && !isDefaultImage ? (
-    <ImageBackground source={{ uri: imageSrc }} resizeMode="cover" style={{ width: '100%', height: 250 }}>
+  return <View
+  style={{
+    aspectRatio: 16 / 9,
+    width: '100%',
+    height: 'auto', 
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  }}
+>
+  
+ { mediaDisplayMode === 'image' && !isDefaultImage ? (
+    <ImageBackground source={{ uri: imageSrc }} resizeMode="contain" style={{ width: '100%', height: '100%' }}>
       {isPlayable && (
         <TouchableWithoutFeedback onPress={toggleMediaMode}>
           <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
@@ -39,7 +49,7 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
       <Video
         source={{ uri: mediaSrc }}
         poster={imageSrc}
-        style={{ width: '100%', height: 300, margin: 3, marginBottom: 6 }}
+        style={{ width: '100%', height: '100%',  }}
         resizeMode="contain"
         controls={true}
         paused={false}
@@ -59,7 +69,7 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
           }}
         /> */}
     </>
-  ) : null;
+  ) : null }</View>;
 
   function toggleMediaMode() {
     const current = mediaDisplayMode as MediaDisplayMode;
