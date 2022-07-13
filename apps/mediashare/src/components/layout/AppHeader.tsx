@@ -166,7 +166,7 @@ const AppHeaderComponent = ({
       )}
 
       {back && <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} />}
-      {showDisplayControls && renderDisplayControls()}
+
       <Appbar.Content
         title={title}
         titleStyle={{
@@ -174,6 +174,7 @@ const AppHeaderComponent = ({
           fontFamily: theme.fonts.medium.fontFamily,
         }}
       />
+      {showDisplayControls && renderDisplayControls()}
       {searchable && <Appbar.Action icon="filter-list" color={searchIsFiltering ? theme.colors.success : '#ffffff'} onPress={() => openSearchConsole()} />}
       {showNotificationsMenu && <Appbar.Action icon="notifications" onPress={() => openSearchConsole()} />}
       {showAccountMenu && <Appbar.Action icon="person" onPress={() => goToAccount()} />}
