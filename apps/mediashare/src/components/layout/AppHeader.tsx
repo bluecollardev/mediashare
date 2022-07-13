@@ -176,7 +176,7 @@ const AppHeaderComponent = ({
       />
       {searchable && <Appbar.Action icon="filter-list" color={searchIsFiltering ? theme.colors.success : '#ffffff'} onPress={() => openSearchConsole()} />}
       {showNotificationsMenu && <Appbar.Action icon="notifications" onPress={() => openSearchConsole()} />}
-      {showAccountMenu && <Appbar.Action icon="account-circle" onPress={() => goToAccount()} />}
+      {showAccountMenu && <Appbar.Action icon="person" onPress={() => goToAccount()} />}
     </Appbar.Header>
   );
 
