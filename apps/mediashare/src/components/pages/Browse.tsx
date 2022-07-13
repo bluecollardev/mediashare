@@ -13,7 +13,7 @@ import { filterUnique, shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 
 export const SharedList = ({ globalState }) => {
-  const { entities } = useAppSelector((state) => state?.shareItems?.sharedWithMe);
+  const { entities, loaded } = useAppSelector((state) => state?.shareItems?.sharedWithMe);
   const ShowMyShare = false;
   // TODO: There are dupes, this is just a temporary workaround; we shouldn't be able to create dupe share items
   const list = filterUnique(entities, '_id').filter((e) => (ShowMyShare ? e : e.sharedWith != e.sharedBy)) || [];
@@ -21,18 +21,18 @@ export const SharedList = ({ globalState }) => {
   const viewPlaylistAction = useViewPlaylistById();
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
 
-  return list.length > 0 ? (
+  return loaded && list.length > 0 ? (
     <PlaylistsComponent list={list} onViewDetailClicked={viewPlaylist} />
-  ) : (
+  ) : loaded && list.length === 0 ? (
     <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="view-list" />
-  );
+  ) : null;
 };
 
 export const SharedBlock = ({ globalState }) => {
   const { tags = [] } = globalState;
 
   const randomKey = createRandomRenderKey();
-  const { entities } = useAppSelector((state) => state?.shareItems?.sharedWithMe);
+  const { entities, loaded } = useAppSelector((state) => state?.shareItems?.sharedWithMe);
   // TODO: There are dupes, this is just a temporary workaround; we shouldn't be able to create dupe share items
   const list = filterUnique(entities, '_id') || [];
   list.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
@@ -40,7 +40,7 @@ export const SharedBlock = ({ globalState }) => {
   const viewPlaylistAction = useViewPlaylistById();
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
 
-  return list.length > 0 ? (
+  return loaded && list.length > 0 ? (
     <List.Section>
       {list.map((item) => {
         // @ts-ignore
@@ -79,9 +79,9 @@ export const SharedBlock = ({ globalState }) => {
         );
       })}
     </List.Section>
-  ) : (
+  ) : loaded && list.length === 0 ? (
     <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="article" />
-  );
+  ) : null;
 };
 
 export const Browse = ({

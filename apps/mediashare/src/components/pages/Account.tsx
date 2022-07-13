@@ -255,8 +255,8 @@ const styles = StyleSheet.create({
   },
   sectionHeaderTitle: {
     textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 18,
+    fontWeight: 'normal',
+    fontSize: 16,
   },
   deleteActionButton: {
     backgroundColor: theme.colors.error,

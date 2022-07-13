@@ -67,7 +67,8 @@ export const AccountCard = ({
           titleStyle={defaultStyles.title}
           subtitle={
             <View>
-              <Subheading style={{ ...defaultStyles.subtitleText, color: theme.colors.primary }}>@{username}</Subheading>
+              {/* TODO: Fix username display on Android */}
+              {/*<Subheading style={{ ...defaultStyles.subtitleText, color: theme.colors.primary }}>@{username}</Subheading>*/}
               <Subheading style={{ ...defaultStyles.subtitleText }}>{email}</Subheading>
             </View>
           }

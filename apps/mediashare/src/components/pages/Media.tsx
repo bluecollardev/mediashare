@@ -86,24 +86,18 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
 
-  const { loading, loaded, entities, selected } = useAppSelector((state) => state?.mediaItems);
-  const [isLoaded, setIsLoaded] = useState(loaded);
-  useEffect(() => {
-    if (loaded && !isLoaded) {
-      setIsLoaded(true);
-    }
-  }, [loaded]);
+  const { entities, selected, loaded } = useAppSelector((state) => state?.mediaItems);
 
   const onRefresh = useCallback(refresh, [dispatch]);
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
-    if (!isLoaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
+    if (!loaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
       setPrevSearchFilters(currentSearchFilters);
       loadData().then();
     }
-  }, [isLoaded, globalState, searchFilters]);
+  }, [loaded, globalState, searchFilters]);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
@@ -132,7 +126,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
           title="Delete Media Items"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
-        {isLoaded && entities.length > 0 ? (
+        {loaded && entities.length > 0 ? (
           <MediaComponent
             key={clearSelectionKey}
             navigation={navigation}
@@ -142,13 +136,13 @@ export const Media = ({ navigation, globalState }: PageProps) => {
             onViewDetail={onEditItem}
             onChecked={updateSelection}
           />
-        ) : (
+        ) : loaded && entities.length === 0 ? (
           <NoContent
             onPress={addMedia}
             messageButtonText="You have not added any media items to your library. Please add and item to your library to continue."
             icon="add-circle"
           />
-        )}
+        ) : null}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>

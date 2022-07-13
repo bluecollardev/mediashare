@@ -76,24 +76,18 @@ export const Playlists = ({ globalState }: PageProps) => {
 
   // TODO: A generic data loader is a good idea, but we can do it later, use useAppSelector for now
   // const [{ state, loaded }] = useLoadPlaylistData();
-  const { loading, loaded, entities = [] as any[], selected = [] as any[] } = useAppSelector((state) => state?.userPlaylists);
-  const [isLoaded, setIsLoaded] = useState(loaded);
-  useEffect(() => {
-    if (loaded && !isLoaded) {
-      setIsLoaded(true);
-    }
-  }, [loaded]);
+  const { entities = [] as any[], selected = [] as any[], loaded } = useAppSelector((state) => state?.userPlaylists);
 
   const onRefresh = useCallback(refresh, [dispatch]);
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
-    if (!isLoaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
+    if (!loaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
       setPrevSearchFilters(currentSearchFilters);
       loadData().then();
     }
-  }, [isLoaded, globalState, searchFilters]);
+  }, [loaded, globalState, searchFilters]);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
@@ -125,7 +119,7 @@ export const Playlists = ({ globalState }: PageProps) => {
           title="Delete Playlists"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
-        {isLoaded && entities.length > 0 ? (
+        {loaded && entities.length > 0 ? (
           <PlaylistsComponent
             key={clearSelectionKey}
             list={entities}
@@ -134,13 +128,13 @@ export const Playlists = ({ globalState }: PageProps) => {
             showActions={!isSelectable}
             onChecked={updateSelection}
           />
-        ) : (
+        ) : loaded && entities.length === 0 ? (
           <NoContent
             onPress={() => createPlaylist()}
             messageButtonText="You have not created any playlists yet. Please create a playlist, or search for a community one to continue."
             icon="add-circle"
           />
-        )}
+        ) : null}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>
