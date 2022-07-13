@@ -3,6 +3,7 @@ import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-nativ
 import { Appbar, Card, Portal, Searchbar } from 'react-native-paper';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { withGlobalStateConsumer, GlobalStateProps } from 'mediashare/core/globalState';
+import { useGoToAccount } from 'mediashare/hooks/navigation';
 import { MultiSelectIcon } from 'mediashare/components/form/MultiSelect';
 import { ActionButtons } from './ActionButtons';
 import themeStyles, { theme, components } from 'mediashare/styles';
@@ -13,6 +14,8 @@ export interface AppHeaderProps {
   navigation?: any;
   searchable?: boolean;
   searchTarget?: 'playlists' | 'media' | undefined;
+  showAccountMenu?: boolean;
+  showNotificationsMenu?: boolean;
   showDisplayControls?: boolean;
   globalState?: GlobalStateProps;
 }
@@ -49,9 +52,11 @@ const AppHeaderComponent = ({
   options,
   back,
   navigation,
+  showAccountMenu = true,
+  showNotificationsMenu = false,
+  showDisplayControls = false,
   searchable = false,
   searchTarget = undefined,
-  showDisplayControls = false,
   globalState = {
     displayMode: 'list',
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,6 +65,8 @@ const AppHeaderComponent = ({
   },
 }: AppHeaderProps) => {
   const { setSearchFilters } = globalState;
+
+  const goToAccount = useGoToAccount();
 
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
   const placeholder = `Search ${title}`;
@@ -164,11 +171,12 @@ const AppHeaderComponent = ({
         title={title}
         titleStyle={{
           fontSize: 20,
-          fontFamily: theme.fonts.medium.fontFamily
+          fontFamily: theme.fonts.medium.fontFamily,
         }}
       />
-      {searchable && searchIsFiltering && <Appbar.Action icon="filter-list" color={theme.colors.primary} onPress={() => openSearchConsole()} />}
-      {searchable && !searchIsActive && <Appbar.Action icon="search" color="#ffffff" onPress={() => openSearchConsole()} />}
+      {searchable && <Appbar.Action icon="filter-list" color={searchIsFiltering ? theme.colors.success : '#ffffff'} onPress={() => openSearchConsole()} />}
+      {showNotificationsMenu && <Appbar.Action icon="notifications" onPress={() => openSearchConsole()} />}
+      {showAccountMenu && <Appbar.Action icon="account-circle" onPress={() => goToAccount()} />}
     </Appbar.Header>
   );
 

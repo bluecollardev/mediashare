@@ -30,7 +30,7 @@ export const MediaPreview = ({
         <TouchableWithoutFeedback onPress={onPress}>
           <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width, height }}>
             {/* @ts-ignore */}
-            {showPlayableIcon && !isDefaultImage && <Button icon="play-circle-filled" color="#ffffff" labelStyle={buttonStyle} />}
+            {showPlayableIcon && !isDefaultImage && <Button icon="play-circle-filled" textColor="#ffffff" labelStyle={buttonStyle} />}
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>

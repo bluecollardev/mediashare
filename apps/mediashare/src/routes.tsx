@@ -61,7 +61,7 @@ const routeConfig = {
   },
   account: {
     name: 'account',
-    options: { title: 'My Account', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'My Account', header: (props) => <AppHeader {...props} showNotificationsMenu={true} /> },
   },
   accountEdit: {
     name: 'accountEdit',

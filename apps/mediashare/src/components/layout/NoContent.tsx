@@ -22,7 +22,7 @@ export const NoContent = ({ onPress, messageButtonText = `Please create a new re
           flexDirection: 'column',
         }}
       >
-        <IconButton icon={icon} size={64} color={theme.colors.primary} />
+        <IconButton icon={icon} size={64} iconColor={theme.colors.primary} />
         <NoItems text={messageButtonText} />
       </View>
     </TouchableWithoutFeedback>

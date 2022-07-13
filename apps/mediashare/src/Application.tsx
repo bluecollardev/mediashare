@@ -2,7 +2,9 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+// TODO: Replace this when we're ready
+// import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createMaterialBottomTabNavigator as createBottomTabNavigator } from 'mediashare/lib/material-bottom-tabs';
 import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -40,6 +42,14 @@ import SharedByContact from './components/pages/SharedByContact';
 
 // const deviceWidth = Dimensions.get('window').width;
 
+// Map route names to icons
+export const tabNavigationIconsMap = {
+  Browse: 'explore',
+  Search: 'search',
+  Playlists: 'play-circle-outline',
+  Media: 'video-library',
+};
+
 const BrowseStackNavigator = createStackNavigator();
 const BrowseNavigation = () => {
   return (
@@ -51,8 +61,8 @@ const BrowseNavigation = () => {
     </BrowseStackNavigator.Navigator>
   );
 };
-const PlaylistsStackNavigator = createStackNavigator();
 
+const PlaylistsStackNavigator = createStackNavigator();
 const PlaylistsNavigation = () => {
   return (
     <PlaylistsStackNavigator.Navigator>
@@ -70,7 +80,6 @@ const PlaylistsNavigation = () => {
 };
 
 const MediaStackNavigator = createStackNavigator();
-
 const MediaNavigation = () => {
   return (
     <MediaStackNavigator.Navigator>
@@ -86,18 +95,13 @@ const MediaNavigation = () => {
 const AccountStackNavigator = createStackNavigator();
 const AccountNavigation = () => {
   const user = useUser();
-
   return (
-    <AccountStackNavigator.Navigator initialRouteName={user?.firstName ? 'Account' : 'accountEdit'}>
+    <AccountStackNavigator.Navigator initialRouteName={user?.firstName ? 'account' : 'accountEdit'}>
       <AccountStackNavigator.Screen {...routeConfig.account} component={Account} />
+      <AccountStackNavigator.Screen {...routeConfig.accountEdit} component={AccountEdit} initialParams={{ userId: null }} />
       <AccountStackNavigator.Screen {...routeConfig.contact} component={Contact} />
       <AccountStackNavigator.Screen {...routeConfig.sharedByContact} component={SharedByContact} />
       <AccountStackNavigator.Screen {...routeConfig.sharedWithContact} component={SharedWithContact} />
-      <AccountStackNavigator.Screen {...routeConfig.accountEdit} component={AccountEdit} initialParams={{ userId: null }} />
-      <AccountStackNavigator.Screen {...routeConfig.mediaItemEdit} component={MediaItemEdit} />
-      <AccountStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
-      <AccountStackNavigator.Screen {...routeConfig.playlistEdit} component={PlaylistEdit} />
-      <AccountStackNavigator.Screen {...routeConfig.addItemsToPlaylist} component={AddToPlaylist} />
     </AccountStackNavigator.Navigator>
   );
 };
@@ -112,27 +116,16 @@ const PublicMainNavigation = () => {
   );
 };
 
-// Map route names to icons
-export const tabNavigationIconsMap = {
-  Browse: 'explore',
-  Playlists: 'play-circle-outline',
-  Media: 'video-library',
-  // Feeds: 'share-social-outline',
-  Account: 'account-box',
-};
-
 const PrivateNavigator = createBottomTabNavigator();
-
 interface PrivateMainNavigationProps {
   globalState: GlobalStateProps;
 }
-
-function PrivateMainNavigation({ globalState }: PrivateMainNavigationProps) {
-  const { user, build } = globalState;
+const PrivateMainNavigation = ({ globalState }: PrivateMainNavigationProps) => {
+  const { build } = globalState;
   const navigationTabListeners = createBottomTabListeners(globalState);
   return (
     <PrivateNavigator.Navigator
-      initialRouteName="Account"
+      initialRouteName="Browse"
       activeColor={theme.colors.text}
       inactiveColor={theme.colors.primary}
       barStyle={{ backgroundColor: theme.colors.background }}
@@ -148,20 +141,24 @@ function PrivateMainNavigation({ globalState }: PrivateMainNavigationProps) {
             : undefined,
       })}
     >
-      {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen name="Browse" component={BrowseNavigation} listeners={navigationTabListeners} />
-      )}
+      <PrivateNavigator.Screen name="Browse" component={BrowseNavigation} listeners={navigationTabListeners} />
+
+      {/*(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
+        <PrivateNavigator.Screen name="Search" component={BrowseNavigation} listeners={navigationTabListeners} />
+      )*/}
 
       {(build.forSubscriber || build.forAdmin) && (
         <PrivateNavigator.Screen name="Playlists" component={PlaylistsNavigation} listeners={navigationTabListeners} />
       )}
 
       {build.forAdmin && <PrivateNavigator.Screen name="Media" component={MediaNavigation} listeners={navigationTabListeners} />}
-
-      <PrivateNavigator.Screen name="Account" component={AccountNavigation} listeners={navigationTabListeners} initialParams={{ userId: user?._id }} />
     </PrivateNavigator.Navigator>
   );
 }
+
+const PublicMainNavigationWithGlobalState = withGlobalStateProvider(PublicMainNavigation);
+const PrivateMainNavigationWithGlobalState = withGlobalStateProvider(PrivateMainNavigation);
+const AccountNavigationWithGlobalState = withGlobalStateProvider(AccountNavigation);
 
 const RootNavigator = createStackNavigator();
 const RootNavigation = ({ isLoggedIn = false }) => {
@@ -170,6 +167,7 @@ const RootNavigation = ({ isLoggedIn = false }) => {
     <RootNavigator.Navigator initialRouteName={isLoggedIn ? 'Private' : 'Public'}>
       <RootNavigator.Screen name="Public" component={PublicMainNavigationWithGlobalState} options={{ headerShown: false }} />
       <RootNavigator.Screen name="Private" component={PrivateMainNavigationWithGlobalState} options={{ headerShown: false }} />
+      <RootNavigator.Screen name="Account" component={AccountNavigationWithGlobalState} options={{ headerShown: false, presentation: 'modal' }} />
     </RootNavigator.Navigator>
   );
 };
@@ -188,9 +186,6 @@ async function clearLogin() {
 }
 
 clearLogin().then();
-
-const PublicMainNavigationWithGlobalState = withGlobalStateProvider(PublicMainNavigation);
-const PrivateMainNavigationWithGlobalState = withGlobalStateProvider(PrivateMainNavigation);
 
 function App() {
   const [fontsLoaded] = useFonts({

@@ -30,7 +30,7 @@ const awsUrl = Config.AWS_URL;
 export const Account = ({ globalState }: PageProps) => {
   const dispatch = useDispatch();
 
-  const goToLogin = useGoToLogin(routeNames.login);
+  const goToLogin = useGoToLogin();
   const viewAccount = useRouteWithParams(routeNames.account);
   const editProfile = useRouteWithParams(routeNames.accountEdit);
   const viewProfileById = useViewProfileById();
@@ -110,7 +110,7 @@ export const Account = ({ globalState }: PageProps) => {
         onProfileImageClicked={() => getDocument()}
       />
       <Divider />
-      <Card mode="outlined" style={styles.sectionHeader}>
+      <Card elevation={0} style={styles.sectionHeader}>
         <Card.Title titleStyle={styles.sectionHeaderTitle} title="My Connections" />
       </Card>
       {/* <Highlights highlights={state.highlights} /> */}

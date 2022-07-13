@@ -62,7 +62,7 @@ export function ActionButtons({
             style={{ ...defaultStyles.cancelButtonTouchable, ...cancelButtonTouchableStyles }}
           >
             <View style={{ ...defaultStyles.cancelButton, ...cancelButtonStyles }}>
-              {cancelIcon && <IconButton color={cancelIconColor} icon={cancelIcon} />}
+              {cancelIcon && <IconButton iconColor={cancelIconColor} icon={cancelIcon} />}
               {!!cancelLabel && <Text style={{ ...defaultStyles.cancelButtonLabel, ...cancelButtonLabelStyles }}>{cancelLabel}</Text>}
             </View>
           </TouchableWithoutFeedback>

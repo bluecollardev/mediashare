@@ -75,12 +75,12 @@ const MediaListItem = ({
         ) : showThumbnail ? (
           image ? (
             <View style={defaultStyles.mediaListItem}>
-              {showActions === 'left' && <IconButton icon={iconLeft} color={iconLeftColor} onPress={onViewDetail} />}
+              {showActions === 'left' && <IconButton icon={iconLeft} iconColor={iconLeftColor} onPress={onViewDetail} />}
               <MediaPreview {...mediaPreviewProps} showPlayableIcon={showPlayableIcon} />
             </View>
           ) : (
             <View style={defaultStyles.mediaListItem}>
-              {showActions === 'left' && <IconButton icon={iconLeft} color={iconLeftColor} onPress={onViewDetail} />}
+              {showActions === 'left' && <IconButton icon={iconLeft} iconColor={iconLeftColor} onPress={onViewDetail} />}
               <MediaPreview {...mediaPreviewProps} />
             </View>
           )
@@ -89,7 +89,7 @@ const MediaListItem = ({
       right={() =>
         showActions === 'right' || showActions === true ? (
           <View style={defaultStyles.iconRightWrapper}>
-            <IconButton icon={iconRight} color={iconRightColor} onPress={onViewDetail} style={defaultStyles.iconButton} />
+            <IconButton icon={iconRight} iconColor={iconRightColor} onPress={onViewDetail} style={defaultStyles.iconButton} />
           </View>
         ) : null
       }

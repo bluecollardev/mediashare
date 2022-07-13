@@ -76,7 +76,7 @@ export const ListItem: React.FC<ListItemProps> = ({
         }
         right={() => {
           return showActions ? (
-            <IconButton icon={iconRight} color={iconRightColor} onPress={() => onViewDetail(itemId)} />
+            <IconButton icon={iconRight} iconColor={iconRightColor} onPress={() => onViewDetail(itemId)} />
           ) : (
             <View>
               {showFollow && (

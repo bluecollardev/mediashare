@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { DarkTheme } from 'react-native-paper';
+import { MD2DarkTheme as DarkTheme } from 'react-native-paper';
 
 const theme = {
   ...DarkTheme,

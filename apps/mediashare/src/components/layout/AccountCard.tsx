@@ -42,8 +42,8 @@ export const AccountCard = ({
 
   // <MaterialIcons name={read ? 'visibility' : 'visibility-off'} size={24} />
   // <View styles={defaultStyles.buttonContainer}>
-  //   <IconButton icon="delete-outline" color={theme.colors.text} size={20} onPress={onDelete} />
-  //   <IconButton icon="play-circle-filled" color={theme.colors.text} size={20} onPress={onView} />
+  //   <IconButton icon="delete-outline" iconColor={theme.colors.text} size={20} onPress={onDelete} />
+  //   <IconButton icon="play-circle-filled" iconColor={theme.colors.text} size={20} onPress={onView} />
   // </View>
   // <Menu.Item icon="play-circle-filled" onPress={() => {}} title="Watch" />
   return (
@@ -84,8 +84,8 @@ export const AccountCard = ({
                   </IconButton>
                 }
               >
-                {isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Delete Account" />}
-                {profile?.build?.forAdmin && !isCurrentUser && <Menu.Item icon="delete-forever" onPress={() => {}} title="Deactivate" />}
+                {isCurrentUser && <Menu.Item trailingIcon="delete-forever" onPress={() => {}} title="Delete Account" />}
+                {profile?.build?.forAdmin && !isCurrentUser && <Menu.Item trailingIcon="delete-forever" onPress={() => {}} title="Deactivate" />}
               </Menu>
             ) : null
           }

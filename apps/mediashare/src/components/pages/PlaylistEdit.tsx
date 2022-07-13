@@ -95,7 +95,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
         <ScrollView>
           <MediaCard
             title={title}
-            author={author}
+            // author={author}
             description={description}
             showThumbnail={true}
             thumbnail={imageSrc}

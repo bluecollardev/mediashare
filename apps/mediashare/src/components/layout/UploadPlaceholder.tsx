@@ -33,7 +33,7 @@ export const UploadPlaceholder = ({
             flexDirection: 'column',
           }}
         >
-          <IconButton icon="cloud-upload" size={64} color={theme.colors.primary} />
+          <IconButton icon="cloud-upload" size={64} iconColor={theme.colors.primary} />
           <Button mode="contained" dark color={theme.colors.darkDefault} uppercase={false} compact>
             <Text>{buttonText}</Text>
           </Button>
@@ -55,7 +55,7 @@ export const UploadPlaceholder = ({
             flexDirection: 'column',
           }}
         >
-          <IconButton icon="cloud-upload" size={64} color={theme.colors.primary} />
+          <IconButton icon="cloud-upload" size={64} iconColor={theme.colors.primary} />
           <Button mode="contained" dark color={theme.colors.darkDefault} uppercase={false} compact>
             <Text>{uploadText}</Text>
           </Button>

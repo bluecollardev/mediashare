@@ -114,7 +114,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       )}
       {topDrawer && <TopDrawer />}
       <View style={defaultStyles.container}>
-        <Card elevation={elevation} style={{ marginTop: 25, marginBottom: 15 }}>
+        <Card elevation={elevation as any} style={{ marginTop: 25, marginBottom: 15 }}>
           <TextField
             label="Title"
             value={title}
@@ -125,7 +125,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           />
         </Card>
         {sortIndex !== undefined && (
-          <Card elevation={elevation} style={{ marginBottom: 15 }}>
+          <Card elevation={elevation as any} style={{ marginBottom: 15 }}>
             <TextField
               keyboardType="numeric"
               style={{ backgroundColor: theme.colors.surface, fontSize: 15 }}
@@ -138,7 +138,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             />
           </Card>
         )}
-        <Card elevation={elevation} style={{ marginBottom: 15 }}>
+        <Card elevation={elevation as any} style={{ marginBottom: 15 }}>
           <SectionedMultiSelect
             colors={components.multiSelect.colors}
             styles={components.multiSelect.styles}
@@ -161,7 +161,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             modalWithSafeAreaView={false}
           />
         </Card>
-        <Card elevation={elevation} style={{ position: 'relative', marginBottom: 25, borderColor: theme.colors.defaultBorder, borderWidth: 1, padding: 0.5 }}>
+        <Card elevation={elevation as any} style={{ position: 'relative', marginBottom: 25, borderColor: theme.colors.defaultBorder, borderWidth: 1, padding: 0.5 }}>
           <SwitchSelector
             fontSize={13}
             textColor={theme.colors.text}
@@ -179,7 +179,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         </Card>
         <View>{children}</View>
         {/* Description can be the longest field so we've moved it to last when we're in edit mode */}
-        <Card elevation={elevation} style={{ marginTop: 25, marginBottom: 25 }}>
+        <Card elevation={elevation as any} style={{ marginTop: 25, marginBottom: 25 }}>
           <TextField
             style={{ height: 500, overflow: 'scroll', backgroundColor: theme.colors.surface, fontSize: 15 }}
             multiline={true}
@@ -194,7 +194,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       </View>
     </View>
   ) : (
-    <Card style={defaultStyles.card} elevation={elevation}>
+    <Card style={defaultStyles.card} elevation={elevation as any}>
       <DisplayPreviewOrVideo key={mediaSrc} mediaSrc={mediaSrc} isPlayable={isPlayable} showThumbnail={showThumbnail} thumbnail={thumbnail} />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <MediaCardTitle title={title} authorProfile={authorProfile} showThumbnail={true} showActions={showActions} onActionsClicked={onActionsClicked} />

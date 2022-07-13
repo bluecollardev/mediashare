@@ -68,7 +68,7 @@ export const ContactListItem: React.FC<ContactListItemProps> = ({
         }
         right={() => {
           return showActions ? (
-            <IconButton icon={iconRight} color={iconRightColor} onPress={() => onViewDetail(userId)} />
+            <IconButton icon={iconRight} iconColor={iconRightColor} onPress={() => onViewDetail(userId)} />
           ) : (
             <View>
               {showFollow && (
