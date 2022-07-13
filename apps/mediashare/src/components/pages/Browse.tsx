@@ -14,16 +14,18 @@ import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 
 export const SharedList = ({ globalState }) => {
   const { entities } = useAppSelector((state) => state?.shareItems?.sharedWithMe);
-  const ShowMyShare = false
+  const ShowMyShare = false;
   // TODO: There are dupes, this is just a temporary workaround; we shouldn't be able to create dupe share items
-  const list = filterUnique(entities, '_id').filter((e) => ShowMyShare ? e : e.sharedWith != e.sharedBy) || [];
+  const list = filterUnique(entities, '_id').filter((e) => (ShowMyShare ? e : e.sharedWith != e.sharedBy)) || [];
 
   const viewPlaylistAction = useViewPlaylistById();
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
 
-  return list.length > 0
-    ? <PlaylistsComponent list={list} onViewDetailClicked={viewPlaylist} />
-    : <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="view-list" />;
+  return list.length > 0 ? (
+    <PlaylistsComponent list={list} onViewDetailClicked={viewPlaylist} />
+  ) : (
+    <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="view-list" />
+  );
 };
 
 export const SharedBlock = ({ globalState }) => {
@@ -77,7 +79,9 @@ export const SharedBlock = ({ globalState }) => {
         );
       })}
     </List.Section>
-  ) : <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="article" />;
+  ) : (
+    <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="article" />
+  );
 };
 
 export const Browse = ({
@@ -104,9 +108,7 @@ export const Browse = ({
 
   return (
     <PageContainer>
-      {globalState?.displayMode === 'list' && (
-        <SharedList globalState={globalState} />
-      )}
+      {globalState?.displayMode === 'list' && <SharedList globalState={globalState} />}
       {globalState?.displayMode === 'article' && (
         <ScrollView>
           <SharedBlock globalState={globalState} />

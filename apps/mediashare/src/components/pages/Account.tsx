@@ -44,7 +44,7 @@ export const Account = ({ globalState }: PageProps) => {
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
-  const contacts = useAppSelector((state) => state?.users?.entities).filter((e) => e._id != userId)
+  const contacts = useAppSelector((state) => state?.users?.entities).filter((e) => e._id != userId);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [isSelectable, setIsSelectable] = useState(false);
   const [selectedItems, setSelectedItems] = React.useState([]);
@@ -230,7 +230,7 @@ export const Account = ({ globalState }: PageProps) => {
   async function unshareItems() {
     await dispatch(removeShareItemAllByUserId(selectedItems));
     setSelectedItems([]);
-    await dispatch(loadUsers())
+    await dispatch(loadUsers());
   }
 
   function updateSelection(bool: boolean, shareItemId: string) {

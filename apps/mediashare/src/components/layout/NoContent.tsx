@@ -10,11 +10,7 @@ interface NoDataProps {
   icon?: string;
 }
 
-export const NoContent = ({
-  onPress,
-  messageButtonText = `Please create a new record to continue`,
-  icon = 'info',
-}: NoDataProps) => {
+export const NoContent = ({ onPress, messageButtonText = `Please create a new record to continue`, icon = 'info' }: NoDataProps) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View
@@ -27,7 +23,7 @@ export const NoContent = ({
         }}
       >
         <IconButton icon={icon} size={64} color={theme.colors.primary} />
-          <NoItems text={messageButtonText} />
+        <NoItems text={messageButtonText} />
       </View>
     </TouchableWithoutFeedback>
   );

@@ -19,7 +19,8 @@ import {
   MediaListItem,
   ActionButtons,
   NoItems,
-  AppDialog, NoContent
+  AppDialog,
+  NoContent,
 } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { selectMediaItem } from 'mediashare/store/modules/mediaItems';

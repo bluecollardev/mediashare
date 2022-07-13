@@ -191,7 +191,11 @@ const LoginComponent = ({}: PageProps) => {
       <KeyboardAvoidingPageContent>
         <ScrollView>
           <Card elevation={0}>
-            <Card.Cover resizeMode="contain" source={require('mediashare/assets/logo/mediashare/256.png')} style={{ backgroundColor: theme.colors.background }} />
+            <Card.Cover
+              resizeMode="contain"
+              source={require('mediashare/assets/logo/mediashare/256.png')}
+              style={{ backgroundColor: theme.colors.background }}
+            />
           </Card>
           {show && (
             <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={false}>

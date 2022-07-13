@@ -84,6 +84,6 @@ export class ShareItemController {
   @Post('unshare-all-by-user-id')
   @ApiBody({ type: () => ShareItemsByUserIdDto })
   async removeShareItemAllByUserId(@Body() shareItemsByUserIdDto: ShareItemsByUserIdDto) {
-    await this.shareItemService.removeShareItemAllByUserId(shareItemsByUserIdDto.shareItemByUserIds)
+    await this.shareItemService.removeShareItemAllByUserId(shareItemsByUserIdDto.shareItemByUserIds);
   }
 }

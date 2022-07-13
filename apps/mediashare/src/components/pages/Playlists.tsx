@@ -103,15 +103,14 @@ export const Playlists = ({ globalState }: PageProps) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const [fabState, setFabState] = useState({ open: false });
-  const fabActions = entities.length > 0
-    ? [
-        { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
-        { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
-        { icon: 'add-circle', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
-      ]
-    : [
-      { icon: 'add-circle', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
-    ];
+  const fabActions =
+    entities.length > 0
+      ? [
+          { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+          { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+          { icon: 'add-circle', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
+        ]
+      : [{ icon: 'add-circle', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } }];
 
   return (
     <PageContainer>

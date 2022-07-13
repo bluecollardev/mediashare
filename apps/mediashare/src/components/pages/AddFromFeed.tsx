@@ -6,16 +6,7 @@ import { getFeedMediaItems, saveFeedMediaItems } from 'mediashare/store/modules/
 import { AwsMediaItem } from 'mediashare/core/aws/aws-media-item.model';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import {
-  PageContainer,
-  PageContent,
-  PageActions,
-  PageProps,
-  NoItems,
-  ActionButtons,
-  MediaListItem,
-  NoContent
-} from 'mediashare/components/layout';
+import { PageContainer, PageContent, PageActions, PageProps, NoItems, ActionButtons, MediaListItem, NoContent } from 'mediashare/components/layout';
 import { useMediaItems } from 'mediashare/hooks/navigation';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
