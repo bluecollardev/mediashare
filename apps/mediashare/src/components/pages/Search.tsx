@@ -70,7 +70,6 @@ export const Search = ({ globalState }: PageProps) => {
   const dispatch = useDispatch();
 
   const shareWith = useRouteName(routeNames.shareWith);
-  const createPlaylist = useRouteName(routeNames.playlistAdd);
   const viewPlaylist = useViewPlaylistById();
 
   const [isSelectable, setIsSelectable] = useState(false);
@@ -174,7 +173,6 @@ export const Search = ({ globalState }: PageProps) => {
               />
             ) : loaded && entities.length === 0 ? (
               <NoContent
-                onPress={() => createPlaylist()}
                 messageButtonText="Search for playlists and media to add to your collection."
                 icon="info"
               />

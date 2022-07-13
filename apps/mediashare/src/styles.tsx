@@ -155,10 +155,10 @@ const components = {
         fontFamily: theme.fonts.thin.fontFamily,
       },
       searchBar: {
-        backgroundColor: '#000',
+        backgroundColor: '#1a1a1a',
       },
       container: {
-        backgroundColor: '#000',
+        backgroundColor: '#1a1a1a',
       },
       selectToggle: {
         marginVertical: 10,
@@ -201,6 +201,21 @@ const components = {
         fontSize: 15,
         fontFamily: theme.fonts.thin.fontFamily,
       },
+      confirmText: {
+        fontSize: 15,
+        fontFamily: theme.fonts.regular.fontFamily,
+      },
+      button: {
+        height: 41,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.29)',
+      },
+      cancelButton: {
+        height: 41,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.29)',
+        backgroundColor: '#121212',
+      }
     },
   },
 };

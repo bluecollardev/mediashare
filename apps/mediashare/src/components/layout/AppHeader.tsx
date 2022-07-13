@@ -116,7 +116,7 @@ const AppHeaderComponent = ({
                     >
                       <Card>
                         <Card.Title title={placeholder} />
-                        <Card.Content style={{ height: '85%', paddingBottom: 50 }}>
+                        <Card.Content style={{ height: '89%', paddingBottom: 0 }}>
                           <Searchbar
                             style={{ width: '100%', marginTop: 15 }}
                             inputStyle={{ fontSize: 15 }}
@@ -131,6 +131,13 @@ const AppHeaderComponent = ({
                           />
                           {/* <Appbar.Action icon="close" onPress={() => closeSearchConsole()} /> */}
                           <SectionedMultiSelect
+                            headerComponent={() => {
+                              return (
+                                <Card>
+                                  <Card.Title title="Choose Tags" />
+                                </Card>
+                              )
+                            }}
                             colors={components.multiSelect.colors}
                             styles={components.multiSelect.styles}
                             items={mappedTags}
@@ -140,9 +147,11 @@ const AppHeaderComponent = ({
                             subKey="children"
                             searchPlaceholderText="Enter Text"
                             selectText="Select Tags"
-                            confirmText="Done"
+                            confirmText="Save"
                             onSelectedItemsChange={updateSearchTags}
                             selectedItems={searchTags}
+                            hideSearch={true}
+                            showRemoveAll={false}
                             expandDropDowns={false}
                             readOnlyHeadings={false}
                             showDropDowns={true}
@@ -150,6 +159,7 @@ const AppHeaderComponent = ({
                             showCancelButton={true}
                             modalWithTouchable={false}
                             modalWithSafeAreaView={false}
+                            modalAnimationType="slide"
                           />
                         </Card.Content>
                       </Card>
