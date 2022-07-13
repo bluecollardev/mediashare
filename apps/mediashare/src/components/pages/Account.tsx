@@ -163,7 +163,6 @@ export const Account = ({ globalState }: PageProps) => {
     const profile = (await dispatch(loadProfile(userId))) as any;
     setState(profile.payload);
     setIsLoaded(true);
-    setIsLoaded(true);
   }
 
   async function getDocument() {
