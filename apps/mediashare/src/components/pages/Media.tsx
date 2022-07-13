@@ -86,7 +86,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
 
-  const { entities, selected, loaded } = useAppSelector((state) => state?.mediaItems);
+  const { entities, selected, loaded, loading } = useAppSelector((state) => state?.mediaItems);
 
   const onRefresh = useCallback(refresh, [dispatch]);
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
@@ -126,7 +126,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
           title="Delete Media Items"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
-        {loaded && entities.length > 0 ? (
+        {(!loaded && !loading) || (loaded && entities.length > 0) ? (
           <MediaComponent
             key={clearSelectionKey}
             navigation={navigation}

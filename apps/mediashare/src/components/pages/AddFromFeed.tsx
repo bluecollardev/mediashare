@@ -18,37 +18,28 @@ export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
 
   const entities = useAppSelector((state) => state?.mediaItem?.feed?.entities) || [];
   const { loading, loaded } = useAppSelector((state) => state?.mediaItem?.feed);
-  const [isLoaded, setIsLoaded] = useState(loaded);
-  useEffect(() => {
-    if (loaded && !isLoaded) {
-      setIsLoaded(true);
-    }
-  }, [loaded]);
 
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
   useEffect(() => {
     const currentSearchFilters = globalState?.search;
-    if (!isLoaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
+    if (!loaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
       setPrevSearchFilters(currentSearchFilters);
       loadData().then();
     }
-  }, [isLoaded, globalState, searchFilters]);
+  }, [loaded, globalState, searchFilters]);
 
   return (
     <PageContainer>
       <PageContent>
-        {(!entities || entities.length === 0) && loaded && (
+        {(!loaded && !loading) && (loaded && entities.length > 0) ? (
+          <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} />
+        ) : (loaded && entities.length === 0) ? (
           <NoContent
             messageButtonText="There are no items in your S3 bucket to import. Please choose another bucket or add files to this bucket to continue."
             icon="cloud-download"
           />
-        )}
-        {isLoaded ? (
-          <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} />
-        ) : (
-          <NoItems text={loading ? 'Loading...' : 'There are no items in your S3 bucket.'} />
-        )}
+        ) : null}
       </PageContent>
       <PageActions>
         <ActionButtons onActionClicked={saveItems} actionLabel="Add Media" onCancelClicked={goToMediaItems} />

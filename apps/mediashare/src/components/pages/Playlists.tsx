@@ -76,7 +76,7 @@ export const Playlists = ({ globalState }: PageProps) => {
 
   // TODO: A generic data loader is a good idea, but we can do it later, use useAppSelector for now
   // const [{ state, loaded }] = useLoadPlaylistData();
-  const { entities = [] as any[], selected = [] as any[], loaded } = useAppSelector((state) => state?.userPlaylists);
+  const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
 
   const onRefresh = useCallback(refresh, [dispatch]);
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
@@ -119,7 +119,7 @@ export const Playlists = ({ globalState }: PageProps) => {
           title="Delete Playlists"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
-        {loaded && entities.length > 0 ? (
+        {(!loaded && !loading) || (loaded && entities.length > 0) ? (
           <PlaylistsComponent
             key={clearSelectionKey}
             list={entities}
