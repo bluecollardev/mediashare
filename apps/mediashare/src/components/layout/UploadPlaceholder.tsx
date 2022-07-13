@@ -23,7 +23,7 @@ export const UploadPlaceholder = ({
       <TouchableWithoutFeedback onPress={onPress}>
         <View
           style={{
-            borderWidth: 2,
+            borderWidth: 1,
             borderStyle: 'dashed',
             borderColor: '#dddddd',
             height: 250,

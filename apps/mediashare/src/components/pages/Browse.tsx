@@ -7,7 +7,7 @@ import { useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
-import { PageContainer, PageProps, MediaCard, ActionButtons } from 'mediashare/components/layout';
+import { PageContainer, PageProps, MediaCard, ActionButtons, NoContent } from 'mediashare/components/layout';
 import { PlaylistsComponent } from './Playlists';
 import { filterUnique, shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
@@ -20,7 +20,9 @@ export const SharedList = ({ globalState }) => {
   const viewPlaylistAction = useViewPlaylistById();
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
 
-  return <PlaylistsComponent list={list} onViewDetailClicked={viewPlaylist} />;
+  return list.length > 0
+    ? <PlaylistsComponent list={list} onViewDetailClicked={viewPlaylist} />
+    : <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="view-list" />;
 };
 
 export const SharedBlock = ({ globalState }) => {
@@ -35,7 +37,7 @@ export const SharedBlock = ({ globalState }) => {
   const viewPlaylistAction = useViewPlaylistById();
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
 
-  return (
+  return list.length > 0 ? (
     <List.Section>
       {list.map((item) => {
         // @ts-ignore
@@ -74,7 +76,7 @@ export const SharedBlock = ({ globalState }) => {
         );
       })}
     </List.Section>
-  );
+  ) : <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="article" />;
 };
 
 export const Browse = ({
@@ -101,7 +103,9 @@ export const Browse = ({
 
   return (
     <PageContainer>
-      {globalState?.displayMode === 'list' && <SharedList globalState={globalState} />}
+      {globalState?.displayMode === 'list' && (
+        <SharedList globalState={globalState} />
+      )}
       {globalState?.displayMode === 'article' && (
         <ScrollView>
           <SharedBlock globalState={globalState} />

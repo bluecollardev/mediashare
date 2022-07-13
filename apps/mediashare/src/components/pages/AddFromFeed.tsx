@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FlatList } from 'react-native';
-import { Subheading, Card } from 'react-native-paper';
 import { useAppSelector } from 'mediashare/store';
 import { getFeedMediaItems, saveFeedMediaItems } from 'mediashare/store/modules/mediaItem';
 import { AwsMediaItem } from 'mediashare/core/aws/aws-media-item.model';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
-import { PageContainer, PageContent, PageActions, PageProps, NoItems, ActionButtons, MediaListItem } from 'mediashare/components/layout';
+import {
+  PageContainer,
+  PageContent,
+  PageActions,
+  PageProps,
+  NoItems,
+  ActionButtons,
+  MediaListItem,
+  NoContent
+} from 'mediashare/components/layout';
 import { useMediaItems } from 'mediashare/hooks/navigation';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,11 +48,10 @@ export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
     <PageContainer>
       <PageContent>
         {(!entities || entities.length === 0) && loaded && (
-          <Card>
-            <Card.Content>
-              <Subheading style={{ textAlign: 'center' }}>There are no items to import in your bucket.</Subheading>
-            </Card.Content>
-          </Card>
+          <NoContent
+            messageButtonText="There are no items in your S3 bucket to import. Please choose another bucket or add files to this bucket to continue."
+            icon="cloud-download"
+          />
         )}
         {isLoaded ? (
           <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} />

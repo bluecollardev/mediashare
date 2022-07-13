@@ -17,7 +17,7 @@ import {
   PageProps,
   MediaListItem,
   ActionButtons,
-  NoItems,
+  NoContent,
   AppDialog,
 } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
@@ -103,11 +103,15 @@ export const Playlists = ({ globalState }: PageProps) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const [fabState, setFabState] = useState({ open: false });
-  const fabActions = [
-    { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
-    { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'library-add', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
-  ];
+  const fabActions = entities.length > 0
+    ? [
+        { icon: 'delete-forever', onPress: () => activateDeleteMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
+        { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
+        { icon: 'add-circle', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
+      ]
+    : [
+      { icon: 'add-circle', onPress: () => createPlaylist(), color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
+    ];
 
   return (
     <PageContainer>
@@ -122,7 +126,7 @@ export const Playlists = ({ globalState }: PageProps) => {
           title="Delete Playlists"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
-        {isLoaded ? (
+        {isLoaded && entities.length > 0 ? (
           <PlaylistsComponent
             key={clearSelectionKey}
             list={entities}
@@ -132,7 +136,11 @@ export const Playlists = ({ globalState }: PageProps) => {
             onChecked={updateSelection}
           />
         ) : (
-          <NoItems text={loading ? 'Loading...' : 'You have not created any playlists yet.'} />
+          <NoContent
+            onPress={() => createPlaylist()}
+            messageButtonText="You have not created any playlists yet. Please create a playlist, or search for a community one to continue."
+            icon="add-circle"
+          />
         )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
