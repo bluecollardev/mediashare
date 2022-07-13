@@ -125,17 +125,18 @@ const PrivateMainNavigation = ({ globalState }: PrivateMainNavigationProps) => {
   const navigationTabListeners = createBottomTabListeners(globalState);
   return (
     <PrivateNavigator.Navigator
-      initialRouteName="Browse"
+      initialRouteName="Playlists"
       activeColor={theme.colors.text}
       inactiveColor={theme.colors.primary}
       barStyle={{ backgroundColor: theme.colors.background }}
-      labeled={false}
+      labeled={true}
+      shifting={false}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tabBarIcon:
           route.name !== 'login'
             ? ({ focused, color }) => {
-                return <MaterialIcons name={tabNavigationIconsMap[route.name]} color={color} size={26} />;
+                return <MaterialIcons name={tabNavigationIconsMap[route.name]} color={color} size={26} style={{ marginBottom: 5 }} />;
                 // <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
               }
             : undefined,
@@ -143,9 +144,9 @@ const PrivateMainNavigation = ({ globalState }: PrivateMainNavigationProps) => {
     >
       <PrivateNavigator.Screen name="Browse" component={BrowseNavigation} listeners={navigationTabListeners} />
 
-      {/*(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
+      {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
         <PrivateNavigator.Screen name="Search" component={BrowseNavigation} listeners={navigationTabListeners} />
-      )*/}
+      )}
 
       {(build.forSubscriber || build.forAdmin) && (
         <PrivateNavigator.Screen name="Playlists" component={PlaylistsNavigation} listeners={navigationTabListeners} />
