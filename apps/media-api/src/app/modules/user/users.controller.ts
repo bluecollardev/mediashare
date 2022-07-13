@@ -35,13 +35,13 @@ export class UsersController {
   @Get(RouteTokens.USER_ID)
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserGetResponse({ type: ProfileDto })
-  async findOne(@Param('userId', new ObjectIdPipe()) userId: ObjectId): Promise<User> {
+  async findOne(@Param('userId') userId: string): Promise<User>  {
     const result = await this.userService.getUserById(userId);
     if (result !== null) {
       return result;
     }
     // If the aggregate fails due to the user not having shared items, result will be null
-    return await this.userService.findOne(userId);
+    return  await this.userService.findOne(userId) 
   }
 
   @Delete(RouteTokens.USER_ID)
