@@ -18,7 +18,7 @@ const AppHeaderComponent = ({ options, back, navigation, searchable = false, glo
   const enableSearch = () => setSearchIsActive(true);
   const disableSearch = () => setSearchIsActive(false);
 
-  const placeholder = `Search ${title}`;
+  const placeholder = `Filter ${title}`;
 
   const [searchText, setSearchText] = useState('');
   const updateSearchText = (text) => {

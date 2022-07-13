@@ -11,6 +11,10 @@ const routeConfig = {
     name: 'browse',
     options: { title: 'My Feed', header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={true} /> },
   },
+  search: {
+    name: 'search',
+    options: { title: 'Search', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" /> },
+  },
   playlists: {
     name: 'playlists',
     options: { title: 'Playlists', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" /> },

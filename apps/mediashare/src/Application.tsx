@@ -24,6 +24,7 @@ import Login from './components/pages/Login';
 import Browse from './components/pages/Browse';
 import MediaItemAdd from './components/pages/MediaItemAdd';
 import AddFromFeed from './components/pages/AddFromFeed';
+import Search from './components/pages/Search';
 import Playlists from './components/pages/Playlists';
 import PlaylistDetail from './components/pages/PlaylistDetail';
 import PlaylistEdit from './components/pages/PlaylistEdit';
@@ -59,6 +60,18 @@ const BrowseNavigation = () => {
       <BrowseStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
       <BrowseStackNavigator.Screen {...routeConfig.shareWith} component={ShareWith} />
     </BrowseStackNavigator.Navigator>
+  );
+};
+
+const SearchStackNavigator = createStackNavigator();
+const SearchNavigation = () => {
+  return (
+    <SearchStackNavigator.Navigator>
+      <SearchStackNavigator.Screen {...routeConfig.search} component={Search} />
+      <SearchStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
+      <SearchStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
+      <SearchStackNavigator.Screen {...routeConfig.shareWith} component={ShareWith} />
+    </SearchStackNavigator.Navigator>
   );
 };
 
@@ -145,7 +158,7 @@ const PrivateMainNavigation = ({ globalState }: PrivateMainNavigationProps) => {
       <PrivateNavigator.Screen name="Browse" component={BrowseNavigation} listeners={navigationTabListeners} />
 
       {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen name="Search" component={BrowseNavigation} listeners={navigationTabListeners} />
+        <PrivateNavigator.Screen name="Search" component={SearchNavigation} listeners={navigationTabListeners} />
       )}
 
       {(build.forSubscriber || build.forAdmin) && (

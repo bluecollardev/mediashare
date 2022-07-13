@@ -69,7 +69,7 @@ const AppHeaderComponent = ({
   const goToAccount = useGoToAccount();
 
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
-  const placeholder = `Search ${title}`;
+  const placeholder = `Filter ${title}`;
 
   const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
   const [searchIsActive, setSearchIsActive] = useState(false);
