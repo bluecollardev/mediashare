@@ -44,61 +44,22 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return this.repository
       .aggregate([
         { $match: { _id: id } },
-        { $lookup: { from: 'share_item', localField: '_id', foreignField: 'userId', as: 'shareItems' } },
-        { $lookup: { from: 'likes', localField: '_id', foreignField: 'createdBy', as: 'likes' } },
-        { $lookup: { from: 'share_item', localField: '_id', foreignField: 'createdBy', as: 'shares' } },
-        { $addFields: { shared: '$shareItems' } },
-        { $unwind: { path: '$shareItems', preserveNullAndEmptyArrays: false } },
-        { $lookup: { from: 'user', localField: 'shareItems.createdBy', foreignField: '_id', as: 'author' } },
-        { $unwind: { path: '$author', preserveNullAndEmptyArrays: false } },
-        { $lookup: { from: 'playlist', localField: 'shareItems.playlistId', foreignField: '_id', as: 'playlist' } },
-        { $unwind: { path: '$playlist', preserveNullAndEmptyArrays: false } },
         {
           $replaceRoot: {
             newRoot: {
-              $mergeObjects: [
-                '$playlist',
-                {
-                  _id: '$shareItems.userId',
-                  author: '$author.username',
-                  authorId: '$author._id',
-                  authorImage: '$author.imageSrc',
-                  authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
-                  createdAt: '$shareItems.createdAt',
-                  createdBy: '$shareItems.createdBy',
-                  email: '$email',
-                  firstName: '$firstName',
-                  lastName: '$lastName',
-                  likesCount: { $size: '$likes' },
-                  phoneNumber: '$phoneNumber',
-                  playlistId: '$playlist._id',
-                  read: '$shareItems.read',
-                  role: '$role',
-                  sharedCount: { $size: '$shared' },
-                  shareItemId: '$shareItems._id',
-                  sharesCount: { $size: '$shares' },
-                  userImg: '$imageSrc',
-                  username: '$username',
-                },
-              ],
-            },
-          },
-        },
-        {
-          $group: {
-            _id: '$_id',
-            imageSrc: { $first: '$userImg' },
-            firstName: { $first: '$firstName' },
-            lastName: { $first: '$lastName' },
-            email: { $first: '$email' },
-            role: { $first: '$role' },
-            phoneNumber: { $first: '$phoneNumber' },
-            username: { $first: '$username' },
-            sharedCount: { $first: '$sharedCount' },
-            sharesCount: { $first: '$sharesCount' },
-            likesCount: { $first: '$likesCount' },
-            sharedItems: {
-              $push: '$$ROOT',
+              _id: '$_id',
+              email: '$email',
+              username: '$username',
+              role: '$role',
+              firstName: '$firstName',
+              lastName: '$lastName',
+              phoneNumber: '$phoneNumber',
+              // TODO: Can we remove author from here?
+              author: '$username',
+              authorId: '$_id',
+              authorImage: '$imageSrc',
+              authorName: { $concat: ['$firstName', ' ', 'lastName'] },
+              imageSrc: '$imageSrc',
             },
           },
         },
@@ -107,7 +68,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
   }
 
   async getUserAll() {
-    const resultUsers = await this.repository
+    return await this.repository
       .aggregate([
         { $lookup: { from: 'share_item', localField: '_id', foreignField: 'userId', as: 'sharedMediaItems' } },
         { $addFields: { shared: '$sharedMediaItems' } },
@@ -129,7 +90,6 @@ export class UserService extends DataService<User, MongoRepository<User>> {
         },
       ])
       .toArray();
-    return resultUsers;
   }
 
   async getUserAllWithJwt(jwt: string) {

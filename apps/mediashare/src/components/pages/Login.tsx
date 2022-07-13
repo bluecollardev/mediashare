@@ -194,18 +194,17 @@ const LoginComponent = ({}: PageProps) => {
             <Card.Cover resizeMode="contain" source={require('mediashare/assets/logo/mediashare/256.png')} style={{ backgroundColor: theme.colors.background }} />
           </Card>
           {show && (
-            <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={true}>
+            <Authenticator theme={MyTheme} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={false}>
               {/* <MyCustomSignUp override={'SignUp'} /> */}
-              <SignIn />
+              {/* <SignIn />
               <SignUp />
               <Greetings />
               <ConfirmSignIn />
-
               <VerifyContact />
-              <ForgotPassword />
+              <ForgotPassword /> */}
               {/* <TOTPSetup /> */}
               {/* <Loading /> */}
-              <CustomVerify override="ConfirmSignUp" />
+              {/* <CustomVerify override="ConfirmSignUp" /> */}
             </Authenticator>
           )}
         </ScrollView>

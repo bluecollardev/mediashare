@@ -16,6 +16,7 @@ export * from './MediaList';
 export * from './MediaListItem';
 export * from './MediaPreview';
 export * from './NoItems';
+export * from './NoContent';
 export * from './PageContainer';
 export * from './PlainActionButtons';
 export * from './SharedList';

@@ -19,7 +19,7 @@ import {
   MediaListItem,
   ActionButtons,
   NoItems,
-  AppDialog,
+  AppDialog, NoContent
 } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { selectMediaItem } from 'mediashare/store/modules/mediaItems';
@@ -115,7 +115,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   const fabActions = [
     { icon: 'delete-forever', onPress: activateDeleteMode, color: theme.colors.text, style: { backgroundColor: theme.colors.error } },
     { icon: 'cloud-download', onPress: addFromFeed, color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
-    { icon: 'library-add', onPress: addMedia, color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
+    { icon: 'add-circle', onPress: addMedia, color: theme.colors.text, style: { backgroundColor: theme.colors.accent } },
   ];
 
   return (
@@ -131,7 +131,7 @@ export const Media = ({ navigation, globalState }: PageProps) => {
           title="Delete Media Items"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
-        {isLoaded ? (
+        {isLoaded && entities.length > 0 ? (
           <MediaComponent
             key={clearSelectionKey}
             navigation={navigation}
@@ -142,7 +142,11 @@ export const Media = ({ navigation, globalState }: PageProps) => {
             onChecked={updateSelection}
           />
         ) : (
-          <NoItems text={loading ? 'Loading...' : 'Please import or upload a media item.'} />
+          <NoContent
+            onPress={addMedia}
+            messageButtonText="You have not added any media items to your library. Please add and item to your library to continue."
+            icon="add-circle"
+          />
         )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.delete && (
