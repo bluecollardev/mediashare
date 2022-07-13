@@ -79,7 +79,10 @@ export const Search = ({ globalState }: PageProps) => {
 
   // TODO: A generic data loader is a good idea, but we can do it later, use useAppSelector for now
   // const [{ state, loaded }] = useLoadPlaylistData();
-  const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
+  // TODO: Finish this!
+  // const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
+  const { selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
+  const entities = [] as any[];
 
   const onRefresh = useCallback(refresh, [dispatch]);
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
@@ -172,8 +175,8 @@ export const Search = ({ globalState }: PageProps) => {
             ) : loaded && entities.length === 0 ? (
               <NoContent
                 onPress={() => createPlaylist()}
-                messageButtonText="You have not created any playlists yet. Please create a playlist, or search for a community one to continue."
-                icon="add-circle"
+                messageButtonText="Search for playlists and media to add to your collection."
+                icon="info"
               />
             ) : null}
           </Card.Content>
@@ -184,7 +187,7 @@ export const Search = ({ globalState }: PageProps) => {
           <ActionButtons onActionClicked={confirmPlaylistsToShare} onCancelClicked={cancelPlaylistsToShare} actionLabel="Share With" actionIcon="group" />
         </PageActions>
       )}
-      {!isSelectable && (
+      {!isSelectable && entities.length > 0 && (
         <FAB.Group
           visible={true}
           open={fabState.open}
