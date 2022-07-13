@@ -6,7 +6,6 @@ import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { CreateMediaShareItemDto, CreatePlaylistShareItemDto } from './dto/create-share-item.dto';
 import { ShareItem } from './entities/share-item.entity';
-import { ShareItemsDto } from './dto/share-item.dto';
 
 @Injectable()
 export class ShareItemService extends DataService<ShareItem, MongoRepository<ShareItem>> {
@@ -221,13 +220,26 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   async removeShareItemAll(shareItems: string[]): Promise<boolean> {
     try {
       // TODO: Promise all this
-      shareItems.forEach(async (key) => {
+      for await (const key of shareItems) {
         await this.repository.delete({ _id: new ObjectId(key) });
-      });
-
+      }
       return true;
     } catch (error) {
       throw new Error('fail delete');
     }
   }
+
+   async removeShareItemAllByUserId(shareItemsUserId: string[]): Promise<boolean> {
+    try {
+      // TODO: Promise all this
+      for await (const key of shareItemsUserId) {
+        await this.repository.delete({userId: new ObjectId(key)})
+      }
+      return true;
+    } catch (error) {
+      throw new Error('fail delete');
+    }
+  }
+
+
 }

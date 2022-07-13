@@ -5,12 +5,7 @@ import { ApiService } from 'mediashare/store/apis';
 import { MediaItemResponseDto } from 'mediashare/rxjs-api';
 
 // Define these in snake case or our converter won't work... we need to fix that
-const mediaItemsActionNames = [
-  'find_media_items',
-  'load_user_media_items',
-  'select_media_item',
-  'clear_media_items'
-] as const;
+const mediaItemsActionNames = ['find_media_items', 'load_user_media_items', 'select_media_item', 'clear_media_items'] as const;
 
 export const mediaItemsActions = makeActions(mediaItemsActionNames);
 
@@ -27,7 +22,9 @@ export const findMediaItems = createAsyncThunk(mediaItemsActions.findMediaItems.
   return await api.mediaItems.mediaItemControllerFindAll({ text, tags }).toPromise();
 });
 
-export const selectMediaItem = createAction<{ isChecked: boolean; item: MediaItemResponseDto }, typeof mediaItemsActions.selectMediaItem.type>(mediaItemsActions.selectMediaItem.type);
+export const selectMediaItem = createAction<{ isChecked: boolean; item: MediaItemResponseDto }, typeof mediaItemsActions.selectMediaItem.type>(
+  mediaItemsActions.selectMediaItem.type
+);
 
 export const clearMediaItems = createAction(mediaItemsActions.clearMediaItems.type);
 
@@ -55,14 +52,26 @@ const mediaItemsSlice = createSlice({
     builder
       .addCase(findMediaItems.pending, reducePendingState())
       .addCase(findMediaItems.rejected, reduceRejectedState())
-      .addCase(findMediaItems.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, entities: action.payload, loading: false, loaded: true
-      })))
+      .addCase(
+        findMediaItems.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          entities: action.payload,
+          loading: false,
+          loaded: true,
+        }))
+      )
       .addCase(loadUserMediaItems.pending, reducePendingState())
       .addCase(loadUserMediaItems.rejected, reduceRejectedState())
-      .addCase(loadUserMediaItems.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, mediaItems: action.payload, loading: false, loaded: true
-      })))
+      .addCase(
+        loadUserMediaItems.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          mediaItems: action.payload,
+          loading: false,
+          loaded: true,
+        }))
+      )
       .addCase(selectMediaItem, (state, action) => {
         const updateSelection = function (bool: boolean, item: MediaItemResponseDto) {
           const { selected } = state;
@@ -74,10 +83,12 @@ const mediaItemsSlice = createSlice({
       })
       .addCase(clearMediaItems, (state) => ({
         // TODO: Shouldn't we be clearing selected media items?
-        ...state, selected: [], loading: false, loaded: true
+        ...state,
+        selected: [],
+        loading: false,
+        loaded: true,
         // ...state, entities: [], loading: false, loaded: true
-      }))
-
+      }));
   },
 });
 

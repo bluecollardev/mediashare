@@ -22,7 +22,7 @@ import { useUser } from 'mediashare/hooks/useUser';
 import { PageContainer, PageActions, PageProps, ContactList, ActionButtons, AccountCard, AppDialog } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
-import { removeShareItemAll } from 'mediashare/store/modules/shareItems';
+import { removeShareItemAllByUserId } from 'mediashare/store/modules/shareItems';
 
 const actionModes = { delete: 'delete', default: 'default' };
 const awsUrl = Config.AWS_URL;
@@ -44,7 +44,7 @@ export const Account = ({ globalState }: PageProps) => {
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
-  const contacts = useAppSelector((state) => state?.users?.entities);
+  const contacts = useAppSelector((state) => state?.users?.entities).filter((e) => e._id != userId)
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [isSelectable, setIsSelectable] = useState(false);
   const [selectedItems, setSelectedItems] = React.useState([]);
@@ -198,7 +198,6 @@ export const Account = ({ globalState }: PageProps) => {
   async function accountLogout() {
     await dispatch(logout());
     goToLogin();
-
   }
 
   function activateUnshareMode() {
@@ -230,8 +229,9 @@ export const Account = ({ globalState }: PageProps) => {
   }
 
   async function unshareItems() {
-    await dispatch(removeShareItemAll(selectedItems));
+    await dispatch(removeShareItemAllByUserId(selectedItems));
     setSelectedItems([]);
+    await dispatch(loadUsers())
   }
 
   function updateSelection(bool: boolean, shareItemId: string) {
