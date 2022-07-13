@@ -5,7 +5,7 @@ import { ObjectIdPipe } from '@mediashare/shared';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import { ShareItemService } from './share-item.service';
-import { ShareItemsDto, ShareItemsResponseDto } from './dto/share-item.dto';
+import { ShareItemsByUserIdDto, ShareItemsDto, ShareItemsResponseDto } from './dto/share-item.dto';
 import { ShareItemGetResponse } from './share-item.decorator';
 import { ShareItem } from './entities/share-item.entity';
 import { MediaItemResponseDto } from '@api-modules/media-item/dto/media-item-response.dto';
@@ -79,5 +79,11 @@ export class ShareItemController {
   @ApiBody({ type: () => ShareItemsDto })
   async removeShareItemAll(@Body() shareItemsDto: ShareItemsDto) {
     await this.shareItemService.removeShareItemAll(shareItemsDto.shareItemIds);
+  }
+
+  @Post('unshare-all-by-user-id')
+  @ApiBody({ type: () => ShareItemsByUserIdDto })
+  async removeShareItemAllByUserId(@Body() shareItemsByUserIdDto: ShareItemsByUserIdDto) {
+    await this.shareItemService.removeShareItemAllByUserId(shareItemsByUserIdDto.shareItemByUserIds)
   }
 }

@@ -139,10 +139,13 @@ function PrivateMainNavigation({ globalState }: PrivateMainNavigationProps) {
       labeled={false}
       screenOptions={({ route }) => ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        tabBarIcon: route.name !== 'login' ? ({ focused, color }) => {
-          return <MaterialIcons name={tabNavigationIconsMap[route.name]} color={color} size={26} />;
-          // <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
-        } : undefined,
+        tabBarIcon:
+          route.name !== 'login'
+            ? ({ focused, color }) => {
+                return <MaterialIcons name={tabNavigationIconsMap[route.name]} color={color} size={26} />;
+                // <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
+              }
+            : undefined,
       })}
     >
       {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
@@ -156,7 +159,6 @@ function PrivateMainNavigation({ globalState }: PrivateMainNavigationProps) {
       {build.forAdmin && <PrivateNavigator.Screen name="Media" component={MediaNavigation} listeners={navigationTabListeners} />}
 
       <PrivateNavigator.Screen name="Account" component={AccountNavigation} listeners={navigationTabListeners} initialParams={{ userId: user?._id }} />
-
     </PrivateNavigator.Navigator>
   );
 }
@@ -166,16 +168,8 @@ const RootNavigation = ({ isLoggedIn = false }) => {
   console.log(isLoggedIn);
   return (
     <RootNavigator.Navigator initialRouteName={isLoggedIn ? 'Private' : 'Public'}>
-      <RootNavigator.Screen
-        name="Public"
-        component={PublicMainNavigationWithGlobalState}
-        options={{ headerShown: false }}
-      />
-      <RootNavigator.Screen
-        name="Private"
-        component={PrivateMainNavigationWithGlobalState}
-        options={{ headerShown: false }}
-      />
+      <RootNavigator.Screen name="Public" component={PublicMainNavigationWithGlobalState} options={{ headerShown: false }} />
+      <RootNavigator.Screen name="Private" component={PrivateMainNavigationWithGlobalState} options={{ headerShown: false }} />
     </RootNavigator.Navigator>
   );
 };

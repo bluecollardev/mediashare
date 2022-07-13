@@ -14,8 +14,9 @@ import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 
 export const SharedList = ({ globalState }) => {
   const { entities } = useAppSelector((state) => state?.shareItems?.sharedWithMe);
+  const ShowMyShare = false
   // TODO: There are dupes, this is just a temporary workaround; we shouldn't be able to create dupe share items
-  const list = filterUnique(entities, '_id') || [];
+  const list = filterUnique(entities, '_id').filter((e) => ShowMyShare ? e : e.sharedWith != e.sharedBy) || [];
 
   const viewPlaylistAction = useViewPlaylistById();
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });

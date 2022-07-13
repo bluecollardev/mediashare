@@ -15,3 +15,8 @@ export class ShareItemsDto {
   @ApiProperty({ name: 'shareItemIds', type: () => String, isArray: true })
   shareItemIds: string[];
 }
+
+export class ShareItemsByUserIdDto {
+  @ApiProperty({ name: 'shareItemByUserIds', type: () => String, isArray: true })
+  shareItemByUserIds: string[];
+}

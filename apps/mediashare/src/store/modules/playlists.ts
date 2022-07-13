@@ -7,12 +7,7 @@ import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { mediaItemsActions } from 'mediashare/store/modules/mediaItems';
 
 // Define these in snake case or our converter won't work... we need to fix that
-const playlistsActionNames = [
-  'find_playlists',
-  'get_user_playlists',
-  'select_playlist',
-  'clear_playlists'
-] as const;
+const playlistsActionNames = ['find_playlists', 'get_user_playlists', 'select_playlist', 'clear_playlists'] as const;
 
 export const playlistsActions = makeActions(playlistsActionNames);
 
@@ -29,7 +24,9 @@ export const getUserPlaylists = createAsyncThunk(playlistsActions.getUserPlaylis
   return await api.user.userControllerGetUserPlaylists().toPromise();
 });
 
-export const selectPlaylist = createAction<{ isChecked: boolean; plist: PlaylistResponseDto }, typeof playlistsActions.selectPlaylist.type>(playlistsActions.selectPlaylist.type);
+export const selectPlaylist = createAction<{ isChecked: boolean; plist: PlaylistResponseDto }, typeof playlistsActions.selectPlaylist.type>(
+  playlistsActions.selectPlaylist.type
+);
 
 export const clearPlaylists = createAction(playlistsActions.clearPlaylists.type);
 
@@ -57,14 +54,26 @@ const playlistsSlice = createSlice({
     builder
       .addCase(getUserPlaylists.pending, reducePendingState())
       .addCase(getUserPlaylists.rejected, reduceRejectedState())
-      .addCase(getUserPlaylists.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, entities: action.payload, loading: false, loaded: true
-      })))
+      .addCase(
+        getUserPlaylists.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          entities: action.payload,
+          loading: false,
+          loaded: true,
+        }))
+      )
       .addCase(findPlaylists.pending, reducePendingState())
       .addCase(findPlaylists.rejected, reduceRejectedState())
-      .addCase(findPlaylists.fulfilled, reduceFulfilledState((state, action) => ({
-        ...state, entities: action.payload, loading: false, loaded: true
-      })))
+      .addCase(
+        findPlaylists.fulfilled,
+        reduceFulfilledState((state, action) => ({
+          ...state,
+          entities: action.payload,
+          loading: false,
+          loaded: true,
+        }))
+      )
       .addCase(selectPlaylist, (state, action) => {
         const updateSelection = (bool: boolean, item: PlaylistResponseDto) => {
           const { selected } = state;
@@ -75,9 +84,12 @@ const playlistsSlice = createSlice({
       })
       .addCase(clearPlaylists, (state) => ({
         // TODO: Shouldn't we be clearing selected media items?
-        ...state, selected: [], loading: false, loaded: true
+        ...state,
+        selected: [],
+        loading: false,
+        loaded: true,
         // ...state, entities: [], loading: false, loaded: true
-      }))
+      }));
   },
 });
 

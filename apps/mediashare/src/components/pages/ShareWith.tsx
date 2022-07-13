@@ -61,7 +61,7 @@ const ShareWith = ({}: PageProps) => {
         playlistIds: playlists.map((playlist) => playlist._id),
       })
     );
-    await dispatch(clearPlaylists())
+    await dispatch(clearPlaylists());
     setIsLoaded(false);
     viewPlaylists();
   }

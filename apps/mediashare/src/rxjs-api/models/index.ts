@@ -17,6 +17,7 @@ export * from './PlaylistResponseDto';
 export * from './ProfileDto';
 export * from './ProfileShareItem';
 export * from './ShareItem';
+export * from './ShareItemsByUserIdDto';
 export * from './ShareItemsDto';
 export * from './ShareItemsResponseDto';
 export * from './Tag';

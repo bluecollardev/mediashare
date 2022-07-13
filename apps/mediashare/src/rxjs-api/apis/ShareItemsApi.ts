@@ -13,7 +13,7 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
-import { MediaItemResponseDto, PlaylistResponseDto, ShareItem, ShareItemsDto, ShareItemsResponseDto } from '../models';
+import { MediaItemResponseDto, PlaylistResponseDto, ShareItem, ShareItemsByUserIdDto, ShareItemsDto, ShareItemsResponseDto } from '../models';
 
 export interface ShareItemControllerFindShareItemRequest {
   shareId: string;
@@ -29,6 +29,10 @@ export interface ShareItemControllerRemoveShareItemRequest {
 
 export interface ShareItemControllerRemoveShareItemAllRequest {
   shareItemsDto: ShareItemsDto;
+}
+
+export interface ShareItemControllerRemoveShareItemAllByUserIdRequest {
+  shareItemsByUserIdDto: ShareItemsByUserIdDto;
 }
 
 /**
@@ -264,6 +268,34 @@ export class ShareItemsApi extends BaseAPI {
         method: 'POST',
         headers,
         body: shareItemsDto,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  shareItemControllerRemoveShareItemAllByUserId({ shareItemsByUserIdDto }: ShareItemControllerRemoveShareItemAllByUserIdRequest): Observable<void>;
+  shareItemControllerRemoveShareItemAllByUserId(
+    { shareItemsByUserIdDto }: ShareItemControllerRemoveShareItemAllByUserIdRequest,
+    opts?: OperationOpts
+  ): Observable<void | RawAjaxResponse<void>>;
+  shareItemControllerRemoveShareItemAllByUserId(
+    { shareItemsByUserIdDto }: ShareItemControllerRemoveShareItemAllByUserIdRequest,
+    opts?: OperationOpts
+  ): Observable<void | RawAjaxResponse<void>> {
+    throwIfNullOrUndefined(shareItemsByUserIdDto, 'shareItemsByUserIdDto', 'shareItemControllerRemoveShareItemAllByUserId');
+
+    const headers: HttpHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    return this.request<void>(
+      {
+        url: '/api/share-items/unshare-all-by-user-id',
+        method: 'POST',
+        headers,
+        body: shareItemsByUserIdDto,
       },
       opts?.responseOpts
     );
