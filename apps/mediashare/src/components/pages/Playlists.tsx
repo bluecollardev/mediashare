@@ -76,12 +76,9 @@ export const Playlists = ({ globalState }: PageProps) => {
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
-
-  // TODO: A generic data loader is a good idea, but we can do it later, use useAppSelector for now
-  // const [{ state, loaded }] = useLoadPlaylistData();
-  const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
-
   const onRefresh = useCallback(refresh, [dispatch]);
+
+  const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
@@ -117,6 +114,7 @@ export const Playlists = ({ globalState }: PageProps) => {
           globalState={globalState}
           loaded={(!loaded && !loading) || (loaded && entities.length > 0)}
           loadData={loadData}
+          searchTarget="playlists"
           key={clearSelectionKey}
           list={entities}
           onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}

@@ -1,12 +1,8 @@
-import React, { useMemo, useState } from 'react';
-import { View, SafeAreaView, Modal, TouchableWithoutFeedback } from 'react-native';
-import { Appbar, Card, Portal, Searchbar } from 'react-native-paper';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import React, { useState } from 'react';
+import { Appbar } from 'react-native-paper';
 import { withGlobalStateConsumer, GlobalStateProps } from 'mediashare/core/globalState';
 import { useGoToAccount } from 'mediashare/hooks/navigation';
-import { MultiSelectIcon } from 'mediashare/components/form/MultiSelect';
-import { ActionButtons } from './ActionButtons';
-import themeStyles, { theme, components } from 'mediashare/styles';
+import { theme } from 'mediashare/styles';
 
 export interface AppHeaderProps {
   options?: any;
@@ -21,34 +17,6 @@ export interface AppHeaderProps {
   globalState?: GlobalStateProps;
 }
 
-const ModalContentWrapper = (props) => {
-  const { modalWithSafeAreaView, children } = props;
-  const Component = modalWithSafeAreaView ? SafeAreaView : View;
-  return (
-    <Component
-      style={[
-        { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' },
-        // styles.modalWrapper
-      ]}
-    >
-      {children}
-    </Component>
-  );
-};
-
-const BackdropView = (props) => {
-  const { modalWithTouchable, children } = props;
-  const Wrapper = modalWithTouchable ? TouchableWithoutFeedback : null;
-
-  return Wrapper ? (
-    <Wrapper onPress={() => undefined}>
-      <View {...props}>{children}</View>
-    </Wrapper>
-  ) : (
-    <View {...props} />
-  );
-};
-
 const AppHeaderComponent = ({
   options,
   back,
@@ -60,24 +28,25 @@ const AppHeaderComponent = ({
   searchable = false,
   searchTarget = undefined,
   globalState = {
+    openSearchConsole: () => undefined,
+    closeSearchConsole: () => undefined,
     displayMode: 'list',
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     setDisplayMode: (value) => undefined,
     tags: [],
   },
 }: AppHeaderProps) => {
-  const { setSearchFilters } = globalState;
+  const { openSearchConsole, closeSearchConsole, searchIsActive } = globalState;
 
   const goToAccount = useGoToAccount();
 
   const title = options?.headerTitle !== undefined ? options?.headerTitle : options?.title !== undefined ? options?.title : '';
 
   const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
-  const [searchIsActive, setSearchIsActive] = useState(false);
-  const [searchText, setSearchText] = useState('');
-  const [searchTags, setSearchTags] = useState([]);
 
   const [displayMode, setDisplayMode] = useState(globalState?.displayMode);
+
+  const searchIcon = !searchIsActive ? 'search' : searchIsActive ? 'filter-list' : 'filter-list';
 
   return (
     <Appbar.Header style={{ backgroundColor: theme.colors.background }}>
@@ -91,8 +60,8 @@ const AppHeaderComponent = ({
       />
       {showDisplayControls && renderDisplayControls()}
       {searchable && showSearchSettings && <Appbar.Action icon="settings" onPress={() => undefined} />}
-      {searchable && !showSearchSettings && <Appbar.Action icon="filter-list" color={searchIsFiltering ? theme.colors.success : '#ffffff'} onPress={() => closeSearchConsole()} />}
-      {showNotificationsMenu && <Appbar.Action icon="notifications" onPress={() => openSearchConsole()} />}
+      {searchable && !showSearchSettings && <Appbar.Action icon={searchIcon} color={searchIsFiltering ? theme.colors.success : '#ffffff'} onPress={() => toggleSearchConsole()} />}
+      {showNotificationsMenu && <Appbar.Action icon="notifications" onPress={() => undefined} />}
       {showAccountMenu && <Appbar.Action icon="person" onPress={() => goToAccount()} />}
     </Appbar.Header>
   );
@@ -107,13 +76,8 @@ const AppHeaderComponent = ({
     globalState?.setDisplayMode('article');
   }
 
-  function openSearchConsole() {
-    setSearchIsActive(true);
-  }
-
-  function closeSearchConsole() {
-    setSearchIsActive(false);
-    setSearchFilters({ text: '', tags: [] });
+  function toggleSearchConsole() {
+    searchIsActive ? closeSearchConsole() : openSearchConsole();
   }
 
   function renderDisplayControls() {

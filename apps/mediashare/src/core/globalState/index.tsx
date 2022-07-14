@@ -22,7 +22,11 @@ export interface GlobalStateProps {
   };
   loadUserData?: () => void;
   search?: any;
+  searchIsActive?: boolean;
+  setSearchIsActive?: Function;
   setSearchFilters?: Function;
+  openSearchConsole?: Function;
+  closeSearchConsole?: Function;
   tags?: Tag[];
   displayMode?: 'list' | 'article';
   setDisplayMode: (value) => void;
@@ -45,6 +49,7 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
     const loading = useAppSelector((state) => state?.app?.loading);
     const tags = useAppSelector((state) => state?.tags?.entities || []);
 
+    const [searchIsActive, setSearchIsActive] = useState(false);
     const [searchFilters, setSearchFilters] = useState(INITIAL_SEARCH_FILTERS);
     const [displayMode, setDisplayMode] = useState(INITIAL_DISPLAY_MODE);
 
@@ -80,6 +85,10 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
         roles,
         build,
         loadUserData,
+        openSearchConsole,
+        closeSearchConsole,
+        searchIsActive,
+        setSearchIsActive,
         setSearchFilters,
         search: {
           filters: { ...searchFilters },
@@ -95,6 +104,15 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
       await dispatch(loadUser());
       await dispatch(findItemsSharedByMe());
       await dispatch(findItemsSharedWithMe());
+    }
+
+    function openSearchConsole() {
+      setSearchIsActive(true);
+    }
+
+    function closeSearchConsole() {
+      setSearchIsActive(false);
+      setSearchFilters({ text: '', tags: [] });
     }
   };
 };

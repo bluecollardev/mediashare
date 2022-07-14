@@ -10,23 +10,27 @@ export interface PlaylistSearchProps {
   globalState?: GlobalStateProps;
   loaded: boolean;
   loadData: () => Promise<void>;
+  searchTarget: 'playlists' | 'media';
 }
 
 export const withPlaylistSearch = (WrappedComponent: any) => {
   return function PlaylistSearch({
-    globalState = { setSearchFilters: () => undefined },
+    globalState = {
+      openSearchConsole: () => undefined,
+      closeSearchConsole: () => undefined,
+      setSearchFilters: () => undefined,
+      searchIsActive: false,
+    },
     loaded,
     loadData = () => undefined,
+    searchTarget,
     ...rest
   }: any) {
-    const { setSearchFilters } = globalState;
+    const { openSearchConsole, closeSearchConsole, searchIsActive, setSearchFilters } = globalState;
     // const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
     // const [searchIsActive, setSearchIsActive] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [searchTags, setSearchTags] = useState([]);
-
-    // TODO: Make this configurable
-    const searchTarget = 'playlists';
 
     const mappedTags = useMemo(() => {
       const availableTags = Array.isArray(globalState?.tags) ? globalState.tags : [];
@@ -47,64 +51,64 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
 
     return (
       <>
+        {searchIsActive && (
+          <Card>
+            <Card.Content>
+              <Searchbar
+                style={{ width: '100%', marginTop: 15 }}
+                inputStyle={{ fontSize: 15 }}
+                placeholder="Keywords"
+                value={searchText}
+                onChangeText={(text) => updateSearchText(text)}
+                // onIconPress={() => closeSearchConsole()}
+                icon=""
+                // icon="arrow-back-ios"
+                clearIcon="clear"
+                autoCapitalize="none"
+              />
+              {/* <Appbar.Action icon="close" onPress={() => closeSearchConsole()} /> */}
+              <SectionedMultiSelect
+                colors={components.multiSelect.colors}
+                styles={components.multiSelect.styles}
+                items={mappedTags}
+                IconRenderer={MultiSelectIcon}
+                uniqueKey="key"
+                displayKey="value"
+                subKey="children"
+                searchPlaceholderText="Enter Text"
+                selectText="Select Tags"
+                confirmText="Done"
+                onSelectedItemsChange={updateSearchTags}
+                selectedItems={searchTags}
+                hideSearch={true}
+                showRemoveAll={true}
+                expandDropDowns={false}
+                readOnlyHeadings={false}
+                showDropDowns={true}
+                parentChipsRemoveChildren={true}
+                showCancelButton={true}
+                modalWithTouchable={false}
+                modalWithSafeAreaView={false}
+              />
+              <ActionButtons
+                actionLabel="Search"
+                actionButtonStyles={{ backgroundColor: theme.colors.primary }}
+                showCancel={false}
+                containerStyles={{ marginHorizontal: 0, marginTop: 15 }}
+                onActionClicked={() => submitSearch()}
+              />
+
+            </Card.Content>
+          </Card>
+        )}
+        <Divider />
         <Card>
           <Card.Content>
-            <Searchbar
-              style={{ width: '100%', marginTop: 15 }}
-              inputStyle={{ fontSize: 15 }}
-              placeholder="Keywords"
-              value={searchText}
-              onChangeText={(text) => updateSearchText(text)}
-              // onIconPress={() => closeSearchConsole()}
-              icon=""
-              // icon="arrow-back-ios"
-              clearIcon="clear"
-              autoCapitalize="none"
-            />
-            {/* <Appbar.Action icon="close" onPress={() => closeSearchConsole()} /> */}
-            <SectionedMultiSelect
-              colors={components.multiSelect.colors}
-              styles={components.multiSelect.styles}
-              items={mappedTags}
-              IconRenderer={MultiSelectIcon}
-              uniqueKey="key"
-              displayKey="value"
-              subKey="children"
-              searchPlaceholderText="Enter Text"
-              selectText="Select Tags"
-              confirmText="Done"
-              onSelectedItemsChange={updateSearchTags}
-              selectedItems={searchTags}
-              expandDropDowns={false}
-              readOnlyHeadings={false}
-              showDropDowns={true}
-              parentChipsRemoveChildren={true}
-              showCancelButton={true}
-              modalWithTouchable={false}
-              modalWithSafeAreaView={false}
-            />
-            <ActionButtons
-              actionLabel="Search"
-              actionButtonStyles={{ backgroundColor: theme.colors.primary }}
-              showCancel={false}
-              containerStyles={{ marginHorizontal: 0, marginTop: 15 }}
-              onActionClicked={() => submitSearch()}
-            />
-            <Divider />
             <WrappedComponent globalState={globalState} {...rest} />
           </Card.Content>
         </Card>
-
       </>
     );
-
-    /* function openSearchConsole() {
-      setSearchIsActive(true);
-    }
-
-    function closeSearchConsole() {
-      setSearchIsActive(false);
-    } */
 
     function updateSearchText(value) {
       // Set the in-component state value
