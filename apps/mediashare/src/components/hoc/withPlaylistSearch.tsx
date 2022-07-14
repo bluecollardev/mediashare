@@ -94,7 +94,7 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
               />
               <ActionButtons
                 actionLabel="Search"
-                actionButtonStyles={{ backgroundColor: theme.colors.primary }}
+                actionButtonStyles={{ backgroundColor: theme.colors.secondary }}
                 showCancel={false}
                 containerStyles={{ marginHorizontal: 0, marginTop: 15 }}
                 onActionClicked={() => submitSearch()}

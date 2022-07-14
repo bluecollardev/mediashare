@@ -9,7 +9,7 @@ const theme = {
     background: 'rgba(30,30,30,1)',
     success: '#9ECD3B',
     primary: '#00B8EC',
-    secondary: '#048ab0', // Custom property
+    secondary: '#444444', // Custom property
     default: '#BDC1C6',
     darkDefault: '#1D1D1D',
     defaultBorder: 'rgba(255,255,255,0.29)',
