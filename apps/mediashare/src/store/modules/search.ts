@@ -7,11 +7,11 @@ import { PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { mediaItemsActions } from 'mediashare/store/modules/mediaItems';
 
 // Define these in snake case or our converter won't work... we need to fix that
-const searchActionNames = ['find_playlists', 'get_user_playlists', 'select_playlist', 'clear_playlists'] as const;
+const searchActionNames = ['search_playlists', 'search_user_playlists', 'select_playlist', 'clear_playlists'] as const;
 
 export const searchActions = makeActions(searchActionNames);
 
-export const findPlaylists = createAsyncThunk(searchActions.findPlaylists.type, async (args: { text?: string; tags?: string[] }, { extra }) => {
+export const searchPlaylists = createAsyncThunk(searchActions.searchPlaylists.type, async (args: { text?: string; tags?: string[] }, { extra }) => {
   const { api } = extra as { api: ApiService };
   const { text, tags = [] } = args;
   console.log(`Search playlists args: ${JSON.stringify(args, null, 2)}`);
@@ -19,7 +19,7 @@ export const findPlaylists = createAsyncThunk(searchActions.findPlaylists.type, 
   return await api.playlists.playlistControllerFindAll({ text, tags }).toPromise();
 });
 
-export const getUserPlaylists = createAsyncThunk(searchActions.getUserPlaylists.type, async (opts = undefined, { extra }) => {
+export const searchUserPlaylists = createAsyncThunk(searchActions.searchUserPlaylists.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
   return await api.user.userControllerGetUserPlaylists().toPromise();
 });
@@ -30,7 +30,7 @@ export const selectPlaylist = createAction<{ isChecked: boolean; plist: Playlist
 
 export const clearPlaylists = createAction(searchActions.clearPlaylists.type);
 
-export interface PlaylistsState {
+export interface SearchState {
   // entities: PlaylistResponseDto[] | PlaylistItemResponseDto[];
   // selected: PlaylistResponseDto[] | PlaylistItemResponseDto[];
   entities: PlaylistResponseDto[];
@@ -39,7 +39,7 @@ export interface PlaylistsState {
   loaded: boolean;
 }
 
-export const searchInitialState: PlaylistsState = {
+export const searchInitialState: SearchState = {
   entities: [],
   selected: [],
   loading: false,
@@ -52,10 +52,10 @@ const searchSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getUserPlaylists.pending, reducePendingState())
-      .addCase(getUserPlaylists.rejected, reduceRejectedState())
+      .addCase(searchUserPlaylists.pending, reducePendingState())
+      .addCase(searchUserPlaylists.rejected, reduceRejectedState())
       .addCase(
-        getUserPlaylists.fulfilled,
+        searchUserPlaylists.fulfilled,
         reduceFulfilledState((state, action) => ({
           ...state,
           entities: action.payload,
@@ -63,10 +63,10 @@ const searchSlice = createSlice({
           loaded: true,
         }))
       )
-      .addCase(findPlaylists.pending, reducePendingState())
-      .addCase(findPlaylists.rejected, reduceRejectedState())
+      .addCase(searchPlaylists.pending, reducePendingState())
+      .addCase(searchPlaylists.rejected, reduceRejectedState())
       .addCase(
-        findPlaylists.fulfilled,
+        searchPlaylists.fulfilled,
         reduceFulfilledState((state, action) => ({
           ...state,
           entities: action.payload,

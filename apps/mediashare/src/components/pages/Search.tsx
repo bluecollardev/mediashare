@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
-import { findPlaylists, selectPlaylist } from 'mediashare/store/modules/search';
+import { searchPlaylists, selectPlaylist } from 'mediashare/store/modules/search';
 import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { GlobalStateProps, withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/navigation';
@@ -144,7 +144,7 @@ export const Search = ({ globalState }: PageProps) => {
       text: search?.filters?.text ? search.filters.text : '',
       tags: search?.filters?.tags || [],
     };
-    await dispatch(findPlaylists(args));
+    await dispatch(searchPlaylists(args));
   }
 
   async function refresh() {
