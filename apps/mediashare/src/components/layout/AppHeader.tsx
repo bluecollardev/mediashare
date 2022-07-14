@@ -46,9 +46,7 @@ const AppHeaderComponent = ({
 
   const [displayMode, setDisplayMode] = useState(globalState?.displayMode);
 
-  let searchIcon = hideSearchIcon
-    ? (searchIsFiltering ? 'filter-list' : '')
-    : (!searchIsActive ? 'search' : searchIsActive ? 'filter-list' : 'filter-list')
+  let searchIcon = hideSearchIcon ? (searchIsFiltering ? 'filter-list' : '') : !searchIsActive ? 'search' : searchIsActive ? 'filter-list' : 'filter-list';
 
   return (
     <Appbar.Header style={{ backgroundColor: theme.colors.background }}>

@@ -1,23 +1,11 @@
 import { SafeAreaProviderCompat } from '@react-navigation/elements';
-import {
-  CommonActions,
-  Link,
-  ParamListBase,
-  Route,
-  TabNavigationState,
-  useLinkBuilder,
-  useTheme,
-} from '@react-navigation/native';
+import { CommonActions, Link, ParamListBase, Route, TabNavigationState, useLinkBuilder, useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { Platform, StyleSheet, Text } from 'react-native';
 import { BottomNavigation, MD2DarkTheme as DarkTheme, MD2LightTheme as DefaultTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import type {
-  MaterialBottomTabDescriptorMap,
-  MaterialBottomTabNavigationConfig,
-  MaterialBottomTabNavigationHelpers,
-} from '../types';
+import type { MaterialBottomTabDescriptorMap, MaterialBottomTabNavigationConfig, MaterialBottomTabNavigationHelpers } from '../types';
 
 type Props = MaterialBottomTabNavigationConfig & {
   state: TabNavigationState<ParamListBase>;
@@ -29,34 +17,18 @@ type Scene = { route: { key: string } };
 
 // Optionally require vector-icons referenced from react-native-paper:
 // https://github.com/callstack/react-native-paper/blob/4b26429c49053eaa4c3e0fae208639e01093fa87/src/components/MaterialCommunityIcon.tsx#L14
-let MaterialCommunityIcons: React.ComponentType<
-  React.ComponentProps<
-    typeof import('react-native-vector-icons/MaterialCommunityIcons').default
-  >
->;
+let MaterialCommunityIcons: React.ComponentType<React.ComponentProps<typeof import('react-native-vector-icons/MaterialCommunityIcons').default>>;
 
 try {
   // Optionally require vector-icons
-  MaterialCommunityIcons =
-    require('react-native-vector-icons/MaterialCommunityIcons').default;
+  MaterialCommunityIcons = require('react-native-vector-icons/MaterialCommunityIcons').default;
 } catch (e: any) {
   let isErrorLogged = false;
 
   // Fallback component for icons
-  MaterialCommunityIcons = ({
-    name,
-    color,
-    size,
-    selectionColor: _0,
-    onLayout: _1,
-    ...rest
-  }) => {
+  MaterialCommunityIcons = ({ name, color, size, selectionColor: _0, onLayout: _1, ...rest }) => {
     if (!isErrorLogged) {
-      if (
-        !/(Cannot find module|Module not found|Cannot resolve module)/.test(
-          e.message
-        )
-      ) {
+      if (!/(Cannot find module|Module not found|Cannot resolve module)/.test(e.message)) {
         console.error(e);
       }
 
@@ -85,12 +57,7 @@ try {
   };
 }
 
-function MaterialBottomTabViewInner({
-  state,
-  navigation,
-  descriptors,
-  ...rest
-}: Props) {
+function MaterialBottomTabViewInner({ state, navigation, descriptors, ...rest }: Props) {
   const insets = useSafeAreaInsets();
   const { dark, colors } = useTheme();
   const buildLink = useLinkBuilder();
@@ -125,16 +92,7 @@ function MaterialBottomTabViewInner({
       renderScene={({ route }) => descriptors[route.key].render()}
       renderTouchable={
         Platform.OS === 'web'
-          ? ({
-              onPress,
-              route,
-              accessibilityRole: _0,
-              borderless: _1,
-              centered: _2,
-              rippleColor: _3,
-              style,
-              ...rest
-            }) => {
+          ? ({ onPress, route, accessibilityRole: _0, borderless: _1, centered: _2, rippleColor: _3, style, ...rest }) => {
               return (
                 <Link
                   {...rest}
@@ -160,14 +118,7 @@ function MaterialBottomTabViewInner({
         const { options } = descriptors[route.key];
 
         if (typeof options.tabBarIcon === 'string') {
-          return (
-            <MaterialCommunityIcons
-              name={options.tabBarIcon}
-              color={color}
-              size={24}
-              style={styles.icon}
-            />
-          );
+          return <MaterialCommunityIcons name={options.tabBarIcon} color={color} size={24} style={styles.icon} />;
         }
 
         if (typeof options.tabBarIcon === 'function') {
@@ -179,17 +130,11 @@ function MaterialBottomTabViewInner({
       getLabelText={({ route }: Scene) => {
         const { options } = descriptors[route.key];
 
-        return options.tabBarLabel !== undefined
-          ? options.tabBarLabel
-          : options.title !== undefined
-          ? options.title
-          : (route as Route<string>).name;
+        return options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : (route as Route<string>).name;
       }}
       getColor={({ route }) => descriptors[route.key].options.tabBarColor}
       getBadge={({ route }) => descriptors[route.key].options.tabBarBadge}
-      getAccessibilityLabel={({ route }) =>
-        descriptors[route.key].options.tabBarAccessibilityLabel
-      }
+      getAccessibilityLabel={({ route }) => descriptors[route.key].options.tabBarAccessibilityLabel}
       getTestID={({ route }) => descriptors[route.key].options.tabBarTestID}
       onTabPress={({ route, preventDefault }) => {
         const event = navigation.emit({

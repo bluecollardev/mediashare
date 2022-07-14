@@ -161,7 +161,10 @@ export const MediaCard: React.FC<MediaCardProps> = ({
             modalWithSafeAreaView={false}
           />
         </Card>
-        <Card elevation={elevation as any} style={{ position: 'relative', marginBottom: 25, borderColor: theme.colors.defaultBorder, borderWidth: 1, padding: 0.5 }}>
+        <Card
+          elevation={elevation as any}
+          style={{ position: 'relative', marginBottom: 25, borderColor: theme.colors.defaultBorder, borderWidth: 1, padding: 0.5 }}
+        >
           <SwitchSelector
             fontSize={13}
             textColor={theme.colors.text}

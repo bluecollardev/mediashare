@@ -10,11 +10,7 @@ import {
 } from '@react-navigation/native';
 import * as React from 'react';
 
-import type {
-  MaterialBottomTabNavigationConfig,
-  MaterialBottomTabNavigationEventMap,
-  MaterialBottomTabNavigationOptions,
-} from '../types';
+import type { MaterialBottomTabNavigationConfig, MaterialBottomTabNavigationEventMap, MaterialBottomTabNavigationOptions } from '../types';
 import MaterialBottomTabView from '../views/MaterialBottomTabView';
 
 type Props = DefaultNavigatorOptions<
@@ -26,39 +22,25 @@ type Props = DefaultNavigatorOptions<
   TabRouterOptions &
   MaterialBottomTabNavigationConfig;
 
-function MaterialBottomTabNavigator({
-  id,
-  initialRouteName,
-  backBehavior,
-  children,
-  screenListeners,
-  screenOptions,
-  ...rest
-}: Props) {
-  const { state, descriptors, navigation, NavigationContent } =
-    useNavigationBuilder<
-      TabNavigationState<ParamListBase>,
-      TabRouterOptions,
-      TabActionHelpers<ParamListBase>,
-      MaterialBottomTabNavigationOptions,
-      MaterialBottomTabNavigationEventMap
-    >(TabRouter, {
-      id,
-      initialRouteName,
-      backBehavior,
-      children,
-      screenListeners,
-      screenOptions,
-    });
+function MaterialBottomTabNavigator({ id, initialRouteName, backBehavior, children, screenListeners, screenOptions, ...rest }: Props) {
+  const { state, descriptors, navigation, NavigationContent } = useNavigationBuilder<
+    TabNavigationState<ParamListBase>,
+    TabRouterOptions,
+    TabActionHelpers<ParamListBase>,
+    MaterialBottomTabNavigationOptions,
+    MaterialBottomTabNavigationEventMap
+  >(TabRouter, {
+    id,
+    initialRouteName,
+    backBehavior,
+    children,
+    screenListeners,
+    screenOptions,
+  });
 
   return (
     <NavigationContent>
-      <MaterialBottomTabView
-        {...rest}
-        state={state}
-        navigation={navigation}
-        descriptors={descriptors}
-      />
+      <MaterialBottomTabView {...rest} state={state} navigation={navigation} descriptors={descriptors} />
     </NavigationContent>
   );
 }

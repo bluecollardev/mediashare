@@ -170,7 +170,7 @@ const PrivateMainNavigation = ({ globalState }: PrivateMainNavigationProps) => {
       {build.forAdmin && <PrivateNavigator.Screen name="Media" component={MediaNavigation} listeners={navigationTabListeners} />}
     </PrivateNavigator.Navigator>
   );
-}
+};
 
 const PublicMainNavigationWithGlobalState = withGlobalStateProvider(PublicMainNavigation);
 const PrivateMainNavigationWithGlobalState = withGlobalStateProvider(PrivateMainNavigation);

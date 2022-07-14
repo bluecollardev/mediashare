@@ -64,7 +64,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
 
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
-const PlaylistsComponentWithSearch = withPlaylistSearch(PlaylistsComponent)
+const PlaylistsComponentWithSearch = withPlaylistSearch(PlaylistsComponent);
 
 export const Playlists = ({ globalState }: PageProps) => {
   const dispatch = useDispatch();

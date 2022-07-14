@@ -136,7 +136,7 @@ const AppHeaderComponent = ({
                                 <Card>
                                   <Card.Title title="Choose Tags" />
                                 </Card>
-                              )
+                              );
                             }}
                             colors={components.multiSelect.colors}
                             styles={components.multiSelect.styles}
@@ -188,7 +188,9 @@ const AppHeaderComponent = ({
       />
       {showDisplayControls && renderDisplayControls()}
       {searchable && showSearchSettings && <Appbar.Action icon="settings" onPress={() => undefined} />}
-      {searchable && !showSearchSettings && <Appbar.Action icon="filter-list" color={searchIsFiltering ? theme.colors.success : '#ffffff'} onPress={() => openSearchConsole()} />}
+      {searchable && !showSearchSettings && (
+        <Appbar.Action icon="filter-list" color={searchIsFiltering ? theme.colors.success : '#ffffff'} onPress={() => openSearchConsole()} />
+      )}
       {showNotificationsMenu && <Appbar.Action icon="notifications" onPress={() => openSearchConsole()} />}
       {showAccountMenu && <Appbar.Action icon="person" onPress={() => goToAccount()} />}
     </Appbar.Header>

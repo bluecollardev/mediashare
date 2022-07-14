@@ -183,7 +183,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        {!isSelectable && <ActionButtons loading={isSaved}  onActionClicked={savePlaylist} onCancelClicked={clearAndGoBack} actionLabel="Save" />}
+        {!isSelectable && <ActionButtons loading={isSaved} onActionClicked={savePlaylist} onCancelClicked={clearAndGoBack} actionLabel="Save" />}
         {isSelectable && (
           <ActionButtons
             onActionClicked={confirmDeletePlaylistItems}
@@ -216,7 +216,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   }
 
   async function savePlaylist() {
-    setIsSaved(true)
+    setIsSaved(true);
     // @ts-ignore
     const mediaIds = selected.mediaItems.map((item) => item._id) || [];
     if (isSelectable) {
@@ -227,7 +227,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
     }
 
     setIsLoaded(false);
-    setIsSaved(false)
+    setIsSaved(false);
     // await loadData();
     goToPlaylists();
   }

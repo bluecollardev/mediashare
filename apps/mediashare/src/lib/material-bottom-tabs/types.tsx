@@ -1,12 +1,4 @@
-import type {
-  Descriptor,
-  NavigationHelpers,
-  NavigationProp,
-  ParamListBase,
-  RouteProp,
-  TabActionHelpers,
-  TabNavigationState,
-} from '@react-navigation/native';
+import type { Descriptor, NavigationHelpers, NavigationProp, ParamListBase, RouteProp, TabActionHelpers, TabNavigationState } from '@react-navigation/native';
 import type { BottomNavigation } from 'react-native-paper';
 
 export type MaterialBottomTabNavigationEventMap = {
@@ -16,24 +8,13 @@ export type MaterialBottomTabNavigationEventMap = {
   tabPress: { data: undefined; canPreventDefault: true };
 };
 
-export type MaterialBottomTabNavigationHelpers = NavigationHelpers<
-  ParamListBase,
-  MaterialBottomTabNavigationEventMap
-> &
-  TabActionHelpers<ParamListBase>;
+export type MaterialBottomTabNavigationHelpers = NavigationHelpers<ParamListBase, MaterialBottomTabNavigationEventMap> & TabActionHelpers<ParamListBase>;
 
 export type MaterialBottomTabNavigationProp<
   ParamList extends ParamListBase,
   RouteName extends keyof ParamList = keyof ParamList,
   NavigatorID extends string | undefined = undefined
-> = NavigationProp<
-  ParamList,
-  RouteName,
-  NavigatorID,
-  TabNavigationState<ParamList>,
-  MaterialBottomTabNavigationOptions,
-  MaterialBottomTabNavigationEventMap
-> &
+> = NavigationProp<ParamList, RouteName, NavigatorID, TabNavigationState<ParamList>, MaterialBottomTabNavigationOptions, MaterialBottomTabNavigationEventMap> &
   TabActionHelpers<ParamList>;
 
 export type MaterialBottomTabScreenProps<
@@ -41,11 +22,7 @@ export type MaterialBottomTabScreenProps<
   RouteName extends keyof ParamList = keyof ParamList,
   NavigatorID extends string | undefined = undefined
 > = {
-  navigation: MaterialBottomTabNavigationProp<
-    ParamList,
-    RouteName,
-    NavigatorID
-  >;
+  navigation: MaterialBottomTabNavigationProp<ParamList, RouteName, NavigatorID>;
   route: RouteProp<ParamList, RouteName>;
 };
 
@@ -69,9 +46,7 @@ export type MaterialBottomTabNavigationOptions = {
    * String referring to an icon in the `MaterialCommunityIcons` set, or a
    * function that given { focused: boolean, color: string } returns a React.Node to display in the navigation bar.
    */
-  tabBarIcon?:
-    | string
-    | ((props: { focused: boolean; color: string }) => React.ReactNode);
+  tabBarIcon?: string | ((props: { focused: boolean; color: string }) => React.ReactNode);
 
   /**
    * Badge to show on the tab icon, can be `true` to show a dot, `string` or `number` to show text.
@@ -95,10 +70,7 @@ export type MaterialBottomTabDescriptor = Descriptor<
   RouteProp<ParamListBase>
 >;
 
-export type MaterialBottomTabDescriptorMap = Record<
-  string,
-  MaterialBottomTabDescriptor
->;
+export type MaterialBottomTabDescriptorMap = Record<string, MaterialBottomTabDescriptor>;
 
 export type MaterialBottomTabNavigationConfig = Partial<
   Omit<
