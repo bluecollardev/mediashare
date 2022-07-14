@@ -79,9 +79,9 @@ export const Search = ({ globalState }: PageProps) => {
   // TODO: A generic data loader is a good idea, but we can do it later, use useAppSelector for now
   // const [{ state, loaded }] = useLoadPlaylistData();
   // TODO: Finish this!
-  // const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
-  const { selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
-  const entities = [] as any[];
+  const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
+  // const { selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
+  // const entities = [] as any[];
 
   const onRefresh = useCallback(refresh, [dispatch]);
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
