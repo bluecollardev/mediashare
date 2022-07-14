@@ -170,7 +170,7 @@ export const Playlists = ({ globalState }: PageProps) => {
     };
 
     if (args.text || args.tags.length > 0) {
-      await dispatch(findPlaylists(args));
+      await dispatch(getUserPlaylists());
     } else {
       await dispatch(getUserPlaylists());
     }

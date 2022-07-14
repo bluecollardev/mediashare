@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
-import { getUserPlaylists, findPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
+import { findPlaylists, selectPlaylist } from 'mediashare/store/modules/search';
 import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { GlobalStateProps, withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/navigation';
@@ -182,7 +182,7 @@ export const Search = ({ globalState }: PageProps) => {
 };
 
 export default withLoadingSpinner((state) => {
-  return !!state?.userPlaylists?.loading || false;
+  return !!state?.search?.loading || false;
 })(withGlobalStateConsumer(Search));
 
 const styles = StyleSheet.create({
