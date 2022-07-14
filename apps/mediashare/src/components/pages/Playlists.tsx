@@ -86,7 +86,6 @@ export const Playlists = ({ globalState }: PageProps) => {
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
-    loadData().then();
   }, []);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -114,24 +113,24 @@ export const Playlists = ({ globalState }: PageProps) => {
           title="Delete Playlists"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
-        {(!loaded && !loading) || (loaded && entities.length > 0) ? (
-          <PlaylistsComponentWithSearch
-            globalState={globalState}
-            loaded={loaded}
-            key={clearSelectionKey}
-            list={entities}
-            onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
-            selectable={isSelectable}
-            showActions={!isSelectable}
-            onChecked={updateSelection}
-          />
-        ) : loaded && entities.length === 0 ? (
+        <PlaylistsComponentWithSearch
+          globalState={globalState}
+          loaded={(!loaded && !loading) || (loaded && entities.length > 0)}
+          loadData={loadData}
+          key={clearSelectionKey}
+          list={entities}
+          onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
+          selectable={isSelectable}
+          showActions={!isSelectable}
+          onChecked={updateSelection}
+        />
+        {loaded && entities.length === 0 && (
           <NoContent
             onPress={() => createPlaylist()}
             messageButtonText="You have not created any playlists yet. Please create a playlist, or search for a community one to continue."
             icon="add-circle"
           />
-        ) : null}
+        )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>

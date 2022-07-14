@@ -9,12 +9,14 @@ import { components, theme } from 'mediashare/styles';
 export interface PlaylistSearchProps {
   globalState?: GlobalStateProps;
   loaded: boolean;
+  loadData: () => Promise<void>;
 }
 
 export const withPlaylistSearch = (WrappedComponent: any) => {
   return function PlaylistSearch({
     globalState = { setSearchFilters: () => undefined },
     loaded,
+    loadData = () => undefined,
     ...rest
   }: any) {
     const { setSearchFilters } = globalState;
@@ -39,6 +41,7 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
       const currentSearchFilters = globalState?.search;
       if (!loaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
         setPrevSearchFilters(currentSearchFilters);
+        loadData().then();
       }
     }, [loaded, globalState, searchFilters]);
 
@@ -84,7 +87,7 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
               actionLabel="Search"
               actionButtonStyles={{ backgroundColor: theme.colors.primary }}
               showCancel={false}
-              containerStyles={{ marginHorizontal: 0 }}
+              containerStyles={{ marginHorizontal: 0, marginTop: 15 }}
               onActionClicked={() => submitSearch()}
             />
             <Divider />
