@@ -89,7 +89,10 @@ export const Search = ({ globalState }: PageProps) => {
         ]
       : [];
 
-  const searchResults = !globalState?.searchIsFiltering ? [] : entities;
+  const searchResults = globalState?.searchIsFiltering ? entities : [];
+  console.log('search results filtering');
+  console.log(globalState?.searchIsFiltering);
+  console.log(searchResults);
 
   return (
     <PageContainer>

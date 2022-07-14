@@ -25,7 +25,7 @@ export interface GlobalStateProps {
   searchIsActive?: boolean;
   setSearchIsActive?: Function;
   setSearchFilters?: Function;
-  searchIsFiltering?: boolean;
+  searchIsFiltering?: () => boolean;
   openSearchConsole?: Function;
   closeSearchConsole?: Function;
   tags?: Tag[];
@@ -70,7 +70,6 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
     }, [isLoggedIn]);
 
     const providerValue = getProviderValue() as GlobalStateProps;
-    const searchIsFiltering = searchFilters?.text !== '' || searchFilters?.tags?.length > 0;
 
     return (
       <GlobalState.Provider value={providerValue}>
@@ -117,6 +116,10 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
     function closeSearchConsole() {
       setSearchIsActive(false);
       setSearchFilters({ text: '', tags: [] });
+    }
+
+    function searchIsFiltering() {
+      return searchFilters?.text !== '' || searchFilters?.tags?.length > 0;
     }
   };
 };
