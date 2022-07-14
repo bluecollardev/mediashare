@@ -21,7 +21,7 @@ const AppHeaderComponent = ({
   options,
   back,
   navigation,
-  showAccountMenu = true,
+  showAccountMenu = false,
   showNotificationsMenu = false,
   showDisplayControls = false,
   hideSearchIcon = false,

@@ -1,93 +1,118 @@
-import React from 'react';
-
 import { AppHeader } from 'mediashare/components/layout';
+import React from 'react';
 
 const routeConfig = {
   login: {
     name: 'login',
-    options: { title: '', header: () => null },
+    options: { title: '', header: () => null }
   },
   browse: {
     name: 'browse',
-    options: { title: 'My Feed', header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={true} /> },
+    options: {
+      title: 'My Feed',
+      header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={true} showAccountMenu={true} />
+    }
   },
   search: {
     name: 'search',
-    options: { title: 'Search', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" hideSearchIcon={true} /> },
+    options: {
+      title: 'Search',
+      header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" hideSearchIcon={true}
+                                    showAccountMenu={true} />
+    }
   },
   playlists: {
     name: 'playlists',
-    options: { title: 'Playlists', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" /> },
+    options: {
+      title: 'Playlists',
+      header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" showAccountMenu={true} />
+    }
   },
   playlistAdd: {
     name: 'playlistAdd',
-    options: { title: 'Create Playlist', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Create Playlist', header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
   },
   playlistDetail: {
     name: 'playlistDetail',
-    options: { title: 'Playlist', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Playlist', header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
   },
   playlistEdit: {
     name: 'playlistEdit',
-    options: { title: 'Edit Playlist', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Edit Playlist', header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
   },
   playlistItemDetail: {
     name: 'playlistItemDetail',
-    options: { title: 'Playlist Item', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Playlist Item', header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
   },
   playlistItemEdit: {
     name: 'playlistItemEdit',
-    options: { title: 'Edit Playlist Item', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Edit Playlist Item', header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
   },
   media: {
     name: 'media',
-    options: { title: 'Media Library', header: (props) => <AppHeader {...props} searchable={true} searchTarget="media" /> },
+    options: {
+      title: 'Media Library',
+      header: (props) => <AppHeader {...props} searchable={true} searchTarget="media" showAccountMenu={true} />
+    }
   },
   mediaItemAdd: {
     name: 'addMediaItem',
-    options: { title: 'Upload', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Upload', header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
   },
   mediaItemDetail: {
     name: 'mediaItemDetail',
-    options: { title: 'File Details', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'File Details', header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
   },
   mediaItemEdit: {
     name: 'mediaItemEdit',
-    options: { title: 'Edit Media', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Edit Media', header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
   },
   addFromFeed: {
     name: 'addFromFeed',
-    options: { title: 'Import From S3 Bucket', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Import From S3 Bucket', header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
   },
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
-    options: { title: 'Add Items To Playlist', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" /> },
+    options: {
+      title: 'Add Items To Playlist',
+      header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" showAccountMenu={true} />
+    }
   },
   shareWith: {
     name: 'shareWith',
-    options: { title: 'Share With', header: (props) => <AppHeader {...props} searchable={true} /> },
+    options: {
+      title: 'Share With',
+      header: (props) => <AppHeader {...props} searchable={true} showAccountMenu={true} />
+    }
   },
   account: {
     name: 'account',
-    options: { title: 'My Account', header: (props) => <AppHeader {...props} showNotificationsMenu={true} /> },
+    options: {
+      title: 'My Account',
+      header: (props) => <AppHeader {...props} showNotificationsMenu={true} showAccountMenu={false} />
+    }
   },
   accountEdit: {
     name: 'accountEdit',
-    options: { title: 'Update Account', header: (props) => <AppHeader {...props} /> },
+    options: { title: 'Update Account', header: (props) => <AppHeader {...props} showAccountMenu={false} /> }
   },
   contact: {
     name: 'contact',
-    options: { title: 'Contact', header: (props) => <AppHeader {...props} /> },
+    options: {
+      title: 'Contact',
+      header: (props) => <AppHeader {...props} showAccountMenu={false} showNotificationsMenu={true} />
+    }
   },
   sharedWithContact: {
     name: 'sharedWithContact',
-    options: { title: `Items You're Sharing`, header: (props) => <AppHeader {...props} /> },
+    options: { title: `Items You're Sharing`, header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
   },
   sharedByContact: {
     name: 'sharedByContact',
-    options: { title: `Items They're Sharing`, header: (props) => <AppHeader {...props} /> },
-  },
+    options: { title: `Items They're Sharing`, header: (props) => <AppHeader {...props} showAccountMenu={true} /> }
+  }
 } as const;
+
 type RouteEnumKeys = keyof typeof routeConfig;
 type RouteEnumType<Key extends RouteEnumKeys> = typeof routeConfig[Key]['name'];
 type MappedRouteEnum = { [P in RouteEnumKeys]: RouteEnumType<P> };
