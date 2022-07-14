@@ -83,6 +83,7 @@ export const Playlists = ({ globalState }: PageProps) => {
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
+    loadData().then();
   }, []);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -170,7 +171,7 @@ export const Playlists = ({ globalState }: PageProps) => {
     };
 
     if (args.text || args.tags.length > 0) {
-      await dispatch(getUserPlaylists());
+      await dispatch(findPlaylists(args));
     } else {
       await dispatch(getUserPlaylists());
     }
