@@ -1,4 +1,3 @@
-import { getPlaylistById } from 'mediashare/store/modules/playlist';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
@@ -24,8 +23,6 @@ export interface PlaylistItemEditContainerProps {
   fetchList: Function;
   data: Object;
 }
-
-export interface PlaylistItemEditContainerState {}
 
 const PlaylistItemEdit = ({
   navigation,

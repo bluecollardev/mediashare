@@ -150,7 +150,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
                 showCancel={false}
                 cancelIcon="rule"
-                actionLabel="Add To Playlist"
+                actionLabel="Add Items To Playlist"
                 actionIcon="playlist-add"
                 onActionClicked={() => addToPlaylist({ playlistId })}
               />
@@ -210,12 +210,18 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     await goToPlaylists();
   }
 
+  function hasPlaylistItemRecord(item) {
+    return item._id === item.playlistItemId;
+  }
+
   function activatePlaylistDetail(item) {
     console.log('activatePlaylistDetail');
     console.log(item);
     return allowEdit
       ? editPlaylistMediaItem({ playlistItemId: item.playlistItemId, mediaId: item.mediaItemId, uri: item.uri, playlistId })
-      : viewPlaylistMediaItem({ mediaId: item._id, uri: item.uri });
+      : hasPlaylistItemRecord(item)
+        ? viewPlaylistMediaItem( { playlistItemId: item._id, uri: item.uri })
+        : viewPlaylistMediaItem({ mediaId: item._id, uri: item.uri });
   }
 
   async function viewPlaylistMediaItem({ playlistItemId = undefined, mediaId = undefined, uri = undefined }) {
@@ -227,7 +233,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     }
   }
 
-  async function editPlaylistMediaItem({ playlistId = undefined, playlistItemId = undefined, mediaId = undefined, uri = undefined }) {
+  async function editPlaylistMediaItem({ playlistItemId = undefined, playlistId = undefined, mediaId = undefined, uri = undefined }) {
     console.log('editPlaylistMediaItem');
     let itemId = playlistItemId || mediaId;
     if (!playlistItemId) {

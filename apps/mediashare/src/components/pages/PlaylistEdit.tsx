@@ -165,8 +165,8 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
               onCancelClicked={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
               cancelIconColor={isSelectable ? theme.colors.primary : theme.colors.disabled}
               disableAction={actionMode === actionModes.delete}
-              actionLabel="Add To Playlist"
-              actionIcon={!(Array.isArray(items) && items.length > 0) ? 'playlist-add' : undefined}
+              actionLabel="Add Items To Playlist"
+              actionIcon={!(Array.isArray(items) && items.length > 0) ? 'playlist-add' : 'playlist-add'}
               onActionClicked={() => addToPlaylist({ playlistId })}
             />
             <MediaList

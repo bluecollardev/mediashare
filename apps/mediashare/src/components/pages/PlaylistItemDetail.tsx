@@ -8,8 +8,8 @@ import { PageContainer, PageContent, PageProps, MediaCard } from 'mediashare/com
 import { AuthorProfileDto } from 'mediashare/rxjs-api';
 
 // @ts-ignore
-export const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
-  const mediaItem = useAppSelector((state) => state?.mediaItem?.entity);
+export const PlaylistItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
+  const mediaItem = useAppSelector((state) => state?.playlistItem?.entity);
   const {
     _id,
     title = '',
@@ -56,4 +56,4 @@ export const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
   );
 };
 
-export default withLoadingSpinner(undefined)(withGlobalStateConsumer(MediaItemDetail));
+export default withLoadingSpinner(undefined)(withGlobalStateConsumer(PlaylistItemDetail));

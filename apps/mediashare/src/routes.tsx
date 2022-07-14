@@ -31,6 +31,10 @@ const routeConfig = {
     name: 'playlistEdit',
     options: { title: 'Edit Playlist', header: (props) => <AppHeader {...props} /> },
   },
+  playlistItemDetail: {
+    name: 'playlistItemDetail',
+    options: { title: 'Playlist Item', header: (props) => <AppHeader {...props} /> },
+  },
   playlistItemEdit: {
     name: 'playlistItemEdit',
     options: { title: 'Edit Playlist Item', header: (props) => <AppHeader {...props} /> },
@@ -57,7 +61,7 @@ const routeConfig = {
   },
   addItemsToPlaylist: {
     name: 'addItemsToPlaylist',
-    options: { title: 'Add To Playlist', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" /> },
+    options: { title: 'Add Items To Playlist', header: (props) => <AppHeader {...props} searchable={true} searchTarget="playlists" /> },
   },
   shareWith: {
     name: 'shareWith',

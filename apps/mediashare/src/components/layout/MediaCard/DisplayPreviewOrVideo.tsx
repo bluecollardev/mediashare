@@ -15,6 +15,7 @@ export interface DisplayPreviewOrVideoProps {
   thumbnail?: string;
 }
 
+// TODO: Use MediaPreview component!
 export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ mediaSrc, isPlayable = false, showThumbnail = true, thumbnail = null }) => {
   const getMediaDisplayMode = () => (showThumbnail && thumbnail ? 'image' : 'video');
   const initialMediaDisplayMode = isPlayable ? (getMediaDisplayMode() as MediaDisplayMode) : 'image';
@@ -31,12 +32,13 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
         marginRight: 'auto',
       }}
     >
+      {/* TODO: Use MediaPreview component here! */}
       {mediaDisplayMode === 'image' && !isDefaultImage ? (
         <ImageBackground source={{ uri: imageSrc }} resizeMode="contain" style={{ width: '100%', height: '100%' }}>
           {isPlayable && (
             <TouchableWithoutFeedback onPress={toggleMediaMode}>
               <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                <Button icon="play-circle-filled" color="#ffffff" labelStyle={{ fontSize: 50 }}>
+                <Button icon="play-circle-filled" textColor="rgba(255,255,255,0.666)" labelStyle={{ fontSize: 50 }}>
                   {' '}
                 </Button>
               </View>

@@ -26,14 +26,15 @@ import MediaItemAdd from './components/pages/MediaItemAdd';
 import AddFromFeed from './components/pages/AddFromFeed';
 import Search from './components/pages/Search';
 import Playlists from './components/pages/Playlists';
-import PlaylistDetail from './components/pages/PlaylistDetail';
-import PlaylistEdit from './components/pages/PlaylistEdit';
 import PlaylistAdd from './components/pages/PlaylistAdd';
+import PlaylistEdit from './components/pages/PlaylistEdit';
+import PlaylistDetail from './components/pages/PlaylistDetail';
+import PlaylistItemDetail from './components/pages/PlaylistItemDetail';
+import PlaylistItemEdit from './components/pages/PlaylistItemEdit';
 import AddToPlaylist from './components/pages/AddToPlaylist';
 import Media from './components/pages/Media';
 import MediaItemDetail from './components/pages/MediaItemDetail';
 import MediaItemEdit from './components/pages/MediaItemEdit';
-import PlaylistItemEdit from './components/pages/PlaylistItemEdit';
 import ShareWith from './components/pages/ShareWith';
 import Account from './components/pages/Account';
 import AccountEdit from './components/pages/AccountEdit';
@@ -57,6 +58,7 @@ const BrowseNavigation = () => {
     <BrowseStackNavigator.Navigator>
       <BrowseStackNavigator.Screen {...routeConfig.browse} component={Browse} />
       <BrowseStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
+      <BrowseStackNavigator.Screen {...routeConfig.playlistItemDetail} component={PlaylistItemDetail} />
       <BrowseStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
       <BrowseStackNavigator.Screen {...routeConfig.shareWith} component={ShareWith} />
     </BrowseStackNavigator.Navigator>

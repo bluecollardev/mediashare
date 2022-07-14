@@ -97,13 +97,18 @@ export function useEditPlaylistById() {
   };
 }
 
-// TODO: Finish this
 export function useViewPlaylistItemById() {
   const nav = useNavigation();
   const dispatch = useDispatch();
   return async ({ playlistItemId = undefined, mediaId = undefined, uri = undefined }) => {
+    console.log('useViewPlaylistItemById handler');
+    console.log(playlistItemId);
+    console.log(mediaId);
+    console.log(uri);
     if (playlistItemId) {
       await dispatch(getPlaylistItemById({ playlistItemId, uri }));
+      // @ts-ignore
+      nav.navigate(routeNames.playlistItemDetail, { playlistItemId, uri });
     } else if (mediaId) {
       await dispatch(getMediaItemById({ mediaId, uri }));
       // @ts-ignore

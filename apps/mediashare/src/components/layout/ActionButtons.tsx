@@ -38,7 +38,7 @@ export function ActionButtons({
   disableAction = false,
   onActionClicked = () => undefined,
   actionLabel = 'Done',
-  // actionIcon = undefined, // or eg. 'check-circle',
+  actionIcon = undefined, // or eg. 'check-circle',
   actionIconColor = theme.colors.white,
   loading = false,
   containerStyles = {},
@@ -79,7 +79,7 @@ export function ActionButtons({
           >
             <View style={{ ...defaultStyles.actionButton, ...actionButtonStyles, ...(disableAction ? defaultStyles.actionButtonDisabled : {}) }}>
               {loading && <ActivityIndicator size="small" color={actionIconColor} style={{ paddingRight: 15 }} />}
-              {/* <IconButton color={actionIconColor} icon={actionIcon} /> */}
+              <IconButton iconColor={actionIconColor} icon={actionIcon} />
               {!!actionLabel && (
                 <Text
                   style={{ ...defaultStyles.actionButtonLabel, ...actionButtonLabelStyles, ...(disableAction ? defaultStyles.actionButtonLabelDisabled : {}) }}
