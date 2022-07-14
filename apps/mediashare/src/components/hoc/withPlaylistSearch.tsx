@@ -11,6 +11,7 @@ export interface PlaylistSearchProps {
   loaded: boolean;
   loadData: () => Promise<void>;
   searchTarget: 'playlists' | 'media';
+  forcedSearchMode?: boolean;
 }
 
 export const withPlaylistSearch = (WrappedComponent: any) => {
@@ -24,9 +25,10 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
     loaded,
     loadData = () => undefined,
     searchTarget,
+    forcedSearchMode,
     ...rest
   }: any) {
-    const { openSearchConsole, closeSearchConsole, searchIsActive, setSearchFilters } = globalState;
+    const { searchIsActive, setSearchFilters } = globalState;
     // const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
     // const [searchIsActive, setSearchIsActive] = useState(false);
     const [searchText, setSearchText] = useState('');
@@ -51,7 +53,7 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
 
     return (
       <>
-        {searchIsActive && (
+        {(forcedSearchMode ? forcedSearchMode : searchIsActive) && (
           <Card>
             <Card.Content>
               <Searchbar

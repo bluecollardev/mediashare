@@ -97,6 +97,7 @@ export const Search = ({ globalState }: PageProps) => {
           globalState={globalState}
           loaded={loaded}
           loadData={loadData}
+          forcedSearchMode={true}
           key={clearSelectionKey}
           list={entities}
           onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
