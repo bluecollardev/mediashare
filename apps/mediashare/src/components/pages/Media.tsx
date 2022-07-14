@@ -6,11 +6,12 @@ import { useAppSelector } from 'mediashare/store';
 import { deleteMediaItem } from 'mediashare/store/modules/mediaItem';
 import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { withPlaylistSearch } from 'mediashare/components/hoc/withPlaylistSearch';
 import { useRouteName, useEditMediaItemById } from 'mediashare/hooks/navigation';
+import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { AuthorProfileDto, MediaItem, MediaItemResponseDto } from 'mediashare/rxjs-api';
 import { RefreshControl } from 'react-native';
 import { FAB, Divider } from 'react-native-paper';
-import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import {
   PageContainer,
   PageProps,
@@ -75,6 +76,8 @@ export const MediaComponent = ({
 
 const actionModes = { delete: 'delete', default: 'default' };
 
+const MediaComponentWithSearch = withPlaylistSearch(MediaComponent);
+
 export const Media = ({ navigation, globalState }: PageProps) => {
   const dispatch = useDispatch();
 
@@ -85,23 +88,14 @@ export const Media = ({ navigation, globalState }: PageProps) => {
   const [isSelectable, setIsSelectable] = useState(false);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(refresh, [dispatch]);
 
   const { entities, selected, loaded, loading } = useAppSelector((state) => state?.mediaItems);
-
-  const onRefresh = useCallback(refresh, [dispatch]);
-  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
-  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
-  useEffect(() => {
-    const currentSearchFilters = globalState?.search;
-    if (!loaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
-      setPrevSearchFilters(currentSearchFilters);
-      loadData().then();
-    }
-  }, [loaded, globalState, searchFilters]);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
+    loadData().then();
   }, []);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -126,23 +120,26 @@ export const Media = ({ navigation, globalState }: PageProps) => {
           title="Delete Media Items"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
-        {(!loaded && !loading) || (loaded && entities.length > 0) ? (
-          <MediaComponent
-            key={clearSelectionKey}
-            navigation={navigation}
-            list={entities}
-            showActions={!isSelectable}
-            selectable={isSelectable}
-            onViewDetail={onEditItem}
-            onChecked={updateSelection}
-          />
-        ) : loaded && entities.length === 0 ? (
+        <MediaComponentWithSearch
+          globalState={globalState}
+          loaded={(!loaded && !loading) || (loaded && entities.length > 0)}
+          loadData={loadData}
+          searchTarget="media"
+          key={clearSelectionKey}
+          navigation={navigation}
+          list={entities}
+          showActions={!isSelectable}
+          selectable={isSelectable}
+          onViewDetail={onEditItem}
+          onChecked={updateSelection}
+        />
+        {loaded && entities.length === 0 && (
           <NoContent
             onPress={addMedia}
             messageButtonText="You have not added any media items to your library. Please add and item to your library to continue."
             icon="add-circle"
           />
-        ) : null}
+        )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
