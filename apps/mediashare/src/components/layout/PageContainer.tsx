@@ -30,7 +30,11 @@ export interface PageContentProps {
 export function PageContent({ children }: PageContentProps) {
   return (
     <View style={styles.pageContent}>
-      <View>{children}</View>
+      <View>
+        <Card>
+          <Card.Content>{children}</Card.Content>
+        </Card>
+      </View>
     </View>
   );
 }

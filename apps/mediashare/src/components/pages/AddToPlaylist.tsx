@@ -8,54 +8,23 @@ import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { AuthorProfileDto, UpdatePlaylistDto } from 'mediashare/rxjs-api';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
+import { withPlaylistSearch } from 'mediashare/components/hoc/withPlaylistSearch';
 import { useGoBack, useViewMediaItemById } from 'mediashare/hooks/navigation';
-import { PageContainer, PageActions, PageProps, PageContent, NoItems, ActionButtons, MediaListType, MediaListItem } from 'mediashare/components/layout';
+import {
+  PageContainer,
+  PageActions,
+  PageProps,
+  PageContent,
+  ActionButtons,
+  MediaListType,
+  MediaListItem,
+  NoContent
+} from 'mediashare/components/layout';
 
 import { theme } from 'mediashare/styles';
 
-export const AddToPlaylist = ({ route, globalState }: PageProps) => {
-  const { playlistId } = route.params;
-
-  const dispatch = useDispatch();
-  const viewMediaItem = useViewMediaItemById();
-  const goBack = useGoBack();
-
-  const playlist = useAppSelector((state) => state?.playlist?.selected);
-  // @ts-ignore
-  const [mediaItems, setMediaItems] = useState((playlist?.mediaItems as MediaListType[]) || []);
-
-  const { loading, loaded, entities = [] as any[] } = useAppSelector((state) => state?.mediaItems);
-  const [isLoaded, setIsLoaded] = useState(loaded);
-  useEffect(() => {
-    if (loaded && !isLoaded) {
-      setIsLoaded(true);
-    }
-  }, [loaded]);
-
-  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
-  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
-  useEffect(() => {
-    const currentSearchFilters = globalState?.search;
-    if (!isLoaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
-      setPrevSearchFilters(currentSearchFilters);
-      loadData().then();
-    }
-  }, [isLoaded, globalState, searchFilters]);
-
-  return (
-    <PageContainer>
-      <PageContent>
-        {isLoaded ? (
-          <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
-        ) : (
-          <NoItems text={loading ? 'Loading...' : 'There are no items in your media library.'} />
-        )}
-      </PageContent>
-      <PageActions>
-        <ActionButtons onActionClicked={saveItems} actionLabel="Save" onCancelClicked={cancel} />
-      </PageActions>
-    </PageContainer>
-  );
+export const AddToPlaylistComponent = ({ entities, viewMediaItem, addItem, removeItem }) => {
+  return <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
 
   function renderVirtualizedListItem(item) {
     const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, thumbnail = '' } = item;
@@ -79,6 +48,53 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
       </>
     );
   }
+}
+
+const AddToPlaylistComponentWithSearch = withPlaylistSearch(AddToPlaylistComponent);
+
+export const AddToPlaylist = ({ route, globalState }: PageProps) => {
+  const { playlistId } = route.params;
+
+  const dispatch = useDispatch();
+  const viewMediaItem = useViewMediaItemById();
+  const goBack = useGoBack();
+
+  const playlist = useAppSelector((state) => state?.playlist?.selected);
+  // @ts-ignore
+  const [mediaItems, setMediaItems] = useState((playlist?.mediaItems as MediaListType[]) || []);
+
+  const { loading, loaded, entities = [] as any[] } = useAppSelector((state) => state?.mediaItems);
+
+  useEffect(() => {
+    loadData().then();
+  }, []);
+
+  return (
+    <PageContainer>
+      <PageContent>
+        <AddToPlaylistComponentWithSearch
+          globalState={globalState}
+          loaded={(!loaded && !loading) || (loaded && entities.length > 0)}
+          loadData={loadData}
+          searchTarget="media"
+          entities={entities}
+          viewMediaItem={viewMediaItem}
+          addItem={addItem}
+          removeItem={removeItem}
+        />
+        {loaded && entities.length === 0 && (
+          <NoContent
+            onPress={() => undefined}
+            messageButtonText="There are no items in your media library to add."
+            icon="info"
+          />
+        )}
+      </PageContent>
+      <PageActions>
+        <ActionButtons onActionClicked={saveItems} actionLabel="Save" onCancelClicked={cancel} />
+      </PageActions>
+    </PageContainer>
+  );
 
   async function loadData() {
     const { search } = globalState;
@@ -121,12 +137,10 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
       imageSrc: playlist?.imageSrc,
     };
     await dispatch(updateUserPlaylist(dto));
-    setIsLoaded(false);
     goBack();
   }
 
   function cancel() {
-    setIsLoaded(false);
     goBack();
   }
 };
