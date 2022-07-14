@@ -75,6 +75,7 @@ export const Search = ({ globalState }: PageProps) => {
   const onRefresh = useCallback(refresh, [dispatch]);
 
   const { entities = [] as any[], loaded } = useAppSelector((state) => state?.search);
+  const searchResults = globalState?.searchIsFiltering() ? entities : [];
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
@@ -83,13 +84,11 @@ export const Search = ({ globalState }: PageProps) => {
 
   const [fabState, setFabState] = useState({ open: false });
   const fabActions =
-    entities.length > 0
-      ? [
-          { icon: 'share', onPress: () => activateShareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } },
-        ]
+    searchResults.length > 0
+      ? [{ icon: 'share', onPress: () => activateShareMode(), color: theme.colors.text, style: { backgroundColor: theme.colors.primary } }]
       : [];
 
-  const searchResults = globalState?.searchIsFiltering() ? entities : [];
+
   console.log('search results filtering');
   console.log(globalState?.searchIsFiltering());
   console.log(searchResults);
@@ -122,7 +121,7 @@ export const Search = ({ globalState }: PageProps) => {
           <ActionButtons onActionClicked={confirmPlaylistsToShare} onCancelClicked={cancelPlaylistsToShare} actionLabel="Share With" actionIcon="group" />
         </PageActions>
       )}
-      {!isSelectable && entities.length > 0 && (
+      {!isSelectable && searchResults.length > 0 && (
         <FAB.Group
           visible={true}
           open={fabState.open}
