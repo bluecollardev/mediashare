@@ -57,6 +57,7 @@ const MediaListItem = ({
 
   return (
     <List.Item
+      style={defaultStyles.listItem}
       title={title || null}
       titleNumberOfLines={3}
       titleEllipsizeMode="tail"
@@ -111,6 +112,10 @@ MediaListItem.Description = MediaListItemDescription;
 export { MediaListItem };
 
 const defaultStyles: any = StyleSheet.create({
+  listItem: {
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
   mediaListItem: {
     display: 'flex',
     flexDirection: 'row',

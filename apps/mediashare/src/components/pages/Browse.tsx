@@ -6,7 +6,7 @@ import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner
 import { useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { ScrollView, View } from 'react-native';
-import { List } from 'react-native-paper';
+import { List, Card } from 'react-native-paper';
 import { PageContainer, PageProps, MediaCard, ActionButtons, NoContent } from 'mediashare/components/layout';
 import { PlaylistsComponent } from './Playlists';
 import { filterUnique, shortenText } from 'mediashare/utils';
@@ -108,12 +108,16 @@ export const Browse = ({
 
   return (
     <PageContainer>
-      {globalState?.displayMode === 'list' && <SharedList globalState={globalState} />}
-      {globalState?.displayMode === 'article' && (
-        <ScrollView>
-          <SharedBlock globalState={globalState} />
-        </ScrollView>
-      )}
+      <Card>
+        <Card.Content>
+          {globalState?.displayMode === 'list' && <SharedList globalState={globalState} />}
+          {globalState?.displayMode === 'article' && (
+            <ScrollView>
+              <SharedBlock globalState={globalState} />
+            </ScrollView>
+          )}
+        </Card.Content>
+      </Card>
     </PageContainer>
   );
 

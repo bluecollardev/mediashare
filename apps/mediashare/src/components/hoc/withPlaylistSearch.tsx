@@ -54,61 +54,54 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
     return (
       <>
         {(forcedSearchMode ? forcedSearchMode : searchIsActive) && (
-          <Card>
-            <Card.Content>
-              <Searchbar
-                style={{ width: '100%', marginTop: 15 }}
-                inputStyle={{ fontSize: 15 }}
-                placeholder="Keywords"
-                value={searchText}
-                onChangeText={(text) => updateSearchText(text)}
-                // onIconPress={() => closeSearchConsole()}
-                icon=""
-                // icon="arrow-back-ios"
-                clearIcon="clear"
-                autoCapitalize="none"
-              />
-              {/* <Appbar.Action icon="close" onPress={() => closeSearchConsole()} /> */}
-              <SectionedMultiSelect
-                colors={components.multiSelect.colors}
-                styles={components.multiSelect.styles}
-                items={mappedTags}
-                IconRenderer={MultiSelectIcon}
-                uniqueKey="key"
-                displayKey="value"
-                subKey="children"
-                searchPlaceholderText="Enter Text"
-                selectText="Select Tags"
-                confirmText="Done"
-                onSelectedItemsChange={updateSearchTags}
-                selectedItems={searchTags}
-                hideSearch={true}
-                showRemoveAll={true}
-                expandDropDowns={false}
-                readOnlyHeadings={false}
-                showDropDowns={true}
-                parentChipsRemoveChildren={true}
-                showCancelButton={true}
-                modalWithTouchable={false}
-                modalWithSafeAreaView={false}
-              />
-              <ActionButtons
-                actionLabel="Search"
-                actionButtonStyles={{ backgroundColor: theme.colors.secondary }}
-                showCancel={false}
-                containerStyles={{ marginHorizontal: 0, marginTop: 15 }}
-                onActionClicked={() => submitSearch()}
-              />
-
-            </Card.Content>
-          </Card>
+          <>
+            <Searchbar
+              style={{ width: '100%', marginTop: 15 }}
+              inputStyle={{ fontSize: 15 }}
+              placeholder="Keywords"
+              value={searchText}
+              onChangeText={(text) => updateSearchText(text)}
+              // onIconPress={() => closeSearchConsole()}
+              icon=""
+              // icon="arrow-back-ios"
+              clearIcon="clear"
+              autoCapitalize="none"
+            />
+            {/* <Appbar.Action icon="close" onPress={() => closeSearchConsole()} /> */}
+            <SectionedMultiSelect
+              colors={components.multiSelect.colors}
+              styles={components.multiSelect.styles}
+              items={mappedTags}
+              IconRenderer={MultiSelectIcon}
+              uniqueKey="key"
+              displayKey="value"
+              subKey="children"
+              searchPlaceholderText="Enter Text"
+              selectText="Select Tags"
+              confirmText="Done"
+              onSelectedItemsChange={updateSearchTags}
+              selectedItems={searchTags}
+              hideSearch={true}
+              showRemoveAll={true}
+              expandDropDowns={false}
+              readOnlyHeadings={false}
+              showDropDowns={true}
+              parentChipsRemoveChildren={true}
+              showCancelButton={true}
+              modalWithTouchable={false}
+              modalWithSafeAreaView={false}
+            />
+            <ActionButtons
+              actionLabel="Search"
+              actionButtonStyles={{ backgroundColor: theme.colors.secondary }}
+              showCancel={false}
+              containerStyles={{ marginHorizontal: 0, marginTop: 15 }}
+              onActionClicked={() => submitSearch()}
+            />
+          </>
         )}
         <Divider />
-        <Card>
-          <Card.Content>
-            <WrappedComponent globalState={globalState} {...rest} />
-          </Card.Content>
-        </Card>
+        <WrappedComponent globalState={globalState} {...rest} />
       </>
     );
 
