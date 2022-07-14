@@ -74,7 +74,7 @@ export const Search = ({ globalState }: PageProps) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(refresh, [dispatch]);
 
-  const { entities = [] as any[], loaded } = useAppSelector((state) => state?.userPlaylists);
+  const { entities = [] as any[], loaded } = useAppSelector((state) => state?.search);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
@@ -89,9 +89,9 @@ export const Search = ({ globalState }: PageProps) => {
         ]
       : [];
 
-  const searchResults = globalState?.searchIsFiltering ? entities : [];
+  const searchResults = globalState?.searchIsFiltering() ? entities : [];
   console.log('search results filtering');
-  console.log(globalState?.searchIsFiltering);
+  console.log(globalState?.searchIsFiltering());
   console.log(searchResults);
 
   return (
@@ -144,12 +144,7 @@ export const Search = ({ globalState }: PageProps) => {
       text: search?.filters?.text ? search.filters.text : '',
       tags: search?.filters?.tags || [],
     };
-
-    if (args.text || args.tags.length > 0) {
-      await dispatch(findPlaylists(args));
-    } else {
-      await dispatch(getUserPlaylists());
-    }
+    await dispatch(findPlaylists(args));
   }
 
   async function refresh() {
