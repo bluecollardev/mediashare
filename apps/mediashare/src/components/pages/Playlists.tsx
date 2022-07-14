@@ -1,3 +1,4 @@
+import { withPlaylistSearch } from 'mediashare/components/hoc/withPlaylistSearch';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { routeNames } from 'mediashare/routes';
@@ -63,6 +64,8 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
 
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
+const PlaylistsComponentWithSearch = withPlaylistSearch(PlaylistsComponent)
+
 export const Playlists = ({ globalState }: PageProps) => {
   const dispatch = useDispatch();
 
@@ -79,19 +82,11 @@ export const Playlists = ({ globalState }: PageProps) => {
   const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
 
   const onRefresh = useCallback(refresh, [dispatch]);
-  const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
-  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
-  useEffect(() => {
-    const currentSearchFilters = globalState?.search;
-    if (!loaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
-      setPrevSearchFilters(currentSearchFilters);
-      loadData().then();
-    }
-  }, [loaded, globalState, searchFilters]);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
+    loadData().then();
   }, []);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -120,7 +115,9 @@ export const Playlists = ({ globalState }: PageProps) => {
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
         />
         {(!loaded && !loading) || (loaded && entities.length > 0) ? (
-          <PlaylistsComponent
+          <PlaylistsComponentWithSearch
+            globalState={globalState}
+            loaded={loaded}
             key={clearSelectionKey}
             list={entities}
             onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}

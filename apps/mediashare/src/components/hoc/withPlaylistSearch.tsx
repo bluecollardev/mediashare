@@ -1,24 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import { ActionButtons } from 'mediashare/components/layout';
+import React, { useEffect, useMemo, useState } from 'react';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { MultiSelectIcon } from 'mediashare/components/form';
 import { GlobalStateProps } from 'mediashare/core/globalState';
 import { Card, Divider, Searchbar } from 'react-native-paper';
-import { components } from 'mediashare/styles';
+import { components, theme } from 'mediashare/styles';
 
 export interface PlaylistSearchProps {
-  globalState: GlobalStateProps;
+  globalState?: GlobalStateProps;
   loaded: boolean;
-  loadData: () => Promise<void>;
-  mappedTags: any[];
 }
 
 export const withPlaylistSearch = (WrappedComponent: any) => {
-  return function PlaylistSearch({ globalState, loaded, loadData, mappedTags, ...rest }: any) {
+  return function PlaylistSearch({
+    globalState = { setSearchFilters: () => undefined },
+    loaded,
+    ...rest
+  }: any) {
     const { setSearchFilters } = globalState;
     // const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
     // const [searchIsActive, setSearchIsActive] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [searchTags, setSearchTags] = useState([]);
+
+    // TODO: Make this configurable
+    const searchTarget = 'playlists';
+
+    const mappedTags = useMemo(() => {
+      const availableTags = Array.isArray(globalState?.tags) ? globalState.tags : [];
+      if (searchTarget === 'playlists') return availableTags.filter((tag) => tag.isPlaylistTag);
+      if (searchTarget === 'media') return availableTags.filter((tag) => tag.isMediaTag);
+      return availableTags;
+    }, []);
 
     const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
     const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
@@ -26,7 +39,6 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
       const currentSearchFilters = globalState?.search;
       if (!loaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
         setPrevSearchFilters(currentSearchFilters);
-        loadData().then();
       }
     }, [loaded, globalState, searchFilters]);
 
@@ -68,10 +80,18 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
               modalWithTouchable={false}
               modalWithSafeAreaView={false}
             />
+            <ActionButtons
+              actionLabel="Search"
+              actionButtonStyles={{ backgroundColor: theme.colors.primary }}
+              showCancel={false}
+              containerStyles={{ marginHorizontal: 0 }}
+              onActionClicked={() => submitSearch()}
+            />
             <Divider />
             <WrappedComponent globalState={globalState} {...rest} />
           </Card.Content>
         </Card>
+
       </>
     );
 

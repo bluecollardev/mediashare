@@ -1,6 +1,4 @@
-import { MultiSelectIcon } from 'mediashare/components/form';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
@@ -8,8 +6,9 @@ import { getUserPlaylists, findPlaylists, selectPlaylist } from 'mediashare/stor
 import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { GlobalStateProps, withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/navigation';
+import { withPlaylistSearch } from 'mediashare/components/hoc/withPlaylistSearch';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { FAB, Divider, Appbar, Card, Searchbar } from 'react-native-paper';
+import { FAB, Divider } from 'react-native-paper';
 import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import {
   PageActions,
@@ -21,7 +20,7 @@ import {
   NoContent,
 } from 'mediashare/components/layout';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
-import { components, theme } from 'mediashare/styles';
+import { theme } from 'mediashare/styles';
 
 export interface SearchProps {
   list: PlaylistResponseDto[];
@@ -33,9 +32,7 @@ export interface SearchProps {
   globalState?: GlobalStateProps;
 }
 
-export const SearchComponent = ({ list = [], onViewDetailClicked, selectable = false, showActions = true, onChecked = () => undefined }: SearchProps) => {
-
-
+export const SearchComponent = withPlaylistSearch(({ list = [], onViewDetailClicked, selectable = false, showActions = true, onChecked = () => undefined }: SearchProps) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
@@ -62,7 +59,7 @@ export const SearchComponent = ({ list = [], onViewDetailClicked, selectable = f
       </>
     );
   }
-};
+});
 
 const actionModes = { share: 'share', delete: 'delete', default: 'default' };
 
@@ -79,39 +76,18 @@ export const Search = ({ globalState }: PageProps) => {
   // TODO: A generic data loader is a good idea, but we can do it later, use useAppSelector for now
   // const [{ state, loaded }] = useLoadPlaylistData();
   // TODO: Finish this!
-  const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
-  // const { selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
-  // const entities = [] as any[];
+  // const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
+  const { selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
+  const entities = [] as any[];
 
   const onRefresh = useCallback(refresh, [dispatch]);
   const searchFilters = globalState?.search?.filters || { text: '', tags: [] };
   const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '', tags: [] } });
-  useEffect(() => {
-    const currentSearchFilters = globalState?.search;
-    if (!loaded || JSON.stringify(currentSearchFilters) !== JSON.stringify(prevSearchFilters)) {
-      setPrevSearchFilters(currentSearchFilters);
-      loadData().then();
-    }
-  }, [loaded, globalState, searchFilters]);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
-  }, []);
-
-  const { setSearchFilters } = globalState;
-  const searchIsFiltering = globalState?.search?.filters?.text !== '' || globalState?.search?.filters?.tags?.length > 0;
-  const [searchIsActive, setSearchIsActive] = useState(false);
-  const [searchText, setSearchText] = useState('');
-  const [searchTags, setSearchTags] = useState([]);
-
-  const searchTarget = 'playlists';
-
-  const mappedTags = useMemo(() => {
-    const availableTags = Array.isArray(globalState?.tags) ? globalState.tags : [];
-    if (searchTarget === 'playlists') return availableTags.filter((tag) => tag.isPlaylistTag);
-    if (searchTarget === 'media') return availableTags.filter((tag) => tag.isMediaTag);
-    return availableTags;
+    loadData().then();
   }, []);
 
   const [fabState, setFabState] = useState({ open: false });
@@ -125,60 +101,22 @@ export const Search = ({ globalState }: PageProps) => {
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        <Card>
-          <Card.Content>
-            <Searchbar
-              style={{ width: '100%', marginTop: 15 }}
-              inputStyle={{ fontSize: 15 }}
-              placeholder="Keywords"
-              value={searchText}
-              onChangeText={(text) => updateSearchText(text)}
-              onIconPress={() => closeSearchConsole()}
-              icon=""
-              // icon="arrow-back-ios"
-              clearIcon="clear"
-              autoCapitalize="none"
-            />
-            {/* <Appbar.Action icon="close" onPress={() => closeSearchConsole()} /> */}
-            <SectionedMultiSelect
-              colors={components.multiSelect.colors}
-              styles={components.multiSelect.styles}
-              items={mappedTags}
-              IconRenderer={MultiSelectIcon}
-              uniqueKey="key"
-              displayKey="value"
-              subKey="children"
-              searchPlaceholderText="Enter Text"
-              selectText="Select Tags"
-              confirmText="Done"
-              onSelectedItemsChange={updateSearchTags}
-              selectedItems={searchTags}
-              expandDropDowns={false}
-              readOnlyHeadings={false}
-              showDropDowns={true}
-              parentChipsRemoveChildren={true}
-              showCancelButton={true}
-              modalWithTouchable={false}
-              modalWithSafeAreaView={false}
-            />
-            <Divider />
-            {(!loaded && !loading) || (loaded && entities.length > 0) ? (
-              <SearchComponent
-                key={clearSelectionKey}
-                list={entities}
-                onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
-                selectable={isSelectable}
-                showActions={!isSelectable}
-                onChecked={updateSelection}
-              />
-            ) : loaded && entities.length === 0 ? (
-              <NoContent
-                messageButtonText="Search for playlists and media to add to your collection."
-                icon="info"
-              />
-            ) : null}
-          </Card.Content>
-        </Card>
+        <SearchComponent
+          globalState={globalState}
+          loaded={loaded}
+          key={clearSelectionKey}
+          list={entities}
+          onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
+          selectable={isSelectable}
+          showActions={!isSelectable}
+          onChecked={updateSelection}
+        />
+        {loaded && entities.length === 0 && (
+          <NoContent
+            messageButtonText="Search for playlists and media to add to your collection."
+            icon="info"
+          />
+        )}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>
@@ -246,30 +184,6 @@ export const Search = ({ globalState }: PageProps) => {
   function clearCheckboxSelection() {
     const randomKey = createRandomRenderKey();
     setClearSelectionKey(randomKey);
-  }
-
-  function openSearchConsole() {
-    setSearchIsActive(true);
-  }
-
-  function closeSearchConsole() {
-    setSearchIsActive(false);
-  }
-
-  function updateSearchText(value) {
-    // Set the in-component state value
-    setSearchText(value);
-  }
-
-  function updateSearchTags(values) {
-    // Set the in-component state value
-    setSearchTags(values);
-  }
-
-  function submitSearch() {
-    // Update global search filters
-    setSearchFilters({ text: searchText, tags: [...searchTags] });
-    closeSearchConsole(); // Close the search
   }
 };
 
