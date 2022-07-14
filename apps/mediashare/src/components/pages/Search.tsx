@@ -74,12 +74,11 @@ export const Search = ({ globalState }: PageProps) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(refresh, [dispatch]);
 
-  const { entities = [] as any[], selected = [] as any[], loaded, loading } = useAppSelector((state) => state?.userPlaylists);
+  const { entities = [] as any[], loaded } = useAppSelector((state) => state?.userPlaylists);
 
   const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
   useEffect(() => {
     clearCheckboxSelection();
-    loadData().then();
   }, []);
 
   const [fabState, setFabState] = useState({ open: false });
@@ -90,6 +89,8 @@ export const Search = ({ globalState }: PageProps) => {
         ]
       : [];
 
+  const searchResults = !globalState?.searchIsFiltering ? [] : entities;
+
   return (
     <PageContainer>
       <KeyboardAvoidingPageContent refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
@@ -97,15 +98,16 @@ export const Search = ({ globalState }: PageProps) => {
           globalState={globalState}
           loaded={loaded}
           loadData={loadData}
+          searchTarget="playlists"
           forcedSearchMode={true}
           key={clearSelectionKey}
-          list={entities}
+          list={searchResults}
           onViewDetailClicked={(item) => viewPlaylist({ playlistId: item._id })}
           selectable={isSelectable}
           showActions={!isSelectable}
           onChecked={updateSelection}
         />
-        {loaded && entities.length === 0 && (
+        {searchResults.length === 0 && (
           <NoContent
             messageButtonText="Search for playlists and media to add to your collection."
             icon="info"

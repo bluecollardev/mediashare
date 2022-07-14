@@ -10,7 +10,7 @@ export interface AppHeaderProps {
   navigation?: any;
   searchable?: boolean;
   searchTarget?: 'playlists' | 'media' | undefined;
-  showSearchSettings?: boolean;
+  hideSearchIcon?: boolean;
   showAccountMenu?: boolean;
   showNotificationsMenu?: boolean;
   showDisplayControls?: boolean;
@@ -24,7 +24,7 @@ const AppHeaderComponent = ({
   showAccountMenu = true,
   showNotificationsMenu = false,
   showDisplayControls = false,
-  showSearchSettings = false,
+  hideSearchIcon = false,
   searchable = false,
   searchTarget = undefined,
   globalState = {
@@ -46,7 +46,9 @@ const AppHeaderComponent = ({
 
   const [displayMode, setDisplayMode] = useState(globalState?.displayMode);
 
-  const searchIcon = !searchIsActive ? 'search' : searchIsActive ? 'filter-list' : 'filter-list';
+  let searchIcon = hideSearchIcon
+    ? (searchIsFiltering ? 'filter-list' : '')
+    : (!searchIsActive ? 'search' : searchIsActive ? 'filter-list' : 'filter-list')
 
   return (
     <Appbar.Header style={{ backgroundColor: theme.colors.background }}>
@@ -59,8 +61,7 @@ const AppHeaderComponent = ({
         }}
       />
       {showDisplayControls && renderDisplayControls()}
-      {searchable && showSearchSettings && <Appbar.Action icon="settings" onPress={() => undefined} />}
-      {searchable && !showSearchSettings && <Appbar.Action icon={searchIcon} color={searchIsFiltering ? theme.colors.success : '#ffffff'} onPress={() => toggleSearchConsole()} />}
+      {searchable && <Appbar.Action icon={searchIcon} color={searchIsFiltering ? theme.colors.success : '#ffffff'} onPress={() => toggleSearchConsole()} />}
       {showNotificationsMenu && <Appbar.Action icon="notifications" onPress={() => undefined} />}
       {showAccountMenu && <Appbar.Action icon="person" onPress={() => goToAccount()} />}
     </Appbar.Header>

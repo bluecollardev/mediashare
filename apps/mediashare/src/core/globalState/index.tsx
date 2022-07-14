@@ -25,6 +25,7 @@ export interface GlobalStateProps {
   searchIsActive?: boolean;
   setSearchIsActive?: Function;
   setSearchFilters?: Function;
+  searchIsFiltering?: boolean;
   openSearchConsole?: Function;
   closeSearchConsole?: Function;
   tags?: Tag[];
@@ -69,6 +70,8 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
     }, [isLoggedIn]);
 
     const providerValue = getProviderValue() as GlobalStateProps;
+    const searchIsFiltering = searchFilters?.text !== '' || searchFilters?.tags?.length > 0;
+
     return (
       <GlobalState.Provider value={providerValue}>
         <WrappedComponent {...props} globalState={providerValue} />
@@ -93,6 +96,7 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
         search: {
           filters: { ...searchFilters },
         },
+        searchIsFiltering,
         tags,
         displayMode,
         setDisplayMode,
