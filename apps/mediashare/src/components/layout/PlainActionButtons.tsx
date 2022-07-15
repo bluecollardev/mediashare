@@ -40,10 +40,10 @@ export const PlainActionButtons = ({
   return (
     <View style={mergedStyles}>
       {children}
-      <Button icon={leftIcon} loading={loading} onPress={() => cancelCb()} style={styles.actionButton} disabled={disableCancel} color={cancelIconColor}>
+      <Button icon={leftIcon} loading={loading} onPress={() => cancelCb()} style={styles.primaryButton} disabled={disableCancel} color={cancelIconColor}>
         {cancelLabel}
       </Button>
-      <Button loading={loading} icon={actionIcon} onPress={() => actionCb()} disabled={disableAction} style={styles.actionButton} color={actionIconColor}>
+      <Button loading={loading} icon={actionIcon} onPress={() => actionCb()} disabled={disableAction} style={styles.primaryButton} color={actionIconColor}>
         {actionLabel}
       </Button>
     </View>

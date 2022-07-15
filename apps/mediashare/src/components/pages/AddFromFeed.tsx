@@ -42,7 +42,7 @@ export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
         ) : null}
       </PageContent>
       <PageActions>
-        <ActionButtons onActionClicked={saveItems} actionLabel="Add Media" onCancelClicked={goToMediaItems} />
+        <ActionButtons onPrimaryClicked={saveItems} primaryLabel="Add Media" onSecondaryClicked={goToMediaItems} />
       </PageActions>
     </PageContainer>
   );

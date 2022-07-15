@@ -98,10 +98,10 @@ const SharedByContact = ({ route }: SharedByContactProps) => {
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
           <ActionButtons
-            onActionClicked={openUnshareDialog}
-            onCancelClicked={cancelItemsToUnshare}
-            actionLabel="Revoke Access"
-            actionButtonStyles={styles.deleteActionButton}
+            onPrimaryClicked={openUnshareDialog}
+            onSecondaryClicked={cancelItemsToUnshare}
+            primaryLabel="Revoke Access"
+            primaryButtonStyles={styles.deleteActionButton}
           />
         </PageActions>
       )}

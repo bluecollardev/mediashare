@@ -4,87 +4,87 @@ import { IconButton, Text } from 'react-native-paper';
 import { theme } from 'mediashare/styles';
 
 interface Props {
-  showCancel?: boolean;
-  disableCancel?: boolean;
-  cancelLabel?: string;
-  cancelIcon?: string;
-  cancelIconColor?: string;
-  onCancelClicked?: () => void;
-  showAction?: boolean;
-  disableAction?: boolean;
-  onActionClicked?: () => void;
-  actionLabel?: string;
-  actionIcon?: string;
-  actionIconColor?: string;
   loading?: boolean;
+  showPrimary?: boolean;
+  disablePrimary?: boolean;
+  onPrimaryClicked?: () => void;
+  primaryLabel?: string;
+  primaryIcon?: string;
+  primaryIconColor?: string;
+  showSecondary?: boolean;
+  disableSecondary?: boolean;
+  secondaryLabel?: string;
+  secondaryIcon?: string;
+  secondaryIconColor?: string;
+  onSecondaryClicked?: () => void;
   containerStyles?: object;
   actionButtonsStyles?: object;
-  cancelButtonTouchableStyles?: object;
-  cancelButtonStyles?: object;
-  cancelButtonLabelStyles?: object;
-  actionButtonTouchableStyles?: object;
-  actionButtonStyles?: object;
-  actionButtonLabelStyles?: object;
+  primaryButtonTouchableStyles?: object;
+  primaryButtonStyles?: object;
+  primaryButtonLabelStyles?: object;
+  secondaryButtonTouchableStyles?: object;
+  secondaryButtonStyles?: object;
+  secondaryButtonLabelStyles?: object;
 }
 
 export function ActionButtons({
-  showCancel = true,
-  disableCancel = false,
-  onCancelClicked = () => undefined,
-  cancelLabel = undefined,
-  cancelIcon = 'cancel',
-  cancelIconColor = theme.colors.default,
-  showAction = true,
-  disableAction = false,
-  onActionClicked = () => undefined,
-  actionLabel = 'Done',
-  actionIcon = undefined, // or eg. 'check-circle',
-  actionIconColor = theme.colors.white,
+  showSecondary = true,
+  disableSecondary = false,
+  onSecondaryClicked = () => undefined,
+  secondaryLabel = undefined,
+  secondaryIcon = 'cancel',
+  secondaryIconColor = theme.colors.default,
+  showPrimary = true,
+  disablePrimary = false,
+  onPrimaryClicked = () => undefined,
+  primaryLabel = 'Done',
+  primaryIcon = undefined, // or eg. 'check-circle',
+  primaryIconColor = theme.colors.white,
   loading = false,
   containerStyles = {},
   actionButtonsStyles = {},
-  cancelButtonTouchableStyles = {},
-  cancelButtonStyles = {},
-  cancelButtonLabelStyles = {},
-  actionButtonTouchableStyles = {},
-  actionButtonStyles = {},
-  actionButtonLabelStyles = {},
+  secondaryButtonTouchableStyles = {},
+  secondaryButtonStyles = {},
+  secondaryButtonLabelStyles = {},
+  primaryButtonTouchableStyles = {},
+  primaryButtonStyles = {},
+  primaryButtonLabelStyles = {},
 }: Props) {
   return (
     <View style={{ ...defaultStyles.container, ...containerStyles }}>
       <View style={[{ ...defaultStyles.actionButtons, ...actionButtonsStyles }]}>
-        {showCancel && (
+        {showSecondary && (
           <TouchableWithoutFeedback
             accessibilityRole="button"
             onPress={() => {
-              onCancelClicked();
+              onSecondaryClicked();
             }}
-            style={{ ...defaultStyles.cancelButtonTouchable, ...cancelButtonTouchableStyles }}
+            style={{ ...defaultStyles.secondaryButtonTouchable, ...secondaryButtonTouchableStyles }}
           >
-            <View style={{ ...defaultStyles.cancelButton, ...cancelButtonStyles }}>
-              {cancelIcon && <IconButton iconColor={cancelIconColor} icon={cancelIcon} />}
-              {!!cancelLabel && <Text style={{ ...defaultStyles.cancelButtonLabel, ...cancelButtonLabelStyles }}>{cancelLabel}</Text>}
+            <View style={{ ...defaultStyles.secondaryButton, ...secondaryButtonStyles }}>
+              {secondaryIcon && <IconButton iconColor={secondaryIconColor} icon={secondaryIcon} />}
+              {!!secondaryLabel && <Text style={{ ...defaultStyles.secondaryButtonLabel, ...secondaryButtonLabelStyles }}>{secondaryLabel}</Text>}
             </View>
           </TouchableWithoutFeedback>
         )}
-        {showAction && (
+        {showPrimary && (
           <TouchableWithoutFeedback
             accessibilityRole="button"
             onPress={() => {
-              if (!disableAction && !loading) {
-                onActionClicked();
+              if (!disablePrimary && !loading) {
+                onPrimaryClicked();
               }
             }}
-            style={{ ...defaultStyles.actionButtonTouchable, ...actionButtonTouchableStyles }}
+            style={{ ...defaultStyles.primaryButtonTouchable, ...primaryButtonTouchableStyles }}
           >
-            <View style={{ ...defaultStyles.actionButton, ...actionButtonStyles, ...(disableAction ? defaultStyles.actionButtonDisabled : {}) }}>
-              {loading && <ActivityIndicator size="small" color={actionIconColor} style={{ paddingRight: 15 }} />}
-              <IconButton iconColor={actionIconColor} icon={actionIcon} />
-              {!!actionLabel && (
+            <View style={{ ...defaultStyles.primaryButton, ...primaryButtonStyles, ...(disablePrimary ? defaultStyles.primaryButtonDisabled : {}) }}>
+              {loading && <ActivityIndicator size="small" color={primaryIconColor} style={{ paddingRight: 15 }} />}
+              {primaryIcon && <IconButton iconColor={primaryIconColor} icon={primaryIcon} />}
+              {!!primaryLabel && (
                 <Text
-                  style={{ ...defaultStyles.actionButtonLabel, ...actionButtonLabelStyles, ...(disableAction ? defaultStyles.actionButtonLabelDisabled : {}) }}
+                  style={{ ...defaultStyles.primaryButtonLabel, ...primaryButtonLabelStyles, ...(disablePrimary ? defaultStyles.primaryButtonLabelDisabled : {}) }}
                 >
-                  {actionLabel}
+                  {primaryLabel}
                 </Text>
               )}
             </View>
@@ -105,39 +105,12 @@ const defaultStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
-  cancelButtonTouchable: {
-    overflow: 'hidden',
-  },
-  cancelButton: {
-    width: 54,
-    height: 41,
-    // flex: Platform.OS === 'android' ? 0 : 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 0,
-    borderColor: theme.colors.defaultBorder,
-    borderWidth: 1,
-    borderRightWidth: 0,
-  },
-  cancelButtonLabel: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: '#ffffff',
-    paddingRight: 35,
-  },
-  actionButtonTouchable: {
+  primaryButtonTouchable: {
     flex: 1,
     overflow: 'hidden',
     display: 'flex',
   },
-  actionButton: {
+  primaryButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -148,12 +121,10 @@ const defaultStyles = StyleSheet.create({
     borderRadius: 0,
     backgroundColor: theme.colors.primary,
   },
-  actionButtonDisabled: {
-    borderColor: theme.colors.defaultBorder,
-    borderWidth: 1,
-    backgroundColor: theme.colors.darkDefault,
+  primaryButtonDisabled: {
+    backgroundColor: theme.colors.secondary,
   },
-  actionButtonLabel: {
+  primaryButtonLabel: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -163,7 +134,32 @@ const defaultStyles = StyleSheet.create({
     color: '#ffffff',
     paddingRight: 35,
   },
-  actionButtonLabelDisabled: {
+  primaryButtonLabelDisabled: {
     color: theme.colors.defaultBorder,
+  },
+  secondaryButtonTouchable: {
+    overflow: 'hidden',
+  },
+  secondaryButton: {
+    width: 54,
+    height: 41,
+    // flex: Platform.OS === 'android' ? 0 : 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 0,
+    backgroundColor: theme.colors.surface,
+  },
+  secondaryButtonLabel: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    paddingRight: 35,
   },
 });

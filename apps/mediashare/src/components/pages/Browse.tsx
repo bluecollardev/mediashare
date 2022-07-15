@@ -71,11 +71,11 @@ export const SharedBlock = ({ globalState }) => {
             >
               <ActionButtons
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
-                showCancel={false}
-                showAction={true}
-                actionLabel="Watch Now"
-                actionIcon="live-tv"
-                onActionClicked={() => viewPlaylist(item)}
+                showSecondary={false}
+                showPrimary={true}
+                primaryLabel="Watch Now"
+                primaryIcon="live-tv"
+                onPrimaryClicked={() => viewPlaylist(item)}
               />
             </MediaCard>
           </View>

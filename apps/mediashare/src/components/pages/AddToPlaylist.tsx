@@ -91,7 +91,7 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
         )}
       </PageContent>
       <PageActions>
-        <ActionButtons onActionClicked={saveItems} actionLabel="Save" onCancelClicked={cancel} />
+        <ActionButtons onPrimaryClicked={saveItems} primaryLabel="Save" onSecondaryClicked={cancel} />
       </PageActions>
     </PageContainer>
   );

@@ -16,7 +16,7 @@ interface ListActionButtonProps {
 
 const ListActionButton = ({ loading = false, actionCb, label, icon, mode = 'contained', color = theme.colors.accent }: ListActionButtonProps) => {
   return (
-    <Button mode={mode} dark color={color} loading={loading} style={styles.actionButton} onPress={() => actionCb()} icon={icon}>
+    <Button mode={mode} dark color={color} loading={loading} style={styles.primaryButton} onPress={() => actionCb()} icon={icon}>
       {label}
     </Button>
   );

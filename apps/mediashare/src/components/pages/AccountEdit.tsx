@@ -79,7 +79,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
           <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label="Phone Number*" value={state?.phoneNumber} disabled={!isLoaded} />
         </View>
       </ScrollView>
-      <ActionButtons disableAction={withoutName()} disableCancel={withoutName()} onCancelClicked={cancel} onActionClicked={save} actionLabel="Save" />
+      <ActionButtons disablePrimary={withoutName()} disableSecondary={withoutName()} onSecondaryClicked={cancel} onPrimaryClicked={save} primaryLabel="Save" />
     </PageContainer>
   );
 

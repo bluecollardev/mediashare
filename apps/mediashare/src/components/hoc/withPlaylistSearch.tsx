@@ -56,7 +56,7 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
         {(forcedSearchMode ? forcedSearchMode : searchIsActive) && (
           <>
             <Searchbar
-              style={{ width: '100%', marginTop: 15 }}
+              style={{ width: '100%', marginTop: 15, backgroundColor: theme.colors.surface }}
               inputStyle={{ fontSize: 15 }}
               placeholder="Keywords"
               value={searchText}
@@ -92,11 +92,11 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
               modalWithSafeAreaView={false}
             />
             <ActionButtons
-              actionLabel="Search"
-              actionButtonStyles={{ backgroundColor: theme.colors.secondary }}
-              showCancel={false}
+              primaryLabel="Search"
+              primaryButtonStyles={{ backgroundColor: theme.colors.secondary }}
+              showSecondary={false}
               containerStyles={{ marginHorizontal: 0, marginTop: 15 }}
-              onActionClicked={() => submitSearch()}
+              onPrimaryClicked={() => submitSearch()}
             />
           </>
         )}

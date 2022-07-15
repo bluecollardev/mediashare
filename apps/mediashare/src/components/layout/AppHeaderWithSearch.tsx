@@ -165,8 +165,8 @@ const AppHeaderComponent = ({
                       </Card>
                       <ActionButtons
                         containerStyles={{ marginHorizontal: 0 }}
-                        onActionClicked={() => submitSearch()}
-                        onCancelClicked={() => closeSearchConsole()}
+                        onPrimaryClicked={() => submitSearch()}
+                        onSecondaryClicked={() => closeSearchConsole()}
                       />
                     </View>
                   </BackdropView>

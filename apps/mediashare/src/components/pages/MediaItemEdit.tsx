@@ -145,7 +145,7 @@ const MediaItemEdit = ({
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons loading={isSaved} onActionClicked={saveItem} onCancelClicked={clearAndGoBack} actionLabel="Save" />
+        <ActionButtons loading={isSaved} onPrimaryClicked={saveItem} onSecondaryClicked={clearAndGoBack} primaryLabel="Save" />
       </PageActions>
     </PageContainer>
   );

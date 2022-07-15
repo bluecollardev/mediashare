@@ -136,23 +136,23 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
             {!allowEdit && items.length > 0 && (
               <ActionButtons
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
-                showCancel={false}
-                showAction={true}
-                onActionClicked={async () => {
+                showSecondary={false}
+                showPrimary={true}
+                onPrimaryClicked={async () => {
                   playFromBeginning({ mediaId: items[0]._id, uri: items[0].uri });
                 }}
-                actionLabel="Play from Beginning"
-                actionIcon="live-tv"
+                primaryLabel="Play from Beginning"
+                primaryIcon="live-tv"
               />
             )}
             {!build.forFreeUser && allowEdit && (
               <ActionButtons
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
-                showCancel={false}
-                cancelIcon="rule"
-                actionLabel="Add Items To Playlist"
-                actionIcon="playlist-add"
-                onActionClicked={() => addToPlaylist({ playlistId })}
+                showSecondary={false}
+                secondaryIcon="rule"
+                primaryLabel="Add Items To Playlist"
+                primaryIcon="playlist-add"
+                onPrimaryClicked={() => addToPlaylist({ playlistId })}
               />
             )}
             <MediaList

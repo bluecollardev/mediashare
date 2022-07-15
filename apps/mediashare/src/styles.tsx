@@ -165,8 +165,8 @@ const components = {
         marginVertical: 10,
         paddingLeft: 15,
         paddingRight: 10,
-        borderWidth: 1,
-        borderColor: theme.colors.defaultBorder,
+        /* borderWidth: 1,
+        borderColor: theme.colors.defaultBorder, */
         backgroundColor: theme.colors.surface,
       },
       selectToggleText: {
@@ -211,7 +211,7 @@ const components = {
         borderWidth: 1,
         borderColor: 'rgba(255,255,255,0.29)',
       },
-      cancelButton: {
+      secondaryButton: {
         height: 41,
         borderWidth: 1,
         borderColor: 'rgba(255,255,255,0.29)',

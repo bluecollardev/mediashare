@@ -147,7 +147,7 @@ const PlaylistItemEdit = ({
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons onActionClicked={saveItem} onCancelClicked={clearAndGoBack} actionLabel="Save" />
+        <ActionButtons onPrimaryClicked={saveItem} onSecondaryClicked={clearAndGoBack} primaryLabel="Save" />
       </PageActions>
     </PageContainer>
   );

@@ -168,7 +168,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           <SwitchSelector
             fontSize={13}
             textColor={theme.colors.text}
-            borderColor={theme.colors.defaultBorder}
+            borderColor={theme.colors.darkDefault}
             selectedColor={theme.colors.primary}
             backgroundColor={theme.colors.surface}
             buttonColor={theme.colors.surface}

@@ -18,7 +18,7 @@ export function TextField({ value = '', validator = () => false, onChangeText, d
       // Inject our theme manually we don't have access to the provider here
       theme={theme}
       dense
-      mode="outlined"
+      mode="flat"
       textAlign="left"
       label={label}
       value={value}

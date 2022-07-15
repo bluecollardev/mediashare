@@ -93,7 +93,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        <ActionButtons onActionClicked={saveItem} loading={isSaved}  onCancelClicked={clearAndGoBack} actionLabel="Save" disableAction={!isValid()} />
+        <ActionButtons onPrimaryClicked={saveItem} loading={isSaved} onSecondaryClicked={clearAndGoBack} primaryLabel="Save" disablePrimary={!isValid()} />
       </PageActions>
     </PageContainer>
   );
@@ -113,7 +113,7 @@ export const MediaItemAdd = ({ globalState = { tags: [] } }: PageProps) => {
     // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
     // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
     const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
-   
+
     const dto: CreateMediaItemDto = {
       key: title,
       title,

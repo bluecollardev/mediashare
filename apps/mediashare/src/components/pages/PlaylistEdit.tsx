@@ -160,14 +160,14 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
           >
             <ActionButtons
               containerStyles={{ marginHorizontal: 0, marginBottom: 15 }}
-              showCancel={Array.isArray(items) && items.length > 0}
-              cancelIcon="rule"
-              onCancelClicked={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
-              cancelIconColor={isSelectable ? theme.colors.primary : theme.colors.disabled}
-              disableAction={actionMode === actionModes.delete}
-              actionLabel="Add Items To Playlist"
-              actionIcon={!(Array.isArray(items) && items.length > 0) ? 'playlist-add' : 'playlist-add'}
-              onActionClicked={() => addToPlaylist({ playlistId })}
+              showSecondary={Array.isArray(items) && items.length > 0}
+              secondaryIcon="rule"
+              onSecondaryClicked={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+              secondaryIconColor={isSelectable ? theme.colors.primary : theme.colors.disabled}
+              disablePrimary={actionMode === actionModes.delete}
+              primaryLabel="Add Items To Playlist"
+              primaryIcon={!(Array.isArray(items) && items.length > 0) ? 'playlist-add' : 'playlist-add'}
+              onPrimaryClicked={() => addToPlaylist({ playlistId })}
             />
             <MediaList
               key={clearSelectionKey}
@@ -183,13 +183,13 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
         </ScrollView>
       </KeyboardAvoidingPageContent>
       <PageActions>
-        {!isSelectable && <ActionButtons loading={isSaved} onActionClicked={savePlaylist} onCancelClicked={clearAndGoBack} actionLabel="Save" />}
+        {!isSelectable && <ActionButtons loading={isSaved} onPrimaryClicked={savePlaylist} onSecondaryClicked={clearAndGoBack} primaryLabel="Save" />}
         {isSelectable && (
           <ActionButtons
-            onActionClicked={confirmDeletePlaylistItems}
-            onCancelClicked={cancelDeletePlaylistItems}
-            actionLabel="Remove"
-            actionIconColor={theme.colors.error}
+            onPrimaryClicked={confirmDeletePlaylistItems}
+            onSecondaryClicked={cancelDeletePlaylistItems}
+            primaryLabel="Remove"
+            primaryIconColor={theme.colors.error}
           />
         )}
       </PageActions>

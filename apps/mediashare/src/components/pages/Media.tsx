@@ -144,11 +144,11 @@ export const Media = ({ navigation, globalState }: PageProps) => {
       {isSelectable && actionMode === actionModes.delete && (
         <PageActions>
           <ActionButtons
-            onActionClicked={openDeleteDialog}
-            onCancelClicked={cancelItemsToDelete}
-            actionLabel="Delete"
-            actionIcon="delete"
-            actionButtonStyles={styles.deleteActionButton}
+            onPrimaryClicked={openDeleteDialog}
+            onSecondaryClicked={cancelItemsToDelete}
+            primaryLabel="Delete"
+            primaryIcon="delete"
+            primaryButtonStyles={styles.deleteActionButton}
           />
         </PageActions>
       )}
