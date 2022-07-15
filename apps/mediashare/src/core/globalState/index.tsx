@@ -105,8 +105,6 @@ export const GlobalStateProviderWrapper = (WrappedComponent: any) => {
 
     async function loadUserData() {
       await dispatch(loadUser());
-      await dispatch(findItemsSharedByMe());
-      await dispatch(findItemsSharedWithMe());
     }
 
     function openSearchConsole() {

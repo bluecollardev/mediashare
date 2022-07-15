@@ -1,6 +1,8 @@
 import { mapAvailableTags } from 'mediashare/core/utils/tags';
 import { useAppSelector } from 'mediashare/store';
-import React, { useEffect, useMemo, useState } from 'react';
+import { getUserPlaylists } from 'mediashare/store/modules/playlists';
+import { findItemsSharedByMe, findItemsSharedWithMe } from 'mediashare/store/modules/shareItems';
+import React, { useEffect, useMemo } from 'react';
 import { AuthorProfileDto } from 'mediashare/rxjs-api';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { useViewPlaylistById } from 'mediashare/hooks/navigation';
@@ -8,6 +10,7 @@ import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { ScrollView, View } from 'react-native';
 import { List, Card } from 'react-native-paper';
 import { PageContainer, PageProps, MediaCard, ActionButtons, NoContent } from 'mediashare/components/layout';
+import { useDispatch } from 'react-redux';
 import { PlaylistsComponent } from './Playlists';
 import { filterUnique, shortenText } from 'mediashare/utils';
 import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
@@ -91,20 +94,11 @@ export const Browse = ({
     setDisplayMode: (value) => undefined,
   },
 }: PageProps) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [prevSearchFilters, setPrevSearchFilters] = useState({ filters: { text: '' } });
+  const dispatch = useDispatch();
 
   useEffect(() => {
     loadData().then();
   }, []);
-
-  useEffect(() => {
-    const currentSearchFilters = globalState?.search;
-    if (!isLoaded || currentSearchFilters !== prevSearchFilters) {
-      setPrevSearchFilters(currentSearchFilters);
-      loadData().then();
-    }
-  }, [isLoaded, globalState]);
 
   return (
     <PageContainer>
@@ -122,19 +116,7 @@ export const Browse = ({
   );
 
   async function loadData() {
-    const { search } = globalState;
-    const args = {
-      text: search?.filters?.text ? search.filters.text : '',
-      // tags: [],
-    };
-
-    if (search.filters.text) {
-      // await dispatch(findPlaylists(args));
-    } else {
-      // await dispatch(getUserPlaylists({}));
-    }
-
-    setIsLoaded(true);
+    await dispatch(findItemsSharedWithMe());
   }
 };
 
