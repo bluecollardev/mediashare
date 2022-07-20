@@ -8,9 +8,9 @@ import { PLAYLIST_CATEGORY } from '@core-lib';
 import { CreateDto } from '@api-core/decorators/create-dto.decorator';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
-import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse, PlaylistShareResponse } from './playlist.decorator';
+import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse, PlaylistShareResponse } from './search.decorator';
 import { notFoundResponse } from '@api-core/functors/http-errors.functor';
-import { PlaylistService } from './playlist.service';
+import { SearchService } from './search.service';
 import { PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
@@ -20,8 +20,8 @@ import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 
 @ApiTags('playlists')
 @Controller('playlists')
-export class PlaylistController {
-  constructor(private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
+export class SearchController {
+  constructor(private readonly playlistService: SearchService, private shareItemService: ShareItemService) {}
 
   @Get('categories')
   getCategories() {

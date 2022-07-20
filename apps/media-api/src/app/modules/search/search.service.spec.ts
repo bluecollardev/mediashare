@@ -8,7 +8,7 @@ import { mockLoggerFactory } from '../../../factories/mock-logger.factory';
 import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
 import { MediaItem } from '../../media-item/entities/media-item.entity';
 import { Playlist } from '../entities/playlist.entity'; */
-import { PlaylistService } from './playlist.service';
+import { SearchService } from './search.service';
 /* import { PlaylistItemService } from '@api-modules/playlist-item/services/playlist-item.service'; */
 
 describe('PlaylistService', () => {
