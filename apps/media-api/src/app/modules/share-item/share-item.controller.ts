@@ -19,35 +19,35 @@ export class ShareItemController {
 
   @Get('shared-by-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
-  async findItemsSharedByUser(@GetUserId() userId: ObjectId) {
+  async findItemsSharedByUser(@GetUserId() userId: string) {
     return await this.shareItemService.getItemsSharedByUser(userId);
   }
 
   @Get('shared-by-user/media-items')
   @ShareItemGetResponse({ type: MediaItemResponseDto, isArray: true })
-  async findMediaItemsSharedByUser(@GetUserId() userId: ObjectId) {
+  async findMediaItemsSharedByUser(@GetUserId() userId: string) {
     return await this.shareItemService.getMediaItemsSharedByUser(userId);
   }
   @Get('shared-by-user/playlists')
   @ShareItemGetResponse({ type: PlaylistResponseDto, isArray: true })
-  async findPlaylistsSharedByUser(@GetUserId() userId: ObjectId) {
+  async findPlaylistsSharedByUser(@GetUserId() userId: string) {
     return await this.shareItemService.getPlaylistsSharedByUser(userId);
   }
 
   @Get('shared-with-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
-  async findItemsSharedWithUser(@GetUserId() userId: ObjectId) {
+  async findItemsSharedWithUser(@GetUserId() userId: string) {
     return await this.shareItemService.getItemsSharedWithUser(userId);
   }
 
   @Get('shared-with-user/media-items')
   @ShareItemGetResponse({ type: MediaItemResponseDto, isArray: true })
-  async findMediaItemsSharedWithUser(@GetUserId() userId: ObjectId) {
+  async findMediaItemsSharedWithUser(@GetUserId() userId: string) {
     return await this.shareItemService.getMediaItemsSharedWithUser(userId);
   }
   @Get('shared-with-user/playlists')
   @ShareItemGetResponse({ type: PlaylistResponseDto, isArray: true })
-  async findPlaylistsSharedWithUser(@GetUserId() userId: ObjectId) {
+  async findPlaylistsSharedWithUser(@GetUserId() userId: string) {
     return await this.shareItemService.getPlaylistsSharedWithUser(userId);
   }
 
