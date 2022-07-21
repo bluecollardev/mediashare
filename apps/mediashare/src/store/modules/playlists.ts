@@ -2,16 +2,14 @@ import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { makeActions } from 'mediashare/store/factory';
 import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
 import { ApiService } from 'mediashare/store/apis';
-// import { PlaylistResponseDto, PlaylistItemResponseDto } from 'mediashare/rxjs-api';
 import { PlaylistResponseDto } from 'mediashare/rxjs-api';
-import { mediaItemsActions } from 'mediashare/store/modules/mediaItems';
 
 // Define these in snake case or our converter won't work... we need to fix that
 const playlistsActionNames = ['find_playlists', 'get_user_playlists', 'select_playlist', 'clear_playlists'] as const;
 
 export const playlistsActions = makeActions(playlistsActionNames);
 
-export const findPlaylists = createAsyncThunk(playlistsActions.findPlaylists.type, async (args: { text?: string; tags?: string[] }, { extra }) => {
+export const findUserPlaylists = createAsyncThunk(playlistsActions.findPlaylists.type, async (args: { text?: string; tags?: string[] }, { extra }) => {
   const { api } = extra as { api: ApiService };
   const { text, tags = [] } = args;
   console.log(`Search playlists args: ${JSON.stringify(args, null, 2)}`);
@@ -21,7 +19,7 @@ export const findPlaylists = createAsyncThunk(playlistsActions.findPlaylists.typ
 
 export const getUserPlaylists = createAsyncThunk(playlistsActions.getUserPlaylists.type, async (opts = undefined, { extra }) => {
   const { api } = extra as { api: ApiService };
-  return await api.user.userControllerGetUserPlaylists().toPromise();
+  return await api.playlists.playlistControllerFindAll({ text: '', tags: [] }).toPromise();
 });
 
 export const selectPlaylist = createAction<{ isChecked: boolean; plist: PlaylistResponseDto }, typeof playlistsActions.selectPlaylist.type>(
@@ -31,8 +29,6 @@ export const selectPlaylist = createAction<{ isChecked: boolean; plist: Playlist
 export const clearPlaylists = createAction(playlistsActions.clearPlaylists.type);
 
 export interface PlaylistsState {
-  // entities: PlaylistResponseDto[] | PlaylistItemResponseDto[];
-  // selected: PlaylistResponseDto[] | PlaylistItemResponseDto[];
   entities: PlaylistResponseDto[];
   selected: PlaylistResponseDto[];
   loading: boolean;
@@ -63,10 +59,10 @@ const playlistsSlice = createSlice({
           loaded: true,
         }))
       )
-      .addCase(findPlaylists.pending, reducePendingState())
-      .addCase(findPlaylists.rejected, reduceRejectedState())
+      .addCase(findUserPlaylists.pending, reducePendingState())
+      .addCase(findUserPlaylists.rejected, reduceRejectedState())
       .addCase(
-        findPlaylists.fulfilled,
+        findUserPlaylists.fulfilled,
         reduceFulfilledState((state, action) => ({
           ...state,
           entities: action.payload,

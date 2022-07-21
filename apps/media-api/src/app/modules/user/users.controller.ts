@@ -1,8 +1,6 @@
 import { Controller, Body, Param, UseGuards, Get, Put, Delete, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiHideProperty, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { DeleteResult } from 'typeorm';
-import { ObjectId } from 'mongodb';
-import { ObjectIdPipe } from '@mediashare/shared';
 // import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
 import { BcRolesType, BC_ROLES } from '@core-lib';
@@ -13,23 +11,19 @@ import { User } from './entities/user.entity';
 import { UserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ProfileDto } from './dto/profile.dto';
-import { PlaylistService } from '@api-modules/playlist/playlist.service';
-import { PlaylistResponseDto } from '@api-modules/playlist/dto/playlist-response.dto';
-import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { Request } from 'express';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly userService: UserService, private playlistService: PlaylistService, private shareItemService: ShareItemService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   @ApiBearerAuth()
   @UserGetResponse({ isArray: true })
   async findAll(@Req() request: Request) {
     const jwt = request.headers.authorization.replace('Bearer ', '');
-    const result = await this.userService.getUserAllWithJwt(jwt);
-    return result;
+    return await this.userService.getUserAllWithJwt(jwt);
   }
 
   @Get(RouteTokens.USER_ID)
@@ -53,22 +47,14 @@ export class UsersController {
   }
 
   @Put(RouteTokens.USER_ID)
+  @UseGuards(UserGuard)
   @ApiBody({ type: UpdateUserDto })
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserPostResponse({ type: UserDto })
-  update(@Param('userId', new ObjectIdPipe()) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('userId') userId: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser({ userId, updateUserDto });
   }
 
-  @Get(':userId/playlists')
-  @ApiParam({ name: 'userId', type: String, required: true })
-  @ApiHideProperty()
-  @UserGetResponse({ type: PlaylistResponseDto, isArray: true })
-  getPlaylists(@Param('userId', new ObjectIdPipe()) userId: ObjectId) {
-    return this.playlistService.getByUserId(userId);
-  }
-
-  // TODO: Remove this?
   @Put(':userId/roles')
   @ApiBody({ enum: BC_ROLES })
   @UserPostResponse({ type: UserDto })
@@ -76,6 +62,4 @@ export class UsersController {
     const { roles = [] } = params;
     return this.userService.setRoles(id, roles);
   }
-
-  // New Auth stuff
 }

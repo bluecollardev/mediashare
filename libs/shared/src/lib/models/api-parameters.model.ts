@@ -1,11 +1,11 @@
-import { ObjectId } from 'mongodb';
+import { IdType } from '@core-lib';
 
 interface IObjectIdParameters {
-  userId?: ObjectId;
-  mediaId?: ObjectId;
-  playlistId?: ObjectId;
-  playlistItemId?: ObjectId;
-  createdBy?: ObjectId;
+  userId?: IdType;
+  mediaId?: IdType;
+  playlistId?: IdType;
+  playlistItemId?: IdType;
+  createdBy?: IdType;
 }
 
 export type ObjectIdParameters = Partial<IObjectIdParameters>;

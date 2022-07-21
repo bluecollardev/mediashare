@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectIdGuard } from '@util-lib';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
@@ -58,18 +59,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
   }: SearchParameters) {
     let aggregateQuery = [];
 
-    // Match by user ID first as it's indexed and this is the best way to reduce the number of results early
-    if (userId) {
-      aggregateQuery = aggregateQuery.concat([
-        {
-          $match: {
-            createdBy: userId,
-          },
-        },
-      ]);
-    }
-
-    // Next, we want to match the text as it's also indexed
+    // We have to search by text first as $match->$text is only allowed to be the first part of an aggregate query
     // TODO: fullText means a search on all index fields, this is only supported in MongoDB Atlas
     // Not sure if we want to use Atlas as we can't self host... we can implement distributed search later...
     if (query && fullText) {
@@ -84,6 +74,17 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
         {
           $match: {
             $text: { $search: query },
+          },
+        },
+      ]);
+    }
+
+    // Match by user ID if it's available as it's indexed and this is the best way to reduce the number of results early
+    if (userId) {
+      aggregateQuery = aggregateQuery.concat([
+        {
+          $match: {
+            createdBy: ObjectIdGuard(userId),
           },
         },
       ]);

@@ -13,19 +13,11 @@ import { AuthorizeDto } from './dto/authorize.dto';
 import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { MediaItemService } from '@api-modules/media-item/media-item.service';
 import { MediaItemResponseDto } from '@api-modules/media-item/dto/media-item-response.dto';
-import { PlaylistService } from '@api-modules/playlist/playlist.service';
-import { PlaylistGetResponse } from '@api-modules/playlist/playlist.decorator';
-import { PlaylistResponseDto } from '@api-modules/playlist/dto/playlist-response.dto';
 
 @ApiTags('user')
 @Controller({ path: ['user'] })
 export class UserController {
-  constructor(
-    private userService: UserService,
-    private playlistService: PlaylistService,
-    private shareItemService: ShareItemService,
-    private mediaItemService: MediaItemService
-  ) {}
+  constructor(private userService: UserService, private shareItemService: ShareItemService, private mediaItemService: MediaItemService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('authorize')
@@ -46,11 +38,11 @@ export class UserController {
         // TODO: Replace this string!
         imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
       });
-      const profile = await this.userService.getUserById(newUser._id);
+      const profile = await this.userService.getUserById(newUser._id.toString());
       if (!profile) return res.send(user);
       return res.send(profile);
     }
-    const profile = await this.userService.getUserById(user._id);
+    const profile = await this.userService.getUserById(user._id.toString());
     if (!profile) return res.send(user);
 
     return res.send(profile);
@@ -67,23 +59,15 @@ export class UserController {
 
   @Get()
   @UserGetResponse({ type: ProfileDto })
-  async getUser(@GetUserId() userId: ObjectId) {
+  async getUser(@GetUserId() userId: string) {
     return await this.userService.getUserById(userId);
   }
 
   @Put()
   @UserPostResponse()
   @ApiBody({ type: UpdateUserDto })
-  async updateUser(@GetUserId() userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+  async updateUser(@GetUserId() userId: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.updateUser({ userId, updateUserDto });
-  }
-
-  @Get('playlists')
-  @UseGuards(UserGuard)
-  @ApiBearerAuth()
-  @PlaylistGetResponse({ type: PlaylistResponseDto, isArray: true })
-  async getUserPlaylists(@GetUserId() userId: ObjectId) {
-    return await this.playlistService.getByUserId(userId);
   }
 
   @Get('media-items')

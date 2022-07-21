@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataService } from '@api';
+import { ObjectIdGuard } from '@util-lib';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
@@ -19,9 +20,9 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
 
   async createMediaShareItem({ userId, mediaId, createdBy, title }: CreateMediaShareItemDto): Promise<ShareItem> {
     return await this.create({
-      userId: new ObjectId(userId),
-      mediaId: new ObjectId(mediaId),
-      createdBy: new ObjectId(createdBy),
+      userId: ObjectIdGuard(userId),
+      mediaId: ObjectIdGuard(mediaId),
+      createdBy: ObjectIdGuard(createdBy),
       title,
       read: false,
     });
@@ -29,9 +30,9 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
 
   async createPlaylistShareItem({ userId, playlistId, createdBy, title }: CreatePlaylistShareItemDto): Promise<ShareItem> {
     return await this.create({
-      userId: new ObjectId(userId),
-      playlistId: new ObjectId(playlistId),
-      createdBy: new ObjectId(createdBy),
+      userId: ObjectIdGuard(userId),
+      playlistId: ObjectIdGuard(playlistId),
+      createdBy: ObjectIdGuard(createdBy),
       title,
       read: false,
     });

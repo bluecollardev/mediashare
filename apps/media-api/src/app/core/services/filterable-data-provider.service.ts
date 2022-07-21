@@ -1,8 +1,9 @@
+import { IdType } from '@core-lib';
 import { Injectable } from '@nestjs/common';
+import { ObjectIdGuard } from '@util-lib';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { DataService } from '@api-core/services/data-provider.service';
-import { ObjectId } from 'mongodb';
 import { SearchParameters } from '@mediashare/shared';
 import { BcBaseEntity } from '../entities/base.entity';
 
@@ -46,19 +47,19 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
   }
 
   getById(id) {
-    return this.repository.aggregate([{ $match: { _id: id } }, ...this.buildFields(), this.replaceRoot()]).next();
+    return this.repository.aggregate([{ $match: { _id: ObjectIdGuard(id) } }, ...this.buildFields(), this.replaceRoot()]).next();
   }
 
-  getByUserId(userId: ObjectId) {
-    return this.repository.aggregate([{ $match: { createdBy: userId } }, ...this.buildFields(), this.replaceRoot()]).toArray();
+  getByUserId(userId: IdType) {
+    return this.repository.aggregate([{ $match: { createdBy: ObjectIdGuard(userId) } }, ...this.buildFields(), this.replaceRoot()]).toArray();
   }
 
   getPopular() {
     return this.repository.aggregate([...this.buildAggregateQuery({}), ...this.buildFields(), { $sort: { likesCount: -1 } }, this.replaceRoot()]).toArray();
   }
 
-  search({ query, tags }: SearchParameters) {
-    return this.repository.aggregate([...this.buildAggregateQuery({ query, tags }), ...this.buildFields(), this.replaceRoot()]).toArray();
+  search({ userId, query, tags }: SearchParameters) {
+    return this.repository.aggregate([...this.buildAggregateQuery({ userId, query, tags }), ...this.buildFields(), this.replaceRoot()]).toArray();
   }
 
   protected abstract buildAggregateQuery(params: SearchParameters): any[];

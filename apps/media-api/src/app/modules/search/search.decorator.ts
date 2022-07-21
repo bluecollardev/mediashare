@@ -2,10 +2,10 @@ import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { UseJwtGuard } from '@api-modules/auth/auth.decorator';
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
-import { CreatePlaylistDto } from './dto/create-playlist.dto';
-import { UpdatePlaylistDto } from './dto/update-playlist.dto';
-import { PlaylistResponseDto } from './dto/playlist-response.dto';
-import { Playlist } from './entities/playlist.entity';
+import { CreatePlaylistDto } from '@api-modules/playlist/dto/create-playlist.dto';
+import { UpdatePlaylistDto } from '@api-modules/playlist//dto/update-playlist.dto';
+import { PlaylistResponseDto } from '@api-modules/playlist//dto/playlist-response.dto';
+import { Playlist } from '@api-modules/playlist//entities/playlist.entity';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 
 export function PlaylistGetResponse({ type = PlaylistResponseDto, isArray = false, description }: ApiControllerDecoratorParams = {}) {
