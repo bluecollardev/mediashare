@@ -1,8 +1,9 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, ManyToOne } from 'typeorm';
 import { ApiDecoratorOptions, ApiObjectId, ApiString } from '@mediashare/shared';
 import { IsBoolean } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
+import { User } from '@api-modules/user/entities/user.entity';
 
 @Entity('share_item')
 export class ShareItem extends BcEntity {
@@ -28,4 +29,9 @@ export class ShareItem extends BcEntity {
   @ApiString()
   @Column({ name: 'title', unique: false })
   title: string;
+
+  @ManyToOne(() => User, user => user.shareItem )
+  @Column({ name: 'owner', unique: false })
+  owner: User
+
 }

@@ -53,11 +53,13 @@ export class UsersController {
   }
 
   @Put(RouteTokens.USER_ID)
-  @ApiBody({ type: UpdateUserDto })
   @ApiParam({ name: 'userId', type: String, required: true })
+  @ApiBody({ type: UpdateUserDto })
   @UserPostResponse({ type: UserDto })
-  update(@Param('userId', new ObjectIdPipe()) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.updateUser({ userId, updateUserDto });
+  update(@Param('userId',new ObjectIdPipe()) userId: string , @Body() updateUserDto: { updateUserDto : UpdateUserDto}) {
+   const ObjectUserId =  ObjectId(userId)
+   const UserDetailDto = updateUserDto
+   return this.userService.updateUser({ userId: ObjectUserId, updateUserDto: UserDetailDto as UpdateUserDto});
   }
 
   @Get(':userId/playlists')
