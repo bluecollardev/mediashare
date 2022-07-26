@@ -112,7 +112,7 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
       // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'playlistItemId', as: 'shareItems' } },
       // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'playlistItemId', as: 'viewItems' } },
       // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'playlistItemId', as: 'likeItems' } },
-      // { $unwind: { path: '$author' } },
+      { $unwind: { path: '$author' } },
       {
         $addFields: {
           authorProfile: {
