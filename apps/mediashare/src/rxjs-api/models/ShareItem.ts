@@ -17,10 +17,10 @@
  */
 export interface ShareItem {
   /**
-   * @type {string}
+   * @type {object}
    * @memberof ShareItem
    */
-  readonly _id: string;
+  readonly _id: object;
   /**
    * @type {string}
    * @memberof ShareItem
@@ -32,25 +32,25 @@ export interface ShareItem {
    */
   readonly updatedDate?: string;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof ShareItem
    */
-  createdBy: string;
+  createdBy: object;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof ShareItem
    */
-  readonly userId: string;
+  readonly userId: object;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof ShareItem
    */
-  playlistId?: string;
+  playlistId?: object;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof ShareItem
    */
-  mediaId?: string;
+  mediaId?: object;
   /**
    * @type {string}
    * @memberof ShareItem

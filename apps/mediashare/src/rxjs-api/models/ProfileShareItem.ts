@@ -37,25 +37,25 @@ export interface ProfileShareItem {
    */
   author: string;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof ProfileShareItem
    */
-  authorId: string;
+  authorId: object;
   /**
    * @type {string}
    * @memberof ProfileShareItem
    */
   imageSrc: string;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof ProfileShareItem
    */
-  playlistId: string;
+  playlistId: object;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof ProfileShareItem
    */
-  shareId: string;
+  shareId: object;
   /**
    * @type {boolean}
    * @memberof ProfileShareItem

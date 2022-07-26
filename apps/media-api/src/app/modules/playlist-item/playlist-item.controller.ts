@@ -1,5 +1,6 @@
 import { Controller, Body, Param, UseGuards, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ObjectIdGuard } from '@util-lib';
 import { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
@@ -36,7 +37,7 @@ export class PlaylistItemController {
   @Get(RouteTokens.PLAYLIST_ITEM_ID)
   @ApiParam({ name: 'playlistItemId', type: String, required: true })
   @PlaylistItemGetResponse()
-  async findOne(@Param('playlistItemId', new ObjectIdPipe()) playlistItemId: ObjectId) {
+  async findOne(@Param('playlistItemId') playlistItemId: string) {
     const response = await this.playlistItemService.getById(playlistItemId);
     if (!response) throw notFoundResponse('playlistItem', { args: { playlistItemId } });
     return response;
@@ -62,21 +63,21 @@ export class PlaylistItemController {
   @ApiBearerAuth()
   @Post()
   @PlaylistItemPostResponse()
-  async create(@CreateDto() createPlaylistItemDto: CreatePlaylistItemDto, @GetUserId() createdBy: ObjectId) {
+  async create(@CreateDto() createPlaylistItemDto: CreatePlaylistItemDto, @GetUserId() createdBy) {
     const playlistId = new ObjectId(createPlaylistItemDto?.playlistId);
     const mediaId = new ObjectId(createPlaylistItemDto?.mediaId);
     const sortIndex = createPlaylistItemDto?.sortIndex;
-    const mediaItem: MediaItem = await this.mediaItemService.getById(mediaId);
+    const mediaItem: MediaItem = await this.mediaItemService.findOne(mediaId);
     delete mediaItem._id;
     const playlistItem: Omit<PlaylistItem, '_id'> = {
       isPlayable: false,
       uri: '',
       ...mediaItem,
-      userId: createdBy,
-      playlistId,
-      mediaId,
+      createdBy: ObjectIdGuard(createdBy),
+      userId: ObjectIdGuard(createdBy),
+      playlistId: ObjectIdGuard(playlistId),
+      mediaId: ObjectIdGuard(mediaId),
       sortIndex,
-      createdBy,
     };
     return await this.playlistItemService.create({ ...playlistItem });
   }

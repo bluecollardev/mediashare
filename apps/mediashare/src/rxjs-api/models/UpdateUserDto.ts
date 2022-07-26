@@ -17,10 +17,10 @@
  */
 export interface UpdateUserDto {
   /**
-   * @type {string}
+   * @type {object}
    * @memberof UpdateUserDto
    */
-  readonly _id?: string;
+  readonly _id?: object;
   /**
    * @type {string}
    * @memberof UpdateUserDto
@@ -32,13 +32,13 @@ export interface UpdateUserDto {
    */
   readonly updatedDate?: string;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof UpdateUserDto
    */
-  createdBy?: string;
+  createdBy?: object;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof UpdateUserDto
    */
-  userId?: string;
+  userId?: object;
 }

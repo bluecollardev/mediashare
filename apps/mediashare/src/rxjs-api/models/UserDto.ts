@@ -24,10 +24,10 @@ export interface UserDto {
    */
   imageSrc: string;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof UserDto
    */
-  _id: string;
+  _id: object;
   /**
    * @type {string}
    * @memberof UserDto

@@ -19,10 +19,10 @@ import { PlaylistCategoryType, PlaylistItemResponseDto, TagKeyValue } from './';
  */
 export interface CreatePlaylistResponseDto {
   /**
-   * @type {string}
+   * @type {object}
    * @memberof CreatePlaylistResponseDto
    */
-  readonly _id: string;
+  readonly _id: object;
   /**
    * @type {string}
    * @memberof CreatePlaylistResponseDto
@@ -34,15 +34,15 @@ export interface CreatePlaylistResponseDto {
    */
   readonly updatedDate?: string;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof CreatePlaylistResponseDto
    */
-  createdBy: string;
+  createdBy: object;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof CreatePlaylistResponseDto
    */
-  userId: string;
+  userId: object;
   /**
    * @type {string}
    * @memberof CreatePlaylistResponseDto

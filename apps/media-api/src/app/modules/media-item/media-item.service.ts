@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectIdGuard } from '@util-lib';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 // import { ConfigService } from '@nestjs/config';
@@ -41,7 +42,7 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
       aggregateQuery = aggregateQuery.concat([
         {
           $match: {
-            createdBy: userId,
+            createdBy: ObjectIdGuard(userId),
           },
         },
       ]);

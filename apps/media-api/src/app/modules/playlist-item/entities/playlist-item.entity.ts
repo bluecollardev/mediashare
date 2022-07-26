@@ -1,11 +1,11 @@
-import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
-import { MEDIA_CATEGORY, MediaCategoryType } from '@core-lib';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean } from 'class-validator';
 import { Column, Entity, Index } from 'typeorm';
 import { ApiLongString, ApiObjectId, ApiString, ApiTextString, ApiUriString } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
 import { MediaItem } from '@api-modules/media-item/entities/media-item.entity';
+import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
+import { MEDIA_CATEGORY, MediaCategoryType } from '@core-lib';
 
 @Entity('playlist_item')
 export class PlaylistItem extends MediaItem {
@@ -62,6 +62,7 @@ export class PlaylistItem extends MediaItem {
   @ApiProperty({ required: false })
   isPlayable: boolean;
 
+  // TODO: Get these working again
   /* @Column({ nullable: true })
   @ApiProperty({ enum: MEDIA_CATEGORY, name: 'category', enumName: 'MediaCategoryType', required: false })
   category: MediaCategoryType;

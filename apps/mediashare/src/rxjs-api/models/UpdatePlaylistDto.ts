@@ -19,10 +19,10 @@ import { PlaylistCategoryType, TagKeyValue } from './';
  */
 export interface UpdatePlaylistDto {
   /**
-   * @type {string}
+   * @type {object}
    * @memberof UpdatePlaylistDto
    */
-  readonly _id: string;
+  readonly _id: object;
   /**
    * @type {string}
    * @memberof UpdatePlaylistDto

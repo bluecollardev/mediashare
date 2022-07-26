@@ -19,10 +19,10 @@ import { AuthorProfileDto, MediaCategoryType, TagKeyValue } from './';
  */
 export interface MediaItemResponseDto {
   /**
-   * @type {string}
+   * @type {object}
    * @memberof MediaItemResponseDto
    */
-  readonly _id: string;
+  readonly _id: object;
   /**
    * @type {string}
    * @memberof MediaItemResponseDto
@@ -34,15 +34,15 @@ export interface MediaItemResponseDto {
    */
   readonly updatedDate?: string;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof MediaItemResponseDto
    */
-  createdBy: string;
+  createdBy: object;
   /**
-   * @type {string}
+   * @type {object}
    * @memberof MediaItemResponseDto
    */
-  userId: string;
+  userId: object;
   /**
    * @type {string}
    * @memberof MediaItemResponseDto

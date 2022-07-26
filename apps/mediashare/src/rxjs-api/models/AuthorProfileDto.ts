@@ -17,10 +17,10 @@
  */
 export interface AuthorProfileDto {
   /**
-   * @type {string}
+   * @type {object}
    * @memberof AuthorProfileDto
    */
-  authorId: string;
+  authorId: object;
   /**
    * @type {string}
    * @memberof AuthorProfileDto
