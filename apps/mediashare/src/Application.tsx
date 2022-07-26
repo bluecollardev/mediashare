@@ -151,7 +151,7 @@ const PrivateMainNavigation = ({ globalState }: PrivateMainNavigationProps) => {
         tabBarIcon:
           route.name !== 'login'
             ? ({ focused, color }) => {
-                return <MaterialIcons name={tabNavigationIconsMap[route.name]} color={color} size={26} style={{ marginBottom: 5 }} />;
+                return <MaterialIcons name={tabNavigationIconsMap[route.name]} color={color} size={20} style={{ marginBottom: 5 }} />;
                 // <Icon name={tabNavigationIconsMap[route.name]} color={color} />;
               }
             : undefined,
