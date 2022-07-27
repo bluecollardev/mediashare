@@ -124,6 +124,7 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
       imageSrc: playlist?.imageSrc,
     };
     await dispatch(updateUserPlaylist(dto));
+    await dispatch(getPlaylistById(playlistId));
     goBack();
   }
 

@@ -58,12 +58,7 @@ export class PlaylistController {
   @ApiBearerAuth()
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() userId: string) {
-    const { mediaIds } = createPlaylistDto;
-    return await this.playlistService.createPlaylistWithItems({
-      ...createPlaylistDto,
-      createdBy: ObjectIdGuard(userId),
-      mediaIds,
-    });
+    return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, createdBy: ObjectIdGuard(userId) });
   }
 
   @Put(RouteTokens.PLAYLIST_ID)
@@ -73,11 +68,7 @@ export class PlaylistController {
   @ApiBody({ type: UpdatePlaylistDto })
   @PlaylistPutResponse()
   async update(@Param('playlistId') playlistId: string, @GetUserId() userId: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
-    const { mediaIds, ...rest } = updatePlaylistDto;
-    return await this.playlistService.update(playlistId, {
-      ...rest,
-      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => new ObjectId(id)) : [],
-    });
+    return await this.playlistService.updatePlaylistWithItems(playlistId, updatePlaylistDto);
   }
 
   @Delete(RouteTokens.PLAYLIST_ID)
@@ -85,7 +76,7 @@ export class PlaylistController {
   @ApiBearerAuth()
   @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   async remove(@Param('playlistId') playlistId: string) {
-    return await this.playlistService.remove(playlistId);
+    return await this.playlistService.removePlaylistWithItems(playlistId);
   }
 
   @Post(`${RouteTokens.PLAYLIST_ID}/share/${RouteTokens.USER_ID}`)

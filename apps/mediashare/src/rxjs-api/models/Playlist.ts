@@ -19,10 +19,10 @@ import { PlaylistCategoryType, TagKeyValue } from './';
  */
 export interface Playlist {
   /**
-   * @type {object}
+   * @type {string}
    * @memberof Playlist
    */
-  readonly _id: object;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof Playlist
@@ -34,15 +34,15 @@ export interface Playlist {
    */
   readonly updatedDate?: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof Playlist
    */
-  createdBy: object;
+  createdBy: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof Playlist
    */
-  userId: object;
+  userId: string;
   /**
    * @type {string}
    * @memberof Playlist

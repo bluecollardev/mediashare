@@ -17,10 +17,10 @@
  */
 export interface Like {
   /**
-   * @type {object}
+   * @type {string}
    * @memberof Like
    */
-  readonly _id: object;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof Like
@@ -32,23 +32,23 @@ export interface Like {
    */
   readonly updatedDate?: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof Like
    */
-  createdBy: object;
+  createdBy: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof Like
    */
-  userId: object;
+  userId: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof Like
    */
-  playlistId: object;
+  playlistId: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof Like
    */
-  mediaId: object;
+  mediaId: string;
 }

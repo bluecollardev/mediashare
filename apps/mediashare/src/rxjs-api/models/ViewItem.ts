@@ -17,10 +17,10 @@
  */
 export interface ViewItem {
   /**
-   * @type {object}
+   * @type {string}
    * @memberof ViewItem
    */
-  readonly _id: object;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof ViewItem
@@ -32,23 +32,23 @@ export interface ViewItem {
    */
   readonly updatedDate?: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof ViewItem
    */
-  createdBy: object;
+  createdBy: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof ViewItem
    */
-  userId: object;
+  userId: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof ViewItem
    */
-  playlistId?: object;
+  playlistId?: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof ViewItem
    */
-  mediaId?: object;
+  mediaId?: string;
 }

@@ -19,10 +19,10 @@ import { MediaCategoryType, TagKeyValue } from './';
  */
 export interface UpdatePlaylistItemDto {
   /**
-   * @type {object}
+   * @type {string}
    * @memberof UpdatePlaylistItemDto
    */
-  readonly _id?: object;
+  readonly _id?: string;
   /**
    * @type {string}
    * @memberof UpdatePlaylistItemDto
@@ -34,15 +34,15 @@ export interface UpdatePlaylistItemDto {
    */
   readonly updatedDate?: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof UpdatePlaylistItemDto
    */
-  createdBy?: object;
+  createdBy?: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof UpdatePlaylistItemDto
    */
-  userId?: object;
+  userId?: string;
   /**
    * @type {string}
    * @memberof UpdatePlaylistItemDto
@@ -84,15 +84,15 @@ export interface UpdatePlaylistItemDto {
    */
   tags?: Array<TagKeyValue> | null;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof UpdatePlaylistItemDto
    */
-  playlistId?: object;
+  playlistId?: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof UpdatePlaylistItemDto
    */
-  mediaId?: object;
+  mediaId?: string;
   /**
    * @type {number}
    * @memberof UpdatePlaylistItemDto

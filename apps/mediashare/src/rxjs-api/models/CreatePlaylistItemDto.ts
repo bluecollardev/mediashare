@@ -17,15 +17,15 @@
  */
 export interface CreatePlaylistItemDto {
   /**
-   * @type {object}
+   * @type {string}
    * @memberof CreatePlaylistItemDto
    */
-  playlistId: object;
+  playlistId: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof CreatePlaylistItemDto
    */
-  mediaId: object;
+  mediaId: string;
   /**
    * @type {number}
    * @memberof CreatePlaylistItemDto

@@ -38,6 +38,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
 
   const { playlistId } = route.params;
 
+  // TODO: Can we rename 'selected' in state to 'entity'?
   const { loaded, selected } = useAppSelector((state) => state?.playlist);
   const [isLoaded, setIsLoaded] = useState(loaded);
   const [isSaved, setIsSaved] = useState(false);
@@ -161,7 +162,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
             <ActionButtons
               containerStyles={{ marginHorizontal: 0, marginBottom: 15 }}
               showSecondary={Array.isArray(items) && items.length > 0}
-              secondaryIcon="rule"
+              secondaryIcon="remove"
               onSecondaryClicked={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
               secondaryIconColor={isSelectable ? theme.colors.primary : theme.colors.disabled}
               disablePrimary={actionMode === actionModes.delete}
@@ -190,6 +191,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
             onSecondaryClicked={cancelDeletePlaylistItems}
             primaryLabel="Remove"
             primaryIconColor={theme.colors.error}
+            primaryButtonStyles={{ backgroundColor: theme.colors.error }}
           />
         )}
       </PageActions>
@@ -218,7 +220,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   async function savePlaylist() {
     setIsSaved(true);
     // @ts-ignore
-    const mediaIds = selected.mediaItems.map((item) => item._id) || [];
+    const mediaIds: string[] = selected.mediaItems.map((item) => item._id as string) || [];
     if (isSelectable) {
       const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
       await saveWithIds(filtered);
@@ -233,7 +235,6 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
   }
 
   async function savePlaylistItems() {
-    // @ts-ignore
     const mediaIds = selected.mediaItems.map((item) => item._id) || [];
     if (isSelectable) {
       const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
@@ -243,7 +244,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
     }
 
     setIsLoaded(false);
-    // await loadData();
+    await loadData();
   }
 
   async function saveWithIds(mediaIds: string[]) {

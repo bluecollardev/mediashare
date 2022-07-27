@@ -19,10 +19,10 @@ import { AuthorProfileDto, MediaCategoryType, TagKeyValue } from './';
  */
 export interface PlaylistItemResponseDto {
   /**
-   * @type {object}
+   * @type {string}
    * @memberof PlaylistItemResponseDto
    */
-  readonly _id: object;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof PlaylistItemResponseDto
@@ -34,15 +34,15 @@ export interface PlaylistItemResponseDto {
    */
   readonly updatedDate?: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof PlaylistItemResponseDto
    */
-  createdBy: object;
+  createdBy: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof PlaylistItemResponseDto
    */
-  userId: object;
+  userId: string;
   /**
    * @type {string}
    * @memberof PlaylistItemResponseDto
@@ -84,15 +84,15 @@ export interface PlaylistItemResponseDto {
    */
   tags: Array<TagKeyValue> | null;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof PlaylistItemResponseDto
    */
-  playlistId: object;
+  playlistId: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof PlaylistItemResponseDto
    */
-  mediaId: object;
+  mediaId: string;
   /**
    * @type {number}
    * @memberof PlaylistItemResponseDto

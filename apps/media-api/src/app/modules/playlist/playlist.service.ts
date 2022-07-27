@@ -1,3 +1,4 @@
+import { IdType } from '@core-lib';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectIdGuard } from '@util-lib';
@@ -10,6 +11,7 @@ import { UserService } from '@api-modules/user/user.service';
 import { PlaylistItemService } from '@api-modules/playlist-item/playlist-item.service';
 import { Playlist } from './entities/playlist.entity';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
+import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { SearchParameters } from '@mediashare/shared';
 
 type CreatePlaylistParameters = {
@@ -39,13 +41,54 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
   }
 
   async createPlaylistWithItems(dto: CreatePlaylistDto & { createdBy: ObjectId }) {
-    return await this.create({ ...dto, mediaIds: dto.mediaIds.map((id) => new ObjectId(id)) });
+    const { mediaIds, createdBy } = dto;
+    return await this.create({
+      ...dto,
+      createdBy: ObjectIdGuard(createdBy),
+      mediaIds: mediaIds.map((id) => new ObjectId(id)),
+    });
   }
 
-  createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
+  async updatePlaylistWithItems(playlistId: IdType, dto: UpdatePlaylistDto) {
+    const { mediaIds, ...rest } = dto;
+    // TODO: Transaction!
+    // Get playlist items by playlistId
+    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) });
+    // Filter out any deleted media items
+    const playlistItemIdsToDelete = playlistItems
+      // If playlist item mediaId is NOT included in our mediaIds, delete the playlist item
+      .filter((item) => !mediaIds.includes(item.mediaId.toString()))
+      .map((item) => item.playlistId);
+
+    // Ensure unique ids
+    const uniquePlaylistItemIdsToDelete = Array.from(new Set(playlistItemIdsToDelete));
+    const deletePlaylistItems = uniquePlaylistItemIdsToDelete.map((playlistItemId) => async () => await this.playlistItemService.remove(playlistItemId));
+
+    const result = await Promise.all(deletePlaylistItems);
+    if (!result) {
+      // Handle error
+    }
+
+    return await this.update(playlistId, {
+      ...rest,
+      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => ObjectIdGuard(id)) : [],
+    });
+  }
+
+  async removePlaylistWithItems(playlistId: IdType) {
+    return await this.remove(playlistId);
+  }
+
+  private async createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
     if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
     const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
-    return this.playlistItemService.insertMany(mappedItems);
+    return await this.playlistItemService.insertMany(mappedItems);
+  }
+
+  private async updatePlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
+    if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
+    const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
+    return await this.playlistItemService.insertMany(mappedItems);
   }
 
   protected buildAggregateQuery({

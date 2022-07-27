@@ -19,10 +19,10 @@ import { AuthorProfileDto, MediaItem, PlaylistCategoryType, PlaylistItemResponse
  */
 export interface PlaylistResponseDto {
   /**
-   * @type {object}
+   * @type {string}
    * @memberof PlaylistResponseDto
    */
-  readonly _id: object;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof PlaylistResponseDto
@@ -34,15 +34,15 @@ export interface PlaylistResponseDto {
    */
   readonly updatedDate?: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof PlaylistResponseDto
    */
-  createdBy: object;
+  createdBy: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof PlaylistResponseDto
    */
-  userId: object;
+  userId: string;
   /**
    * @type {string}
    * @memberof PlaylistResponseDto

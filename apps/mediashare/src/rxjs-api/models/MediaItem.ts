@@ -19,10 +19,10 @@ import { MediaCategoryType, TagKeyValue } from './';
  */
 export interface MediaItem {
   /**
-   * @type {object}
+   * @type {string}
    * @memberof MediaItem
    */
-  readonly _id: object;
+  readonly _id: string;
   /**
    * @type {string}
    * @memberof MediaItem
@@ -34,15 +34,15 @@ export interface MediaItem {
    */
   readonly updatedDate?: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof MediaItem
    */
-  createdBy: object;
+  createdBy: string;
   /**
-   * @type {object}
+   * @type {string}
    * @memberof MediaItem
    */
-  userId: object;
+  userId: string;
   /**
    * @type {string}
    * @memberof MediaItem
