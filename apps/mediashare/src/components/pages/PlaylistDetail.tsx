@@ -215,7 +215,7 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
           />
         )}
       </PageActions>
-      {!build.forFreeUser && (
+      {!build.forFreeUser && !isSelectable && (
         <FAB.Group
           visible={true}
           open={fabState.open}
