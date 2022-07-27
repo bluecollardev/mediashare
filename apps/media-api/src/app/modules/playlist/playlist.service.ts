@@ -58,11 +58,11 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
     const playlistItemIdsToDelete = playlistItems
       // If playlist item mediaId is NOT included in our mediaIds, delete the playlist item
       .filter((item) => !mediaIds.includes(item.mediaId.toString()))
-      .map((item) => item.playlistId);
+      .map((item) => item._id.toString());
 
     // Ensure unique ids
     const uniquePlaylistItemIdsToDelete = Array.from(new Set(playlistItemIdsToDelete));
-    const deletePlaylistItems = uniquePlaylistItemIdsToDelete.map((playlistItemId) => async () => await this.playlistItemService.remove(playlistItemId));
+    const deletePlaylistItems = uniquePlaylistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
 
     const result = await Promise.all(deletePlaylistItems);
     if (!result) {
@@ -76,10 +76,20 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
   }
 
   async removePlaylistWithItems(playlistId: IdType) {
+    // Get playlist items by playlistId
+    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) });
+    const playlistItemIdsToDelete = playlistItems.map((item) => item._id.toString());
+    const deletePlaylistItems = playlistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
+
+    const result = await Promise.all(deletePlaylistItems);
+    if (!result) {
+      // Handle error
+    }
+
     return await this.remove(playlistId);
   }
 
-  private async createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
+  /* private async createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
     if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
     const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
     return await this.playlistItemService.insertMany(mappedItems);
@@ -89,7 +99,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
     if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
     const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
     return await this.playlistItemService.insertMany(mappedItems);
-  }
+  } */
 
   protected buildAggregateQuery({
     userId,
