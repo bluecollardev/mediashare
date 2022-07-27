@@ -110,6 +110,8 @@ export const Playlists = ({ globalState }: PageProps) => {
           showDialog={showDeleteDialog}
           title="Delete Playlists"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+          color={theme.colors.white}
+          buttonColor={theme.colors.error}
         />
         <PlaylistsComponentWithSearch
           globalState={globalState}

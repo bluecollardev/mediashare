@@ -11,24 +11,26 @@ interface AppDialogProps {
   onDismiss: any;
   title: string;
   subtitle: string;
+  color?: string;
+  buttonColor?: string;
 }
 
-export function AppDialog({ leftActionLabel, rightActionLabel, leftActionCb, rightActionCb, showDialog, onDismiss, title, subtitle }: AppDialogProps) {
+export function AppDialog({ leftActionLabel, rightActionLabel, leftActionCb, rightActionCb, showDialog, onDismiss, title, subtitle, color = theme.colors.white, buttonColor = theme.colors.primary }: AppDialogProps) {
   return (
     <Portal>
       <Dialog visible={showDialog} onDismiss={onDismiss}>
         <Card.Title
           title={title}
-          left={(props) => <Avatar.Icon color={theme.colors.text} style={{ backgroundColor: theme.colors.error }} {...props} icon="warning" />}
+          left={(props) => <Avatar.Icon color={theme.colors.white} style={{ backgroundColor: theme.colors.error }} {...props} icon="warning" />}
         />
         <Card.Content style={{ marginBottom: 15 }}>
           <Text>{subtitle}</Text>
         </Card.Content>
         <Dialog.Actions style={{ paddingTop: 0 }}>
-          <Button mode="text" color={theme.colors.text} onPress={leftActionCb}>
+          <Button mode="text" dark textColor={color} onPress={leftActionCb}>
             {leftActionLabel}
           </Button>
-          <Button mode="contained" dark color={theme.colors.error} onPress={rightActionCb}>
+          <Button mode="contained" dark color={color} buttonColor={buttonColor} onPress={rightActionCb}>
             {rightActionLabel}
           </Button>
         </Dialog.Actions>

@@ -92,6 +92,8 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
           showDialog={showDeleteDialog}
           title="Delete Playlist"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+          color={theme.colors.white}
+          buttonColor={theme.colors.error}
         />
         <ScrollView>
           <MediaCard
