@@ -172,13 +172,13 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
             />
             <MediaList
               key={clearSelectionKey}
-              onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
               list={items}
+              showThumbnail={true}
               selectable={isSelectable}
               showActions={!isSelectable}
-              removeItem={onRemoveItem}
+              onViewDetail={(item) => viewMediaItem({ mediaId: item._id, uri: item.uri })}
               addItem={onAddItem}
-              showThumbnail={true}
+              removeItem={onRemoveItem}
             />
           </MediaCard>
         </ScrollView>

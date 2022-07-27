@@ -1,14 +1,20 @@
+import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
-import { getPlaylistById, removeUserPlaylist, selectMappedPlaylistMediaItems } from 'mediashare/store/modules/playlist';
+import {
+  getPlaylistById,
+  removeUserPlaylist,
+  selectMappedPlaylistMediaItems,
+  updateUserPlaylist
+} from 'mediashare/store/modules/playlist';
 import { addPlaylistItem } from 'mediashare/store/modules/playlistItem';
 import { getUserPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
 import { loadUsers } from 'mediashare/store/modules/users';
-import { mapAvailableTags } from 'mediashare/store/modules/tags';
+import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import {
   useRouteName,
   useRouteWithParams,
@@ -19,12 +25,23 @@ import {
 } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB } from 'react-native-paper';
-import { PageContainer, PageContent, PageProps, ActionButtons, AppDialog, MediaCard, MediaList } from 'mediashare/components/layout';
-import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
+import {
+  PageContainer,
+  PageContent,
+  PageProps,
+  ActionButtons,
+  AppDialog,
+  MediaCard,
+  MediaList,
+  PageActions
+} from 'mediashare/components/layout';
+import { AuthorProfileDto, MediaCategoryType, MediaItem, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { theme } from 'mediashare/styles';
 
+const actionModes = { delete: 'delete', default: 'default' };
+
 // @ts-ignore
-export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps) => {
+export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }: PageProps) => {
   const dispatch = useDispatch();
 
   const { playlistId = '' } = route?.params || {};
@@ -40,6 +57,7 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
 
   const { loaded, selected } = useAppSelector((state) => state?.playlist);
   const [isLoaded, setIsLoaded] = useState(loaded);
+  const [isSaved, setIsSaved] = useState(false);
 
   const appUserId = useAppSelector((state) => state?.user?.entity?._id);
   // @ts-ignore
@@ -62,6 +80,16 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
   const { tags = [], build } = globalState;
   const tagKeys = (selected?.tags || []).map(({ key }) => key);
   const mappedTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
+  const availableTags = useMemo(() => mapAvailableTags(tags).filter((tag) => tag.isPlaylistTag), []);
+  const initialPlaylistTags = getInitialPlaylistTags();
+  const [selectedTagKeys, setSelectedTagKeys] = useState(initialPlaylistTags);
+
+  const [actionMode, setActionMode] = useState(actionModes.default);
+  const [isSelectable, setIsSelectable] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const items = selectMappedPlaylistMediaItems(selected) || [];
 
   useEffect(() => {
@@ -70,7 +98,11 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
     }
   }, [isLoaded]);
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [clearSelectionKey, setClearSelectionKey] = useState(createRandomRenderKey());
+
+  useEffect(() => {
+    clearCheckboxSelection();
+  }, []);
 
   const [fabState, setFabState] = useState({ open: false });
   let fabActions;
@@ -147,24 +179,42 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
             )}
             {!build.forFreeUser && allowEdit && (
               <ActionButtons
-                containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
-                showSecondary={false}
-                secondaryIcon="rule"
+                containerStyles={{ marginHorizontal: 0, marginBottom: 15 }}
+                showSecondary={Array.isArray(items) && items.length > 0}
+                secondaryIcon="remove"
+                onSecondaryClicked={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
+                secondaryIconColor={isSelectable ? theme.colors.primary : theme.colors.disabled}
+                disablePrimary={actionMode === actionModes.delete}
                 primaryLabel="Add Items To Playlist"
-                primaryIcon="playlist-add"
+                primaryIcon={!(Array.isArray(items) && items.length > 0) ? 'playlist-add' : 'playlist-add'}
                 onPrimaryClicked={() => addToPlaylist({ playlistId })}
               />
             )}
             <MediaList
+              key={clearSelectionKey}
               list={items}
               showThumbnail={true}
+              selectable={isSelectable}
+              showActions={!isSelectable}
               onViewDetail={activatePlaylistDetail}
-              selectable={false}
+              addItem={onAddItem}
+              removeItem={onRemoveItem}
               actionIconRight={allowEdit ? 'edit' : undefined}
             />
           </MediaCard>
         </ScrollView>
       </PageContent>
+      <PageActions>
+        {isSelectable && (
+          <ActionButtons
+            onPrimaryClicked={confirmDeletePlaylistItems}
+            onSecondaryClicked={cancelDeletePlaylistItems}
+            primaryLabel="Remove"
+            primaryIconColor={theme.colors.error}
+            primaryButtonStyles={{ backgroundColor: theme.colors.error }}
+          />
+        )}
+      </PageActions>
       {!build.forFreeUser && (
         <FAB.Group
           visible={true}
@@ -247,6 +297,93 @@ export const PlaylistDetail = ({ route, globalState = { tags: [] } }: PageProps)
       await dispatch(getPlaylistById(playlistId));
     }
     editPlaylistItemById({ playlistItemId: itemId });
+  }
+
+  async function savePlaylistItems() {
+    const mediaIds = selected.mediaItems.map((item) => item._id) || [];
+    if (isSelectable) {
+      const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
+      await saveWithIds(filtered);
+    } else {
+      await saveWithIds(mediaIds);
+    }
+
+    setIsLoaded(false);
+    await loadData();
+  }
+
+  async function saveWithIds(mediaIds: string[]) {
+    // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
+    // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
+    const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
+
+    await dispatch(
+      updateUserPlaylist({
+        _id: selected._id,
+        title,
+        description,
+        mediaIds,
+        category: MediaCategoryType[category as any],
+        tags: (selectedTags || []) as any[],
+        imageSrc,
+      })
+    );
+  }
+
+  function getInitialPlaylistTags() {
+    return (
+      selected?.tags
+      ?.map((tag) => {
+        return tag ? tag?.key : undefined;
+      })
+      .filter((tag) => !!tag) || []
+    );
+  }
+
+  // const [selected, setSelected] = useState(selectedItems.size);
+  function onAddItem(item: MediaItem) {
+    // setSelected(selectedItems.size);
+    const updatedItems = selectedItems.concat([item._id]);
+    setSelectedItems(updatedItems);
+  }
+
+  function onRemoveItem(selected: MediaItem) {
+    const updatedItems = selectedItems.filter((item) => item !== selected._id);
+    setSelectedItems(updatedItems);
+  }
+
+  function clearCheckboxSelection() {
+    const randomKey = createRandomRenderKey();
+    setClearSelectionKey(randomKey);
+  }
+
+  function activateDeleteMode() {
+    setActionMode(actionModes.delete);
+    setIsSelectable(true);
+  }
+
+  async function confirmDeletePlaylistItems() {
+    await savePlaylistItems();
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+    resetData();
+  }
+
+  function cancelDeletePlaylistItems() {
+    setActionMode(actionModes.default);
+    clearCheckboxSelection();
+    setIsSelectable(false);
+    resetData();
+  }
+
+  function resetData() {
+    setSelectedItems([]);
+  }
+
+  function clearAndGoBack() {
+    navigation.goBack();
+    resetData();
   }
 };
 
