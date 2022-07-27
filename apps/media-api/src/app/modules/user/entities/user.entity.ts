@@ -30,10 +30,10 @@ export class User extends BcEntity {
   @Column() imageSrc: string;
 
   @ApiProperty({ isArray: true, nullable: true})
-  @Column({ array: true, nullable: true }) sharedPlaylists: ObjectId[];
+  @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
 
   @ApiProperty({ isArray: true, nullable: true})
-  @Column({ array: true, nullable: true}) sharedMediaItems: ObjectId[];
+  @Column({ array: true, nullable: true}) sharedMediaItems?: ObjectId[];
 
   @ApiProperty()
   @Column({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType' }) role: BcRolesType;

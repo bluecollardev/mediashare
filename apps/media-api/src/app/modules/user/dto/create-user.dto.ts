@@ -6,6 +6,7 @@ import { PlaylistResponseDto } from '@api-modules/playlist/dto/playlist-response
 import { User } from '../entities/user.entity';
 import { BC_ROLES } from '@core-lib';
 import { BcRolesType } from '@api-core/types/roles.type';
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 
 export class CreateUserDto {
   @ApiName(<ApiDecoratorOptions>{ required: true })
@@ -22,9 +23,11 @@ export class CreateUserDto {
 }
 
 export class UserDto implements User {
+  
   constructor(user: Partial<User>) {
     Object.assign(this, user);
   }
+  
   @ApiString()
   imageSrc: string;
 
@@ -68,6 +71,9 @@ export class UserDto implements User {
 
   @ApiProperty()
   sharedMediaItems?: ObjectId[];
+
+  @ApiProperty()
+  shareItem: ShareItem[];
 
   @ApiPastDate()
   createdAt?: Date;
