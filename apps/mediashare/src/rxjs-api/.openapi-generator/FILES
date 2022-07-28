@@ -4,6 +4,7 @@ apis/LikesApi.ts
 apis/MediaItemsApi.ts
 apis/PlaylistItemsApi.ts
 apis/PlaylistsApi.ts
+apis/SearchApi.ts
 apis/ShareItemsApi.ts
 apis/TagsApi.ts
 apis/UserApi.ts

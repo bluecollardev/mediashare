@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
 import { removeUserPlaylist } from 'mediashare/store/modules/playlist';
-import { getUserPlaylists, findPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
+import { getUserPlaylists, findUserPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
 import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useRouteName, useViewPlaylistById } from 'mediashare/hooks/navigation';
@@ -110,6 +110,8 @@ export const Playlists = ({ globalState }: PageProps) => {
           showDialog={showDeleteDialog}
           title="Delete Playlists"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+          color={theme.colors.white}
+          buttonColor={theme.colors.error}
         />
         <PlaylistsComponentWithSearch
           globalState={globalState}
@@ -171,7 +173,7 @@ export const Playlists = ({ globalState }: PageProps) => {
     };
 
     if (args.text || args.tags.length > 0) {
-      await dispatch(findPlaylists(args));
+      await dispatch(findUserPlaylists(args));
     } else {
       await dispatch(getUserPlaylists());
     }

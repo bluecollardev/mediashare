@@ -36,14 +36,14 @@ export class UserService extends DataService<User, MongoRepository<User>> {
     return this.client.send({ role: 'auth', cmd: 'setRoles' }, { _id, roles }).toPromise();
   }
 
-  updateUser({ userId, updateUserDto }: { userId: ObjectId; updateUserDto: UpdateUserDto }) {
-    return this.update(userId, omit(updateUserDto, ['role']));
+  updateUser({ userId, updateUserDto }: { userId: string; updateUserDto: UpdateUserDto }) {
+    return this.update(new ObjectId(userId), omit(updateUserDto, ['role']));
   }
 
-  getUserById(id: ObjectId) {
+  getUserById(id: string) {
     return this.repository
       .aggregate([
-        { $match: { _id: id } },
+        { $match: { _id: new ObjectId(id) } },
         {
           $replaceRoot: {
             newRoot: {

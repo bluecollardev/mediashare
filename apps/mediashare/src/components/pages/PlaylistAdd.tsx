@@ -120,7 +120,7 @@ const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
   );
 
   async function savePlaylist() {
-    setIsSaved(true)
+    setIsSaved(true);
     // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
     // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
     const selectedTags = mapSelectedTagKeysToTagKeyValue(selectedTagKeys, availableTags);
@@ -139,7 +139,7 @@ const PlaylistAdd = ({ navigation, globalState = { tags: [] } }: PageProps) => {
     const playlistId = payload._id;
     await dispatch(getUserPlaylists());
     await dispatch(getPlaylistById(playlistId));
-    setIsSaved(false)
+    setIsSaved(false);
     editPlaylist(playlistId);
   }
 

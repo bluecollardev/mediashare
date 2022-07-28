@@ -12,6 +12,7 @@ import { ProfileModule } from '@api-modules/profile/profile.module';
 import { MediaItemModule } from '@api-modules/media-item/media-item.module';
 import { PlaylistItemModule } from '@api-modules/playlist-item/playlist-item.module';
 import { PlaylistModule } from '@api-modules/playlist/playlist.module';
+import { SearchModule } from '@api-modules/search/search.module';
 import { ShareItemModule } from '@api-modules/share-item/share-item.module';
 import { ViewsModule } from '@api-modules/views/views.module';
 import { LikesModule } from '@api-modules/likes/likes.module';
@@ -56,6 +57,7 @@ import { UserConnectionModule } from '@api-modules/user-connection/user-connecti
     MediaItemModule,
     PlaylistItemModule,
     PlaylistModule,
+    SearchModule,
     ViewsModule,
     ShareItemModule,
     LikesModule,

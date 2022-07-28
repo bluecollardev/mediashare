@@ -82,7 +82,11 @@ export function ActionButtons({
               {primaryIcon && <IconButton iconColor={primaryIconColor} icon={primaryIcon} />}
               {!!primaryLabel && (
                 <Text
-                  style={{ ...defaultStyles.primaryButtonLabel, ...primaryButtonLabelStyles, ...(disablePrimary ? defaultStyles.primaryButtonLabelDisabled : {}) }}
+                  style={{
+                    ...defaultStyles.primaryButtonLabel,
+                    ...primaryButtonLabelStyles,
+                    ...(disablePrimary ? defaultStyles.primaryButtonLabelDisabled : {}),
+                  }}
                 >
                   {primaryLabel}
                 </Text>

@@ -84,6 +84,8 @@ const PlaylistItemEdit = ({
           showDialog={showDialog}
           title="Delete Media Item"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+          color={theme.colors.white}
+          buttonColor={theme.colors.error}
         />
         <ScrollView>
           <MediaCard

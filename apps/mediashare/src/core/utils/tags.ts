@@ -36,6 +36,7 @@ export const mapSelectedTagKeysToTagKeyValue = (selectedTagKeys: string[], avail
         return extractKey(key) === extractKey(selectedTagKey);
       });
     })
+    .filter((tag) => !!tag) // If selectedTagKey isn't found, we could have undefined records, filter them out
     .map(({ key, value }) => ({
       key: extractKey(key),
       value

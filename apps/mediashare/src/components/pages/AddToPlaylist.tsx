@@ -10,21 +10,12 @@ import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { withPlaylistSearch } from 'mediashare/components/hoc/withPlaylistSearch';
 import { useGoBack, useViewMediaItemById } from 'mediashare/hooks/navigation';
-import {
-  PageContainer,
-  PageActions,
-  PageProps,
-  PageContent,
-  ActionButtons,
-  MediaListType,
-  MediaListItem,
-  NoContent
-} from 'mediashare/components/layout';
+import { PageContainer, PageActions, PageProps, PageContent, ActionButtons, MediaListType, MediaListItem, NoContent } from 'mediashare/components/layout';
 
 import { theme } from 'mediashare/styles';
 
 export const AddToPlaylistComponent = ({ entities, viewMediaItem, addItem, removeItem }) => {
-  return <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
+  return <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />;
 
   function renderVirtualizedListItem(item) {
     const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, thumbnail = '' } = item;
@@ -48,7 +39,7 @@ export const AddToPlaylistComponent = ({ entities, viewMediaItem, addItem, remov
       </>
     );
   }
-}
+};
 
 const AddToPlaylistComponentWithSearch = withPlaylistSearch(AddToPlaylistComponent);
 
@@ -83,11 +74,7 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
           removeItem={removeItem}
         />
         {loaded && entities.length === 0 && (
-          <NoContent
-            onPress={() => undefined}
-            messageButtonText="There are no items in your media library to add."
-            icon="info"
-          />
+          <NoContent onPress={() => undefined} messageButtonText="There are no items in your media library to add." icon="info" />
         )}
       </PageContent>
       <PageActions>
@@ -137,6 +124,7 @@ export const AddToPlaylist = ({ route, globalState }: PageProps) => {
       imageSrc: playlist?.imageSrc,
     };
     await dispatch(updateUserPlaylist(dto));
+    await dispatch(getPlaylistById(playlistId));
     goBack();
   }
 

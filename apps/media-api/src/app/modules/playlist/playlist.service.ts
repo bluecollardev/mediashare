@@ -1,5 +1,7 @@
+import { IdType } from '@core-lib';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectIdGuard } from '@util-lib';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
@@ -9,6 +11,7 @@ import { UserService } from '@api-modules/user/user.service';
 import { PlaylistItemService } from '@api-modules/playlist-item/playlist-item.service';
 import { Playlist } from './entities/playlist.entity';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
+import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { SearchParameters } from '@mediashare/shared';
 
 type CreatePlaylistParameters = {
@@ -38,14 +41,65 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
   }
 
   async createPlaylistWithItems(dto: CreatePlaylistDto & { createdBy: ObjectId }) {
-    return await this.create({ ...dto, mediaIds: dto.mediaIds.map((id) => new ObjectId(id)) });
+    const { mediaIds, createdBy } = dto;
+    return await this.create({
+      ...dto,
+      createdBy: ObjectIdGuard(createdBy),
+      mediaIds: mediaIds.map((id) => new ObjectId(id)),
+    });
   }
 
-  createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
+  async updatePlaylistWithItems(playlistId: IdType, dto: UpdatePlaylistDto) {
+    const { mediaIds, ...rest } = dto;
+    // TODO: Transaction!
+    // Get playlist items by playlistId
+    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) });
+    // Filter out any deleted media items
+    const playlistItemIdsToDelete = playlistItems
+      // If playlist item mediaId is NOT included in our mediaIds, delete the playlist item
+      .filter((item) => !mediaIds.includes(item.mediaId.toString()))
+      .map((item) => item._id.toString());
+
+    // Ensure unique ids
+    const uniquePlaylistItemIdsToDelete = Array.from(new Set(playlistItemIdsToDelete));
+    const deletePlaylistItems = uniquePlaylistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
+
+    const result = await Promise.all(deletePlaylistItems);
+    if (!result) {
+      // Handle error
+    }
+
+    return await this.update(playlistId, {
+      ...rest,
+      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => ObjectIdGuard(id)) : [],
+    });
+  }
+
+  async removePlaylistWithItems(playlistId: IdType) {
+    // Get playlist items by playlistId
+    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) });
+    const playlistItemIdsToDelete = playlistItems.map((item) => item._id.toString());
+    const deletePlaylistItems = playlistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
+
+    const result = await Promise.all(deletePlaylistItems);
+    if (!result) {
+      // Handle error
+    }
+
+    return await this.remove(playlistId);
+  }
+
+  /* private async createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
     if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
     const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
-    return this.playlistItemService.insertMany(mappedItems);
+    return await this.playlistItemService.insertMany(mappedItems);
   }
+
+  private async updatePlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
+    if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
+    const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
+    return await this.playlistItemService.insertMany(mappedItems);
+  } */
 
   protected buildAggregateQuery({
     userId,
@@ -58,18 +112,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
   }: SearchParameters) {
     let aggregateQuery = [];
 
-    // Match by user ID first as it's indexed and this is the best way to reduce the number of results early
-    if (userId) {
-      aggregateQuery = aggregateQuery.concat([
-        {
-          $match: {
-            createdBy: userId,
-          },
-        },
-      ]);
-    }
-
-    // Next, we want to match the text as it's also indexed
+    // We have to search by text first as $match->$text is only allowed to be the first part of an aggregate query
     // TODO: fullText means a search on all index fields, this is only supported in MongoDB Atlas
     // Not sure if we want to use Atlas as we can't self host... we can implement distributed search later...
     if (query && fullText) {
@@ -84,6 +127,17 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
         {
           $match: {
             $text: { $search: query },
+          },
+        },
+      ]);
+    }
+
+    // Match by user ID if it's available as it's indexed and this is the best way to reduce the number of results early
+    if (userId) {
+      aggregateQuery = aggregateQuery.concat([
+        {
+          $match: {
+            createdBy: ObjectIdGuard(userId),
           },
         },
       ]);

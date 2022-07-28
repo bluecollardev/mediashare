@@ -12,7 +12,7 @@ import { PlaylistService } from './playlist.service';
 /* import { PlaylistItemService } from '@api-modules/playlist-item/services/playlist-item.service'; */
 
 describe('PlaylistService', () => {
-  /* let service: PlaylistService;
+  /* let service: SearchService;
   let repository: MongoRepository<Playlist>;
   let mediaRepository: MongoRepository<MediaItem>;
   let playlistItemRepository: MongoRepository<PlaylistItem>;
@@ -58,7 +58,7 @@ describe('PlaylistService', () => {
 
     const logger = module.get(PinoLogger);
     const playlistItemService = new PlaylistItemService(playlistItemRepository, logger);
-    service = new PlaylistService(repository, logger, userService, playlistItemService);
+    service = new SearchService(repository, logger, userService, playlistItemService);
   });
 
   it('should be defined', () => {

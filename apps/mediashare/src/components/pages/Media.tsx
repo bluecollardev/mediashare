@@ -119,6 +119,8 @@ export const Media = ({ navigation, globalState }: PageProps) => {
           showDialog={showDeleteDialog}
           title="Delete Media Items"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+          color={theme.colors.white}
+          buttonColor={theme.colors.error}
         />
         <MediaComponentWithSearch
           globalState={globalState}

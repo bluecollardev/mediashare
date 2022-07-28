@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectIdGuard } from '@util-lib';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 // import { ConfigService } from '@nestjs/config';
@@ -41,7 +42,7 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
       aggregateQuery = aggregateQuery.concat([
         {
           $match: {
-            createdBy: userId,
+            createdBy: ObjectIdGuard(userId),
           },
         },
       ]);
@@ -143,7 +144,7 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
               sortIndex: '$sortIndex',
               uri: '$uri',
               thumbnail: '$thumbnail',
-              category: '$category',
+              // category: '$category',
               tags: '$tags',
               // shareCount: { $size: '$shareItems' },
               // likesCount: { $size: '$likeItems' },

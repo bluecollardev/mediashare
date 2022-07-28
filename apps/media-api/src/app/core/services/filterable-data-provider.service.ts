@@ -1,8 +1,10 @@
+import { IdType } from '@core-lib';
 import { Injectable } from '@nestjs/common';
+import { ObjectIdGuard } from '@util-lib';
 import { PinoLogger } from 'nestjs-pino';
+import { pipeline } from 'stream';
 import { MongoRepository } from 'typeorm';
 import { DataService } from '@api-core/services/data-provider.service';
-import { ObjectId } from 'mongodb';
 import { SearchParameters } from '@mediashare/shared';
 import { BcBaseEntity } from '../entities/base.entity';
 
@@ -46,19 +48,23 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
   }
 
   getById(id) {
-    return this.repository.aggregate([{ $match: { _id: id } }, ...this.buildFields(), this.replaceRoot()]).next();
+    const pipeline = [{ $match: { _id: ObjectIdGuard(id) } }, ...this.buildFields(), this.replaceRoot()];
+    return this.repository.aggregate(pipeline).next();
   }
 
-  getByUserId(userId: ObjectId) {
-    return this.repository.aggregate([{ $match: { createdBy: userId } }, ...this.buildFields(), this.replaceRoot()]).toArray();
+  getByUserId(userId: IdType) {
+    const pipeline = [{ $match: { createdBy: ObjectIdGuard(userId) } }, ...this.buildFields(), this.replaceRoot()];
+    return this.repository.aggregate(pipeline).toArray();
   }
 
   getPopular() {
-    return this.repository.aggregate([...this.buildAggregateQuery({}), ...this.buildFields(), { $sort: { likesCount: -1 } }, this.replaceRoot()]).toArray();
+    const pipeline = [...this.buildAggregateQuery({}), ...this.buildFields(), { $sort: { likesCount: -1 } }, this.replaceRoot()];
+    return this.repository.aggregate(pipeline).toArray();
   }
 
-  search({ query, tags }: SearchParameters) {
-    return this.repository.aggregate([...this.buildAggregateQuery({ query, tags }), ...this.buildFields(), this.replaceRoot()]).toArray();
+  search({ userId, query, tags }: SearchParameters) {
+    const pipeline = [...this.buildAggregateQuery({ userId, query, tags }), ...this.buildFields(), this.replaceRoot()];
+    return this.repository.aggregate(pipeline).toArray();
   }
 
   protected abstract buildAggregateQuery(params: SearchParameters): any[];

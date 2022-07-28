@@ -84,6 +84,8 @@ const MediaItemEdit = ({
           showDialog={showDialog}
           title="Delete Media Item"
           subtitle="Are you sure you want to do this? This action is final and cannot be undone."
+          color={theme.colors.white}
+          buttonColor={theme.colors.error}
         />
         <ScrollView>
           <MediaCard
@@ -161,7 +163,7 @@ const MediaItemEdit = ({
   }
 
   async function saveItem() {
-    setIsSaved(true)
+    setIsSaved(true);
 
     // We only keep track of the tag key, we need to provide a { key, value } pair to to the API
     // Map keys using our tag keys in state... ideally at some point maybe we do this on the server
@@ -178,7 +180,7 @@ const MediaItemEdit = ({
     };
 
     await dispatch(updateMediaItem(dto));
-    setIsSaved(false)
+    setIsSaved(false);
     await viewMediaItems();
   }
 
