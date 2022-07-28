@@ -33,6 +33,7 @@ export class UsersController {
   }
 
   @Get(RouteTokens.USER_ID)
+  @ApiBearerAuth()
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserGetResponse({ type: ProfileDto })
   async findOne(@Param('userId') userId: string): Promise<User> {
@@ -45,6 +46,7 @@ export class UsersController {
   }
 
   @Delete(RouteTokens.USER_ID)
+  @ApiBearerAuth()
   @ApiParam({ name: 'userId', type: String, required: true })
   @UseGuards(UserGuard)
   @ApiBearerAuth()
@@ -53,6 +55,7 @@ export class UsersController {
   }
 
   @Put(RouteTokens.USER_ID)
+  @ApiBearerAuth()
   @ApiParam({ name: 'userId', type: String, required: true })
   @ApiBody({ type: UpdateUserDto })
   @UserPostResponse({ type: UserDto })
@@ -63,6 +66,7 @@ export class UsersController {
   }
 
   @Get(':userId/playlists')
+  @ApiBearerAuth()
   @ApiParam({ name: 'userId', type: String, required: true })
   @ApiHideProperty()
   @UserGetResponse({ type: PlaylistResponseDto, isArray: true })
@@ -72,6 +76,7 @@ export class UsersController {
 
   // TODO: Remove this?
   @Put(':userId/roles')
+  @ApiBearerAuth()
   @ApiBody({ enum: BC_ROLES })
   @UserPostResponse({ type: UserDto })
   setRoles(@Param('userId') id: string, @Body() params: { roles: BcRolesType[] }) {

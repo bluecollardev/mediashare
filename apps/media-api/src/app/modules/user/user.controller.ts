@@ -69,7 +69,6 @@ export class UserController {
       imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
     });
     const profile = await this.userService.getUserById(newUser._id);
-    console.log(profile)
     return res.send(profile);
   }
 

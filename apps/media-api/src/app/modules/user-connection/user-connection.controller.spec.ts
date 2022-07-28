@@ -10,7 +10,6 @@ describe('UserConnectionController', () => {
       controllers: [UserConnectionController],
       providers: [UserConnectionService],
     }).compile();
-
     controller = module.get<UserConnectionController>(UserConnectionController);
   });
 

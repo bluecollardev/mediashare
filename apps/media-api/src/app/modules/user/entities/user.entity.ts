@@ -40,5 +40,5 @@ export class User extends BcEntity {
 
   @ApiProperty({ type: () => ShareItem, isArray: true, nullable: true})
   @OneToMany(() => ShareItem, shareItem => shareItem.userId)
-  @Column({ array: true, nullable: true }) shareItem: ShareItem[]
+  @Column({ array: true, nullable: true }) shareItem?: ShareItem[]
 }
