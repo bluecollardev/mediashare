@@ -27,7 +27,6 @@ export class UsersController {
   }
 
   @Get(RouteTokens.USER_ID)
-  @ApiBearerAuth()
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserGetResponse({ type: ProfileDto })
   async findOne(@Param('userId') userId: string): Promise<User> {
@@ -40,17 +39,14 @@ export class UsersController {
   }
 
   @Delete(RouteTokens.USER_ID)
-  @ApiBearerAuth()
   @ApiParam({ name: 'userId', type: String, required: true })
   @UseGuards(UserGuard)
-  @ApiBearerAuth()
   remove(@Param('userId') userId: string): Promise<DeleteResult> {
     return this.userService.remove(userId);
   }
 
   @Put(RouteTokens.USER_ID)
   @UseGuards(UserGuard)
-  @ApiBody({ type: UpdateUserDto })
   @ApiParam({ name: 'userId', type: String, required: true })
   @ApiBody({ type: UpdateUserDto })
   @UserPostResponse({ type: UserDto })
@@ -59,7 +55,6 @@ export class UsersController {
   }
 
   @Put(':userId/roles')
-  @ApiBearerAuth()
   @ApiBody({ enum: BC_ROLES })
   @UserPostResponse({ type: UserDto })
   setRoles(@Param('userId') id: string, @Body() params: { roles: BcRolesType[] }) {
