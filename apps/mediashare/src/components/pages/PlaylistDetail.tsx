@@ -35,7 +35,7 @@ import {
   MediaList,
   PageActions
 } from 'mediashare/components/layout';
-import { AuthorProfileDto, MediaCategoryType, MediaItem, PlaylistResponseDto } from 'mediashare/rxjs-api';
+import { AuthorProfileDto, MediaCategoryType, PlaylistItem, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { theme } from 'mediashare/styles';
 
 const actionModes = { delete: 'delete', default: 'default' };
@@ -90,7 +90,7 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const items = selectMappedPlaylistMediaItems(selected) || [];
+  const playlistMediaItems = selectMappedPlaylistMediaItems(selected) || [];
 
   useEffect(() => {
     if (!isLoaded) {
@@ -162,18 +162,18 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
                 styles={{ width: '100%', marginTop: 25, marginBottom: 25 }}
                 compact
                 dark
-                onPress={() => (items && items.length > 0 ? viewPlaylistMediaItem({ mediaId: items[0]._id, uri: items[0].uri }) : undefined)}
+                onPress={() => (playlistMediaItems && playlistMediaItems.length > 0 ? viewPlaylistMediaItem({ mediaId: playlistMediaItems[0]._id, uri: playlistMediaItems[0].uri }) : undefined)}
               >
                 Play From Beginning
               </Button>
               <Divider /> */}
-            {!allowEdit && items.length > 0 && (
+            {!allowEdit && playlistMediaItems.length > 0 && (
               <ActionButtons
                 containerStyles={{ marginHorizontal: 0, marginVertical: 15 }}
                 showSecondary={false}
                 showPrimary={true}
                 onPrimaryClicked={async () => {
-                  playFromBeginning({ mediaId: items[0]._id, uri: items[0].uri });
+                  playFromBeginning({ mediaId: playlistMediaItems[0]._id, uri: playlistMediaItems[0].uri });
                 }}
                 primaryLabel="Play from Beginning"
                 primaryIcon="live-tv"
@@ -182,19 +182,19 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
             {!build.forFreeUser && allowEdit && (
               <ActionButtons
                 containerStyles={{ marginHorizontal: 0, marginBottom: 15 }}
-                showSecondary={Array.isArray(items) && items.length > 0}
+                showSecondary={Array.isArray(playlistMediaItems) && playlistMediaItems.length > 0}
                 secondaryIcon="remove"
                 onSecondaryClicked={() => (!isSelectable ? activateDeleteMode() : cancelDeletePlaylistItems())}
                 secondaryIconColor={isSelectable ? theme.colors.primary : theme.colors.disabled}
                 disablePrimary={actionMode === actionModes.delete}
                 primaryLabel="Add Items To Playlist"
-                primaryIcon={!(Array.isArray(items) && items.length > 0) ? 'playlist-add' : 'playlist-add'}
+                primaryIcon={!(Array.isArray(playlistMediaItems) && playlistMediaItems.length > 0) ? 'playlist-add' : 'playlist-add'}
                 onPrimaryClicked={() => addToPlaylist({ playlistId })}
               />
             )}
             <MediaList
               key={clearSelectionKey}
-              list={items}
+              list={playlistMediaItems}
               showThumbnail={true}
               selectable={isSelectable}
               showActions={!isSelectable}
@@ -302,7 +302,8 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
   }
 
   async function savePlaylistItems() {
-    const mediaIds = selected.mediaItems.map((item) => item._id) || [];
+    // We manage by mediaItemId, as the _id can be either a playlistItemId or a mediaItemId
+    const mediaIds = playlistMediaItems.map((item) => item.mediaItemId) || [];
     if (isSelectable) {
       const filtered = mediaIds.filter((id) => !selectedItems.includes(id));
       await saveWithIds(filtered);
@@ -342,15 +343,13 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
     );
   }
 
-  // const [selected, setSelected] = useState(selectedItems.size);
-  function onAddItem(item: MediaItem) {
-    // setSelected(selectedItems.size);
-    const updatedItems = selectedItems.concat([item._id]);
+  function onAddItem(item: PlaylistItem) {
+    const updatedItems = selectedItems.concat([item.mediaId]);
     setSelectedItems(updatedItems);
   }
 
-  function onRemoveItem(selected: MediaItem) {
-    const updatedItems = selectedItems.filter((item) => item !== selected._id);
+  function onRemoveItem(selected: PlaylistItem) {
+    const updatedItems = selectedItems.filter((item) => item !== selected.mediaId);
     setSelectedItems(updatedItems);
   }
 
