@@ -57,9 +57,9 @@ export const FeedTags = ({ list = [], onViewDetailClicked }: FeedTagsBlockProps)
           // description={`0 playlists`}
           showThumbnail={true}
           image={imageSrc}
+          showPlayableIcon={false}
           showActions={false}
           selectable={false}
-          showPlayableIcon={false}
           onViewDetail={() => onViewDetailClicked(item)}
         />
       </View>
