@@ -1,4 +1,6 @@
-const DEFAULT_IMAGE = 'https://www.freeiconspng.com/uploads/no-image-icon-13.png';
+import { awsUrl } from 'mediashare/core/aws/key-factory';
+
+const DEFAULT_IMAGE = awsUrl + `assets/no-image.png`;
 
 export function usePreviewImage(imageSrc) {
   const isDefaultImage = !imageSrc;

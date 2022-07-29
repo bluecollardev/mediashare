@@ -1,4 +1,5 @@
 import React from 'react';
+import { usePreviewImage } from 'mediashare/hooks/usePreviewImage';
 import { Dimensions, FlatList, View, TouchableHighlight } from 'react-native';
 import { useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { MediaCard, SectionHeader } from 'mediashare/components/layout';
@@ -39,6 +40,9 @@ export const FeedRecentlyPlayed = ({ list = [] }: FeedRecentlyPlayedProps) => {
       h: Dimensions.get('window').width / 2
     };
 
+    console.log(`[DisplayPreviewOrVideo] thumbnail: ${imageSrc}`);
+    const mediaPreview = usePreviewImage(imageSrc);
+
     return (
       <View style={{ width: dimensions.w, height: dimensions.h }}>
         <TouchableHighlight
@@ -52,7 +56,7 @@ export const FeedRecentlyPlayed = ({ list = [] }: FeedRecentlyPlayedProps) => {
             title={title}
             // description={<MediaListItem.Description data={{ authorProfile, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />}
             showThumbnail={true}
-            thumbnail={imageSrc}
+            thumbnail={mediaPreview.imageSrc}
             thumbnailStyle={{
               aspectRatio: 1 / 1,
               padding: 10

@@ -111,7 +111,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 
   const TopDrawer = topDrawer;
 
-  const showMediaPreview = showThumbnail && (thumbnail || mediaSrc);
+  const showMediaPreview = showThumbnail && (!!thumbnail || !!mediaSrc);
 
   return isEdit ? (
     <View>

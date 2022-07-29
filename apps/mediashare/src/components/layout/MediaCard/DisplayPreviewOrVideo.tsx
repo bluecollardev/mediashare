@@ -22,7 +22,9 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
   const initialMediaDisplayMode = isPlayable ? (getMediaDisplayMode() as MediaDisplayMode) : 'image';
   const [mediaDisplayMode, setMediaDisplayMode] = useState(initialMediaDisplayMode);
 
+  console.log(`[DisplayPreviewOrVideo] thumbnail: ${thumbnail}`);
   const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
+  console.log(`imageSrc: ${imageSrc}, isDefaultImage: ${isDefaultImage}`)
   return (
     <View
       style={{
