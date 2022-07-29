@@ -107,7 +107,7 @@ const routeConfig = {
     name: 'feed',
     options: {
       title: 'My Feed',
-      header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={false} showAccountMenu={true} />,
+      header: (props) => <AppHeader {...props} searchable={true} showDisplayControls={false} showAccountMenu={true} />,
     },
   },
   feedSharedWithMe: {

@@ -98,9 +98,9 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
               containerStyles={{ marginHorizontal: 0, marginTop: 15 }}
               onPrimaryClicked={() => submitSearch()}
             />
+            <Divider />
           </>
         )}
-        <Divider />
         <WrappedComponent globalState={globalState} {...rest} />
       </>
     );
