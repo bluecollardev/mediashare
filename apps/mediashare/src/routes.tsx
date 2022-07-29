@@ -6,10 +6,10 @@ const routeConfig = {
     name: 'login',
     options: { title: '', header: () => null },
   },
-  browse: {
-    name: 'browse',
+  sharedWithMe: {
+    name: 'sharedWithMe',
     options: {
-      title: 'My Feed',
+      title: 'Shared With Me',
       header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={true} showAccountMenu={true} />,
     },
   },

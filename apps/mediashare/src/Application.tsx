@@ -57,6 +57,7 @@ const FeedNavigation = () => {
   return (
     <FeedStackNavigator.Navigator>
       <FeedStackNavigator.Screen {...routeConfig.feed} component={Feed} />
+      <FeedStackNavigator.Screen {...routeConfig.sharedWithMe} component={Feed} />
       <FeedStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
       <FeedStackNavigator.Screen {...routeConfig.playlistItemDetail} component={PlaylistItemDetail} />
       <FeedStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
