@@ -21,7 +21,8 @@ import { createBottomTabListeners } from './screenListeners';
 import { GlobalStateProps, withGlobalStateProvider } from './core/globalState';
 
 import Login from './components/pages/Login';
-import Browse from './components/pages/Browse';
+import Feed from './components/pages/Feed';
+import FeedSharedWithMe from './components/pages/SharedWithMe';
 import MediaItemAdd from './components/pages/MediaItemAdd';
 import AddFromFeed from './components/pages/AddFromFeed';
 import Search from './components/pages/Search';
@@ -46,22 +47,23 @@ import SharedByContact from './components/pages/SharedByContact';
 
 // Map route names to icons
 export const tabNavigationIconsMap = {
-  Browse: 'explore',
+  Feed: 'explore',
   Search: 'search',
   Playlists: 'play-circle-outline',
   Media: 'video-library',
 };
 
-const BrowseStackNavigator = createStackNavigator();
-const BrowseNavigation = () => {
+const FeedStackNavigator = createStackNavigator();
+const FeedNavigation = () => {
   return (
-    <BrowseStackNavigator.Navigator>
-      <BrowseStackNavigator.Screen {...routeConfig.browse} component={Browse} />
-      <BrowseStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
-      <BrowseStackNavigator.Screen {...routeConfig.playlistItemDetail} component={PlaylistItemDetail} />
-      <BrowseStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
-      <BrowseStackNavigator.Screen {...routeConfig.shareWith} component={ShareWith} />
-    </BrowseStackNavigator.Navigator>
+    <FeedStackNavigator.Navigator>
+      <FeedStackNavigator.Screen {...routeConfig.feed} component={Feed} />
+      <FeedStackNavigator.Screen {...routeConfig.feedSharedWithMe} component={FeedSharedWithMe} />
+      <FeedStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
+      <FeedStackNavigator.Screen {...routeConfig.playlistItemDetail} component={PlaylistItemDetail} />
+      <FeedStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
+      <FeedStackNavigator.Screen {...routeConfig.shareWith} component={ShareWith} />
+    </FeedStackNavigator.Navigator>
   );
 };
 
@@ -157,7 +159,7 @@ const PrivateMainNavigation = ({ globalState }: PrivateMainNavigationProps) => {
             : undefined,
       })}
     >
-      <PrivateNavigator.Screen name="Browse" component={BrowseNavigation} listeners={navigationTabListeners} />
+      <PrivateNavigator.Screen name="Feed" component={FeedNavigation} listeners={navigationTabListeners} />
 
       {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
         <PrivateNavigator.Screen name="Search" component={SearchNavigation} listeners={navigationTabListeners} />

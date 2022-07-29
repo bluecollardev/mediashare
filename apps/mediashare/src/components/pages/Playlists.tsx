@@ -51,6 +51,7 @@ export const PlaylistsComponent = ({ list = [], onViewDetailClicked, selectable 
           description={<MediaListItem.Description data={{ authorProfile, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />}
           showThumbnail={true}
           image={imageSrc}
+          showPlayableIcon={false}
           showActions={showActions}
           selectable={selectable}
           onViewDetail={() => onViewDetailClicked(item)}

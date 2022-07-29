@@ -15,6 +15,7 @@ export interface MediaCardTitleProps {
   showActions?: boolean;
   showThumbnail?: boolean;
   onActionsClicked?: () => void;
+  style?: any;
 }
 
 export const MediaCardTitle: React.FC<MediaCardTitleProps> = ({
@@ -23,10 +24,11 @@ export const MediaCardTitle: React.FC<MediaCardTitleProps> = ({
   showActions = false,
   showThumbnail = true,
   onActionsClicked = () => {},
+  style = {},
 }: MediaCardTitleProps) => {
   return authorProfile ? (
     <Card.Title
-      style={{ marginTop: 25, marginBottom: 25 }}
+      style={{ ...defaultStyles.component, ...style }}
       title={<Title style={defaultStyles.titleText}>{title}</Title>}
       titleStyle={defaultStyles.title}
       titleNumberOfLines={2}
@@ -34,27 +36,30 @@ export const MediaCardTitle: React.FC<MediaCardTitleProps> = ({
       subtitle={
         <View style={defaultStyles.subtitle}>
           <View style={defaultStyles.createdBy}>
-            <Text style={defaultStyles.author}>{authorProfile?.authorName}</Text>
-            <Text style={defaultStyles.username}>@{authorProfile?.authorUsername}</Text>
+            {authorProfile?.authorName && <Text style={defaultStyles.author}>{authorProfile?.authorName}</Text>}
+            {authorProfile?.authorUsername && <Text style={defaultStyles.username}>@{authorProfile?.authorUsername}</Text>}
           </View>
         </View>
       }
       subtitleStyle={defaultStyles.subtitle}
-      leftStyle={defaultStyles.avatar}
-      left={() =>
-        showThumbnail &&
-        authorProfile?.authorImage && (
+      leftStyle={showThumbnail ? defaultStyles.avatar : undefined}
+      left={showThumbnail ? () => {
+        return authorProfile?.authorImage ? (
           <View>
             <Avatar.Image source={{ uri: authorProfile?.authorImage || DEFAULT_AVATAR }} size={52} />
           </View>
-        )
-      }
+        ) : null;
+      } : undefined}
       right={(buttonProps: any) => showActions && <IconButton {...buttonProps} icon="more-vert" onPress={onActionsClicked} />}
     />
   ) : null;
 };
 
 const defaultStyles = StyleSheet.create({
+  component: {
+    marginTop: 25,
+    marginBottom: 25,
+  },
   avatar: {
     width: 50,
   },

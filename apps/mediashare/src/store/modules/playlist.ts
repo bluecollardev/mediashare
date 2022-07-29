@@ -142,10 +142,6 @@ export const selectActiveMediaItems = (selected) => selected?.mediaItems || [];
 export const selectPlaylistMediaItems = createSelector(selectActivePlaylistItems, selectActiveMediaItems, (playlistItems, mediaItems) => {
   return mediaItems.map((mediaItem) => {
     const playlistItem = playlistItems.find((item) => item.mediaId === mediaItem._id);
-    console.log('[selectPlaylistMediaItems] playlist items');
-    console.log(playlistItems);
-    console.log('[selectPlaylistMediaItems] playlist item');
-    console.log(playlistItem);
     return {
       mediaItem,
       mediaItemId: mediaItem._id,

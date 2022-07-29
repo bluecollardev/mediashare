@@ -27,6 +27,11 @@ export interface Tag {
    */
   value: string;
   /**
+   * @type {string}
+   * @memberof Tag
+   */
+  imageSrc: string | null;
+  /**
    * @type {boolean}
    * @memberof Tag
    */

@@ -49,6 +49,7 @@ export const MediaList = ({
               image={thumbnail}
               selectable={selectable}
               showThumbnail={showThumbnail}
+              showPlayableIcon={false}
               showActions={showActions}
               onChecked={(v) => (v ? addItem(item) : removeItem(item))}
               onViewDetail={() => onViewDetail(item)}

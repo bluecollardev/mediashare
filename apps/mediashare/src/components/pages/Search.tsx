@@ -43,6 +43,7 @@ export const SearchComponent = withPlaylistSearch(
             description={<MediaListItem.Description data={{ authorProfile, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />}
             showThumbnail={true}
             image={imageSrc}
+            showPlayableIcon={false}
             showActions={showActions}
             selectable={selectable}
             onViewDetail={() => onViewDetailClicked(item)}
@@ -102,7 +103,7 @@ export const Search = ({ globalState }: PageProps) => {
           showActions={!isSelectable}
           onChecked={updateSelection}
         />
-        {searchResults.length === 0 && <NoContent messageButtonText="Search for playlists and media to add to your collection." icon="info" />}
+        {searchResults.length === 0 && <NoContent messageButtonText="Find playlists and media to add to your collection." icon="info" />}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>

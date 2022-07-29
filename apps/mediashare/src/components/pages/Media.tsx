@@ -60,8 +60,9 @@ export const MediaComponent = ({
           titleStyle={styles.titleText}
           description={<MediaListItem.Description data={{ authorProfile, description }} />}
           showThumbnail={true}
-          showActions={showActions}
           image={thumbnail}
+          showPlayableIcon={false}
+          showActions={showActions}
           iconRight="edit"
           iconRightColor={theme.colors.default}
           selectable={selectable}
