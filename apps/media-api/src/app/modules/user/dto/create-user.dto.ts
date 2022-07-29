@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ApiDecoratorOptions, ApiEmail, ApiName, ApiObjectId, ApiPastDate, ApiString } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
-// import { MediaItemResponseDto } from '@api-modules/media-item/dto/media-item-response.dto';
-// import { PlaylistResponseDto } from '@api-modules/playlist/dto/playlist-response.dto';
+import { MediaItemResponseDto } from '@api-modules/media-item/dto/media-item-response.dto';
+import { PlaylistResponseDto } from '@api-modules/playlist/dto/playlist-response.dto';
 import { User } from '../entities/user.entity';
 import { BC_ROLES } from '@core-lib';
 import { BcRolesType } from '@api-core/types/roles.type';
-// import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 
 export class CreateUserDto {
   @ApiName(<ApiDecoratorOptions>{ required: true })

@@ -26,7 +26,7 @@ export const FeedSharedByContact = ({ list = [] }: FeedSharedByContactProps) => 
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
   const dimensions = {
-    h: 380,
+    h: 380
   };
 
   return (
@@ -53,7 +53,7 @@ export const FeedSharedByContact = ({ list = [] }: FeedSharedByContactProps) => 
     const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, description = '', mediaIds = [], mediaItems = [], imageSrc = '' } = item;
     const dimensions = {
       w: Dimensions.get('window').width / 2,
-      h: Dimensions.get('window').width / 2,
+      h: Dimensions.get('window').width / 2
     };
 
     console.log(`[DisplayPreviewOrVideo] thumbnail: ${imageSrc}`);
@@ -75,7 +75,7 @@ export const FeedSharedByContact = ({ list = [] }: FeedSharedByContactProps) => 
             thumbnail={mediaPreview.imageSrc}
             thumbnailStyle={{
               aspectRatio: 1 / 1,
-              padding: 10,
+              padding: 10
             }}
             showActions={false}
             showAvatar={false}

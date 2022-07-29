@@ -14,13 +14,7 @@ export interface FeedPlaylistsBlockProps {
   onChecked?: (checked: boolean, item?: any) => void;
 }
 
-export const FeedPlaylists = ({
-  list = [],
-  onViewDetailClicked,
-  selectable = false,
-  showActions = true,
-  onChecked = () => undefined,
-}: FeedPlaylistsBlockProps) => {
+export const FeedPlaylists = ({ list = [], onViewDetailClicked, selectable = false, showActions = true, onChecked = () => undefined }: FeedPlaylistsBlockProps) => {
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 

@@ -54,7 +54,7 @@ const MediaListItem = ({
     width: 64,
     height: 64,
     onPress,
-    ...mediaPreviewProps,
+    ...mediaPreviewProps
   };
 
   description = typeof description === 'string' ? <Caption>{description}</Caption> : description;
@@ -75,13 +75,7 @@ const MediaListItem = ({
         selectable ? (
           <View style={defaultStyles.mediaListItem}>
             <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.success : theme.colors.disabled} />
-            {showThumbnail ? (
-              image ? (
-                <MediaPreview {...mediaPreviewConfig} showPlayableIcon={showPlayableIcon} />
-              ) : (
-                <MediaPreview {...mediaPreviewConfig} showPlayableIcon={showPlayableIcon} />
-              )
-            ) : null}
+            {showThumbnail ? image ? <MediaPreview {...mediaPreviewConfig} showPlayableIcon={showPlayableIcon} /> : <MediaPreview {...mediaPreviewConfig} showPlayableIcon={showPlayableIcon} /> : null}
           </View>
         ) : showThumbnail ? (
           image ? (
