@@ -52,8 +52,9 @@ export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
     const { key, size, lastModified } = item;
     return (
       <MediaListItem
-        showActions={false}
         key={`s3_item_${key}`}
+        showActions={false}
+        showPlayableIcon={false}
         title={key}
         description={`${size} - ${lastModified}`}
         checked={false}

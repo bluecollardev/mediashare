@@ -8,6 +8,8 @@ import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 import { getPlaylistById } from 'mediashare/store/modules/playlist';
 
+// TODO: Fix ts-ignores!
+
 type RouteConfigKeyType = EnumLiteralsOf<typeof routeNames>;
 // @ts-ignore
 type RouteParentKeyType = keyof Pick<typeof routeConfig, 'Browse' | 'Media' | 'Playlists' | 'Account'>;
@@ -161,3 +163,11 @@ export function useEditMediaItemById() {
   const nav = useNavigation();
   return ({ mediaId, uri }) => nav.navigate(routeNames.sharedItemDetail, { mediaId, uri });
 } */
+
+export function useViewFeedSharedWithMe() {
+  const nav = useNavigation();
+  return async () => {
+    // @ts-ignore
+    nav.navigate(routeNames.feedSharedWithMe);
+  }
+}

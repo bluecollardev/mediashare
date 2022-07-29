@@ -23,8 +23,10 @@ export interface MediaCardProps {
   showSocial?: any | boolean;
   showActions?: boolean;
   showDescription?: boolean;
+  showAvatar?: boolean;
   showThumbnail?: boolean;
   thumbnail?: string;
+  thumbnailStyle?: any;
   mediaSrc?: string | null;
   category?: string;
   // TODO: Fix Tag type
@@ -59,8 +61,10 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   showSocial = false,
   showActions = false,
   showDescription = true,
+  showAvatar = true,
   showThumbnail = true,
   thumbnail = null,
+  thumbnailStyle,
   onActionsClicked = () => {},
   children,
   topDrawer = undefined,
@@ -107,10 +111,19 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 
   const TopDrawer = topDrawer;
 
+  const showMediaPreview = showThumbnail && (!!thumbnail || !!mediaSrc);
+
   return isEdit ? (
     <View>
-      {showThumbnail && (
-        <DisplayPreviewOrVideo key={mediaSrc} mediaSrc={mediaSrc} isPlayable={isPlayable} showThumbnail={showThumbnail} thumbnail={thumbnail} />
+      {showMediaPreview && (
+        <DisplayPreviewOrVideo
+          key={mediaSrc}
+          mediaSrc={mediaSrc}
+          isPlayable={isPlayable}
+          showThumbnail={showThumbnail}
+          thumbnail={thumbnail}
+          style={thumbnailStyle}
+        />
       )}
       {topDrawer && <TopDrawer />}
       <View style={defaultStyles.container}>
@@ -198,9 +211,25 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     </View>
   ) : (
     <Card style={defaultStyles.card} elevation={elevation as any}>
-      <DisplayPreviewOrVideo key={mediaSrc} mediaSrc={mediaSrc} isPlayable={isPlayable} showThumbnail={showThumbnail} thumbnail={thumbnail} />
+      {showMediaPreview && (
+        <DisplayPreviewOrVideo
+          key={mediaSrc}
+          mediaSrc={mediaSrc}
+          isPlayable={isPlayable}
+          showThumbnail={showThumbnail}
+          thumbnail={thumbnail}
+          style={thumbnailStyle}
+        />
+      )}
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
-      <MediaCardTitle title={title} authorProfile={authorProfile} showThumbnail={true} showActions={showActions} onActionsClicked={onActionsClicked} />
+      <MediaCardTitle
+        title={title}
+        authorProfile={authorProfile}
+        showThumbnail={showAvatar}
+        showActions={showActions}
+        onActionsClicked={onActionsClicked}
+        style={!showMediaPreview ? { marginTop: 0 } : {}}
+      />
       <Card.Content style={{ marginBottom: 15 }}>
         <MediaCardTags tags={mappedSelectedTags} />
       </Card.Content>

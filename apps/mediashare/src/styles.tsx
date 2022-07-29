@@ -13,7 +13,7 @@ const theme = {
     default: '#BDC1C6',
     darkDefault: '#1D1D1D',
     defaultBorder: 'rgba(255,255,255,0.29)',
-    accent: '#50C100',
+    accent: '#EC6A37', // mandarin orange
     textDarker: '#BDC1C6',
     text: 'rgba(255,255,255,1)',
     error: 'rgba(242,22,81,1)',

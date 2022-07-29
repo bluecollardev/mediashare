@@ -92,15 +92,15 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
               modalWithSafeAreaView={false}
             />
             <ActionButtons
-              primaryLabel="Search"
-              primaryButtonStyles={{ backgroundColor: theme.colors.secondary }}
+              primaryLabel="Submit"
+              primaryButtonStyles={{ backgroundColor: theme.colors.accent }}
               showSecondary={false}
               containerStyles={{ marginHorizontal: 0, marginTop: 15 }}
               onPrimaryClicked={() => submitSearch()}
             />
+            <Divider />
           </>
         )}
-        <Divider />
         <WrappedComponent globalState={globalState} {...rest} />
       </>
     );

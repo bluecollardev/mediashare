@@ -18,6 +18,10 @@ export class Tag extends KeyPair<string> implements TagInterface {
   @Column('value')
   value: string;
 
+  @ApiProperty({ type: String, nullable: true })
+  @Column('imageSrc')
+  imageSrc: string;
+
   @ApiProperty({ type: Boolean, nullable: true })
   @Column('isMediaTag')
   isMediaTag: boolean;

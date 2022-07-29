@@ -143,8 +143,12 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
             title={title}
             authorProfile={authorProfile}
             description={description}
-            thumbnail={imageSrc}
             showThumbnail={true}
+            thumbnail={imageSrc}
+            thumbnailStyle={{
+              // TODO: Can we do this automatically from video metadata?
+              aspectRatio: 1 / 1
+            }}
             category={category}
             availableTags={mappedTags}
             tags={tagKeys}
@@ -205,18 +209,18 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
             />
           </MediaCard>
         </ScrollView>
+        <PageActions>
+          {isSelectable && (
+            <ActionButtons
+              onPrimaryClicked={confirmDeletePlaylistItems}
+              onSecondaryClicked={cancelDeletePlaylistItems}
+              primaryLabel="Remove"
+              primaryIconColor={theme.colors.error}
+              primaryButtonStyles={{ backgroundColor: theme.colors.error }}
+            />
+          )}
+        </PageActions>
       </PageContent>
-      <PageActions>
-        {isSelectable && (
-          <ActionButtons
-            onPrimaryClicked={confirmDeletePlaylistItems}
-            onSecondaryClicked={cancelDeletePlaylistItems}
-            primaryLabel="Remove"
-            primaryIconColor={theme.colors.error}
-            primaryButtonStyles={{ backgroundColor: theme.colors.error }}
-          />
-        )}
-      </PageActions>
       {!build.forFreeUser && !isSelectable && (
         <FAB.Group
           visible={true}

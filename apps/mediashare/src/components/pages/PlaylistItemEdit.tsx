@@ -94,8 +94,12 @@ const PlaylistItemEdit = ({
             description={description}
             sortIndex={String(sortIndex)}
             mediaSrc={documentUri}
-            thumbnail={thumbnail}
             showThumbnail={true}
+            thumbnail={thumbnail}
+            thumbnailStyle={{
+              // TODO: Can we do this automatically from video metadata?
+              aspectRatio: 1 / 1
+            }}
             category={category}
             categoryOptions={options}
             onCategoryChange={(e: any) => {

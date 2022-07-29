@@ -155,12 +155,21 @@ export async function putToS3({ key, file, options = {} }: PutStorageParams) {
 }
 
 export async function fetchMedia(path: string) {
-  const response = await fetch(path);
-  const blob = await response.blob();
-  if (!blob) {
-    console.log('[fetchMedia] no blob in storage.service/fetchmedia');
+  console.log(`[fetchMedia] fetch ${path}`);
+  let response;
+  try {
+    response = await fetch(path);
+  } catch (err) {
+    console.log(`[fetchMedia] fetch(${path}) failed`);
   }
-  return blob;
+
+  if (response) {
+    const blob = await response.blob();
+    if (!blob) {
+      console.log('[fetchMedia] no blob in storage.service/fetchmedia');
+    }
+    return blob;
+  }
 }
 
 export async function fetchAndPutToS3({ fileUri, key, options }: { fileUri: string; key: string; options?: StorageOptions }) {
