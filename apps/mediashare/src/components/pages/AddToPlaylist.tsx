@@ -27,6 +27,7 @@ export const AddToPlaylistComponent = ({ entities, viewMediaItem, addItem, remov
           titleStyle={styles.titleText}
           description={<MediaListItem.Description data={{ authorProfile }} />}
           showThumbnail={true}
+          showPlayableIcon={false}
           showActions={true}
           image={thumbnail}
           selectable={true}

@@ -40,7 +40,7 @@ const MediaListItem = ({
   selectable = true,
   showActions = true,
   showThumbnail = false,
-  showPlayableIcon = true,
+  showPlayableIcon = false,
   iconLeft = '',
   iconLeftColor = theme.colors.default,
   iconRight = 'chevron-right',
@@ -75,7 +75,7 @@ const MediaListItem = ({
         selectable ? (
           <View style={defaultStyles.mediaListItem}>
             <Checkbox status={isChecked ? 'checked' : 'indeterminate'} color={isChecked ? theme.colors.success : theme.colors.disabled} />
-            {showThumbnail ? image ? <MediaPreview {...mediaPreviewConfig} /> : <MediaPreview {...mediaPreviewConfig} /> : null}
+            {showThumbnail ? image ? <MediaPreview {...mediaPreviewConfig} showPlayableIcon={showPlayableIcon} /> : <MediaPreview {...mediaPreviewConfig} showPlayableIcon={showPlayableIcon} /> : null}
           </View>
         ) : showThumbnail ? (
           image ? (
@@ -86,7 +86,7 @@ const MediaListItem = ({
           ) : (
             <View style={defaultStyles.mediaListItem}>
               {showActions === 'left' && <IconButton icon={iconLeft} iconColor={iconLeftColor} onPress={onViewDetail} />}
-              <MediaPreview {...mediaPreviewConfig} />
+              <MediaPreview {...mediaPreviewConfig} showPlayableIcon={showPlayableIcon} />
             </View>
           )
         ) : null
