@@ -110,8 +110,6 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   };
 
   const TopDrawer = topDrawer;
-  console.log('WTF THUMBNAIL STY');
-  console.log(thumbnailStyle);
 
   return isEdit ? (
     <View>

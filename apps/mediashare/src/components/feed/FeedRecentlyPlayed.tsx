@@ -1,5 +1,6 @@
 import React from 'react';
-import { Dimensions, FlatList, View } from 'react-native';
+import { Dimensions, FlatList, View, TouchableHighlight } from 'react-native';
+import { useViewPlaylistById } from 'mediashare/hooks/navigation';
 import { MediaCard, SectionHeader } from 'mediashare/components/layout';
 import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 
@@ -12,10 +13,12 @@ export interface FeedRecentlyPlayedProps {
   onChecked?: (checked: boolean, item?: any) => void;
 }
 
-export const FeedRecentlyPlayed = ({ list = [], onViewDetailClicked, selectable = false, showActions = true, onChecked = () => undefined }: FeedRecentlyPlayedProps) => {
+export const FeedRecentlyPlayed = ({ list = [] }: FeedRecentlyPlayedProps) => {
+  const viewPlaylistAction = useViewPlaylistById();
+  const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
+
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
-
 
   const dimensions = {
     h: 350
@@ -38,19 +41,26 @@ export const FeedRecentlyPlayed = ({ list = [], onViewDetailClicked, selectable 
 
     return (
       <View style={{ width: dimensions.w, height: dimensions.h }}>
-        <MediaCard
-          key={`playlist_${_id}`}
-          title={title}
-          // description={<MediaListItem.Description data={{ authorProfile, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />}
-          showThumbnail={true}
-          thumbnail={imageSrc}
-          thumbnailStyle={{
-            aspectRatio: 1 / 1,
-            padding: 10
+        <TouchableHighlight
+          style={{ width: dimensions.w, height: dimensions.h, zIndex: 10 }}
+          onPress={async () => {
+            await viewPlaylist(item);
           }}
-          showActions={false}
-          showAvatar={false}
-        />
+        >
+          <MediaCard
+            key={`playlist_${_id}`}
+            title={title}
+            // description={<MediaListItem.Description data={{ authorProfile, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />}
+            showThumbnail={true}
+            thumbnail={imageSrc}
+            thumbnailStyle={{
+              aspectRatio: 1 / 1,
+              padding: 10
+            }}
+            showActions={false}
+            showAvatar={false}
+          />
+        </TouchableHighlight>
       </View>
     );
   }

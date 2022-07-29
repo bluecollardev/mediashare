@@ -6,20 +6,6 @@ const routeConfig = {
     name: 'login',
     options: { title: '', header: () => null },
   },
-  sharedWithMe: {
-    name: 'sharedWithMe',
-    options: {
-      title: 'Shared With Me',
-      header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={true} showAccountMenu={true} />,
-    },
-  },
-  feed: {
-    name: 'feed',
-    options: {
-      title: 'My Feed',
-      header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={true} showAccountMenu={true} />,
-    },
-  },
   search: {
     name: 'search',
     options: {
@@ -116,6 +102,20 @@ const routeConfig = {
   sharedByContact: {
     name: 'sharedByContact',
     options: { title: `Items They're Sharing`, header: (props) => <AppHeader {...props} showAccountMenu={true} /> },
+  },
+  feed: {
+    name: 'feed',
+    options: {
+      title: 'My Feed',
+      header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={false} showAccountMenu={true} />,
+    },
+  },
+  feedSharedWithMe: {
+    name: 'feedSharedWithMe',
+    options: {
+      title: 'Shared With Me',
+      header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={true} showAccountMenu={true} />,
+    },
   },
 } as const;
 

@@ -22,6 +22,7 @@ import { GlobalStateProps, withGlobalStateProvider } from './core/globalState';
 
 import Login from './components/pages/Login';
 import Feed from './components/pages/Feed';
+import FeedSharedWithMe from './components/pages/SharedWithMe';
 import MediaItemAdd from './components/pages/MediaItemAdd';
 import AddFromFeed from './components/pages/AddFromFeed';
 import Search from './components/pages/Search';
@@ -57,7 +58,7 @@ const FeedNavigation = () => {
   return (
     <FeedStackNavigator.Navigator>
       <FeedStackNavigator.Screen {...routeConfig.feed} component={Feed} />
-      <FeedStackNavigator.Screen {...routeConfig.sharedWithMe} component={Feed} />
+      <FeedStackNavigator.Screen {...routeConfig.feedSharedWithMe} component={FeedSharedWithMe} />
       <FeedStackNavigator.Screen {...routeConfig.playlistDetail} component={PlaylistDetail} />
       <FeedStackNavigator.Screen {...routeConfig.playlistItemDetail} component={PlaylistItemDetail} />
       <FeedStackNavigator.Screen {...routeConfig.mediaItemDetail} component={MediaItemDetail} />
