@@ -18,7 +18,7 @@ export const FeedRecentlyPlayed = ({ list = [], onViewDetailClicked, selectable 
 
 
   const dimensions = {
-    h: Dimensions.get('window').height / 3
+    h: 350
   };
 
   return (
@@ -44,6 +44,10 @@ export const FeedRecentlyPlayed = ({ list = [], onViewDetailClicked, selectable 
           // description={<MediaListItem.Description data={{ authorProfile, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />}
           showThumbnail={true}
           thumbnail={imageSrc}
+          thumbnailStyle={{
+            aspectRatio: 1 / 1,
+            padding: 10
+          }}
           showActions={false}
           showAvatar={false}
         />
