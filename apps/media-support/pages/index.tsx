@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import React from 'react';
-import styles from '../styles/Home.module.css';
+import Image from 'next/image';
+import logo from './image/152_logo.png';
 
 const Home: NextPage = () => {
   return (
@@ -14,24 +15,43 @@ const Home: NextPage = () => {
     >
       <div
         style={{
-          height: '100%',
-          flex: 1,
+          width: '100%',
         }}
       >
-        <h1
+        <div
           style={{
-            textAlign: 'center',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            maxWidth: '300px',
+            justifyContent: 'center',
+            margin: '0 auto',
           }}
         >
-          Welcome
-        </h1>
-        <h1
-          style={{
-            textAlign: 'center',
-          }}
-        >
-          Mediashare
-        </h1>
+          <div
+            style={{
+              textAlign: 'center',
+            }}
+          >
+            <Image src={logo.src} alt="Picture of the author" width={100} height={100} />
+          </div>
+          <h1
+            style={{
+              textAlign: 'center',
+              margin: 0,
+            }}
+          >
+            Welcome
+          </h1>
+          <h1
+            style={{
+              textAlign: 'center',
+            }}
+          >
+            Mediashare
+          </h1>
+        </div>
       </div>
     </div>
   );

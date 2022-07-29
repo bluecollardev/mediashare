@@ -1,13 +1,17 @@
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Amplify, Auth } from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 import awsMobile from '../aws.export';
 import '@aws-amplify/ui-react/styles.css';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, TextField, Snackbar } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import logo from '../image/152_logo.png';
+import Image from 'next/image';
+import e from 'express';
+
 
 Amplify.configure({
   ...awsMobile,
@@ -30,6 +34,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 const Home: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
+
   //   data:{
   // author: "testUser"
   // authorId: "62dd71ea71312cea47f85130"
@@ -47,7 +52,7 @@ const Home: NextPage = () => {
       const {
         data: { _id },
       } = await axios.post(
-        'http://localhost:5000/api/user/invite',
+        `${process.env.API_HOST}/api/user/invite`,
         { username, email },
         {
           headers: {
@@ -55,10 +60,9 @@ const Home: NextPage = () => {
             'Content-Type': 'application/json',
           },
         }
-      );
-
+      )
       await axios.post(
-        'http://localhost:5000/api/user-connection',
+        `${process.env.API_HOST}/api/user-connection`,
         { userId: _id, connectionId: id },
         {
           headers: {
@@ -66,8 +70,7 @@ const Home: NextPage = () => {
             'Content-Type': 'application/json',
           },
         }
-      );
-
+      )
       router.push('/success');
     } catch (error) {
       throw error;
@@ -106,6 +109,7 @@ const Home: NextPage = () => {
       await Auth.confirmSignUp(username, code);
     } catch (error) {
       console.log('error confirming sign up', error);
+      throw error;
     }
   }
 
@@ -113,7 +117,6 @@ const Home: NextPage = () => {
     try {
       if (showCode) {
         confirmSignUp(data);
-        console.log('go to home');
       } else {
         await signUp(data);
         setShowCode(true);
@@ -151,7 +154,14 @@ const Home: NextPage = () => {
             padding: '0em 1em',
           }}
         >
-          <h1 style={{ textAlign: 'center' }}>Sing Up</h1>
+          <div
+            style={{
+              textAlign: 'center',
+            }}
+          >
+            <Image src={logo.src} alt="Picture of the author" width={100} height={100} />
+          </div>
+          <h1 style={{ textAlign: 'center' }}>Sign Up</h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
             style={{
