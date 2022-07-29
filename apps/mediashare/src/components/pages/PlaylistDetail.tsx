@@ -209,18 +209,18 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
             />
           </MediaCard>
         </ScrollView>
+        <PageActions>
+          {isSelectable && (
+            <ActionButtons
+              onPrimaryClicked={confirmDeletePlaylistItems}
+              onSecondaryClicked={cancelDeletePlaylistItems}
+              primaryLabel="Remove"
+              primaryIconColor={theme.colors.error}
+              primaryButtonStyles={{ backgroundColor: theme.colors.error }}
+            />
+          )}
+        </PageActions>
       </PageContent>
-      <PageActions>
-        {isSelectable && (
-          <ActionButtons
-            onPrimaryClicked={confirmDeletePlaylistItems}
-            onSecondaryClicked={cancelDeletePlaylistItems}
-            primaryLabel="Remove"
-            primaryIconColor={theme.colors.error}
-            primaryButtonStyles={{ backgroundColor: theme.colors.error }}
-          />
-        )}
-      </PageActions>
       {!build.forFreeUser && !isSelectable && (
         <FAB.Group
           visible={true}
