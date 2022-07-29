@@ -5,41 +5,41 @@
  *
  */
 export class ServerConfiguration<T extends { [key: string]: string }> {
-  public constructor(private url: string, private variableConfiguration: T, private description: string) {}
+    public constructor(private url: string, private variableConfiguration: T, private description: string) {}
 
-  /**
-   * Sets the value of the variables of this server.
-   *
-   * @param variableConfiguration a partial variable configuration for the variables contained in the url
-   */
-  public setVariables(variableConfiguration: Partial<T>) {
-    Object.assign(this.variableConfiguration, variableConfiguration);
-  }
-
-  public getConfiguration(): T {
-    return this.variableConfiguration;
-  }
-
-  public getDescription(): string {
-    return this.description;
-  }
-
-  /**
-   * Constructions the URL this server using the url with variables
-   * replaced with their respective values
-   */
-  public getUrl(): string {
-    let replacedUrl = this.url;
-    for (const key in this.variableConfiguration) {
-      var re = new RegExp('{' + key + '}', 'g');
-      replacedUrl = replacedUrl.replace(re, this.variableConfiguration[key]);
+    /**
+     * Sets the value of the variables of this server.
+     *
+     * @param variableConfiguration a partial variable configuration for the variables contained in the url
+     */
+    public setVariables(variableConfiguration: Partial<T>) {
+        Object.assign(this.variableConfiguration, variableConfiguration);
     }
-    return replacedUrl;
-  }
+
+	public getConfiguration(): T {
+		return this.variableConfiguration
+	}
+
+	public getDescription(): string {
+		return this.description
+	}
+
+	/**
+	 * Constructions the URL this server using the url with variables
+	 * replaced with their respective values
+	 */	
+	public getUrl(): string {
+		let replacedUrl = this.url;
+		for (const key in this.variableConfiguration) {
+			var re = new RegExp("{" + key + "}","g");
+			replacedUrl = replacedUrl.replace(re, this.variableConfiguration[key]);
+		}
+		return replacedUrl
+	}
 }
 
-const server1 = new ServerConfiguration<{}>('http://localhost:5000', {}, 'local dev');
-const server2 = new ServerConfiguration<{}>('https://mediashare-api-staging.herokuapp.com', {}, 'staging');
-const server3 = new ServerConfiguration<{}>('https://mediashare-api-prod.herokuapp.com', {}, 'production');
+const server1 = new ServerConfiguration<{  }>("http://localhost:5000", {  }, "local dev")
+const server2 = new ServerConfiguration<{  }>("https://mediashare-api-staging.herokuapp.com", {  }, "staging")
+const server3 = new ServerConfiguration<{  }>("https://mediashare-api-prod.herokuapp.com", {  }, "production")
 
 export const servers = [server1, server2, server3];
