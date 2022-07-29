@@ -1,8 +1,8 @@
-import { Entity, Column, OneToMany } from 'typeorm';
-import { ObjectId } from 'mongodb';
+import { Entity, Column } from 'typeorm';
+// import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
 import { BcRolesType, BC_ROLES } from '@core-lib';
-import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
+// import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('user')

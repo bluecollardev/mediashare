@@ -17,14 +17,20 @@ export interface DisplayPreviewOrVideoProps {
 }
 
 // TODO: Use MediaPreview component!
-export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ mediaSrc, isPlayable = false, showThumbnail = true, thumbnail = null, style = {} }) => {
+export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({
+  mediaSrc,
+  isPlayable = false,
+  showThumbnail = true,
+  thumbnail = null,
+  style = {},
+}) => {
   const getMediaDisplayMode = () => (showThumbnail && thumbnail ? 'image' : 'video');
   const initialMediaDisplayMode = isPlayable ? (getMediaDisplayMode() as MediaDisplayMode) : 'image';
   const [mediaDisplayMode, setMediaDisplayMode] = useState(initialMediaDisplayMode);
 
   console.log(`[DisplayPreviewOrVideo] thumbnail: ${thumbnail}`);
   const { imageSrc, isDefaultImage } = usePreviewImage(thumbnail);
-  console.log(`imageSrc: ${imageSrc}, isDefaultImage: ${isDefaultImage}`)
+  console.log(`imageSrc: ${imageSrc}, isDefaultImage: ${isDefaultImage}`);
   return (
     <View
       style={{
@@ -33,7 +39,7 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
         height: 'auto',
         marginLeft: 'auto',
         marginRight: 'auto',
-        ...style
+        ...style,
       }}
     >
       {/* TODO: Use MediaPreview component here! */}

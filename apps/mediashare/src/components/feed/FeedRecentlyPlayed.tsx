@@ -22,7 +22,7 @@ export const FeedRecentlyPlayed = ({ list = [] }: FeedRecentlyPlayedProps) => {
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
   const dimensions = {
-    h: 350
+    h: 350,
   };
 
   return (
@@ -37,7 +37,7 @@ export const FeedRecentlyPlayed = ({ list = [] }: FeedRecentlyPlayedProps) => {
     const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, description = '', mediaIds = [], mediaItems = [], imageSrc = '' } = item;
     const dimensions = {
       w: Dimensions.get('window').width / 2,
-      h: Dimensions.get('window').width / 2
+      h: Dimensions.get('window').width / 2,
     };
 
     console.log(`[DisplayPreviewOrVideo] thumbnail: ${imageSrc}`);
@@ -59,7 +59,7 @@ export const FeedRecentlyPlayed = ({ list = [] }: FeedRecentlyPlayedProps) => {
             thumbnail={mediaPreview.imageSrc}
             thumbnailStyle={{
               aspectRatio: 1 / 1,
-              padding: 10
+              padding: 10,
             }}
             showActions={false}
             showAvatar={false}
