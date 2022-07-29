@@ -26,6 +26,7 @@ export interface MediaCardProps {
   showAvatar?: boolean;
   showThumbnail?: boolean;
   thumbnail?: string;
+  thumbnailStyle?: any;
   mediaSrc?: string | null;
   category?: string;
   // TODO: Fix Tag type
@@ -63,6 +64,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   showAvatar = true,
   showThumbnail = true,
   thumbnail = null,
+  thumbnailStyle,
   onActionsClicked = () => {},
   children,
   topDrawer = undefined,
@@ -118,9 +120,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
           isPlayable={isPlayable}
           showThumbnail={showThumbnail}
           thumbnail={thumbnail}
-          style={{
-            aspectRatio: 1 / 1,
-          }}
+          style={thumbnailStyle}
         />
       )}
       {topDrawer && <TopDrawer />}
@@ -215,9 +215,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         isPlayable={isPlayable}
         showThumbnail={showThumbnail}
         thumbnail={thumbnail}
-        style={{
-          aspectRatio: 1 / 1,
-        }}
+        style={thumbnailStyle}
       />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <MediaCardTitle title={title} authorProfile={authorProfile} showThumbnail={showAvatar} showActions={showActions} onActionsClicked={onActionsClicked} />
