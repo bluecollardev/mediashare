@@ -36,7 +36,7 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
     >
       {/* TODO: Use MediaPreview component here! */}
       {mediaDisplayMode === 'image' && !isDefaultImage ? (
-        <ImageBackground source={{ uri: imageSrc }} resizeMode="contain" style={{ width: '100%', height: '100%' }}>
+        <ImageBackground source={{ uri: imageSrc }} resizeMode="cover" style={{ width: '100%', height: '100%' }}>
           {isPlayable && (
             <TouchableWithoutFeedback onPress={toggleMediaMode}>
               <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>

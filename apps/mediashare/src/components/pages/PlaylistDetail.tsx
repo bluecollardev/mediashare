@@ -143,8 +143,12 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
             title={title}
             authorProfile={authorProfile}
             description={description}
-            thumbnail={imageSrc}
             showThumbnail={true}
+            thumbnail={imageSrc}
+            thumbnailStyle={{
+              // TODO: Can we do this automatically from video metadata?
+              aspectRatio: 1 / 1
+            }}
             category={category}
             availableTags={mappedTags}
             tags={tagKeys}
