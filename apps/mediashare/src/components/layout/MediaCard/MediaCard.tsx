@@ -113,7 +113,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
 
   return isEdit ? (
     <View>
-      {showThumbnail && (
+      {showThumbnail && (thumbnail || mediaSrc) && (
         <DisplayPreviewOrVideo
           key={mediaSrc}
           mediaSrc={mediaSrc}
@@ -209,14 +209,16 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     </View>
   ) : (
     <Card style={defaultStyles.card} elevation={elevation as any}>
-      <DisplayPreviewOrVideo
-        key={mediaSrc}
-        mediaSrc={mediaSrc}
-        isPlayable={isPlayable}
-        showThumbnail={showThumbnail}
-        thumbnail={thumbnail}
-        style={thumbnailStyle}
-      />
+      {showThumbnail && (thumbnail || mediaSrc) && (
+        <DisplayPreviewOrVideo
+          key={mediaSrc}
+          mediaSrc={mediaSrc}
+          isPlayable={isPlayable}
+          showThumbnail={showThumbnail}
+          thumbnail={thumbnail}
+          style={thumbnailStyle}
+        />
+      )}
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
       <MediaCardTitle title={title} authorProfile={authorProfile} showThumbnail={showAvatar} showActions={showActions} onActionsClicked={onActionsClicked} />
       <Card.Content style={{ marginBottom: 15 }}>
