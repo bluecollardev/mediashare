@@ -103,7 +103,7 @@ export const Search = ({ globalState }: PageProps) => {
           showActions={!isSelectable}
           onChecked={updateSelection}
         />
-        {searchResults.length === 0 && <NoContent messageButtonText="Search for playlists and media to add to your collection." icon="info" />}
+        {searchResults.length === 0 && <NoContent messageButtonText="Find playlists and media to add to your collection." icon="info" />}
       </KeyboardAvoidingPageContent>
       {isSelectable && actionMode === actionModes.share && (
         <PageActions>
