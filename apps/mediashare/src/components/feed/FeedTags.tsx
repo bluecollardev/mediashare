@@ -2,7 +2,8 @@ import React from 'react';
 import { Dimensions, View } from 'react-native';
 // import { Divider } from 'react-native-paper';
 import { MediaListItem, SectionHeader } from 'mediashare/components/layout';
-import styles from 'mediashare/styles';
+import styles, { theme } from 'mediashare/styles';
+import { Button } from 'react-native-paper';
 
 export interface FeedTagsBlockProps {
   list: any[];
@@ -22,10 +23,21 @@ export const FeedTags = ({ list = [], onViewDetailClicked }: FeedTagsBlockProps)
 
   return (
     <View style={{ marginBottom: 15 }}>
-      <SectionHeader title={`Popular Categories`} />
-      <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: dimensions.w }}>
+      <SectionHeader title={`Popular Tags`} />
+      <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: dimensions.w, marginBottom: 10 }}>
         {displayTags.map((tag) => renderVirtualizedListItem(tag))}
       </View>
+      <Button
+        icon="label"
+        color={theme.colors.darkDefault}
+        textColor={theme.colors.primary}
+        uppercase={false}
+        mode="outlined"
+        compact
+        dark
+      >
+        List All Tags
+      </Button>
     </View>
   );
 

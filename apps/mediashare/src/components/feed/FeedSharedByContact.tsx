@@ -1,7 +1,9 @@
 import React from 'react';
 import { FlatList, View, Dimensions } from 'react-native';
+import { Button, Divider } from 'react-native-paper';
 import { MediaCard, SectionHeader } from 'mediashare/components/layout';
 import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
+import { theme } from 'mediashare/styles';
 
 export interface FeedSharedByContactProps {
   list: PlaylistResponseDto[];
@@ -17,13 +19,24 @@ export const FeedSharedByContact = ({ list = [], onViewDetailClicked, selectable
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
   const dimensions = {
-    h: 350
+    h: 380
   };
 
   return (
     <View style={{ height: dimensions.h }}>
       <SectionHeader title={`Shared With You`} />
       <FlatList horizontal={true} data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
+      <Button
+        icon="list"
+        color={theme.colors.darkDefault}
+        textColor={theme.colors.primary}
+        uppercase={false}
+        mode="outlined"
+        compact
+        dark
+      >
+        All Shared Playlists
+      </Button>
     </View>
   );
 
