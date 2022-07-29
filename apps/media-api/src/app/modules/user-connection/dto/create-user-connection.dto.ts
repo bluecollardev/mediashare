@@ -4,7 +4,6 @@ import { IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
 
 export class CreateUserConnectionDto {
-
   @ApiProperty({ required: true })
   @IsString()
   userId: ObjectId;
@@ -18,6 +17,4 @@ export class CreateUserConnectionDto {
 
   @ApiPastDate()
   updatedDate?: Date;
-
 }
-

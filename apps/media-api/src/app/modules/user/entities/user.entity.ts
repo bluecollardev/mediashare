@@ -7,38 +7,45 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('user')
 export class User extends BcEntity {
-  
   @ApiProperty()
-  @Column() username: string;
+  @Column()
+  username: string;
 
   @ApiProperty()
-  @Column() phoneNumber: string;
+  @Column()
+  phoneNumber: string;
 
   @ApiProperty()
-  @Column() email: string;
+  @Column()
+  email: string;
 
   @ApiProperty()
-  @Column() sub: string;
+  @Column()
+  sub: string;
 
   @ApiProperty()
-  @Column() firstName: string;
+  @Column()
+  firstName: string;
 
   @ApiProperty()
-  @Column() lastName: string;
+  @Column()
+  lastName: string;
 
   @ApiProperty()
-  @Column() imageSrc: string;
+  @Column()
+  imageSrc: string;
 
-  @ApiProperty({ isArray: true, nullable: true})
+  /* @ApiProperty({ isArray: true, nullable: true})
   @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
 
   @ApiProperty({ isArray: true, nullable: true})
-  @Column({ array: true, nullable: true}) sharedMediaItems?: ObjectId[];
+  @Column({ array: true, nullable: true}) sharedMediaItems?: ObjectId[]; */
 
   @ApiProperty()
-  @Column({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType' }) role: BcRolesType;
+  @Column({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType' })
+  role: BcRolesType;
 
-  @ApiProperty({type: () => ShareItem, isArray: true, nullable: true})
+  /* @ApiProperty({type: () => ShareItem, isArray: true, nullable: true})
   @OneToMany(() => ShareItem, shareItem => shareItem.userId)
-  @Column({ array: true, nullable: true }) shareItem?: ShareItem[]
+  @Column({ array: true, nullable: true }) shareItem?: ShareItem[] */
 }

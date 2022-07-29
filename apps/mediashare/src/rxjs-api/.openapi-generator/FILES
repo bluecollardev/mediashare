@@ -8,6 +8,7 @@ apis/SearchApi.ts
 apis/ShareItemsApi.ts
 apis/TagsApi.ts
 apis/UserApi.ts
+apis/UserConnectionApi.ts
 apis/UsersApi.ts
 apis/ViewsApi.ts
 apis/index.ts
@@ -19,6 +20,8 @@ models/CreateMediaItemDto.ts
 models/CreatePlaylistDto.ts
 models/CreatePlaylistItemDto.ts
 models/CreatePlaylistResponseDto.ts
+models/CreateUserConnectionDto.ts
+models/InviteDto.ts
 models/Like.ts
 models/MediaCategoryType.ts
 models/MediaItem.ts

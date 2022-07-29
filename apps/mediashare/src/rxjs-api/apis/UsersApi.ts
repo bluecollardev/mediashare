@@ -88,17 +88,10 @@ export class UsersApi extends BaseAPI {
   usersControllerRemove({ userId }: UsersControllerRemoveRequest, opts?: OperationOpts): Observable<void | RawAjaxResponse<void>> {
     throwIfNullOrUndefined(userId, 'userId', 'usersControllerRemove');
 
-    const headers: HttpHeaders = {
-      ...(this.configuration.username != null && this.configuration.password != null
-        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
-        : undefined),
-    };
-
     return this.request<void>(
       {
         url: '/api/users/{userId}'.replace('{userId}', encodeURI(userId)),
         method: 'DELETE',
-        headers,
       },
       opts?.responseOpts
     );

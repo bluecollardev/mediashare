@@ -24,14 +24,14 @@ export const ContactList: React.FC<ContactListProps> = ({
   showActions,
   onViewDetail = () => undefined,
 }) => {
-  const namedContacts = contacts
-    .filter((user) => !!user.firstName || !!user.lastName)
-    .filter((e) => {
+  const namedContacts = contacts.filter((user) => !!user.firstName || !!user.lastName);
+  // TODO: Remove our reliance on this property, we're removing it from the API
+  /* .filter((e) => {
       if (!showAll && e?.sharedMediaItems) {
         return e.sharedMediaItems.length > 0;
       }
       return e;
-    });
+    }); */
 
   const unnamedContacts = contacts.filter((user) => !user.firstName && !user.lastName);
   const mappedAndKeyed = R.values(

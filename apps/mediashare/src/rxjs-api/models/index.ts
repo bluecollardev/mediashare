@@ -5,6 +5,8 @@ export * from './CreateMediaItemDto';
 export * from './CreatePlaylistDto';
 export * from './CreatePlaylistItemDto';
 export * from './CreatePlaylistResponseDto';
+export * from './CreateUserConnectionDto';
+export * from './InviteDto';
 export * from './Like';
 export * from './MediaCategoryType';
 export * from './MediaItem';

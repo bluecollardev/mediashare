@@ -13,20 +13,18 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     @InjectRepository(UserConnection)
     repository: MongoRepository<UserConnection>,
     logger: PinoLogger
-  ){
+  ) {
     super(repository, logger);
   }
 
-  async createUserConnection({userId, connectionId}: CreateUserConnectionDto): Promise<UserConnection>{
-    try{
+  async createUserConnection({ userId, connectionId }: CreateUserConnectionDto): Promise<UserConnection> {
+    try {
       return await this.create({
         userId: new ObjectId(userId),
         connectionId: new ObjectId(connectionId),
       });
     } catch (error) {
-      throw new error
+      throw new error();
     }
-   
   }
-  
 }
