@@ -1,4 +1,5 @@
 import React from 'react';
+import { usePreviewImage } from 'mediashare/hooks/usePreviewImage';
 import { useViewPlaylistById, useViewFeedSharedWithMe } from 'mediashare/hooks/navigation';
 import { FlatList, View, Dimensions, TouchableHighlight } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -55,6 +56,9 @@ export const FeedSharedByContact = ({ list = [] }: FeedSharedByContactProps) => 
       h: Dimensions.get('window').width / 2
     };
 
+    console.log(`[DisplayPreviewOrVideo] thumbnail: ${imageSrc}`);
+    const mediaPreview = usePreviewImage(imageSrc);
+
     return (
       <View style={{ width: dimensions.w, height: dimensions.h }}>
         <TouchableHighlight
@@ -68,7 +72,7 @@ export const FeedSharedByContact = ({ list = [] }: FeedSharedByContactProps) => 
             title={title}
             // description={<MediaListItem.Description data={{ authorProfile, itemCount: mediaIds?.length || mediaItems?.length || 0 }} showItemCount={true} />}
             showThumbnail={true}
-            thumbnail={imageSrc}
+            thumbnail={mediaPreview.imageSrc}
             thumbnailStyle={{
               aspectRatio: 1 / 1,
               padding: 10
