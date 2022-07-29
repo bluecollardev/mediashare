@@ -22,7 +22,7 @@ export const FeedTags = ({ list = [], onViewDetailClicked }: FeedTagsBlockProps)
   };
 
   return (
-    <View style={{ marginBottom: 15 }}>
+    <View style={{ marginTop: 20, marginBottom: 15 }}>
       <SectionHeader title={`Popular Tags`} />
       <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: dimensions.w, marginBottom: 10 }}>
         {displayTags.map((tag) => renderVirtualizedListItem(tag))}
