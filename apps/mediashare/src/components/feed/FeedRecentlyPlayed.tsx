@@ -25,8 +25,8 @@ export const FeedRecentlyPlayed = ({ list = [] }: FeedRecentlyPlayedProps) => {
   };
 
   return (
-    <View style={{ height: dimensions.h }}>
-      <SectionHeader title={`Recently Played`} />
+    <View style={{ height: dimensions.h, marginBottom: 15 }}>
+      <SectionHeader title={`Resume Playing`} />
       <FlatList horizontal={true} data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
     </View>
   );

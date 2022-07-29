@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Divider } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { useAppSelector } from 'mediashare/store';
@@ -32,8 +33,10 @@ export const Feed = ({
       <PageContent>
         <ScrollView>
           <FeedTags list={tags} />
-          <FeedRecentlyPlayed list={list} />
+          <Divider style={{ marginTop: 10, marginBottom: 20 }} />
           <FeedSharedByContact list={list} />
+          <Divider style={{ marginTop: 10, marginBottom: 20 }} />
+          <FeedRecentlyPlayed list={list} />
         </ScrollView>
       </PageContent>
     </PageContainer>

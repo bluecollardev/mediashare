@@ -29,8 +29,8 @@ export const FeedSharedByContact = ({ list = [] }: FeedSharedByContactProps) => 
   };
 
   return (
-    <View style={{ height: dimensions.h }}>
-      <SectionHeader title={`Shared With You`} />
+    <View style={{ height: dimensions.h, marginBottom: 15 }}>
+      <SectionHeader title={`Recently Added`} />
       <FlatList horizontal={true} data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
       <Button
         icon="list"
