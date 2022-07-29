@@ -23,6 +23,7 @@ export interface MediaCardProps {
   showSocial?: any | boolean;
   showActions?: boolean;
   showDescription?: boolean;
+  showAvatar?: boolean;
   showThumbnail?: boolean;
   thumbnail?: string;
   mediaSrc?: string | null;
@@ -59,6 +60,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   showSocial = false,
   showActions = false,
   showDescription = true,
+  showAvatar = true,
   showThumbnail = true,
   thumbnail = null,
   onActionsClicked = () => {},
@@ -110,7 +112,16 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   return isEdit ? (
     <View>
       {showThumbnail && (
-        <DisplayPreviewOrVideo key={mediaSrc} mediaSrc={mediaSrc} isPlayable={isPlayable} showThumbnail={showThumbnail} thumbnail={thumbnail} />
+        <DisplayPreviewOrVideo
+          key={mediaSrc}
+          mediaSrc={mediaSrc}
+          isPlayable={isPlayable}
+          showThumbnail={showThumbnail}
+          thumbnail={thumbnail}
+          style={{
+            aspectRatio: 1 / 1,
+          }}
+        />
       )}
       {topDrawer && <TopDrawer />}
       <View style={defaultStyles.container}>
@@ -198,9 +209,18 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     </View>
   ) : (
     <Card style={defaultStyles.card} elevation={elevation as any}>
-      <DisplayPreviewOrVideo key={mediaSrc} mediaSrc={mediaSrc} isPlayable={isPlayable} showThumbnail={showThumbnail} thumbnail={thumbnail} />
+      <DisplayPreviewOrVideo
+        key={mediaSrc}
+        mediaSrc={mediaSrc}
+        isPlayable={isPlayable}
+        showThumbnail={showThumbnail}
+        thumbnail={thumbnail}
+        style={{
+          aspectRatio: 1 / 1,
+        }}
+      />
       {/* Had to use actual text spaces to space this out for some reason not going to look into it now... */}
-      <MediaCardTitle title={title} authorProfile={authorProfile} showThumbnail={true} showActions={showActions} onActionsClicked={onActionsClicked} />
+      <MediaCardTitle title={title} authorProfile={authorProfile} showThumbnail={showAvatar} showActions={showActions} onActionsClicked={onActionsClicked} />
       <Card.Content style={{ marginBottom: 15 }}>
         <MediaCardTags tags={mappedSelectedTags} />
       </Card.Content>

@@ -34,21 +34,20 @@ export const MediaCardTitle: React.FC<MediaCardTitleProps> = ({
       subtitle={
         <View style={defaultStyles.subtitle}>
           <View style={defaultStyles.createdBy}>
-            <Text style={defaultStyles.author}>{authorProfile?.authorName}</Text>
-            <Text style={defaultStyles.username}>@{authorProfile?.authorUsername}</Text>
+            {authorProfile?.authorName && <Text style={defaultStyles.author}>{authorProfile?.authorName}</Text>}
+            {authorProfile?.authorUsername && <Text style={defaultStyles.username}>@{authorProfile?.authorUsername}</Text>}
           </View>
         </View>
       }
       subtitleStyle={defaultStyles.subtitle}
-      leftStyle={defaultStyles.avatar}
-      left={() =>
-        showThumbnail &&
-        authorProfile?.authorImage && (
+      leftStyle={showThumbnail ? defaultStyles.avatar : undefined}
+      left={showThumbnail ? () => {
+        return authorProfile?.authorImage ? (
           <View>
             <Avatar.Image source={{ uri: authorProfile?.authorImage || DEFAULT_AVATAR }} size={52} />
           </View>
-        )
-      }
+        ) : null;
+      } : undefined}
       right={(buttonProps: any) => showActions && <IconButton {...buttonProps} icon="more-vert" onPress={onActionsClicked} />}
     />
   ) : null;

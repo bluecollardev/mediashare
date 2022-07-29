@@ -13,6 +13,13 @@ const routeConfig = {
       header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={true} showAccountMenu={true} />,
     },
   },
+  feed: {
+    name: 'feed',
+    options: {
+      title: 'My Feed',
+      header: (props) => <AppHeader {...props} searchable={false} showDisplayControls={true} showAccountMenu={true} />,
+    },
+  },
   search: {
     name: 'search',
     options: {

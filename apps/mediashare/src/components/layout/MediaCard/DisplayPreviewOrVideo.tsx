@@ -13,10 +13,11 @@ export interface DisplayPreviewOrVideoProps {
   isPlayable?: boolean;
   showThumbnail?: boolean;
   thumbnail?: string;
+  style?: any;
 }
 
 // TODO: Use MediaPreview component!
-export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ mediaSrc, isPlayable = false, showThumbnail = true, thumbnail = null }) => {
+export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ mediaSrc, isPlayable = false, showThumbnail = true, thumbnail = null, style = {} }) => {
   const getMediaDisplayMode = () => (showThumbnail && thumbnail ? 'image' : 'video');
   const initialMediaDisplayMode = isPlayable ? (getMediaDisplayMode() as MediaDisplayMode) : 'image';
   const [mediaDisplayMode, setMediaDisplayMode] = useState(initialMediaDisplayMode);
@@ -30,6 +31,7 @@ export const DisplayPreviewOrVideo: React.FC<DisplayPreviewOrVideoProps> = ({ me
         height: 'auto',
         marginLeft: 'auto',
         marginRight: 'auto',
+        ...style
       }}
     >
       {/* TODO: Use MediaPreview component here! */}
