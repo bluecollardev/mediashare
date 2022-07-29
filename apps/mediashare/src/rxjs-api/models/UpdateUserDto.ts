@@ -41,4 +41,44 @@ export interface UpdateUserDto {
    * @memberof UpdateUserDto
    */
   userId?: string;
+  /**
+   * @type {string}
+   * @memberof UpdateUserDto
+   */
+  username?: string;
+  /**
+   * @type {string}
+   * @memberof UpdateUserDto
+   */
+  phoneNumber?: string;
+  /**
+   * @type {string}
+   * @memberof UpdateUserDto
+   */
+  email?: string;
+  /**
+   * @type {string}
+   * @memberof UpdateUserDto
+   */
+  sub?: string;
+  /**
+   * @type {string}
+   * @memberof UpdateUserDto
+   */
+  firstName?: string;
+  /**
+   * @type {string}
+   * @memberof UpdateUserDto
+   */
+  lastName?: string;
+  /**
+   * @type {string}
+   * @memberof UpdateUserDto
+   */
+  imageSrc?: string;
+  /**
+   * @type {object}
+   * @memberof UpdateUserDto
+   */
+  role?: object;
 }

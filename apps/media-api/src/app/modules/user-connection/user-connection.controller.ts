@@ -1,4 +1,4 @@
-import { Controller,  HttpStatus,  Post, Req, Res } from '@nestjs/common';
+import { Controller, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { UserConnectionService } from './user-connection.service';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
@@ -13,12 +13,11 @@ export class UserConnectionController {
   @ApiBody({ type: CreateUserConnectionDto })
   async createUserConnection(@Req() req: Request, @Res() res: Response) {
     try {
-      const { userId, connectionId } = req.body as any 
-      const result =  await this.userConnectionService.createUserConnection({userId, connectionId})
-      return res.status(HttpStatus.OK).json(result)
-    } catch(error) {
-      throw new error;
+      const { userId, connectionId } = req.body as any;
+      const result = await this.userConnectionService.createUserConnection({ userId, connectionId });
+      return res.status(HttpStatus.OK).json(result);
+    } catch (error) {
+      throw new error();
     }
   }
-
 }

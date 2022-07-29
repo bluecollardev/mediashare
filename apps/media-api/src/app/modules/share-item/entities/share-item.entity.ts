@@ -30,8 +30,7 @@ export class ShareItem extends BcEntity {
   @Column({ name: 'title', unique: false })
   title: string;
 
-  @ManyToOne(() => User, user => user.shareItem )
+  @ManyToOne(() => User, (user) => user.shareItem)
   @Column({ name: 'owner', unique: false })
-  owner: User
-
+  owner: User;
 }

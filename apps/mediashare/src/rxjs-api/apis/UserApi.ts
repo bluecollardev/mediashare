@@ -13,10 +13,14 @@
 
 import { Observable } from 'rxjs';
 import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, OperationOpts, RawAjaxResponse } from '../runtime';
-import { AuthorizeDto, MediaItemResponseDto, ProfileDto, UpdateUserDto, UserDto } from '../models';
+import { AuthorizeDto, InviteDto, MediaItemResponseDto, ProfileDto, UpdateUserDto, UserDto } from '../models';
 
 export interface UserControllerAuthorizeRequest {
   authorizeDto: AuthorizeDto;
+}
+
+export interface UserControllerInviteRequest {
+  inviteDto: InviteDto;
 }
 
 export interface UserControllerUpdateUserRequest {
@@ -86,6 +90,28 @@ export class UserApi extends BaseAPI {
         url: '/api/user/media-items',
         method: 'GET',
         headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
+  userControllerInvite({ inviteDto }: UserControllerInviteRequest): Observable<ProfileDto>;
+  userControllerInvite({ inviteDto }: UserControllerInviteRequest, opts?: OperationOpts): Observable<RawAjaxResponse<ProfileDto>>;
+  userControllerInvite({ inviteDto }: UserControllerInviteRequest, opts?: OperationOpts): Observable<ProfileDto | RawAjaxResponse<ProfileDto>> {
+    throwIfNullOrUndefined(inviteDto, 'inviteDto', 'userControllerInvite');
+
+    const headers: HttpHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    return this.request<ProfileDto>(
+      {
+        url: '/api/user/invite',
+        method: 'POST',
+        headers,
+        body: inviteDto,
       },
       opts?.responseOpts
     );

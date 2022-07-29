@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-import { BcRolesType, MediaItemResponseDto, PlaylistResponseDto } from './';
+import { BcRolesType } from './';
 
 /**
  * @export
@@ -73,26 +73,6 @@ export interface UserDto {
    * @memberof UserDto
    */
   phoneNumber: string;
-  /**
-   * @type {Array<MediaItemResponseDto>}
-   * @memberof UserDto
-   */
-  mediaItems: Array<MediaItemResponseDto>;
-  /**
-   * @type {Array<PlaylistResponseDto>}
-   * @memberof UserDto
-   */
-  playlists: Array<PlaylistResponseDto>;
-  /**
-   * @type {Array<string>}
-   * @memberof UserDto
-   */
-  sharedPlaylists: Array<string>;
-  /**
-   * @type {Array<string>}
-   * @memberof UserDto
-   */
-  sharedMediaItems: Array<string>;
   /**
    * @type {string}
    * @memberof UserDto

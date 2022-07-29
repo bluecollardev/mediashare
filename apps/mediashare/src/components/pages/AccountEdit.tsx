@@ -112,8 +112,8 @@ const AccountEdit = ({ route }: AccountEditProps) => {
     const updateUserDto = state;
     const updateUserId = state._id;
     // @ts-ignore
-    // updateUserDto, 
-    from(dispatch(updateAccount({ updateUserDto ,userId: updateUserId })))
+    // updateUserDto,
+    from(dispatch(updateAccount({ updateUserDto, userId: updateUserId })))
       .pipe(
         // @ts-ignore
         switchMap(() => dispatch(loadProfile(userId))),

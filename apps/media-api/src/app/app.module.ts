@@ -62,7 +62,7 @@ import { UserConnectionModule } from '@api-modules/user-connection/user-connecti
     ShareItemModule,
     LikesModule,
     TagModule,
-    UserConnectionModule
+    UserConnectionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

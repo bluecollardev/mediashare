@@ -23,11 +23,10 @@ export class CreateUserDto {
 }
 
 export class UserDto implements User {
-  
   constructor(user: Partial<User>) {
     Object.assign(this, user);
   }
-  
+
   @ApiString()
   imageSrc: string;
 
@@ -60,7 +59,8 @@ export class UserDto implements User {
   @ApiString()
   phoneNumber: string;
 
-  @ApiProperty({ type: () => MediaItemResponseDto, isArray: true })
+  // TODO: Remove these from the API complete
+  /* @ApiProperty({ type: () => MediaItemResponseDto, isArray: true })
   mediaItems?: MediaItemResponseDto[];
 
   @ApiProperty({ type: () => PlaylistResponseDto, isArray: true })
@@ -73,7 +73,7 @@ export class UserDto implements User {
   sharedMediaItems?: ObjectId[];
 
   @ApiProperty()
-  shareItem: ShareItem[];
+  shareItem: ShareItem[]; */
 
   @ApiPastDate()
   createdAt?: Date;

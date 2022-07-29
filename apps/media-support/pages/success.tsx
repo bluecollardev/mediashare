@@ -1,26 +1,32 @@
 import type { NextPage } from 'next';
 
- const Success: NextPage = () => {
-    return (
-     <div
+const Success: NextPage = () => {
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        width: '100%',
+        flex: 1,
+        display: 'flex',
+      }}
+    >
+      <div
         style={{
-          minHeight: '100vh',
-          width: '100%',
+          height: '100%',
           flex: 1,
-          display: 'flex',
         }}
       >
-        <div
+        <h1
           style={{
-            height: '100%',
-            flex: 1,
+            textAlign: 'center',
           }}
         >
-           <h1 style={{
-                textAlign: 'center'
-          }}> download app and sing in down</h1>
-        </div>
-      </div>)
- }
- 
- export default Success
+          {' '}
+          download app and sing in down
+        </h1>
+      </div>
+    </div>
+  );
+};
+
+export default Success;

@@ -53,7 +53,7 @@ export class UserController {
   @ApiResponse({ type: ProfileDto, isArray: false, status: 200 })
   async invite(@Req() req: Request, @Res() res: Response) {
     const { email, username } = req.body as any;
-   
+
     const newUser = await this.userService.create({
       email: email,
       username: username,
@@ -63,7 +63,6 @@ export class UserController {
     const profile = await this.userService.getUserById(newUser._id);
     return res.send(profile);
   }
-
 
   @Post('logout')
   @UseGuards(JwtAuthGuard)
