@@ -15,6 +15,7 @@ export interface MediaCardTitleProps {
   showActions?: boolean;
   showThumbnail?: boolean;
   onActionsClicked?: () => void;
+  style?: any;
 }
 
 export const MediaCardTitle: React.FC<MediaCardTitleProps> = ({
@@ -23,10 +24,11 @@ export const MediaCardTitle: React.FC<MediaCardTitleProps> = ({
   showActions = false,
   showThumbnail = true,
   onActionsClicked = () => {},
+  style = {},
 }: MediaCardTitleProps) => {
   return authorProfile ? (
     <Card.Title
-      style={{ marginTop: 25, marginBottom: 25 }}
+      style={{ ...defaultStyles.component, ...style }}
       title={<Title style={defaultStyles.titleText}>{title}</Title>}
       titleStyle={defaultStyles.title}
       titleNumberOfLines={2}
@@ -54,6 +56,10 @@ export const MediaCardTitle: React.FC<MediaCardTitleProps> = ({
 };
 
 const defaultStyles = StyleSheet.create({
+  component: {
+    marginTop: 25,
+    marginBottom: 25,
+  },
   avatar: {
     width: 50,
   },
