@@ -88,11 +88,18 @@ export function AppUpload({
       }
       const image = res.assets[0];
       const thumbnailKey = thumbnailRoot + image.fileName;
-      fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } }).then((res: { key: string }) => {
-        // eslint-disable-next-line no-shadow
-        const image = awsUrl + res.key;
-        handleUploadComplete(image);
-      });
+      fetchAndPutToS3({ key: thumbnailKey, fileUri: image.uri, options: { contentType: image.type } })
+        .then((res) => {
+          // eslint-disable-next-line no-shadow
+          if (!res) {
+            console.warn(`You may not be able to access file system if you aren't signed in with an Apple ID.`)
+          }
+          const image = awsUrl + res.key;
+          handleUploadComplete(image);
+        })
+        .catch((err) => {
+          console.warn(`Error uploading file: ${JSON.stringify(err)}`)
+        });
     });
   }
 
