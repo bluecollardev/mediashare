@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import React from 'react';
 import Image from 'next/image';
-import logo from './image/152_logo.png';
+import logo from '../image/152_logo.png';
 
 const Home: NextPage = () => {
   return (

@@ -2,13 +2,13 @@ import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Amplify, { Auth } from 'aws-amplify';
-import awsMobile from '../aws.export';
+import awsMobile from '../../aws.export';
 import '@aws-amplify/ui-react/styles.css';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, TextField, Snackbar } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import logo from '../image/152_logo.png';
+import logo from '../../image/152_logo.png';
 import Image from 'next/image';
 import e from 'express';
 

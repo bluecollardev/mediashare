@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Image from 'next/image'
-import logo from './image/152_logo.png';
+import logo from '../image/152_logo.png';
 
 const Success: NextPage = () => {
   return (

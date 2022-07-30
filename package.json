@@ -12,6 +12,8 @@
     "seed:users": "ts-node --project scripts/tsconfig.json -r tsconfig-paths/register scripts/gen-users.script.ts",
     "compose:up": "docker-compose -p mediashare up --build -V -d",
     "compose:db": "docker-compose up db",
+    "support:start": "cd apps/media-support && yarn next build && yarn next start; cd ../../",
+    "support:debug": "cd apps/media-support && yarn next dev; cd ../../",
     "api:start": "nest start --path apps/media-api/tsconfig.json --watch",
     "api:debug": "nest start --path apps/media-api/tsconfig.json --exec 'node --inspect' --debug --watch",
     "api:debug-brk": "nest start --path apps/media-api/tsconfig.json --exec 'node --inspect-brk' --debug --watch",
