@@ -8,6 +8,9 @@ npm run dev
 yarn dev
 ```
 
+Second create .env.local and variable name is API_HOST=http://localhost:5000/api.
+
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Deploy on Vercel
