@@ -45,7 +45,7 @@
     "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-express": "^8.4.3",
     "@nestjs/swagger": "^5.2.1",
-    "@nestjs/typeorm": "^8.0.3",
+    "@nestjs/typeorm": "^8.1.4",
     "@reduxjs/toolkit": "1.8.0",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
@@ -71,7 +71,7 @@
     "swagger-ui-express": "^4.1.6",
     "tslib": "^2.0.0",
     "type-fest": "^2.13.0",
-    "typeorm": "^0.2.31"
+    "typeorm": "^0.3.7"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.2.4",
