@@ -223,7 +223,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     try {
       // TODO: Promise all this
       for await (const key of shareItems) {
-        await this.repository.delete({ _id: new ObjectId(key) });
+        await this.repository.delete({ _id: new ObjectId(key) } as any);
       }
       return true;
     } catch (error) {
@@ -235,7 +235,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     try {
       // TODO: Promise all this
       for await (const key of shareItemsUserId) {
-        await this.repository.delete({ userId: new ObjectId(key) });
+        await this.repository.delete({ userId: new ObjectId(key) } as any);
       }
       return true;
     } catch (error) {

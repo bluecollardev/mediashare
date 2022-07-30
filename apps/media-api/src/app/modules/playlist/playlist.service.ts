@@ -1,7 +1,7 @@
-import { IdType } from '@core-lib';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectIdGuard } from '@util-lib';
+import { IdType } from '@core-lib';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
@@ -13,6 +13,7 @@ import { Playlist } from './entities/playlist.entity';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { SearchParameters } from '@mediashare/shared';
+import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
 
 type CreatePlaylistParameters = {
   playlistId: ObjectId;
@@ -53,12 +54,12 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
     const { mediaIds, ...rest } = dto;
     // TODO: Transaction!
     // Get playlist items by playlistId
-    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) });
+    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) } as any);
     // Filter out any deleted media items
     const playlistItemIdsToDelete = playlistItems
       // If playlist item mediaId is NOT included in our mediaIds, delete the playlist item
-      .filter((item) => !mediaIds.includes(item.mediaId.toString()))
-      .map((item) => item._id.toString());
+      .filter((item: PlaylistItem) => !mediaIds.includes(item.mediaId.toString()))
+      .map((item: PlaylistItem) => item._id.toString());
 
     // Ensure unique ids
     const uniquePlaylistItemIdsToDelete = Array.from(new Set(playlistItemIdsToDelete));
@@ -77,8 +78,8 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
 
   async removePlaylistWithItems(playlistId: IdType) {
     // Get playlist items by playlistId
-    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) });
-    const playlistItemIdsToDelete = playlistItems.map((item) => item._id.toString());
+    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) } as any);
+    const playlistItemIdsToDelete = playlistItems.map((item: PlaylistItem) => item._id.toString());
     const deletePlaylistItems = playlistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
 
     const result = await Promise.all(deletePlaylistItems);

@@ -28,7 +28,7 @@ export class UserController {
     const { accessToken = null, idToken = null } = req.body as any;
     const valid = this.userService.validateToken({ token: accessToken, idToken });
     if (!valid) throw new UnauthorizedException();
-    const user = await this.userService.findByQuery({ sub: valid.sub });
+    const user = await this.userService.findByQuery({ sub: valid.sub } as any);
 
     res.setHeader('Authorization', accessToken);
     res.setHeader('Id', idToken);
