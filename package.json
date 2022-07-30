@@ -51,7 +51,7 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "compression": "^1.7.4",
-    "connect-mongo": "^4.2.0",
+    "connect-mongo": "4.2.2",
     "express-session": "^1.17.1",
     "faker": "^5.4.0",
     "joi": "^17.4.0",
