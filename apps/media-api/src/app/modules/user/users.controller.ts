@@ -41,15 +41,14 @@ export class UsersController {
   @Delete(RouteTokens.USER_ID)
   @ApiParam({ name: 'userId', type: String, required: true })
   @UseGuards(UserGuard)
-  @ApiBearerAuth()
   remove(@Param('userId') userId: string): Promise<DeleteResult> {
     return this.userService.remove(userId);
   }
 
   @Put(RouteTokens.USER_ID)
   @UseGuards(UserGuard)
-  @ApiBody({ type: UpdateUserDto })
   @ApiParam({ name: 'userId', type: String, required: true })
+  @ApiBody({ type: UpdateUserDto })
   @UserPostResponse({ type: UserDto })
   update(@Param('userId') userId: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser({ userId, updateUserDto });

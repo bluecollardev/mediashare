@@ -9,7 +9,7 @@ import { UserGuard } from './user.guard';
 import { UserGetResponse, UserPostResponse } from './user.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ProfileDto } from './dto/profile.dto';
-import { AuthorizeDto } from './dto/authorize.dto';
+import { AuthorizeDto, InviteDto } from './dto/authorize.dto';
 import { ShareItemService } from '@api-modules/share-item/share-item.service';
 import { MediaItemService } from '@api-modules/media-item/media-item.service';
 import { MediaItemResponseDto } from '@api-modules/media-item/dto/media-item-response.dto';
@@ -48,10 +48,26 @@ export class UserController {
     return res.send(profile);
   }
 
+  @Post('invite')
+  @ApiBody({ type: InviteDto })
+  @ApiResponse({ type: ProfileDto, isArray: false, status: 200 })
+  async invite(@Req() req: Request, @Res() res: Response) {
+    const { email, username } = req.body as any;
+
+    const newUser = await this.userService.create({
+      email: email,
+      username: username,
+      role: 'subscriber',
+      imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
+    });
+    const profile = await this.userService.getUserById(newUser._id);
+    return res.send(profile);
+  }
+
   @Post('logout')
   @UseGuards(JwtAuthGuard)
   logout(@Req() req: Request, @Res() res: Response) {
-    req.logout();
+    // req.logout();
     res.setHeader('Authorization', '');
     res.setHeader('Id', '');
     return res.status(HttpStatus.OK).send();

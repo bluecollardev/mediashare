@@ -1,27 +1,51 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
 import { BcRolesType, BC_ROLES } from '@core-lib';
+import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('user')
 export class User extends BcEntity {
-  @Column() username: string;
+  @ApiProperty()
+  @Column()
+  username: string;
 
-  @Column() phoneNumber: string;
+  @ApiProperty()
+  @Column()
+  phoneNumber: string;
 
-  @Column() email: string;
+  @ApiProperty()
+  @Column()
+  email: string;
 
-  @Column() sub: string;
+  @ApiProperty()
+  @Column()
+  sub: string;
 
-  @Column() firstName: string;
+  @ApiProperty()
+  @Column()
+  firstName: string;
 
-  @Column() lastName: string;
+  @ApiProperty()
+  @Column()
+  lastName: string;
 
-  @Column() imageSrc: string;
+  @ApiProperty()
+  @Column()
+  imageSrc: string;
 
+  /* @ApiProperty({ isArray: true, nullable: true})
   @Column({ array: true, nullable: true }) sharedPlaylists?: ObjectId[];
 
-  @Column({ array: true, nullable: true }) sharedMediaItems?: ObjectId[];
+  @ApiProperty({ isArray: true, nullable: true})
+  @Column({ array: true, nullable: true}) sharedMediaItems?: ObjectId[]; */
 
-  @Column({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType' }) role: BcRolesType;
+  @ApiProperty()
+  @Column({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType' })
+  role: BcRolesType;
+
+  /* @ApiProperty({type: () => ShareItem, isArray: true, nullable: true})
+  @OneToMany(() => ShareItem, shareItem => shareItem.userId)
+  @Column({ array: true, nullable: true }) shareItem?: ShareItem[] */
 }

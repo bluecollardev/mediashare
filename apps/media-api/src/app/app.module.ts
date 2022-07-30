@@ -17,6 +17,7 @@ import { ShareItemModule } from '@api-modules/share-item/share-item.module';
 import { ViewsModule } from '@api-modules/views/views.module';
 import { LikesModule } from '@api-modules/likes/likes.module';
 import { TagModule } from '@api-modules/tag/tag.module';
+import { UserConnectionModule } from '@api-modules/user-connection/user-connection.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { TagModule } from '@api-modules/tag/tag.module';
     ShareItemModule,
     LikesModule,
     TagModule,
+    UserConnectionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

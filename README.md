@@ -8,6 +8,7 @@ You will need to have Node.js, npm, yarn, and Docker installed locally
 There are two applications in this project.
 - /apps/mediashare - The phone app
 - /apps/mediashare-api - The API for the phone app
+- /apps/media-support - The web for invitation from app.
 
 To run the project locally, you will need to start both of them. You will also have to start the database.
 
@@ -70,3 +71,12 @@ The password is 'welcome1' but you can change that and the email config there.
 This generates a client in the mediashare application.
 
 Run `npm run gen:api-client`
+
+
+## Running the Web support
+To run the web, open a terminal window and navigate to `./apps/media-support`.
+Then run the following commands:
+``` shell
+  yarn install # If you haven't already
+  yarn dev
+```

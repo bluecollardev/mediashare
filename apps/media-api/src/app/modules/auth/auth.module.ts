@@ -12,10 +12,10 @@ import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.
 import { MediaItem } from '@api-modules/media-item/entities/media-item.entity';
 import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 import { AuthService } from './auth.service';
-import { ShareItemModule } from '@api-modules/share-item/share-item.module';
 import { LocalStrategy } from './local.strategy';
 import { SessionSerializer } from './session.serializer';
 import { accessKey } from './keys';
+import { UserConnection } from '@api-modules/user-connection/entities/user-connection.entity';
 
 @Module({
   imports: [
@@ -43,7 +43,7 @@ import { accessKey } from './keys';
         ignoreExpiration: true,
       },
     }),
-    TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem, ShareItem]),
+    TypeOrmModule.forFeature([User, Playlist, PlaylistItem, MediaItem, ShareItem, UserConnection]),
   ],
   controllers: [],
   providers: [LocalStrategy, SessionSerializer, AuthService, UserService, ShareItemService],

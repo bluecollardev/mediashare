@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ApiDecoratorOptions, ApiEmail, ApiName, ApiObjectId, ApiPastDate, ApiString } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
-import { MediaItemResponseDto } from '@api-modules/media-item/dto/media-item-response.dto';
-import { PlaylistResponseDto } from '@api-modules/playlist/dto/playlist-response.dto';
-import { User } from '../entities/user.entity';
 import { BC_ROLES } from '@core-lib';
 import { BcRolesType } from '@api-core/types/roles.type';
+// import { MediaItemResponseDto } from '@api-modules/media-item/dto/media-item-response.dto';
+// import { PlaylistResponseDto } from '@api-modules/playlist/dto/playlist-response.dto';
+// import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
+import { User } from '../entities/user.entity';
 
 export class CreateUserDto {
   @ApiName(<ApiDecoratorOptions>{ required: true })
@@ -25,6 +26,7 @@ export class UserDto implements User {
   constructor(user: Partial<User>) {
     Object.assign(this, user);
   }
+
   @ApiString()
   imageSrc: string;
 
@@ -57,7 +59,8 @@ export class UserDto implements User {
   @ApiString()
   phoneNumber: string;
 
-  @ApiProperty({ type: () => MediaItemResponseDto, isArray: true })
+  // TODO: Remove these from the API complete
+  /* @ApiProperty({ type: () => MediaItemResponseDto, isArray: true })
   mediaItems?: MediaItemResponseDto[];
 
   @ApiProperty({ type: () => PlaylistResponseDto, isArray: true })
@@ -68,6 +71,9 @@ export class UserDto implements User {
 
   @ApiProperty()
   sharedMediaItems?: ObjectId[];
+
+  @ApiProperty()
+  shareItem: ShareItem[]; */
 
   @ApiPastDate()
   createdAt?: Date;

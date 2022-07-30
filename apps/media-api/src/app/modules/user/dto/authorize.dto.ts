@@ -13,3 +13,11 @@ export class AuthorizeDto {
   })
   idToken: string;
 }
+
+export class InviteDto {
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  username: string;
+}
