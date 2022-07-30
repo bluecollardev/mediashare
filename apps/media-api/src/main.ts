@@ -15,6 +15,7 @@ import * as passport from 'passport';
 import { AppConfigService } from '@api-modules/app-config/app-config.provider';
 import { GlobalExceptionFilter } from '@api-core/exception-filters/global-exception.filter';
 import * as session from 'express-session';
+// TODO: We should be able to create a connection using TypeORM no? If so, remove this!
 import MongoStore from 'connect-mongo';
 import * as compression from 'compression';
 import * as bodyParser from 'body-parser';

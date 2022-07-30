@@ -20,8 +20,8 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
   async createUserConnection({ userId, connectionId }: CreateUserConnectionDto): Promise<UserConnection> {
     try {
       return await this.create({
-        userId: new ObjectId(userId),
-        connectionId: new ObjectId(connectionId),
+        userId,
+        connectionId,
       });
     } catch (error) {
       throw new error();

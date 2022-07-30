@@ -1,5 +1,6 @@
 import { Controller, Body, UseGuards, HttpCode, HttpStatus, UnauthorizedException, Get, Post, Put, Req, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { StringIdGuard } from '@util-lib';
 import { Response, Request } from 'express';
 import { ObjectId } from 'mongodb';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
@@ -60,7 +61,7 @@ export class UserController {
       role: 'subscriber',
       imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
     });
-    const profile = await this.userService.getUserById(newUser._id);
+    const profile = await this.userService.getUserById(StringIdGuard(newUser._id));
     return res.send(profile);
   }
 

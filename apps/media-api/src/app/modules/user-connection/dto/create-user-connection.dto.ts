@@ -6,11 +6,10 @@ import { ObjectId } from 'mongodb';
 export class CreateUserConnectionDto {
   @ApiProperty({ required: true })
   @IsString()
-  userId: ObjectId;
+  userId: string;
 
   @ApiProperty({ required: true })
-  @IsString()
-  connectionId: ObjectId;
+  connectionId: string;
 
   @ApiPastDate()
   createdAt?: Date;
