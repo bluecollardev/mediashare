@@ -49,10 +49,12 @@ const Home: NextPage = () => {
   async function createConnection(data: IFromInput) {
     try {
       const { username, email } = data;
+      // console.log(`${process.env.APP_HOST}/api/user/invite`);
       const {
         data: { _id },
       } = await axios.post(
-        `${process.env.API_HOST}/api/user/invite`,
+        `${process.env.NEXT_PUBLIC_API_HOST}/api/user/invite`,
+        //`http://localhost:5000/api/user/invite`,
         { username, email },
         {
           headers: {
@@ -62,7 +64,8 @@ const Home: NextPage = () => {
         }
       )
       await axios.post(
-        `${process.env.API_HOST}/api/user-connection`,
+        `${process.env.NEXT_PUBLIC_API_HOST}/api/user-connection`,
+        //`http://localhost:5000/api/user-connection`,
         { userId: _id, connectionId: id },
         {
           headers: {

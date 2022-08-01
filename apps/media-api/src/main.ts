@@ -91,7 +91,7 @@ async function bootstrap() {
       writeFileSync('./swagger-spec.json', JSON.stringify(document, null, 2));
     }
 
-    // app.enableCors();
+    app.enableCors();
     await app.listen(port, () => {
       console.log(`Listening at ${host}:${port}/${globalPrefix}`);
     });
