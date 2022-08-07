@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import Image from 'next/image'
+import Image from 'next/image';
 import logo from '../image/152_logo.png';
 
 const Success: NextPage = () => {
@@ -22,19 +22,19 @@ const Success: NextPage = () => {
         }}
       >
         <div
-            style={{
-              textAlign: 'center',
-            }}
-          >
-            <Image src={logo.src} alt="Picture of the author" width={100} height={100} />
-          </div>
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          <Image src={logo.src} alt="Picture of the author" width={100} height={100} />
+        </div>
         <h1
           style={{
             textAlign: 'center',
           }}
         >
           {' '}
-          download app ios and android
+          Download app ios and android
         </h1>
       </div>
     </div>

@@ -42,7 +42,7 @@ export const MediaItemDetail = ({ globalState = { tags: [] } }: PageProps) => {
             thumbnail={thumbnail}
             thumbnailStyle={{
               // TODO: Can we do this automatically from video metadata?
-              aspectRatio: 1 / 1
+              aspectRatio: 1 / 1,
             }}
             category={category}
             availableTags={mappedTags}
