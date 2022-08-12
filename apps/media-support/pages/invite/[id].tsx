@@ -10,7 +10,6 @@ import { Button, TextField, Snackbar } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import logo from '../../image/152_logo.png';
 import Image from 'next/image';
-import e from 'express';
 
 
 Amplify.configure({
