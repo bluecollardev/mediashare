@@ -39,18 +39,13 @@ const Home: NextPage = () => {
           <h1
             style={{
               textAlign: 'center',
-              margin: 0,
-            }}
-          >
-            Welcome
-          </h1>
-          <h1
-            style={{
-              textAlign: 'center',
             }}
           >
             Mediashare
           </h1>
+          <h6 style={{ textAlign: 'center', margin: 0 }}>
+            <a href="https://bluecollardev.com" style={{ color: '#15B7EB' }}><span style={{ color: '#15B7EB' }}>by Blue Collar Software</span></a>
+          </h6>
         </div>
       </div>
     </div>

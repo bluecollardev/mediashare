@@ -163,7 +163,10 @@ const Home: NextPage = () => {
           >
             <Image src={logo.src} alt="Picture of the author" width={100} height={100} />
           </div>
-          <h1 style={{ textAlign: 'center' }}>Sign Up</h1>
+          <h1 style={{ textAlign: 'center' }}>Create Account</h1>
+          <p style={{ textAlign: 'center' }}>
+            You've been invited to join the Mediashare private app trial. Please create a user account to continue.
+          </p>
           <form
             onSubmit={handleSubmit(onSubmit)}
             style={{
@@ -232,8 +235,8 @@ const Home: NextPage = () => {
               />
             )}
 
-            <Button variant="contained" type="submit">
-              {showCode ? 'Confirm code' : 'Sing up'}
+            <Button variant="contained" type="submit" style={{ backgroundColor: '#15B7EB' }}>
+              {showCode ? 'Confirm code' : 'Sign up'}
             </Button>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
