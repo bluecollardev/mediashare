@@ -32,9 +32,7 @@ export const AddFromFeed = ({ navigation, globalState }: PageProps) => {
   return (
     <PageContainer>
       <PageContent>
-        {loaded && entities.length > 0 && (
-          <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} />
-        )}
+        {loaded && entities.length > 0 && <FlatList data={entities} renderItem={({ item }) => renderVirtualizedListItem(item)} />}
         {loaded && entities.length === 0 && (
           <NoContent
             messageButtonText="There are no items in your S3 bucket to import. Please choose another bucket or add files to this bucket to continue."

@@ -52,17 +52,16 @@ export class UserController {
   @Post('invite')
   @ApiBody({ type: InviteDto })
   @ApiResponse({ type: ProfileDto, isArray: false, status: 200 })
-  async invite(@Req() req: Request, @Res() res: Response) {
-    const { email, username } = req.body as any;
-
+  async invite(@Body() InviteDto: InviteDto, @Res() res: Response) {
     const newUser = await this.userService.create({
-      email: email,
-      username: username,
+      email: InviteDto.email,
+      username: InviteDto.username,
       role: 'subscriber',
       imageSrc: 'https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg',
     });
     const profile = await this.userService.getUserById(StringIdGuard(newUser._id));
     return res.send(profile);
+
   }
 
   @Post('logout')
