@@ -24,8 +24,15 @@ export const appValidationSchema = Joi.object({
   AUTH_PORT: Joi.number().default(4000),
   AUTH_HOST: Joi.string().default('localhost'),
   AWS_URL: Joi.string().default(''),
+  USER_CONNECTION_MODULE_SECRET: Joi.string().default(''),
+  USER_CONNECTION_MODULE_AKI_KEY: Joi.string().default(''),
+  USER_CONNECTION_REGION: Joi.string().default(''),
+  INVITATION_REQUEST_URL: Joi.string().default(''),
+  INVITATION_EMAIL_SENDER: Joi.string().default(''),
+  INVITATION_EMAIL_SUBJECT: Joi.string().default(''),
 });
 
+// TODO: Use these app envs, instead of process.env everywhere if possible...
 export default registerAs('app', () => ({
   host: process.env.APP_HOST,
   env: process.env.NODE_ENV,
@@ -42,4 +49,10 @@ export default registerAs('app', () => ({
   authHost: process.env.AUTH_HOST,
   awsUrl: process.env.AWS_URL,
   synchronize: process.env.DB_SYNCHRONIZE,
+  userConnectionModuleSecret: process.env.USER_CONNECTION_MODULE_SECRET,
+  userConnectionModuleAkiKey: process.env.USER_CONNECTION_MODULE_AKI_KEY,
+  userConnectionModuleRegion: process.env.USER_CONNECTION_REGION,
+  invitationAppUrl: process.env.INVITATION_REQUEST_URL,
+  invitationEmailSender: process.env.INVITATION_EMAIL_SENDER,
+  invitationEmailSubject: process.env.INVITATION_EMAIL_SUBJECT,
 }));

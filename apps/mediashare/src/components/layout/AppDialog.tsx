@@ -15,7 +15,18 @@ interface AppDialogProps {
   buttonColor?: string;
 }
 
-export function AppDialog({ leftActionLabel, rightActionLabel, leftActionCb, rightActionCb, showDialog, onDismiss, title, subtitle, color = theme.colors.white, buttonColor = theme.colors.primary }: AppDialogProps) {
+export function AppDialog({
+  leftActionLabel,
+  rightActionLabel,
+  leftActionCb,
+  rightActionCb,
+  showDialog,
+  onDismiss,
+  title,
+  subtitle,
+  color = theme.colors.white,
+  buttonColor = theme.colors.primary,
+}: AppDialogProps) {
   return (
     <Portal>
       <Dialog visible={showDialog} onDismiss={onDismiss}>
