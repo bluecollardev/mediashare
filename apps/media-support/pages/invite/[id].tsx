@@ -14,12 +14,12 @@ import Image from 'next/image';
 
 export async function getServerSideProps(context: { query: { userId: string; id: string; }; }) {
   const {userId , id} = context.query
-  if(context.query.userId === undefined || context.query.id  === undefined  ) {
+  if(context.query.userId === undefined || context.query.id  !== 'id'  ) {
     return {
       notFound: true
     }
   }
-  if(userId === '' || id === '' ) {
+  if(userId === '' || id !== 'id' ) {
     return {
       notFound: true
     }
@@ -51,7 +51,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 const Home: NextPage = () => {
   const router = useRouter();
   const { userId: id } = router.query;
-  console.log(router.query);
 
   async function createUserAWS(data: IFromInput) {
     try {
