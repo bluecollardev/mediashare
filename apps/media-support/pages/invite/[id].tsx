@@ -12,6 +12,24 @@ import logo from '../../image/152_logo.png';
 import Image from 'next/image';
 
 
+export async function getServerSideProps(context: { query: { userId: string; id: string; }; }) {
+  const {userId , id} = context.query
+  if(context.query.userId === undefined || context.query.id  === undefined  ) {
+    return {
+      notFound: true
+    }
+  }
+  if(userId === '' || id === '' ) {
+    return {
+      notFound: true
+    }
+
+  }
+  return {
+    props: {},
+  };
+}
+
 Amplify.configure({
   ...awsMobile,
   Analytics: {
@@ -32,7 +50,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { pid: id } = router.query;
+  const { userId: id } = router.query;
+  console.log(router.query);
 
   async function createUserAWS(data: IFromInput) {
     try {
@@ -70,7 +89,7 @@ const Home: NextPage = () => {
           },
         }
       );
-      router.push('/success');
+     
     } catch (error) {
       throw error;
     }
@@ -116,6 +135,7 @@ const Home: NextPage = () => {
     try {
       if (showCode) {
         confirmSignUp(data);
+        router.push('/success');
       } else {
         if (id) {
           await signUp(data);
@@ -164,7 +184,7 @@ const Home: NextPage = () => {
           </div>
           <h1 style={{ textAlign: 'center' }}>Create Account</h1>
           <p style={{ textAlign: 'center' }}>
-            You've been invited to join the Mediashare private app trial. Please create a user account to continue.
+            {"You've been invited to join the Mediashare private app trial. Please create a user account to continue."}
           </p>
           <form
             onSubmit={handleSubmit(onSubmit)}

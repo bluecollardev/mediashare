@@ -26,12 +26,13 @@ export class UserConnectionController {
   @ApiQuery({ name: 'userId', required: false })
   async sendEmail(@Query('email') email, @Query('userId') userId, @Res() res: Response) {
     console.log(email, userId);
+    // replace link http://localhost:3000/invite/id?userId={}
     const mail = {
       to: email,
       subject: 'Hello from mediashare',
       from: 'mimrachapol@gmail.com', // create new identity on aws SES
       html: `<h1>Hello
-      <a href="http://localhost:3000/invite/id?pid=${userId}"> invite mediashare</a>
+      <a href="http://localhost:3000/invite/id?userId=${userId}"> invite mediashare</a>
       </h1>`,
     };
     
