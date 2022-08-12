@@ -2,7 +2,7 @@ import React from 'react';
 import { usePreviewImage } from 'mediashare/hooks/usePreviewImage';
 import { Dimensions, FlatList, View, TouchableHighlight } from 'react-native';
 import { useViewPlaylistById } from 'mediashare/hooks/navigation';
-import { MediaCard, SectionHeader } from 'mediashare/components/layout';
+import { MediaCard, NoContent, SectionHeader } from 'mediashare/components/layout';
 import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 
 export interface FeedRecentlyPlayedProps {
@@ -12,9 +12,10 @@ export interface FeedRecentlyPlayedProps {
   showActions?: boolean;
   onViewDetailClicked?: Function;
   onChecked?: (checked: boolean, item?: any) => void;
+  displayNoContent?: boolean;
 }
 
-export const FeedRecentlyPlayed = ({ list = [] }: FeedRecentlyPlayedProps) => {
+export const FeedRecentlyPlayed = ({ list = [], displayNoContent = false }: FeedRecentlyPlayedProps) => {
   const viewPlaylistAction = useViewPlaylistById();
   const viewPlaylist = (item) => viewPlaylistAction({ playlistId: item._id });
 
@@ -25,10 +26,17 @@ export const FeedRecentlyPlayed = ({ list = [] }: FeedRecentlyPlayedProps) => {
     h: 350
   };
 
+  const noContentIsVisible = displayNoContent && sortedList && sortedList.length === 0;
+
   return (
-    <View style={{ height: dimensions.h, marginBottom: 15 }}>
+    <View style={{ ...(noContentIsVisible ? { height: dimensions.h } : {}), marginBottom: 15 }}>
       <SectionHeader title={`Resume Playing`} />
-      <FlatList horizontal={true} data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
+      {sortedList && sortedList.length > 0 && (
+        <FlatList horizontal={true} data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
+      )}
+      {noContentIsVisible && (
+        <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="view-list" />
+      )}
     </View>
   );
 

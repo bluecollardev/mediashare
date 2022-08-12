@@ -3,7 +3,7 @@ import { usePreviewImage } from 'mediashare/hooks/usePreviewImage';
 import { useViewPlaylistById, useViewFeedSharedWithMe } from 'mediashare/hooks/navigation';
 import { FlatList, View, Dimensions, TouchableHighlight } from 'react-native';
 import { Button } from 'react-native-paper';
-import { MediaCard, SectionHeader } from 'mediashare/components/layout';
+import { MediaCard, NoContent, SectionHeader } from 'mediashare/components/layout';
 import { AuthorProfileDto, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { theme } from 'mediashare/styles';
 
@@ -14,9 +14,10 @@ export interface FeedSharedByContactProps {
   showActions?: boolean;
   onViewDetailClicked?: Function;
   onChecked?: (checked: boolean, item?: any) => void;
+  displayNoContent?: boolean;
 }
 
-export const FeedSharedByContact = ({ list = [] }: FeedSharedByContactProps) => {
+export const FeedSharedByContact = ({ list = [], displayNoContent = false }: FeedSharedByContactProps) => {
   const viewFeedSharedWithMeAction = useViewFeedSharedWithMe();
   const viewFeedSharedWithMe = () => viewFeedSharedWithMeAction();
   const viewPlaylistAction = useViewPlaylistById();
@@ -29,22 +30,31 @@ export const FeedSharedByContact = ({ list = [] }: FeedSharedByContactProps) => 
     h: 380
   };
 
+  const noContentIsVisible = displayNoContent && sortedList && sortedList.length === 0;
+
   return (
-    <View style={{ height: dimensions.h, marginBottom: 15 }}>
+    <View style={{ ...(noContentIsVisible ? { height: dimensions.h } : {}), marginBottom: 15 }}>
       <SectionHeader title={`Recently Added`} />
-      <FlatList horizontal={true} data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
-      <Button
-        icon="list"
-        color={theme.colors.darkDefault}
-        textColor={theme.colors.primary}
-        uppercase={false}
-        mode="outlined"
-        compact
-        dark
-        onPress={() => viewFeedSharedWithMe()}
-      >
-        All Shared Playlists
-      </Button>
+      {sortedList && sortedList.length > 0 && (
+        <>
+          <FlatList horizontal={true} data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
+          <Button
+            icon="list"
+            color={theme.colors.darkDefault}
+            textColor={theme.colors.primary}
+            uppercase={false}
+            mode="outlined"
+            compact
+            dark
+            onPress={() => viewFeedSharedWithMe()}
+          >
+            All Shared Playlists
+          </Button>
+        </>
+      )}
+      {noContentIsVisible && (
+        <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="view-list" />
+      )}
     </View>
   );
 
