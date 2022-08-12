@@ -22,14 +22,10 @@ export const FeedRecentlyPlayed = ({ list = [], displayNoContent = false }: Feed
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
-  const dimensions = {
-    h: 350
-  };
-
   const noContentIsVisible = displayNoContent && sortedList && sortedList.length === 0;
 
   return (
-    <View style={{ ...(noContentIsVisible ? { height: dimensions.h } : {}), marginBottom: 15 }}>
+    <View style={{ marginBottom: 15 }}>
       <SectionHeader title={`Resume Playing`} />
       {sortedList && sortedList.length > 0 && (
         <FlatList horizontal={true} data={sortedList} renderItem={({ item }) => renderVirtualizedListItem(item)} keyExtractor={({ _id }) => `playlist_${_id}`} />
@@ -45,7 +41,7 @@ export const FeedRecentlyPlayed = ({ list = [], displayNoContent = false }: Feed
     const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, description = '', mediaIds = [], mediaItems = [], imageSrc = '' } = item;
     const dimensions = {
       w: Dimensions.get('window').width / 2,
-      h: Dimensions.get('window').width / 2
+      h: Dimensions.get('window').width / 2 + 100
     };
 
     console.log(`[DisplayPreviewOrVideo] thumbnail: ${imageSrc}`);

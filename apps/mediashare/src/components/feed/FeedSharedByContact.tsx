@@ -26,14 +26,10 @@ export const FeedSharedByContact = ({ list = [], displayNoContent = false }: Fee
   const sortedList = list.map((item) => item);
   sortedList.sort((dtoA, dtoB) => (dtoA.title > dtoB.title ? 1 : -1));
 
-  const dimensions = {
-    h: 380
-  };
-
   const noContentIsVisible = displayNoContent && sortedList && sortedList.length === 0;
 
   return (
-    <View style={{ ...(noContentIsVisible ? { height: dimensions.h } : {}), marginBottom: 15 }}>
+    <View style={{ marginBottom: 15 }}>
       <SectionHeader title={`Recently Added`} />
       {sortedList && sortedList.length > 0 && (
         <>
@@ -63,7 +59,7 @@ export const FeedSharedByContact = ({ list = [], displayNoContent = false }: Fee
     const { _id = '', title = '', authorProfile = {} as AuthorProfileDto, description = '', mediaIds = [], mediaItems = [], imageSrc = '' } = item;
     const dimensions = {
       w: Dimensions.get('window').width / 2,
-      h: Dimensions.get('window').width / 2
+      h: Dimensions.get('window').width / 2 + 100
     };
 
     console.log(`[DisplayPreviewOrVideo] thumbnail: ${imageSrc}`);
@@ -85,7 +81,8 @@ export const FeedSharedByContact = ({ list = [], displayNoContent = false }: Fee
             thumbnail={mediaPreview.imageSrc}
             thumbnailStyle={{
               aspectRatio: 1 / 1,
-              padding: 10
+              padding: 10,
+              paddingBottom: 0
             }}
             showActions={false}
             showAvatar={false}
