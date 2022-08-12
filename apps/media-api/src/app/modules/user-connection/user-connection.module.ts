@@ -8,9 +8,9 @@ import { SesModule } from '@nextnm/nestjs-ses';
 @Module({
   imports: [
     SesModule.forRoot({
-      SECRET: 'C7rXF5JVEWkecHcjay+nXnuf3fPu8ERpj7ZS6EOg',
-      AKI_KEY: 'AKIA3ZSOCVIUBBEA4D2M',
-      REGION: 'us-west-2',
+      SECRET: process.env['USER_CONNECTION_MODULE_SECRET'],
+      AKI_KEY: process.env['USER_CONNECTION_MODULE_AKI_KEY'],
+      REGION: process.env['USER_CONNECTION_REGION'],
     }),
     TypeOrmModule.forFeature([UserConnection]),
   ],
