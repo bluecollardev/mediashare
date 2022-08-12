@@ -45,7 +45,8 @@ export class User extends BcEntity {
   @Column({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType' })
   role: BcRolesType;
 
-  @ApiProperty({type: () => ShareItem, isArray: true, nullable: true})
-  @OneToMany(() => ShareItem, shareItem => shareItem.userId)
-  @Column({ array: true, nullable: true }) shareItem?: ShareItem[]
+  @ApiProperty({ type: () => ShareItem, isArray: true, nullable: true })
+  @OneToMany(() => ShareItem, (shareItem) => shareItem.userId)
+  @Column({ array: true, nullable: true })
+  shareItem?: ShareItem[];
 }

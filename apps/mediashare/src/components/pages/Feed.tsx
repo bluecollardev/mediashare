@@ -21,7 +21,7 @@ const FeedComponent = ({ list, tags }) => {
       <FeedRecentlyPlayed list={list} />
     </>
   );
-}
+};
 
 const FeedComponentWithSearch = withPlaylistSearch(FeedComponent);
 
