@@ -12,6 +12,24 @@ import logo from '../../image/152_logo.png';
 import Image from 'next/image';
 
 
+export async function getServerSideProps(context: { query: { userId: string; id: string; }; }) {
+  const {userId , id} = context.query
+  if(context.query.userId === undefined || context.query.id  !== 'id'  ) {
+    return {
+      notFound: true
+    }
+  }
+  if(userId === '' || id !== 'id' ) {
+    return {
+      notFound: true
+    }
+
+  }
+  return {
+    props: {},
+  };
+}
+
 Amplify.configure({
   ...awsMobile,
   Analytics: {
@@ -32,7 +50,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { pid: id } = router.query;
+  const { userId: id } = router.query;
 
   async function createUserAWS(data: IFromInput) {
     try {
@@ -70,7 +88,7 @@ const Home: NextPage = () => {
           },
         }
       );
-      router.push('/success');
+
     } catch (error) {
       throw error;
     }
@@ -86,7 +104,7 @@ const Home: NextPage = () => {
           email,
         },
       });
-      await createConnection(data);
+      await await createConnection(data);
     } catch (error) {
       throw error;
     }
@@ -116,10 +134,11 @@ const Home: NextPage = () => {
     try {
       if (showCode) {
         confirmSignUp(data);
+        router.push('/success');
       } else {
         if (id) {
           await signUp(data);
-          setShowCode(true);
+            setShowCode(true);
         }
       }
     } catch (error) {
