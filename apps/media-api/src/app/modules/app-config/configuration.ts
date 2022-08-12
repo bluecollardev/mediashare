@@ -27,7 +27,7 @@ export const appValidationSchema = Joi.object({
   USER_CONNECTION_MODULE_SECRET: Joi.string().default(''),
   USER_CONNECTION_MODULE_AKI_KEY: Joi.string().default(''),
   USER_CONNECTION_REGION: Joi.string().default(''),
-  INVITATION_APP_URL: Joi.string().default(''),
+  INVITATION_REQUEST_URL: Joi.string().default(''),
   INVITATION_EMAIL_SENDER: Joi.string().default(''),
   INVITATION_EMAIL_SUBJECT: Joi.string().default(''),
 });
@@ -52,7 +52,7 @@ export default registerAs('app', () => ({
   userConnectionModuleSecret: process.env.USER_CONNECTION_MODULE_SECRET,
   userConnectionModuleAkiKey: process.env.USER_CONNECTION_MODULE_AKI_KEY,
   userConnectionModuleRegion: process.env.USER_CONNECTION_REGION,
-  invitationAppUrl: process.env.INVITATION_APP_URL,
+  invitationAppUrl: process.env.INVITATION_REQUEST_URL,
   invitationEmailSender: process.env.INVITATION_EMAIL_SENDER,
   invitationEmailSubject: process.env.INVITATION_EMAIL_SUBJECT,
 }));

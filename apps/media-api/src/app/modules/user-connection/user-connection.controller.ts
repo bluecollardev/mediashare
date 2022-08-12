@@ -32,7 +32,7 @@ export class UserConnectionController {
       subject: process.env['INVITATION_EMAIL_SUBJECT'],
       // Create new identity on AWS SES
       from: process.env['INVITATION_EMAIL_SENDER'],
-      html: `<h1>Hello<a href={process.env['INVITATION_APP_URL'].replace('{{userId}}', userId)}> invite mediashare</a></h1>`,
+      html: `<h1>Hello<a href={process.env['INVITATION_REQUEST_URL'].replace('{{userId}}', userId)}> invite mediashare</a></h1>`,
     };
 
     await this.userConnectionService.send(mail)

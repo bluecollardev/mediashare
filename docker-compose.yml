@@ -47,7 +47,7 @@ services:
       - USER_CONNECTION_MODULE_SECRET=
       - USER_CONNECTION_MODULE_AKI_KEY=
       - USER_CONNECTION_REGION=us-west-2
-      - INVITATION_APP_URL="http://localhost:3000/invite/id?pid={{userId}}"
+      - INVITATION_REQUEST_URL="http://localhost:3000/invite/id?pid={{userId}}"
       - INVITATION_EMAIL_SUBJECT="Hello from mediashare"
       - INVITATION_EMAIL_SENDER=mimrachapol@gmail.com
     volumes:
