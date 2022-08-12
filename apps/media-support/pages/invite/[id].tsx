@@ -104,7 +104,7 @@ const Home: NextPage = () => {
           email,
         },
       });
-      await createConnection(data);
+      await await createConnection(data);
     } catch (error) {
       throw error;
     }
@@ -137,9 +137,11 @@ const Home: NextPage = () => {
         router.push('/success');
       } else {
         if (id) {
+        
           await signUp(data);
-          setShowCode(true);
+            setShowCode(true);
         }
+        
       }
     } catch (error) {
       setOpen(true);
