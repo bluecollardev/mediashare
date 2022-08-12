@@ -25,17 +25,17 @@ export class UserConnectionController {
   @ApiQuery({ name: 'email', required: false })
   @ApiQuery({ name: 'userId', required: false })
   async sendEmail(@Query('email') email, @Query('userId') userId, @Res() res: Response) {
-    console.log(email, userId);
+    console.log(`Sending email: ${email} ${userId}`);
+    // url = "id?pid=62e3eebb3a969b9a6710aff2"
     const mail = {
       to: email,
-      subject: 'Hello from mediashare',
-      from: 'mimrachapol@gmail.com', // create new identity on aws SES
-      html: `<h1>Hello
-      <a href="http://localhost:3000/invite/id?pid=${userId}"> invite mediashare</a>
-      </h1>`,
+      subject: process.env['INVITATION_EMAIL_SUBJECT'],
+      // Create new identity on AWS SES
+      from: process.env['INVITATION_EMAIL_SENDER'],
+      html: `<h1>Hello<a href={process.env['INVITATION_REQUEST_URL'].replace('{{userId}}', userId)}> invite mediashare</a></h1>`,
     };
-    
-    await this.userConnectionService.send(mail) 
+
+    await this.userConnectionService.send(mail);
     return res.status(HttpStatus.OK).json({
       statusCode: 200
     });

@@ -96,3 +96,5 @@ node_modules/
 
 swagger-spec.json
 libs/misc
+
+/development.env

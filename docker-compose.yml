@@ -44,6 +44,12 @@ services:
       - DB_USERNAME=mongodb
       - AUTH_HOST=auth
       - AUTH_PORT=4000
+      - USER_CONNECTION_MODULE_SECRET=
+      - USER_CONNECTION_MODULE_AKI_KEY=
+      - USER_CONNECTION_REGION=us-west-2
+      - INVITATION_REQUEST_URL="http://localhost:3000/invite/id?pid={{userId}}"
+      - INVITATION_EMAIL_SUBJECT="Hello from mediashare"
+      - INVITATION_EMAIL_SENDER=mimrachapol@gmail.com
     volumes:
       - .:/usr/src/app
       - /usr/app/node_modules
