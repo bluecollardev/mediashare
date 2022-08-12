@@ -92,13 +92,13 @@ export function AppUpload({
         .then((res) => {
           // eslint-disable-next-line no-shadow
           if (!res) {
-            console.warn(`You may not be able to access file system if you aren't signed in with an Apple ID.`)
+            console.warn(`You may not be able to access file system if you aren't signed in with an Apple ID.`);
           }
           const image = awsUrl + res.key;
           handleUploadComplete(image);
         })
         .catch((err) => {
-          console.warn(`Error uploading file: ${JSON.stringify(err)}`)
+          console.warn(`Error uploading file: ${JSON.stringify(err)}`);
         });
     });
   }

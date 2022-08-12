@@ -169,5 +169,5 @@ export function useViewFeedSharedWithMe() {
   return async () => {
     // @ts-ignore
     nav.navigate(routeNames.feedSharedWithMe);
-  }
+  };
 }

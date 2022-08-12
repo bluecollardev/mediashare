@@ -6,6 +6,7 @@
 You will need to have Node.js, npm, yarn, and Docker installed locally
 
 There are two applications in this project.
+
 - /apps/mediashare - The phone app
 - /apps/mediashare-api - The API for the phone app
 - /apps/media-support - The web for invitation from app.
@@ -14,22 +15,24 @@ To run the project locally, you will need to start both of them. You will also h
 
 To run the project against staging environment, just start the phone app.
 
-
 ### Running the Phone App in iOS Simulator
 
 To run the phone app, open a terminal window and navigate to `./apps/mediashare`.
 Then run the following commands:
+
 ```shell
   yarn install # If you haven't already
   yarn app:ios:install-pods
 ```
 
 if you're previously built this app, you may find that Pod install is failing. In this case run:
+
 ```shell
   yarn app:ios:refresh-pods
 ```
 
 Now run this to start the Phone App in iOS Simulator:
+
 ```shell
   yarn run:ios:prod
 ```
@@ -43,17 +46,20 @@ Now start the API server: `npm run api:start` or `npm run api:debug`.
 
 To run the phone app, navigate to `./apps/mediashare`.
 Then run the following commands:
+
 ```shell
   yarn install # If you haven't already
   yarn app:ios:install-pods
 ```
 
 if you're previously built this app, you may find that Pod install is failing. In this case run:
+
 ```shell
   yarn app:ios:refresh-pods
 ```
 
 Now run this to start the Phone App in iOS Simulator:
+
 ```shell
   yarn run:ios:local
 ```
@@ -66,17 +72,18 @@ This will seed with a small set of data, and 3 users. admin@example.~~c~~om, use
 
 The password is 'welcome1' but you can change that and the email config there.
 
-## Generate client API library 
+## Generate client API library
 
 This generates a client in the mediashare application.
 
 Run `npm run gen:api-client`
 
-
 ## Running the Web support
+
 To run the web, open a terminal window and navigate to `./apps/media-support`.
 Then run the following commands:
-``` shell
+
+```shell
   yarn install # If you haven't already
   yarn dev
 ```
