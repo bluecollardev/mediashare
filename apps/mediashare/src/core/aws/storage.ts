@@ -9,8 +9,8 @@ export const validImageFormats = ['jpg', 'jpeg', 'png', 'gif', 'tiff', 'bmp'];
 
 export const videoThumbnailDefaultOptions = {
   quality: 0.6,
-  width: 720,
-};
+  width: 720
+}
 
 export interface StorageOptions {
   title?: string;

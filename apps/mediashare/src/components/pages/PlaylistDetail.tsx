@@ -5,7 +5,12 @@ import { ScrollView } from 'react-native';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
-import { getPlaylistById, removeUserPlaylist, selectMappedPlaylistMediaItems, updateUserPlaylist } from 'mediashare/store/modules/playlist';
+import {
+  getPlaylistById,
+  removeUserPlaylist,
+  selectMappedPlaylistMediaItems,
+  updateUserPlaylist
+} from 'mediashare/store/modules/playlist';
 import { addPlaylistItem } from 'mediashare/store/modules/playlistItem';
 import { getUserPlaylists, selectPlaylist } from 'mediashare/store/modules/playlists';
 import { loadUsers } from 'mediashare/store/modules/users';
@@ -20,7 +25,16 @@ import {
 } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { FAB } from 'react-native-paper';
-import { PageContainer, PageContent, PageProps, ActionButtons, AppDialog, MediaCard, MediaList, PageActions } from 'mediashare/components/layout';
+import {
+  PageContainer,
+  PageContent,
+  PageProps,
+  ActionButtons,
+  AppDialog,
+  MediaCard,
+  MediaList,
+  PageActions
+} from 'mediashare/components/layout';
 import { AuthorProfileDto, MediaCategoryType, PlaylistItem, PlaylistResponseDto } from 'mediashare/rxjs-api';
 import { theme } from 'mediashare/styles';
 
@@ -133,7 +147,7 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
             thumbnail={imageSrc}
             thumbnailStyle={{
               // TODO: Can we do this automatically from video metadata?
-              aspectRatio: 1 / 1,
+              aspectRatio: 1 / 1
             }}
             category={category}
             availableTags={mappedTags}
@@ -326,10 +340,10 @@ export const PlaylistDetail = ({ navigation, route, globalState = { tags: [] } }
   function getInitialPlaylistTags() {
     return (
       selected?.tags
-        ?.map((tag) => {
-          return tag ? tag?.key : undefined;
-        })
-        .filter((tag) => !!tag) || []
+      ?.map((tag) => {
+        return tag ? tag?.key : undefined;
+      })
+      .filter((tag) => !!tag) || []
     );
   }
 

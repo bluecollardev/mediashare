@@ -22,9 +22,13 @@ const Success: NextPage = () => {
           flexDirection: 'column',
         }}
       >
-        <div style={{ textAlign: 'center' }}>
-          <Image src={logo.src} alt="Picture of the author" width={100} height={100} />
-        </div>
+        <div
+            style={{
+              textAlign: 'center',
+            }}
+          >
+            <Image src={logo.src} alt="Picture of the author" width={100} height={100} />
+          </div>
         <h1 style={{ textAlign: 'center' }}>Welcome to Mediashare</h1>
         <p style={{ textAlign: 'center' }}>
           Your account has been created. Please install the Mediashare app<br /> using the TestFlight app on your iOS phone or tablet.

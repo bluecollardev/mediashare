@@ -32,12 +32,26 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { pid: id } = router.query;
+  const { id } = router.query;
 
-  async function createUserAWS(data: IFromInput) {
+  //   data:{
+  // author: "testUser"
+  // authorId: "62dd71ea71312cea47f85130"
+  // authorImage: "https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg"
+  // authorName: null
+  // email: "mimrachapol@gmail.com"
+  // imageSrc: "https://res.cloudinary.com/baansaowanee/image/upload/v1632212064/default_avatar_lt0il8.jpg"
+  // role: "subscriber"
+  // username: "testUser"
+  // _id: "62dd71ea71312cea47f85130"}
+
+  async function createConnection(data: IFromInput) {
     try {
       const { username, email } = data;
-      const result = await axios.post(
+      // console.log(`${process.env.APP_HOST}/api/user/invite`);
+      const {
+        data: { _id },
+      } = await axios.post(
         `${process.env.NEXT_PUBLIC_API_HOST}/api/user/invite`,
         //`http://localhost:5000/api/user/invite`,
         { username, email },
@@ -47,18 +61,7 @@ const Home: NextPage = () => {
             'Content-Type': 'application/json',
           },
         }
-      );
-      return result
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function createConnection(data: IFromInput) {
-    try {
-      const {
-        data: { _id },
-      } = await createUserAWS(data);
+      )
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_HOST}/api/user-connection`,
         //`http://localhost:5000/api/user-connection`,
@@ -69,7 +72,7 @@ const Home: NextPage = () => {
             'Content-Type': 'application/json',
           },
         }
-      );
+      )
       router.push('/success');
     } catch (error) {
       throw error;
@@ -86,7 +89,7 @@ const Home: NextPage = () => {
           email,
         },
       });
-      await createConnection(data);
+      createConnection(data);
     } catch (error) {
       throw error;
     }
@@ -117,10 +120,8 @@ const Home: NextPage = () => {
       if (showCode) {
         confirmSignUp(data);
       } else {
-        if (id) {
-          await signUp(data);
-          setShowCode(true);
-        }
+        await signUp(data);
+        setShowCode(true);
       }
     } catch (error) {
       setOpen(true);

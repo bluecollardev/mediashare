@@ -15,7 +15,7 @@ import { loadProfile } from 'mediashare/store/modules/profile';
 import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useWindowDimensions, ScrollView, StyleSheet } from 'react-native';
-import { FAB, Divider, Card, IconButton } from 'react-native-paper';
+import { FAB, Divider, Card , IconButton} from 'react-native-paper';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { useGoToLogin, useRouteWithParams, useViewProfileById } from 'mediashare/hooks/navigation';
 import { useUser } from 'mediashare/hooks/useUser';
@@ -95,7 +95,7 @@ export const Account = ({ globalState }: PageProps) => {
         title="Revoke Access"
         subtitle="Are you sure you want to do this? This action is final and cannot be undone."
       />
-      <ModalSheet userId={user._id} showDialog={openInvite} onDismiss={() => setInvite(false)} />
+      <ModalSheet showDialog={openInvite} onDismiss={() => setInvite(false)} />
       <AccountCard
         title={fullName}
         username={username}
@@ -112,11 +112,8 @@ export const Account = ({ globalState }: PageProps) => {
       />
       <Divider />
       <Card elevation={0} style={styles.sectionHeader}>
-        <Card.Title
-          titleStyle={styles.sectionHeaderTitle}
-          title="My Connections"
-          right={(props) => <IconButton {...props} icon="add" onPress={() => setInvite(true)} />}
-        />
+        <Card.Title titleStyle={styles.sectionHeaderTitle} title="My Connections"
+         right={(props) => <IconButton {...props} icon="add" onPress={() => setInvite(true)} />}  />
       </Card>
       {/* <Highlights highlights={state.highlights} /> */}
       {!build.forFreeUser && (

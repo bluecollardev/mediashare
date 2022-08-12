@@ -14,7 +14,6 @@ import {
   UsersApi,
   TagsApi,
   ViewsApi,
-  UserConnectionApi,
 } from 'mediashare/rxjs-api';
 import Config from 'mediashare/config';
 
@@ -72,7 +71,6 @@ function apiFactory() {
     users: new UsersApi(configuration),
     views: new ViewsApi(configuration),
     tags: new TagsApi(configuration),
-    userConnection: new UserConnectionApi(configuration),
     configuration,
   };
 }
@@ -80,6 +78,6 @@ function apiFactory() {
 const apis = apiFactory();
 export type ApiService = typeof apis;
 
-const { search, mediaItems, shareItems, playlists, playlistItems, user, users, userConnection, views, tags, configuration } = apis;
+const { search, mediaItems, shareItems, playlists, playlistItems, user, users, views, tags, configuration } = apis;
 
-export { apis, search, mediaItems, shareItems, playlists, playlistItems, user, users, views, userConnection, tags, configuration };
+export { apis, search, mediaItems, shareItems, playlists, playlistItems, user, users, views, tags, configuration };

@@ -2,7 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useAppSelector } from 'mediashare/store';
-import { getPlaylistById, removeUserPlaylist, selectMappedPlaylistMediaItems, updateUserPlaylist } from 'mediashare/store/modules/playlist';
+import {
+  getPlaylistById,
+  removeUserPlaylist,
+  selectMappedPlaylistMediaItems,
+  updateUserPlaylist
+} from 'mediashare/store/modules/playlist';
 import { getUserPlaylists } from 'mediashare/store/modules/playlists';
 import { mapAvailableTags, mapSelectedTagKeysToTagKeyValue } from 'mediashare/store/modules/tags';
 import { usePlaylists, useRouteWithParams, useViewMediaItemById } from 'mediashare/hooks/navigation';
@@ -101,7 +106,7 @@ const PlaylistEdit = ({ navigation, route, globalState = { tags: [] } }: PagePro
             thumbnail={imageSrc}
             thumbnailStyle={{
               // TODO: Can we do this automatically from video metadata?
-              aspectRatio: 1 / 1,
+              aspectRatio: 1 / 1
             }}
             category={category}
             categoryOptions={options}

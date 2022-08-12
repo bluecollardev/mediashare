@@ -43,17 +43,13 @@ export const MediaCardTitle: React.FC<MediaCardTitleProps> = ({
       }
       subtitleStyle={defaultStyles.subtitle}
       leftStyle={showThumbnail ? defaultStyles.avatar : undefined}
-      left={
-        showThumbnail
-          ? () => {
-              return authorProfile?.authorImage ? (
-                <View>
-                  <Avatar.Image source={{ uri: authorProfile?.authorImage || DEFAULT_AVATAR }} size={52} />
-                </View>
-              ) : null;
-            }
-          : undefined
-      }
+      left={showThumbnail ? () => {
+        return authorProfile?.authorImage ? (
+          <View>
+            <Avatar.Image source={{ uri: authorProfile?.authorImage || DEFAULT_AVATAR }} size={52} />
+          </View>
+        ) : null;
+      } : undefined}
       right={(buttonProps: any) => showActions && <IconButton {...buttonProps} icon="more-vert" onPress={onActionsClicked} />}
     />
   ) : null;

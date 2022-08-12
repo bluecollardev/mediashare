@@ -33,7 +33,6 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
     // const [searchIsActive, setSearchIsActive] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [searchTags, setSearchTags] = useState([]);
-    const [isLoaded, setIsLoaded] = useState(false);
 
     const mappedTags = useMemo(() => {
       const availableTags = Array.isArray(globalState?.tags) ? globalState.tags : [];
@@ -93,7 +92,6 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
               modalWithSafeAreaView={false}
             />
             <ActionButtons
-              loading={isLoaded}
               primaryLabel="Submit"
               primaryButtonStyles={{ backgroundColor: theme.colors.accent }}
               showSecondary={false}
@@ -119,10 +117,7 @@ export const withPlaylistSearch = (WrappedComponent: any) => {
 
     function submitSearch() {
       // Update global search filters
-      setIsLoaded(true);
-      // async submitSearch
       setSearchFilters({ text: searchText, tags: [...searchTags] });
-      setIsLoaded(false);
       // closeSearchConsole(); // Close the search
     }
   };

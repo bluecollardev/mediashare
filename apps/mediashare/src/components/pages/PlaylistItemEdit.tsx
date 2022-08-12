@@ -98,7 +98,7 @@ const PlaylistItemEdit = ({
             thumbnail={thumbnail}
             thumbnailStyle={{
               // TODO: Can we do this automatically from video metadata?
-              aspectRatio: 1 / 1,
+              aspectRatio: 1 / 1
             }}
             category={category}
             categoryOptions={options}
