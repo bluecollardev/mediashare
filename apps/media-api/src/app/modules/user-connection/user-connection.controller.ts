@@ -35,9 +35,18 @@ export class UserConnectionController {
       html: `<h1>Hello<a href={process.env['INVITATION_REQUEST_URL'].replace('{{userId}}', userId)}> invite mediashare</a></h1>`,
     };
 
-    await this.userConnectionService.send(mail);
-    return res.status(HttpStatus.OK).json({
-      statusCode: 200
-    });
+    try {
+      await this.userConnectionService.send(mail);
+      return res.status(HttpStatus.OK).json({
+        statusCode: 200
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        statusCode: 500,
+      });
+    }
+
+
   }
 }

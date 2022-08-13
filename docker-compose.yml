@@ -47,9 +47,9 @@ services:
       - USER_CONNECTION_MODULE_SECRET=
       - USER_CONNECTION_MODULE_AKI_KEY=
       - USER_CONNECTION_REGION=us-west-2
-      - INVITATION_REQUEST_URL="http://localhost:3000/invite/id?pid={{userId}}"
+      - INVITATION_REQUEST_URL="http://localhost:3000/invite/id?userId={{userId}}"
       - INVITATION_EMAIL_SUBJECT="Hello from mediashare"
-      - INVITATION_EMAIL_SENDER=mimrachapol@gmail.com
+      - INVITATION_EMAIL_SENDER=lucas@bluecollardev.com
     volumes:
       - .:/usr/src/app
       - /usr/app/node_modules

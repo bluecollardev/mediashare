@@ -3,7 +3,7 @@ import { UserConnectionService } from './user-connection.service';
 import { UserConnectionController } from './user-connection.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserConnection } from './entities/user-connection.entity';
-import { SesModule } from '@nextnm/nestjs-ses';
+import { SesModule } from '@api-modules/nestjs-ses';
 
 @Module({
   imports: [
@@ -15,6 +15,6 @@ import { SesModule } from '@nextnm/nestjs-ses';
     TypeOrmModule.forFeature([UserConnection]),
   ],
   controllers: [UserConnectionController],
-  providers: [UserConnectionService],
+  providers: [UserConnectionService, SesModule],
 })
 export class UserConnectionModule {}
