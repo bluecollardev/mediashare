@@ -1,13 +1,19 @@
 import { Controller, HttpStatus, Post, Query, Req, Res } from '@nestjs/common';
 import { UserConnectionService } from './user-connection.service';
+import { UserService } from '@api-modules/user/user.service';
+import { ProfileDto } from '@api-modules/user/dto/profile.dto';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { CreateUserConnectionDto } from './dto/create-user-connection.dto';
+import renderInvitationEmailTemplate from './invitation-email.template';
 
 @ApiTags('user-connection')
 @Controller('user-connection')
 export class UserConnectionController {
-  constructor(private readonly userConnectionService: UserConnectionService) {}
+  constructor(
+    private readonly userConnectionService: UserConnectionService,
+    private readonly userService: UserService
+  ) {}
 
   @Post()
   @ApiBody({ type: CreateUserConnectionDto })
@@ -26,13 +32,14 @@ export class UserConnectionController {
   @ApiQuery({ name: 'userId', required: false })
   async sendEmail(@Query('email') email, @Query('userId') userId, @Res() res: Response) {
     console.log(`Sending email: ${email} ${userId}`);
+    const user: ProfileDto = await this.userService.getUserById(userId);
     // url = "id?pid=62e3eebb3a969b9a6710aff2"
     const mail = {
       to: email,
       subject: process.env['INVITATION_EMAIL_SUBJECT'],
       // Create new identity on AWS SES
       from: process.env['INVITATION_EMAIL_SENDER'],
-      html: `<h1>Hello<a href={process.env['INVITATION_REQUEST_URL'].replace('{{userId}}', userId)}> invite mediashare</a></h1>`,
+      html: renderInvitationEmailTemplate(user)
     };
 
     try {
