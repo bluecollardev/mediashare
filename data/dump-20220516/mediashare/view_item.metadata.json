@@ -1,9 +1,0 @@
-{
-  "options": {},
-  "indexes": [
-    { "v": { "$numberInt": "2" }, "key": { "_id": { "$numberInt": "1" } }, "name": "_id_" },
-    { "v": { "$numberInt": "2" }, "key": { "playlistId": { "$numberInt": "1" } }, "name": "playlistId", "background": false, "sparse": false },
-    { "v": { "$numberInt": "2" }, "key": { "mediaId": { "$numberInt": "1" } }, "name": "mediaId", "background": false, "sparse": false }
-  ],
-  "uuid": "d51f43aaf6114fa78745982fc97ad5a9"
-}

@@ -1,0 +1,17 @@
+{
+  "options": {},
+  "indexes": [
+    { "v": { "$numberInt": "2" }, "key": { "_id": { "$numberInt": "1" } }, "name": "_id_" },
+    { "v": { "$numberInt": "2" }, "key": { "userId": { "$numberInt": "1" } }, "name": "userId", "background": false, "sparse": false },
+    {
+      "v": { "$numberInt": "2" },
+      "key": { "_fts": "text", "_ftsx": { "$numberInt": "1" } },
+      "name": "title_text",
+      "weights": { "title": { "$numberInt": "1" } },
+      "default_language": "english",
+      "language_override": "language",
+      "textIndexVersion": { "$numberInt": "3" }
+    }
+  ],
+  "uuid": "3e9e905451ab447897524d9e99c8936a"
+}

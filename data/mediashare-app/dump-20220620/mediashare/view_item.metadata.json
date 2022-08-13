@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"playlistId":{"$numberInt":"1"}},"name":"playlistId","background":false,"sparse":false},{"v":{"$numberInt":"2"},"key":{"mediaId":{"$numberInt":"1"}},"name":"mediaId","background":false,"sparse":false}],"uuid":"c5bc8d3b75944cf0a8fc0331fae03383"}
