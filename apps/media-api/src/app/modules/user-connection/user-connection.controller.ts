@@ -31,26 +31,30 @@ export class UserConnectionController {
   @ApiQuery({ name: 'email', required: false })
   @ApiQuery({ name: 'userId', required: false })
   async sendEmail(@Query('email') email, @Query('userId') userId, @Res() res: Response) {
-    console.log(`Sending email: ${email} ${userId}`);
-    const user: ProfileDto = await this.userService.getUserById(userId);
-    // url = "id?pid=62e3eebb3a969b9a6710aff2"
-    const mail = {
-      to: email,
-      subject: process.env['INVITATION_EMAIL_SUBJECT'],
-      // Create new identity on AWS SES
-      from: process.env['INVITATION_EMAIL_SENDER'],
-      html: renderInvitationEmailTemplate(user)
-    };
-
     try {
+      console.log(`Sending email: ${email} ${userId}`);
+      const user: ProfileDto = await this.userService.getUserById(userId);
+       // url = "id?pid=62e3eebb3a969b9a6710aff2"
+      const mail = {
+        to: email,
+        subject: process.env['INVITATION_EMAIL_SUBJECT'],
+        // Create new identity on AWS SES
+        from: process.env['INVITATION_EMAIL_SENDER'],
+        html: renderInvitationEmailTemplate(user)
+      };
+  
       await this.userConnectionService.send(mail);
       return res.status(HttpStatus.OK).json({
         statusCode: 200
       });
+      
+      
+      
     } catch (err) {
       console.log(err);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         statusCode: 500,
+      
       });
     }
 
