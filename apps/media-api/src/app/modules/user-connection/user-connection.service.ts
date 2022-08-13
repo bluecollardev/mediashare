@@ -6,7 +6,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm/repository/MongoRepository';
 import { CreateUserConnectionDto } from './dto/create-user-connection.dto';
 import { UserConnection } from './entities/user-connection.entity';
-import { SesService } from '@nextnm/nestjs-ses';
+import { SesService } from '@api-modules/nestjs-ses';
 
 // const options: SesEmailOptions = {
 //   from: '',

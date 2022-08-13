@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { UserConnectionService } from './user-connection.service';
-import { UserConnectionController } from './user-connection.controller';
+import { AuthModule } from '@api-modules/auth/auth.module';
+import { User } from '@api-modules/user/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserService } from '@api-modules/user/user.service';
+import { UserConnectionService } from './user-connection.service';
 import { UserConnection } from './entities/user-connection.entity';
-import { SesModule } from '@nextnm/nestjs-ses';
+import { UserConnectionController } from './user-connection.controller';
+import { SesModule } from '@api-modules/nestjs-ses';
 
 @Module({
   imports: [
@@ -12,9 +15,10 @@ import { SesModule } from '@nextnm/nestjs-ses';
       AKI_KEY: process.env['USER_CONNECTION_MODULE_AKI_KEY'],
       REGION: process.env['USER_CONNECTION_REGION'],
     }),
-    TypeOrmModule.forFeature([UserConnection]),
+    TypeOrmModule.forFeature([User, UserConnection]),
+    AuthModule,
   ],
   controllers: [UserConnectionController],
-  providers: [UserConnectionService],
+  providers: [UserService, UserConnectionService, SesModule],
 })
 export class UserConnectionModule {}
