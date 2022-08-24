@@ -180,7 +180,6 @@ const AccountNavigationWithGlobalState = withGlobalStateProvider(AccountNavigati
 
 const RootNavigator = createStackNavigator();
 const RootNavigation = ({ isLoggedIn = false }) => {
-  console.log(isLoggedIn);
   return (
     <RootNavigator.Navigator initialRouteName={isLoggedIn ? 'Private' : 'Public'}>
       <RootNavigator.Screen name="Public" component={PublicMainNavigationWithGlobalState} options={{ headerShown: false }} />

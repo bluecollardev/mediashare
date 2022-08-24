@@ -20,6 +20,12 @@ export function useGoToAccount() {
   return () => nav.navigate('Account');
 }
 
+export function useGoToFeed() {
+  const nav = useNavigation();
+  // @ts-ignore
+  return () => nav.navigate('Feed');
+}
+
 export function useGoToLogin() {
   const nav = useNavigation();
   // @ts-ignore
