@@ -10,7 +10,6 @@ import { PageContainer, PageProps, KeyboardAvoidingPageContent } from 'mediashar
 import { theme } from 'mediashare/styles';
 import { useGoToFeed } from 'mediashare/hooks/navigation';
 import { Hub } from '@aws-amplify/core';
-import { Auth } from 'aws-amplify';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -196,26 +195,11 @@ const LoginComponent = ({}: PageProps) => {
     let mount = true;
     Hub.listen('auth', async (data) => {
       const { payload } = data;
-      if (payload.event === 'signIn') {
-        const authResult = await Auth.currentAuthenticatedUser();
-        console.log('A user has signed in!', payload.data.username);
-        const accessToken = authResult.signInUserSession.accessToken.jwtToken;
-        const idToken = authResult.signInUserSession.idToken.jwtToken;
-        // const refreshToken = data.signInUserSession.refreshToken.token;
-        dispatch(loginAction({ accessToken, idToken }));
-      }
       if (payload.event === 'signOut') {
         console.log('A user has signed out!');
         if (mount) {
           setIsFlex(1);
           setShow(true);
-        }
-      }
-      if (payload.event === 'signedIn') {
-        console.log('A user has signed in!', payload.data.username);
-        if (mount) {
-          setIsFlex(0);
-          setShow(false);
         }
       }
     });
