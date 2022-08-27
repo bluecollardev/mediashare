@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Auth } from 'aws-amplify';
 import {useRoute} from '@react-navigation/native'
+import { userSnack } from 'mediashare/hooks/useSnack';
 
 interface FormData {
   username: string;
@@ -29,6 +30,10 @@ const route = useRoute();
     },
   });
 
+  const {element,
+    onToggleSnackBar,
+    setMessage } = userSnack();
+    
   const username = watch('username');
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
@@ -47,6 +52,8 @@ const route = useRoute();
   const handleResendCode = async () => {
     try {
       await Auth.resendSignUp(username)
+      setMessage('Code was send to your email');
+      onToggleSnackBar();
     console.log('code confirm');
     } catch (error) {
       console.log('error resend code ',error);
@@ -129,6 +136,7 @@ const route = useRoute();
               Back to sign in
             </Button>
           </View>
+          {element}
         </ScrollView>
       </KeyboardAvoidingPageContent>
     </PageContainer>

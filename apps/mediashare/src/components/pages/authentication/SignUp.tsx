@@ -5,6 +5,7 @@ import { TextInput, HelperText, Button, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Auth } from 'aws-amplify';
+import { userSnack } from 'mediashare/hooks/useSnack';
 
 interface FormData {
   username: string;
@@ -30,8 +31,12 @@ const SignUpComponent = ({}: PageProps) => {
     },
   });
 
+    const {element,
+    onToggleSnackBar,
+    setMessage } = userSnack();
+    
+
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-  
     try {
       const { username, password, email, phone } = data;
        await Auth.signUp({
@@ -46,6 +51,8 @@ const SignUpComponent = ({}: PageProps) => {
     nav.navigate('confirm', {username});
       console.log(data);
     } catch (error) {
+      setMessage('sign up error');
+      onToggleSnackBar();
       console.log('sign up error',error);
     }
   };
@@ -166,6 +173,7 @@ const SignUpComponent = ({}: PageProps) => {
               Back to sign in
             </Button>
           </View>
+          {element}
         </ScrollView>
       </KeyboardAvoidingPageContent>
     </PageContainer>

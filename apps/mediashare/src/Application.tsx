@@ -136,7 +136,6 @@ const PublicMainNavigation = () => {
       <PublicStackNavigator.Screen {...routeConfig.signup} component={SignUp} />
       <PublicStackNavigator.Screen {...routeConfig.confirm} component={Confirm} />
       <PublicStackNavigator.Screen {...routeConfig.resetPassword} component={ResetPassword} />
-      {/* <PublicStackNavigator.Screen {...routeConfig.login} component={Login} /> */}
     </PublicStackNavigator.Navigator>
   );
 };
