@@ -6,6 +6,18 @@ const routeConfig = {
     name: 'login',
     options: { title: '', header: () => null },
   },
+  signup: {
+    name: 'signup',
+    options: { title: '', header: () => null },
+  },
+  confirm: {
+    name: 'confirm',
+    options: { title: '', header: () => null },
+  },
+  resetPassword: {
+    name: 'resetPassword',
+    options: { title: '', header: () => null },
+  },
   search: {
     name: 'search',
     options: {

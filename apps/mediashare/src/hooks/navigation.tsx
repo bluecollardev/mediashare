@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { getPlaylistItemById } from 'mediashare/store/modules/playlistItem';
 import { useDispatch } from 'react-redux';
 import { EnumLiteralsOf } from 'mediashare/core/generics';
@@ -23,13 +23,18 @@ export function useGoToAccount() {
 export function useGoToFeed() {
   const nav = useNavigation();
   // @ts-ignore
-  return () => nav.navigate('Feed');
+  return () => nav.navigate('Private' ,{ screen: 'Feed'});
 }
 
 export function useGoToLogin() {
   const nav = useNavigation();
   // @ts-ignore
-  return () => nav.navigate('Public');
+  return () => {
+    // @ts-ignore
+    nav.navigate('login');
+    // nav.dispatch(StackActions.popToTop());
+  
+  };
 }
 
 export function useRouteName(key: RouteConfigKeyType) {

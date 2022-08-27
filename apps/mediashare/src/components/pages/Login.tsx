@@ -1,15 +1,16 @@
-import React, { Component, useEffect, useCallback, useState } from 'react';
+import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { loginAction } from 'mediashare/store/modules/user';
 import { RootState } from 'mediashare/store';
-import { Authenticator, SignIn, SignUp, Greetings, VerifyContact, ForgotPassword, AmplifyTheme, ConfirmSignIn } from 'aws-amplify-react-native';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { Button, Card } from 'react-native-paper';
+import { Text, Card, TextInput, HelperText, Button } from 'react-native-paper';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent } from 'mediashare/components/layout/PageContainer';
 import { theme } from 'mediashare/styles';
-import { useGoToFeed } from 'mediashare/hooks/navigation';
-import { Hub } from '@aws-amplify/core';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
+import { Auth } from 'aws-amplify';
+import { userSnack } from 'mediashare/hooks/useSnack';
 
 export const maxLength = (max: any) => (value: any) => value?.length > max;
 export const minLength = (min: any) => (value: any) => value?.length < min;
@@ -19,196 +20,56 @@ export interface LoginProps {
   loginForm: any;
   onLogin: any;
 }
-const sectionFooterLink = Object.assign({}, AmplifyTheme.sectionFooterLink, { color: theme.colors.primary, fontFamily: theme.fonts.medium.fontFamily });
 
-const sectionFooterLinkDisabled = Object.assign({}, AmplifyTheme.sectionFooterLinkDisabled, {
-  color: theme.colors.disabled,
-  fontFamily: theme.fonts.medium.fontFamily,
-});
-
-// https://github.com/aws-amplify/amplify-js/blob/main/packages/aws-amplify-react-native/src/AmplifyTheme.ts
-const MyTheme = (props) =>
-  Object.assign({}, AmplifyTheme, {
-    container: {
-      flex: props.isFlex,
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      paddingTop: 20,
-      width: '100%',
-      backgroundColor: theme.colors.background,
-    },
-    section: {
-      flex: 1,
-      width: '100%',
-      justifyContent: 'space-between',
-      paddingHorizontal: 20,
-    },
-    sectionScroll: {
-      flex: 1,
-      width: '100%',
-      paddingHorizontal: 20,
-    },
-    sectionHeader: {
-      width: '100%',
-      marginBottom: 32,
-      paddingTop: 20,
-    },
-    sectionHeaderText: {
-      color: theme.colors.primary,
-      fontSize: 22,
-      fontWeight: '500',
-    },
-    sectionFooter: {
-      width: '100%',
-      padding: 10,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginTop: 15,
-      marginBottom: 20,
-    },
-    sectionFooterLink: {
-      fontSize: 15,
-      color: theme.colors.textDarker,
-      alignItems: 'baseline',
-      textAlign: 'center',
-    },
-    sectionFooterLinkDisabled: {
-      fontSize: 15,
-      color: theme.colors.textDarker,
-      alignItems: 'baseline',
-      textAlign: 'center',
-    },
-    navBar: {
-      marginTop: 35,
-      padding: 15,
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-    },
-    navButton: {
-      marginLeft: 12,
-      borderRadius: 4,
-    },
-    cell: {
-      flex: 1,
-      width: '50%',
-    },
-    errorRow: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      color: theme.colors.error,
-    },
-    errorRowIcon: {
-      height: 25,
-      width: 25,
-      color: theme.colors.error,
-    },
-    errorRowText: {
-      marginLeft: 10,
-      color: theme.colors.error,
-    },
-    photo: {
-      width: '100%',
-    },
-    album: {
-      width: '100%',
-    },
-    button: {
-      backgroundColor: theme.colors.primary,
-      alignItems: 'center',
-      padding: 16,
-    },
-    buttonDisabled: {
-      backgroundColor: theme.colors.disabled,
-      alignItems: 'center',
-      padding: 16,
-    },
-    buttonText: {
-      color: theme.colors.text,
-      fontSize: 15,
-      fontWeight: '600',
-    },
-    formField: {
-      marginBottom: 22,
-    },
-    input: {
-      padding: 16,
-      borderWidth: 1,
-      borderRadius: 3,
-      borderColor: theme.colors.default,
-      color: theme.colors.text,
-    },
-    inputLabel: {
-      marginBottom: 8,
-      color: theme.colors.textDarker,
-    },
-    phoneContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    phoneInput: {
-      flex: 2,
-      padding: 16,
-      borderWidth: 1,
-      borderRadius: 3,
-      borderColor: theme.colors.default,
-      color: theme.colors.text,
-    },
-    picker: {
-      flex: 1,
-      height: 44,
-      // ensure that longer text values render without truncation
-      // as the selected value of the Picker on Android
-    },
-    pickerItem: {
-      height: 44,
-    },
-    signedOutMessage: {
-      textAlign: 'center',
-      padding: 20,
-      color: theme.colors.text,
-    },
-  });
 export interface LoginState extends Pick<RootState, never> {}
+
+interface FormData {
+  username: string;
+  password: string;
+}
 
 const LoginComponent = ({}: PageProps) => {
   const dispatch = useDispatch();
-  const navToFeed = useGoToFeed();
-  const [isFlex, setIsFlex] = useState(0);
-  const [show, setShow] = useState(true);
+  const nav = useNavigation();
+  const {element,
+    onToggleSnackBar,
+    setMessage } = userSnack();
 
-  const updateAuthState = useCallback((authState, data) => {
-    if (authState === 'signedIn') {
-      setShow(false);
-      setIsFlex(0);
-      const accessToken = data.signInUserSession.accessToken.jwtToken;
-      const idToken = data.signInUserSession.idToken.jwtToken;
-      // const refreshToken = data.signInUserSession.refreshToken.token;
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    try {
+      const response = await Auth.signIn(data.username, data.password);
+      const accessToken = response.signInUserSession.accessToken.jwtToken;
+      const idToken = response.signInUserSession.idToken.jwtToken;
       dispatch(loginAction({ accessToken, idToken }));
-      navToFeed();
+    } catch (error) {
+      setMessage('Incorrect username or password');
+      onToggleSnackBar();
+      console.log('signIn--->', error);
+      // throw error;
     }
-  }, []);
+  };
 
-  useEffect(() => {
-    let mount = true;
-    Hub.listen('auth', async (data) => {
-      const { payload } = data;
-      if (payload.event === 'signOut') {
-        console.log('A user has signed out!');
-        if (mount) {
-          setIsFlex(1);
-          setShow(true);
-        }
-      }
-    });
-    return () => {
-      mount = false;
-      // @ts-ignore
-      Hub.remove('auth');
-    };
-  }, []);
+  const onHandleForgotPassword = () => {
+    // @ts-ignore
+    nav.navigate('resetPassword');
+  };
+
+  const onHandleSignUp = () => {;
+    // @ts-ignore
+    nav.navigate('signup');
+  };
 
   return (
     <PageContainer>
@@ -220,12 +81,8 @@ const LoginComponent = ({}: PageProps) => {
             justifyContent: 'center',
           }}
         >
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-            }}
-          >
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            {/* <Button labelStyle={{ fontSize: 10 }} mode="text" onPress={onToggleSnackBar} >test</Button> */}
             <Card elevation={0}>
               <Card.Cover
                 resizeMode="contain"
@@ -233,20 +90,74 @@ const LoginComponent = ({}: PageProps) => {
                 style={{ backgroundColor: theme.colors.background }}
               />
             </Card>
-            {show && (
-              <Authenticator theme={MyTheme({ isFlex })} onStateChange={(authState, data) => updateAuthState(authState, data)} hideDefault={false}>
-                {/* <MyCustomSignUp override={'SignUp'} /> */}
-                {/* <SignIn />
-              <SignUp />
-              <Greetings />
-              <ConfirmSignIn />
-              <VerifyContact />
-              <ForgotPassword /> */}
-                {/* <TOTPSetup /> */}
-                {/* <Loading /> */}
-                {/* <CustomVerify override="ConfirmSignUp" /> */}
-              </Authenticator>
-            )}
+            <View style={{ paddingVertical: 10 }}>
+              <Text variant="displayLarge" style={{ fontSize: 20 }}>
+                Sign in to account
+              </Text>
+            </View>
+            <Controller
+              control={control}
+              name="username"
+              rules={{
+                required: 'required',
+              }}
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <View>
+                    <TextInput autoCapitalize="none" label="username" value={value} onBlur={onBlur} onChangeText={(value) => onChange(value)} />
+                    <HelperText type="error">{errors.username?.message}</HelperText>
+                  </View>
+                );
+              }}
+            />
+
+            <Controller
+              control={control}
+              name="password"
+              rules={{
+                required: 'required',
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <>
+                  <TextInput
+                    autoCapitalize="none"
+                    label="password"
+                    secureTextEntry
+                    textContentType="password"
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={(value) => onChange(value)}
+                  />
+                  <HelperText type="error">{errors.password?.message}</HelperText>
+                </>
+              )}
+            />
+
+            <Button
+              style={{
+                borderRadius: 10,
+                padding: 5,
+              }}
+              mode="contained"
+              onPress={handleSubmit(onSubmit)}
+            >
+              Sign In
+            </Button>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingTop: 10,
+              }}
+            >
+              <Button labelStyle={{ fontSize: 10 }} mode="text" onPress={onHandleForgotPassword}>
+                Forgot password?
+              </Button>
+              <Button labelStyle={{ fontSize: 10 }} mode="text" onPress={onHandleSignUp}>
+                Don't have an account?
+              </Button>
+            </View>
+            {element}
           </View>
         </ScrollView>
       </KeyboardAvoidingPageContent>
@@ -254,25 +165,4 @@ const LoginComponent = ({}: PageProps) => {
   );
 };
 
-class CustomVerify extends Component<any> {
-  constructor(props: any) {
-    super(props);
-    this.gotoSignIn = this.gotoSignIn.bind(this);
-  }
-
-  gotoSignIn() {
-    const { onStateChange } = this.props;
-    onStateChange('signIn', {});
-  }
-
-  render() {
-    const { authState } = this.props;
-    return authState === 'confirmSignUp' ? (
-      <Button onPress={this.gotoSignIn} style={{ width: '100%' }} mode="outlined">
-        Go to Sign In
-      </Button>
-    ) : null;
-  }
-}
-
-export default withLoadingSpinner(undefined)(LoginComponent);
+export default  withLoadingSpinner(undefined)(LoginComponent);

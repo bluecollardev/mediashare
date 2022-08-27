@@ -5,11 +5,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 // TODO: Replace this when we're ready
 // import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createMaterialBottomTabNavigator as createBottomTabNavigator } from 'mediashare/lib/material-bottom-tabs';
-import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
+import {  Provider as PaperProvider, Text, Card } from 'react-native-paper';
+import { View, ActivityIndicator } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify from 'aws-amplify';
 import awsmobile from './aws-exports';
 import { store, useAppSelector } from './store';
 import { routeConfig } from './routes';
@@ -21,6 +22,9 @@ import { createBottomTabListeners } from './screenListeners';
 import { GlobalStateProps, withGlobalStateProvider } from './core/globalState';
 
 import Login from './components/pages/Login';
+import SignUp from './components/pages/authentication/SignUp';
+import Confirm from './components/pages/authentication/ConfirmCode';
+import ResetPassword from './components/pages/authentication/ResetPassword';
 import Feed from './components/pages/Feed';
 import FeedSharedWithMe from './components/pages/SharedWithMe';
 import MediaItemAdd from './components/pages/MediaItemAdd';
@@ -129,6 +133,10 @@ const PublicMainNavigation = () => {
   return (
     <PublicStackNavigator.Navigator initialRouteName="login">
       <PublicStackNavigator.Screen {...routeConfig.login} component={Login} />
+      <PublicStackNavigator.Screen {...routeConfig.signup} component={SignUp} />
+      <PublicStackNavigator.Screen {...routeConfig.confirm} component={Confirm} />
+      <PublicStackNavigator.Screen {...routeConfig.resetPassword} component={ResetPassword} />
+      {/* <PublicStackNavigator.Screen {...routeConfig.login} component={Login} /> */}
     </PublicStackNavigator.Navigator>
   );
 };
@@ -179,12 +187,38 @@ const PrivateMainNavigationWithGlobalState = withGlobalStateProvider(PrivateMain
 const AccountNavigationWithGlobalState = withGlobalStateProvider(AccountNavigation);
 
 const RootNavigator = createStackNavigator();
-const RootNavigation = ({ isLoggedIn = false }) => {
+const RootNavigation = ({ isLoggedIn = undefined }) => {
+  if (isLoggedIn === undefined) {
+    return (
+      <View style={{  flexGrow: 1,
+        height:'100%' ,
+        justifyContent:"center",  
+        backgroundColor: theme.colors.background, 
+        }}>
+       <View style={{
+         
+      justifyContent: 'center',
+       }}>
+        <Card elevation={0} >
+          <Card.Cover resizeMode="contain" source={require('mediashare/assets/logo/mediashare/256.png')} style={{ maxWidth: 150, width: '100%', marginLeft: 'auto', marginRight:'auto', backgroundColor: theme.colors.background }} />
+        </Card>
+        </View>
+        <ActivityIndicator/>
+      </View>
+    );
+  }
   return (
-    <RootNavigator.Navigator initialRouteName={isLoggedIn ? 'Private' : 'Public'}>
-      <RootNavigator.Screen name="Public" component={PublicMainNavigationWithGlobalState} options={{ headerShown: false }} />
-      <RootNavigator.Screen name="Private" component={PrivateMainNavigationWithGlobalState} options={{ headerShown: false }} />
-      <RootNavigator.Screen name="Account" component={AccountNavigationWithGlobalState} options={{ headerShown: false, presentation: 'modal' }} />
+    <RootNavigator.Navigator>
+      {isLoggedIn ? (
+        <>
+          <RootNavigator.Screen name="Private" component={PrivateMainNavigationWithGlobalState} options={{ headerShown: false }} />
+          <RootNavigator.Screen name="Account" component={AccountNavigationWithGlobalState} options={{ headerShown: false, presentation: 'modal' }} />
+        </>
+      ) : (
+        <>
+          <RootNavigator.Screen name="Public" component={PublicMainNavigationWithGlobalState} options={{ headerShown: false }} />
+        </>
+      )}
     </RootNavigator.Navigator>
   );
 };
@@ -197,13 +231,6 @@ Amplify.configure({
   },
 });
 
-async function clearLogin() {
-  await Auth.signOut();
-  await Auth.currentCredentials();
-}
-
-clearLogin().then();
-
 function App() {
   const [fontsLoaded] = useFonts({
     'CircularStd-Black': require('./assets/fonts/CircularStd-Black.otf'),
@@ -213,22 +240,8 @@ function App() {
     'CircularStd-Light': require('./assets/fonts/CircularStd-Light.otf'),
   });
 
-  // Amplify.configure(awsmobile);
-  // clearLogin();
-
-  // This is disabled until I figure out what causes the session to be wack
-  // useEffect(() => {
-  //   const checkToken = async function () {
-  //     const storedToken = await getKeyPair('token');
-  //     if (storedToken) {
-  //       const user = await dispatch(validateTokenAction(storedToken));
-  //     }
-  //   };
-  //   checkToken();
-  // }, []);
-
   const loading = useAppSelector((state) => state?.app?.loading);
-  const { isLoggedIn } = useUser();
+  const { isCurrent } = useUser();
 
   const customTheme = { ...theme };
   if (!fontsLoaded) {
@@ -244,7 +257,9 @@ function App() {
           }}
         >
           <NavigationContainer>
-            <RootNavigation key={isLoggedIn.toString()} isLoggedIn={isLoggedIn} />
+            <RootNavigation
+            isLoggedIn={isCurrent}
+            />
           </NavigationContainer>
         </PaperProvider>
       </Provider>

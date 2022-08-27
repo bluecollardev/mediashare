@@ -71,9 +71,10 @@ export function PageContainer({ children }: PageContainerProps) {
     dispatch(clearError());
     // setVisible(false);
   };
+  
   return (
     <SafeAreaView style={styles.pageContainer}>
-      <Portal>
+      {/* <Portal>
         <Dialog visible={app.hasError} onDismiss={hideDialog}>
           <Card.Title
             title={app.error.name}
@@ -89,7 +90,7 @@ export function PageContainer({ children }: PageContainerProps) {
             </Button>
           </Dialog.Actions>
         </Dialog>
-      </Portal>
+      </Portal> */}
       {children}
     </SafeAreaView>
   );

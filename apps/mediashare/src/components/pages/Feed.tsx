@@ -43,6 +43,7 @@ export const Feed = ({
     loadData().then();
   }, []);
 
+  console.log('--load ',loading)
   return (
     <PageContainer>
       <PageContent>
@@ -57,7 +58,7 @@ export const Feed = ({
               tags={tags}
             />
           )}
-          {loaded && list.length === 0 && (
+          { list.length === 0 && (
             <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="view-list" />
           )}
         </ScrollView>

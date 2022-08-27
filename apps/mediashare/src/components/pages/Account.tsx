@@ -24,6 +24,7 @@ import { createRandomRenderKey } from 'mediashare/core/utils/uuid';
 import { theme } from 'mediashare/styles';
 import { removeShareItemAllByUserId } from 'mediashare/store/modules/shareItems';
 import ModalSheet from '../layout/InviteModal';
+import { signOut } from 'mediashare/core/aws/auth';
 
 const actionModes = { delete: 'delete', default: 'default' };
 const awsUrl = Config.AWS_URL;
@@ -201,7 +202,6 @@ export const Account = ({ globalState }: PageProps) => {
 
   async function accountLogout() {
     await dispatch(logout());
-    goToLogin();
   }
 
   function activateUnshareMode() {

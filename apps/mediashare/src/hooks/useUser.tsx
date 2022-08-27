@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAppSelector } from 'mediashare/store';
 import { DEFAULT_USER_ROLE } from 'mediashare/core/globalState';
 import { BcRolesType } from 'mediashare/rxjs-api';
+import { Auth } from 'aws-amplify';
+import { loginAction } from 'mediashare/store/modules/user';
+import { useDispatch } from 'react-redux';
 
 export function useUser() {
   const user = useAppSelector((state) => state?.user?.entity);
@@ -11,23 +14,52 @@ export function useUser() {
   const roles = [role].filter((r) => !!r);
   const authenticatedAndLoggedIn = user?._id?.length > 0;
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authenticatedAndLoggedIn);
+  const [isCurrent, setIsCurrent] = useState(undefined);
   const [build, setBuild] = useState({
     forFreeUser: false,
     forSubscriber: false,
     forAdmin: false,
   });
+  const dispatch = useDispatch();
+
+  
 
   useEffect(() => {
+    let mount = true;
     if (authenticatedAndLoggedIn) {
-      console.log('[useUser] authenticatedAndLoggedIn is true, run setIsLoggedIn effect');
-      setIsLoggedIn(authenticatedAndLoggedIn);
-      setBuild({
-        // TODO: Guest is just for unregistered users... we can update this later
-        forFreeUser: roles.includes(BcRolesType.Guest) || roles.includes(BcRolesType.Free),
-        forSubscriber: roles.includes(BcRolesType.Subscriber),
-        forAdmin: roles.includes(BcRolesType.Admin),
-      });
+      console.log('[useUser] authenticatedAndLoggedIn is true, run setIsLoggedIn effect', authenticatedAndLoggedIn);
+      if (mount) {
+        // setIsLoggedIn(authenticatedAndLoggedIn);
+        setBuild({
+          // TODO: Guest is just for unregistered users... we can update this later
+          forFreeUser: roles.includes(BcRolesType.Guest) || roles.includes(BcRolesType.Free),
+          forSubscriber: roles.includes(BcRolesType.Subscriber),
+          forAdmin: roles.includes(BcRolesType.Admin),
+        });
+      }
     }
+
+    const fetchData = async () => {
+  
+      const authUser = await Auth.currentUserPoolUser();
+      const accessToken = authUser.signInUserSession.accessToken.jwtToken;
+      const idToken = authUser.signInUserSession.idToken.jwtToken;
+      console.log(authUser)
+      if (mount) {
+        setIsCurrent(authUser);
+        dispatch(loginAction({ accessToken, idToken }));
+      }
+    }
+  
+    fetchData().catch((error) => {
+      if(mount) {
+        setIsCurrent(null);
+      }
+    });
+    
+    return () => {
+      mount = false;
+    };
   }, [authenticatedAndLoggedIn]);
 
   return {
@@ -35,5 +67,7 @@ export function useUser() {
     roles,
     isLoggedIn,
     build,
+    setIsLoggedIn,
+    isCurrent,
   };
 }
