@@ -8,6 +8,7 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Auth } from 'aws-amplify';
 import {useRoute} from '@react-navigation/native'
 import { userSnack } from 'mediashare/hooks/useSnack';
+import { routeConfig } from 'mediashare/routes';
 
 interface FormData {
   username: string;
@@ -40,11 +41,11 @@ const route = useRoute();
     try {
     const { username, code } = data;
     await Auth.confirmSignUp(username, code);
-    console.log('code confirm');
-      // @ts-ignore
-    nav.navigate('login');
+      nav.navigate(routeConfig.login.name as never, {} as never);
     
     } catch (error) {
+      setMessage(error.message);
+      onToggleSnackBar();
       console.log('confirm error ',error);
     }
   };
@@ -54,16 +55,16 @@ const route = useRoute();
       await Auth.resendSignUp(username)
       setMessage('Code was send to your email');
       onToggleSnackBar();
-    console.log('code confirm');
     } catch (error) {
+      setMessage(error.message);
+      onToggleSnackBar();
       console.log('error resend code ',error);
     }
   }
 
   const onHandleBack = () => {
     reset();
-    // @ts-ignore
-    nav.navigate('login');
+    nav.navigate(routeConfig.login.name as never, {} as never);
   };
 
   return (
@@ -77,7 +78,7 @@ const route = useRoute();
           }}
         >
           <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Text variant="displayLarge" style={{fontSize: 20, paddingBottom: 10 }}>Create your account</Text>
+          <Text variant="displayLarge" style={{fontSize: 20, paddingBottom: 10 }}>Verification your account</Text>
             <Controller
               control={control}
               name="username"

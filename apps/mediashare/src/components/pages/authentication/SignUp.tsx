@@ -1,11 +1,14 @@
-import React  from 'react';
+import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent } from 'mediashare/components/layout/PageContainer';
 import { TextInput, HelperText, Button, Text } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { ThemeProvider, useNavigation } from '@react-navigation/native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Auth } from 'aws-amplify';
 import { userSnack } from 'mediashare/hooks/useSnack';
+import { routeConfig } from 'mediashare/routes';
+import PhoneInput from 'react-native-phone-number-input';
+import { theme } from 'mediashare/styles';
 
 interface FormData {
   username: string;
@@ -31,36 +34,31 @@ const SignUpComponent = ({}: PageProps) => {
     },
   });
 
-    const {element,
-    onToggleSnackBar,
-    setMessage } = userSnack();
-    
+  const { element, onToggleSnackBar, setMessage } = userSnack();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       const { username, password, email, phone } = data;
-       await Auth.signUp({
-      username,
-      password,
-      attributes: {
-      email,
-      preferred_username:username,
-      phone_number: phone,
-    }});
-    // @ts-ignore
-    nav.navigate('confirm', {username});
-      console.log(data);
+      await Auth.signUp({
+        username,
+        password,
+        attributes: {
+          email,
+          phone_number: phone,
+        },
+      });
+      // @ts-ignore
+      nav.navigate(routeConfig.confirm.name, { username });
     } catch (error) {
-      setMessage('sign up error');
+      setMessage(error.message);
       onToggleSnackBar();
-      console.log('sign up error',error);
+      console.log('sign up error', error);
     }
   };
 
   const onHandleBack = () => {
     reset();
-    // @ts-ignore
-    nav.navigate('login');
+    nav.navigate(routeConfig.login.name as never, {} as never);
   };
 
   return (
@@ -74,7 +72,9 @@ const SignUpComponent = ({}: PageProps) => {
           }}
         >
           <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Text variant="displayLarge" style={{fontSize: 20, paddingBottom: 10 }}>Create your account</Text>
+            <Text variant="displayLarge" style={{ fontSize: 20, paddingBottom: 10 }}>
+              Create your account
+            </Text>
             <Controller
               control={control}
               name="username"
@@ -136,28 +136,32 @@ const SignUpComponent = ({}: PageProps) => {
                 </>
               )}
             />
-
             <Controller
-              control={control}
               name="phone"
               rules={{
                 required: 'required',
-                minLength: {
-                  value: 10,
-                  message: 'not correct phone number',
-                },
-                pattern: {
-                  value: /^[0-9]+$/,
-                  message: 'Please enter a number',
-                },
+                
               }}
+              control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <>
-                  <TextInput autoCapitalize="none" label="phone" value={value} onBlur={onBlur} onChangeText={(value) => onChange(value)} />
-                  <HelperText type="error">{errors.phone?.message}</HelperText>
-                </>
+                <View>
+                <PhoneInput 
+                defaultValue={value}
+                layout="first"
+                onChangeText={(value) => onChange(value)}
+                onChangeFormattedText={(value) => onChange(value)}
+                defaultCode='US' 
+                withDarkTheme={true} 
+                containerStyle={{ backgroundColor:  "#252525", width: '100%'}}
+                textContainerStyle={{ backgroundColor: "#252525"}}
+                codeTextStyle={{ color: theme.colors.primary }}
+                textInputStyle={{  color: '#fff'}}
+                />
+                <HelperText type="error">{errors.phone?.message}</HelperText>
+                </View>
               )}
             />
+            
             <Button
               style={{
                 borderRadius: 10,
@@ -169,7 +173,7 @@ const SignUpComponent = ({}: PageProps) => {
               Sign Up
             </Button>
 
-            <Button style={{paddingTop: 10}} labelStyle={{ fontSize: 10 }} mode="text" onPress={onHandleBack}>
+            <Button style={{ paddingTop: 10 }} labelStyle={{ fontSize: 10 }} mode="text" onPress={onHandleBack}>
               Back to sign in
             </Button>
           </View>

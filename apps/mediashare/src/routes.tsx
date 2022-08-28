@@ -2,12 +2,13 @@ import { AppHeader } from 'mediashare/components/layout';
 import React from 'react';
 
 const routeConfig = {
+  // ======= route for navigate custom sign up and login
   login: {
     name: 'login',
     options: { title: '', header: () => null },
   },
-  signup: {
-    name: 'signup',
+  signUp: {
+    name: 'signUp',
     options: { title: '', header: () => null },
   },
   confirm: {
@@ -18,6 +19,8 @@ const routeConfig = {
     name: 'resetPassword',
     options: { title: '', header: () => null },
   },
+  // =================================================
+  
   search: {
     name: 'search',
     options: {

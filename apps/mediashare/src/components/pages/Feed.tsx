@@ -43,7 +43,6 @@ export const Feed = ({
     loadData().then();
   }, []);
 
-  console.log('--load ',loading)
   return (
     <PageContainer>
       <PageContent>

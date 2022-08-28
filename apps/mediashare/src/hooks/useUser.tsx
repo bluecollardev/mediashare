@@ -14,7 +14,7 @@ export function useUser() {
   const roles = [role].filter((r) => !!r);
   const authenticatedAndLoggedIn = user?._id?.length > 0;
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authenticatedAndLoggedIn);
-  const [isCurrent, setIsCurrent] = useState(undefined);
+  const [isCurrentUser, setIsCurrentUser] = useState(undefined);
   const [build, setBuild] = useState({
     forFreeUser: false,
     forSubscriber: false,
@@ -23,13 +23,12 @@ export function useUser() {
   const dispatch = useDispatch();
 
   
-
   useEffect(() => {
     let mount = true;
     if (authenticatedAndLoggedIn) {
       console.log('[useUser] authenticatedAndLoggedIn is true, run setIsLoggedIn effect', authenticatedAndLoggedIn);
       if (mount) {
-        // setIsLoggedIn(authenticatedAndLoggedIn);
+        setIsLoggedIn(authenticatedAndLoggedIn);
         setBuild({
           // TODO: Guest is just for unregistered users... we can update this later
           forFreeUser: roles.includes(BcRolesType.Guest) || roles.includes(BcRolesType.Free),
@@ -40,24 +39,23 @@ export function useUser() {
     }
 
     const fetchData = async () => {
-  
       const authUser = await Auth.currentUserPoolUser();
       const accessToken = authUser.signInUserSession.accessToken.jwtToken;
       const idToken = authUser.signInUserSession.idToken.jwtToken;
-      console.log(authUser)
       if (mount) {
-        setIsCurrent(authUser);
+        setIsCurrentUser(authUser);
         dispatch(loginAction({ accessToken, idToken }));
       }
     }
   
     fetchData().catch((error) => {
       if(mount) {
-        setIsCurrent(null);
+        setIsCurrentUser(null);
       }
     });
     
     return () => {
+      setIsCurrentUser(null);
       mount = false;
     };
   }, [authenticatedAndLoggedIn]);
@@ -68,6 +66,6 @@ export function useUser() {
     isLoggedIn,
     build,
     setIsLoggedIn,
-    isCurrent,
+    isCurrentUser,
   };
 }

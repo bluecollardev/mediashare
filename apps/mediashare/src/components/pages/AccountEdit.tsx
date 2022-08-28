@@ -16,7 +16,7 @@ import { useRouteWithParams } from 'mediashare/hooks/navigation';
 import { useProfile } from 'mediashare/hooks/useProfile';
 import { TextField } from 'mediashare/components/form/TextField';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
-import { PageContainer, PageProps, ActionButtons, AccountCard } from 'mediashare/components/layout';
+import { PageContainer, PageProps, ActionButtons, AccountCard ,KeyboardAvoidingPageContent} from 'mediashare/components/layout';
 
 const awsUrl = Config.AWS_URL;
 interface AccountEditProps extends PageProps {}
@@ -49,6 +49,8 @@ const AccountEdit = ({ route }: AccountEditProps) => {
 
   return (
     <PageContainer>
+       <KeyboardAvoidingPageContent>
+       <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.formContainer}>
       <View>
         <AccountCard
           title={fullName}
@@ -65,7 +67,7 @@ const AccountEdit = ({ route }: AccountEditProps) => {
           onProfileImageClicked={() => getDocument()}
         />
       </View>
-      <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.formContainer}>
+     
         <View style={styles.formSection}>
           <TextField label="Account Type" value={state?.role} disabled={true} />
           <TextField onChangeText={(text) => onUpdate({ username: text })} label="Username*" value={state?.username} disabled={!isLoaded} />
@@ -78,8 +80,10 @@ const AccountEdit = ({ route }: AccountEditProps) => {
           <TextField onChangeText={(text) => onUpdate({ email: text })} label="Email*" value={state?.email} disabled={!isLoaded} />
           <TextField onChangeText={(text) => onUpdate({ phoneNumber: text })} label="Phone Number*" value={state?.phoneNumber} disabled={!isLoaded} />
         </View>
-      </ScrollView>
+   
       <ActionButtons disablePrimary={withoutName()} disableSecondary={withoutName()} onSecondaryClicked={cancel} onPrimaryClicked={save} primaryLabel="Save" />
+      </ScrollView>
+      </KeyboardAvoidingPageContent>
     </PageContainer>
   );
 

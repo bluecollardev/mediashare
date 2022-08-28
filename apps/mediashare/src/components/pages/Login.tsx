@@ -2,7 +2,6 @@ import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { loginAction } from 'mediashare/store/modules/user';
-import { RootState } from 'mediashare/store';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { Text, Card, TextInput, HelperText, Button } from 'react-native-paper';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent } from 'mediashare/components/layout/PageContainer';
@@ -11,17 +10,7 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { Auth } from 'aws-amplify';
 import { userSnack } from 'mediashare/hooks/useSnack';
-
-export const maxLength = (max: any) => (value: any) => value?.length > max;
-export const minLength = (min: any) => (value: any) => value?.length < min;
-export const email = (value: any) => !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
-
-export interface LoginProps {
-  loginForm: any;
-  onLogin: any;
-}
-
-export interface LoginState extends Pick<RootState, never> {}
+import { routeConfig } from 'mediashare/routes';
 
 interface FormData {
   username: string;
@@ -31,9 +20,7 @@ interface FormData {
 const LoginComponent = ({}: PageProps) => {
   const dispatch = useDispatch();
   const nav = useNavigation();
-  const {element,
-    onToggleSnackBar,
-    setMessage } = userSnack();
+  const { element, onToggleSnackBar, setMessage } = userSnack();
 
   const {
     control,
@@ -54,21 +41,24 @@ const LoginComponent = ({}: PageProps) => {
       const idToken = response.signInUserSession.idToken.jwtToken;
       dispatch(loginAction({ accessToken, idToken }));
     } catch (error) {
-      setMessage('Incorrect username or password');
+      setMessage(error.message);
       onToggleSnackBar();
-      console.log('signIn--->', error);
-      // throw error;
+      if(error.code === 'UserNotConfirmedException') {
+         // @ts-ignore
+        nav.navigate(routeConfig.confirm.name, { username: data.username });
+        reset();
+      }
+      console.log(error.code)
+      console.log('login',error);
     }
   };
 
   const onHandleForgotPassword = () => {
-    // @ts-ignore
-    nav.navigate('resetPassword');
+    nav.navigate(routeConfig.resetPassword.name as never, {} as never);
   };
 
-  const onHandleSignUp = () => {;
-    // @ts-ignore
-    nav.navigate('signup');
+  const onHandleSignUp = () => {
+    nav.navigate(routeConfig.signUp.name as never, {} as never);
   };
 
   return (
@@ -82,7 +72,6 @@ const LoginComponent = ({}: PageProps) => {
           }}
         >
           <View style={{ flex: 1, justifyContent: 'center' }}>
-            {/* <Button labelStyle={{ fontSize: 10 }} mode="text" onPress={onToggleSnackBar} >test</Button> */}
             <Card elevation={0}>
               <Card.Cover
                 resizeMode="contain"
@@ -165,4 +154,4 @@ const LoginComponent = ({}: PageProps) => {
   );
 };
 
-export default  withLoadingSpinner(undefined)(LoginComponent);
+export default withLoadingSpinner(undefined)(LoginComponent);

@@ -133,7 +133,7 @@ const PublicMainNavigation = () => {
   return (
     <PublicStackNavigator.Navigator initialRouteName="login">
       <PublicStackNavigator.Screen {...routeConfig.login} component={Login} />
-      <PublicStackNavigator.Screen {...routeConfig.signup} component={SignUp} />
+      <PublicStackNavigator.Screen {...routeConfig.signUp} component={SignUp} />
       <PublicStackNavigator.Screen {...routeConfig.confirm} component={Confirm} />
       <PublicStackNavigator.Screen {...routeConfig.resetPassword} component={ResetPassword} />
     </PublicStackNavigator.Navigator>
@@ -240,7 +240,7 @@ function App() {
   });
 
   const loading = useAppSelector((state) => state?.app?.loading);
-  const { isCurrent } = useUser();
+  const { isCurrentUser } = useUser();
 
   const customTheme = { ...theme };
   if (!fontsLoaded) {
@@ -257,7 +257,7 @@ function App() {
         >
           <NavigationContainer>
             <RootNavigation
-            isLoggedIn={isCurrent}
+            isLoggedIn={isCurrentUser}
             />
           </NavigationContainer>
         </PaperProvider>

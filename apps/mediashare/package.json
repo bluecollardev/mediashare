@@ -67,6 +67,7 @@
     "react-native-loading-spinner-overlay": "^2.0.0",
     "react-native-pager-view": "^5.4.4",
     "react-native-paper": "^5.0.0-rc.3",
+    "react-native-phone-number-input": "^2.1.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "2.16.1",
     "react-native-sectioned-multi-select": "^0.9.1",
