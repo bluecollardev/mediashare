@@ -40,11 +40,9 @@ export function useUser() {
 
     const fetchData = async () => {
       const authUser = await Auth.currentUserPoolUser();
-      const accessToken = authUser.signInUserSession.accessToken.jwtToken;
-      const idToken = authUser.signInUserSession.idToken.jwtToken;
       if (mount) {
+        dispatch(loginAction({ accessToken: authUser.signInUserSession.accessToken.jwtToken, idToken: authUser.signInUserSession.idToken.jwtToken}));
         setIsCurrentUser(authUser);
-        dispatch(loginAction({ accessToken, idToken }));
       }
     }
   
