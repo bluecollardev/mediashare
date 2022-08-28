@@ -57,7 +57,7 @@ export const Feed = ({
               tags={tags}
             />
           )}
-          { list.length === 0 && (
+          { loaded && list.length === 0 && (
             <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="view-list" />
           )}
         </ScrollView>

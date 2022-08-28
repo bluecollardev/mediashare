@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // TODO: Replace this when we're ready
 // import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createMaterialBottomTabNavigator as createBottomTabNavigator } from 'mediashare/lib/material-bottom-tabs';
-import {  Provider as PaperProvider, Text, Card } from 'react-native-paper';
+import { Provider as PaperProvider, Text, Card } from 'react-native-paper';
 import { View, ActivityIndicator } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -166,17 +166,19 @@ const PrivateMainNavigation = ({ globalState }: PrivateMainNavigationProps) => {
             : undefined,
       })}
     >
-      <PrivateNavigator.Screen name="Feed" component={FeedNavigation} listeners={navigationTabListeners} />
+      <>
+        <PrivateNavigator.Screen name="Feed" component={FeedNavigation} listeners={navigationTabListeners} />
 
-      {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen name="Search" component={SearchNavigation} listeners={navigationTabListeners} />
-      )}
+        {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
+          <PrivateNavigator.Screen name="Search" component={SearchNavigation} listeners={navigationTabListeners} />
+        )}
 
-      {(build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen name="Playlists" component={PlaylistsNavigation} listeners={navigationTabListeners} />
-      )}
+        {(build.forSubscriber || build.forAdmin) && (
+          <PrivateNavigator.Screen name="Playlists" component={PlaylistsNavigation} listeners={navigationTabListeners} />
+        )}
 
-      {build.forAdmin && <PrivateNavigator.Screen name="Media" component={MediaNavigation} listeners={navigationTabListeners} />}
+        {build.forAdmin && <PrivateNavigator.Screen name="Media" component={MediaNavigation} listeners={navigationTabListeners} />}
+      </>
     </PrivateNavigator.Navigator>
   );
 };
@@ -186,29 +188,30 @@ const PrivateMainNavigationWithGlobalState = withGlobalStateProvider(PrivateMain
 const AccountNavigationWithGlobalState = withGlobalStateProvider(AccountNavigation);
 
 const RootNavigator = createStackNavigator();
-const RootNavigation = ({ isLoggedIn = undefined }) => {
-  if (isLoggedIn === undefined) {
+const RootNavigation = ({ isCurrentUser = undefined, isLoggedIn = false }) => {
+  if (isCurrentUser === undefined && !isLoggedIn) {
     return (
-      <View style={{  flexGrow: 1,
-        height:'100%' ,
-        justifyContent:"center",  
-        backgroundColor: theme.colors.background, 
-        }}>
-       <View style={{
-         
-      justifyContent: 'center',
-       }}>
-        <Card elevation={0} >
-          <Card.Cover resizeMode="contain" source={require('mediashare/assets/logo/mediashare/256.png')} style={{ maxWidth: 150, width: '100%', marginLeft: 'auto', marginRight:'auto', backgroundColor: theme.colors.background }} />
-        </Card>
+      <View style={{ flexGrow: 1, height: '100%', justifyContent: 'center', backgroundColor: theme.colors.background }}>
+        <View
+          style={{
+            justifyContent: 'center',
+          }}
+        >
+          <Card elevation={0}>
+            <Card.Cover
+              resizeMode="contain"
+              source={require('mediashare/assets/logo/mediashare/256.png')}
+              style={{ maxWidth: 150, width: '100%', marginLeft: 'auto', marginRight: 'auto', backgroundColor: theme.colors.background }}
+            />
+          </Card>
         </View>
-        <ActivityIndicator/>
+        <ActivityIndicator />
       </View>
     );
   }
   return (
     <RootNavigator.Navigator>
-      {isLoggedIn ? (
+      {isCurrentUser ? (
         <>
           <RootNavigator.Screen name="Private" component={PrivateMainNavigationWithGlobalState} options={{ headerShown: false }} />
           <RootNavigator.Screen name="Account" component={AccountNavigationWithGlobalState} options={{ headerShown: false, presentation: 'modal' }} />
@@ -240,7 +243,7 @@ function App() {
   });
 
   const loading = useAppSelector((state) => state?.app?.loading);
-  const { isCurrentUser } = useUser();
+  const { isCurrentUser, isLoggedIn } = useUser();
 
   const customTheme = { ...theme };
   if (!fontsLoaded) {
@@ -256,9 +259,7 @@ function App() {
           }}
         >
           <NavigationContainer>
-            <RootNavigation
-            isLoggedIn={isCurrentUser}
-            />
+            <RootNavigation isCurrentUser={isCurrentUser} isLoggedIn={isLoggedIn} />
           </NavigationContainer>
         </PaperProvider>
       </Provider>
