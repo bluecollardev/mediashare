@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // TODO: Replace this when we're ready
@@ -10,7 +10,7 @@ import { View, ActivityIndicator } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import Amplify from 'aws-amplify';
+import Amplify, { Hub } from 'aws-amplify';
 import awsmobile from './aws-exports';
 import { store, useAppSelector } from './store';
 import { routeConfig } from './routes';
@@ -46,8 +46,8 @@ import AccountEdit from './components/pages/AccountEdit';
 import Contact from './components/pages/Contact';
 import SharedWithContact from './components/pages/SharedWithContact';
 import SharedByContact from './components/pages/SharedByContact';
-
-// const deviceWidth = Dimensions.get('window').width;
+import { Auth } from 'aws-amplify';
+import { loginAction } from './store/modules/user';
 
 // Map route names to icons
 export const tabNavigationIconsMap = {
@@ -243,7 +243,42 @@ function App() {
   });
 
   const loading = useAppSelector((state) => state?.app?.loading);
-  const { isCurrentUser, isLoggedIn } = useUser();
+  const { isLoggedIn } = useUser();
+  const [isCurrentUser, setIsCurrentUser] = useState(undefined);
+  const dispatch = useDispatch();
+
+  const fetchData = async () => {
+    const authUser = await Auth.currentUserPoolUser({ bypassCache: true });
+    dispatch(loginAction({ accessToken: authUser.signInUserSession.accessToken.jwtToken, idToken: authUser.signInUserSession.idToken.jwtToken }));
+    setIsCurrentUser(authUser);
+  };
+
+  useEffect(() => {
+    let mount = true;
+    fetchData().catch((error) => {
+      if (mount) {
+        setIsCurrentUser(null);
+      }
+    });
+    return () => {
+      setIsCurrentUser(null);
+      mount = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    Hub.listen('auth', (data) => {
+      if (data.payload.event === 'signIn' || data.payload.event === 'signOut') {
+        fetchData().catch((error) => {
+          setIsCurrentUser(null);
+        });
+      }
+    });
+    return () => {
+      // @ts-ignore
+      Hub.remove('auth');
+    };
+  }, []);
 
   const customTheme = { ...theme };
   if (!fontsLoaded) {
