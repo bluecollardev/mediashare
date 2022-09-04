@@ -1,4 +1,4 @@
-import React, { ReactNode , useState} from 'react';
+import React, { ReactNode } from 'react';
 import styles, { theme } from 'mediashare/styles';
 import { KeyboardAvoidingView, SafeAreaView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';

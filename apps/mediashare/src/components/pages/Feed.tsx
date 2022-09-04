@@ -39,6 +39,10 @@ export const Feed = ({
   const { entities, loaded, loading } = useAppSelector((state) => state?.shareItems?.sharedWithMe);
   const list = filterUnique(entities, '_id').filter((e) => (ShowMyShare ? e : e.sharedWith != e.sharedBy)) || [];
 
+  async function loadData() {
+    await dispatch(findItemsSharedWithMe());
+  }
+  
   useEffect(() => {
     const fetchData = async () => {
       await loadData();
@@ -67,9 +71,7 @@ export const Feed = ({
     </PageContainer>
   );
 
-  async function loadData() {
-    await dispatch(findItemsSharedWithMe());
-  }
+ 
 };
 
 export default withLoadingSpinner(undefined)(withGlobalStateConsumer(Feed));
