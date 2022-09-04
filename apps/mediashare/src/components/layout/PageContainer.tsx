@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode , useState} from 'react';
 import styles, { theme } from 'mediashare/styles';
 import { KeyboardAvoidingView, SafeAreaView, TouchableWithoutFeedback, View, Text, Keyboard, Platform } from 'react-native';
 import { Portal, Dialog, Button, Avatar, Card } from 'react-native-paper';
@@ -69,15 +69,14 @@ export function PageActions({ children, style }: PageActionsProps) {
 export function PageContainer({ children }: PageContainerProps) {
   const dispatch = useDispatch();
   const app = useAppSelector((state) => state?.app);
-  // const [visible, setVisible] = useState(false);
   const hideDialog = function () {
     dispatch(clearError());
-    // setVisible(false);
   };
   
+
   return (
     <SafeAreaView style={styles.pageContainer}>
-      {/* <Portal>
+      <Portal>
         <Dialog visible={app.hasError} onDismiss={hideDialog}>
           <Card.Title
             title={app.error.name}
@@ -93,7 +92,7 @@ export function PageContainer({ children }: PageContainerProps) {
             </Button>
           </Dialog.Actions>
         </Dialog>
-      </Portal> */}
+      </Portal>
       {children}
     </SafeAreaView>
   );
