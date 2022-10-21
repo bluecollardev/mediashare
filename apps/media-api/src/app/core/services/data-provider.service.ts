@@ -152,7 +152,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
 
       return clone(findByQuery);
     } catch (error) {
-      this.logger.error(`${this.constructor.name}.findManyByQuery ${error}`);
+      this.logger.error(`${this.constructor.name}.findAllByQuery ${error}`);
     }
   }
 

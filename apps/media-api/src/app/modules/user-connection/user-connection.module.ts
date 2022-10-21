@@ -8,6 +8,8 @@ import { UserConnection } from './entities/user-connection.entity';
 import { UserConnectionController } from './user-connection.controller';
 import { SesModule } from '@api-modules/nestjs-ses';
 
+console.log(process.env);
+
 @Module({
   imports: [
     SesModule.forRoot({
