@@ -7,6 +7,7 @@ import { MongoRepository } from 'typeorm/repository/MongoRepository';
 import { CreateUserConnectionDto } from './dto/create-user-connection.dto';
 import { UserConnection } from './entities/user-connection.entity';
 import { SesService } from '@api-modules/nestjs-ses';
+import { UserService } from '@api-modules/user/user.service';
 
 // const options: SesEmailOptions = {
 //   from: '',
@@ -21,7 +22,9 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     @InjectRepository(UserConnection)
     repository: MongoRepository<UserConnection>,
     logger: PinoLogger,
-    private sesService: SesService
+    private sesService: SesService,
+    private userService: UserService
+
   ) {
     super(repository, logger);
   }
@@ -29,10 +32,17 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
   async createUserConnection({ userId, connectionId }: CreateUserConnectionDto): Promise<UserConnection> {
     try {
       const user = new ObjectId(userId);
+
+      // Create the inverse relationship
+      /* await this.create({
+        userId: connectionId ,
+        connectionId: userId,
+      }); */
       return await this.create({
         userId: user,
         connectionId,
       });
+
     } catch (error) {
       throw new error();
     }
@@ -41,5 +51,9 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
   async send(mail){
     const transport = await this.sesService.sendEmail(mail);
     return transport;
+  }
+
+  async userEmailAlreadyExits(email: string) {
+    return await this.userService.findByQuery({ where: {email: email } })
   }
 }
