@@ -17,10 +17,13 @@ export interface SesEmailOptions {
 export class SesService {
   private readonly ses;
   constructor(
-    @Inject(AKI_KEY) private readonly apiKey,
-    @Inject(REGION) private readonly region,
-    @Inject(SECRET) private readonly secret,
+    // @Inject(AKI_KEY) private readonly apiKey,
+    // @Inject(REGION) private readonly region,
+    // @Inject(SECRET) private readonly secret,
   ) {
+    const apiKey = 'AKIA3ZSOCVIUBBEA4D2M';
+    const region = 'us-west-2';
+    const secret = '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';
     this.ses = ses.createClient({
       key: apiKey,
       amazon: `https://email.${region}.amazonaws.com`,

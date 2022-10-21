@@ -1,8 +1,11 @@
 import { DataService } from '@api';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectIdGuard } from '@util-lib';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
+import { clone } from 'remeda';
+import { FindOptionsWhere } from 'typeorm';
 import { MongoRepository } from 'typeorm/repository/MongoRepository';
 import { CreateUserConnectionDto } from './dto/create-user-connection.dto';
 import { UserConnection } from './entities/user-connection.entity';
@@ -48,9 +51,26 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     }
   }
 
+  async getUserConnections(id: ObjectId | string) {
+    try {
+      const userConnections = await this.repository
+      .find({
+        where: {
+          $or: [
+            { userId: ObjectIdGuard(id) },
+            { connectionId: id },
+          ]
+        } as FindOptionsWhere<UserConnection>
+      })
+
+      return clone(userConnections);
+    } catch (error) {
+      this.logger.error(`${this.constructor.name}.getUserConnections ${error}`);
+    }
+  }
+
   async send(mail){
-    const transport = await this.sesService.sendEmail(mail);
-    return transport;
+    return await this.sesService.sendEmail(mail);
   }
 
   async userEmailAlreadyExits(email: string) {
