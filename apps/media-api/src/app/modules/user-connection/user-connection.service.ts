@@ -34,16 +34,18 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
 
   async createUserConnection({ userId, connectionId }: CreateUserConnectionDto): Promise<UserConnection> {
     try {
-      const user = new ObjectId(userId);
+      const userObjectId = ObjectIdGuard(userId);
+      const connectionObjectId = ObjectIdGuard(connectionId);
 
-      // Create the inverse relationship
+      // Create the a pair of connection entities including the inverse relationship
       /* await this.create({
         userId: connectionId ,
-        connectionId: userId,
+        connectionId: connectionObjectId,
       }); */
+
       return await this.create({
-        userId: user,
-        connectionId,
+        userId: userObjectId,
+        connectionId: connectionObjectId,
       });
 
     } catch (error) {
@@ -58,7 +60,7 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
         where: {
           $or: [
             { userId: ObjectIdGuard(id) },
-            { connectionId: id },
+            { connectionId: ObjectIdGuard(id) },
           ]
         } as FindOptionsWhere<UserConnection>
       })
