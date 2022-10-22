@@ -11,5 +11,5 @@ export class UserConnection extends BcEntity {
 
   @ApiProperty()
   @Column('connectionId')
-  connectionId: string;
+  connectionId: ObjectId;
 }
