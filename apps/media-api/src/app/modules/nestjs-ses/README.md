@@ -1,4 +1,4 @@
-**Module is out of date, and we cannot update it so we're including it in our source code
+\*\*Module is out of date, and we cannot update it so we're including it in our source code
 
 <h1 align="center"></h1>
 

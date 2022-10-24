@@ -26,7 +26,10 @@ import { UserConnectionService } from '@api-modules/user-connection/user-connect
       REGION: process.env['USER_CONNECTION_REGION'],
     }),
     AuthModule,
-    TypeOrmModule.forFeature([User, UserConnection, Playlist, PlaylistItem, MediaItem]), SesModule, ShareItemModule, AppConfigModule
+    TypeOrmModule.forFeature([User, UserConnection, Playlist, PlaylistItem, MediaItem]),
+    SesModule,
+    ShareItemModule,
+    AppConfigModule,
   ],
   controllers: [UserController, UsersController],
   providers: [PlaylistService, PlaylistItemService, MediaItemService, UserConnectionService, AppConfigService, SesService],

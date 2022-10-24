@@ -76,6 +76,27 @@ export class UserApi extends BaseAPI {
 
   /**
    */
+  userControllerGetUserConnections(): Observable<Array<object>>;
+  userControllerGetUserConnections(opts?: OperationOpts): Observable<RawAjaxResponse<Array<object>>>;
+  userControllerGetUserConnections(opts?: OperationOpts): Observable<Array<object> | RawAjaxResponse<Array<object>>> {
+    const headers: HttpHeaders = {
+      ...(this.configuration.username != null && this.configuration.password != null
+        ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
+        : undefined),
+    };
+
+    return this.request<Array<object>>(
+      {
+        url: '/api/user/connections',
+        method: 'GET',
+        headers,
+      },
+      opts?.responseOpts
+    );
+  }
+
+  /**
+   */
   userControllerGetUserMediaItems(): Observable<Array<MediaItemResponseDto>>;
   userControllerGetUserMediaItems(opts?: OperationOpts): Observable<RawAjaxResponse<Array<MediaItemResponseDto>>>;
   userControllerGetUserMediaItems(opts?: OperationOpts): Observable<Array<MediaItemResponseDto> | RawAjaxResponse<Array<MediaItemResponseDto>>> {

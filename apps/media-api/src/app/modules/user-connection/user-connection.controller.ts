@@ -10,10 +10,7 @@ import renderInvitationEmailTemplate from './invitation-email.template';
 @ApiTags('user-connection')
 @Controller('user-connection')
 export class UserConnectionController {
-  constructor(
-    private readonly userConnectionService: UserConnectionService,
-    private readonly userService: UserService
-  ) {}
+  constructor(private readonly userConnectionService: UserConnectionService, private readonly userService: UserService) {}
 
   @Post()
   @ApiBody({ type: CreateUserConnectionDto })
@@ -32,7 +29,6 @@ export class UserConnectionController {
   @ApiQuery({ name: 'userId', required: false })
   async sendEmail(@Query('email') email, @Query('userId') userId, @Res() res: Response) {
     try {
-
       console.log(`Sending email: ${email} ${userId}`);
 
       // ====== email already exits
@@ -52,17 +48,16 @@ export class UserConnectionController {
         subject: process.env['INVITATION_EMAIL_SUBJECT'],
         // Create new identity on AWS SES
         from: process.env['INVITATION_EMAIL_SENDER'],
-        html: renderInvitationEmailTemplate(user)
+        html: renderInvitationEmailTemplate(user),
       };
       await this.userConnectionService.send(mail);
       return res.status(HttpStatus.OK).json({
-        statusCode: 200
+        statusCode: 200,
       });
     } catch (err) {
       console.log(err);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         statusCode: 500,
-
       });
     }
   }

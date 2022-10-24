@@ -27,7 +27,6 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     logger: PinoLogger,
     private sesService: SesService,
     private userService: UserService
-
   ) {
     super(repository, logger);
   }
@@ -37,17 +36,20 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
       const userObjectId = ObjectIdGuard(userId);
       const connectionObjectId = ObjectIdGuard(connectionId);
 
-      // Create the a pair of connection entities including the inverse relationship
-      /* await this.create({
-        userId: connectionId ,
-        connectionId: connectionObjectId,
-      }); */
-
-      return await this.create({
+      const userConnection = await this.create({
         userId: userObjectId,
         connectionId: connectionObjectId,
       });
 
+      // Create the inverse relationship
+      // If a UserConnection record exists for both users, both
+      // users are allowed to see each other's public shares
+      await this.create({
+        userId: connectionObjectId,
+        connectionId: userObjectId,
+      });
+
+      return userConnection;
     } catch (error) {
       throw new error();
     }
@@ -55,15 +57,11 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
 
   async getUserConnections(id: ObjectId | string) {
     try {
-      const userConnections = await this.repository
-      .find({
+      const userConnections = await this.repository.find({
         where: {
-          $or: [
-            { userId: ObjectIdGuard(id) },
-            { connectionId: ObjectIdGuard(id) },
-          ]
-        } as FindOptionsWhere<UserConnection>
-      })
+          userId: ObjectIdGuard(id)
+        } as FindOptionsWhere<UserConnection>,
+      });
 
       return clone(userConnections);
     } catch (error) {
@@ -71,11 +69,11 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     }
   }
 
-  async send(mail){
+  async send(mail) {
     return await this.sesService.sendEmail(mail);
   }
 
   async userEmailAlreadyExits(email: string) {
-    return await this.userService.findByQuery({ where: {email: email } })
+    return await this.userService.findByQuery({ where: { email: email } });
   }
 }

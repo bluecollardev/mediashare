@@ -48,18 +48,45 @@ export class UserService extends DataService<User, MongoRepository<User>> {
           $replaceRoot: {
             newRoot: {
               _id: '$_id',
-              email: '$email',
               username: '$username',
-              role: '$role',
+              email: '$email',
               firstName: '$firstName',
               lastName: '$lastName',
               phoneNumber: '$phoneNumber',
+              role: '$role',
               // TODO: Can we remove author from here?
-              author: '$username',
+              imageSrc: '$imageSrc',
               authorId: '$_id',
+              author: '$username',
               authorImage: '$imageSrc',
               authorName: { $concat: ['$firstName', ' ', 'lastName'] },
+            },
+          },
+        },
+      ])
+      .next();
+  }
+
+  getUsersByIds(ids: ObjectId[]) {
+    return this.repository
+      .aggregate([
+        { $match: { _id: { $in: [...ids] } } },
+        {
+          $replaceRoot: {
+            newRoot: {
+              _id: '$_id',
+              username: '$username',
+              email: '$email',
+              firstName: '$firstName',
+              lastName: '$lastName',
+              phoneNumber: '$phoneNumber',
+              role: '$role',
+              // TODO: Can we remove author from here?
               imageSrc: '$imageSrc',
+              authorId: '$_id',
+              author: '$username',
+              authorImage: '$imageSrc',
+              authorName: { $concat: ['$firstName', ' ', 'lastName'] },
             },
           },
         },
@@ -76,15 +103,15 @@ export class UserService extends DataService<User, MongoRepository<User>> {
           $group: {
             _id: '$_id',
             username: { $first: '$username' },
-            phoneNumber: { $first: '$phoneNumber' },
             email: { $first: '$email' },
             sub: { $first: '$sub' },
+            phoneNumber: { $first: '$phoneNumber' },
             firstName: { $first: '$firstName' },
             lastName: { $first: '$lastName' },
-            imageSrc: { $first: '$imageSrc' },
-            role: { $first: '$role' },
             createdAt: { $first: '$createdAt' },
             updatedDate: { $first: '$updatedDate' },
+            role: { $first: '$role' },
+            imageSrc: { $first: '$imageSrc' },
             sharedMediaItems: { $first: '$sharedMediaItems' },
           },
         },
