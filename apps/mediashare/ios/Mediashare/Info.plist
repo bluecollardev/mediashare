@@ -43,6 +43,7 @@
 	<array>
 		<string>MaterialIcons.ttf</string>
 		<string>FontAwesome.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
 		<string>CircularStd-Black.otf</string>
 		<string>CircularStd-BlackItalic.otf</string>
 		<string>CircularStd-Bold.otf</string>
@@ -53,7 +54,6 @@
 		<string>CircularStd-Light.otf</string>
 		<string>CircularStd-Medium.otf</string>
 		<string>CircularStd-MediumItalic.otf</string>
-		
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
