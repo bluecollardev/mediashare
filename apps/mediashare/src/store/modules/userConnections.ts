@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { CreateUserConnectionDto } from 'mediashare/rxjs-api';
+import { CreateUserConnectionDto, UserDto } from 'mediashare/rxjs-api';
 import { makeActions } from 'mediashare/store/factory';
 import { ApiService } from 'mediashare/store/apis';
 import { reduceFulfilledState, reducePendingState, reduceRejectedState } from 'mediashare/store/helpers';
@@ -23,8 +23,8 @@ export const loadUserConnections = createAsyncThunk(userConnectionsActions.loadU
 });
 
 export interface UserConnectionsState {
-  entities: CreateUserConnectionDto[];
-  selected: CreateUserConnectionDto[];
+  entities: UserDto[];
+  selected: UserDto[];
   loading: boolean;
   loaded: boolean;
 }

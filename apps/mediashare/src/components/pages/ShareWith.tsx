@@ -4,7 +4,7 @@ import { routeNames } from 'mediashare/routes';
 import { useAppSelector } from 'mediashare/store';
 import { shareUserPlaylist } from 'mediashare/store/modules/playlist';
 import { clearPlaylists, getUserPlaylists } from 'mediashare/store/modules/playlists';
-import { loadUsers } from 'mediashare/store/modules/users';
+import { loadUserConnections } from 'mediashare/store/modules/userConnections';
 import { useGoBack, useRouteName } from 'mediashare/hooks/navigation';
 import { withLoadingSpinner } from 'mediashare/components/hoc/withLoadingSpinner';
 import { PageContainer, PageContent, PageActions, PageProps, ActionButtons, ContactList } from 'mediashare/components/layout';
@@ -17,13 +17,13 @@ const ShareWith = ({}: PageProps) => {
   const goBack = useGoBack();
   const viewPlaylists = useRouteName(routeNames.playlists);
 
-  const users = useAppSelector((state) => state?.users?.entities);
+  const users = useAppSelector((state) => state?.userConnections?.entities);
   const playlists = useAppSelector((state) => state?.userPlaylists?.selected);
   const [selectedUsers, setSelectedUsers] = React.useState([]);
 
   useEffect(() => {
     if (!loaded) {
-      dispatch(loadUsers());
+      dispatch(loadUserConnections());
       setIsLoaded(true);
     }
   }, [loaded, dispatch]);
