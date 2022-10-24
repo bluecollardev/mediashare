@@ -43,6 +43,7 @@
 	<array>
 		<string>MaterialCommunityIcons.ttf</string>
 		<string>MaterialIcons.ttf</string>
+		<string>FontAwesome.ttf</string>
 		<string>CircularStd-Black.otf</string>
 		<string>CircularStd-BlackItalic.otf</string>
 		<string>CircularStd-Bold.otf</string>

@@ -39,35 +39,37 @@ export const Feed = ({
   const { entities, loaded, loading } = useAppSelector((state) => state?.shareItems?.sharedWithMe);
   const list = filterUnique(entities, '_id').filter((e) => (ShowMyShare ? e : e.sharedWith != e.sharedBy)) || [];
 
+  async function loadData() {
+    await dispatch(findItemsSharedWithMe());
+  }
+
   useEffect(() => {
-    loadData().then();
+    const fetchData = async () => {
+      await loadData();
+    };
+    fetchData().catch(console.error);
   }, []);
 
   return (
     <PageContainer>
       <PageContent>
         <ScrollView>
-          {(!loaded && !loading) || (loaded && list.length > 0) && (
-            <FeedComponentWithSearch
-              globalState={globalState}
-              loaded={(!loaded && !loading) || (loaded && entities.length > 0)}
-              loadData={loadData}
-              searchTarget="playlists"
-              list={list}
-              tags={tags}
-            />
-          )}
-          {loaded && list.length === 0 && (
-            <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="view-list" />
-          )}
+          {(!loaded && !loading) ||
+            (loaded && list.length > 0 && (
+              <FeedComponentWithSearch
+                globalState={globalState}
+                loaded={(!loaded && !loading) || (loaded && entities.length > 0)}
+                loadData={loadData}
+                searchTarget="playlists"
+                list={list}
+                tags={tags}
+              />
+            ))}
+          {list.length === 0 && <NoContent messageButtonText="Items that are shared with you will show up in your feed." icon="view-list" />}
         </ScrollView>
       </PageContent>
     </PageContainer>
   );
-
-  async function loadData() {
-    await dispatch(findItemsSharedWithMe());
-  }
 };
 
 export default withLoadingSpinner(undefined)(withGlobalStateConsumer(Feed));
