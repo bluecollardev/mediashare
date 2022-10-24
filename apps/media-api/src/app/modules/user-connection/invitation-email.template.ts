@@ -1,6 +1,6 @@
 import { ProfileDto } from '../user/dto/profile.dto';
 
-export default ({ _id, firstName  }: ProfileDto) => {
+export default ({ _id, firstName }: ProfileDto) => {
   return `
     <h3>Hello,</h3>
     <br />
@@ -9,5 +9,5 @@ export default ({ _id, firstName  }: ProfileDto) => {
     <br />${process.env['INVITATION_REQUEST_URL'].replace('{{userId}}', _id)}<br />
     into your browser to create an account and / or join their network.
     </p>
-  `
-}
+  `;
+};

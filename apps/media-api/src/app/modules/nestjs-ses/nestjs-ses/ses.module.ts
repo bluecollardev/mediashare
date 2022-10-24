@@ -6,11 +6,11 @@ import { SesService } from './services/relay/ses.service';
 @Module({})
 export class SesModule {
   public static forRoot(config: ConfigurationSes) {
-    console.log('ses module')
-    console.log(config)
-    console.log(config.AKI_KEY)
-    console.log(config.SECRET)
-    console.log('----------')
+    console.log('ses module');
+    console.log(config);
+    console.log(config.AKI_KEY);
+    console.log(config.SECRET);
+    console.log('----------');
     return {
       module: SesModule,
       //   controllers: [

@@ -115,7 +115,9 @@ export const Account = ({ globalState }: PageProps) => {
         <Card.Title
           titleStyle={styles.sectionHeaderTitle}
           title="My Connections"
-          right={(props) => <IconButton iconColor={theme.colors.success} {...props} style={{ marginRight: 15 }} icon="person-add" onPress={() => setInvite(true)} />}
+          right={(props) => (
+            <IconButton iconColor={theme.colors.success} {...props} style={{ marginRight: 15 }} icon="person-add" onPress={() => setInvite(true)} />
+          )}
         />
       </Card>
       {/* <Highlights highlights={state.highlights} /> */}
@@ -262,7 +264,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'normal',
     fontSize: 16,
-    marginLeft: 60
+    marginLeft: 60,
   },
   deleteActionButton: {
     backgroundColor: theme.colors.error,

@@ -68,7 +68,6 @@ export class UserController {
     });
     const profile = await this.userService.getUserById(StringIdGuard(newUser._id));
     return res.send(profile);
-
   }
 
   @Post('logout')
@@ -106,6 +105,11 @@ export class UserController {
   @ApiBearerAuth()
   @UserGetResponse({ type: UpdateUserConnectionDto, isArray: true })
   async getUserConnections(@GetUserId() userId: ObjectId) {
-    return await this.userConnectionService.getUserConnections(userId);
+    // When YOU invite a new user, and they accept YOUR invite, YOU become THEIR connection,
+    // meaning YOUR userId becomes their connectionId.
+    // As such, we select only the UserConnection entities where YOUR userId is THEIR connectionId.
+    const userConnections = await this.userConnectionService.getUserConnections(userId);
+    const connectionUserIds = userConnections.map((uc) => uc.connectionId);
+    return await this.userService.getUsersByIds(connectionUserIds);
   }
 }
