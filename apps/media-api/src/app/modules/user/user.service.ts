@@ -91,7 +91,7 @@ export class UserService extends DataService<User, MongoRepository<User>> {
           },
         },
       ])
-      .next();
+      .toArray();
   }
 
   async getUserAll() {

@@ -10,9 +10,8 @@ import { useAppSelector } from 'mediashare/store';
 import { thumbnailRoot } from 'mediashare/core/aws/key-factory';
 import { fetchAndPutToS3 } from 'mediashare/core/aws/storage';
 import { loadUser, logout, updateAccount } from 'mediashare/store/modules/user';
-import { loadUsers } from 'mediashare/store/modules/users';
+import { loadUserConnections } from 'mediashare/store/modules/userConnections';
 import { loadProfile } from 'mediashare/store/modules/profile';
-import { findMediaItems } from 'mediashare/store/modules/mediaItems';
 import { withGlobalStateConsumer } from 'mediashare/core/globalState';
 import { useWindowDimensions, ScrollView, StyleSheet } from 'react-native';
 import { FAB, Divider, Card, IconButton } from 'react-native-paper';
@@ -46,7 +45,7 @@ export const Account = ({ globalState }: PageProps) => {
   const fullName = firstName || lastName ? `${firstName} ${lastName}` : 'Unnamed User';
   const [state, setState] = useState(R.pick(user, ['firstName', 'email', 'lastName', 'phoneNumber', 'imageSrc']));
 
-  const contacts = useAppSelector((state) => state?.users?.entities).filter((e) => e._id != userId);
+  const contacts = useAppSelector((state) => state?.userConnections?.entities).filter((e) => e._id != userId);
   const [actionMode, setActionMode] = useState(actionModes.default);
   const [isSelectable, setIsSelectable] = useState(false);
   const [selectedItems, setSelectedItems] = React.useState([]);
@@ -163,10 +162,7 @@ export const Account = ({ globalState }: PageProps) => {
   );
 
   async function loadData() {
-    const { search } = globalState;
-    const args = { text: search?.filters?.text ? search.filters.text : '' };
-    await dispatch(findMediaItems(args));
-    await dispatch(loadUsers());
+    await dispatch(loadUserConnections());
     // @ts-ignore
     const profile = (await dispatch(loadProfile(userId))) as any;
     setState(profile.payload);
@@ -237,7 +233,7 @@ export const Account = ({ globalState }: PageProps) => {
   async function unshareItems() {
     await dispatch(removeShareItemAllByUserId(selectedItems));
     setSelectedItems([]);
-    await dispatch(loadUsers());
+    await dispatch(loadUserConnections());
   }
 
   function updateSelection(bool: boolean, shareItemId: string) {

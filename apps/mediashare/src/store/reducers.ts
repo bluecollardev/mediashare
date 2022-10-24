@@ -5,7 +5,7 @@ import { reducer as appStateReducer } from './modules/appState';
 import { reducer as profileReducer } from './modules/profile';
 import { reducer as usersReducer } from './modules/users';
 import { reducer as userReducer } from './modules/user';
-import { reducer as userConnectionsReducer } from './modules/userConnection';
+import { reducer as userConnectionsReducer } from './modules/userConnections';
 import { reducer as searchReducer } from './modules/search';
 import { reducer as playlistsReducer } from './modules/playlists';
 import { reducer as playlistReducer } from './modules/playlist';

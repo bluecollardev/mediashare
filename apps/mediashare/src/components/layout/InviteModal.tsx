@@ -5,7 +5,7 @@ import { StyleSheet, TextInput, Platform, KeyboardAvoidingView, SafeAreaView } f
 import { theme } from 'mediashare/styles';
 import { View } from 'react-native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import { sendEmail } from 'mediashare/store/modules/userConnection';
+import { sendEmail } from 'mediashare/store/modules/userConnections';
 
 interface AccountCardProps {
   userId: string;
@@ -30,14 +30,14 @@ export default function ModalSheet({ showDialog, onDismiss, userId }: AccountCar
   });
   const dispatch = useDispatch();
   const onSubmit: SubmitHandler<IFromInput> = async (data) => {
-  
+
       if (!data.email) {
         return;
       }
       await dispatch(sendEmail({ userId, email: data.email }));
       reset();
       onDismiss();
-   
+
   };
 
   return (
