@@ -35,7 +35,7 @@ export class ShareItemController {
   }
 
   @Get('shared-with-user')
-  @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
+  @ApiResponse({ type: ShareItemsResponseDto, status: 200 })
   async findItemsSharedWithUser(@GetUserId() userId: string) {
     return await this.shareItemService.getItemsSharedWithUser(userId);
   }
