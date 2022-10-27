@@ -37,7 +37,8 @@ export class ShareItemController {
   @Get('shared-with-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
   async findItemsSharedWithUser(@GetUserId() userId: string) {
-    return await this.shareItemService.getItemsSharedWithUser(userId);
+    const result = await this.shareItemService.getItemsSharedWithUser(userId);
+    return result;
   }
 
   @Get('shared-with-user/media-items')
