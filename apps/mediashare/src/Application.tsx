@@ -249,7 +249,7 @@ function App() {
 
   const fetchData = async () => {
     const authUser = await Auth.currentUserPoolUser({ bypassCache: true });
-    dispatch(loginAction({ accessToken: authUser.signInUserSession.accessToken.jwtToken, idToken: authUser.signInUserSession.idToken.jwtToken }));
+    await dispatch(loginAction({ accessToken: authUser.signInUserSession.accessToken.jwtToken, idToken: authUser.signInUserSession.idToken.jwtToken }));
     setIsCurrentUser(authUser);
   };
 

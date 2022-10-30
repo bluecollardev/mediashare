@@ -1,12 +1,11 @@
-
-import React  from 'react';
+import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { PageContainer, PageProps, KeyboardAvoidingPageContent } from 'mediashare/components/layout/PageContainer';
 import { TextInput, HelperText, Button, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Auth } from 'aws-amplify';
-import {useRoute} from '@react-navigation/native'
+import { useRoute } from '@react-navigation/native';
 import { userSnack } from 'mediashare/hooks/useSnack';
 import { routeConfig } from 'mediashare/routes';
 
@@ -17,13 +16,13 @@ interface FormData {
 
 const ConfirmComponent = ({}: PageProps) => {
   const nav = useNavigation();
-const route = useRoute();
+  const route = useRoute();
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-    watch
+    watch,
   } = useForm<FormData>({
     defaultValues: {
       username: route?.params?.username || '',
@@ -31,36 +30,33 @@ const route = useRoute();
     },
   });
 
-  const {element,
-    onToggleSnackBar,
-    setMessage } = userSnack();
-    
+  const { element, onToggleSnackBar, setMessage } = userSnack();
+
   const username = watch('username');
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-    const { username, code } = data;
-    await Auth.confirmSignUp(username, code);
+      const { username, code } = data;
+      await Auth.confirmSignUp(username, code);
       nav.navigate(routeConfig.login.name as never, {} as never);
-    
     } catch (error) {
       setMessage(error.message);
       onToggleSnackBar();
-      console.log('confirm error ',error);
+      console.log('confirm error ', error);
     }
   };
 
   const handleResendCode = async () => {
     try {
-      await Auth.resendSignUp(username)
+      await Auth.resendSignUp(username);
       setMessage('Code was send to your email');
       onToggleSnackBar();
     } catch (error) {
       setMessage(error.message);
       onToggleSnackBar();
-      console.log('error resend code ',error);
+      console.log('error resend code ', error);
     }
-  }
+  };
 
   const onHandleBack = () => {
     reset();
@@ -78,7 +74,9 @@ const route = useRoute();
           }}
         >
           <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Text variant="displayLarge" style={{fontSize: 20, paddingBottom: 10 }}>Verification your account</Text>
+            <Text variant="displayLarge" style={{ fontSize: 20, paddingBottom: 10 }}>
+              Verification your account
+            </Text>
             <Controller
               control={control}
               name="username"
@@ -109,7 +107,7 @@ const route = useRoute();
                 </>
               )}
             />
-            
+
             <Button
               style={{
                 borderRadius: 10,
@@ -125,7 +123,7 @@ const route = useRoute();
               style={{
                 borderRadius: 10,
                 padding: 5,
-                marginTop:15
+                marginTop: 15,
               }}
               mode="outlined"
               onPress={handleResendCode}
@@ -133,7 +131,7 @@ const route = useRoute();
               Resend code
             </Button>
 
-            <Button style={{paddingTop: 10}} labelStyle={{ fontSize: 10 }} mode="text" onPress={onHandleBack}>
+            <Button style={{ paddingTop: 10 }} labelStyle={{ fontSize: 10 }} mode="text" onPress={onHandleBack}>
               Back to sign in
             </Button>
           </View>

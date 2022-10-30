@@ -20,7 +20,7 @@ const routeConfig = {
     options: { title: '', header: () => null },
   },
   // =================================================
-  
+
   search: {
     name: 'search',
     options: {

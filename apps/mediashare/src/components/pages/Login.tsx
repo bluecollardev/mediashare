@@ -43,13 +43,13 @@ const LoginComponent = ({}: PageProps) => {
     } catch (error) {
       setMessage(error.message);
       onToggleSnackBar();
-      if(error.code === 'UserNotConfirmedException') {
-         // @ts-ignore
+      if (error.code === 'UserNotConfirmedException') {
+        // @ts-ignore
         nav.navigate(routeConfig.confirm.name, { username: data.username });
         reset();
       }
-      console.log(error.code)
-      console.log('login',error);
+      console.log(error.code);
+      console.log('login', error);
     }
   };
 

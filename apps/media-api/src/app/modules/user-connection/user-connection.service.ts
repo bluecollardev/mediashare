@@ -59,7 +59,7 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     try {
       const userConnections = await this.repository.find({
         where: {
-          userId: ObjectIdGuard(id)
+          userId: ObjectIdGuard(id),
         } as FindOptionsWhere<UserConnection>,
       });
 

@@ -140,28 +140,27 @@ const SignUpComponent = ({}: PageProps) => {
               name="phone"
               rules={{
                 required: 'required',
-                
               }}
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View>
-                <PhoneInput 
-                defaultValue={value}
-                layout="first"
-                onChangeText={(value) => onChange(value)}
-                onChangeFormattedText={(value) => onChange(value)}
-                defaultCode='US' 
-                withDarkTheme={true} 
-                containerStyle={{ backgroundColor:  "#252525", width: '100%'}}
-                textContainerStyle={{ backgroundColor: "#252525"}}
-                codeTextStyle={{ color: theme.colors.primary }}
-                textInputStyle={{  color: '#fff'}}
-                />
-                <HelperText type="error">{errors.phone?.message}</HelperText>
+                  <PhoneInput
+                    defaultValue={value}
+                    layout="first"
+                    onChangeText={(value) => onChange(value)}
+                    onChangeFormattedText={(value) => onChange(value)}
+                    defaultCode="US"
+                    withDarkTheme={true}
+                    containerStyle={{ backgroundColor: '#252525', width: '100%' }}
+                    textContainerStyle={{ backgroundColor: '#252525' }}
+                    codeTextStyle={{ color: theme.colors.primary }}
+                    textInputStyle={{ color: '#fff' }}
+                  />
+                  <HelperText type="error">{errors.phone?.message}</HelperText>
                 </View>
               )}
             />
-            
+
             <Button
               style={{
                 borderRadius: 10,

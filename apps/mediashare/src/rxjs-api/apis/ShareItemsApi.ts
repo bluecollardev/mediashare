@@ -62,16 +62,16 @@ export class ShareItemsApi extends BaseAPI {
 
   /**
    */
-  shareItemControllerFindItemsSharedWithUser(): Observable<Array<ShareItemsResponseDto>>;
-  shareItemControllerFindItemsSharedWithUser(opts?: OperationOpts): Observable<RawAjaxResponse<Array<ShareItemsResponseDto>>>;
-  shareItemControllerFindItemsSharedWithUser(opts?: OperationOpts): Observable<Array<ShareItemsResponseDto> | RawAjaxResponse<Array<ShareItemsResponseDto>>> {
+  shareItemControllerFindItemsSharedWithUser(): Observable<ShareItemsResponseDto>;
+  shareItemControllerFindItemsSharedWithUser(opts?: OperationOpts): Observable<RawAjaxResponse<ShareItemsResponseDto>>;
+  shareItemControllerFindItemsSharedWithUser(opts?: OperationOpts): Observable<ShareItemsResponseDto | RawAjaxResponse<ShareItemsResponseDto>> {
     const headers: HttpHeaders = {
       ...(this.configuration.username != null && this.configuration.password != null
         ? { Authorization: `Basic ${btoa(this.configuration.username + ':' + this.configuration.password)}` }
         : undefined),
     };
 
-    return this.request<Array<ShareItemsResponseDto>>(
+    return this.request<ShareItemsResponseDto>(
       {
         url: '/api/share-items/shared-with-user',
         method: 'GET',

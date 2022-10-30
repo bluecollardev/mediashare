@@ -42,7 +42,7 @@ export const Feed = ({
   async function loadData() {
     await dispatch(findItemsSharedWithMe());
   }
-  
+
   useEffect(() => {
     const fetchData = async () => {
       await loadData();
@@ -70,8 +70,6 @@ export const Feed = ({
       </PageContent>
     </PageContainer>
   );
-
- 
 };
 
 export default withLoadingSpinner(undefined)(withGlobalStateConsumer(Feed));

@@ -23,7 +23,7 @@ export function useGoToAccount() {
 export function useGoToFeed() {
   const nav = useNavigation();
   // @ts-ignore
-  return () => nav.navigate('Private' ,{ screen: 'Feed'});
+  return () => nav.navigate('Private', { screen: 'Feed' });
 }
 
 export function useGoToLogin() {
@@ -33,7 +33,6 @@ export function useGoToLogin() {
     // @ts-ignore
     nav.navigate('login');
     // nav.dispatch(StackActions.popToTop());
-  
   };
 }
 

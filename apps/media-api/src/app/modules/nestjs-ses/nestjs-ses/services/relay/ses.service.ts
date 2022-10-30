@@ -16,9 +16,7 @@ export interface SesEmailOptions {
 @Injectable()
 export class SesService {
   private readonly ses;
-  constructor() // @Inject(AKI_KEY) private readonly apiKey,
-  // @Inject(REGION) private readonly region,
-  // @Inject(SECRET) private readonly secret,
+  constructor() // @Inject(SECRET) private readonly secret, // @Inject(REGION) private readonly region, // @Inject(AKI_KEY) private readonly apiKey,
   {
     const apiKey = 'AKIA3ZSOCVIUBBEA4D2M';
     const region = 'us-west-2';
