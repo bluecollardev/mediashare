@@ -1,15 +1,16 @@
-import React from 'react';
-import { Provider } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { Provider, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // TODO: Replace this when we're ready
 // import { createMaterialBottomTabNavigator as createBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createMaterialBottomTabNavigator as createBottomTabNavigator } from 'mediashare/lib/material-bottom-tabs';
-import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider, Text, Card } from 'react-native-paper';
+import { View, ActivityIndicator } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify, { Hub } from 'aws-amplify';
 import awsmobile from './aws-exports';
 import { store, useAppSelector } from './store';
 import { routeConfig } from './routes';
@@ -21,6 +22,9 @@ import { createBottomTabListeners } from './screenListeners';
 import { GlobalStateProps, withGlobalStateProvider } from './core/globalState';
 
 import Login from './components/pages/Login';
+import SignUp from './components/pages/authentication/SignUp';
+import Confirm from './components/pages/authentication/ConfirmCode';
+import ResetPassword from './components/pages/authentication/ResetPassword';
 import Feed from './components/pages/Feed';
 import FeedSharedWithMe from './components/pages/SharedWithMe';
 import MediaItemAdd from './components/pages/MediaItemAdd';
@@ -42,8 +46,8 @@ import AccountEdit from './components/pages/AccountEdit';
 import Contact from './components/pages/Contact';
 import SharedWithContact from './components/pages/SharedWithContact';
 import SharedByContact from './components/pages/SharedByContact';
-
-// const deviceWidth = Dimensions.get('window').width;
+import { Auth } from 'aws-amplify';
+import { loginAction } from './store/modules/user';
 
 // Map route names to icons
 export const tabNavigationIconsMap = {
@@ -129,6 +133,9 @@ const PublicMainNavigation = () => {
   return (
     <PublicStackNavigator.Navigator initialRouteName="login">
       <PublicStackNavigator.Screen {...routeConfig.login} component={Login} />
+      <PublicStackNavigator.Screen {...routeConfig.signUp} component={SignUp} />
+      <PublicStackNavigator.Screen {...routeConfig.confirm} component={Confirm} />
+      <PublicStackNavigator.Screen {...routeConfig.resetPassword} component={ResetPassword} />
     </PublicStackNavigator.Navigator>
   );
 };
@@ -159,17 +166,19 @@ const PrivateMainNavigation = ({ globalState }: PrivateMainNavigationProps) => {
             : undefined,
       })}
     >
-      <PrivateNavigator.Screen name="Feed" component={FeedNavigation} listeners={navigationTabListeners} />
+      <>
+        <PrivateNavigator.Screen name="Feed" component={FeedNavigation} listeners={navigationTabListeners} />
 
-      {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen name="Search" component={SearchNavigation} listeners={navigationTabListeners} />
-      )}
+        {(build.forFreeUser || build.forSubscriber || build.forAdmin) && (
+          <PrivateNavigator.Screen name="Search" component={SearchNavigation} listeners={navigationTabListeners} />
+        )}
 
-      {(build.forSubscriber || build.forAdmin) && (
-        <PrivateNavigator.Screen name="Playlists" component={PlaylistsNavigation} listeners={navigationTabListeners} />
-      )}
+        {(build.forSubscriber || build.forAdmin) && (
+          <PrivateNavigator.Screen name="Playlists" component={PlaylistsNavigation} listeners={navigationTabListeners} />
+        )}
 
-      {build.forAdmin && <PrivateNavigator.Screen name="Media" component={MediaNavigation} listeners={navigationTabListeners} />}
+        {build.forAdmin && <PrivateNavigator.Screen name="Media" component={MediaNavigation} listeners={navigationTabListeners} />}
+      </>
     </PrivateNavigator.Navigator>
   );
 };
@@ -179,13 +188,39 @@ const PrivateMainNavigationWithGlobalState = withGlobalStateProvider(PrivateMain
 const AccountNavigationWithGlobalState = withGlobalStateProvider(AccountNavigation);
 
 const RootNavigator = createStackNavigator();
-const RootNavigation = ({ isLoggedIn = false }) => {
-  console.log(isLoggedIn);
+const RootNavigation = ({ isCurrentUser = undefined, isLoggedIn = false }) => {
+  if (isCurrentUser === undefined && !isLoggedIn) {
+    return (
+      <View style={{ flexGrow: 1, height: '100%', justifyContent: 'center', backgroundColor: theme.colors.background }}>
+        <View
+          style={{
+            justifyContent: 'center',
+          }}
+        >
+          <Card elevation={0}>
+            <Card.Cover
+              resizeMode="contain"
+              source={require('mediashare/assets/logo/mediashare/256.png')}
+              style={{ maxWidth: 150, width: '100%', marginLeft: 'auto', marginRight: 'auto', backgroundColor: theme.colors.background }}
+            />
+          </Card>
+        </View>
+        <ActivityIndicator />
+      </View>
+    );
+  }
   return (
-    <RootNavigator.Navigator initialRouteName={isLoggedIn ? 'Private' : 'Public'}>
-      <RootNavigator.Screen name="Public" component={PublicMainNavigationWithGlobalState} options={{ headerShown: false }} />
-      <RootNavigator.Screen name="Private" component={PrivateMainNavigationWithGlobalState} options={{ headerShown: false }} />
-      <RootNavigator.Screen name="Account" component={AccountNavigationWithGlobalState} options={{ headerShown: false, presentation: 'modal' }} />
+    <RootNavigator.Navigator>
+      {isCurrentUser ? (
+        <>
+          <RootNavigator.Screen name="Private" component={PrivateMainNavigationWithGlobalState} options={{ headerShown: false }} />
+          <RootNavigator.Screen name="Account" component={AccountNavigationWithGlobalState} options={{ headerShown: false, presentation: 'modal' }} />
+        </>
+      ) : (
+        <>
+          <RootNavigator.Screen name="Public" component={PublicMainNavigationWithGlobalState} options={{ headerShown: false }} />
+        </>
+      )}
     </RootNavigator.Navigator>
   );
 };
@@ -198,13 +233,6 @@ Amplify.configure({
   },
 });
 
-async function clearLogin() {
-  await Auth.signOut();
-  await Auth.currentCredentials();
-}
-
-clearLogin().then();
-
 function App() {
   const [fontsLoaded] = useFonts({
     'CircularStd-Black': require('./assets/fonts/CircularStd-Black.otf'),
@@ -214,22 +242,43 @@ function App() {
     'CircularStd-Light': require('./assets/fonts/CircularStd-Light.otf'),
   });
 
-  // Amplify.configure(awsmobile);
-  // clearLogin();
-
-  // This is disabled until I figure out what causes the session to be wack
-  // useEffect(() => {
-  //   const checkToken = async function () {
-  //     const storedToken = await getKeyPair('token');
-  //     if (storedToken) {
-  //       const user = await dispatch(validateTokenAction(storedToken));
-  //     }
-  //   };
-  //   checkToken();
-  // }, []);
-
   const loading = useAppSelector((state) => state?.app?.loading);
   const { isLoggedIn } = useUser();
+  const [isCurrentUser, setIsCurrentUser] = useState(undefined);
+  const dispatch = useDispatch();
+
+  const fetchData = async () => {
+    const authUser = await Auth.currentUserPoolUser({ bypassCache: true });
+    await dispatch(loginAction({ accessToken: authUser.signInUserSession.accessToken.jwtToken, idToken: authUser.signInUserSession.idToken.jwtToken }));
+    setIsCurrentUser(authUser);
+  };
+
+  useEffect(() => {
+    let mount = true;
+    fetchData().catch((error) => {
+      if (mount) {
+        setIsCurrentUser(null);
+      }
+    });
+    return () => {
+      setIsCurrentUser(null);
+      mount = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    Hub.listen('auth', (data) => {
+      if (data.payload.event === 'signIn' || data.payload.event === 'signOut') {
+        fetchData().catch((error) => {
+          setIsCurrentUser(null);
+        });
+      }
+    });
+    return () => {
+      // @ts-ignore
+      Hub.remove('auth');
+    };
+  }, []);
 
   const customTheme = { ...theme };
   if (!fontsLoaded) {
@@ -245,7 +294,7 @@ function App() {
           }}
         >
           <NavigationContainer>
-            <RootNavigation key={isLoggedIn.toString()} isLoggedIn={isLoggedIn} />
+            <RootNavigation isCurrentUser={isCurrentUser} isLoggedIn={isLoggedIn} />
           </NavigationContainer>
         </PaperProvider>
       </Provider>

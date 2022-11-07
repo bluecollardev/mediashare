@@ -30,14 +30,12 @@ export default function ModalSheet({ showDialog, onDismiss, userId }: AccountCar
   });
   const dispatch = useDispatch();
   const onSubmit: SubmitHandler<IFromInput> = async (data) => {
-
-      if (!data.email) {
-        return;
-      }
-      await dispatch(sendEmail({ userId, email: data.email }));
-      reset();
-      onDismiss();
-
+    if (!data.email) {
+      return;
+    }
+    await dispatch(sendEmail({ userId, email: data.email }));
+    reset();
+    onDismiss();
   };
 
   return (

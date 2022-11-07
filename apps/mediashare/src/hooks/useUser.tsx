@@ -18,16 +18,22 @@ export function useUser() {
   });
 
   useEffect(() => {
+    let mount = true;
     if (authenticatedAndLoggedIn) {
       console.log('[useUser] authenticatedAndLoggedIn is true, run setIsLoggedIn effect');
-      setIsLoggedIn(authenticatedAndLoggedIn);
-      setBuild({
-        // TODO: Guest is just for unregistered users... we can update this later
-        forFreeUser: roles.includes(BcRolesType.Guest) || roles.includes(BcRolesType.Free),
-        forSubscriber: roles.includes(BcRolesType.Subscriber),
-        forAdmin: roles.includes(BcRolesType.Admin),
-      });
+      if (mount) {
+        setBuild({
+          // TODO: Guest is just for unregistered users... we can update this later
+          forFreeUser: roles.includes(BcRolesType.Guest) || roles.includes(BcRolesType.Free),
+          forSubscriber: roles.includes(BcRolesType.Subscriber),
+          forAdmin: roles.includes(BcRolesType.Admin),
+        });
+        setIsLoggedIn(authenticatedAndLoggedIn);
+      }
     }
+    return () => {
+      mount = false;
+    };
   }, [authenticatedAndLoggedIn]);
 
   return {

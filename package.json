@@ -25,7 +25,7 @@
     "build:prod": "rm -rf ./dist && nx build media-api --verbose",
     "start:prod": "pm2-runtime start pm2.yaml --env production",
     "serve": "nx serve",
-    "debug-only:api": "npm run api:start & npm run support:debug",
+    "debug-only:api": "npm run api:debug & npm run support:debug",
     "debug-only:support": "npm run api:start & npm run support:debug",
     "serve:prod": "nx run-many --all --target=serve",
     "test:cov": "jest --coverage",

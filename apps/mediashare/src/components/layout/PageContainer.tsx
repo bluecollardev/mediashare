@@ -42,7 +42,7 @@ export function PageContent({ children }: PageContentProps) {
 export function KeyboardAvoidingPageContent({ children }: PageContentProps) {
   return (
     <View style={styles.pageContent}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.pageContent}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.pageContent} keyboardVerticalOffset={100}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Card>
             <Card.Content>{children}</Card.Content>
@@ -66,11 +66,10 @@ export function PageActions({ children, style }: PageActionsProps) {
 export function PageContainer({ children }: PageContainerProps) {
   const dispatch = useDispatch();
   const app = useAppSelector((state) => state?.app);
-  // const [visible, setVisible] = useState(false);
   const hideDialog = function () {
     dispatch(clearError());
-    // setVisible(false);
   };
+
   return (
     <SafeAreaView style={styles.pageContainer}>
       <Portal>

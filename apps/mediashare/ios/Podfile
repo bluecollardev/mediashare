@@ -10,13 +10,9 @@ target 'Mediashare' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 
-  pod 'RNAWSCognito', :path => '../node_modules/amazon-cognito-identity-js'
 
-  pod 'react-native-config', :path => '../node_modules/react-native-config'
 
   post_install do |installer|
     installer.pods_project.targets.each do |target|
