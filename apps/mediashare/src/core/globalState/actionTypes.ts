@@ -1,2 +1,0 @@
-export const UPDATE_GLOBAL_STATE = 'UPDATE_GLOBAL_STATE';
-export const UPDATE_TOAST = 'UPDATE_TOAST';
