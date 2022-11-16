@@ -7,7 +7,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { clone } from 'remeda';
 import { FindOptionsWhere } from 'typeorm';
 import { MongoRepository } from 'typeorm/repository/MongoRepository';
-import { CreateUserConnectionDto } from './dto/create-user-connection.dto';
+import { UserConnectionDto } from './dto/user-connection.dto';
 import { UserConnection } from './entities/user-connection.entity';
 import { SesService } from '@api-modules/nestjs-ses';
 import { UserService } from '@api-modules/user/user.service';
@@ -31,7 +31,31 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     super(repository, logger);
   }
 
-  async createUserConnection({ userId, connectionId }: CreateUserConnectionDto): Promise<UserConnection> {
+  async createUserConnection({ userId, connectionId }: UserConnectionDto): Promise<UserConnection> {
+    try {
+      const userObjectId = ObjectIdGuard(userId);
+      const connectionObjectId = ObjectIdGuard(connectionId);
+
+      const userConnection = await this.create({
+        userId: userObjectId,
+        connectionId: connectionObjectId,
+      });
+
+      // Create the inverse relationship
+      // If a UserConnection record exists for both users, both
+      // users are allowed to see each other's public shares
+      await this.create({
+        userId: connectionObjectId,
+        connectionId: userObjectId,
+      });
+
+      return userConnection;
+    } catch (error) {
+      throw new error();
+    }
+  }
+
+  async removeUserConnection({ userId, connectionId }: UserConnectionDto): Promise<UserConnection> {
     try {
       const userObjectId = ObjectIdGuard(userId);
       const connectionObjectId = ObjectIdGuard(connectionId);
@@ -73,7 +97,7 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     return await this.sesService.sendEmail(mail);
   }
 
-  async userEmailAlreadyExits(email: string) {
-    return await this.userService.findByQuery({ where: { email: email } });
+  async userEmailAlreadyExists(email: string) {
+    return await this.userService.findAllByQuery({ where: { email: email } });
   }
 }

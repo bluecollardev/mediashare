@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from '@api-modules/user/user.service';
 import { UserConnectionService } from './user-connection.service';
 import { UserConnection } from './entities/user-connection.entity';
-import { UserConnectionController } from './user-connection.controller';
 import { SesModule } from '@api-modules/nestjs-ses';
 
 console.log(process.env);
@@ -20,7 +19,6 @@ console.log(process.env);
     TypeOrmModule.forFeature([User, UserConnection]),
     AuthModule,
   ],
-  controllers: [UserConnectionController],
   providers: [UserService, UserConnectionService, SesModule],
 })
 export class UserConnectionModule {}

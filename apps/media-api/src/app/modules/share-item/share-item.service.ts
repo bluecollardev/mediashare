@@ -219,7 +219,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       .toArray();
   }
 
-  async removeShareItemAll(shareItems: string[]): Promise<boolean> {
+  async removeAllShareItems(shareItems: string[]): Promise<boolean> {
     try {
       // TODO: Promise all this
       for await (const key of shareItems) {
@@ -231,7 +231,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     }
   }
 
-  async removeShareItemAllByUserId(shareItemsUserId: string[]): Promise<boolean> {
+  async removeAllShareItemsByUserId(shareItemsUserId: string[]): Promise<boolean> {
     try {
       // TODO: Promise all this
       for await (const key of shareItemsUserId) {

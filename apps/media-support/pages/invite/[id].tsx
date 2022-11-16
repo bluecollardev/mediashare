@@ -11,19 +11,17 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import logo from '../../image/152_logo.png';
 import Image from 'next/image';
 
-
-export async function getServerSideProps(context: { query: { userId: string; id: string; }; }) {
-  const {userId , id} = context.query
-  if(context.query.userId === undefined || context.query.id  !== 'id'  ) {
+export async function getServerSideProps(context: { query: { userId: string; id: string } }) {
+  const { userId, id } = context.query;
+  if (context.query.userId === undefined || context.query.id !== 'id') {
     return {
-      notFound: true
-    }
+      notFound: true,
+    };
   }
-  if(userId === '' || id !== 'id' ) {
+  if (userId === '' || id !== 'id') {
     return {
-      notFound: true
-    }
-
+      notFound: true,
+    };
   }
   return {
     props: {},
@@ -66,7 +64,7 @@ const Home: NextPage = () => {
           },
         }
       );
-      return result
+      return result;
     } catch (error) {
       throw error;
     }
@@ -88,7 +86,6 @@ const Home: NextPage = () => {
           },
         }
       );
-
     } catch (error) {
       throw error;
     }
@@ -138,7 +135,7 @@ const Home: NextPage = () => {
       } else {
         if (id) {
           await signUp(data);
-            setShowCode(true);
+          setShowCode(true);
         }
       }
     } catch (error) {
@@ -182,9 +179,7 @@ const Home: NextPage = () => {
             <Image src={logo.src} alt="Picture of the author" width={100} height={100} />
           </div>
           <h1 style={{ textAlign: 'center' }}>Create Account</h1>
-          <p style={{ textAlign: 'center' }}>
-            You've been invited to join the Mediashare private app trial. Please create a user account to continue.
-          </p>
+          <p style={{ textAlign: 'center' }}>You've been invited to join the Mediashare private app trial. Please create a user account to continue.</p>
           <form
             onSubmit={handleSubmit(onSubmit)}
             style={{

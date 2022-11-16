@@ -99,3 +99,7 @@ swagger-spec.json
 libs/misc
 
 /development.env
+
+
+## Mediashare OpenAPI generated client
+/apps/mediashare

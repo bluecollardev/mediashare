@@ -2,19 +2,16 @@ import { ApiPastDate } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
-export class CreateUserConnectionDto {
+export class UserConnectionDto {
   @ApiProperty({ required: true })
-  @IsString()
   userId: string;
 
   @ApiProperty({ required: true })
   connectionId: string;
 
-  @ApiPastDate()
+  @ApiPastDate({ required: false })
   createdAt?: Date;
 
-  @ApiPastDate()
+  @ApiPastDate({ required: false })
   updatedDate?: Date;
 }
-
-
