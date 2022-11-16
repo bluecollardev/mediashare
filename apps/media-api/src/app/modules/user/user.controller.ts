@@ -112,7 +112,7 @@ export class UserController {
     return await this.userService.getUsersByIds(connectionUserIds);
   }
 
-  @Post('connections')
+  @Post('connections/create')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto })
@@ -126,11 +126,11 @@ export class UserController {
     }
   }
 
-  @Delete('connections')
+  @Post('connection/remove')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiBody({ type: UserConnectionDto })
-  async removeUserConnection(@Req() req: Request, @Res() res: Response) {
+  @ApiBody({ type: UserConnectionDto, isArray: false })
+  async removeUserConnection(@Body() userConnectionDto: UserConnectionDto, @Req() req: Request, @Res() res: Response) {
     try {
       const { userId, connectionId } = req.body as any;
       if (!userId || !connectionId) {
@@ -145,7 +145,20 @@ export class UserController {
           message: `User ID and Connection ID cannot be the same`,
         });
       }
-      const result = await this.userConnectionService.removeUserConnection({ userId, connectionId });
+      const result = await this.userConnectionService.removeUserConnection(userConnectionDto);
+      return res.status(HttpStatus.OK).json(result);
+    } catch (error) {
+      throw new error();
+    }
+  }
+
+  @Post('connections/remove')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiBody({ type: UserConnectionDto, isArray: true })
+  async removeUserConnections(@Body() userConnectionDtos: UserConnectionDto[], @Req() req: Request, @Res() res: Response) {
+    try {
+      const result = await this.userConnectionService.removeAllUserConnections(userConnectionDtos);
       return res.status(HttpStatus.OK).json(result);
     } catch (error) {
       throw new error();
@@ -194,7 +207,7 @@ export class UserController {
           html: renderInvitationEmailTemplate(user),
         };
         console.log(`Sending email: ${email} ${userId}`);
-        await this.userConnectionService.send(mail);
+        await this.userConnectionService.sendEmail(mail);
         return res.status(HttpStatus.OK).json({
           statusCode: 200,
         });

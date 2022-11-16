@@ -51,39 +51,16 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
 
       return userConnection;
     } catch (error) {
-      throw new error();
+      this.logger.error(`${this.constructor.name}.createUserConnection ${error}`);
+      throw error;
     }
   }
 
-  async removeUserConnection({ userId, connectionId }: UserConnectionDto): Promise<UserConnection> {
-    try {
-      const userObjectId = ObjectIdGuard(userId);
-      const connectionObjectId = ObjectIdGuard(connectionId);
-
-      const userConnection = await this.create({
-        userId: userObjectId,
-        connectionId: connectionObjectId,
-      });
-
-      // Create the inverse relationship
-      // If a UserConnection record exists for both users, both
-      // users are allowed to see each other's public shares
-      await this.create({
-        userId: connectionObjectId,
-        connectionId: userObjectId,
-      });
-
-      return userConnection;
-    } catch (error) {
-      throw new error();
-    }
-  }
-
-  async getUserConnections(id: ObjectId | string) {
+  async getUserConnections(userId: ObjectId | string) {
     try {
       const userConnections = await this.repository.find({
         where: {
-          userId: ObjectIdGuard(id),
+          userId: ObjectIdGuard(userId),
         } as FindOptionsWhere<UserConnection>,
       });
 
@@ -93,7 +70,49 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     }
   }
 
-  async send(mail) {
+  async removeUserConnection({ userId, connectionId }: Partial<UserConnectionDto>): Promise<void> {
+    try {
+      if (!userId || !connectionId) {
+        throw new Error('userId and connectionId are both required parameters');
+      }
+
+      const query = [{ $match: {
+        $or: [
+          {
+            $and: [
+              { userId: ObjectIdGuard(userId) },
+              { connectionId: ObjectIdGuard(connectionId) }
+            ]
+          },
+          {
+            $and: [
+              { userId: ObjectIdGuard(connectionId) },
+              { connectionId: ObjectIdGuard(userId) }
+            ]
+          }
+        ],
+      }}];
+      const userConnections = await this.repository.aggregate(query).toArray();
+      await this.repository.remove(userConnections);
+    } catch (error) {
+      this.logger.error(`${this.constructor.name}.removeUserConnection ${error}`);
+      throw error;
+    }
+  }
+
+  async removeAllUserConnections(userConnections: Partial<UserConnectionDto>[]): Promise<void> {
+    try {
+      const removeUserConnections = userConnections.map(async ({ userId, connectionId }) => {
+        await this.removeUserConnection({ userId, connectionId });
+      });
+      await Promise.all(removeUserConnections);
+    } catch (error) {
+      this.logger.error(`${this.constructor.name}.removeAllUserConnections ${error}`);
+      throw error;
+    }
+  }
+
+  async sendEmail(mail) {
     return await this.sesService.sendEmail(mail);
   }
 
