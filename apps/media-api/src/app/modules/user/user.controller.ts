@@ -158,8 +158,16 @@ export class UserController {
   @ApiBody({ type: UserConnectionDto, isArray: true })
   async removeUserConnections(@Body() userConnectionDtos: UserConnectionDto[], @Req() req: Request, @Res() res: Response) {
     try {
-      const result = await this.userConnectionService.removeAllUserConnections(userConnectionDtos);
-      return res.status(HttpStatus.OK).json(result);
+      const shareItemsResult = await this.shareItemService.removeUserConnectionShareItems(userConnectionDtos);
+      if (shareItemsResult) {
+        const userConnectionResult = await this.userConnectionService.removeUserConnections(userConnectionDtos);
+        return res.status(HttpStatus.OK).json(userConnectionResult);
+      }
+
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        statusCode: 500,
+        message: `There was a problem removing user connection share items`
+      });
     } catch (error) {
       throw new error();
     }

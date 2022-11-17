@@ -1,4 +1,3 @@
-import { DataService } from '@api';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectIdGuard } from '@util-lib';
@@ -9,6 +8,7 @@ import { FindOptionsWhere } from 'typeorm';
 import { MongoRepository } from 'typeorm/repository/MongoRepository';
 import { UserConnectionDto } from './dto/user-connection.dto';
 import { UserConnection } from './entities/user-connection.entity';
+import { DataService } from '@api';
 import { SesService } from '@api-modules/nestjs-ses';
 import { UserService } from '@api-modules/user/user.service';
 
@@ -26,7 +26,7 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     repository: MongoRepository<UserConnection>,
     logger: PinoLogger,
     private sesService: SesService,
-    private userService: UserService
+    private userService: UserService,
   ) {
     super(repository, logger);
   }
@@ -76,31 +76,34 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
         throw new Error('userId and connectionId are both required parameters');
       }
 
-      const query = [{ $match: {
-        $or: [
-          {
-            $and: [
-              { userId: ObjectIdGuard(userId) },
-              { connectionId: ObjectIdGuard(connectionId) }
-            ]
-          },
-          {
-            $and: [
-              { userId: ObjectIdGuard(connectionId) },
-              { connectionId: ObjectIdGuard(userId) }
-            ]
-          }
-        ],
-      }}];
+      const query = [{
+        $match: {
+          $or: [
+            {
+              $and: [
+                { userId: ObjectIdGuard(userId) },
+                { connectionId: ObjectIdGuard(connectionId) }
+              ]
+            },
+            {
+              $and: [
+                { userId: ObjectIdGuard(connectionId) },
+                { connectionId: ObjectIdGuard(userId) }
+              ]
+            }
+          ],
+        }
+      }];
       const userConnections = await this.repository.aggregate(query).toArray();
       await this.repository.remove(userConnections);
+
     } catch (error) {
       this.logger.error(`${this.constructor.name}.removeUserConnection ${error}`);
       throw error;
     }
   }
 
-  async removeAllUserConnections(userConnections: Partial<UserConnectionDto>[]): Promise<void> {
+  async removeUserConnections(userConnections: Partial<UserConnectionDto>[]): Promise<void> {
     try {
       const removeUserConnections = userConnections.map(async ({ userId, connectionId }) => {
         await this.removeUserConnection({ userId, connectionId });
