@@ -1,8 +1,0 @@
-Flask
-flask-restx
-python-dotenv
-boto3
-awscli
-werkzeug
-
-
