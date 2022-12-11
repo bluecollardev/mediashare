@@ -130,7 +130,6 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
 
     try {
       const findByQuery = await this.repository.findOne(query);
-
       return clone(findByQuery);
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findOne ${error}`);

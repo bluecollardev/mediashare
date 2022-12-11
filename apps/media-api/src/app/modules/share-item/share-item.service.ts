@@ -3,10 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataService } from '@api';
 import { ObjectIdGuard } from '@util-lib';
-import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
-import { MongoRepository } from 'typeorm';
+import { DeleteWriteOpResultObject, MongoRepository } from 'typeorm';
 import { CreateMediaShareItemDto, CreatePlaylistShareItemDto } from './dto/create-share-item.dto';
+import { UserConnectionDto } from '@api-modules/user-connection/dto/user-connection.dto';
 import { ShareItem } from './entities/share-item.entity';
 
 @Injectable()
@@ -219,27 +219,48 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       .toArray();
   }
 
-  async removeShareItemAll(shareItems: string[]): Promise<boolean> {
-    try {
-      // TODO: Promise all this
-      for await (const key of shareItems) {
-        await this.repository.delete({ _id: new ObjectId(key) } as any);
-      }
-      return true;
-    } catch (error) {
-      throw new Error('fail delete');
-    }
+  async removeShareItems(shareItemIds: IdType[]): Promise<DeleteWriteOpResultObject> {
+    const shareItemObjectIds = shareItemIds.map((id: string) => ObjectIdGuard(id));
+    return await this.repository.deleteMany({
+      _id: { $in: shareItemObjectIds }
+    });
   }
 
-  async removeShareItemAllByUserId(shareItemsUserId: string[]): Promise<boolean> {
+  async removeUserConnectionShareItems(userConnectionDtos: UserConnectionDto[]): Promise<ShareItem[]> {
     try {
-      // TODO: Promise all this
-      for await (const key of shareItemsUserId) {
-        await this.repository.delete({ userId: new ObjectId(key) } as any);
-      }
-      return true;
+      const shareItemsToRemove = [];
+      const removeShareItems = userConnectionDtos.map(async (userConnectionDto) => {
+        const { userId, connectionId }: Partial<UserConnectionDto> = userConnectionDto;
+        if (!userId || !connectionId) {
+          throw new Error('userId and connectionId are both required parameters');
+        }
+
+        const query = [{
+          $match: {
+            $or: [
+              {
+                $and: [
+                  { createdBy: ObjectIdGuard(userId) },
+                  { userId: ObjectIdGuard(connectionId) }
+                ]
+              },
+              {
+                $and: [
+                  { createdBy: ObjectIdGuard(connectionId) },
+                  { userId: ObjectIdGuard(userId) }
+                ]
+              }
+            ],
+          }
+        }];
+        const shareItems = await this.repository.aggregate(query).toArray();
+        shareItemsToRemove.push(...shareItems);
+      });
+      await Promise.all(removeShareItems);
+      return await this.repository.remove(shareItemsToRemove);
     } catch (error) {
-      throw new Error('fail delete');
+      this.logger.error(`${this.constructor.name}.removeUserConnection ${error}`);
+      throw error;
     }
   }
 }

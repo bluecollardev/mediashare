@@ -1,4 +1,3 @@
-import { DataService } from '@api';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectIdGuard } from '@util-lib';
@@ -7,8 +6,9 @@ import { PinoLogger } from 'nestjs-pino';
 import { clone } from 'remeda';
 import { FindOptionsWhere } from 'typeorm';
 import { MongoRepository } from 'typeorm/repository/MongoRepository';
-import { CreateUserConnectionDto } from './dto/create-user-connection.dto';
+import { UserConnectionDto } from './dto/user-connection.dto';
 import { UserConnection } from './entities/user-connection.entity';
+import { DataService } from '@api';
 import { SesService } from '@api-modules/nestjs-ses';
 import { UserService } from '@api-modules/user/user.service';
 
@@ -26,12 +26,12 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     repository: MongoRepository<UserConnection>,
     logger: PinoLogger,
     private sesService: SesService,
-    private userService: UserService
+    private userService: UserService,
   ) {
     super(repository, logger);
   }
 
-  async createUserConnection({ userId, connectionId }: CreateUserConnectionDto): Promise<UserConnection> {
+  async createUserConnection({ userId, connectionId }: UserConnectionDto): Promise<UserConnection> {
     try {
       const userObjectId = ObjectIdGuard(userId);
       const connectionObjectId = ObjectIdGuard(connectionId);
@@ -51,15 +51,16 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
 
       return userConnection;
     } catch (error) {
-      throw new error();
+      this.logger.error(`${this.constructor.name}.createUserConnection ${error}`);
+      throw error;
     }
   }
 
-  async getUserConnections(id: ObjectId | string) {
+  async getUserConnections(userId: ObjectId | string) {
     try {
       const userConnections = await this.repository.find({
         where: {
-          userId: ObjectIdGuard(id),
+          userId: ObjectIdGuard(userId),
         } as FindOptionsWhere<UserConnection>,
       });
 
@@ -69,11 +70,56 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     }
   }
 
-  async send(mail) {
+  async removeUserConnection({ userId, connectionId }: Partial<UserConnectionDto>): Promise<void> {
+    try {
+      if (!userId || !connectionId) {
+        throw new Error('userId and connectionId are both required parameters');
+      }
+
+      const query = [{
+        $match: {
+          $or: [
+            {
+              $and: [
+                { userId: ObjectIdGuard(userId) },
+                { connectionId: ObjectIdGuard(connectionId) }
+              ]
+            },
+            {
+              $and: [
+                { userId: ObjectIdGuard(connectionId) },
+                { connectionId: ObjectIdGuard(userId) }
+              ]
+            }
+          ],
+        }
+      }];
+      const userConnections = await this.repository.aggregate(query).toArray();
+      await this.repository.remove(userConnections);
+
+    } catch (error) {
+      this.logger.error(`${this.constructor.name}.removeUserConnection ${error}`);
+      throw error;
+    }
+  }
+
+  async removeUserConnections(userConnections: Partial<UserConnectionDto>[]): Promise<void> {
+    try {
+      const removeUserConnections = userConnections.map(async ({ userId, connectionId }) => {
+        await this.removeUserConnection({ userId, connectionId });
+      });
+      await Promise.all(removeUserConnections);
+    } catch (error) {
+      this.logger.error(`${this.constructor.name}.removeAllUserConnections ${error}`);
+      throw error;
+    }
+  }
+
+  async sendEmail(mail) {
     return await this.sesService.sendEmail(mail);
   }
 
-  async userEmailAlreadyExits(email: string) {
-    return await this.userService.findByQuery({ where: { email: email } });
+  async userEmailAlreadyExists(email: string) {
+    return await this.userService.findAllByQuery({ where: { email: email } });
   }
 }

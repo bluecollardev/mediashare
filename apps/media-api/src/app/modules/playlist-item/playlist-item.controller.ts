@@ -122,6 +122,6 @@ export class PlaylistItemController {
       title,
     });
     response.status(HttpStatus.CREATED);
-    return response.send(shareItem); */
+    return response.sendEmail(shareItem); */
   }
 }

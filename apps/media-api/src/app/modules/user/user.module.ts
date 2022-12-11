@@ -1,4 +1,5 @@
 import { SesModule, SesService } from '@api-modules/nestjs-ses';
+import { SesModuleOptions } from '@api-modules/nestjs-ses/ses.struct';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '@api-modules/auth/auth.module';
@@ -20,14 +21,24 @@ import { UserConnectionService } from '@api-modules/user-connection/user-connect
 
 @Module({
   imports: [
-    SesModule.forRoot({
-      SECRET: process.env['USER_CONNECTION_MODULE_SECRET'],
-      AKI_KEY: process.env['USER_CONNECTION_MODULE_AKI_KEY'],
-      REGION: process.env['USER_CONNECTION_REGION'],
-    }),
+    SesModule.registerAsync([
+      {
+        imports: [AppConfigModule],
+        inject: [AppConfigService],
+        useFactory: (configService: AppConfigService) => {
+          const sesConfig: SesModuleOptions = {
+            region: configService.get('sesModuleRegion'),
+            akiKey: configService.get('sesModuleAkiKey'),
+            secret: configService.get('sesModuleSecret'),
+          };
+
+          console.log(`[UserModule.registerAsync useFactory] ${JSON.stringify(sesConfig, null, 2)}`);
+          return sesConfig;
+        },
+      },
+    ]),
     AuthModule,
     TypeOrmModule.forFeature([User, UserConnection, Playlist, PlaylistItem, MediaItem]),
-    SesModule,
     ShareItemModule,
     AppConfigModule,
   ],
