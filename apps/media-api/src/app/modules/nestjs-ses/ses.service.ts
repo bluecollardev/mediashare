@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { AKI_KEY, REGION, SECRET } from '../../tokens/tokens';
+import { SES_MODULE_OPTIONS, SesModuleOptions } from './ses.struct';
 import * as ses from 'node-ses';
 
 export interface SesEmailOptions {
@@ -15,18 +15,20 @@ export interface SesEmailOptions {
 
 @Injectable()
 export class SesService {
-  private readonly ses;
-  constructor() // @Inject(SECRET) private readonly secret, // @Inject(REGION) private readonly region, // @Inject(AKI_KEY) private readonly apiKey,
-  {
-    const apiKey = 'AKIA3ZSOCVIUBBEA4D2M';
-    const region = 'us-west-2';
-    const secret = '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';
+  constructor(
+    @Inject(SES_MODULE_OPTIONS) private readonly options: SesModuleOptions
+  ) {
     this.ses = ses.createClient({
-      key: apiKey,
-      amazon: `https://email.${region}.amazonaws.com`,
-      secret,
+      amazon: `https://email.${options.region}.amazonaws.com`,
+      key: options.akiKey,
+      secret: options.secret,
     });
+
+    console.log(`[SesService constructor] `);
+    console.log(`[SesService] SesService SES client: ${JSON.stringify(this.ses)}`);
   }
+
+  private readonly ses;
 
   public sendEmail(emailOptions: SesEmailOptions): Promise<boolean> {
     const email = {
