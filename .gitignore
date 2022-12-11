@@ -91,11 +91,10 @@ buck-out/
 /
 
 ## Nested node_modules
-
 node_modules/
-development.env
 
-swagger-spec.json
+# Project dirs
+/apps/mediashare
 libs/misc
-
 /development.env
+swagger-spec.json
