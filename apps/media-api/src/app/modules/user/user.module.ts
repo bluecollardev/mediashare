@@ -32,7 +32,7 @@ import { UserConnectionService } from '@api-modules/user-connection/user-connect
             secret: configService.get('sesModuleSecret'),
           };
 
-          console.log(`[SesModule.registerAsync useFactory] ${JSON.stringify(sesConfig, null, 2)}`);
+          console.log(`[UserModule.registerAsync useFactory] ${JSON.stringify(sesConfig, null, 2)}`);
           return sesConfig;
         },
       },
