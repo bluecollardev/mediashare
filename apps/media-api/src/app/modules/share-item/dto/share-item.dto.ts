@@ -1,3 +1,4 @@
+import { UserConnectionDto } from '@api-modules/user-connection/dto/user-connection.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { MediaItemResponseDto } from '@api-modules/media-item/dto/media-item-response.dto';
 import { PlaylistResponseDto } from '@api-modules/playlist/dto/playlist-response.dto';
@@ -18,5 +19,5 @@ export class ShareItemsDto {
 
 export class ShareItemsByUserIdDto {
   @ApiProperty({ name: 'shareItemByUserIds', type: () => String, isArray: true })
-  shareItemByUserIds: string[];
+  shareItemByUserIds: UserConnectionDto[];
 }
