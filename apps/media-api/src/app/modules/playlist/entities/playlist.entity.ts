@@ -8,10 +8,11 @@ import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY } from '@cor
 
 @Entity('playlist')
 export class Playlist extends BcEntity implements PlaylistInterface {
+
   @ApiObjectId()
-  @Column({ nullable: false, unique: false })
-  @Index('userId', { unique: false })
-  userId: ObjectId;
+  @Column({ nullable: true })
+  @Index('cloneOf', { unique: false })
+  cloneOf?: ObjectId;
 
   @Column({ nullable: true, type: 'text' })
   @ApiString()

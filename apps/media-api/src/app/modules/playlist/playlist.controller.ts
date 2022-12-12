@@ -58,7 +58,7 @@ export class PlaylistController {
   @ApiBearerAuth()
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() userId: string) {
-    return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, createdBy: ObjectIdGuard(userId) });
+    return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, createdBy: ObjectIdGuard(userId), cloneOf: createPlaylistDto?.cloneOf ? createPlaylistDto.cloneOf : undefined });
   }
 
   @Put(RouteTokens.PLAYLIST_ID)

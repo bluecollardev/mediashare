@@ -107,6 +107,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
             newRoot: {
               $mergeObjects: [
                 {
+                  playlistId: '$playlistId',
                   shareId: '$_id',
                   sharedWith: '$sharedWith.username',
                   sharedWithUserId: '$sharedWith._id',
@@ -197,6 +198,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
             newRoot: {
               $mergeObjects: [
                 {
+                  playlistId: '$playlistId',
                   shareId: '$_id',
                   sharedWith: '$sharedWith.username',
                   sharedWithUserId: '$sharedWith._id',
@@ -222,7 +224,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   async removeShareItems(shareItemIds: IdType[]): Promise<DeleteWriteOpResultObject> {
     const shareItemObjectIds = shareItemIds.map((id: string) => ObjectIdGuard(id));
     return await this.repository.deleteMany({
-      _id: { $in: shareItemObjectIds }
+      _id: { $in: shareItemObjectIds },
     });
   }
 
@@ -235,24 +237,20 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
           throw new Error('userId and connectionId are both required parameters');
         }
 
-        const query = [{
-          $match: {
-            $or: [
-              {
-                $and: [
-                  { createdBy: ObjectIdGuard(userId) },
-                  { userId: ObjectIdGuard(connectionId) }
-                ]
-              },
-              {
-                $and: [
-                  { createdBy: ObjectIdGuard(connectionId) },
-                  { userId: ObjectIdGuard(userId) }
-                ]
-              }
-            ],
-          }
-        }];
+        const query = [
+          {
+            $match: {
+              $or: [
+                {
+                  $and: [{ createdBy: ObjectIdGuard(userId) }, { userId: ObjectIdGuard(connectionId) }],
+                },
+                {
+                  $and: [{ createdBy: ObjectIdGuard(connectionId) }, { userId: ObjectIdGuard(userId) }],
+                },
+              ],
+            },
+          },
+        ];
         const shareItems = await this.repository.aggregate(query).toArray();
         shareItemsToRemove.push(...shareItems);
       });

@@ -4,7 +4,6 @@ import { PlaylistCategoryType } from '../../';
 
 export interface PlaylistInterface extends BcBaseInterface {
   title: string;
-  userId: IdType;
-
   category: PlaylistCategoryType;
+  cloneOf?: IdType;
 }
