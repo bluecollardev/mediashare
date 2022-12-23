@@ -1,4 +1,5 @@
-import { Controller, Body, UseGuards, HttpCode, HttpStatus, UnauthorizedException, Get, Post, Put, Req, Res, Delete, Query } from '@nestjs/common';
+import { UserConnection } from '@api-modules/user-connection/entities/user-connection.entity';
+import { Controller, Body, UseGuards, HttpCode, HttpStatus, UnauthorizedException, Get, Post, Put, Req, Res, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StringIdGuard } from '@util-lib';
 import { Response, Request } from 'express';
@@ -66,7 +67,7 @@ export class UserController {
       email: InviteDto.email,
       username: InviteDto.username,
       role: 'subscriber',
-      imageSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/assets/default-user.png',
+      imageSrc: `${process.env['AWS_URL']}/assets/default-user.png`,
     });
     const profile = await this.userService.getUserById(StringIdGuard(newUser._id));
     return res.send(profile);
@@ -176,46 +177,62 @@ export class UserController {
   @Post('send-email')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiQuery({ name: 'email', required: true })
-  @ApiQuery({ name: 'userId', required: true })
-  async sendEmail(@Query('email') email, @Query('userId') userId, @Res() res: Response) {
+  @ApiQuery({ name: 'userId', required: true, description: 'The userId of the currently logged in user' })
+  @ApiQuery({ name: 'email', required: true, description: 'The email address to send the invitation to' })
+  async sendEmail(@Query('userId') userId, @Query('email') email, @Res() res: Response) {
     try {
       if (!userId || !email) {
         return res.status(HttpStatus.BAD_REQUEST).json({
           statusCode: 400,
         });
       }
+
       // Does email already exist?
-      const invitees = await this.userConnectionService.userEmailAlreadyExists(email);
-      if (Array.isArray(invitees) && invitees.length > 0) {
-        const createConnection = (invitee) => async () => {
-          const userConnection = await this.userConnectionService.createUserConnection({ userId, connectionId: invitee._id.toString() });
-          console.log('Created new user connection');
-          console.log(userConnection);
+      // Note that we can have multiple matching users to a single email, as a single user can currently have
+      // multiple accounts with different user names corresponding to a single email address.
+      // We do this so that I can personally test this with multiple accounts, I don't want to have to create a bunch of
+      // fake email addresses to test when I can just use my own existing accounts.
+      // In the future, we'll probably want to only allow a single account per email. To do this updates are also required
+      // in our AWS Cognito user pool.
+      const matchingUsers = await this.userConnectionService.findUsersByEmail(email);
+      const hasMatchingUsers = Array.isArray(matchingUsers) && matchingUsers.length > 0;
+
+        const emailSubject = process.env['INVITATION_EMAIL_SUBJECT'];
+        const emailFrom = process.env['INVITATION_EMAIL_SENDER'];
+
+      const createAndSendEmail = async (email) => {
+        const currentUser: ProfileDto = await this.userService.getUserById(userId);
+        const mail = {
+          to: email,
+          subject: emailSubject,
+          from: emailFrom,
+          html: renderInvitationEmailTemplate(currentUser, email),
         };
+        console.log(`Sending email invitation on behalf on ${currentUser.email} [${userId}] to: ${email} `);
+        return await this.userConnectionService.sendEmail(mail);
+      };
 
-        const createConnections: Promise<void>[] = [];
-        invitees.filter((invitee) => userId !== invitee._id.toString()).forEach((invitee) => createConnections.push(createConnection(invitee)()));
+      // Does the user receiving the invitation already have an account?
+      if (hasMatchingUsers) {
+        // If matching users we need to send an email invitation
+        // Get all existing user connections
+        const currentUserConnections = await this.userConnectionService.getUserConnections(userId)
+        // For each matching user account, send out an email invitation
+        const invitationsToSend = matchingUsers
+          // A user cannot be both the sender and the recipient of an invitation
+          // TODO: Throw some kind of validation error if this occurs so the user can react to it
+          .filter((invitee) => userId !== invitee._id.toString())
+          // Remove any recipients that are already connections
+          // .filter((invitee) => !currentUserConnections.find((connection) => connection.connectionId === invitee._id))
+          // And send out the emails
+          .map((invitee) => createAndSendEmail(invitee.email))
 
-        if (invitees.length > 0) {
-          console.log('Email exists in the system, creating user connections');
-        }
-
-        await Promise.all(createConnections);
+        await Promise.all(invitationsToSend);
         return res.status(HttpStatus.OK).json({
           statusCode: 200,
         });
       } else {
-        const user: ProfileDto = await this.userService.getUserById(userId);
-        const mail = {
-          to: email,
-          subject: process.env['INVITATION_EMAIL_SUBJECT'],
-          // Create new identity on AWS SES
-          from: process.env['INVITATION_EMAIL_SENDER'],
-          html: renderInvitationEmailTemplate(user),
-        };
-        console.log(`Sending email: ${email} ${userId}`);
-        await this.userConnectionService.sendEmail(mail);
+        await createAndSendEmail(email);
         return res.status(HttpStatus.OK).json({
           statusCode: 200,
         });

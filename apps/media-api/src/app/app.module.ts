@@ -18,6 +18,7 @@ import { ViewsModule } from '@api-modules/views/views.module';
 import { LikesModule } from '@api-modules/likes/likes.module';
 import { TagModule } from '@api-modules/tag/tag.module';
 import { UserConnectionModule } from '@api-modules/user-connection/user-connection.module';
+import { ActionsModule } from '@api-modules/actions/actions.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { UserConnectionModule } from '@api-modules/user-connection/user-connecti
     LikesModule,
     TagModule,
     UserConnectionModule,
+    ActionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

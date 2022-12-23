@@ -33,6 +33,10 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
 
   async createUserConnection({ userId, connectionId }: UserConnectionDto): Promise<UserConnection> {
     try {
+      if (userId === connectionId) {
+        throw new Error(`${this.constructor.name}.createUserConnection userId cannot be the same as connectionId`)
+      }
+
       const userObjectId = ObjectIdGuard(userId);
       const connectionObjectId = ObjectIdGuard(connectionId);
 
@@ -119,7 +123,7 @@ export class UserConnectionService extends DataService<UserConnection, MongoRepo
     return await this.sesService.sendEmail(mail);
   }
 
-  async userEmailAlreadyExists(email: string) {
-    return await this.userService.findAllByQuery({ where: { email: email } });
+  async findUsersByEmail(email: string) {
+    return await this.userService.findAllByQuery({ where: { email: email.toLowerCase() } });
   }
 }
