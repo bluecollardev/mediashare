@@ -3,7 +3,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { DeepPartial, FindManyOptions, FindOneOptions, MongoRepository } from 'typeorm';
 import { SearchParameters } from '@mediashare/shared';
 import { BcBaseEntity } from '../entities/base.entity';
-import { ObjectIdGuard, StringIdGuard } from '@util-lib';
+import { ObjectIdGuard } from '@util-lib';
 import { IdType } from '@core-lib';
 import { clone } from 'remeda';
 
@@ -50,9 +50,8 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
    */
   async findOne(id: IdType, opts: FindOneOptions | undefined = undefined): Promise<E> {
     this.logger.info(`${this.constructor.name}findOne props`, id);
-    const _id = StringIdGuard(id);
     try {
-      const document = await this.repository.findOneBy({ _id });
+      const document = await this.repository.findOneBy({ _id: ObjectIdGuard(id) });
       this.logger.info(`${this.constructor.name} findOne result`, document);
       return clone(document);
     } catch (error) {
