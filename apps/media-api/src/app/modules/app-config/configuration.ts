@@ -27,9 +27,12 @@ export const appValidationSchema = Joi.object({
   SES_MODULE_REGION: Joi.string().default(''),
   SES_MODULE_AKI_KEY: Joi.string().default(''),
   SES_MODULE_SECRET: Joi.string().default(''),
+  EMAIL_UNSUBSCRIBE_URL: Joi.string().default(''),
+  EMAIL_PREFERENCES_URL: Joi.string().default(''),
   INVITATION_REQUEST_URL: Joi.string().default(''),
   INVITATION_EMAIL_SENDER: Joi.string().default(''),
   INVITATION_EMAIL_SUBJECT: Joi.string().default(''),
+  ACCEPT_INVITATION_DEEPLINK: Joi.string().default(''),
 });
 
 // TODO: Use these app envs, instead of process.env everywhere if possible...
@@ -52,7 +55,10 @@ export default registerAs('app', () => ({
   sesModuleRegion: process.env.SES_MODULE_REGION,
   sesModuleAkiKey: process.env.SES_MODULE_AKI_KEY,
   sesModuleSecret: process.env.SES_MODULE_SECRET,
-  invitationAppUrl: process.env.INVITATION_REQUEST_URL,
-  invitationEmailSender: process.env.INVITATION_EMAIL_SENDER,
+  emailUnsubscribeUrl: process.env.EMAIL_UNSUBSCRIBE_URL,
+  emailPreferencesUrl: process.env.EMAIL_PREFERENCES_URL,
+  invitationRequestUrl: process.env.INVITATION_REQUEST_URL,
   invitationEmailSubject: process.env.INVITATION_EMAIL_SUBJECT,
+  invitationEmailSender: process.env.INVITATION_EMAIL_SENDER,
+  acceptInvitationDeeplink: process.env.ACCEPT_INVITATION_DEEPLINK,
 }));
