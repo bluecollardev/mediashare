@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtDecodeMiddleware } from '@api-core/middleware/jwt-decode.middleware';
 import { AppConfigModule } from '@api-modules/app-config/app-config.module';
+import { AppConfigService } from '@api-modules/app-config/app-config.provider';
 import { AuthModule } from '@api-modules/auth/auth.module';
 import { User } from '@api-modules/user/entities/user.entity';
 import { UserService } from '@api-modules/user/user.service';
@@ -16,7 +17,7 @@ import { MediaItem } from '@api-modules/media-item/entities/media-item.entity';
 @Module({
   imports: [AppConfigModule, TypeOrmModule.forFeature([User, Playlist, MediaItem, PlaylistItem]), ShareItemModule, AuthModule],
   controllers: [PlaylistController],
-  providers: [PlaylistService, PlaylistItemService, UserService],
+  providers: [PlaylistService, PlaylistItemService, UserService, AppConfigService],
 })
 export class PlaylistModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectIdGuard } from '@util-lib';
-import { IdType } from '@core-lib';
+import { IdType, VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '@core-lib';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
 import { FilterableDataService } from '@api';
+import { AppConfigService } from '@api-modules/app-config/app-config.provider';
 import { UserService } from '@api-modules/user/user.service';
 import { PlaylistItemService } from '@api-modules/playlist-item/playlist-item.service';
 import { Playlist } from './entities/playlist.entity';
@@ -15,11 +15,11 @@ import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { SearchParameters } from '@mediashare/shared';
 import { PlaylistItem } from '@api-modules/playlist-item/entities/playlist-item.entity';
 
-type CreatePlaylistParameters = {
+/* type CreatePlaylistParameters = {
   playlistId: ObjectId;
   items: string[];
   createdBy: ObjectId;
-};
+}; */
 
 @Injectable()
 export class PlaylistService extends FilterableDataService<Playlist, MongoRepository<Playlist>> {
@@ -27,7 +27,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
     @InjectRepository(Playlist)
     repository: MongoRepository<Playlist>,
     logger: PinoLogger,
-    private configService: ConfigService,
+    private configService: AppConfigService,
     private userService: UserService,
     private playlistItemService: PlaylistItemService
   ) {
@@ -128,14 +128,6 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
       if (this.useDistributedSearch) {
         throw new Error('Elastic search has not been implemented');
       }
-      // Search all fields in the index
-      aggregateQuery = aggregateQuery.concat([
-        {
-          $match: {
-            $text: { $search: query },
-          },
-        },
-      ]);
     }
 
     // Match by user ID if it's available as it's indexed and this is the best way to reduce the number of results early
@@ -143,7 +135,24 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
       aggregateQuery = aggregateQuery.concat([
         {
           $match: {
-            createdBy: ObjectIdGuard(userId),
+            $text: { $search: query },
+            $and: [{ createdBy: ObjectIdGuard(userId) }],
+          },
+        },
+      ]);
+    } else {
+      // Only return search results that are app subscriber content (for paying app subscribers), shared content from a user's network, or public content
+      const appSubscriberContentUserIds = this.configService.get('appSubscriberContentUserIds');
+      console.log('appSubscriberContentUserIds');
+      console.log(appSubscriberContentUserIds);
+      aggregateQuery = aggregateQuery.concat([
+        {
+          $match: {
+            $text: { $search: query },
+            $and: [
+              { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+              { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+            ],
           },
         },
       ]);
@@ -179,7 +188,6 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
     }
 
     aggregateQuery = aggregateQuery.concat([...this.buildFields()]);
-
     if (query) {
       aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
     }

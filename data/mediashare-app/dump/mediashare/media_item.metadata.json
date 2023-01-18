@@ -1,1 +1,25 @@
-{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"mediashare.media_item"},{"v":{"$numberInt":"2"},"key":{"userId":{"$numberInt":"1"}},"name":"userId","ns":"mediashare.media_item","background":false,"sparse":false},{"v":{"$numberInt":"2"},"key":{"_fts":"text","_ftsx":{"$numberInt":"1"}},"name":"title_text","language_override":"language","ns":"mediashare.media_item","weights":{"title":{"$numberInt":"1"}},"default_language":"english","textIndexVersion":{"$numberInt":"3"}}],"uuid":"db17b2eac1fb49f298bb74242a39f3a7"}
+{
+  "options": {},
+  "indexes": [
+    { "v": { "$numberInt": "2" }, "key": { "_id": { "$numberInt": "1" } }, "name": "_id_", "ns": "mediashare.media_item" },
+    {
+      "v": { "$numberInt": "2" },
+      "key": { "userId": { "$numberInt": "1" } },
+      "name": "userId",
+      "ns": "mediashare.media_item",
+      "background": false,
+      "sparse": false
+    },
+    {
+      "v": { "$numberInt": "2" },
+      "key": { "_fts": "text", "_ftsx": { "$numberInt": "1" } },
+      "name": "title_text",
+      "language_override": "language",
+      "ns": "mediashare.media_item",
+      "weights": { "title": { "$numberInt": "1" } },
+      "default_language": "english",
+      "textIndexVersion": { "$numberInt": "3" }
+    }
+  ],
+  "uuid": "db17b2eac1fb49f298bb74242a39f3a7"
+}

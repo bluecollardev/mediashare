@@ -63,8 +63,15 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
   }
 
   search({ userId, query, tags }: SearchParameters) {
-    const pipeline = [...this.buildAggregateQuery({ userId, query, tags }), ...this.buildFields(), this.replaceRoot()];
+    const pipeline = [...this.buildAggregateQuery({ userId, query, tags }), ...this.buildFields(), ...this.buildTextScore(), this.replaceRoot()];
     return this.repository.aggregate(pipeline).toArray();
+  }
+
+  protected buildTextScore() {
+    return [
+      { $addFields: { score: { $meta: 'textScore' } } },
+      { $sort: { score: { $meta: 'textScore' } } },
+    ]
   }
 
   protected abstract buildAggregateQuery(params: SearchParameters): any[];

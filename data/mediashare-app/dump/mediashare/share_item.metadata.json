@@ -1,1 +1,31 @@
-{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"mediashare.share_item"},{"v":{"$numberInt":"2"},"key":{"playlistId":{"$numberInt":"1"}},"name":"playlistId","background":false,"sparse":false,"ns":"mediashare.share_item"},{"v":{"$numberInt":"2"},"key":{"userId":{"$numberInt":"1"}},"name":"userId","background":false,"sparse":false,"ns":"mediashare.share_item"},{"v":{"$numberInt":"2"},"key":{"mediaId":{"$numberInt":"1"}},"name":"mediaId","background":false,"sparse":false,"ns":"mediashare.share_item"}],"uuid":"36c3a64a79c5417fbf7d302146a7b302"}
+{
+  "options": {},
+  "indexes": [
+    { "v": { "$numberInt": "2" }, "key": { "_id": { "$numberInt": "1" } }, "name": "_id_", "ns": "mediashare.share_item" },
+    {
+      "v": { "$numberInt": "2" },
+      "key": { "playlistId": { "$numberInt": "1" } },
+      "name": "playlistId",
+      "background": false,
+      "sparse": false,
+      "ns": "mediashare.share_item"
+    },
+    {
+      "v": { "$numberInt": "2" },
+      "key": { "userId": { "$numberInt": "1" } },
+      "name": "userId",
+      "background": false,
+      "sparse": false,
+      "ns": "mediashare.share_item"
+    },
+    {
+      "v": { "$numberInt": "2" },
+      "key": { "mediaId": { "$numberInt": "1" } },
+      "name": "mediaId",
+      "background": false,
+      "sparse": false,
+      "ns": "mediashare.share_item"
+    }
+  ],
+  "uuid": "36c3a64a79c5417fbf7d302146a7b302"
+}
