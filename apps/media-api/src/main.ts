@@ -3,9 +3,13 @@
  * This is only a minimal backend to get started.
  */
 
+import express from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as http from 'http';
+import * as https from 'https';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app/app.module';
 
@@ -19,12 +23,22 @@ import * as session from 'express-session';
 import MongoStore from 'connect-mongo';
 import * as compression from 'compression';
 import * as bodyParser from 'body-parser';
+import { readFileSync } from 'fs';
 
 const port = process.env.PORT || 3456;
 
 async function bootstrap() {
   try {
-    const app = await NestFactory.create(AppModule);
+    const httpsOptions = {
+      key: process.env.HTTPS_KEY || readFileSync(`${__dirname}/../certs/key.pem`),
+      cert: process.env.HTTPS_CERT || readFileSync(`${__dirname}/../certs/cert.pem`),
+    };
+
+    const server = express();
+    const app = await NestFactory.create(
+      AppModule,
+      new ExpressAdapter(server),
+    );
 
     const appConfig: AppConfigService = app.get(AppConfigService);
 
@@ -48,7 +62,7 @@ async function bootstrap() {
       appConfig.get('env') === 'development',
     ] as const;
 
-    app.setGlobalPrefix(globalPrefix);
+    app.setGlobalPrefix(globalPrefix, { exclude: ['/.well-known/apple-app-site-association'] });
 
     /* PASSPORT & SESSION */
 
@@ -92,9 +106,11 @@ async function bootstrap() {
     }
 
     app.enableCors();
-    await app.listen(port, () => {
-      console.log(`Listening at ${host}:${port}/${globalPrefix}`);
-    });
+
+    http.createServer(server).listen(port);
+    https.createServer(httpsOptions, server).listen(443);
+    await app.init();
+    console.log(`Listening at ${host}:${port}/${globalPrefix}`);
   } catch (err) {
     console.error('API bootstrapping failed!');
     throw err;

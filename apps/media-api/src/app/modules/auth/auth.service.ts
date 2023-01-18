@@ -21,7 +21,7 @@ export class AuthService {
 
   decodeIdToken(jwt: string): any {
     return jwtoken.verify(jwt, idKey, { algorithms: ['RS256'] }, function (err, decodedToken) {
-      console.log('decodedToken ', decodedToken);
+      // console.log('decodedToken ', decodedToken);
       const { email, phone_number } = decodedToken as any;
       return { email, phone_number };
     });

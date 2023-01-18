@@ -24,8 +24,8 @@ export class SesService {
       secret: options.secret,
     });
 
-    console.log(`[SesService constructor] `);
-    console.log(`[SesService] SesService SES client: ${JSON.stringify(this.ses)}`);
+    // console.log(`[SesService constructor] `);
+    // console.log(`[SesService] SesService SES client: ${JSON.stringify(this.ses)}`);
   }
 
   private readonly ses;
