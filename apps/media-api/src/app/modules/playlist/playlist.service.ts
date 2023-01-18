@@ -42,10 +42,10 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
   }
 
   async createPlaylistWithItems(dto: CreatePlaylistDto & { createdBy: ObjectId }) {
-    const { title, category, description, imageSrc, mediaIds, tags, createdBy, cloneOf } = dto;
+    const { title, visibility, description, imageSrc, mediaIds, tags, createdBy, cloneOf } = dto;
     return await this.create({
       title,
-      category,
+      visibility,
       description,
       imageSrc,
       tags,
@@ -222,7 +222,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
               title: '$title',
               description: '$description',
               imageSrc: '$imageSrc',
-              category: '$category',
+              visibility: '$visibility',
               tags: '$tags',
               mediaItems: '$mediaItems',
               playlistItems: '$playlistItems',

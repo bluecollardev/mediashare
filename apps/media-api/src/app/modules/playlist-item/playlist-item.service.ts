@@ -144,7 +144,7 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
               sortIndex: '$sortIndex',
               uri: '$uri',
               thumbnail: '$thumbnail',
-              // category: '$category',
+              // visibility: '$visibility',
               tags: '$tags',
               // shareCount: { $size: '$shareItems' },
               // likesCount: { $size: '$likeItems' },

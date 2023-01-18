@@ -141,7 +141,7 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
               description: '$description',
               uri: '$uri',
               thumbnail: '$thumbnail',
-              category: '$category',
+              visibility: '$visibility',
               tags: '$tags',
               // shareCount: { $size: '$shareItems' },
               // likesCount: { $size: '$likeItems' },

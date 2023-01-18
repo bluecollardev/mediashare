@@ -4,11 +4,10 @@ import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
 import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
-import { PlaylistCategoryType, PlaylistInterface, PLAYLIST_CATEGORY } from '@core-lib';
+import { PlaylistVisibilityType, PlaylistInterface, PLAYLIST_VISIBILITY } from '@core-lib';
 
 @Entity('playlist')
 export class Playlist extends BcEntity implements PlaylistInterface {
-
   @ApiObjectId()
   @Column({ nullable: true })
   @Index('cloneOf', { unique: false })
@@ -31,8 +30,8 @@ export class Playlist extends BcEntity implements PlaylistInterface {
   mediaIds: ObjectId[];
 
   @Column({ nullable: true })
-  @ApiProperty({ enum: PLAYLIST_CATEGORY, name: 'category', enumName: 'PlaylistCategoryType', required: false })
-  category: PlaylistCategoryType;
+  @ApiProperty({ enum: PLAYLIST_VISIBILITY, name: 'visibility', enumName: 'PlaylistVisibilityType', required: false })
+  visibility: PlaylistVisibilityType;
 
   @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
   @Column({ name: 'tags', array: true, nullable: true })

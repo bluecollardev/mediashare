@@ -5,7 +5,7 @@ import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
 import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
-import { MediaCategoryType, MEDIA_CATEGORY } from '@core-lib';
+import { MediaVisibilityType, MEDIA_VISIBILITY } from '@core-lib';
 
 @Entity('media_item')
 export class MediaItem extends BcEntity {
@@ -45,8 +45,8 @@ export class MediaItem extends BcEntity {
   isPlayable: boolean;
 
   @Column({ nullable: true })
-  @ApiProperty({ enum: MEDIA_CATEGORY, name: 'category', enumName: 'MediaCategoryType', required: false })
-  category: MediaCategoryType;
+  @ApiProperty({ enum: MEDIA_VISIBILITY, name: 'visibility', enumName: 'MediaVisibilityType', required: false })
+  visibility: MediaVisibilityType;
 
   @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
   @Column({ name: 'tags', array: true, nullable: true })

@@ -35,10 +35,7 @@ async function bootstrap() {
     };
 
     const server = express();
-    const app = await NestFactory.create(
-      AppModule,
-      new ExpressAdapter(server),
-    );
+    const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
     const appConfig: AppConfigService = app.get(AppConfigService);
 

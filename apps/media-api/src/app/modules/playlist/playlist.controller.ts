@@ -5,7 +5,7 @@ import { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
-import { PLAYLIST_CATEGORY } from '@core-lib';
+import { PLAYLIST_VISIBILITY } from '@core-lib';
 import { CreateDto } from '@api-core/decorators/create-dto.decorator';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import { UserService } from '@api-modules/user/user.service';
@@ -26,9 +26,9 @@ import { ShareItem } from '@api-modules/share-item/entities/share-item.entity';
 export class PlaylistController {
   constructor(private userService: UserService, private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
 
-  @Get('categories')
-  getCategories() {
-    return { categories: PLAYLIST_CATEGORY };
+  @Get('visibilities')
+  getVisibilities() {
+    return { visibilities: PLAYLIST_VISIBILITY };
   }
 
   @Get(RouteTokens.PLAYLIST_ID)
@@ -58,7 +58,11 @@ export class PlaylistController {
   @ApiBearerAuth()
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUserId() userId: string) {
-    return await this.playlistService.createPlaylistWithItems({ ...createPlaylistDto, createdBy: ObjectIdGuard(userId), cloneOf: createPlaylistDto?.cloneOf ? createPlaylistDto.cloneOf : undefined });
+    return await this.playlistService.createPlaylistWithItems({
+      ...createPlaylistDto,
+      createdBy: ObjectIdGuard(userId),
+      cloneOf: createPlaylistDto?.cloneOf ? createPlaylistDto.cloneOf : undefined,
+    });
   }
 
   @Put(RouteTokens.PLAYLIST_ID)

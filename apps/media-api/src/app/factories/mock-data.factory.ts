@@ -84,7 +84,7 @@ export class UserFactory extends DataFn {
       title: Faker.lorem.sentence(),
       isPlayable: Faker.random.boolean(),
       description: Faker.lorem.lines(),
-      category: 'paid',
+      visibility: 'private',
       tags: [],
       key: '',
       thumbnail: '',
