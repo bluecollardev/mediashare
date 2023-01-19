@@ -143,12 +143,15 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
     } else {
       // Only return search results that are app subscriber content (for paying app subscribers), shared content from a user's network, or public content
       const appSubscriberContentUserIds = this.configService.get('appSubscriberContentUserIds');
-      console.log('appSubscriberContentUserIds');
-      console.log(appSubscriberContentUserIds);
       aggregateQuery = aggregateQuery.concat([
         {
-          $match: {
+          $match: query ? {
             $text: { $search: query },
+            $and: [
+              { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+              { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+            ],
+          } : {
             $and: [
               { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
               { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
@@ -187,9 +190,8 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
       }
     }
 
-    aggregateQuery = aggregateQuery.concat([...this.buildFields()]);
     if (query) {
-      aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
+      aggregateQuery = aggregateQuery.concat(this.buildTextScore());
     }
 
     return aggregateQuery;

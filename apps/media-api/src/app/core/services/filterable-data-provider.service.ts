@@ -2,7 +2,6 @@ import { IdType } from '@core-lib';
 import { Injectable } from '@nestjs/common';
 import { ObjectIdGuard } from '@util-lib';
 import { PinoLogger } from 'nestjs-pino';
-import { pipeline } from 'stream';
 import { MongoRepository } from 'typeorm';
 import { DataService } from '@api-core/services/data-provider.service';
 import { SearchParameters } from '@mediashare/shared';
@@ -63,7 +62,7 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
   }
 
   search({ userId, query, tags }: SearchParameters) {
-    const pipeline = [...this.buildAggregateQuery({ userId, query, tags }), ...this.buildFields(), ...this.buildTextScore(), this.replaceRoot()];
+    const pipeline = [...this.buildAggregateQuery({ userId, query, tags }), ...this.buildFields(), this.replaceRoot()];
     return this.repository.aggregate(pipeline).toArray();
   }
 
