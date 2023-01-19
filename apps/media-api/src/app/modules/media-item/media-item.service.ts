@@ -66,8 +66,13 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
       const appSubscriberContentUserIds = this.configService.get('appSubscriberContentUserIds');
       aggregateQuery = aggregateQuery.concat([
         {
-          $match: {
+          $match: query ? {
             $text: { $search: query },
+            $and: [
+              { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+              { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+            ],
+          } : {
             $and: [
               { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
               { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
@@ -106,10 +111,8 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
       }
     }
 
-    aggregateQuery = aggregateQuery.concat([...this.buildFields()]);
-
     if (query) {
-      aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
+      aggregateQuery = aggregateQuery.concat(this.buildTextScore());
     }
 
     return aggregateQuery;
