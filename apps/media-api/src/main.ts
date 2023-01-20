@@ -1,8 +1,3 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import express from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -13,26 +8,29 @@ import * as https from 'https';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app/app.module';
 
-import { writeFileSync } from 'fs';
+import {  } from 'fs';
 
-import * as passport from 'passport';
 import { AppConfigService } from '@api-modules/app-config/app-config.provider';
 import { GlobalExceptionFilter } from '@api-core/exception-filters/global-exception.filter';
-import * as session from 'express-session';
-// TODO: We should be able to create a connection using TypeORM no? If so, remove this!
 import MongoStore from 'connect-mongo';
+import * as session from 'express-session';
 import * as compression from 'compression';
+import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 
 const port = process.env.PORT || 3456;
+const withHttps = process.env.HTTPS === 'true';
 
 async function bootstrap() {
   try {
-    const httpsOptions = {
-      key: process.env.HTTPS_KEY || readFileSync(`${__dirname}/../certs/key.pem`),
-      cert: process.env.HTTPS_CERT || readFileSync(`${__dirname}/../certs/cert.pem`),
-    };
+    let httpsOptions;
+    if (withHttps) {
+      httpsOptions = {
+        key: process.env.HTTPS_KEY || readFileSync(`${__dirname}/../certs/key.pem`),
+        cert: process.env.HTTPS_CERT || readFileSync(`${__dirname}/../certs/cert.pem`),
+      };
+    }
 
     const server = express();
     const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
@@ -75,7 +73,6 @@ async function bootstrap() {
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
-
     SwaggerModule.setup(globalPrefix, app, document, { explorer: isDev });
 
     app.use(passport.initialize());
@@ -91,7 +88,6 @@ async function bootstrap() {
           dbName,
           collectionName,
         }),
-
         secret,
         resave: false,
       })
@@ -105,7 +101,9 @@ async function bootstrap() {
     app.enableCors();
 
     http.createServer(server).listen(port);
-    https.createServer(httpsOptions, server).listen(443);
+    if (withHttps) {
+      https.createServer(httpsOptions, server).listen(443);
+    }
     await app.init();
     console.log(`Listening at ${host}:${port}/${globalPrefix}`);
   } catch (err) {
