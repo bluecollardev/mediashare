@@ -2,7 +2,7 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { ApiString, ApiLongString, ApiTextString, ApiUriString, ApiDecoratorOptions } from '@mediashare/shared';
 import { IsIn } from 'class-validator';
 import { MediaItem } from '../entities/media-item.entity';
-import { MediaCategoryType, MEDIA_CATEGORY } from '@core-lib';
+import { MediaVisibilityType, MEDIA_VISIBILITY } from '@core-lib';
 import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
 
 const OPTIONAL_MEDIA_DTO_KEYS = ['_id', 'createdAt', 'updatedDate', 'userId', 'createdBy'] as const;
@@ -20,9 +20,9 @@ export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_D
   @ApiTextString()
   description: string;
 
-  @ApiProperty({ required: true, enum: MEDIA_CATEGORY })
-  @IsIn(MEDIA_CATEGORY)
-  category: MediaCategoryType;
+  @ApiProperty({ required: true, enum: MEDIA_VISIBILITY })
+  @IsIn(MEDIA_VISIBILITY)
+  visibility: MediaVisibilityType;
 
   @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
   tags: TagKeyValue[];

@@ -33,6 +33,7 @@ export const appValidationSchema = Joi.object({
   INVITATION_EMAIL_SENDER: Joi.string().default(''),
   INVITATION_EMAIL_SUBJECT: Joi.string().default(''),
   ACCEPT_INVITATION_DEEPLINK: Joi.string().default(''),
+  APP_SUBSCRIBER_CONTENT_USER_IDS: Joi.string().default(''),
 });
 
 // TODO: Use these app envs, instead of process.env everywhere if possible...
@@ -61,4 +62,6 @@ export default registerAs('app', () => ({
   invitationEmailSubject: process.env.INVITATION_EMAIL_SUBJECT,
   invitationEmailSender: process.env.INVITATION_EMAIL_SENDER,
   acceptInvitationDeeplink: process.env.ACCEPT_INVITATION_DEEPLINK,
+  appSubscriberContentUserIds: process.env.APP_SUBSCRIBER_CONTENT_USER_IDS
+    ? process.env.APP_SUBSCRIBER_CONTENT_USER_IDS.split(',') : [],
 }));

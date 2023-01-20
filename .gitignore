@@ -98,3 +98,5 @@ node_modules/
 libs/misc
 /development.env
 swagger-spec.json
+/certs/*
+!/certs/.gitkeep

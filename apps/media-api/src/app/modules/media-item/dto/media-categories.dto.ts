@@ -1,7 +1,7 @@
 import { ApiArray, ApiDecoratorOptions } from '@mediashare/shared';
-import { MediaCategoryType } from '@core-lib';
+import { MediaVisibilityType } from '@core-lib';
 
-export class MediaCategoryDto {
+export class MediaVisibilityDto {
   @ApiArray(<ApiDecoratorOptions>{ type: Array })
-  categories: MediaCategoryType[];
+  visibilities: MediaVisibilityType[];
 }

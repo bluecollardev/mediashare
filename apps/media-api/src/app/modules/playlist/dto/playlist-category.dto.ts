@@ -1,7 +1,7 @@
 import { ApiArray, ApiDecoratorOptions } from '@mediashare/shared';
-import { PlaylistCategoryType } from '@core-lib';
+import { PlaylistVisibilityType } from '@core-lib';
 
-export class PlaylistCategoryDto {
+export class PlaylistVisibilityDto {
   @ApiArray(<ApiDecoratorOptions>{ type: Array })
-  categories: PlaylistCategoryType[];
+  visibilities: PlaylistVisibilityType[];
 }

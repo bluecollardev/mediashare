@@ -15,17 +15,15 @@ export interface SesEmailOptions {
 
 @Injectable()
 export class SesService {
-  constructor(
-    @Inject(SES_MODULE_OPTIONS) private readonly options: SesModuleOptions
-  ) {
+  constructor(@Inject(SES_MODULE_OPTIONS) private readonly options: SesModuleOptions) {
     this.ses = ses.createClient({
       amazon: `https://email.${options.region}.amazonaws.com`,
       key: options.akiKey,
       secret: options.secret,
     });
 
-    console.log(`[SesService constructor] `);
-    console.log(`[SesService] SesService SES client: ${JSON.stringify(this.ses)}`);
+    // console.log(`[SesService constructor] `);
+    // console.log(`[SesService] SesService SES client: ${JSON.stringify(this.ses)}`);
   }
 
   private readonly ses;

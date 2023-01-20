@@ -1,3 +1,5 @@
+import { AppConfigService } from '@api-modules/app-config/app-config.provider';
+import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '@core-lib';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectIdGuard } from '@util-lib';
@@ -13,8 +15,8 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
   constructor(
     @InjectRepository(MediaItem)
     repository: MongoRepository<MediaItem>,
-    logger: PinoLogger
-    // private configService: ConfigService
+    logger: PinoLogger,
+    private configService: AppConfigService,
   ) {
     super(repository, logger);
     this.repository
@@ -37,18 +39,7 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
   }: SearchParameters) {
     let aggregateQuery = [];
 
-    // Match by user ID first as it's indexed and this is the best way to reduce the number of results early
-    if (userId) {
-      aggregateQuery = aggregateQuery.concat([
-        {
-          $match: {
-            createdBy: ObjectIdGuard(userId),
-          },
-        },
-      ]);
-    }
-
-    // Next, we want to match the text as it's also indexed
+    // We have to search by text first as $match->$text is only allowed to be the first part of an aggregate query
     // TODO: fullText means a search on all index fields, this is only supported in MongoDB Atlas
     // Not sure if we want to use Atlas as we can't self host... we can implement distributed search later...
     if (query && fullText) {
@@ -58,11 +49,36 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
       if (this.useDistributedSearch) {
         throw new Error('Elastic search has not been implemented');
       }
-      // Search all fields in the index
+    }
+
+    // Match by user ID if it's available as it's indexed and this is the best way to reduce the number of results early
+    if (userId) {
       aggregateQuery = aggregateQuery.concat([
         {
-          $match: {
+          $match: query ? {
             $text: { $search: query },
+            $and: [{ createdBy: ObjectIdGuard(userId) }],
+          } : {
+            $and: [{ createdBy: ObjectIdGuard(userId) }],
+          },
+        },
+      ]);
+    } else {
+      // Only return search results that are app subscriber content (for paying app subscribers), shared content from a user's network, or public content
+      const appSubscriberContentUserIds = this.configService.get('appSubscriberContentUserIds');
+      aggregateQuery = aggregateQuery.concat([
+        {
+          $match: query ? {
+            $text: { $search: query },
+            $and: [
+              { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+              { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+            ],
+          } : {
+            $and: [
+              { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+              { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+            ],
           },
         },
       ]);
@@ -95,12 +111,6 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
           },
         });
       }
-    }
-
-    aggregateQuery = aggregateQuery.concat([...this.buildFields()]);
-
-    if (query) {
-      aggregateQuery = aggregateQuery.concat([{ $sort: { score: { $meta: 'textScore' } } }]);
     }
 
     return aggregateQuery;
@@ -141,7 +151,7 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
               description: '$description',
               uri: '$uri',
               thumbnail: '$thumbnail',
-              category: '$category',
+              visibility: '$visibility',
               tags: '$tags',
               // shareCount: { $size: '$shareItems' },
               // likesCount: { $size: '$likeItems' },

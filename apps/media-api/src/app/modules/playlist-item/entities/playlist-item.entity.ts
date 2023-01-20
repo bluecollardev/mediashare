@@ -5,7 +5,7 @@ import { ApiLongString, ApiObjectId, ApiString, ApiTextString, ApiUriString } fr
 import { ObjectId } from 'mongodb';
 import { MediaItem } from '@api-modules/media-item/entities/media-item.entity';
 import { TagKeyValue } from '@api-modules/tag/dto/tag-key-value.dto';
-import { MEDIA_CATEGORY, MediaCategoryType } from '@core-lib';
+import { MEDIA_VISIBILITY, MediaVisibilityType } from '@core-lib';
 
 @Entity('playlist_item')
 export class PlaylistItem extends MediaItem {
@@ -64,8 +64,8 @@ export class PlaylistItem extends MediaItem {
 
   // TODO: Get these working again
   /* @Column({ nullable: true })
-  @ApiProperty({ enum: MEDIA_CATEGORY, name: 'category', enumName: 'MediaCategoryType', required: false })
-  category: MediaCategoryType;
+  @ApiProperty({ enum: MEDIA_VISIBILITY, name: 'visibility', enumName: 'MediaVisibilityType', required: false })
+  visibility: MediaVisibilityType;
 
   @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
   @Column({ name: 'tags', array: true, nullable: true })

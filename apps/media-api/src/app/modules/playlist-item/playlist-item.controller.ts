@@ -5,7 +5,7 @@ import { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
 import RouteTokens from '@api-modules/app-config/constants/open-api.constants';
-import { MEDIA_CATEGORY } from '@core-lib';
+import { MEDIA_VISIBILITY } from '@core-lib';
 import { CreateDto } from '@api-core/decorators/create-dto.decorator';
 import { GetUserId } from '@api-core/decorators/user.decorator';
 import { JwtAuthGuard } from '@api-modules/auth/guards/jwt-auth.guard';
@@ -29,9 +29,9 @@ export class PlaylistItemController {
     private shareItemService: ShareItemService
   ) {}
 
-  @Get('categories')
-  getCategories() {
-    return MEDIA_CATEGORY;
+  @Get('visibilities')
+  getVisibilities() {
+    return MEDIA_VISIBILITY;
   }
 
   @Get(RouteTokens.PLAYLIST_ITEM_ID)
@@ -50,7 +50,7 @@ export class PlaylistItemController {
   async findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
     // Always search, we want to run the aggregate query in every case
-    return query || tags ? await this.playlistItemService.search({ query, tags: parsedTags }) : await this.playlistItemService.search({});
+    return !!(query || tags) ? await this.playlistItemService.search({ query, tags: parsedTags }) : await this.playlistItemService.search({});
   }
 
   @Get('popular')

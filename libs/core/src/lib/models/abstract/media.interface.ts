@@ -2,7 +2,7 @@ import { Stats } from '../stats.model';
 
 import { IdType } from '../../types';
 import { BcBaseInterface } from '../bc-base.interface';
-import { MediaCategoryType } from '../../models';
+import { MediaVisibilityType } from '../../models';
 import { TagInterface } from '../tag.model';
 
 export interface Media extends BcBaseInterface {
@@ -16,5 +16,5 @@ export interface Media extends BcBaseInterface {
   summary: string;
   description: string;
   title: string;
-  category: MediaCategoryType;
+  visibility: MediaVisibilityType;
 }

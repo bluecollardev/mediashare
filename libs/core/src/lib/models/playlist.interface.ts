@@ -1,9 +1,9 @@
 import { IdType } from '../types/id.type';
 import { BcBaseInterface } from './bc-base.interface';
-import { PlaylistCategoryType } from '../../';
+import { PlaylistVisibilityType } from '../../';
 
 export interface PlaylistInterface extends BcBaseInterface {
   title: string;
-  category: PlaylistCategoryType;
+  visibility: PlaylistVisibilityType;
   cloneOf?: IdType;
 }

@@ -19,6 +19,7 @@ import { LikesModule } from '@api-modules/likes/likes.module';
 import { TagModule } from '@api-modules/tag/tag.module';
 import { UserConnectionModule } from '@api-modules/user-connection/user-connection.module';
 import { ActionsModule } from '@api-modules/actions/actions.module';
+import { WellKnownModule } from '@api-modules/well-known/well-known.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { ActionsModule } from '@api-modules/actions/actions.module';
     TagModule,
     UserConnectionModule,
     ActionsModule,
+    WellKnownModule,
   ],
   controllers: [AppController],
   providers: [AppService],
