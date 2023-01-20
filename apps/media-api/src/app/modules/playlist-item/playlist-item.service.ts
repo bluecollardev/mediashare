@@ -55,8 +55,10 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
     if (userId) {
       aggregateQuery = aggregateQuery.concat([
         {
-          $match: {
+          $match: query ? {
             $text: { $search: query },
+            $and: [{ createdBy: ObjectIdGuard(userId) }],
+          } : {
             $and: [{ createdBy: ObjectIdGuard(userId) }],
           },
         },
@@ -109,10 +111,6 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
           },
         });
       }
-    }
-
-    if (query) {
-      aggregateQuery = aggregateQuery.concat(this.buildTextScore());
     }
 
     return aggregateQuery;

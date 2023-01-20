@@ -55,8 +55,10 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
     if (userId) {
       aggregateQuery = aggregateQuery.concat([
         {
-          $match: {
+          $match: query ? {
             $text: { $search: query },
+            $and: [{ createdBy: ObjectIdGuard(userId) }],
+          } : {
             $and: [{ createdBy: ObjectIdGuard(userId) }],
           },
         },
@@ -111,10 +113,6 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
       }
     }
 
-    if (query) {
-      aggregateQuery = aggregateQuery.concat(this.buildTextScore());
-    }
-
     return aggregateQuery;
   }
 
@@ -133,10 +131,8 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
             authorUsername: '$author.username',
             authorImage: '$author.imageSrc',
           },
-          score: { $meta: 'textScore' },
         },
       },
-      { $sort: { score: { $meta: 'textScore' } } },
     ];
   }
 

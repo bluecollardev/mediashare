@@ -50,7 +50,7 @@ export class PlaylistController {
   @PlaylistGetResponse({ type: PlaylistResponseDto, isArray: true })
   async findAll(@GetUserId() userId: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
-    return query || tags ? await this.playlistService.search({ userId, query, tags: parsedTags }) : await this.playlistService.getByUserId(userId);
+    return !!(query || tags) ? await this.playlistService.search({ userId, query, tags: parsedTags }) : await this.playlistService.getByUserId(userId);
   }
 
   @Post()

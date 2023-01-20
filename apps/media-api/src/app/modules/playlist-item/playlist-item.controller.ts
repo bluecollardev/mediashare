@@ -50,7 +50,7 @@ export class PlaylistItemController {
   async findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
     // Always search, we want to run the aggregate query in every case
-    return query || tags ? await this.playlistItemService.search({ query, tags: parsedTags }) : await this.playlistItemService.search({});
+    return !!(query || tags) ? await this.playlistItemService.search({ query, tags: parsedTags }) : await this.playlistItemService.search({});
   }
 
   @Get('popular')

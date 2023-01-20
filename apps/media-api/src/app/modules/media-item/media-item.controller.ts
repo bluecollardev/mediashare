@@ -43,7 +43,7 @@ export class MediaItemController {
   async findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
     // Always search, we want to run the aggregate query in every case
-    return query || tags ? await this.mediaItemService.search({ query, tags: parsedTags }) : await this.mediaItemService.search({});
+    return !!(query || tags) ? await this.mediaItemService.search({ query, tags: parsedTags }) : await this.mediaItemService.search({});
   }
 
   @Get('popular')
