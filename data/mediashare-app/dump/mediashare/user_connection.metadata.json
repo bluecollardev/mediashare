@@ -1,5 +1,0 @@
-{
-  "options": {},
-  "indexes": [{ "v": { "$numberInt": "2" }, "key": { "_id": { "$numberInt": "1" } }, "name": "_id_", "ns": "mediashare.user_connection" }],
-  "uuid": "597d9922f7c341488885fcf4e722042b"
-}
