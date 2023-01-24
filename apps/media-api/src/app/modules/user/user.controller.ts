@@ -45,6 +45,7 @@ export class UserController {
     if (!user) {
       const newUser = await this.userService.create({
         ...valid,
+        // TODO: All new users should probably be free, not subscribers, complete this!
         role: 'subscriber',
         // TODO: Replace this string!
         imageSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/assets/default-user.png',
@@ -123,7 +124,7 @@ export class UserController {
       const result = await this.userConnectionService.createUserConnection({ userId, connectionId });
       return res.status(HttpStatus.OK).json(result);
     } catch (error) {
-      throw new error();
+      throw error;
     }
   }
 
@@ -149,7 +150,7 @@ export class UserController {
       const result = await this.userConnectionService.removeUserConnection(userConnectionDto);
       return res.status(HttpStatus.OK).json(result);
     } catch (error) {
-      throw new error();
+      throw error;
     }
   }
 
@@ -170,7 +171,7 @@ export class UserController {
         message: `There was a problem removing user connection share items`
       });
     } catch (error) {
-      throw new error();
+      throw error;
     }
   }
 
