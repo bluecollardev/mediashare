@@ -62,6 +62,5 @@ export default registerAs('app', () => ({
   invitationEmailSubject: process.env.INVITATION_EMAIL_SUBJECT,
   invitationEmailSender: process.env.INVITATION_EMAIL_SENDER,
   acceptInvitationDeeplink: process.env.ACCEPT_INVITATION_DEEPLINK,
-  appSubscriberContentUserIds: process.env.APP_SUBSCRIBER_CONTENT_USER_IDS
-    ? process.env.APP_SUBSCRIBER_CONTENT_USER_IDS.split(',') : [],
+  appSubscriberContentUserIds: process.env.APP_SUBSCRIBER_CONTENT_USER_IDS ? process.env.APP_SUBSCRIBER_CONTENT_USER_IDS.split(',') : [],
 }));

@@ -87,7 +87,7 @@ export class UserFactory extends DataFn {
       visibility: 'private',
       tags: [],
       key: '',
-      thumbnail: '',
+      imageSrc: '',
       uri: '',
     };
   }

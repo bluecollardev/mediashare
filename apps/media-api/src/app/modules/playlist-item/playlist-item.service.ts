@@ -16,7 +16,7 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
     @InjectRepository(PlaylistItem)
     repository: MongoRepository<PlaylistItem>,
     logger: PinoLogger,
-    private configService: AppConfigService,
+    private configService: AppConfigService
   ) {
     super(repository, logger);
     this.repository
@@ -55,12 +55,14 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
     if (userId) {
       aggregateQuery = aggregateQuery.concat([
         {
-          $match: query ? {
-            $text: { $search: query },
-            $and: [{ createdBy: ObjectIdGuard(userId) }],
-          } : {
-            $and: [{ createdBy: ObjectIdGuard(userId) }],
-          },
+          $match: query
+            ? {
+                $text: { $search: query },
+                $and: [{ createdBy: ObjectIdGuard(userId) }],
+              }
+            : {
+                $and: [{ createdBy: ObjectIdGuard(userId) }],
+              },
         },
       ]);
     } else {
@@ -68,18 +70,20 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
       const appSubscriberContentUserIds = this.configService.get('appSubscriberContentUserIds');
       aggregateQuery = aggregateQuery.concat([
         {
-          $match: query ? {
-            $text: { $search: query },
-            $and: [
-              { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-              { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-            ],
-          } : {
-            $and: [
-              { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-              { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-            ],
-          },
+          $match: query
+            ? {
+                $text: { $search: query },
+                $and: [
+                  { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+                  { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+                ],
+              }
+            : {
+                $and: [
+                  { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+                  { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+                ],
+              },
         },
       ]);
     }
@@ -153,7 +157,7 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
               description: '$description',
               sortIndex: '$sortIndex',
               uri: '$uri',
-              thumbnail: '$thumbnail',
+              imageSrc: '$imageSrc',
               // visibility: '$visibility',
               tags: '$tags',
               // shareCount: { $size: '$shareItems' },

@@ -134,12 +134,14 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
     if (userId) {
       aggregateQuery = aggregateQuery.concat([
         {
-          $match: query ? {
-            $text: { $search: query },
-            $and: [{ createdBy: ObjectIdGuard(userId) }],
-          } : {
-            $and: [{ createdBy: ObjectIdGuard(userId) }],
-          },
+          $match: query
+            ? {
+                $text: { $search: query },
+                $and: [{ createdBy: ObjectIdGuard(userId) }],
+              }
+            : {
+                $and: [{ createdBy: ObjectIdGuard(userId) }],
+              },
         },
       ]);
     } else {
@@ -147,18 +149,20 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
       const appSubscriberContentUserIds = this.configService.get('appSubscriberContentUserIds');
       aggregateQuery = aggregateQuery.concat([
         {
-          $match: query ? {
-            $text: { $search: query },
-            $and: [
-              { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-              { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-            ],
-          } : {
-            $and: [
-              { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-              { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-            ],
-          },
+          $match: query
+            ? {
+                $text: { $search: query },
+                $and: [
+                  { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+                  { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+                ],
+              }
+            : {
+                $and: [
+                  { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+                  { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+                ],
+              },
         },
       ]);
     }

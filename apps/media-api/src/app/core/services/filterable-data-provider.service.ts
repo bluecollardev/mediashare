@@ -69,7 +69,7 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
   search({ userId, query, tags }: SearchParameters) {
     try {
       let pipeline = [...this.buildAggregateQuery({ userId, query, tags })];
-      const hasTextQuery = pipeline.find((stage) => !!(stage?.$match?.$text));
+      const hasTextQuery = pipeline.find((stage) => !!stage?.$match?.$text);
       if (hasTextQuery) {
         pipeline = pipeline.concat(this.buildTextScore());
       }
@@ -82,10 +82,7 @@ export abstract class FilterableDataService<E extends BcBaseEntity<E>, R extends
   }
 
   protected buildTextScore() {
-    return [
-      { $addFields: { score: { $meta: 'textScore' } } },
-      { $sort: { score: { $meta: 'textScore' } } },
-    ]
+    return [{ $addFields: { score: { $meta: 'textScore' } } }, { $sort: { score: { $meta: 'textScore' } } }];
   }
 
   protected abstract buildAggregateQuery(params: SearchParameters): any[];

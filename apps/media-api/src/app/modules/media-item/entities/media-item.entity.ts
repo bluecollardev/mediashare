@@ -37,7 +37,7 @@ export class MediaItem extends BcEntity {
 
   @Column({ nullable: true })
   @ApiString()
-  thumbnail?: string;
+  imageSrc?: string;
 
   @Column({ nullable: true })
   @IsBoolean()

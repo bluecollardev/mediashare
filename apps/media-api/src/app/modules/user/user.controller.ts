@@ -168,7 +168,7 @@ export class UserController {
 
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         statusCode: 500,
-        message: `There was a problem removing user connection share items`
+        message: `There was a problem removing user connection share items`,
       });
     } catch (error) {
       throw error;
@@ -198,8 +198,8 @@ export class UserController {
       const matchingUsers = await this.userConnectionService.findUsersByEmail(email);
       const hasMatchingUsers = Array.isArray(matchingUsers) && matchingUsers.length > 0;
 
-        const emailSubject = process.env['INVITATION_EMAIL_SUBJECT'];
-        const emailFrom = process.env['INVITATION_EMAIL_SENDER'];
+      const emailSubject = process.env['INVITATION_EMAIL_SUBJECT'];
+      const emailFrom = process.env['INVITATION_EMAIL_SENDER'];
 
       const createAndSendEmail = async (email) => {
         const currentUser: ProfileDto = await this.userService.getUserById(userId);
@@ -217,7 +217,7 @@ export class UserController {
       if (hasMatchingUsers) {
         // If matching users we need to send an email invitation
         // Get all existing user connections
-        const currentUserConnections = await this.userConnectionService.getUserConnections(userId)
+        const currentUserConnections = await this.userConnectionService.getUserConnections(userId);
         // For each matching user account, send out an email invitation
         const invitationsToSend = matchingUsers
           // A user cannot be both the sender and the recipient of an invitation
@@ -226,7 +226,7 @@ export class UserController {
           // Remove any recipients that are already connections
           // .filter((invitee) => !currentUserConnections.find((connection) => connection.connectionId === invitee._id))
           // And send out the emails
-          .map((invitee) => createAndSendEmail(invitee.email))
+          .map((invitee) => createAndSendEmail(invitee.email));
 
         await Promise.all(invitationsToSend);
         return res.status(HttpStatus.OK).json({
