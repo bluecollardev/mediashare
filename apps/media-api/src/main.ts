@@ -8,7 +8,7 @@ import * as https from 'https';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app/app.module';
 
-import {  } from 'fs';
+import {} from 'fs';
 
 import { AppConfigService } from '@api-modules/app-config/app-config.provider';
 import { GlobalExceptionFilter } from '@api-core/exception-filters/global-exception.filter';

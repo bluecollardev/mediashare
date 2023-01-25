@@ -1,3 +1,4 @@
+import { MediaItemService } from '@api-modules/media-item/media-item.service';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppConfigModule } from '@api-modules/app-config/app-config.module';
@@ -11,8 +12,8 @@ import { MediaItem } from '@api-modules/media-item/entities/media-item.entity';
 import { ShareItemModule } from '@api-modules/share-item/share-item.module';
 
 @Module({
-  imports: [AppConfigModule, TypeOrmModule.forFeature([Playlist, MediaItem, PlaylistItem]), ShareItemModule, AuthModule],
+  imports: [AppConfigModule, TypeOrmModule.forFeature([Playlist, PlaylistItem, MediaItem]), ShareItemModule, AuthModule],
   controllers: [SearchController],
-  providers: [PlaylistService, PlaylistItemService],
+  providers: [PlaylistService, PlaylistItemService, MediaItemService],
 })
 export class SearchModule {}

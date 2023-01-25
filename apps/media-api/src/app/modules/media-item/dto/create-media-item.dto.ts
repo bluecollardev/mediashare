@@ -31,7 +31,7 @@ export class CreateMediaItemDto extends OmitType(MediaItem, [...OPTIONAL_MEDIA_D
   key: string;
 
   @ApiLongString(<ApiDecoratorOptions>{ required: true })
-  thumbnail?: string;
+  imageSrc?: string;
 
   @ApiString()
   eTag?: string;
@@ -42,7 +42,7 @@ export class AdditionalMediaItemDto extends CreateMediaItemDto {
   displayFileName: string;
 
   @ApiUriString()
-  thumbnail?: string;
+  imageSrc?: string;
 
   @ApiUriString()
   uri: string;

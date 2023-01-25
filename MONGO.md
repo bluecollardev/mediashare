@@ -9,5 +9,3 @@ TODO: Make a quick CLI tool for this...
 `mongodump -d mediashare --archive --gzip mediashare-backup.20230120-2323.tar.gz`
 `mongorestore --gzip --archive=mediashare-backup.20230120-2323.tar.gz --drop --uri mongodb+srv://<USER>:<PASSWORD>@cluster0.8x36b.mongodb.net`
 `mongorestore --gzip --archive=mediashare-backup.20230120-2323.tar.gz --drop --uri mongodb+srv://<USER>:<PASSWORD>@cluster0.nureuqr.mongodb.net`
-
-

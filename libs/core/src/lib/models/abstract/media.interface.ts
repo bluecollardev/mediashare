@@ -9,7 +9,7 @@ export interface Media extends BcBaseInterface {
   displayFileName: string;
   userId: IdType;
   isPlayable: boolean;
-  thumbnail?: string;
+  imageSrc?: string;
   uri: string;
   tags?: TagInterface[];
   stats?: Stats;
