@@ -12,6 +12,7 @@ export class SearchController {
   constructor(private readonly playlistService: PlaylistService, private readonly mediaItemService: MediaItemService) {}
 
   /**
+   * TODO: Type contentType!
    * When we're searching for records, we want to search through public records,
    * records shared from my network, and optionally our own records,
    * although by default we want to hide those.
@@ -28,15 +29,22 @@ export class SearchController {
     let results = [];
     switch (target) {
       case 'playlists':
-        results = !!(query || tags) ? await this.playlistService.search({ query, tags: parsedTags }) : await this.playlistService.findAll();
+        results = !!(query || tags)
+          ? await this.playlistService.search({ query, tags: parsedTags })
+          : await this.playlistService.findAll();
+        results = results.map((result) => ({ ...result, contentType: 'playlist' }))
         break;
       case 'media':
         results = !!(query || tags)
           ? await this.mediaItemService.search({ query, tags: parsedTags })
           : await this.mediaItemService.search({ query: '', tags: [] });
+        results = results.map((result) => ({ ...result, contentType: 'mediaItem' }))
         break;
       default:
-        results = !!(query || tags) ? await this.playlistService.search({ query, tags: parsedTags }) : await this.playlistService.findAll();
+        results = !!(query || tags)
+          ? await this.playlistService.search({ query, tags: parsedTags })
+          : await this.playlistService.findAll();
+        results = results.map((result) => ({ ...result, contentType: 'playlist' }))
         break;
     }
     return results;
