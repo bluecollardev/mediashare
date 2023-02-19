@@ -1,5 +1,6 @@
 import { Controller, Body, Param, UseGuards, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ObjectIdGuard } from '@util-lib';
 import { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
@@ -61,8 +62,8 @@ export class MediaItemController {
       isPlayable: false,
       uri: '',
       ...createMediaItemDto,
-      userId: createdBy,
-      createdBy,
+      userId: ObjectIdGuard(createdBy),
+      createdBy: ObjectIdGuard(createdBy),
     };
     return await this.mediaItemService.create({ ...mediaItem });
   }

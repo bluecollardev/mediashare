@@ -1,4 +1,3 @@
-import { MediaItem } from '@api-modules/media-item/entities/media-item.entity';
 import { MediaItemService } from '@api-modules/media-item/media-item.service';
 import { Controller, Query, Get } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
