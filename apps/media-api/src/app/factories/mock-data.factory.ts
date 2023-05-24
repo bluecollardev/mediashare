@@ -1,13 +1,12 @@
 import * as Faker from 'faker';
 import { ObjectId } from 'mongodb';
-import { CreateMediaItemDto } from '../controllers/media-item/dto/create-media-item.dto';
-import { MediaItem } from '../controllers/media-item/entities/media-item.entity';
-import { CreateUserDto } from '../controllers/user/dto/create-user.dto';
-import { User } from '../controllers/user/entities/user.entity';
-import { CreatePlaylistItemDto } from '../modules/playlist-item/dto/create-playlist-item.dto';
+import { CreateMediaItemDto } from '../modules/media-item/dto/create-media-item.dto';
+import { MediaItem } from '../modules/media-item/entities/media-item.entity';
+import { CreateUserDto } from '../modules/user/dto/create-user.dto';
+import { User } from '../modules/user/entities/user.entity';
 
-import * as R from 'remeda';
-import { Playlist } from '../controllers/playlist/entities/playlist.entity';
+import { range } from 'remeda';
+import { Playlist } from '../modules/playlist/entities/playlist.entity';
 import { SessionUserInterface } from '../core/models/auth-user.model';
 
 import { ObjectIdGuard } from '@util-lib';
@@ -53,7 +52,7 @@ export class UserFactory extends DataFn {
       _id: ObjectIdGuard(_id),
       createdAt: new Date(),
       email,
-      roles: ['user'],
+      roles: ['subscriber'],
     };
   }
 
@@ -79,23 +78,16 @@ export class UserFactory extends DataFn {
     return new playlistMixin();
   }
 
-  createPlaylistItemDto() {
-    return {};
-  }
-
-  createSharedItem() {
-    return {};
-  }
-
   createMediaDto(): CreateMediaItemDto {
     return {
       summary: Faker.lorem.lines(),
       title: Faker.lorem.sentence(),
       isPlayable: Faker.random.boolean(),
       description: Faker.lorem.lines(),
-      category: 'paid',
+      visibility: 'private',
+      tags: [],
       key: '',
-      thumbnail: '',
+      imageSrc: '',
       uri: '',
     };
   }
@@ -110,8 +102,8 @@ export class UserFactory extends DataFn {
 export function userDataFactory(userFactory: UserFactory) {
   const user = userFactory.user;
 
-  const media = R.range(1, DataFn.number(10)).map(() => userFactory.createMediaDto());
-  const playlistDto = R.range(1, DataFn.number(4)).map(() => userFactory.createPlaylistDto(media));
+  const media = range(1, DataFn.number(10)).map(() => userFactory.createMediaDto());
+  const playlistDto = range(1, DataFn.number(4)).map(() => userFactory.createPlaylistDto(media));
 
   return { playlistDto, user, media };
 }

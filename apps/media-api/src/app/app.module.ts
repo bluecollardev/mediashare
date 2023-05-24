@@ -1,27 +1,30 @@
-import { AuthModule } from './modules/auth/auth.module';
-import { Module } from '@nestjs/common';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './controllers/user/user.module';
+import { Module } from '@nestjs/common';
 import { LoggerModule } from 'nestjs-pino';
-import { MediaItemModule } from './controllers/media-item/media-item.module';
-import { ProfileModule } from './controllers/profile/profile.module';
-import { PlaylistModule } from './controllers/playlist/playlist.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
-import { ShareItemsModule } from './controllers/share-items/share-items.module';
-import { AppConfigModule } from './modules/app-config/app-config.module';
-import { AppConfigService } from './modules/app-config/app-config.provider';
-import { JwtModule } from '@nestjs/jwt';
-import { ViewsModule } from './controllers/views/views.module';
-import { LikesModule } from './controllers/likes/likes.module';
+import { AppConfigService } from '@api-modules/app-config/app-config.provider';
+import { AppConfigModule } from '@api-modules/app-config/app-config.module';
+import { AuthModule } from '@api-modules/auth/auth.module';
+import { UserModule } from '@api-modules/user/user.module';
+import { ProfileModule } from '@api-modules/profile/profile.module';
+import { MediaItemModule } from '@api-modules/media-item/media-item.module';
+import { PlaylistItemModule } from '@api-modules/playlist-item/playlist-item.module';
+import { PlaylistModule } from '@api-modules/playlist/playlist.module';
+import { SearchModule } from '@api-modules/search/search.module';
+import { ShareItemModule } from '@api-modules/share-item/share-item.module';
+import { ViewsModule } from '@api-modules/views/views.module';
+import { LikesModule } from '@api-modules/likes/likes.module';
+import { TagModule } from '@api-modules/tag/tag.module';
+import { UserConnectionModule } from '@api-modules/user-connection/user-connection.module';
+import { ActionsModule } from '@api-modules/actions/actions.module';
+import { WellKnownModule } from '@api-modules/well-known/well-known.module';
 
 @Module({
   imports: [
     AuthModule,
     AppConfigModule,
-
     TypeOrmModule.forRootAsync({
       imports: [AppConfigModule],
       useFactory: (configService: AppConfigService) => ({
@@ -37,7 +40,6 @@ import { LikesModule } from './controllers/likes/likes.module';
         useUnifiedTopology: true,
         useNewUrlParser: true,
       }),
-
       inject: [AppConfigService],
     }),
     LoggerModule.forRoot({
@@ -49,17 +51,22 @@ import { LikesModule } from './controllers/likes/likes.module';
         },
       },
     }),
-
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
     UserModule,
-    MediaItemModule,
     ProfileModule,
+    MediaItemModule,
+    PlaylistItemModule,
     PlaylistModule,
+    SearchModule,
     ViewsModule,
-    ShareItemsModule,
+    ShareItemModule,
     LikesModule,
+    TagModule,
+    UserConnectionModule,
+    ActionsModule,
+    WellKnownModule,
   ],
   controllers: [AppController],
   providers: [AppService],

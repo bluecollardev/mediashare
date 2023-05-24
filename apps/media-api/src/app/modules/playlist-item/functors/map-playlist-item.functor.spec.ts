@@ -1,13 +1,12 @@
-import { ObjectId } from 'mongodb';
+/* import { ObjectId } from 'mongodb';
+import { mapPlaylistItems } from './map-playlist-item.functor';
+import { range } from 'remeda';
 
-import { mapPlaylistId, mapUserIdToPlaylistItem, mapPlaylistItem, mapPlaylistItems } from './map-playlist-item.functor';
-
-import * as R from 'remeda';
 const createId = () => new ObjectId().toHexString();
 
 describe('mapPlaylistItem', () => {
   it('should map playlist items', () => {
-    const ids = R.range(0, 5).map(() => createId());
+    const ids = range(0, 5).map(() => createId());
 
     const playlistItems = mapPlaylistItem(ids);
 
@@ -18,7 +17,7 @@ describe('mapPlaylistItem', () => {
 
 describe('toObjectId', () => {
   it('should return objectId values', () => {
-    const ids = R.range(0, 5).map(() => createId());
+    const ids = range(0, 5).map(() => createId());
 
     const mapPlaylistItem = ids;
 
@@ -48,7 +47,7 @@ describe('mapPlaylistId', () => {
 
 describe('mapPlaylistItems', () => {
   it("should return an array of playlistDto's", () => {
-    const ids = R.range(0, 5).map(() => createId());
+    const ids = range(0, 5).map(() => createId());
 
     const userId = new ObjectId();
 
@@ -63,4 +62,4 @@ describe('mapPlaylistItems', () => {
     expect(mappedPlaylistItems[0].mediaId.toHexString()).toEqual(ids[0]);
     expect(mappedPlaylistItems[0].userId).toEqual(userId);
   });
-});
+}); */

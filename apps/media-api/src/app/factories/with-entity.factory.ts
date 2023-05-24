@@ -1,4 +1,4 @@
-import { DeepPartial } from '@api';
+// import { DeepPartial } from '@api-core/entities/base.entity';
 import { ObjectId } from 'mongodb';
 
 import { Entity } from 'typeorm';

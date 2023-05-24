@@ -45,46 +45,45 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       case HttpException:
         status = HttpStatus.UNPROCESSABLE_ENTITY;
         ex = (exception as BadRequestException);
-        details = ex.getResponse();
-        message = `${ex.message}: ${Array.isArray(details.message) ? details.message.join('; ') : details.message}`;
-        code = ex.code;
-        status = ex.getStatus();
-        Logger.error(message, ex.stack, `${request.method} ${request.url}`);
+        details = ex?.getResponse();
+        message = `${ex?.message}: ${Array.isArray(details.message) ? details.message.join('; ') : details.message}`;
+        code = ex?.code;
+        status = ex?.getStatus();
+        Logger.error(message, ex?.stack, `${request.method} ${request.url}`);
         break;
       case BadRequestException:
         status = HttpStatus.UNPROCESSABLE_ENTITY;
         ex = (exception as BadRequestException);
-        details = ex.getResponse();
-        message = `${ex.message}: ${Array.isArray(details.message) ? details.message.join('; ') : details.message}`;
-        code = ex.code;
-        status = ex.getStatus();
-        Logger.error(message, ex.stack, `${request.method} ${request.url}`);
+        details = ex?.getResponse();
+        message = `${ex?.message}: ${Array.isArray(details.message) ? details.message.join('; ') : details.message}`;
+        code = ex?.code;
+        status = ex?.getStatus();
+        Logger.error(message, ex?.stack, `${request.method} ${request.url}`);
         break;
       case QueryFailedError:  // this is a TypeOrm error
         ex = (exception as QueryFailedError);
         status = HttpStatus.UNPROCESSABLE_ENTITY;
-        message = ex.message;
-        code = ex.code;
-        Logger.error(message, ex.stack, `${request.method} ${request.url}`);
+        message = ex?.message;
+        code = ex?.code;
+        Logger.error(message, ex?.stack, `${request.method} ${request.url}`);
         break;
       case EntityNotFoundError:  // this is another TypeOrm error
         ex = (exception as EntityNotFoundError);
         status = HttpStatus.UNPROCESSABLE_ENTITY;
-        message = ex.message;
-        code = ex.code;
-        Logger.error(message, ex.stack, `${request.method} ${request.url}`);
+        message = ex?.message;
+        code = ex?.code;
+        Logger.error(message, ex?.stack, `${request.method} ${request.url}`);
         break;
       case CannotCreateEntityIdMapError: // and another
         ex = (exception as CannotCreateEntityIdMapError);
         status = HttpStatus.UNPROCESSABLE_ENTITY;
-        message = ex.message;
-        code = ex.code;
-        Logger.error(message, ex.stack, `${request.method} ${request.url}`);
+        message = ex?.message;
+        code = ex?.code;
+        Logger.error(message, ex?.stack, `${request.method} ${request.url}`);
         break;
       default:
         status = HttpStatus.INTERNAL_SERVER_ERROR
-        Logger.error(message, ex.stack, `${request.method} ${request.url}`);
-
+        Logger.error(message, ex?.stack, `${request.method} ${request.url}`);
     }
 
     response.status(status).json(GlobalResponseError(status, message, code, request));

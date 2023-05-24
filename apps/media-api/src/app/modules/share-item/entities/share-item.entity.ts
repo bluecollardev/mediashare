@@ -1,31 +1,36 @@
-import { BcEntity } from '@api';
-import { ApiObjectId, ApiString } from '@mediashare/shared';
+import { Column, Entity, Index, ManyToOne } from 'typeorm';
+import { ApiDecoratorOptions, ApiObjectId, ApiString } from '@mediashare/shared';
 import { IsBoolean } from 'class-validator';
 import { ObjectId } from 'mongodb';
-import { Column, Entity, Index } from 'typeorm';
+import { BcEntity } from '@api-core/entities/base.entity';
+import { User } from '@api-modules/user/entities/user.entity';
 
-@Entity()
+@Entity('share_item')
 export class ShareItem extends BcEntity {
+  @ApiObjectId(<ApiDecoratorOptions>{ readOnly: true })
   @Column({ name: 'userId' })
-  @ApiObjectId({ readOnly: true })
   @Index('userId', { unique: false })
   userId: ObjectId;
 
+  @ApiObjectId(<ApiDecoratorOptions>{ required: false })
   @Column('playlistId')
-  @ApiObjectId({ required: false })
   @Index('playlistId', { unique: false })
   playlistId: ObjectId;
 
+  @ApiObjectId(<ApiDecoratorOptions>{ required: false })
   @Column({ name: 'mediaId', unique: false })
-  @ApiObjectId({ required: false })
   @Index('mediaId')
   mediaId: ObjectId;
 
-  @Column({ name: 'read', unique: false })
   @IsBoolean()
+  @Column({ name: 'read', unique: false })
   read: boolean;
 
-  @Column({ name: 'title', unique: false })
   @ApiString()
+  @Column({ name: 'title', unique: false })
   title: string;
+
+  @ManyToOne(() => User, (user) => user.shareItem)
+  @Column({ name: 'owner', unique: false })
+  owner: User;
 }

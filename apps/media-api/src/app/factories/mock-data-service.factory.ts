@@ -1,4 +1,4 @@
-import { BcBaseEntity, DeepPartial } from '@api';
+import { BcBaseEntity, DeepPartial } from '@api-core/entities/base.entity';
 
 class MockDataService<T extends BcBaseEntity<T>> {
   mockDocuments = new Map<string, T>();

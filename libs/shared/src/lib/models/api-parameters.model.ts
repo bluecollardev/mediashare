@@ -1,13 +1,23 @@
-import { ObjectId } from 'mongodb';
+import { IdType } from '@core-lib';
 
-class ObjectIdParameters {
-  userId: ObjectId;
-  playlistId: ObjectId;
-  mediaId: ObjectId;
-  playlistItemId: ObjectId;
-  createdBy: ObjectId;
+interface IObjectIdParameters {
+  userId?: IdType;
+  mediaId?: IdType;
+  playlistId?: IdType;
+  playlistItemId?: IdType;
+  createdBy?: IdType;
 }
 
-export type OptionalObjectIdParameters = Partial<ObjectIdParameters>;
+export type ObjectIdParameters = Partial<IObjectIdParameters>;
 
-export { ObjectIdParameters };
+interface IContentSearchParameters {
+  query?: string;
+  fullText?: boolean; // Search all text fields?
+  textMatchingMode?: 'and' | 'or';
+  tags?: string[];
+  tagsMatchingMode?: 'any' | 'all';
+}
+
+export type ContentSearchParameters = Partial<IContentSearchParameters>;
+
+export type SearchParameters = Partial<ObjectIdParameters & ContentSearchParameters>;

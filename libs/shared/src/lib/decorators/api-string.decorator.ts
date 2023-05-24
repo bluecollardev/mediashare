@@ -5,7 +5,6 @@ import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, IsUrl, Length } from 'class-validator';
 import { apiDecoratorDefaults } from '../models';
-
 import * as R from 'remeda';
 
 const baseStringValidators = (min, max) => [IsString(), Length(min, max)];
@@ -36,7 +35,7 @@ export const ApiName: ApiDecoratorType = function ({ required } = apiDecoratorDe
 };
 
 export const ApiString: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
-  const length = [3, 255] as const;
+  const length = [0, 255] as const;
   return applyDecorators(
     ...baseStringValidators(...length),
     ApiProperty({

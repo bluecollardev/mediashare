@@ -1,5 +1,4 @@
-
-FROM node:12.13-buster as development
+FROM node:16.13.1-buster as development
 
 ENV NODE_ENV=development
 
@@ -7,14 +6,14 @@ WORKDIR /usr/src/app
 
 COPY package.json ./
 
-RUN npm install
+RUN npm install --force
 
 COPY . .
 
-CMD ["npm" "start"]
+CMD ["npm", "start"]
 
 # seperate build for production
-FROM node:12.13-alpine as production
+FROM node:16.13.1-alpine as production
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}

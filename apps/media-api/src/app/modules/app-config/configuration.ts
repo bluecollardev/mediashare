@@ -1,8 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
 
-// console.log(process.env.NODE_ENV);
-
 export const appValidationSchema = Joi.object({
   APP_NAME: Joi.string().default('MediashareApi'),
   APP_ENV: Joi.string().valid('development', 'production', 'test', 'provision').default('development'),
@@ -16,6 +14,7 @@ export const appValidationSchema = Joi.object({
   SESSION_SECRET: Joi.string().default('this-is-my-secret-key'),
   APP_HOST: Joi.string().default('localhost'),
   DB_TYPE: Joi.string().default('mongodb'),
+  DB_IS_ATLAS: Joi.string().default(false),
   DB: Joi.string().default('mediashare'),
   DB_SSL: Joi.boolean().default(false),
   DB_SYNCHRONIZE: Joi.boolean().default(false),
@@ -25,8 +24,19 @@ export const appValidationSchema = Joi.object({
   AUTH_PORT: Joi.number().default(4000),
   AUTH_HOST: Joi.string().default('localhost'),
   AWS_URL: Joi.string().default(''),
+  SES_MODULE_REGION: Joi.string().default(''),
+  SES_MODULE_AKI_KEY: Joi.string().default(''),
+  SES_MODULE_SECRET: Joi.string().default(''),
+  EMAIL_UNSUBSCRIBE_URL: Joi.string().default(''),
+  EMAIL_PREFERENCES_URL: Joi.string().default(''),
+  INVITATION_REQUEST_URL: Joi.string().default(''),
+  INVITATION_EMAIL_SENDER: Joi.string().default(''),
+  INVITATION_EMAIL_SUBJECT: Joi.string().default(''),
+  ACCEPT_INVITATION_DEEPLINK: Joi.string().default(''),
+  APP_SUBSCRIBER_CONTENT_USER_IDS: Joi.string().default(''),
 });
 
+// TODO: Use these app envs, instead of process.env everywhere if possible...
 export default registerAs('app', () => ({
   host: process.env.APP_HOST,
   env: process.env.NODE_ENV,
@@ -34,6 +44,7 @@ export default registerAs('app', () => ({
   port: process.env.APP_PORT,
   globalPrefix: process.env.APP_PREFIX,
   title: process.env.APP_TITLE,
+  dbIsMongoAtlas: process.env.DB_IS_ATLAS,
   sessionDb: process.env.DB_URL,
   sessionDbName: process.env.SESSION_DB_NAME,
   sessionSecret: process.env.SESSION_SECRET,
@@ -42,4 +53,14 @@ export default registerAs('app', () => ({
   authHost: process.env.AUTH_HOST,
   awsUrl: process.env.AWS_URL,
   synchronize: process.env.DB_SYNCHRONIZE,
+  sesModuleRegion: process.env.SES_MODULE_REGION,
+  sesModuleAkiKey: process.env.SES_MODULE_AKI_KEY,
+  sesModuleSecret: process.env.SES_MODULE_SECRET,
+  emailUnsubscribeUrl: process.env.EMAIL_UNSUBSCRIBE_URL,
+  emailPreferencesUrl: process.env.EMAIL_PREFERENCES_URL,
+  invitationRequestUrl: process.env.INVITATION_REQUEST_URL,
+  invitationEmailSubject: process.env.INVITATION_EMAIL_SUBJECT,
+  invitationEmailSender: process.env.INVITATION_EMAIL_SENDER,
+  acceptInvitationDeeplink: process.env.ACCEPT_INVITATION_DEEPLINK,
+  appSubscriberContentUserIds: process.env.APP_SUBSCRIBER_CONTENT_USER_IDS ? process.env.APP_SUBSCRIBER_CONTENT_USER_IDS.split(',') : [],
 }));

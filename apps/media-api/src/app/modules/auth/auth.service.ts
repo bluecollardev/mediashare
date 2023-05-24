@@ -1,5 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
-
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as jwtoken from 'jsonwebtoken';
 import { idKey } from './keys';
@@ -21,21 +20,17 @@ export class AuthService {
   }
 
   decodeIdToken(jwt: string): any {
-    const verify = jwtoken.verify(jwt, idKey, { algorithms: ['RS256'] }, function (err, decodedToken) {
-      console.log('decodedToken ', decodedToken);
+    return jwtoken.verify(jwt, idKey, { algorithms: ['RS256'] }, function (err, decodedToken) {
+      // console.log('decodedToken ', decodedToken);
       const { email, phone_number } = decodedToken as any;
       return { email, phone_number };
     });
-    return verify;
   }
 
   validateToken(jwt: string) {
     const jwtResult = this.jwtService.verify(jwt);
-
     const { username = null, sub = null } = jwtResult;
-
     const hasUser = !!jwtResult;
-
     return hasUser ? { username, sub } : null;
   }
 }

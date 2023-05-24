@@ -37,12 +37,19 @@ services:
       - SESSION_DB_COLLECTION=session
       - MS_PORT=4000
       - DB_TYPE=mongodb
+      - DB_IS_ATLAS=true
       - DB=mediashare
       - DB_SSL=false
       - DB_SYNCHRONIZE=true
       - DB_USERNAME=mongodb
       - AUTH_HOST=auth
       - AUTH_PORT=4000
+      - USER_CONNECTION_MODULE_SECRET=
+      - USER_CONNECTION_MODULE_AKI_KEY=
+      - USER_CONNECTION_REGION=us-west-2
+      - INVITATION_REQUEST_URL="http://localhost:3000/invite/id?userId={{userId}}"
+      - INVITATION_EMAIL_SUBJECT="Hello from mediashare"
+      - INVITATION_EMAIL_SENDER=lucas@bluecollardev.com
     volumes:
       - .:/usr/src/app
       - /usr/app/node_modules
@@ -54,7 +61,7 @@ services:
     depends_on:
       - db
     ports:
-      - 3333:3333
+      - '3333:3333'
     networks:
       - mediashareapi
 
@@ -100,7 +107,7 @@ services:
     volumes:
       - ms-mongo-data:/var/lib/mongodb/data
     ports:
-      - 27017:27017
+      - '27017:27017'
     networks:
       - mediashareapi
 
