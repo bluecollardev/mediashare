@@ -25,6 +25,9 @@ export class AuthUser {
   @IsEmail()
   email: string;
 
+  @Column()
+  isDisabled: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

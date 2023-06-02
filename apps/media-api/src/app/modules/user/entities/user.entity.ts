@@ -1,4 +1,5 @@
 import { Entity, Column, OneToMany } from 'typeorm';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ObjectId } from 'mongodb';
 import { BcEntity } from '@api-core/entities/base.entity';
 import { BcRolesType, BC_ROLES } from '@core-lib';
@@ -17,6 +18,10 @@ export class User extends BcEntity {
 
   @ApiProperty()
   @Column()
+  isDisabled: boolean;
+
+  @ApiProperty()
+  @Column()
   email: string;
 
   @ApiProperty()
@@ -31,6 +36,18 @@ export class User extends BcEntity {
   @Column()
   lastName: string;
 
+  @ApiProperty()
+  @Column()
+  transactionId: string;
+
+  @ApiProperty()
+  @Column()
+  transactionDate: string;
+
+  @ApiProperty()
+  @Column()
+  transactionEndDate: string;
+  
   @ApiProperty()
   @Column()
   imageSrc: string;
