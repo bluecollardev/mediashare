@@ -170,6 +170,7 @@ export abstract class DataService<E extends BcBaseEntity<E>, R extends MongoRepo
    * Override this method when implementing aggregates.
    * @protected
    */
+  // eslint-disable-next-line no-empty-pattern
   protected buildAggregateQuery({}: SearchParameters): any[] {
     let aggregateQuery = [];
 

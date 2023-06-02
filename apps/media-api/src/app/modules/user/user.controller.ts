@@ -119,6 +119,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto })
   async createUserConnection(@Req() req: Request, @Res() res: Response) {
+    // eslint-disable-next-line no-useless-catch
     try {
       const { userId, connectionId } = req.body as any;
       const result = await this.userConnectionService.createUserConnection({ userId, connectionId });
@@ -133,6 +134,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto, isArray: false })
   async removeUserConnection(@Body() userConnectionDto: UserConnectionDto, @Req() req: Request, @Res() res: Response) {
+    // eslint-disable-next-line no-useless-catch
     try {
       const { userId, connectionId } = req.body as any;
       if (!userId || !connectionId) {
@@ -159,6 +161,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto, isArray: true })
   async removeUserConnections(@Body() userConnectionDtos: UserConnectionDto[], @Req() req: Request, @Res() res: Response) {
+    // eslint-disable-next-line no-useless-catch
     try {
       const shareItemsResult = await this.shareItemService.removeUserConnectionShareItems(userConnectionDtos);
       if (shareItemsResult) {

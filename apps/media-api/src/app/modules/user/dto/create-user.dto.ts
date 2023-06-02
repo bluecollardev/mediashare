@@ -59,6 +59,18 @@ export class UserDto implements User {
   @ApiString()
   phoneNumber: string;
 
+  @ApiString()
+  isDisabled: boolean;
+
+  @ApiProperty()
+  transactionId: string;
+
+  @ApiProperty()
+  transactionDate: string;
+
+  @ApiProperty()
+  transactionEndDate: string;
+
   // TODO: Remove these from the API complete
   /* @ApiProperty({ type: () => MediaItemResponseDto, isArray: true })
   mediaItems?: MediaItemResponseDto[];

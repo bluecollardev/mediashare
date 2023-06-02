@@ -73,6 +73,9 @@ export class ProfileDto {
 
   @ApiString()
   phoneNumber: string;
+  
+  @ApiString()
+  isDisabled: boolean;
 
   @ApiString()
   username: string;
@@ -88,4 +91,13 @@ export class ProfileDto {
 
   @ApiProperty({ type: Number })
   likesCount: number;
+
+  @ApiProperty()
+  transactionId: string;
+
+  @ApiProperty()
+  transactionDate: string;
+
+  @ApiProperty()
+  transactionEndDate: string;
 }
