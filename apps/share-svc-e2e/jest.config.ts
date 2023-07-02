@@ -15,5 +15,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/share-svc-e2e',
+  // coverageDirectory: '../../coverage/share-svc-e2e',
 };

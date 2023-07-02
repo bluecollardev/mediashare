@@ -15,10 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mediashare-platform/api-lib": ["libs/api-lib/src/index.ts"],
-      "@mediashare-platform/core": ["libs/core/src/index.ts"],
-      "@mediashare-platform/shared": ["libs/shared/src/index.ts"],
-      "@mediashare-platform/utility": ["libs/utility/src/index.ts"]
+      "@mediashare/api-lib": ["libs/api-lib/src/index.ts"],
+      "@mediashare/core": ["libs/core/src/index.ts"],
+      "@mediashare/shared": ["libs/shared/src/index.ts"],
+      "@mediashare/shared/*": ["libs/shared/src/lib/*"],
+      "@mediashare/utility": ["libs/utility/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

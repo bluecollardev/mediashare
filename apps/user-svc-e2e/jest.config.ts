@@ -15,5 +15,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/user-svc-e2e',
+  // coverageDirectory: '../../coverage/user-svc-e2e',
 };
