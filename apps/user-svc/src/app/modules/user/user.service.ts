@@ -5,13 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { ObjectIdGuard } from '../../core/guards';
-import { DataService, DataServiceValidationResponse } from '../../core/services/data-provider.service';
+import { DataService } from '../../core/services/data-provider.service';
 import { ObjectId } from 'mongodb';
 import { IdType } from '@mediashare/shared';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
+import { ApiErrorResponse, ApiErrorResponses } from '../../core/errors/api-error';
 
 @Injectable()
 export class UserDataService extends DataService<User, MongoRepository<User>> {
@@ -34,17 +35,17 @@ export class UserService {
     protected logger: PinoLogger,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<UserDto | DataServiceValidationResponse> {
+  async create(createUserDto: CreateUserDto): Promise<UserDto> {
     const errors = await this.dataService.validateDto(CreateUserDto, createUserDto);
-    if (errors) return Promise.reject<DataServiceValidationResponse>(errors);
+    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
     const entity = this.classMapper.map(createUserDto, CreateUserDto, User);
     const result = await this.dataService.create(entity);
     return this.classMapper.mapAsync(result, User, UserDto);
   }
 
-  async update(userId: IdType, updateUserDto: UpdateUserDto): Promise<UserDto | DataServiceValidationResponse> {
+  async update(userId: IdType, updateUserDto: UpdateUserDto): Promise<UserDto> {
     const errors = await this.dataService.validateDto(UpdateUserDto, updateUserDto);
-    if (errors) return Promise.reject<DataServiceValidationResponse>(errors);
+    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
     const entity = this.classMapper.map(updateUserDto, UpdateUserDto, User);
     const result = await this.dataService.update(userId, entity);
     return await this.classMapper.mapAsync(result, User, UserDto);

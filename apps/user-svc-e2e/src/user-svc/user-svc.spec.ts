@@ -1,6 +1,6 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Mapper } from '@automapper/core';
 import { randomUUID } from 'crypto';
 import { stub } from 'jest-auto-stub/src/index';
@@ -8,12 +8,12 @@ import { PinoLogger } from 'nestjs-pino';
 import { DataSource, MongoRepository } from 'typeorm';
 import { clone } from 'remeda';
 
-import { baseUrl, ValidBearerToken } from './constants';
+import { baseUrl } from './constants';
 import { allValidations } from './fixtures/validations';
-import { ApiErrorMessage } from './functions/errors';
 import { defaultOptionsWithBearer } from './functions/auth';
 import { initializeDB, initializeMapper } from './functions/initializer';
 
+import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
 import { CreateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/create-user.dto';
 import { UpdateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/update-user.dto';
 import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
@@ -36,11 +36,12 @@ describe('UserAPI.e2e', () => {
     userRepository = await db.getMongoRepository(User);
     userDataService = new UserDataService(userRepository, logger)
     userService = new UserService(userDataService, mapper, logger);
-  })
 
-  afterAll(async () => {
     // Delete all test records
     await userRepository.deleteMany({});
+  });
+
+  afterAll(async () => {
     await db.close();
   });
 
@@ -50,23 +51,19 @@ describe('UserAPI.e2e', () => {
         firstName: 'J'
       } as CreateUserDto;
 
-      const options = {
-        headers: {
-          'authorization': `Bearer ${ValidBearerToken}`
-        }
-      } as AxiosRequestConfig;
-
-      await axios.post(`${baseUrl}/user`, dto, options)
+      await axios.post(`${baseUrl}/user`, dto, defaultOptionsWithBearer())
         .catch((res: AxiosError) => {
           const {
-            message,
-            error,
-            statusCode
-          }: ApiErrorMessage = res.response.data as ApiErrorMessage;
-          expect(statusCode).toEqual(400);
-          expect(error).toEqual('Bad Request');
-          expect(message).toBeInstanceOf(Array);
-          expect(message).toEqual(allValidations);
+            code,
+            displayMessage,
+            additionalMessages,
+          }: ApiErrorResponse = res.response.data as ApiErrorResponse;
+          expect(res.response.status).toEqual(422);
+          expect(code).toEqual('ValidationError');
+          expect(displayMessage).toEqual('Validation failed');
+          expect(additionalMessages).toBeInstanceOf(Array);
+          expect(JSON.stringify(additionalMessages))
+            .toEqual(JSON.stringify(allValidations));
         });
     });
   });

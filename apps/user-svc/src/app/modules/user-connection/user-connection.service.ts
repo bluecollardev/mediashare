@@ -6,10 +6,11 @@ import { FindOptionsWhere, MongoRepository } from 'typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { IdType } from '@mediashare/shared';
 import { ObjectIdGuard } from '../../core/guards';
-import { DataService, DataServiceValidationResponse } from '../../core/services/data-provider.service';
+import { DataService } from '../../core/services/data-provider.service';
 import { UserConnection } from './entities/user-connection.entity';
 import { CreateUserConnectionDto } from './dto/create-user-connection.dto';
 import { UserConnectionDto } from './dto/user-connection.dto';
+import { ApiErrorResponse, ApiErrorResponses } from '../../core/errors/api-error';
 
 
 // const options: SesEmailOptions = {
@@ -38,9 +39,9 @@ export class UserConnectionService {
     protected logger: PinoLogger,
   ) {}
 
-  async create(createUserConnectionDto: CreateUserConnectionDto): Promise<UserConnectionDto | DataServiceValidationResponse> {
+  async create(createUserConnectionDto: CreateUserConnectionDto): Promise<UserConnectionDto> {
     const errors = await this.dataService.validateDto(CreateUserConnectionDto, createUserConnectionDto);
-    if (errors) return Promise.reject<DataServiceValidationResponse>(errors);
+    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
 
     const { userId, connectionId } = createUserConnectionDto;
     if (userId === connectionId) {

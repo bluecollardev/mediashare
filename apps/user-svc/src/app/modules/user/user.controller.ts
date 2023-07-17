@@ -1,4 +1,3 @@
-import { ObjectIdPipe } from '@mediashare/shared';
 import {
   Controller,
   Body,
@@ -13,6 +12,8 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Response, Request } from 'express';
+import { ObjectIdPipe } from '@mediashare/shared';
+import { handleErrorResponse, handleSuccessResponse } from '../../core/http/response';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
@@ -95,46 +96,81 @@ export class UserController {
   // @UseGuards(AuthenticationGuard)
   @Post()
   @UserPostResponse({ type: UserDto })
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    return await this.userService.create(createUserDto);
+  async createUser(@Res() res: Response, @Body() createUserDto: CreateUserDto) {
+    try {
+      const result = await this.userService.create(createUserDto);
+      return handleSuccessResponse(res, HttpStatus.CREATED, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   // @UseGuards(AuthenticationGuard)
   @Get()
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
-  async getCurrentUser(@GetUserId() userId: string) {
-    return await this.userService.findById(userId);
+  async getCurrentUser(@Res() res: Response, @GetUserId() userId: string) {
+    try {
+      const result = await this.userService.findById(userId);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   @Get(':userId')
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
-  async getUser(@Param('userId', ObjectIdPipe) userId: ObjectId) {
-    return await this.userService.findById(userId);
+  async getUser(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
+    try {
+      const result = await this.userService.findById(userId);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   // @UseGuards(AuthenticationGuard)
   @Put()
   @UserPostResponse({ type: UserDto })
   @ApiBody({ type: UpdateUserDto })
-  async updateCurrentUser(@GetUserId() userId: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.userService.update(userId, updateUserDto);
+  async updateCurrentUser(@Res() res: Response, @GetUserId() userId: string, @Body() updateUserDto: UpdateUserDto) {
+    try {
+      const result = await this.userService.update(userId, updateUserDto);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   @Put(':userId')
   @UserPostResponse({ type: UserDto })
   @ApiBody({ type: UpdateUserDto })
-  async updateUser(@Param('userId', ObjectIdPipe) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
-    return await this.userService.update(userId, updateUserDto);
+  async updateUser(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+    try {
+      const result = await this.userService.update(userId, updateUserDto);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   @Delete()
-  async deleteCurrentUser(@GetUserId() userId: string) {
-    return await this.userService.remove(userId);
+  async deleteCurrentUser(@Res() res: Response, @GetUserId() userId: string) {
+    try {
+      const result = await this.userService.remove(userId);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   @Delete(':userId')
-  async deleteUser(@Param('userId', ObjectIdPipe) userId: ObjectId) {
-    return await this.userService.remove(userId);
+  async deleteUser(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
+    try {
+      const result = await this.userService.remove(userId);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   // TODO: MOVE THIS OUT?
@@ -143,8 +179,23 @@ export class UserController {
   // @ApiBearerAuth()
   // @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
   async getUserMediaItems(@Res() res: Response, @GetUserId() userId: ObjectId) {
-    /*return await this.mediaItemService.getByUserId(userId);*/
+    /*const result = await this.mediaItemService.getByUserId(userId);*/
     return res.send('OK');
+  }
+
+  @Post('connections/create')
+  // @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiBody({ type: UserConnectionDto })
+  async createUserConnection(@Req() req: Request, @Res() res: Response) {
+    try {
+      // We do it this way instead of using the decorator on purpose
+      const userConnectionDto: UserConnectionDto = req.body;
+      const result = await this.userConnectionService.create(userConnectionDto);
+      return handleSuccessResponse(res, HttpStatus.CREATED, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   // @Get('connections')
@@ -153,24 +204,14 @@ export class UserController {
   @ApiBearerAuth()
   @UserGetResponse({ type: UpdateUserConnectionDto, isArray: true })
   // async getUserConnections(@GetUserId() userId: ObjectId) {
-  async getUserConnections(@Param('userId', ObjectIdPipe) userId: ObjectId) {
-    const userConnections = await this.userConnectionService.findConnections(userId);
-    const connectionUserIds = userConnections.map((uc) => uc.connectionId);
-    return await this.userService.findByIds(connectionUserIds);
-  }
-
-  @Post('connections/create')
-  // @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiBody({ type: UserConnectionDto })
-  async createUserConnection(@Req() req: Request, @Res() res: Response) {
-    // eslint-disable-next-line no-useless-catch
+  async getUserConnections(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
     try {
-      const { userId, connectionId } = req.body as any;
-      const result = await this.userConnectionService.create({ userId, connectionId });
-      return res.status(HttpStatus.CREATED).json(result);
+      const userConnections = await this.userConnectionService.findConnections(userId);
+      const connectionUserIds = userConnections.map((uc) => uc.connectionId);
+      const result = await this.userService.findByIds(connectionUserIds);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
-      throw error;
+      return handleErrorResponse(res, error);
     }
   }
 
@@ -178,7 +219,7 @@ export class UserController {
   // @UseGuards(JwtAuthGuard)
   // @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto, isArray: false })
-  async removeUserConnection(@Body() userConnectionDto: UserConnectionDto, @Req() req: Request, @Res() res: Response) {
+  async removeUserConnection(@Req() req: Request, @Res() res: Response, @Body() userConnectionDto: UserConnectionDto) {
     // eslint-disable-next-line no-useless-catch
     try {
       const { userId, connectionId } = req.body as any;
@@ -195,9 +236,9 @@ export class UserController {
         });
       }
       const result = await this.userConnectionService.remove(userConnectionDto);
-      return res.status(HttpStatus.OK).json(result);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
-      throw error;
+      return handleErrorResponse(res, error);
     }
   }
 
@@ -205,14 +246,14 @@ export class UserController {
   // @UseGuards(JwtAuthGuard)
   // @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto, isArray: true })
-  async removeUserConnections(@Body() userConnectionDtos: UserConnectionDto[], @Req() req: Request, @Res() res: Response) {
+  async removeUserConnections(@Req() req: Request, @Res() res: Response, @Body() userConnectionDtos: UserConnectionDto[]) {
     // eslint-disable-next-line no-useless-catch
     try {
       // TODO: Add this functionality back in
       // const shareItemsResult = await this.shareItemService.removeUserConnectionShareItems(userConnectionDtos);
       // if (shareItemsResult) {
-        const userConnectionResult = await this.userConnectionService.removeMany(userConnectionDtos);
-        return res.status(HttpStatus.OK).json(userConnectionResult);
+      const userConnectionResult = await this.userConnectionService.removeMany(userConnectionDtos);
+      return handleSuccessResponse(res, HttpStatus.OK, userConnectionResult);
       // }
 
       /* return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -220,7 +261,7 @@ export class UserController {
         message: `There was a problem removing user connection share items`,
       }); */
     } catch (error) {
-      throw error;
+      return handleErrorResponse(res, error);
     }
   }
 
@@ -260,7 +301,7 @@ export class UserController {
           html: renderInvitationEmailTemplate(currentUser, email),
         };
         console.log(`Sending email invitation on behalf on ${currentUser.email} [${userId}] to: ${email} `);
-        return await this.userConnectionService.sendEmail(mail);
+        const result = await this.userConnectionService.sendEmail(mail);
       };
 
       // Does the user receiving the invitation already have an account?

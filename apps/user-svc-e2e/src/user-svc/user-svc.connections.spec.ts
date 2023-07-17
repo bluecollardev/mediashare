@@ -1,4 +1,5 @@
 /* Ignore module boundaries, it's just our test scaffolding */
+import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios, { AxiosError } from 'axios';
 import { Mapper } from '@automapper/core';
@@ -10,7 +11,6 @@ import { clone } from 'remeda';
 
 import { baseUrl } from './constants';
 import { allValidations } from './fixtures/validations';
-import { ApiErrorMessage } from './functions/errors';
 import { defaultOptionsWithBearer } from './functions/auth';
 import { initializeDB, initializeMapper } from './functions/initializer';
 
@@ -35,31 +35,64 @@ describe('UserAPI.connections.e2e', () => {
     userConnectionRepository = await db.getMongoRepository(UserConnection);
     userConnectionDataService = new UserConnectionDataService(userConnectionRepository, logger)
     userConnectionService = new UserConnectionService(userConnectionDataService, mapper, logger);
-  })
+
+    // Delete all test records
+    await userConnectionRepository.deleteMany({});
+  });
 
   afterAll(async () => {
-    // Delete all test records
-    // await userConnectionRepository.deleteMany({});
     await db.close();
   });
 
   describe('UserConnectionApi validation', () => {
     it('it should return the correct validation errors', async () => {
       const dto = {
-        userId: new ObjectId(),
-        connectionId: new ObjectId()
-      } as CreateUserConnectionDto;
+        userId: null,
+        connectionId: null
+      };
 
       await axios.post(`${baseUrl}/user/connections/create`, dto, defaultOptionsWithBearer())
         .catch((res: AxiosError) => {
           const {
-            message,
-            error,
-            statusCode
-          }: ApiErrorMessage = res.response.data as ApiErrorMessage;
-          expect(statusCode).toEqual(400);
-          expect(error).toEqual('Bad Request');
-          expect(message).toBeInstanceOf(Array);
+            code,
+            displayMessage,
+            additionalMessages,
+          }: ApiErrorResponse = res.response.data as ApiErrorResponse;
+          expect(res.response.status).toEqual(422);
+          expect(code).toEqual('ValidationError');
+          expect(displayMessage).toEqual('Validation failed');
+          expect(additionalMessages).toBeInstanceOf(Array);
+
+          const validationMessages = [
+            {
+              "target": {
+                "userId": null,
+                "connectionId": null
+              },
+              "value": null,
+              "property": "userId",
+              "children": [],
+              "constraints": {
+                "isDefined": "userId should not be null or undefined",
+                "isMongoId": "userId must be a mongodb id"
+              }
+            },
+            {
+              "target": {
+                "userId": null,
+                "connectionId": null
+              },
+              "value": null,
+              "property": "connectionId",
+              "children": [],
+              "constraints": {
+                "isDefined": "connectionId should not be null or undefined",
+                "isMongoId": "connectionId must be a mongodb id"
+              }
+            }
+          ];
+          expect(JSON.stringify(additionalMessages))
+            .toEqual(JSON.stringify(validationMessages));
         });
     });
   });

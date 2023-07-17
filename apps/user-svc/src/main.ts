@@ -20,11 +20,12 @@ async function bootstrap() {
   // We configured Pino
   // app.useLogger(app.get(Logger));
 
-  app.useGlobalPipes(
+  // We're handling validations on our own
+  /* app.useGlobalPipes(
     new ValidationPipe({
       enableDebugMessages: false,
     })
-  );
+  ); */
 
   configureOpenApi(app)(SwaggerModule)({
     globalPrefix,
