@@ -2,32 +2,26 @@ import { ObjectIdPipe } from '@mediashare/shared';
 import {
   Controller,
   Body,
-  UseGuards,
   HttpCode,
   HttpStatus,
-  UnauthorizedException,
   Get,
   Post,
   Put,
   Req,
   Res,
-  Query,
   Param, Delete
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Response, Request } from 'express';
-import { Authentication, AuthenticationGuard } from '@nestjs-cognito/auth';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
-import { CreateUserConnectionDto } from '../user-connection/dto/create-user-connection.dto';
 import { UpdateUserConnectionDto } from '../user-connection/dto/update-user-connection.dto';
 import { UserConnectionService } from '../user-connection/user-connection.service';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
-import { UserGuard } from './user.guard';
 import { UserGetResponse, UserPostResponse } from './user.decorator';
-import { GetUser, GetUserId } from '../../core/decorators/user.decorator';
+import { GetUserId } from '../../core/decorators/user.decorator';
 import { ObjectId } from 'mongodb';
 
 @ApiTags('user')
@@ -153,11 +147,13 @@ export class UserController {
     return res.send('OK');
   }
 
-  @Get('connections')
+  // @Get('connections')
+  @Get('connections/:userId')
   // @UseGuards(UserGuard)
   @ApiBearerAuth()
   @UserGetResponse({ type: UpdateUserConnectionDto, isArray: true })
-  async getUserConnections(@GetUserId() userId: ObjectId) {
+  // async getUserConnections(@GetUserId() userId: ObjectId) {
+  async getUserConnections(@Param('userId', ObjectIdPipe) userId: ObjectId) {
     const userConnections = await this.userConnectionService.findConnections(userId);
     const connectionUserIds = userConnections.map((uc) => uc.connectionId);
     return await this.userService.findByIds(connectionUserIds);
@@ -172,7 +168,7 @@ export class UserController {
     try {
       const { userId, connectionId } = req.body as any;
       const result = await this.userConnectionService.create({ userId, connectionId });
-      return res.status(HttpStatus.OK).json(result);
+      return res.status(HttpStatus.CREATED).json(result);
     } catch (error) {
       throw error;
     }

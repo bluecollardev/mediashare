@@ -5,6 +5,12 @@ import { IsDefined, IsOptional } from 'class-validator';
 import { ObjectId } from 'mongodb';
 
 export class UserConnectionDto {
+  @IsOptional()
+  @AutoMap()
+  @ApiObjectId()
+  @ApiProperty({ required: false })
+  _id?: ObjectId;
+
   @IsDefined()
   @AutoMap()
   @ApiObjectId()
