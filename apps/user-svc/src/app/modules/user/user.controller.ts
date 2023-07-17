@@ -19,6 +19,10 @@ import { Response, Request } from 'express';
 import { Authentication, AuthenticationGuard } from '@nestjs-cognito/auth';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
+import { CreateUserConnectionDto } from '../user-connection/dto/create-user-connection.dto';
+import { UpdateUserConnectionDto } from '../user-connection/dto/update-user-connection.dto';
+import { UserConnectionService } from '../user-connection/user-connection.service';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
 import { UserGuard } from './user.guard';
@@ -31,8 +35,8 @@ import { ObjectId } from 'mongodb';
 export class UserController {
   constructor(
     private userService: UserService,
-    /*private userConnectionService: UserConnectionService,
-    private shareItemService: ShareItemService,
+    private userConnectionService: UserConnectionService,
+    /*private shareItemService: ShareItemService,
     private mediaItemService: MediaItemService*/
   ) {}
 
@@ -142,32 +146,32 @@ export class UserController {
   // TODO: MOVE THIS OUT?
   @Get('media-items')
   // @UseGuards(UserGuard)
-  @ApiBearerAuth()
+  // @ApiBearerAuth()
   // @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
   async getUserMediaItems(@Res() res: Response, @GetUserId() userId: ObjectId) {
     /*return await this.mediaItemService.getByUserId(userId);*/
     return res.send('OK');
   }
 
-  /*@Get('connections')
-  @UseGuards(UserGuard)
+  @Get('connections')
+  // @UseGuards(UserGuard)
   @ApiBearerAuth()
   @UserGetResponse({ type: UpdateUserConnectionDto, isArray: true })
   async getUserConnections(@GetUserId() userId: ObjectId) {
-    const userConnections = await this.userConnectionService.getUserConnections(userId);
+    const userConnections = await this.userConnectionService.findConnections(userId);
     const connectionUserIds = userConnections.map((uc) => uc.connectionId);
-    return await this.userService.getUsersByIds(connectionUserIds);
+    return await this.userService.findByIds(connectionUserIds);
   }
 
   @Post('connections/create')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto })
   async createUserConnection(@Req() req: Request, @Res() res: Response) {
     // eslint-disable-next-line no-useless-catch
     try {
       const { userId, connectionId } = req.body as any;
-      const result = await this.userConnectionService.createUserConnection({ userId, connectionId });
+      const result = await this.userConnectionService.create({ userId, connectionId });
       return res.status(HttpStatus.OK).json(result);
     } catch (error) {
       throw error;
@@ -175,8 +179,8 @@ export class UserController {
   }
 
   @Post('connection/remove')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto, isArray: false })
   async removeUserConnection(@Body() userConnectionDto: UserConnectionDto, @Req() req: Request, @Res() res: Response) {
     // eslint-disable-next-line no-useless-catch
@@ -194,7 +198,7 @@ export class UserController {
           message: `User ID and Connection ID cannot be the same`,
         });
       }
-      const result = await this.userConnectionService.removeUserConnection(userConnectionDto);
+      const result = await this.userConnectionService.remove(userConnectionDto);
       return res.status(HttpStatus.OK).json(result);
     } catch (error) {
       throw error;
@@ -202,30 +206,32 @@ export class UserController {
   }
 
   @Post('connections/remove')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto, isArray: true })
   async removeUserConnections(@Body() userConnectionDtos: UserConnectionDto[], @Req() req: Request, @Res() res: Response) {
     // eslint-disable-next-line no-useless-catch
     try {
-      const shareItemsResult = await this.shareItemService.removeUserConnectionShareItems(userConnectionDtos);
-      if (shareItemsResult) {
-        const userConnectionResult = await this.userConnectionService.removeUserConnections(userConnectionDtos);
+      // TODO: Add this functionality back in
+      // const shareItemsResult = await this.shareItemService.removeUserConnectionShareItems(userConnectionDtos);
+      // if (shareItemsResult) {
+        const userConnectionResult = await this.userConnectionService.removeMany(userConnectionDtos);
         return res.status(HttpStatus.OK).json(userConnectionResult);
-      }
+      // }
 
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      /* return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         statusCode: 500,
         message: `There was a problem removing user connection share items`,
-      });
+      }); */
     } catch (error) {
       throw error;
     }
   }
 
-  @Post('send-email')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  // TODO: Move the mailing part out of here!
+  /* @Post('send-email')
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
   @ApiQuery({ name: 'userId', required: true, description: 'The userId of the currently logged in user' })
   @ApiQuery({ name: 'email', required: true, description: 'The email address to send the invitation to' })
   async sendEmail(@Query('userId') userId, @Query('email') email, @Res() res: Response) {
@@ -265,7 +271,7 @@ export class UserController {
       if (hasMatchingUsers) {
         // If matching users we need to send an email invitation
         // Get all existing user connections
-        const currentUserConnections = await this.userConnectionService.getUserConnections(userId);
+        const currentUserConnections = await this.userConnectionService.findConnections(userId);
         // For each matching user account, send out an email invitation
         const invitationsToSend = matchingUsers
           // A user cannot be both the sender and the recipient of an invitation
@@ -292,5 +298,5 @@ export class UserController {
         statusCode: 500,
       });
     }
-  }*/
+  } */
 }

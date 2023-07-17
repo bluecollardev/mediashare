@@ -1,8 +1,8 @@
 import { AutoMap } from '@automapper/classes';
 import { Entity, Column } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
 import { ApiBaseEntity } from '../../../core/entities/base.entity';
 import { BcRolesType, BC_ROLES } from '../../../core/models';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('user')
 export class User extends ApiBaseEntity {

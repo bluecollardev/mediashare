@@ -1,4 +1,4 @@
-import { CognitoAuthModule } from '@nestjs-cognito/auth';
+// import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
@@ -8,6 +8,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
+import { UserConnectionModule } from './modules/user-connection/user-connection.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { UserModule } from './modules/user/user.module';
       },
     }), */
     UserModule,
+    UserConnectionModule,
     LoggerModule.forRoot(),
   ],
   controllers: [AppController],

@@ -29,9 +29,9 @@ export class UserDataService extends DataService<User, MongoRepository<User>> {
 @Injectable()
 export class UserService {
   constructor(
-    protected dataService: UserDataService,
+    public dataService: UserDataService,
     @InjectMapper() private readonly classMapper: Mapper,
-    logger: PinoLogger,
+    protected logger: PinoLogger,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto | DataServiceValidationResponse> {
@@ -118,7 +118,7 @@ export class UserService {
       .toArray();
   }
 
-  async findAll() {
+  async findMany() {
     return await this.dataService.repository
       .aggregate([
         // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'userId', as: 'sharedMediaItems' } },
