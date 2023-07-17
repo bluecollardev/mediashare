@@ -1,5 +1,4 @@
 /* Ignore module boundaries, it's just our test scaffolding */
-import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios, { AxiosError } from 'axios';
 import { Mapper } from '@automapper/core';
@@ -7,37 +6,68 @@ import { stub } from 'jest-auto-stub/src/index';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { DataSource, MongoRepository } from 'typeorm';
-import { clone } from 'remeda';
 
 import { baseUrl } from './constants';
-import { allValidations } from './fixtures/validations';
 import { defaultOptionsWithBearer } from './functions/auth';
+import { createUser } from './functions/generators';
 import { initializeDB, initializeMapper } from './functions/initializer';
 
+import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
 import { CreateUserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/create-user-connection.dto';
 import { UpdateUserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/update-user-connection.dto';
 import { UserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/user-connection.dto';
 import { UserConnection } from '@mediashare/user-svc/src/app/modules/user-connection/entities/user-connection.entity';
 import { UserConnectionDataService, UserConnectionService } from '@mediashare/user-svc/src/app/modules/user-connection/user-connection.service';
+import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
+import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
 
 describe('UserAPI.connections.e2e', () => {
   let db: DataSource;
   let userConnectionService: UserConnectionService;
   let userConnectionRepository: MongoRepository<UserConnection>;
   let userConnectionDataService: UserConnectionDataService;
+  let userRepository: MongoRepository<User>;
   let mapper: Mapper;
+
+  let user;
+  let conn1;
+  let conn2;
 
   beforeAll(async () => {
     const logger = stub<PinoLogger>();
     mapper = initializeMapper(UserConnection, UserConnectionDto, CreateUserConnectionDto, UpdateUserConnectionDto);
-    db = await initializeDB([UserConnection]);
+    db = await initializeDB([User, UserConnection]);
 
+    userRepository = await db.getMongoRepository(User);
     userConnectionRepository = await db.getMongoRepository(UserConnection);
     userConnectionDataService = new UserConnectionDataService(userConnectionRepository, logger)
     userConnectionService = new UserConnectionService(userConnectionDataService, mapper, logger);
 
     // Delete all test records
+    await userRepository.deleteMany({});
     await userConnectionRepository.deleteMany({});
+
+    // Create some users for our test
+    user = (await createUser({
+      username: 'jsmith',
+      email: 'jsmith@example.com',
+      firstName: 'John',
+      lastName: 'Smith',
+    })).data;
+
+    conn1 = (await createUser({
+      username: 'ryanjohnson',
+      email: 'ryanj@example.com',
+      firstName: 'Ryan',
+      lastName: 'Johnson',
+    })).data;
+
+    conn2 = (await createUser({
+      username: 'barbs',
+      email: 'barbs@example.com',
+      firstName: 'Barbra',
+      lastName: 'Streisand',
+    })).data;
   });
 
   afterAll(async () => {
@@ -99,59 +129,68 @@ describe('UserAPI.connections.e2e', () => {
 
 
   describe('UserConnectionApi should create, find and delete a new user connection', () => {
-    let createdUserConnectionId;
-    let createdUserConnection: UserConnectionDto;
+    let uc1Id: ObjectId;
+    let uc2Id: ObjectId;
 
-    it('it should create a new user connection', async () => {
-      const dto = {
-        userId: new ObjectId(),
-        connectionId: new ObjectId()
+    it('it should create a first user connection', async () => {
+      const uc1dto = {
+        userId: user._id,
+        connectionId: conn1._id,
       } as CreateUserConnectionDto;
 
-      await axios.post(`${baseUrl}/user/connections/create`, dto, defaultOptionsWithBearer())
+      // Create user connection 1
+      await axios.post(`${baseUrl}/user/connections/create`, uc1dto, defaultOptionsWithBearer())
         .then((res) => {
           expect(res.status).toEqual(201);
 
           const uc: UserConnectionDto = res.data;
           expect(uc._id).toBeDefined();
           // Save created user to test suite for the remaining tests
-          createdUserConnectionId = uc._id;
-          createdUserConnection = clone(uc);
+          uc1Id = uc._id;
 
-          expect(uc.userId).toBeDefined();
-          expect(uc.connectionId).toBeDefined();
+          expect(uc.userId).toEqual(user._id);
+          expect(uc.connectionId).toEqual(conn1._id);
         })
         .catch((err) => {
           throw err;
         });
     });
 
-    it('should get the user connection we created', async () => {
-      const userId = createdUserConnection.userId.toString();
-      await axios.get(`${baseUrl}/user/connections/${userId}`, defaultOptionsWithBearer())
-        .then((res) => {
-          expect(res.status).toEqual(200);
+    it('it should create a second user connection', async () => {
+      // Create user connection 2
+      const uc2dto = {
+        userId: user._id,
+        connectionId: conn2._id,
+      } as CreateUserConnectionDto;
 
-          /* const uc: UserConnectionDto = res.data;
+      await axios.post(`${baseUrl}/user/connections/create`, uc2dto, defaultOptionsWithBearer())
+        .then((res) => {
+          expect(res.status).toEqual(201);
+
+          const uc: UserConnectionDto = res.data;
           expect(uc._id).toBeDefined();
-          expect(uc.userId).toBeDefined();
-          expect(uc.connectionId).toBeDefined(); */
+          // Save created user to test suite for the remaining tests
+          uc2Id = uc._id;
+
+          expect(uc.userId).toEqual(user._id);
+          expect(uc.connectionId).toEqual(conn2._id);
         })
         .catch((err) => {
           throw err;
         });
     });
 
-    it('should get all the user connections for a user', async () => {
-      const userId = createdUserConnection.userId.toString();
-      await axios.get(`${baseUrl}/user/connections/${userId}`, defaultOptionsWithBearer())
+    it('should get the two user connections we created', async () => {
+      await axios.get(`${baseUrl}/user/connections/${user._id.toString()}`, defaultOptionsWithBearer())
         .then((res) => {
           expect(res.status).toEqual(200);
-
-          /* const uc: UserConnectionDto = res.data;
-          expect(uc._id).toBeDefined();
-          expect(uc.userId).toBeDefined();
-          expect(uc.connectionId).toBeDefined(); */
+          const users: UserDto[] = res.data as UserDto[];
+          expect(users).toBeInstanceOf(Array);
+          expect(users).toHaveLength(2);
+          const uc1 = users.find((u) => u._id.toString() === conn1._id.toString());
+          const uc2 = users.find((u) => u._id.toString() === conn2._id.toString());
+          expect(uc1._id).toEqual(conn1._id);
+          expect(uc2._id).toEqual(conn2._id);
         })
         .catch((err) => {
           throw err;

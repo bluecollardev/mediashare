@@ -51,12 +51,12 @@ export class UserConnectionService {
     }
 
     const rel1 = await this.classMapper.map({
-      userId: userId,
-      connectionId: connectionId,
+      userId: ObjectIdGuard(userId),
+      connectionId: ObjectIdGuard(connectionId),
     }, CreateUserConnectionDto, UserConnection);
     const rel2 = await this.classMapper.map({
-      userId: connectionId,
-      connectionId: userId,
+      userId: ObjectIdGuard(connectionId),
+      connectionId: ObjectIdGuard(userId),
     }, CreateUserConnectionDto, UserConnection);
 
     await Promise.all([
@@ -73,8 +73,9 @@ export class UserConnectionService {
         userId: ObjectIdGuard(userId),
       } as FindOptionsWhere<UserConnection>,
     });
+
     const results = entities.map(async (entity) =>
-      this.classMapper.mapAsync(entity, UserConnection, UserConnectionDto));
+      await this.classMapper.mapAsync(entity, UserConnection, UserConnectionDto));
 
     return await Promise.all(results);
   }

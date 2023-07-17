@@ -11,6 +11,7 @@ import { clone } from 'remeda';
 import { baseUrl } from './constants';
 import { allValidations } from './fixtures/validations';
 import { defaultOptionsWithBearer } from './functions/auth';
+import { createUser } from './functions/generators';
 import { initializeDB, initializeMapper } from './functions/initializer';
 
 import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
@@ -74,15 +75,12 @@ describe('UserAPI.e2e', () => {
     let createdUser: UserDto;
 
     it('it should create a new user', async () => {
-      const dto = {
-        sub: randomUUID(),
+      createUser({
         username: 'jsmith',
         email: 'jsmith@example.com',
         firstName: 'John',
         lastName: 'Smith',
-      } as CreateUserDto;
-
-      await axios.post(`${baseUrl}/user`, dto, defaultOptionsWithBearer())
+      })
         .then((res) => {
           expect(res.status).toEqual(201);
 

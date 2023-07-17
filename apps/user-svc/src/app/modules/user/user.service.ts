@@ -59,6 +59,7 @@ export class UserService {
     return this.dataService.findOne(id);
   }
 
+  // TODO: Use mapper
   findById(id: IdType) {
     return this.dataService.repository
       .aggregate([
@@ -89,7 +90,8 @@ export class UserService {
       .next();
   }
 
-  findByIds(ids: ObjectId[]) {
+  // TODO: Use mapper
+  findByIds(ids: IdType[]) {
     return this.dataService.repository
       .aggregate([
         { $match: { _id: { $in: [...ids] } } },

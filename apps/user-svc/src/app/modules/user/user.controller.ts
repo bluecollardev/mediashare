@@ -17,6 +17,7 @@ import { handleErrorResponse, handleSuccessResponse } from '../../core/http/resp
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
+import { CreateUserConnectionDto } from '../user-connection/dto/create-user-connection.dto';
 import { UpdateUserConnectionDto } from '../user-connection/dto/update-user-connection.dto';
 import { UserConnectionService } from '../user-connection/user-connection.service';
 import { UserDto } from './dto/user.dto';
@@ -186,11 +187,11 @@ export class UserController {
   @Post('connections/create')
   // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiBody({ type: UserConnectionDto })
+  @ApiBody({ type: CreateUserConnectionDto })
   async createUserConnection(@Req() req: Request, @Res() res: Response) {
     try {
       // We do it this way instead of using the decorator on purpose
-      const userConnectionDto: UserConnectionDto = req.body;
+      const userConnectionDto: CreateUserConnectionDto = req.body;
       const result = await this.userConnectionService.create(userConnectionDto);
       return handleSuccessResponse(res, HttpStatus.CREATED, result);
     } catch (error) {
@@ -202,12 +203,14 @@ export class UserController {
   @Get('connections/:userId')
   // @UseGuards(UserGuard)
   @ApiBearerAuth()
-  @UserGetResponse({ type: UpdateUserConnectionDto, isArray: true })
+  @UserGetResponse({ type: UserDto, isArray: true }) // TODO: Use ProfileDto
   // async getUserConnections(@GetUserId() userId: ObjectId) {
   async getUserConnections(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
     try {
       const userConnections = await this.userConnectionService.findConnections(userId);
-      const connectionUserIds = userConnections.map((uc) => uc.connectionId);
+      const connectionUserIds = userConnections.map((uc) => uc.connectionId)
+
+      // TODO: Use mapper in findByIds
       const result = await this.userService.findByIds(connectionUserIds);
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
