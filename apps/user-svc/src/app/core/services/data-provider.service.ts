@@ -68,18 +68,17 @@ export abstract class DataService<E extends DataProviderBaseEntity<E>, R extends
    */
   async update(id: IdType, entity: Partial<E>): Promise<E> {
     try {
-      // const errors = await this.validateEntity(entity);
-      // if (errors) return errors as DataServiceValidationResponse;
       const entityWithNoId = omit(entity, ['_id'])
-      const result = await this.repository.findOneAndUpdate({ _id: ObjectIdGuard(id) }, { $set: { ...entityWithNoId } });
+      await this.repository.findOneAndUpdate(
+        { _id: ObjectIdGuard(id) },
+        { $set: { ...entityWithNoId }
+        });
       // Node.js Mongo https://mongodb.github.io/node-mongodb-native/3.1/api/Collection.html#~findAndModifyWriteOpResult
       // For whatever reason, although the return type is Promise<Document>,
       // we're getting back a findAndModifyWriteOpResultObject:
       // { value, lastErrorObject, ok }
-      if (result && result.value && result.ok) {
-        return result.value as E;
-      }
-      return result as E;
+      return await this.findOne(id) as E;
+      // return result.value as E;
     } catch (error) {
       this.logger.error(`${this.constructor.name}.update ${error}`);
       throw error;

@@ -1,3 +1,4 @@
+import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
@@ -29,6 +30,13 @@ import { UserModule } from './modules/user/user.module';
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
+    /* CognitoAuthModule.register({
+      jwtVerifier: {
+        userPoolId: process.env.COGNITO_USER_POOL_ID || 'us-west-2_NIibhhG4d',
+        clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
+        tokenUse: 'id',
+      },
+    }), */
     UserModule,
     LoggerModule.forRoot(),
   ],

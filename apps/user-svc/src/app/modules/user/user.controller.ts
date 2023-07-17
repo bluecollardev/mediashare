@@ -1,6 +1,22 @@
-import { Controller, Body, UseGuards, HttpCode, HttpStatus, UnauthorizedException, Get, Post, Put, Req, Res, Query } from '@nestjs/common';
+import { ObjectIdPipe } from '@mediashare/shared';
+import {
+  Controller,
+  Body,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+  UnauthorizedException,
+  Get,
+  Post,
+  Put,
+  Req,
+  Res,
+  Query,
+  Param, Delete
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response, Request } from 'express';
+import { Authentication, AuthenticationGuard } from '@nestjs-cognito/auth';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
@@ -78,32 +94,54 @@ export class UserController {
   }
 
   // TODO: Make sure only admins and test users can access this endpoint!
+  // @UseGuards(AuthenticationGuard)
   @Post()
-  async createUser(@Res() res: Response, @Body() createUserDto: CreateUserDto) {
+  @UserPostResponse({ type: UserDto })
+  async createUser(@Body() createUserDto: CreateUserDto) {
     return await this.userService.create(createUserDto);
   }
 
+  // @UseGuards(AuthenticationGuard)
   @Get()
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
-  async getUser(@Res() res: Response, @GetUserId() userId: string) {
+  async getCurrentUser(@GetUserId() userId: string) {
     return await this.userService.findById(userId);
   }
 
+  @Get(':userId')
+  @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
+  async getUser(@Param('userId', ObjectIdPipe) userId: ObjectId) {
+    return await this.userService.findById(userId);
+  }
+
+  // @UseGuards(AuthenticationGuard)
   @Put()
-  @UserPostResponse()
+  @UserPostResponse({ type: UserDto })
   @ApiBody({ type: UpdateUserDto })
-  async updateUser(@Res() res: Response, @GetUserId() userId: string, @Body() updateUserDto: UpdateUserDto) {
+  async updateCurrentUser(@GetUserId() userId: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.update(userId, updateUserDto);
   }
 
-  /* @Delete()
-  async deleteUser(@Res() res: Response, @GetUserId() userId: string) {
-    return await this.userService.delete(userId);
-  } */
+  @Put(':userId')
+  @UserPostResponse({ type: UserDto })
+  @ApiBody({ type: UpdateUserDto })
+  async updateUser(@Param('userId', ObjectIdPipe) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.update(userId, updateUserDto);
+  }
+
+  @Delete()
+  async deleteCurrentUser(@GetUserId() userId: string) {
+    return await this.userService.remove(userId);
+  }
+
+  @Delete(':userId')
+  async deleteUser(@Param('userId', ObjectIdPipe) userId: ObjectId) {
+    return await this.userService.remove(userId);
+  }
 
   // TODO: MOVE THIS OUT?
   @Get('media-items')
-  @UseGuards(UserGuard)
+  // @UseGuards(UserGuard)
   @ApiBearerAuth()
   // @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
   async getUserMediaItems(@Res() res: Response, @GetUserId() userId: ObjectId) {

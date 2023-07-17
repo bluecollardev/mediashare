@@ -19,7 +19,8 @@
       "@mediashare/core": ["libs/core/src/index.ts"],
       "@mediashare/shared": ["libs/shared/src/index.ts"],
       "@mediashare/shared/*": ["libs/shared/src/lib/*"],
-      "@mediashare/utility": ["libs/utility/src/index.ts"]
+      "@mediashare/utility": ["libs/utility/src/index.ts"],
+      "@mediashare/user-svc/*": ["apps/user-svc/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

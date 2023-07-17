@@ -14,6 +14,10 @@ export default {
       },
     ],
   },
+  transformIgnorePatterns: [
+    // Fix for jest-auto-stub
+    "/node_modules/(?!(jest-auto-stub)/).*/"
+  ],
   moduleFileExtensions: ['ts', 'js', 'html'],
   // coverageDirectory: '../../coverage/user-svc-e2e',
 };

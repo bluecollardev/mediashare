@@ -85,7 +85,7 @@ describe('UserService', () => {
     });
   });
 
-  describe('UserService should create and update a new user', () => {
+  describe('UserService should create, find, update and delete a new user', () => {
     let createdUserId;
 
     it('should create a new user', async () => {
@@ -140,17 +140,17 @@ describe('UserService', () => {
       const updatedUser = clone(user);
       updatedUser.username = 'jr.smith';
       updatedUser.email = 'jr.smith@example.com';
-      await userService.update(createdUserId, user)
-        .then((updatedUser) => {
-          if (updatedUser instanceof UserDto) {
-            expect(updatedUser).toBeDefined();
-            expect(updatedUser.sub).toBeDefined();
-            expect(updatedUser.username).toEqual('jsmith');
-            expect(updatedUser.email).toEqual('jsmith@example.com');
-            expect(updatedUser.firstName).toEqual('John');
-            expect(updatedUser.lastName).toEqual('Smith');
-            expect(updatedUser.createdAt).toBeDefined();
-            expect(updatedUser.updatedDate).toBeDefined();
+      await userService.update(createdUserId, updatedUser)
+        .then((updated) => {
+          if (updated instanceof UserDto) {
+            expect(updated).toBeDefined();
+            expect(updated.sub).toBeDefined();
+            expect(updated.username).toEqual('jr.smith');
+            expect(updated.email).toEqual('jr.smith@example.com');
+            expect(updated.firstName).toEqual('John');
+            expect(updated.lastName).toEqual('Smith');
+            expect(updated.createdAt).toBeDefined();
+            expect(updated.updatedDate).toBeDefined();
           } else {
             throwInvalidUserDtoError();
           }
@@ -161,12 +161,12 @@ describe('UserService', () => {
         });
     });
 
-    it('should find the user we created', async () => {
+    it('should find the user we updated', async () => {
       const user = await userService.findById(createdUserId);
       expect(user).toBeDefined();
       expect(user.sub).toBeUndefined();
-      expect(user.username).toEqual('jsmith');
-      expect(user.email).toEqual('jsmith@example.com');
+      expect(user.username).toEqual('jr.smith');
+      expect(user.email).toEqual('jr.smith@example.com');
       expect(user.firstName).toEqual('John');
       expect(user.lastName).toEqual('Smith');
       // TODO: Fix these they are broken!
