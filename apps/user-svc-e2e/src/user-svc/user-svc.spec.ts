@@ -90,6 +90,59 @@ describe('UserAPI.e2e', () => {
             .toEqual(JSON.stringify(allValidations));
         });
     });
+
+    it('it should NOT save extra fields to db when you supply extra fields', async () => {
+      const junkData = {
+        "likesCount": 0,
+        "sharesCount": 4,
+        "sharedCount": 2,
+        "sharedItems": [
+          {
+            "_id": "6190693aa0c0e20021fa2324",
+            "title": "Test",
+            "category": "free",
+            "description": "Make a longer test description for this!",
+            "mediaIds": [
+              "619a2f18affc010021370ba7",
+              "619a2f1caffc010021370ba8"
+            ],
+          },
+          {
+            "_id": "6190693aa0c0e20021fa2324",
+            "title": "Test",
+            "category": "free",
+            "description": "We need a longer description for this playlist.",
+            "mediaIds": [
+              "619a2f18affc010021370ba7",
+              "619a2f1caffc010021370ba8"
+            ],
+          }
+        ],
+      }
+      const userData = {
+        username: 'jsmith',
+        email: 'jsmith@example.com',
+        firstName: 'John',
+        lastName: 'Smith',
+        ...junkData,
+      };
+      createUser(userData)
+        .then((res) => {
+          expect(res.status).toEqual(201);
+
+          const user: UserDto = res.data;
+          expect(user._id).toBeDefined();
+          const junkUserKeys = Object.keys(junkData);
+          const userKeys = [ ...Object.keys(user) ];
+          const matches = junkUserKeys.reduce((acc, cur) => {
+            if (userKeys.includes(cur)) {
+              acc.push(cur);
+            }
+            return acc;
+          }, []);
+          expect(matches).toHaveLength(0);
+        })
+    });
   });
 
 
@@ -126,7 +179,7 @@ describe('UserAPI.e2e', () => {
     });
 
     it('should update the user we create', async () => {
-      const testUser = await createAndValidateTestUser();
+      const testUser = await createAndValidateTestUser() as UserDto;
       const testUserId = getTestUserId(testUser);
 
       const dto = clone(testUser) as UpdateUserDto;
@@ -138,14 +191,14 @@ describe('UserAPI.e2e', () => {
           expect(res.status).toEqual(200);
 
           const updated: UserDto = res.data;
-          expect(updated._id).toBeDefined();
           expect(updated).toBeDefined();
+          expect(updated._id).toEqual(testUserId);
           expect(updated.sub).toBeDefined();
           expect(updated.username).toEqual('jr.smith');
           expect(updated.email).toEqual('jr.smith@example.com');
           expect(updated.firstName).toEqual('John');
           expect(updated.lastName).toEqual('Smith');
-          expect(updated.createdAt).toBeDefined();
+          expect(updated.createdAt).toEqual(testUser.createdAt);
           expect(updated.updatedDate).toBeDefined();
 
           // Don't trust the response object - find the user, and make sure it's updated too
