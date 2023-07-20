@@ -2,7 +2,6 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios, { AxiosError } from 'axios';
 import { Mapper } from '@automapper/core';
-import { randomUUID } from 'crypto';
 import { stub } from 'jest-auto-stub/src/index';
 import { PinoLogger } from 'nestjs-pino';
 import { DataSource, MongoRepository } from 'typeorm';
@@ -20,7 +19,31 @@ import { UpdateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/upd
 import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 import { UserDataService, UserService } from '@mediashare/user-svc/src/app/modules/user/user.service';
+import { testAndCloneUser } from './test-components';
 
+const createAndValidateTestUser = async () => {
+  return new Promise((resolve, reject) => {
+    const userData = {
+      username: 'jsmith',
+      email: 'jsmith@example.com',
+      firstName: 'John',
+      lastName: 'Smith',
+    };
+    createUser(userData)
+      .then((res) => {
+        expect(res.status).toEqual(201);
+        const user: UserDto = res.data;
+        testAndCloneUser(user, userData);
+        resolve(user);
+      })
+      .catch((err) => {
+        expect(err).toBeDefined();
+        reject(err);
+      });
+  });
+}
+
+const getTestUserId = (testUser) => testUser._id.toString();
 
 describe('UserAPI.e2e', () => {
   let db: DataSource;
@@ -71,43 +94,15 @@ describe('UserAPI.e2e', () => {
 
 
   describe('UserApi should create, find, update and delete a new user', () => {
-    let createdUserId;
-    let createdUser: UserDto;
-
     it('it should create a new user', async () => {
-      createUser({
-        username: 'jsmith',
-        email: 'jsmith@example.com',
-        firstName: 'John',
-        lastName: 'Smith',
-      })
-        .then((res) => {
-          expect(res.status).toEqual(201);
-
-          const user: UserDto = res.data;
-          expect(user._id).toBeDefined();
-          // Save created user to test suite for the remaining tests
-          createdUserId = user._id;
-          createdUser = clone(user);
-
-          expect(user.sub).toBeDefined();
-          expect(user.username).toEqual('jsmith');
-          expect(user.email).toEqual('jsmith@example.com');
-          expect(user.firstName).toEqual('John');
-          expect(user.lastName).toEqual('Smith');
-          expect(user.createdAt).toBeDefined();
-          expect(user.updatedDate).toBeDefined();
-          // throwInvalidUserDtoError();
-        })
-        .catch((err) => {
-          expect(err).toBeDefined();
-          // throwValidationError(errors);
-          throw err;
-        });
+      await createAndValidateTestUser();
     });
 
-    it('should get the user we created', async () => {
-      await axios.get(`${baseUrl}/user/${createdUserId}`, defaultOptionsWithBearer())
+    it('should get the user we create', async () => {
+      const testUser = await createAndValidateTestUser();
+      const testUserId = getTestUserId(testUser);
+
+      await axios.get(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer())
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -130,13 +125,16 @@ describe('UserAPI.e2e', () => {
         });
     });
 
-    it('should update the user we created', async () => {
-      const dto = clone(createdUser) as UpdateUserDto;
+    it('should update the user we create', async () => {
+      const testUser = await createAndValidateTestUser();
+      const testUserId = getTestUserId(testUser);
+
+      const dto = clone(testUser) as UpdateUserDto;
       dto.username = 'jr.smith';
       dto.email = 'jr.smith@example.com';
 
-      await axios.put(`${baseUrl}/user/${createdUserId}`, dto, defaultOptionsWithBearer())
-        .then((res) => {
+      await axios.put(`${baseUrl}/user/${testUserId}`, dto, defaultOptionsWithBearer())
+        .then(async (res) => {
           expect(res.status).toEqual(200);
 
           const updated: UserDto = res.data;
@@ -149,6 +147,20 @@ describe('UserAPI.e2e', () => {
           expect(updated.lastName).toEqual('Smith');
           expect(updated.createdAt).toBeDefined();
           expect(updated.updatedDate).toBeDefined();
+
+          // Don't trust the response object - find the user, and make sure it's updated too
+          await axios.get(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer())
+            .then((res) => {
+              expect(res.status).toEqual(200);
+
+              const user: UserDto = res.data;
+              expect(user).toBeDefined();
+              expect(user.sub).toBeUndefined();
+              expect(user.username).toEqual('jr.smith');
+              expect(user.email).toEqual('jr.smith@example.com');
+              expect(user.firstName).toEqual('John');
+              expect(user.lastName).toEqual('Smith');
+            });
         })
         .catch((err) => {
           throw err;
@@ -157,23 +169,11 @@ describe('UserAPI.e2e', () => {
         });
     });
 
-    it('should find the user we updated', async () => {
-      await axios.get(`${baseUrl}/user/${createdUserId}`, defaultOptionsWithBearer())
-        .then((res) => {
-          expect(res.status).toEqual(200);
-
-          const user: UserDto = res.data;
-          expect(user).toBeDefined();
-          expect(user.sub).toBeUndefined();
-          expect(user.username).toEqual('jr.smith');
-          expect(user.email).toEqual('jr.smith@example.com');
-          expect(user.firstName).toEqual('John');
-          expect(user.lastName).toEqual('Smith');
-        });
-    });
-
     it('should delete the user we created', async () => {
-      await axios.delete(`${baseUrl}/user/${createdUserId}`, defaultOptionsWithBearer())
+      const testUser = await createAndValidateTestUser();
+      const testUserId = getTestUserId(testUser);
+
+      await axios.delete(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer())
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

@@ -1,11 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { FindManyOptions, FindOneOptions, MongoRepository } from 'typeorm';
+import { MongoRepository } from 'typeorm';
 import { SearchParameters } from '@mediashare/shared';
+import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
+import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
 import { DataProviderBaseEntity } from '../entities/base.entity';
 import { ObjectIdGuard } from '../guards';
 import { IdType } from '@mediashare/shared';
-import { clone, omit } from 'remeda';
+import { omit } from 'remeda';
 import { validate, ValidationError } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 
@@ -109,7 +111,7 @@ export abstract class DataService<E extends DataProviderBaseEntity<E>, R extends
    * @return {*}
    * @memberof DataService
    */
-  async findOne(id: IdType, opts: FindOneOptions | undefined = undefined): Promise<E> {
+  async findOne(id: IdType, opts: MongoFindOneOptions | undefined = undefined): Promise<E> {
     try {
       const document = await this.repository.findOneBy({ _id: ObjectIdGuard(id) });
       return document as E;
@@ -142,7 +144,7 @@ export abstract class DataService<E extends DataProviderBaseEntity<E>, R extends
    * @return {*}
    * @memberof DataService
    */
-  async findByQuery(query: FindManyOptions<E>): Promise<E> {
+  async findByQuery(query: MongoFindOneOptions<E>): Promise<E> {
     try {
       const findByQuery = await this.repository.findOne(query);
       return findByQuery as E;
@@ -159,7 +161,7 @@ export abstract class DataService<E extends DataProviderBaseEntity<E>, R extends
    * @return {*}
    * @memberof DataService
    */
-  async findAllByQuery(query: FindManyOptions<E>): Promise<E[]> {
+  async findAllByQuery(query: MongoFindManyOptions<E>): Promise<E[]> {
     try {
       const findByQuery = await this.repository.find(query);
       return findByQuery as E[];
