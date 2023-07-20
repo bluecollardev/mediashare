@@ -1,4 +1,5 @@
-import { defaultImgUrl } from './user.constants';
+import { UseGuards } from '@nestjs/common';
+import { Authentication, AuthenticationGuard } from '@nestjs-cognito/auth';
 import {
   Controller,
   Body,
@@ -27,7 +28,10 @@ import { UserGetResponse, UserPostResponse } from './user.decorator';
 import { GetUserId } from '../../core/decorators/user.decorator';
 import { ObjectId } from 'mongodb';
 
+import { defaultImgUrl } from './user.constants';
+
 @ApiTags('user')
+@Authentication()
 @Controller({ path: ['user'] })
 export class UserController {
   constructor(
@@ -87,8 +91,8 @@ export class UserController {
     return res.send('OK');
   }
 
-  // TODO: Make sure only admins and test users can access this endpoint!
-  // @UseGuards(AuthenticationGuard)
+  // TODO: Make sure only admins and test users can access this endpoint!z
+  @UseGuards(AuthenticationGuard)
   @Post()
   @UserPostResponse({ type: UserDto })
   async createUser(@Res() res: Response, @Body() createUserDto: CreateUserDto) {
@@ -100,7 +104,7 @@ export class UserController {
     }
   }
 
-  // @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard)
   @Get()
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
   async getCurrentUser(@Res() res: Response, @GetUserId() userId: string) {
@@ -112,6 +116,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthenticationGuard)
   @Get(':userId')
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
@@ -124,7 +129,7 @@ export class UserController {
     }
   }
 
-  // @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard)
   @Put()
   @UserPostResponse({ type: UserDto })
   @ApiBody({ type: UpdateUserDto })
@@ -137,6 +142,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthenticationGuard)
   @Put(':userId')
   @ApiParam({ name: 'userId', type: String, required: true })
   @UserPostResponse({ type: UserDto })
@@ -150,6 +156,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthenticationGuard)
   @Delete()
   async deleteCurrentUser(@Res() res: Response, @GetUserId() userId: string) {
     try {
@@ -160,6 +167,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthenticationGuard)
   @Delete(':userId')
   @ApiParam({ name: 'userId', type: String, required: true })
   async deleteUser(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
@@ -172,6 +180,7 @@ export class UserController {
   }
 
   // TODO: MOVE THIS OUT?
+  @UseGuards(AuthenticationGuard)
   @Get('media-items')
   // @UseGuards(UserGuard)
   // @ApiBearerAuth()
@@ -181,6 +190,7 @@ export class UserController {
     return res.send('OK');
   }
 
+  @UseGuards(AuthenticationGuard)
   @Post('connections/create')
   // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -197,9 +207,10 @@ export class UserController {
   }
 
   // @Get('connections')
+  @UseGuards(AuthenticationGuard)
   @Get('connections/:userId')
   // @UseGuards(UserGuard)
-  @ApiBearerAuth()
+  // @ApiBearerAuth()
   @UserGetResponse({ type: UserDto, isArray: true }) // TODO: Use ProfileDto
   // async getUserConnections(@GetUserId() userId: ObjectId) {
   async getUserConnections(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
@@ -215,6 +226,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthenticationGuard)
   @Post('connection/remove')
   // @UseGuards(JwtAuthGuard)
   // @ApiBearerAuth()
@@ -242,6 +254,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthenticationGuard)
   @Post('connections/remove')
   // @UseGuards(JwtAuthGuard)
   // @ApiBearerAuth()

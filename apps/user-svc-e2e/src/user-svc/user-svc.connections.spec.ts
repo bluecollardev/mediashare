@@ -8,11 +8,11 @@ import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { DataSource, MongoRepository } from 'typeorm';
 
-import { getBaseUrl } from './functions/app';
-import { defaultOptionsWithBearer } from './functions/auth';
-import { createUser } from './functions/generators';
-import { initializeApp, initializeDB, initializeMapper } from './functions/initializer';
+import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './functions/app';
+import { defaultOptionsWithBearer, login } from './functions/auth';
+import { createUser as createUserFunction } from './functions/generators';
 
+import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
 import { CreateUserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/create-user-connection.dto';
 import { UpdateUserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/update-user-connection.dto';
@@ -32,6 +32,8 @@ describe('UserAPI.connections.e2e', () => {
   let userConnectionDataService: UserConnectionDataService;
   let userRepository: MongoRepository<User>;
   let mapper: Mapper;
+  let authResponse: AuthenticationResultType
+  let createUser;
 
   let user;
   let conn1;
@@ -54,6 +56,15 @@ describe('UserAPI.connections.e2e', () => {
     // Delete all test records
     await userRepository.deleteMany({});
     await userConnectionRepository.deleteMany({});
+
+    authResponse = await login(baseUrl, {
+      username: process.env.COGNITO_USER_EMAIL,
+      password: process.env.COGNITO_USER_PASSWORD,
+      clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
+    });
+    console.log(`Logged in`, authResponse);
+
+    createUser = createUserFunction({ baseUrl, token: authResponse?.IdToken });
 
     // Create some users for our test
     user = (await createUser({
@@ -90,7 +101,7 @@ describe('UserAPI.connections.e2e', () => {
         connectionId: null
       };
 
-      await axios.post(`${baseUrl}/user/connections/create`, dto, defaultOptionsWithBearer())
+      await axios.post(`${baseUrl}/user/connections/create`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .catch((res: AxiosError) => {
           const {
             code,
@@ -148,7 +159,7 @@ describe('UserAPI.connections.e2e', () => {
       } as CreateUserConnectionDto;
 
       // Create user connection 1
-      await axios.post(`${baseUrl}/user/connections/create`, uc1dto, defaultOptionsWithBearer())
+      await axios.post(`${baseUrl}/user/connections/create`, uc1dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(201);
 
@@ -172,7 +183,7 @@ describe('UserAPI.connections.e2e', () => {
         connectionId: conn2._id,
       } as CreateUserConnectionDto;
 
-      await axios.post(`${baseUrl}/user/connections/create`, uc2dto, defaultOptionsWithBearer())
+      await axios.post(`${baseUrl}/user/connections/create`, uc2dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(201);
 
@@ -190,7 +201,7 @@ describe('UserAPI.connections.e2e', () => {
     });
 
     it('should get the two user connections we created', async () => {
-      await axios.get(`${baseUrl}/user/connections/${user._id.toString()}`, defaultOptionsWithBearer())
+      await axios.get(`${baseUrl}/user/connections/${user._id.toString()}`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(200);
           const users: UserDto[] = res.data as UserDto[];
@@ -207,7 +218,7 @@ describe('UserAPI.connections.e2e', () => {
     });
 
     /* it('should delete the user connection we created', async () => {
-      await axios.delete(`${baseUrl}/connection/remove/${createdUserConnectionId}`, defaultOptionsWithBearer())
+      await axios.delete(`${baseUrl}/connection/remove/${createdUserConnectionId}`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

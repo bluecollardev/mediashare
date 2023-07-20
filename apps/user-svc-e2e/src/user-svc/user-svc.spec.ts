@@ -9,11 +9,11 @@ import { DataSource, MongoRepository } from 'typeorm';
 import { clone } from 'remeda';
 
 import { allValidations } from './fixtures/validations';
-import { getBaseUrl } from './functions/app';
-import { defaultOptionsWithBearer } from './functions/auth';
-import { createUser } from './functions/generators';
-import { initializeApp, initializeDB, initializeMapper } from './functions/initializer';
+import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './functions/app';
+import { defaultOptionsWithBearer, login } from './functions/auth';
+import { createUser as createUserFunction } from './functions/generators';
 
+import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
 import { CreateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/create-user.dto';
 import { UpdateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/update-user.dto';
@@ -22,7 +22,7 @@ import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.en
 import { UserDataService, UserService } from '@mediashare/user-svc/src/app/modules/user/user.service';
 import { testAndCloneUser } from './test-components';
 
-const createAndValidateTestUser = async () => {
+const createAndValidateTestUser = async (createUserFn) => {
   return new Promise((resolve, reject) => {
     const userData = {
       username: 'jsmith',
@@ -30,7 +30,7 @@ const createAndValidateTestUser = async () => {
       firstName: 'John',
       lastName: 'Smith',
     };
-    createUser(userData)
+    createUserFn(userData)
       .then((res) => {
         expect(res.status).toEqual(201);
         const user: UserDto = res.data;
@@ -55,6 +55,8 @@ describe('UserAPI.e2e', () => {
   let userRepository: MongoRepository<User>;
   let userDataService: UserDataService;
   let mapper: Mapper;
+  let authResponse: AuthenticationResultType
+  let createUser;
 
   beforeAll(async () => {
     const globalPrefix = 'api'
@@ -71,10 +73,19 @@ describe('UserAPI.e2e', () => {
 
     // Delete all test records
     await userRepository.deleteMany({});
+
+    authResponse = await login(baseUrl, {
+      username: process.env.COGNITO_USER_EMAIL,
+      password: process.env.COGNITO_USER_PASSWORD,
+      clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
+    });
+    console.log(`Logged in`, authResponse);
+
+    createUser = createUserFunction({ baseUrl, token: authResponse?.IdToken });
   });
 
   afterAll(async () => {
-    await app.close();
+    // await app.close();
     await db.close();
   });
 
@@ -84,7 +95,7 @@ describe('UserAPI.e2e', () => {
         firstName: 'J'
       } as CreateUserDto;
 
-      await axios.post(`${baseUrl}/user`, dto, defaultOptionsWithBearer())
+      await axios.post(`${baseUrl}/user`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .catch((res: AxiosError) => {
           const {
             code,
@@ -157,14 +168,14 @@ describe('UserAPI.e2e', () => {
 
   describe('UserApi should create, find, update and delete a new user', () => {
     it('it should create a new user', async () => {
-      await createAndValidateTestUser();
+      await createAndValidateTestUser(createUser);
     });
 
     it('should get the user we create', async () => {
-      const testUser = await createAndValidateTestUser();
+      const testUser = await createAndValidateTestUser(createUser);
       const testUserId = getTestUserId(testUser);
 
-      await axios.get(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer())
+      await axios.get(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -188,14 +199,14 @@ describe('UserAPI.e2e', () => {
     });
 
     it('should update the user we create', async () => {
-      const testUser = await createAndValidateTestUser() as UserDto;
+      const testUser = await createAndValidateTestUser(createUser) as UserDto;
       const testUserId = getTestUserId(testUser);
 
       const dto = clone(testUser) as UpdateUserDto;
       dto.username = 'jr.smith';
       dto.email = 'jr.smith@example.com';
 
-      await axios.put(`${baseUrl}/user/${testUserId}`, dto, defaultOptionsWithBearer())
+      await axios.put(`${baseUrl}/user/${testUserId}`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -211,7 +222,7 @@ describe('UserAPI.e2e', () => {
           expect(updated.updatedDate).toBeDefined();
 
           // Don't trust the response object - find the user, and make sure it's updated too
-          await axios.get(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer())
+          await axios.get(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer(authResponse?.IdToken))
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -232,10 +243,10 @@ describe('UserAPI.e2e', () => {
     });
 
     it('should delete the user we created', async () => {
-      const testUser = await createAndValidateTestUser();
+      const testUser = await createAndValidateTestUser(createUser);
       const testUserId = getTestUserId(testUser);
 
-      await axios.delete(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer())
+      await axios.delete(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);
