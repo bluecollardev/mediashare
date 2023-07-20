@@ -4,9 +4,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { PinoLogger } from 'nestjs-pino';
+import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
 import { ObjectIdGuard } from '../../core/guards';
 import { DataService } from '../../core/services/data-provider.service';
-import { ObjectId } from 'mongodb';
 import { IdType } from '@mediashare/shared';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -57,6 +57,10 @@ export class UserService {
 
   async findOne(id: IdType) {
     return this.dataService.findOne(id);
+  }
+
+  async findByQuery(query: MongoFindOneOptions<User>) {
+    return this.dataService.findByQuery(query);
   }
 
   // TODO: Use mapper

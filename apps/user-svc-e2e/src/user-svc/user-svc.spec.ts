@@ -1,5 +1,6 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
+import { INestApplication } from '@nestjs/common';
 import axios, { AxiosError } from 'axios';
 import { Mapper } from '@automapper/core';
 import { stub } from 'jest-auto-stub/src/index';
@@ -7,11 +8,11 @@ import { PinoLogger } from 'nestjs-pino';
 import { DataSource, MongoRepository } from 'typeorm';
 import { clone } from 'remeda';
 
-import { baseUrl } from './constants';
 import { allValidations } from './fixtures/validations';
+import { getBaseUrl } from './functions/app';
 import { defaultOptionsWithBearer } from './functions/auth';
 import { createUser } from './functions/generators';
-import { initializeDB, initializeMapper } from './functions/initializer';
+import { initializeApp, initializeDB, initializeMapper } from './functions/initializer';
 
 import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
 import { CreateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/create-user.dto';
@@ -46,6 +47,9 @@ const createAndValidateTestUser = async () => {
 const getTestUserId = (testUser) => testUser._id.toString();
 
 describe('UserAPI.e2e', () => {
+  let app: INestApplication;
+  let baseUrl: string;
+
   let db: DataSource;
   let userService: UserService;
   let userRepository: MongoRepository<User>;
@@ -53,6 +57,10 @@ describe('UserAPI.e2e', () => {
   let mapper: Mapper;
 
   beforeAll(async () => {
+    const globalPrefix = 'api'
+    app = await initializeApp(globalPrefix);
+    baseUrl = await getBaseUrl(app, globalPrefix);
+
     const logger = stub<PinoLogger>();
     mapper = initializeMapper(User, UserDto, CreateUserDto, UpdateUserDto);
     db = await initializeDB([User]);
@@ -66,6 +74,7 @@ describe('UserAPI.e2e', () => {
   });
 
   afterAll(async () => {
+    await app.close();
     await db.close();
   });
 
@@ -93,28 +102,28 @@ describe('UserAPI.e2e', () => {
 
     it('it should NOT save extra fields to db when you supply extra fields', async () => {
       const junkData = {
-        "likesCount": 0,
-        "sharesCount": 4,
-        "sharedCount": 2,
-        "sharedItems": [
+        'likesCount': 0,
+        'sharesCount': 4,
+        'sharedCount': 2,
+        'sharedItems': [
           {
-            "_id": "6190693aa0c0e20021fa2324",
-            "title": "Test",
-            "category": "free",
-            "description": "Make a longer test description for this!",
-            "mediaIds": [
-              "619a2f18affc010021370ba7",
-              "619a2f1caffc010021370ba8"
+            '_id': '6190693aa0c0e20021fa2324',
+            'title': 'Test',
+            'category': 'free',
+            'description': 'Make a longer test description for this!',
+            'mediaIds': [
+              '619a2f18affc010021370ba7',
+              '619a2f1caffc010021370ba8'
             ],
           },
           {
-            "_id": "6190693aa0c0e20021fa2324",
-            "title": "Test",
-            "category": "free",
-            "description": "We need a longer description for this playlist.",
-            "mediaIds": [
-              "619a2f18affc010021370ba7",
-              "619a2f1caffc010021370ba8"
+            '_id': '6190693aa0c0e20021fa2324',
+            'title': 'Test',
+            'category': 'free',
+            'description': 'We need a longer description for this playlist.',
+            'mediaIds': [
+              '619a2f18affc010021370ba7',
+              '619a2f1caffc010021370ba8'
             ],
           }
         ],

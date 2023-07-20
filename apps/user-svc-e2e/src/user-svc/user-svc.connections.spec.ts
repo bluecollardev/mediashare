@@ -1,5 +1,6 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
+import { INestApplication } from '@nestjs/common';
 import axios, { AxiosError } from 'axios';
 import { Mapper } from '@automapper/core';
 import { stub } from 'jest-auto-stub/src/index';
@@ -7,10 +8,10 @@ import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { DataSource, MongoRepository } from 'typeorm';
 
-import { baseUrl } from './constants';
+import { getBaseUrl } from './functions/app';
 import { defaultOptionsWithBearer } from './functions/auth';
 import { createUser } from './functions/generators';
-import { initializeDB, initializeMapper } from './functions/initializer';
+import { initializeApp, initializeDB, initializeMapper } from './functions/initializer';
 
 import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
 import { CreateUserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/create-user-connection.dto';
@@ -22,6 +23,9 @@ import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.en
 import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
 
 describe('UserAPI.connections.e2e', () => {
+  let app: INestApplication;
+  let baseUrl: string;
+
   let db: DataSource;
   let userConnectionService: UserConnectionService;
   let userConnectionRepository: MongoRepository<UserConnection>;
@@ -34,6 +38,10 @@ describe('UserAPI.connections.e2e', () => {
   let conn2;
 
   beforeAll(async () => {
+    const globalPrefix = 'api'
+    app = await initializeApp(globalPrefix);
+    baseUrl = await getBaseUrl(app, globalPrefix);
+
     const logger = stub<PinoLogger>();
     mapper = initializeMapper(UserConnection, UserConnectionDto, CreateUserConnectionDto, UpdateUserConnectionDto);
     db = await initializeDB([User, UserConnection]);
@@ -71,6 +79,7 @@ describe('UserAPI.connections.e2e', () => {
   });
 
   afterAll(async () => {
+    await app.close();
     await db.close();
   });
 

@@ -1,3 +1,4 @@
+import { defaultImgUrl } from './user.constants';
 import {
   Controller,
   Body,
@@ -10,7 +11,7 @@ import {
   Res,
   Param, Delete
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Response, Request } from 'express';
 import { ObjectIdPipe } from '@mediashare/shared';
 import { handleErrorResponse, handleSuccessResponse } from '../../core/http/response';
@@ -18,7 +19,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
 import { CreateUserConnectionDto } from '../user-connection/dto/create-user-connection.dto';
-import { UpdateUserConnectionDto } from '../user-connection/dto/update-user-connection.dto';
+// import { UpdateUserConnectionDto } from '../user-connection/dto/update-user-connection.dto';
 import { UserConnectionService } from '../user-connection/user-connection.service';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
@@ -41,10 +42,10 @@ export class UserController {
   // @ApiResponse({ type: ProfileDto, isArray: false, status: 200 })
   // @ApiBody({ type: AuthorizeDto })
   async authorize(@Req() req: Request, @Res() res: Response) {
-    /* const { accessToken = null, idToken = null } = req.body as any;
-    const valid = this.userService.validateToken({ token: accessToken, idToken });
-    if (!valid) throw new UnauthorizedException();
-    const user = await this.userService.findByQuery({ sub: valid.sub } as any);
+    const { accessToken = null, idToken = null } = req.body as any;
+    // const valid = this.userService.validateToken({ token: accessToken, idToken });
+    // if (!valid) throw new UnauthorizedException();
+    /* const user = await this.userService.findByQuery({ sub: valid.sub } as any);
 
     res.setHeader('Authorization', accessToken);
     res.setHeader('Id', idToken);
@@ -53,18 +54,11 @@ export class UserController {
         ...valid,
         // TODO: All new users should probably be free, not subscribers, complete this!
         role: 'subscriber',
-        // TODO: Replace this string!
-        imageSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/assets/default-user.png',
+        imageSrc: defaultImgUrl,
       });
-      const profile = await this.userService.getUserById(newUser._id.toString());
-      if (!profile) return res.send(user);
-      return res.send(profile);
     }
-    const profile = await this.userService.getUserById(user._id.toString());
-    if (!profile) return res.send(user);
-
-    return res.send(profile);*/
-    return res.send('OK');
+    const profile = await this.userService.findById(user._id); */
+    return handleSuccessResponse(res, 200, {});
   }
 
   @Post('invite')
@@ -119,6 +113,7 @@ export class UserController {
   }
 
   @Get(':userId')
+  @ApiParam({ name: 'userId', type: String, required: true })
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
   async getUser(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
     try {
@@ -143,6 +138,7 @@ export class UserController {
   }
 
   @Put(':userId')
+  @ApiParam({ name: 'userId', type: String, required: true })
   @UserPostResponse({ type: UserDto })
   @ApiBody({ type: UpdateUserDto })
   async updateUser(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
@@ -165,6 +161,7 @@ export class UserController {
   }
 
   @Delete(':userId')
+  @ApiParam({ name: 'userId', type: String, required: true })
   async deleteUser(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
     try {
       const result = await this.userService.remove(userId);

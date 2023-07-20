@@ -8,6 +8,7 @@
     "@automapper/classes": "^8.7.7",
     "@automapper/core": "^8.7.7",
     "@automapper/nestjs": "^8.7.7",
+    "@aws-sdk/client-cognito-identity-provider": "^3.363.0",
     "@nestjs-cognito/auth": "^1.0.4",
     "@nestjs/common": "^10.0.2",
     "@nestjs/config": "^3.0.0",
@@ -34,6 +35,8 @@
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
+    "@nestjs-cognito/core": "^1.1.0",
+    "@nestjs-cognito/testing": "^1.0.5",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
     "@nx/eslint-plugin": "16.4.2",

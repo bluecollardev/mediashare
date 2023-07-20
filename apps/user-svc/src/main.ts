@@ -35,6 +35,10 @@ async function bootstrap() {
     tag: `user-svc`,
     servers: [
       {
+        url: `http://localhost:5000`,
+        description: `local`,
+      },
+      {
         url: `https://mediashare-api-staging.herokuapp.com`,
         description: `staging`,
       },
