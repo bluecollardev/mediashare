@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ApiString } from '@mediashare/shared';
 import { Column, Entity } from 'typeorm';
 import { ObjectId } from 'mongodb';
-import { KeyPair } from './keypair.entity';
+import { KeyPair } from '@mediashare/core/entities/keypair.entity';
 // TODO: Fix index
 // import { Column, Entity, Index } from 'typeorm';
 

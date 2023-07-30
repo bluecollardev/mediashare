@@ -1,10 +1,10 @@
 import { ApiObjectId } from '@mediashare/shared';
 import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
-import { BcEntity } from '@mediashare/core/entities/base.entity';
+import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
 
 @Entity('like_item')
-export class Like extends BcEntity {
+export class Like extends ApiBaseEntity {
   @ApiObjectId()
   @Column({ name: 'playlistId', unique: false })
   @Index('playlistId', { unique: false })
