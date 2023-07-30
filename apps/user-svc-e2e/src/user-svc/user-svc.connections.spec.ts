@@ -10,7 +10,7 @@ import { DataSource, MongoRepository } from 'typeorm';
 
 import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
-import { createUser as createUserFunction } from './functions/generators';
+import { createUser as createUserFunction } from './functions/user';
 
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
@@ -57,11 +57,12 @@ describe('UserAPI.connections.e2e', () => {
     await userRepository.deleteMany({});
     await userConnectionRepository.deleteMany({});
 
-    authResponse = await login(baseUrl, {
+    const creds = {
       username: process.env.COGNITO_USER_EMAIL,
       password: process.env.COGNITO_USER_PASSWORD,
       clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
-    });
+    };
+    authResponse = await login(baseUrl, creds);
     console.log(`Logged in`, authResponse);
 
     createUser = createUserFunction({ baseUrl, token: authResponse?.IdToken });
@@ -90,12 +91,12 @@ describe('UserAPI.connections.e2e', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    // await app.close();
     await db.close();
   });
 
   describe('UserConnectionApi validation', () => {
-    it('it should return the correct validation errors', async () => {
+    it('should return the correct validation errors', async () => {
       const dto = {
         userId: null,
         connectionId: null
@@ -147,12 +148,11 @@ describe('UserAPI.connections.e2e', () => {
     });
   });
 
+  let uc1Id: ObjectId;
+  let uc2Id: ObjectId;
 
-  describe('UserConnectionApi should create, find and delete a new user connection', () => {
-    let uc1Id: ObjectId;
-    let uc2Id: ObjectId;
-
-    it('it should create a first user connection', async () => {
+  describe('UserConnectionApi should create a first user connection', () => {
+    it('should create a first user connection', async () => {
       const uc1dto = {
         userId: user._id,
         connectionId: conn1._id,
@@ -175,8 +175,10 @@ describe('UserAPI.connections.e2e', () => {
           throw err;
         });
     });
+  });
 
-    it('it should create a second user connection', async () => {
+  describe('UserConnectionApi should create a second user connection', () => {
+    it('should create a second user connection', async () => {
       // Create user connection 2
       const uc2dto = {
         userId: user._id,
@@ -199,7 +201,9 @@ describe('UserAPI.connections.e2e', () => {
           throw err;
         });
     });
+  });
 
+  describe('UserConnectionApi should get the two user connections we created', () => {
     it('should get the two user connections we created', async () => {
       await axios.get(`${baseUrl}/user/connections/${user._id.toString()}`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {

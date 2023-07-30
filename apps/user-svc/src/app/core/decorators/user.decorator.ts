@@ -1,14 +1,30 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+export const USER_CONTEXT_PROPERTY = 'user';
 
-export const GetUser = createParamDecorator((data, context: ExecutionContext) => {
-  console.log(context.switchToHttp());
-  const ctx = context.switchToHttp().getRequest();
-  const user = ctx.session?.user ?? null;
-  return user ? { ...user, _id: user._id } : {};
-});
+/**
+ * Decorator that can be used to inject the cognito user into a controller.
+ * @param {string} [propertyName] The name of the property to inject the user into.
+ * @returns {(target: object, key: string | symbol, descriptor: TypedPropertyDescriptor<any>) => any}
+ * @example @GetUser() user
+ * @example @GetUser("username") username: string
+ * @example @GetUser(["cognito:username", "email"]) { username, email }: { username: string, email: string }
+ */
+export const GetUser = createParamDecorator(
+  (data: string | string[], ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    const user = request[USER_CONTEXT_PROPERTY];
 
-export const GetUserId = createParamDecorator((data, context: ExecutionContext) => {
-  const ctx = context.switchToHttp().getRequest();
-  const user = ctx.session?.user ?? null;
-  return user?._id ? user._id.toString() : undefined;
-});
+    if (!data) {
+      return user;
+    }
+
+    if (Array.isArray(data)) {
+      return data.reduce((result, key) => {
+        result[key] = user[key];
+        return result;
+      }, {});
+    }
+
+    return user[data];
+  }
+);

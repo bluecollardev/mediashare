@@ -11,7 +11,6 @@ import { clone } from 'remeda';
 import { allValidations } from './fixtures/validations';
 import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
-import { createUser as createUserFunction } from './functions/generators';
 
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
@@ -20,31 +19,7 @@ import { UpdateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/upd
 import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 import { UserDataService, UserService } from '@mediashare/user-svc/src/app/modules/user/user.service';
-import { testAndCloneUser } from './test-components';
-
-const createAndValidateTestUser = async (createUserFn) => {
-  return new Promise((resolve, reject) => {
-    const userData = {
-      username: 'jsmith',
-      email: 'jsmith@example.com',
-      firstName: 'John',
-      lastName: 'Smith',
-    };
-    createUserFn(userData)
-      .then((res) => {
-        expect(res.status).toEqual(201);
-        const user: UserDto = res.data;
-        testAndCloneUser(user, userData);
-        resolve(user);
-      })
-      .catch((err) => {
-        expect(err).toBeDefined();
-        reject(err);
-      });
-  });
-}
-
-const getTestUserId = (testUser) => testUser._id.toString();
+import { createUser as createUserFunction, createAndValidateTestUser, getTestUserId } from './functions/user';
 
 describe('UserAPI.e2e', () => {
   let app: INestApplication;
@@ -74,11 +49,12 @@ describe('UserAPI.e2e', () => {
     // Delete all test records
     await userRepository.deleteMany({});
 
-    authResponse = await login(baseUrl, {
+    const creds = {
       username: process.env.COGNITO_USER_EMAIL,
       password: process.env.COGNITO_USER_PASSWORD,
       clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
-    });
+    };
+    authResponse = await login(baseUrl, creds);
     console.log(`Logged in`, authResponse);
 
     createUser = createUserFunction({ baseUrl, token: authResponse?.IdToken });
@@ -95,6 +71,7 @@ describe('UserAPI.e2e', () => {
         firstName: 'J'
       } as CreateUserDto;
 
+      console.log(authResponse?.IdToken);
       await axios.post(`${baseUrl}/user`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .catch((res: AxiosError) => {
           const {
@@ -167,7 +144,7 @@ describe('UserAPI.e2e', () => {
 
 
   describe('UserApi should create, find, update and delete a new user', () => {
-    it('it should create a new user', async () => {
+    it('should create a new user', async () => {
       await createAndValidateTestUser(createUser);
     });
 

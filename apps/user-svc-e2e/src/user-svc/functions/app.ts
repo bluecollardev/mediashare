@@ -101,6 +101,7 @@ export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplicat
     tag: `user-svc`,
     servers: [
       {
+        // TODO: Fix the port so swagger works? This is just tests so we probably don't care...
         url: `http://localhost:5555`,
         description: `local`
       },
@@ -118,6 +119,6 @@ export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplicat
   app.use(bodyParser.json()); // For parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 
-  await app.listen(5555);
+  await app.listen(0);
   return app;
 };

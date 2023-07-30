@@ -76,11 +76,13 @@ describe('UserService', () => {
         .create(dto)
         .catch((errorResponse) => {
           // expect(user).toBeInstanceOf(UserDto);
-          expect(errorResponse.errors).toBeDefined();
-          expect(errorResponse.errors.find((e) => e.property === 'username')).toBeDefined();
-          expect(errorResponse.errors.find((e) => e.property === 'email')).toBeDefined();
-          expect(errorResponse.errors.find((e) => e.property === 'firstName')).toBeDefined();
-          expect(errorResponse.errors.find((e) => e.property === 'lastName')).toBeDefined();
+         const errors = errorResponse.additionalMessages;
+          expect(errors).toBeDefined();
+          expect(errors.find((e) => e.property === 'sub')).toBeDefined();
+          expect(errors.find((e) => e.property === 'username')).toBeDefined();
+          expect(errors.find((e) => e.property === 'email')).toBeDefined();
+          expect(errors.find((e) => e.property === 'firstName')).toBeDefined();
+          expect(errors.find((e) => e.property === 'lastName')).toBeDefined();
         });
     });
   });
