@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockDataServiceFactory } from '../../factories/mock-data-service.factory';
-import { ShareItemService } from '../share-item/share-item.service';
+import { ShareItemService } from './share-item.service';
 import { ShareItemController } from './share-item.controller';
 
 describe('ShareItemsController', () => {

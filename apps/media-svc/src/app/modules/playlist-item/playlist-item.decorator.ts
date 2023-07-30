@@ -1,6 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
-import { UseJwtGuard } from '../auth/auth.decorator';
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
 import { CreatePlaylistItemDto } from './dto/create-playlist-item.dto';
 import { UpdatePlaylistItemDto } from './dto/update-playlist-item.dto';
@@ -9,7 +8,9 @@ import { PlaylistItem } from './entities/playlist-item.entity';
 import { ShareItem } from '../share-item/entities/share-item.entity';
 
 export function PlaylistItemGetResponse({ type = PlaylistItemResponseDto, isArray = false, description }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), UseJwtGuard());
+  // TODO: Fix auth!
+  // return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), UseJwtGuard());
+  return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }));
 }
 
 export function PlaylistItemPostResponse({ type = PlaylistItem, isArray = false, description }: ApiControllerDecoratorParams = {}) {
@@ -21,5 +22,7 @@ export function PlaylistItemPutResponse({ type = PlaylistItem, isArray = false, 
 }
 
 export function PlaylistItemShareResponse({ type = ShareItem, isArray = false, description }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), UseJwtGuard());
+  // TODO: Fix auth!
+  // return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), UseJwtGuard());
+  return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }));
 }

@@ -1,6 +1,4 @@
-import { MediaItem } from '../../media-item/entities/media-item.entity';
-import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
-import { AuthorProfileDto } from '../user/dto/profile.dto';
+// import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { MediaItemResponseDto } from '../../media-item/dto/media-item-response.dto';
 import { PlaylistResponseDto } from '../../playlist/dto/playlist-response.dto';
@@ -34,7 +32,9 @@ export class ShareItemsDto {
   shareItemIds: string[];
 }
 
+// TODO: Fix this type!
 export class ShareItemsByUserIdDto {
   @ApiProperty({ name: 'shareItemByUserIds', type: () => String, isArray: true })
-  shareItemByUserIds: UserConnectionDto[];
+  shareItemByUserIds: any[];
+  // shareItemByUserIds: UserConnectionDto[];
 }
