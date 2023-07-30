@@ -14,11 +14,15 @@ export function PlaylistGetResponse({ type = PlaylistResponseDto, isArray = fals
 }
 
 export function PlaylistPostResponse({ type = Playlist, isArray = false, description }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), ApiBody({ type: CreatePlaylistDto }), UseJwtGuard());
+  // TODO: Fix auth!
+  // return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), ApiBody({ type: CreatePlaylistDto }), UseJwtGuard());
+  return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), ApiBody({ type: CreatePlaylistDto }));
 }
 
 export function PlaylistPutResponse({ type = Playlist, isArray = false, description }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), ApiBody({ type: UpdatePlaylistDto }), UseJwtGuard());
+  // TODO: Fix auth!
+  // return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), ApiBody({ type: UpdatePlaylistDto }), UseJwtGuard());
+  return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), ApiBody({ type: UpdatePlaylistDto }));
 }
 
 export function PlaylistShareResponse({ type = ShareItem, isArray = false, description }: ApiControllerDecoratorParams = {}) {

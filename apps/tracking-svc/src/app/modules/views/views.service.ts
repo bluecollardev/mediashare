@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
-import { DataService } from '@api';
+import { DataService } from '@mediashare/core/services/data-provider.service';
 import { PinoLogger } from 'nestjs-pino';
 import { ViewItem } from './entities/view-item.entity';
 

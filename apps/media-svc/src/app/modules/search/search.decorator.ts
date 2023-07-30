@@ -26,5 +26,7 @@ export function PlaylistPutResponse({ type = Playlist, isArray = false, descript
 }
 
 export function PlaylistShareResponse({ type = ShareItem, isArray = false, description }: ApiControllerDecoratorParams = {}) {
-  return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), UseJwtGuard());
+  // TODO: Fix auth!
+  // return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), UseJwtGuard());
+  return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }));
 }

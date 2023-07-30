@@ -1,7 +1,7 @@
 import { IdType } from '@mediashare/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataService } from '@api';
+import { DataService } from '@mediashare/core/services/data-provider.service';
 import { ObjectIdGuard } from '@mediashare/core/guards';
 import { PinoLogger } from 'nestjs-pino';
 import { DeleteWriteOpResultObject, MongoRepository } from 'typeorm';
