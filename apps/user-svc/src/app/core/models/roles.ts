@@ -1,4 +1,4 @@
-import { ConfigEnum } from '../types';
+import { ConfigEnum } from '@mediashare/core/types';
 
 // TODO: Dynamic roles?
 const BC_ROLES = ['guest', 'free', 'subscriber', 'admin'] as const;

@@ -5,12 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, MongoRepository } from 'typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { IdType } from '@mediashare/shared';
-import { ObjectIdGuard } from '../../core/guards';
-import { DataService } from '../../core/services/data-provider.service';
+import { ObjectIdGuard } from '@mediashare/core/guards';
+import { DataService } from '@mediashare/core/services/data-provider.service';
 import { UserConnection } from './entities/user-connection.entity';
 import { CreateUserConnectionDto } from './dto/create-user-connection.dto';
 import { UserConnectionDto } from './dto/user-connection.dto';
-import { ApiErrorResponse, ApiErrorResponses } from '../../core/errors/api-error';
+import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
 
 
 // const options: SesEmailOptions = {

@@ -13,7 +13,7 @@ import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './fun
 import { defaultOptionsWithBearer, login } from './functions/auth';
 
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
-import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
+import { ApiErrorResponse } from '@mediashare/core/errors/api-error';
 import { CreateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/create-user.dto';
 import { UpdateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/update-user.dto';
 import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';

@@ -9,7 +9,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UserDataService, UserService } from './user.service';
 import { User } from './entities/user.entity';
-// import { mockLoggerFactory } from '../../factories/mock-logger.factory';
+// import { mockLoggerFactory } from '@mediashare/core/factories/mock-logger.factory';
 import { stub } from 'jest-auto-stub';
 import { clone } from 'remeda';
 
