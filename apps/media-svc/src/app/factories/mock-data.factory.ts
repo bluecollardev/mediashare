@@ -7,7 +7,7 @@ import { User } from '../modules/user/entities/user.entity';
 
 import { range } from 'remeda';
 import { Playlist } from '../modules/playlist/entities/playlist.entity';
-import { SessionUserInterface } from '../core/models/auth-user.model';
+import { SessionUserInterface } from '../core/models/auth-user';
 
 import { ObjectIdGuard } from '@mediashare/core/guards';
 

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectIdGuard } from '@mediashare/core/guards';
-import { IdType, VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '@core-lib';
+import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
+import { IdType } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { FilterableDataService } from '@api';
 import { AppConfigService } from '../app-config/app-config.provider';
-import { UserService } from '../user/user.service';
 import { PlaylistItemService } from '../playlist-item/playlist-item.service';
 import { Playlist } from './entities/playlist.entity';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';

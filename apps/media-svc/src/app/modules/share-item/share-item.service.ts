@@ -6,7 +6,7 @@ import { ObjectIdGuard } from '@mediashare/core/guards';
 import { PinoLogger } from 'nestjs-pino';
 import { DeleteWriteOpResultObject, MongoRepository } from 'typeorm';
 import { CreateMediaShareItemDto, CreatePlaylistShareItemDto } from './dto/create-share-item.dto';
-import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
+// import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
 import { ShareItem } from './entities/share-item.entity';
 
 @Injectable()
@@ -228,7 +228,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     });
   }
 
-  async removeUserConnectionShareItems(userConnectionDtos: UserConnectionDto[]): Promise<ShareItem[]> {
+  /* async removeUserConnectionShareItems(userConnectionDtos: UserConnectionDto[]): Promise<ShareItem[]> {
     try {
       const shareItemsToRemove = [];
       const removeShareItems = userConnectionDtos.map(async (userConnectionDto) => {
@@ -260,5 +260,5 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       this.logger.error(`${this.constructor.name}.removeUserConnection ${error}`);
       throw error;
     }
-  }
+  } */
 }

@@ -5,12 +5,11 @@ import { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
 import RouteTokens from '../app-config/constants/open-api.constants';
-import { MEDIA_VISIBILITY } from '@core-lib';
-import { CreateDto } from '@mediashare/core/decorators/create-dto.decorator';
+import { MEDIA_VISIBILITY } from '../../core/models';
+import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PlaylistItemGetResponse, PlaylistItemPostResponse, PlaylistItemPutResponse, PlaylistItemShareResponse } from './playlist-item.decorator';
-import { notFoundResponse } from '@api-core/functors/http-errors.functor';
+import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor';
 import { PlaylistItemService } from './playlist-item.service';
 import { CreatePlaylistItemDto } from './dto/create-playlist-item.dto';
 import { UpdatePlaylistItemDto } from './dto/update-playlist-item.dto';
@@ -59,7 +58,7 @@ export class PlaylistItemController {
     return await this.playlistItemService.getPopular();
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Post()
   @PlaylistItemPostResponse()
@@ -82,7 +81,7 @@ export class PlaylistItemController {
     return await this.playlistItemService.create({ ...playlistItem });
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Put(RouteTokens.PLAYLIST_ITEM_ID)
   @ApiParam({ name: 'playlistItemId', type: String, required: true })
@@ -91,7 +90,7 @@ export class PlaylistItemController {
     return await this.playlistItemService.update(playlistItemId, updatePlaylistItemDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Delete(RouteTokens.PLAYLIST_ITEM_ID)
   @ApiParam({ name: 'playlistItemId', type: String, required: true })

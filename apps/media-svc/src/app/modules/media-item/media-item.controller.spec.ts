@@ -34,7 +34,7 @@ describe('MediaItemController', () => {
       ],
     }).compile();
 
-    controller = module.get<MediaItemController>(MediaItemController);
+    controller = module.get(MediaItemController);
   });
 
   it('should be defined', () => {

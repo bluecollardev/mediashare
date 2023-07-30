@@ -2,7 +2,7 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { ApiString, ApiLongString, ApiTextString, ApiUriString, ApiDecoratorOptions } from '@mediashare/shared';
 import { IsIn } from 'class-validator';
 import { MediaItem } from '../entities/media-item.entity';
-import { MediaVisibilityType, MEDIA_VISIBILITY } from '@core-lib';
+import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
 import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
 
 const OPTIONAL_MEDIA_DTO_KEYS = ['_id', 'createdAt', 'updatedDate', 'userId', 'createdBy'] as const;

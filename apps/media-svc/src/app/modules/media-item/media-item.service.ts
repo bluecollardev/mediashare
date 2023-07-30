@@ -1,5 +1,5 @@
 import { AppConfigService } from '../app-config/app-config.provider';
-import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '@core-lib';
+import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectIdGuard } from '@mediashare/core/guards';

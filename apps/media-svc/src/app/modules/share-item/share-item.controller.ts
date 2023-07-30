@@ -1,9 +1,7 @@
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Controller, Param, HttpCode, UseGuards, HttpStatus, Get, Delete, Post, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
-import RouteTokens from '../app-config/constants/open-api.constants';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
 import { ShareItemService } from './share-item.service';
 import { ShareItemsByUserIdDto, ShareItemsDto, ShareItemsResponseDto } from './dto/share-item.dto';
@@ -11,14 +9,14 @@ import { ShareItemGetResponse } from './share-item.decorator';
 import { ShareItem } from './entities/share-item.entity';
 import { MediaItemResponseDto } from '../media-item/dto/media-item-response.dto';
 import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
-import { UserGuard } from '../user/user.guard';
+import { UserGuard } from '@mediashare/core/guards/user.guard';
 
 @ApiTags('share-items')
 @Controller('share-items')
 export class ShareItemController {
   constructor(private readonly shareItemService: ShareItemService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-by-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
@@ -26,7 +24,7 @@ export class ShareItemController {
     return await this.shareItemService.getItemsSharedByUser(userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-by-user/media-items')
   @ShareItemGetResponse({ type: MediaItemResponseDto, isArray: true })
@@ -34,7 +32,7 @@ export class ShareItemController {
     return await this.shareItemService.getMediaItemsSharedByUser(userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-by-user/playlists')
   @ShareItemGetResponse({ type: PlaylistResponseDto, isArray: true })
@@ -42,7 +40,7 @@ export class ShareItemController {
     return await this.shareItemService.getPlaylistsSharedByUser(userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-with-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: false })
@@ -50,7 +48,7 @@ export class ShareItemController {
     return await this.shareItemService.getItemsSharedWithUser(userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-with-user/media-items')
   @ShareItemGetResponse({ type: MediaItemResponseDto, isArray: true })
@@ -58,7 +56,7 @@ export class ShareItemController {
     return await this.shareItemService.getMediaItemsSharedWithUser(userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-with-user/playlists')
   @ShareItemGetResponse({ type: PlaylistResponseDto, isArray: true })

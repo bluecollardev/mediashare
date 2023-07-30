@@ -1,4 +1,4 @@
-import { BcRolesType } from '../types/roles.type';
+import { BcRolesType } from './roles';
 import { ObjectId } from 'mongodb';
 
 export interface SessionUserInterface {

@@ -4,13 +4,11 @@ import { ObjectIdGuard } from '@mediashare/core/guards';
 import { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
-import RouteTokens from '../app-config/constants/open-api.constants';
-import { MEDIA_VISIBILITY } from '@core-lib';
-import { CreateDto } from '@mediashare/core/decorators/create-dto.decorator';
+import { MEDIA_VISIBILITY } from '../../core/models';
+import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { MediaGetResponse, MediaPostResponse, MediaPutResponse, MediaShareResponse } from './media-item.decorator';
-import { notFoundResponse } from '@api-core/functors/http-errors.functor';
+import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor';
 import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
@@ -53,7 +51,7 @@ export class MediaItemController {
     return await this.mediaItemService.getPopular();
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Post()
   @MediaPostResponse()
@@ -68,7 +66,7 @@ export class MediaItemController {
     return await this.mediaItemService.create({ ...mediaItem });
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Put(RouteTokens.MEDIA_ITEM_ID)
   @ApiParam({ name: 'mediaId', type: String, required: true })
@@ -77,7 +75,7 @@ export class MediaItemController {
     return await this.mediaItemService.update(mediaId, updateMediaItemDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Delete(RouteTokens.MEDIA_ITEM_ID)
   @ApiParam({ name: 'mediaId', type: String, required: true })

@@ -5,11 +5,11 @@ import { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
 import RouteTokens from '../app-config/constants/open-api.constants';
-import { PLAYLIST_VISIBILITY } from '@core-lib';
-import { CreateDto } from '@mediashare/core/decorators/create-dto.decorator';
+import { PLAYLIST_VISIBILITY } from '../../core/models';
+import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse, PlaylistShareResponse } from './playlist.decorator';
-import { notFoundResponse } from '@api-core/functors/http-errors.functor';
+import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor';
 import { PlaylistService } from './playlist.service';
 import { PlaylistResponseDto } from './dto/playlist-response.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
@@ -51,7 +51,7 @@ export class PlaylistController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUser('_id') userId: string) {
@@ -63,7 +63,7 @@ export class PlaylistController {
   }
 
   @Put(RouteTokens.PLAYLIST_ID)
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   @ApiBody({ type: UpdatePlaylistDto })
@@ -73,7 +73,7 @@ export class PlaylistController {
   }
 
   @Delete(RouteTokens.PLAYLIST_ID)
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'playlistId', type: String, required: true, example: new ObjectId().toHexString() })
   async remove(@Param('playlistId') playlistId: string) {

@@ -3,12 +3,12 @@ import { ApiObjectId, ApiString, ApiTextString, ApiLongString, ApiUriString } fr
 import { IsBoolean } from 'class-validator';
 import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
-import { BcEntity } from '@mediashare/core/entities/base.entity';
+import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
 import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
-import { MediaVisibilityType, MEDIA_VISIBILITY } from '@core-lib';
+import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
 
 @Entity('media_item')
-export class MediaItem extends BcEntity {
+export class MediaItem extends ApiBaseEntity {
   constructor(props: Partial<MediaItem> = {}) {
     super();
     Object.assign(this as any, props);

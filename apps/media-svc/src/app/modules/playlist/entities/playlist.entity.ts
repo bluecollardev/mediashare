@@ -2,12 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
 import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
-import { BcEntity } from '@mediashare/core/entities/base.entity';
+import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
 import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
-import { PlaylistVisibilityType, PlaylistInterface, PLAYLIST_VISIBILITY } from '@core-lib';
+import { PlaylistVisibilityType, PLAYLIST_VISIBILITY } from '../../../core/models';
 
 @Entity('playlist')
-export class Playlist extends BcEntity implements PlaylistInterface {
+export class Playlist extends ApiBaseEntity {
   @ApiObjectId()
   @Column({ nullable: true })
   @Index('cloneOf', { unique: false })

@@ -22,7 +22,7 @@ describe('PlaylistController', () => {
       ],
     }).compile();
 
-    controller = module.get<PlaylistController>(PlaylistController);
+    controller = module.get(PlaylistController);
   });
 
   it('should be defined', () => {

@@ -3,9 +3,9 @@ import { IsBoolean } from 'class-validator';
 import { Column, Entity, Index } from 'typeorm';
 import { ApiLongString, ApiObjectId, ApiString, ApiTextString, ApiUriString } from '@mediashare/shared';
 import { ObjectId } from 'mongodb';
-import { MediaItem } from '../media-item/entities/media-item.entity';
+import { MediaItem } from '../../media-item/entities/media-item.entity';
 import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
-import { MEDIA_VISIBILITY, MediaVisibilityType } from '@core-lib';
+import { MEDIA_VISIBILITY, MediaVisibilityType } from '../../../core/models';
 
 @Entity('playlist_item')
 export class PlaylistItem extends MediaItem {
