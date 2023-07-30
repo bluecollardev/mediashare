@@ -12,5 +12,5 @@ export default {
     }],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/media-svc-e2e',
+  // coverageDirectory: '../../coverage/media-svc-e2e',
 };

@@ -27,7 +27,8 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "user-svc:build"
+        "buildTarget": "user-svc:build",
+        "inspect": true
       },
       "configurations": {
         "development": {

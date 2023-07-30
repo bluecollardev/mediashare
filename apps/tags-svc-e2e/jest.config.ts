@@ -15,5 +15,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/tags-svc-e2e',
+  // coverageDirectory: '../../coverage/tags-svc-e2e',
 };
