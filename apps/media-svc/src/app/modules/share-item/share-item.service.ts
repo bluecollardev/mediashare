@@ -1,13 +1,26 @@
-import { IdType } from '@mediashare/shared';
+import { Mapper } from '@automapper/core';
+import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataService } from '@mediashare/core/services';
-import { ObjectIdGuard } from '@mediashare/core/guards';
-import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
+import { PinoLogger } from 'nestjs-pino';
+import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
+import { ObjectIdGuard } from '@mediashare/core/guards';
+import { DataService } from '@mediashare/core/services';
+import { IdType } from '@mediashare/shared';
 import { CreateMediaShareItemDto, CreatePlaylistShareItemDto } from './dto/create-share-item.dto';
 // import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
 import { ShareItem } from './entities/share-item.entity';
+
+@Injectable()
+export class ShareItemDataService extends DataService<ShareItem, MongoRepository<ShareItem>> {
+  constructor(
+    @InjectRepository(ShareItem) repository: MongoRepository<ShareItem>,
+    logger: PinoLogger,
+  ) {
+    super(repository, logger);
+  }
+}
 
 @Injectable()
 export class ShareItemService extends DataService<ShareItem, MongoRepository<ShareItem>> {

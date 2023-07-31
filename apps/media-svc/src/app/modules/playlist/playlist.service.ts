@@ -1,12 +1,13 @@
+import { Mapper } from '@automapper/core';
+import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ObjectIdGuard } from '@mediashare/core/guards';
-import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
-import { IdType } from '@mediashare/shared';
-import { ObjectId } from 'mongodb';
-import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-import { FilterableDataService } from '@mediashare/core/services';
+import { PinoLogger } from 'nestjs-pino';
+import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
+import { ObjectIdGuard } from '@mediashare/core/guards';
+import { DataService, FilterableDataService } from '@mediashare/core/services';
+import { IdType } from '@mediashare/shared';
 import { ConfigService } from '@nestjs/config';
 import { PlaylistItemService } from '../playlist-item/playlist-item.service';
 import { Playlist } from './entities/playlist.entity';
@@ -14,12 +15,23 @@ import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { SearchParameters } from '@mediashare/shared';
 import { PlaylistItem } from '../playlist-item/entities/playlist-item.entity';
+import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
 
 /* type CreatePlaylistParameters = {
   playlistId: ObjectId;
   items: string[];
   createdBy: ObjectId;
 }; */
+
+@Injectable()
+export class PlaylistDataService extends DataService<Playlist, MongoRepository<Playlist>> {
+  constructor(
+    @InjectRepository(Playlist) repository: MongoRepository<Playlist>,
+    logger: PinoLogger,
+  ) {
+    super(repository, logger);
+  }
+}
 
 @Injectable()
 export class PlaylistService extends FilterableDataService<Playlist, MongoRepository<Playlist>> {

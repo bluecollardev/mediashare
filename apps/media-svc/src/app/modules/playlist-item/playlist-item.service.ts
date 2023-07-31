@@ -1,14 +1,27 @@
-import { ConfigService } from '@nestjs/config';
-import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
+import { Mapper } from '@automapper/core';
+import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ObjectIdGuard } from '@mediashare/core/guards';
-import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
-// import { ConfigService } from '@nestjs/config';
-import { FilterableDataService } from '@mediashare/core/services';
+import { PinoLogger } from 'nestjs-pino';
+import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
+import { ObjectIdGuard } from '@mediashare/core/guards';
+import { ConfigService } from '@nestjs/config';
+import { DataService, FilterableDataService } from '@mediashare/core/services';
+import { IdType } from '@mediashare/shared';
 import { PlaylistItem } from './entities/playlist-item.entity';
 import { SearchParameters } from '@mediashare/shared';
+import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
+
+@Injectable()
+export class PlaylistItemDataService extends DataService<PlaylistItem, MongoRepository<PlaylistItem>> {
+  constructor(
+    @InjectRepository(PlaylistItem) repository: MongoRepository<PlaylistItem>,
+    logger: PinoLogger,
+  ) {
+    super(repository, logger);
+  }
+}
 
 @Injectable()
 export class PlaylistItemService extends FilterableDataService<PlaylistItem, MongoRepository<PlaylistItem>> {
