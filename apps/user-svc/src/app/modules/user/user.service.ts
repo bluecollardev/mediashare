@@ -5,14 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
-import { ObjectIdGuard } from '../../core/guards';
-import { DataService } from '../../core/services/data-provider.service';
+import { ObjectIdGuard } from '@mediashare/core/guards';
+import { DataService } from '@mediashare/core/services/data-provider.service';
 import { IdType } from '@mediashare/shared';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
-import { ApiErrorResponse, ApiErrorResponses } from '../../core/errors/api-error';
+import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
 
 @Injectable()
 export class UserDataService extends DataService<User, MongoRepository<User>> {

@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="UserAPI_live.current.e2e" type="JavaScriptTestRunnerJest">
+    <node-interpreter value="project" />
+    <node-options value="" />
+    <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+    <working-dir value="$PROJECT_DIR$" />
+    <envs>
+      <env name="COGNITO_USER_EMAIL" value="lucas@bluecollardev.com" />
+      <env name="COGNITO_USER_PASSWORD" value="Staging123!" />
+    </envs>
+    <scope-kind value="SUITE" />
+    <test-file value="$PROJECT_DIR$/apps/user-svc-e2e/src/user-svc/user-svc_live.current.spec.ts" />
+    <test-names>
+      <test-name value="UserAPI.current.e2e" />
+    </test-names>
+    <method v="2" />
+  </configuration>
+</component>

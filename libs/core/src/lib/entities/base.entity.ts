@@ -16,7 +16,7 @@ export abstract class DataProviderBaseEntity<M> implements ApiBaseEntityInterfac
   // TODO: Do we need to update this?
   //  The constructor part needs to be looked at
   //  and removed if unnecessary
-  constructor(model?: Partial<M>) {
+  protected constructor(model?: Partial<M>) {
     Object.assign(this, model);
   }
 }

@@ -14,7 +14,7 @@ import {
 import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response, Request } from 'express';
 import { ObjectIdPipe } from '@mediashare/shared';
-import { handleErrorResponse, handleSuccessResponse } from '../../core/http/response';
+import { handleErrorResponse, handleSuccessResponse } from '@mediashare/core/http/response';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
@@ -27,7 +27,7 @@ import { ProfileDto } from './dto/profile.dto';
 import { UserService } from './user.service';
 import { UserGetResponse, UserPostResponse } from './user.decorator';
 import { UserGuard } from './user.guard';
-import { GetUser } from '../../core/decorators/user.decorator';
+import { GetUser } from '@mediashare/core/decorators/user.decorator';
 import { ObjectId } from 'mongodb';
 
 import { defaultImgUrl, defaultUserRole } from './user.constants';

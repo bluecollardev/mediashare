@@ -72,7 +72,7 @@ async sendEmail(@Query('userId') userId, @Query('email') email, @Res() res: Resp
 @UseGuards(AuthenticationGuard)
 @Get('media-items')
 // @UserGetResponse({ type: MediaItemResponseDto, isArray: true })
-async getUserMediaItems(@Res() res: Response, @GetUserId() userId: ObjectId) {
+async getUserMediaItems(@Res() res: Response, @GetUser('_id') userId: ObjectId) {
   /*const result = await this.mediaItemService.getByUserId(userId);*/
   return res.send('OK');
 }*/
