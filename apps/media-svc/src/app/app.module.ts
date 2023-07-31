@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DataSource } from 'typeorm';
+import { LoggerModule } from 'nestjs-pino';
+import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
-import { CognitoAuthModule } from '@nestjs-cognito/auth';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoggerModule } from 'nestjs-pino';
+import { TypeOrmModuleFactory } from '@mediashare/core/factories';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MediaItemModule } from './modules/media-item/media-item.module';
@@ -25,27 +26,7 @@ import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
       ignoreEnvFile: process.env.NODE_ENV === 'production',
       ignoreEnvVars: process.env.NODE_ENV !== 'production',
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        // db.type return type messes up things and its not exported
-        type: configService.get<string>('db.type') as any,
-        host: configService.get<string>('db.host'),
-        port: configService.get<number>('db.port'),
-        database: configService.get<string>('db.database'),
-        username: configService.get<string>('db.username'),
-        password: configService.get<string>('db.password'),
-        entities: configService.get<[]>('db.entities'),
-        ssl: configService.get<boolean>('db.ssl'),
-        autoLoadEntities: configService.get<boolean>('db.autoLoadEntities'),
-        synchronize: configService.get<boolean>('db.synchronize'),
-        useUnifiedTopology: configService.get<boolean>('db.useUnifiedTopology'),
-        useNewUrlParser: configService.get<boolean>('db.useNewUrlParser'),
-        logging: configService.get<boolean>('db.logging'),
-        dropSchema: configService.get<boolean>('db.dropSchema'),
-      }),
-      inject: [ConfigService],
-    }),
+    TypeOrmModuleFactory(),
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),

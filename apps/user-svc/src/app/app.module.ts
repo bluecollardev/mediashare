@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DataSource } from 'typeorm';
+import { LoggerModule } from 'nestjs-pino';
+import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
-import { CognitoAuthModule } from '@nestjs-cognito/auth';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoggerModule } from 'nestjs-pino';
+import { TypeOrmModuleFactory } from '@mediashare/core/factories';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
@@ -22,22 +23,7 @@ import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
       ignoreEnvFile: process.env.NODE_ENV === 'production',
       ignoreEnvVars: process.env.NODE_ENV !== 'production',
     }),
-    TypeOrmModule.forRoot({
-      type: 'mongodb',
-      host: 'localhost',
-      port: 27017,
-      database: 'mediashare-test',
-      username: 'mongodb',
-      password: '',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      ssl: false,
-      autoLoadEntities: true,
-      synchronize: true,
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      logging: true,
-      dropSchema: true,
-    }),
+    TypeOrmModuleFactory(),
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
@@ -59,5 +45,5 @@ import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
   providers: [AppService],
 })
 export class AppModule {
-  constructor(private dataSource: DataSource) {}
+  constructor(private configService: ConfigService, private dataSource: DataSource) {}
 }
