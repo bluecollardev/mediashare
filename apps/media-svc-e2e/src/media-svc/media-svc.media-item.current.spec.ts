@@ -18,7 +18,7 @@ import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './fun
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestMediaItem, createMediaItem as createMediaItemFunction, getTestMediaItemId } from './functions/media-item';
 
-describe('MediaAPI.current.e2e', () => {
+describe('MediaItemAPI.current.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
 
@@ -59,7 +59,7 @@ describe('MediaAPI.current.e2e', () => {
     await db.close();
   });
 
-  describe('MediaAPI should get the current mediaItem', () => {
+  describe('MediaItemAPI should get the current mediaItem', () => {
     it('should get the current mediaItem', async () => {
       // Login first
       const creds = {
@@ -98,7 +98,7 @@ describe('MediaAPI.current.e2e', () => {
     });
   });
 
-  describe('MediaAPI should update the current mediaItem', () => {
+  describe('MediaItemAPI should update the current mediaItem', () => {
     it('should update the current mediaItem', async () => {
       // Login first
       const creds = {
@@ -152,7 +152,7 @@ describe('MediaAPI.current.e2e', () => {
     });
   });
 
-  describe('MediaAPI should delete the current mediaItem', () => {
+  describe('MediaItemAPI should delete the current mediaItem', () => {
     it('should delete the current mediaItem', async () => {
       // Login first
       const creds = {

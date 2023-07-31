@@ -21,7 +21,7 @@ import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/enti
 import { MediaItemDataService, MediaItemService } from '@mediashare/media-svc/src/app/modules/media-item/media-item.service';
 import { createMediaItem as createMediaItemFunction, createAndValidateTestMediaItem, getTestMediaItemId } from './functions/media-item';
 
-describe('MediaAPI.e2e', () => {
+describe('MediaItemAPI.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
 
@@ -65,7 +65,7 @@ describe('MediaAPI.e2e', () => {
     await db.close();
   });
 
-  describe('MediaAPI validation', () => {
+  describe('MediaItemAPI validation', () => {
     it('POST /mediaItem should return the correct validation errors', async () => {
       const dto = {
 
@@ -117,7 +117,7 @@ describe('MediaAPI.e2e', () => {
   });
 
 
-  describe('MediaAPI should create, find, update and delete a new mediaItem', () => {
+  describe('MediaItemAPI should create, find, update and delete a new mediaItem', () => {
     it('should create a new mediaItem', async () => {
       await createAndValidateTestMediaItem(createMediaItem);
     });
