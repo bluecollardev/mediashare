@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-export const awsValidationSchema = Joi.object({
+export const awsValidationSchema = {
   AWS_URL: Joi.string().default(''),
-});
+};
 

@@ -42,7 +42,7 @@ export const dbConfig = registerAs('db', () => ({
   url: process.env.DB_URL,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
-  database: process.env.DB_DATBASE,
+  database: process.env.DB_DATABASE,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   entities: [__dirname + '/**/*.entity{.ts,.js}'],

@@ -44,7 +44,8 @@ export class SesService {
     }
     delete email.html;
     return new Promise((resolve, reject) => {
-      this.ses.sendEmail(email, (err, data, res) => {
+      // TODO: Write tests here! This 'as' cast is sketchy...
+      this.ses.sendEmail(email as SesEmailOptions, (err, data, res) => {
         if (err) {
           console.error(err);
           return reject(err);

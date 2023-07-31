@@ -4,8 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 export const TypeOrmModuleFactory = () => TypeOrmModule.forRootAsync({
   imports: [ConfigModule],
   useFactory: (configService: ConfigService) => ({
-    // db.type return type messes up things and its not exported
-    type: configService.get<string>('db.type') as any,
+    // db.type return type messes up things and its not exported use never
+    type: configService.get<string>('db.type') as never,
+    url: configService.get<string>('db.url'),
     host: configService.get<string>('db.host'),
     port: configService.get<number>('db.port'),
     database: configService.get<string>('db.database'),

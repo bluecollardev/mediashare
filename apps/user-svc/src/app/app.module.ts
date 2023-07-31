@@ -1,3 +1,5 @@
+import { CognitoModuleOptions } from '@nestjs-cognito/core';
+import { CognitoTestingModule } from '@nestjs-cognito/testing';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
@@ -15,7 +17,7 @@ import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: 'development.env',
+      envFilePath: 'test.env',
       load: [appConfig, dbConfig],
       validationSchema: appValidationSchema,
       cache: true,
@@ -37,6 +39,17 @@ import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
         tokenUse: 'id',
       },
     }),
+    // TODO: Switch CognitoAuthModule + CognitoTestingModule depending on whether we're in CI test mode
+    CognitoTestingModule.register({
+      identityProvider: {
+        region: 'us-west-2',
+      },
+      jwtVerifier: {
+        userPoolId: process.env.COGNITO_USER_POOL_ID || 'us-west-2_NIibhhG4d',
+        clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
+        tokenUse: 'id',
+      },
+    } as CognitoModuleOptions),
     UserModule,
     UserConnectionModule,
     LoggerModule.forRoot(),
@@ -45,5 +58,10 @@ import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
   providers: [AppService],
 })
 export class AppModule {
-  constructor(private configService: ConfigService, private dataSource: DataSource) {}
+  constructor(private configService: ConfigService, private dataSource: DataSource) {
+    const appConfig = configService.get('app');
+    const dbConfig = configService.get('db');
+    console.log(appConfig);
+    console.log(dbConfig);
+  }
 }
