@@ -68,11 +68,11 @@ describe('MediaAPI.e2e', () => {
   describe('MediaAPI validation', () => {
     it('POST /mediaItem should return the correct validation errors', async () => {
       const dto = {
-        firstName: 'J'
+
       } as CreateMediaItemDto;
 
       console.log(authResponse?.IdToken);
-      await axios.post(`${baseUrl}/mediaItem`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.post(`${baseUrl}/media-item`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .catch((res: AxiosError) => {
           const {
             code,
@@ -93,34 +93,8 @@ describe('MediaAPI.e2e', () => {
         'likesCount': 0,
         'sharesCount': 4,
         'sharedCount': 2,
-        'sharedItems': [
-          {
-            '_id': '6190693aa0c0e20021fa2324',
-            'title': 'Test',
-            'category': 'free',
-            'description': 'Make a longer test description for this!',
-            'mediaIds': [
-              '619a2f18affc010021370ba7',
-              '619a2f1caffc010021370ba8'
-            ],
-          },
-          {
-            '_id': '6190693aa0c0e20021fa2324',
-            'title': 'Test',
-            'category': 'free',
-            'description': 'We need a longer description for this playlist.',
-            'mediaIds': [
-              '619a2f18affc010021370ba7',
-              '619a2f1caffc010021370ba8'
-            ],
-          }
-        ],
       }
       const mediaItemData = {
-        mediaItemname: 'jsmith',
-        email: 'jsmith@example.com',
-        firstName: 'John',
-        lastName: 'Smith',
         ...junkData,
       };
       createMediaItem(mediaItemData)
@@ -159,11 +133,6 @@ describe('MediaAPI.e2e', () => {
           const mediaItem: MediaItemDto = res.data;
           expect(mediaItem._id).toBeDefined();
           // TODO: Fix this, sub is not defined!
-          // expect(mediaItem.sub).toBeDefined();
-          expect(mediaItem.mediaItemname).toEqual('jsmith');
-          expect(mediaItem.email).toEqual('jsmith@example.com');
-          expect(mediaItem.firstName).toEqual('John');
-          expect(mediaItem.lastName).toEqual('Smith');
           // TODO: Dates aren't being returned, fix this!
           // expect(mediaItem.createdAt).toBeDefined();
           // expect(mediaItem.updatedDate).toBeDefined();
@@ -180,8 +149,6 @@ describe('MediaAPI.e2e', () => {
       const testMediaItemId = getTestMediaItemId(testMediaItem);
 
       const dto = clone(testMediaItem) as UpdateMediaItemDto;
-      dto.mediaItemname = 'jr.smith';
-      dto.email = 'jr.smith@example.com';
 
       await axios.put(`${baseUrl}/media-item/${testMediaItemId}`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .then(async (res) => {
@@ -190,11 +157,6 @@ describe('MediaAPI.e2e', () => {
           const updated: MediaItemDto = res.data;
           expect(updated).toBeDefined();
           expect(updated._id).toEqual(testMediaItemId);
-          expect(updated.sub).toBeDefined();
-          expect(updated.mediaItemname).toEqual('jr.smith');
-          expect(updated.email).toEqual('jr.smith@example.com');
-          expect(updated.firstName).toEqual('John');
-          expect(updated.lastName).toEqual('Smith');
           expect(updated.createdAt).toEqual(testMediaItem.createdAt);
           expect(updated.updatedDate).toBeDefined();
 
@@ -205,11 +167,6 @@ describe('MediaAPI.e2e', () => {
 
               const mediaItem: MediaItemDto = res.data;
               expect(mediaItem).toBeDefined();
-              expect(mediaItem.sub).toBeUndefined();
-              expect(mediaItem.mediaItemname).toEqual('jr.smith');
-              expect(mediaItem.email).toEqual('jr.smith@example.com');
-              expect(mediaItem.firstName).toEqual('John');
-              expect(mediaItem.lastName).toEqual('Smith');
             });
         })
         .catch((err) => {

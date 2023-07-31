@@ -59,8 +59,8 @@ describe('MediaAPI.current.e2e', () => {
     await db.close();
   });
 
-  describe('MediaAPI should get the current user', () => {
-    it('should get the current user', async () => {
+  describe('MediaAPI should get the current mediaItem', () => {
+    it('should get the current mediaItem', async () => {
       // Login first
       const creds = {
         username: process.env.COGNITO_USER_EMAIL,
@@ -70,38 +70,25 @@ describe('MediaAPI.current.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const token = jwt.decode(authResponse?.IdToken) as any;
 
       const testMediaItemData = {
-        sub,
-        email,
-        username: 'bcdevlucas',
-        firstName: 'Lucas',
-        lastName: 'Lopatka',
-        phoneNumber,
       };
-      // Create a corresponding user in the database
+      // Create a corresponding mediaItem in the database
       createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
       testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
-      await axios.get(`${baseUrl}/user`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.get(`${baseUrl}/media-item`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(200);
 
-          const user: MediaItemDto = res.data;
-          expect(user._id).toBeDefined();
-          // TODO: Fix this, sub is not defined!
-          // expect(user.sub).toBeDefined();
-          expect(user.username).toEqual(testMediaItem?.username);
-          expect(user.email).toEqual(testMediaItem?.email);
-          expect(user.firstName).toEqual(testMediaItem?.firstName);
-          expect(user.lastName).toEqual(testMediaItem?.lastName);
-          expect(user.phoneNumber).toEqual(testMediaItem?.phoneNumber);
+          const mediaItem: MediaItemDto = res.data;
+          expect(mediaItem._id).toBeDefined();
           // TODO: This actually returns a profile object with authorId, author, authorImage and authorName
           // TODO: Dates aren't being returned, fix this!
-          // expect(user.createdAt).toBeDefined();
-          // expect(user.updatedDate).toBeDefined();
+          // expect(mediaItem.createdAt).toBeDefined();
+          // expect(mediaItem.updatedDate).toBeDefined();
         })
         .catch((err) => {
           throw err;
@@ -111,8 +98,8 @@ describe('MediaAPI.current.e2e', () => {
     });
   });
 
-  describe('MediaAPI should update the current user', () => {
-    it('should update the current user', async () => {
+  describe('MediaAPI should update the current mediaItem', () => {
+    it('should update the current mediaItem', async () => {
       // Login first
       const creds = {
         username: process.env.COGNITO_USER_EMAIL,
@@ -122,60 +109,39 @@ describe('MediaAPI.current.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const token = jwt.decode(authResponse?.IdToken) as any;
 
       const testMediaItemData = {
-        sub,
-        email,
-        username: 'bcdevlucas',
-        firstName: 'Lucas',
-        lastName: 'Lopatka',
-        phoneNumber,
       };
-      // Create a corresponding user in the database
+      // Create a corresponding mediaItem in the database
       createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
       testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       const dto = clone(testMediaItem) as UpdateMediaItemDto;
-      dto.username = 'bcdevtest';
-      // TODO: Don't allow updating email, somehow we have to do this with Cognito
-      // dto.email = 'lucastest@bluecollardev.com';
-      dto.firstName = 'Michael';
-      dto.lastName = 'Laosee';
 
-      await axios.put(`${baseUrl}/user`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.put(`${baseUrl}/media-item`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
           const updated: MediaItemDto = res.data;
           expect(updated).toBeDefined();
           expect(updated._id).toEqual(testMediaItemId);
-          expect(updated.sub).toEqual(testMediaItem.sub);
-          expect(updated.username).toEqual(dto.username);
-          expect(updated.email).toEqual(dto.email);
-          expect(updated.firstName).toEqual(dto.firstName);
-          expect(updated.lastName).toEqual(dto.lastName);
           expect(updated.createdAt).toEqual(testMediaItem.createdAt);
           expect(updated.updatedDate).toBeDefined();
           expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(new Date(testMediaItem.createdAt).getTime());
 
-          // Don't trust the response object - find the user, and make sure it's updated too
-          await axios.get(`${baseUrl}/user`, defaultOptionsWithBearer(authResponse?.IdToken))
+          // Don't trust the response object - find the mediaItem, and make sure it's updated too
+          await axios.get(`${baseUrl}/media-item`, defaultOptionsWithBearer(authResponse?.IdToken))
             .then((res) => {
               expect(res.status).toEqual(200);
 
-              const user: MediaItemDto = res.data;
-              expect(user).toBeDefined();
-              expect(user._id).toEqual(testMediaItemId);
-              // expect(updated.sub).toEqual(testMediaItem.sub);
-              expect(user.username).toEqual(dto.username);
-              expect(user.email).toEqual(dto.email);
-              expect(user.firstName).toEqual(dto.firstName);
-              expect(user.lastName).toEqual(dto.lastName);
+              const mediaItem: MediaItemDto = res.data;
+              expect(mediaItem).toBeDefined();
+              expect(mediaItem._id).toEqual(testMediaItemId);
               // TODO: Should ProfileDto return dates?
-              // expect(user.createdAt).toEqual(testMediaItem.createdAt);
-              // expect(user.updatedDate).toBeDefined();
+              // expect(mediaItem.createdAt).toEqual(testMediaItem.createdAt);
+              // expect(mediaItem.updatedDate).toBeDefined();
             });
         })
         .catch((err) => {
@@ -186,8 +152,8 @@ describe('MediaAPI.current.e2e', () => {
     });
   });
 
-  describe('MediaAPI should delete the current user', () => {
-    it('should delete the current user', async () => {
+  describe('MediaAPI should delete the current mediaItem', () => {
+    it('should delete the current mediaItem', async () => {
       // Login first
       const creds = {
         username: process.env.COGNITO_USER_EMAIL,
@@ -197,23 +163,17 @@ describe('MediaAPI.current.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const token = jwt.decode(authResponse?.IdToken) as any;
 
       const testMediaItemData = {
-        sub,
-        email,
-        username: 'bcdevlucas',
-        firstName: 'Lucas',
-        lastName: 'Lopatka',
-        phoneNumber,
       };
-      // Create a corresponding user in the database
+      // Create a corresponding mediaItem in the database
       createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
-      // TODO: Try a get to make sure the user is deleted
+      // TODO: Try a get to make sure the mediaItem is deleted
       testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
-      await axios.delete(`${baseUrl}/user`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.delete(`${baseUrl}/media-item`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

@@ -18,10 +18,6 @@ export const createMediaItem = ({ baseUrl, token }) => (mediaItem) => {
 }
 export const createAndValidateTestMediaItem = async (createMediaItemFn, mediaItemData = {
   // Default data
-  username: 'jsmith',
-  email: 'jsmith@example.com',
-  firstName: 'John',
-  lastName: 'Smith'
 }) => {
   return new Promise((resolve, reject) => {
     createMediaItemFn(mediaItemData)
