@@ -1,7 +1,7 @@
 import { AutoMap } from '@automapper/classes';
 import { Entity, Column } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { ApiBaseEntity } from '../../../core/entities/base.entity';
+import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
 import { BcRolesType, BC_ROLES } from '../../../core/models';
 
 @Entity('user')

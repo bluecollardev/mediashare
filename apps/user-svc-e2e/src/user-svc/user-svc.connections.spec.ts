@@ -13,7 +13,7 @@ import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createUser as createUserFunction } from './functions/user';
 
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
-import { ApiErrorResponse } from '@mediashare/user-svc/src/app/core/errors/api-error';
+import { ApiErrorResponse } from '@mediashare/core/errors/api-error';
 import { CreateUserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/create-user-connection.dto';
 import { UpdateUserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/update-user-connection.dto';
 import { UserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/user-connection.dto';
