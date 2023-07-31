@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from 'nestjs-pino';
@@ -9,9 +10,19 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LikesModule } from './modules/likes/likes.module';
 import { ViewsModule } from './modules/views/views.module';
+import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: 'development.env',
+      load: [appConfig, dbConfig],
+      validationSchema: appValidationSchema,
+      cache: true,
+      isGlobal: true,
+      ignoreEnvFile: process.env.NODE_ENV === 'production',
+      ignoreEnvVars: process.env.NODE_ENV !== 'production',
+    }),
     TypeOrmModule.forRoot({
       type: 'mongodb',
       host: 'localhost',

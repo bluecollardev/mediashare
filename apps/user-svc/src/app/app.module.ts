@@ -1,17 +1,27 @@
 import { Module } from '@nestjs/common';
-import { DataSource } from 'typeorm';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoggerModule } from 'nestjs-pino';
-import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
+import { CognitoAuthModule } from '@nestjs-cognito/auth';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { LoggerModule } from 'nestjs-pino';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { UserConnectionModule } from './modules/user-connection/user-connection.module';
+import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: 'development.env',
+      load: [appConfig, dbConfig],
+      validationSchema: appValidationSchema,
+      cache: true,
+      isGlobal: true,
+      ignoreEnvFile: process.env.NODE_ENV === 'production',
+      ignoreEnvVars: process.env.NODE_ENV !== 'production',
+    }),
     TypeOrmModule.forRoot({
       type: 'mongodb',
       host: 'localhost',
