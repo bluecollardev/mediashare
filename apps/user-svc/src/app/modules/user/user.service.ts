@@ -6,7 +6,7 @@ import { MongoRepository } from 'typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
 import { ObjectIdGuard } from '@mediashare/core/guards';
-import { DataService } from '@mediashare/core/services/data-provider.service';
+import { DataService } from '@mediashare/core/services';
 import { IdType } from '@mediashare/shared';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';

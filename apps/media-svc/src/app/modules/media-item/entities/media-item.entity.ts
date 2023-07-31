@@ -1,0 +1,54 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { ApiObjectId, ApiString, ApiTextString, ApiLongString, ApiUriString } from '@mediashare/shared';
+import { IsBoolean } from 'class-validator';
+import { Column, Entity, Index } from 'typeorm';
+import { ObjectId } from 'mongodb';
+import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
+// import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
+import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
+
+@Entity('media_item')
+export class MediaItem extends ApiBaseEntity {
+  constructor(props: Partial<MediaItem> = {}) {
+    super();
+    Object.assign(this as any, props);
+  }
+
+  @ApiObjectId()
+  @Column({ nullable: false, unique: false })
+  @Index('userId', { unique: false })
+  userId: ObjectId;
+
+  @Column({ nullable: true, type: 'text' })
+  @ApiString()
+  title: string;
+
+  @Column({ nullable: true, type: 'text' })
+  @ApiTextString()
+  summary: string;
+
+  @Column({ nullable: true, type: 'text' })
+  @ApiTextString()
+  description: string;
+
+  @Column()
+  @ApiUriString()
+  uri: string;
+
+  @Column({ nullable: true })
+  @ApiString()
+  imageSrc?: string;
+
+  @Column({ nullable: true })
+  @IsBoolean()
+  @ApiProperty({ required: false })
+  isPlayable: boolean;
+
+  @Column({ nullable: true })
+  @ApiProperty({ enum: MEDIA_VISIBILITY, name: 'visibility', enumName: 'MediaVisibilityType', required: false })
+  visibility: MediaVisibilityType;
+
+  // @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
+  @Column({ name: 'tags', array: true, nullable: true })
+  tags: any[]; // TagKeyValue[];
+}
