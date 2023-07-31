@@ -6,9 +6,9 @@ export class MediaItemResponseDto extends MediaItem {
   // TODO: Fix this type!
   // @ApiProperty({ type: () => AuthorProfileDto })
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  @ApiProperty({ type: () => {} })
+  // @ApiProperty({ type: () => {} })
   // authorProfile: AuthorProfileDto;
-  authorProfile: any;
+  // authorProfile: any;
 
   @ApiProperty({ type: 'number' })
   shareCount?: number;

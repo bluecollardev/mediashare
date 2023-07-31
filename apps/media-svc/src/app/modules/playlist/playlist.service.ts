@@ -51,7 +51,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
       createdBy: ObjectIdGuard(createdBy),
       mediaIds: mediaIds.map((id) => new ObjectId(id)),
       cloneOf,
-    });
+    } as any);
   }
 
   async updatePlaylistWithItems(playlistId: IdType, dto: UpdatePlaylistDto) {
@@ -77,7 +77,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
     return await this.update(playlistId, {
       ...rest,
       mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => ObjectIdGuard(id)) : [],
-    });
+    } as any);
   }
 
   async removePlaylistWithItems(playlistId: IdType) {
@@ -209,12 +209,12 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
       { $unwind: { path: '$author' } },
       {
         $addFields: {
-          authorProfile: {
+          /* authorProfile: {
             authorId: '$author._id',
             authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
             authorUsername: '$author.username',
             authorImage: '$author.imageSrc',
-          },
+          }, */
         },
       },
     ];
@@ -229,7 +229,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
               _id: '$_id',
               userId: '$author._id',
               username: '$author.username',
-              authorProfile: '$authorProfile',
+              // authorProfile: '$authorProfile',
               title: '$title',
               description: '$description',
               imageSrc: '$imageSrc',

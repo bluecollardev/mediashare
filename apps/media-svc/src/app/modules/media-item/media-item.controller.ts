@@ -63,8 +63,8 @@ export class MediaItemController {
       ...createMediaItemDto,
       userId: ObjectIdGuard(createdBy),
       createdBy: ObjectIdGuard(createdBy),
-    };
-    return await this.mediaItemService.create({ ...mediaItem });
+    } as any;
+    return await this.mediaItemService.create({ ...mediaItem } as any);
   }
 
   // @UseGuards(JwtAuthGuard)

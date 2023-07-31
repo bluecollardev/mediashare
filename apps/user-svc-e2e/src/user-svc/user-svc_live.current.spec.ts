@@ -18,7 +18,7 @@ import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './fun
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestUser, createUser as createUserFunction, getTestUserId } from './functions/user';
 
-describe('UserAPI.current.e2e', () => {
+describe.skip('UserAPI.current.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
 

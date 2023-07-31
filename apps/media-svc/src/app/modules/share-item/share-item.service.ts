@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataService } from '@mediashare/core/services';
 import { ObjectIdGuard } from '@mediashare/core/guards';
 import { PinoLogger } from 'nestjs-pino';
-import { DeleteWriteOpResultObject, MongoRepository } from 'typeorm';
+import { MongoRepository } from 'typeorm';
 import { CreateMediaShareItemDto, CreatePlaylistShareItemDto } from './dto/create-share-item.dto';
 // import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
 import { ShareItem } from './entities/share-item.entity';
@@ -26,7 +26,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       createdBy: ObjectIdGuard(createdBy),
       title,
       read: false,
-    });
+    } as any);
   }
 
   async createPlaylistShareItem({ userId, playlistId, createdBy, title }: CreatePlaylistShareItemDto): Promise<ShareItem> {
@@ -36,7 +36,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       createdBy: ObjectIdGuard(createdBy),
       title,
       read: false,
-    });
+    } as any);
   }
 
   async getItemsSharedByUser(userId: IdType) {
@@ -94,12 +94,12 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
         {
           $addFields: {
             tags: '$playlist.tags',
-            authorProfile: {
+            /* authorProfile: {
               authorId: '$author._id',
               authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
               authorUsername: '$author.username',
               authorImage: '$author.imageSrc',
-            },
+            }, */
           },
         },
         {
@@ -113,7 +113,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
                   sharedWithUserId: '$sharedWith._id',
                   sharedBy: '$sharedBy.username',
                   sharedByUserId: '$sharedBy._id',
-                  authorProfile: '$authorProfile',
+                  // authorProfile: '$authorProfile',
                   read: '$read',
                   tags: '$tags',
                   shareCount: { $size: '$shareItems' },
@@ -185,12 +185,12 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
         {
           $addFields: {
             tags: '$playlist.tags',
-            authorProfile: {
+            /* authorProfile: {
               authorId: '$author._id',
               authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
               authorUsername: '$author.username',
               authorImage: '$author.imageSrc',
-            },
+            } */
           },
         },
         {
@@ -204,7 +204,7 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
                   sharedWithUserId: '$sharedWith._id',
                   sharedBy: '$sharedBy.username',
                   sharedByUserId: '$sharedBy._id',
-                  authorProfile: '$authorProfile',
+                  // authorProfile: '$authorProfile',
                   read: '$read',
                   tags: '$tags',
                   shareCount: { $size: '$shareItems' },
@@ -221,7 +221,8 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
       .toArray();
   }
 
-  async removeShareItems(shareItemIds: IdType[]): Promise<DeleteWriteOpResultObject> {
+  // Was previously Promise<DeleteWriteOpResultObject>
+  async removeShareItems(shareItemIds: IdType[]): Promise<any> {
     const shareItemObjectIds = shareItemIds.map((id: string) => ObjectIdGuard(id));
     return await this.repository.deleteMany({
       _id: { $in: shareItemObjectIds },

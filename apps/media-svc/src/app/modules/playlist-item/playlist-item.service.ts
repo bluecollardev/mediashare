@@ -129,12 +129,12 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
       { $unwind: { path: '$author' } },
       {
         $addFields: {
-          authorProfile: {
+          /* authorProfile: {
             authorId: '$author._id',
             authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
             authorUsername: '$author.username',
             authorImage: '$author.imageSrc',
-          },
+          }, */
         },
       },
     ];
@@ -152,7 +152,7 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
               userId: '$author._id',
               username: '$author.username',
               author: '$author',
-              authorProfile: '$authorProfile',
+              // authorProfile: '$authorProfile',
               title: '$title',
               description: '$description',
               sortIndex: '$sortIndex',

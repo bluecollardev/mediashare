@@ -77,8 +77,8 @@ export class PlaylistItemController {
       playlistId: ObjectIdGuard(playlistId),
       mediaId: ObjectIdGuard(mediaId),
       sortIndex,
-    };
-    return await this.playlistItemService.create({ ...playlistItem });
+    } as any;
+    return await this.playlistItemService.create({ ...playlistItem } as any);
   }
 
   // @UseGuards(JwtAuthGuard)

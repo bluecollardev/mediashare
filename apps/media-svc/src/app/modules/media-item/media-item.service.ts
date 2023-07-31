@@ -129,12 +129,12 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
       { $unwind: { path: '$author' } },
       {
         $addFields: {
-          authorProfile: {
+          /* authorProfile: {
             authorId: '$author._id',
             authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
             authorUsername: '$author.username',
             authorImage: '$author.imageSrc',
-          },
+          }, */
         },
       },
     ];
@@ -150,7 +150,7 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
               userId: '$author._id',
               username: '$author.username',
               author: '$author',
-              authorProfile: '$authorProfile',
+              // authorProfile: '$authorProfile',
               title: '$title',
               description: '$description',
               uri: '$uri',
