@@ -1,39 +1,53 @@
+import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
-import { ObjectId } from 'mongodb';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateMediaShareItemDto {
   @IsString()
+  @AutoMap()
   @ApiProperty({ required: true })
   userId: string;
 
+  @IsOptional()
   @IsString()
+  @AutoMap()
   @ApiProperty({ required: false })
   mediaId?: string;
 
+  @IsOptional()
   @IsString()
+  @AutoMap()
   @ApiProperty({ required: false })
   playlistId?: string;
 
+  @IsOptional()
   @IsString()
+  @AutoMap()
   @ApiProperty({ required: true })
-  createdBy: string;
+  createdBy?: string;
 }
 
 export class CreatePlaylistShareItemDto {
   @IsString()
+  @AutoMap()
   @ApiProperty({ required: true })
   userId: string;
 
+  @IsOptional()
   @IsString()
+  @AutoMap()
   @ApiProperty({ required: false })
   mediaId?: string;
 
+  @IsOptional()
   @IsString()
+  @AutoMap()
   @ApiProperty({ required: false })
   playlistId?: string;
 
+  @IsOptional()
   @IsString()
+  @AutoMap()
   @ApiProperty({ required: true })
-  createdBy: string;
+  createdBy?: string;
 }

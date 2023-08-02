@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import { convertUsing, createMap, forMember, ignore, Mapper } from '@automapper/core';
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
-import { objectIdToStringConverter, stringToObjectIdConverter } from '@mediashare/core/mappings/converters';
+import { stringToObjectIdConverter } from '@mediashare/core/mappings/converters';
 import { Injectable } from '@nestjs/common';
 import { ShareItem } from '../entities/share-item.entity';
 import { CreateMediaShareItemDto, CreatePlaylistShareItemDto } from '../dto/create-share-item.dto';
@@ -31,20 +31,14 @@ export const updateMediaShareItemDtoToShareItemMappingFactory = (mapper) => crea
   mapper,
   UpdateMediaShareItemDto,
   ShareItem,
-  forMember((dest: ShareItem) => dest._id, ignore()),
-  forMember((dest: ShareItem) => dest.userId, convertUsing(stringToObjectIdConverter as never, (source: UpdateMediaShareItemDto) => source.userId)),
-  forMember((dest: ShareItem) => dest.playlistId, convertUsing(stringToObjectIdConverter as never, (source: UpdateMediaShareItemDto) => source.playlistId)),
-  forMember((dest: ShareItem) => dest.mediaId, convertUsing(stringToObjectIdConverter as never, (source: UpdateMediaShareItemDto) => source.mediaId)),
+  forMember((dest: ShareItem) => dest._id, convertUsing(stringToObjectIdConverter as never, (source: UpdateMediaShareItemDto) => source._id)),
 );
 
 export const updatePlaylistShareItemDtoToShareItemMappingFactory = (mapper) => createMap(
   mapper,
   UpdatePlaylistShareItemDto,
   ShareItem,
-  forMember((dest: ShareItem) => dest._id, ignore()),
-  forMember((dest: ShareItem) => dest.userId, convertUsing(stringToObjectIdConverter as never, (source: UpdatePlaylistShareItemDto) => source.userId)),
-  forMember((dest: ShareItem) => dest.playlistId, convertUsing(stringToObjectIdConverter as never, (source: UpdatePlaylistShareItemDto) => source.playlistId)),
-  forMember((dest: ShareItem) => dest.mediaId, convertUsing(stringToObjectIdConverter as never, (source: UpdatePlaylistShareItemDto) => source.mediaId)),
+  forMember((dest: ShareItem) => dest._id, convertUsing(stringToObjectIdConverter as never, (source: UpdatePlaylistShareItemDto) => source._id)),
 );
 
 @Injectable()
