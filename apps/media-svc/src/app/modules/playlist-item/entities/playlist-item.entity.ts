@@ -1,72 +1,63 @@
-import { ApiBaseEntity } from '@mediashare/core/entities';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
-import { Column, Entity, Index } from 'typeorm';
-import { ApiObjectId, ApiString, ApiTextString, ApiUriString } from '@mediashare/shared';
+import { AutoMap } from '@automapper/classes';
+import { AutoMapOptions } from '@automapper/classes/lib/automap';
+import { IsIn } from 'class-validator';
+import { Column, Entity, Index, ObjectIdColumn } from 'typeorm';
 import { ObjectId } from 'mongodb';
-import { MediaItem } from '../../media-item/entities/media-item.entity';
+import { ApiBaseEntity } from '@mediashare/core/entities';
+
+import { MEDIA_VISIBILITY, MediaVisibilityType } from '../../../core/models';
 
 @Entity('playlist_item')
 export class PlaylistItem extends ApiBaseEntity {
-  constructor(props: Partial<PlaylistItem> = {}) {
-    super();
-    Object.assign(this as any, props);
-  }
-
-  @ApiObjectId()
-  // @Transform((string) => new ObjectIdPipe())
-  @Column()
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  @ObjectIdColumn({ name: 'playlistId', nullable: false, unique: false })
   @Index('playlistId', { unique: false })
   playlistId: ObjectId;
 
-  // TODO: Ask Sean what this transform is for, or investigate
-  @ApiObjectId()
-  // @Transform((string) => new ObjectIdPipe())
-  @Column()
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  @ObjectIdColumn({ name: 'mediaId', nullable: false, unique: false })
   @Index('mediaId')
   mediaId: ObjectId;
 
-  @ApiObjectId()
-  // @Transform((string) => new ObjectIdPipe())
-  @Column({ nullable: false, unique: false })
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  @ObjectIdColumn({ name: 'userId', nullable: false, unique: false })
   @Index('userId', { unique: false })
   userId: ObjectId;
 
-  @ApiProperty({ type: Number })
-  @Column()
-  sortIndex: number;
+  @AutoMap()
+  @Column({ nullable: true })
+  sortIndex?: number;
 
+  @AutoMap()
   @Column({ nullable: true, type: 'text' })
-  @ApiString()
   title: string;
 
+  @AutoMap()
   @Column({ nullable: true, type: 'text' })
-  @ApiTextString()
-  summary: string;
+  summary?: string;
 
+  @AutoMap()
   @Column({ nullable: true, type: 'text' })
-  @ApiTextString()
   description: string;
 
-  @Column()
-  @ApiUriString()
+  @AutoMap()
+  @Column({ nullable: false })
   uri: string;
 
+  @AutoMap()
   @Column({ nullable: true })
-  @ApiString()
   imageSrc?: string;
 
+  @AutoMap()
   @Column({ nullable: true })
-  @IsBoolean()
-  @ApiProperty({ required: false })
-  isPlayable: boolean;
+  isPlayable?: boolean;
 
-  // TODO: Get these working again
-  /* @Column({ nullable: true })
-  @ApiProperty({ enum: MEDIA_VISIBILITY, name: 'visibility', enumName: 'MediaVisibilityType', required: false })
+  @IsIn(MEDIA_VISIBILITY)
+  // TODO: Change this to false once all data is updated!
+  @Column({ nullable: true })
   visibility: MediaVisibilityType;
 
-  @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
+  /* @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
   @Column({ name: 'tags', array: true, nullable: true })
   tags: TagKeyValue[]; */
 }

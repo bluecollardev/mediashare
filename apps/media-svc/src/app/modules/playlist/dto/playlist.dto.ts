@@ -1,20 +1,15 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaItemDto } from '../../media-item/dto/media-item.dto';
-import { ApiDecoratorOptions, ApiLongString, ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
+import { ApiLongString, ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDefined, IsIn, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsOptional, IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
 // import { AuthorProfileDto } from '../user/dto/profile.dto';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
 import { PLAYLIST_VISIBILITY, PlaylistVisibilityType } from '../../../core/models';
 
 export class PlaylistDto extends ApiBaseDto {
-  @IsDefined()
-  @AutoMap()
-  @ApiObjectId()
-  _id: ObjectId;
-
   @IsOptional()
   @AutoMap()
   @ApiObjectId()
@@ -22,29 +17,27 @@ export class PlaylistDto extends ApiBaseDto {
 
   @IsString()
   @AutoMap()
-  @ApiProperty({ required: true })
-  @ApiString()
+  @ApiString({ required: true })
   title: string;
 
   @IsString()
   @AutoMap()
-  @ApiProperty({ required: true })
-  @ApiTextString()
+  @ApiTextString({ required: true })
   description: string;
 
   @IsOptional()
   @IsString()
   @AutoMap()
-  @ApiLongString(<ApiDecoratorOptions>{ required: true })
+  @ApiLongString({ required: true })
   imageSrc?: string;
 
   @IsIn(PLAYLIST_VISIBILITY)
   @AutoMap()
-  @ApiProperty({ required: true, enum: PLAYLIST_VISIBILITY })
+  @ApiProperty({ enum: PLAYLIST_VISIBILITY, name: 'visibility', enumName: 'PlaylistVisibilityType', required: true })
   visibility: PlaylistVisibilityType;
 
   // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
-  tags: any[]; // TagKeyValue[];
+  tags?: any[]; // TagKeyValue[];
 
   // @ApiProperty({ type: () => AuthorProfileDto })
   // authorProfile: AuthorProfileDto;

@@ -1,5 +1,7 @@
+import { AutoMap } from '@automapper/classes';
+import { PLAYLIST_VISIBILITY, PlaylistVisibilityType } from '@mediashare/media-svc/src/app/core/models';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray } from 'class-validator';
+import { IsArray, IsIn } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { PlaylistDto } from './playlist.dto';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
@@ -10,8 +12,13 @@ export class CreatePlaylistDto {
   @IsArray()
   mediaIds: ObjectId[];
 
-  // @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
-  tags: any[]; // TagKeyValue[];
+  @IsIn(PLAYLIST_VISIBILITY)
+  @AutoMap()
+  @ApiProperty({ enum: PLAYLIST_VISIBILITY, name: 'visibility', enumName: 'PlaylistVisibilityType', required: true })
+  visibility: PlaylistVisibilityType;
+
+  // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
+  tags?: any[]; // TagKeyValue[];
 }
 
 export class CreatePlaylistResponseDto extends PlaylistDto {
