@@ -13,11 +13,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import bodyParser from 'body-parser';
 import { LoggerModule } from 'nestjs-pino';
 import { configureOpenApi } from '@mediashare/shared';
-import { AppController } from '@mediashare/media-svc/src/app/app.controller';
-import { AppService } from '@mediashare/media-svc/src/app/app.service';
 import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/entities/media-item.entity';
 import { MediaItemModule } from '@mediashare/media-svc/src/app/modules/media-item/media-item.module';
-import { createDB } from '@mediashare/media-svc/src/app/modules/media-item/media-item.service.spec';
+import { createDB } from '@mediashare/shared/test';
 
 export const getBaseUrl = async (app: INestApplication, globalPrefix) =>
   (await app.getUrl()).replace('[::1]', 'localhost') + `/${globalPrefix}`;

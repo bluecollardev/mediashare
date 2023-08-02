@@ -1,0 +1,36 @@
+/* Ignore module boundaries, it's just our test scaffolding */
+/* eslint-disable @nx/enforce-module-boundaries */
+import axios from 'axios';
+import { randomUUID } from 'crypto';
+import { testAndClonePlaylist } from '../test-components';
+import { defaultOptionsWithBearer } from './auth';
+
+import { CreatePlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/create-playlist.dto';
+import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/playlist.dto';
+
+export const createPlaylist = ({ baseUrl, token }) => (playlist) => {
+  const dto = {
+    sub: randomUUID(),
+    ...playlist,
+  } as CreatePlaylistDto;
+
+  return axios.post(`${baseUrl}/playlists`, dto, defaultOptionsWithBearer(token))
+}
+export const createAndValidateTestPlaylist = async (createPlaylistFn, playlistData = {
+  // Default data
+}) => {
+  return new Promise((resolve, reject) => {
+    createPlaylistFn(playlistData)
+      .then((res) => {
+        expect(res.status).toEqual(201);
+        const playlist: PlaylistDto = res.data;
+        testAndClonePlaylist(playlist, playlistData);
+        resolve(playlist);
+      })
+      .catch((err) => {
+        expect(err).toBeDefined();
+        reject(err);
+      });
+  });
+};
+export const getTestPlaylistId = (testPlaylist) => testPlaylist._id.toString();

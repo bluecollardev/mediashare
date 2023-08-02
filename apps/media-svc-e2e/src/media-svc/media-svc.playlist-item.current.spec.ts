@@ -1,32 +1,26 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Mapper } from '@automapper/core';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
+import { clone } from 'remeda';
+import { INestApplication } from '@nestjs/common';
+
+import { DataSource, MongoRepository } from 'typeorm';
+import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
+import { defaultOptionsWithBearer, login } from './functions/auth';
+import { createAndValidateTestPlaylistItem, createPlaylistItem as createPlaylistItemFunction, getTestPlaylistItemId } from './functions/playlist-item';
+
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
-import { CreatePlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/create-playlist-item.dto';
 import { UpdatePlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/update-playlist-item.dto';
 import { PlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/playlist-item.dto';
 import { PlaylistItem } from '@mediashare/media-svc/src/app/modules/playlist-item/entities/playlist-item.entity';
-import { PlaylistItemDataService, PlaylistItemService } from '@mediashare/media-svc/src/app/modules/playlist-item/playlist-item.service';
-import { INestApplication } from '@nestjs/common';
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
-import { stub } from 'jest-auto-stub/src/index';
-import { PinoLogger } from 'nestjs-pino';
-import { clone } from 'remeda';
-import { DataSource, MongoRepository } from 'typeorm';
-import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './functions/app';
-import { defaultOptionsWithBearer, login } from './functions/auth';
-import { createAndValidateTestPlaylistItem, createPlaylistItem as createPlaylistItemFunction, getTestPlaylistItemId } from './functions/playlist-item';
 
 describe('PlaylistAPI.current.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
 
   let db: DataSource;
-  let playlistItemService: PlaylistItemService;
   let playlistItemRepository: MongoRepository<PlaylistItem>;
-  let playlistItemDataService: PlaylistItemDataService;
-  let mapper: Mapper;
   let authResponse: AuthenticationResultType
   let createPlaylistItem;
   let testPlaylistItem;
@@ -37,13 +31,8 @@ describe('PlaylistAPI.current.e2e', () => {
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
-    const logger = stub<PinoLogger>();
-    mapper = initializeMapper(PlaylistItem, PlaylistItemDto, CreatePlaylistItemDto, UpdatePlaylistItemDto);
     db = await initializeDB([PlaylistItem]);
-
     playlistItemRepository = await db.getMongoRepository(PlaylistItem);
-    playlistItemDataService = new PlaylistItemDataService(playlistItemRepository, logger)
-    playlistItemService = new PlaylistItemService(playlistItemDataService, mapper, logger);
 
     // Delete all test records
     await playlistItemRepository.deleteMany({});

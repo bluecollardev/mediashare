@@ -68,7 +68,7 @@ describe('MediaItemAPI.current.e2e', () => {
       testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
-      await axios.get(`${baseUrl}/media-item`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.get(`${baseUrl}/media-items`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -109,7 +109,7 @@ describe('MediaItemAPI.current.e2e', () => {
 
       const dto = clone(testMediaItem) as UpdateMediaItemDto;
 
-      await axios.put(`${baseUrl}/media-item`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.put(`${baseUrl}/media-items`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -121,7 +121,7 @@ describe('MediaItemAPI.current.e2e', () => {
           expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(new Date(testMediaItem.createdAt).getTime());
 
           // Don't trust the response object - find the mediaItem, and make sure it's updated too
-          await axios.get(`${baseUrl}/media-item`, defaultOptionsWithBearer(authResponse?.IdToken))
+          await axios.get(`${baseUrl}/media-items`, defaultOptionsWithBearer(authResponse?.IdToken))
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -162,7 +162,7 @@ describe('MediaItemAPI.current.e2e', () => {
       testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
-      await axios.delete(`${baseUrl}/media-item`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.delete(`${baseUrl}/media-items`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

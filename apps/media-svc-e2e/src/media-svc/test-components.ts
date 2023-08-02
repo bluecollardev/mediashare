@@ -2,13 +2,21 @@ import { clone } from 'remeda';
 
 export const testAndCloneMediaItem = (mediaItem, expected) => {
   expect(mediaItem._id).toBeDefined();
-  expect(mediaItem.sub).toBeDefined();
-  expect(mediaItem.mediaItemname).toEqual(expected.mediaItemname);
-  expect(mediaItem.email).toEqual(expected.email);
-  expect(mediaItem.firstName).toEqual(expected.firstName);
-  expect(mediaItem.lastName).toEqual(expected.lastName);
   expect(mediaItem.createdAt).toBeDefined();
   expect(mediaItem.updatedDate).toBeDefined();
   return clone(mediaItem);
 };
 
+export const testAndClonePlaylistItem = (playlistItem, expected) => {
+  expect(playlistItem._id).toBeDefined();
+  expect(playlistItem.createdAt).toBeDefined();
+  expect(playlistItem.updatedDate).toBeDefined();
+  return clone(playlistItem);
+};
+
+export const testAndClonePlaylist = (playlist, expected) => {
+  expect(playlist._id).toBeDefined();
+  expect(playlist.createdAt).toBeDefined();
+  expect(playlist.updatedDate).toBeDefined();
+  return clone(playlist);
+};
