@@ -218,6 +218,10 @@ export class PlaylistItemService {
     return await this.dataService.getById(id);
   }
 
+  async getByUserId(id: IdType) {
+    return await this.dataService.getByUserId(id);
+  }
+
   async findOne(id: IdType) {
     const entity = await this.dataService.findOne(id);
     return await this.classMapper.mapAsync(entity, PlaylistItem, PlaylistItemDto);

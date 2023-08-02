@@ -13,7 +13,6 @@ import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor'
 import { PlaylistService } from './playlist.service';
 import { PlaylistDto } from './dto/playlist.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
-import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { ShareItemService } from '../share-item/share-item.service';
 import { ShareItem } from '../share-item/entities/share-item.entity';
@@ -85,12 +84,12 @@ export class PlaylistController {
   @ApiParam({ name: 'userId', type: String, required: true })
   @PlaylistShareResponse({ type: ShareItem, isArray: true })
   async share(
-    @Param(RouteTokens.playlistId, new ObjectIdPipe()) playlistId: ObjectId,
-    @Param('userId', new ObjectIdPipe()) userId: ObjectId,
+    @Param(RouteTokens.playlistId) playlistId: string,
+    @Param(RouteTokens.userId) userId: string,
     @GetUser('_id') createdBy: string,
     @Res() response: Response
   ) {
-    const shareItem = await this.shareItemService.createPlaylistShareItem({ createdBy: ObjectIdGuard(createdBy), userId, playlistId, title: '' });
+    const shareItem = await this.shareItemService.createPlaylistShareItem({ userId, playlistId, createdBy });
     return response.status(HttpStatus.CREATED).send(shareItem);
   }
 }

@@ -213,9 +213,17 @@ export class MediaItemService {
     return await this.dataService.getById(id);
   }
 
+  async getByUserId(id: IdType) {
+    return await this.dataService.getByUserId(id);
+  }
+
   async findOne(id: IdType) {
     const entity = await this.dataService.findOne(id);
     return await this.classMapper.mapAsync(entity, MediaItem, MediaItemDto);
+  }
+
+  async findAll() {
+    return await this.dataService.findAll();
   }
 
   async findByQuery(query: MongoFindOneOptions<MediaItem>) {
@@ -230,7 +238,7 @@ export class MediaItemService {
     return await this.dataService.getPopular();
   }
 
-  async search({ userId, query, tags }) {
+  async search({ userId, query, tags }: SearchParameters) {
     return await this.dataService.search({ userId, query, tags });
   }
 }

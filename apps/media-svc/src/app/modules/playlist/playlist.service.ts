@@ -272,9 +272,17 @@ export class PlaylistService {
     return await this.dataService.getById(id);
   }
 
+  async getByUserId(id: IdType) {
+    return await this.dataService.getByUserId(id);
+  }
+
   async findOne(id: IdType) {
     const entity = await this.dataService.findOne(id);
     return await this.classMapper.mapAsync(entity, Playlist, PlaylistDto);
+  }
+
+  async findAll() {
+    return await this.dataService.findAll();
   }
 
   async findByQuery(query: MongoFindOneOptions<Playlist>) {
@@ -283,5 +291,13 @@ export class PlaylistService {
 
   async findAllByQuery(query: MongoFindManyOptions<Playlist>) {
     return await this.dataService.findAllByQuery(query);
+  }
+
+  async getPopular() {
+    return await this.dataService.getPopular();
+  }
+
+  async search({ userId, query, tags }: SearchParameters) {
+    return await this.dataService.search({ userId, query, tags });
   }
 }
