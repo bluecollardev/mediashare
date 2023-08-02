@@ -1,4 +1,3 @@
-import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
 import { PinoLogger } from 'nestjs-pino';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +12,7 @@ import { ObjectIdGuard } from '@mediashare/core/guards';
 import { IdType } from '@mediashare/shared';
 import { SearchParameters } from '@mediashare/shared';
 import { FilterableDataService } from '@mediashare/core/services';
+import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
 
 import { PlaylistItem } from './entities/playlist-item.entity';
 import { CreatePlaylistItemDto } from './dto/create-playlist-item.dto';
@@ -233,5 +233,13 @@ export class PlaylistItemService {
 
   async findAllByQuery(query: MongoFindManyOptions<PlaylistItem>) {
     return await this.dataService.findAllByQuery(query);
+  }
+
+  async getPopular() {
+    return await this.dataService.getPopular();
+  }
+
+  async search({ userId, query, tags }: SearchParameters) {
+    return await this.dataService.search({ userId, query, tags });
   }
 }
