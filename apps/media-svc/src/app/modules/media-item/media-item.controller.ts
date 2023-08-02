@@ -1,9 +1,6 @@
 import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ObjectIdGuard } from '@mediashare/core/guards';
 import { Response } from 'express';
-import { ObjectId } from 'mongodb';
-import { ObjectIdPipe } from '@mediashare/shared';
 import { MEDIA_VISIBILITY } from '../../core/models';
 import { RouteTokens } from '../../core/constants';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
@@ -30,7 +27,7 @@ export class MediaItemController {
   @Get(RouteTokens.mediaId)
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
   @MediaGetResponse()
-  async findOne(@Param(RouteTokens.mediaId, new ObjectIdPipe()) mediaId: ObjectId) {
+  async findOne(@Param(RouteTokens.mediaId) mediaId: string) {
     const response = await this.mediaItemService.getById(mediaId);
     if (!response) throw notFoundResponse('mediaItem', { args: { mediaId } });
     return response;
@@ -55,13 +52,13 @@ export class MediaItemController {
   @ApiBearerAuth()
   @Post()
   @MediaPostResponse()
-  async create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUser('_id') createdBy: ObjectId) {
+  async create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUser('_id') createdBy: string) {
     const mediaItem: Omit<MediaItem, '_id'> = {
       isPlayable: false,
       uri: '',
       ...createMediaItemDto,
-      userId: ObjectIdGuard(createdBy),
-      createdBy: ObjectIdGuard(createdBy),
+      userId: createdBy,
+      createdBy: createdBy,
     } as any;
     return await this.mediaItemService.create({ ...mediaItem } as any);
   }
@@ -70,7 +67,7 @@ export class MediaItemController {
   @Put(RouteTokens.mediaId)
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
   @MediaPutResponse()
-  async update(@Param(RouteTokens.mediaId, ObjectIdPipe) mediaId: ObjectId, @Body() updateMediaItemDto: UpdateMediaItemDto) {
+  async update(@Param(RouteTokens.mediaId) mediaId: string, @Body() updateMediaItemDto: UpdateMediaItemDto) {
     return await this.mediaItemService.update(mediaId, updateMediaItemDto);
   }
 

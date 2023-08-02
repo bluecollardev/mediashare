@@ -1,8 +1,6 @@
 import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { ObjectId } from 'mongodb';
-import { ObjectIdPipe } from '@mediashare/shared';
 import { RouteTokens } from '../../core/constants';
 import { MEDIA_VISIBILITY } from '../../core/models';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
@@ -60,8 +58,8 @@ export class PlaylistItemController {
   @Post()
   @PlaylistItemPostResponse()
   async create(@CreateDto() createPlaylistItemDto: CreatePlaylistItemDto, @GetUser('_id') createdBy) {
-    const playlistId = new ObjectId(createPlaylistItemDto?.playlistId);
-    const mediaId = new ObjectId(createPlaylistItemDto?.mediaId);
+    const playlistId = createPlaylistItemDto?.playlistId;
+    const mediaId = createPlaylistItemDto?.mediaId;
     const sortIndex = createPlaylistItemDto?.sortIndex;
     const mediaItem = await this.mediaItemService.findOne(mediaId);
     delete mediaItem._id;
@@ -82,7 +80,7 @@ export class PlaylistItemController {
   @Put(RouteTokens.playlistItemId)
   @ApiParam({ name: RouteTokens.playlistItemId, type: String, required: true })
   @PlaylistItemPutResponse()
-  async update(@Param(RouteTokens.playlistItemId, ObjectIdPipe) playlistItemId: ObjectId, @Body() updatePlaylistItemDto: UpdatePlaylistItemDto) {
+  async update(@Param(RouteTokens.playlistItemId) playlistItemId: string, @Body() updatePlaylistItemDto: UpdatePlaylistItemDto) {
     return await this.playlistItemService.update(playlistItemId, updatePlaylistItemDto);
   }
 
@@ -100,9 +98,9 @@ export class PlaylistItemController {
   @ApiParam({ name: 'userId', type: String, required: true })
   @PlaylistItemShareResponse({ type: ShareItem })
   async share(
-    @Param(RouteTokens.playlistItemId, new ObjectIdPipe()) playlistItemId: ObjectId,
-    @Param(RouteTokens.userId, new ObjectIdPipe()) userId: ObjectId,
-    @GetUser('_id') createdBy: ObjectId,
+    @Param(RouteTokens.playlistItemId) playlistItemId: string,
+    @Param(RouteTokens.userId) userId: string,
+    @GetUser('_id') createdBy: string,
     @Res() response: Response
   ) {
     const { title } = await this.playlistItemService.findOne(playlistItemId);

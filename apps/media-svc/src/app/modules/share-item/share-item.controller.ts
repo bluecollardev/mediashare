@@ -1,7 +1,5 @@
 import { Controller, Param, HttpCode, UseGuards, HttpStatus, Get, Delete, Post, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ObjectId } from 'mongodb';
-import { ObjectIdPipe } from '@mediashare/shared';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
 import { RouteTokens } from '../../core/constants';
 import { ShareItemService } from './share-item.service';
@@ -62,7 +60,7 @@ export class ShareItemController {
   @Get(RouteTokens.shareId)
   @ApiParam({ name: RouteTokens.shareId, type: String, required: true })
   @ShareItemGetResponse()
-  async findShareItem(@Param(RouteTokens.shareId, new ObjectIdPipe()) shareId: ObjectId) {
+  async findShareItem(@Param(RouteTokens.shareId) shareId: string) {
     return await this.shareItemService.findOne(shareId);
   }
 
@@ -72,14 +70,14 @@ export class ShareItemController {
   @Post(`read/${RouteTokens.shareId}`) // TODO: Why is this a POST? Shouldn't we be using ShareItemPostResponse as well?
   @ApiParam({ name: RouteTokens.shareId, type: String, required: true })
   @ApiResponse({ type: ShareItem, status: 200 })
-  async readShareItem(@Param(RouteTokens.shareId, new ObjectIdPipe()) shareId: ObjectId) {
+  async readShareItem(@Param(RouteTokens.shareId) shareId: string) {
     return await this.shareItemService.update(shareId, { read: true });
   }
 
   @Delete(RouteTokens.shareId)
   @ApiParam({ name: RouteTokens.shareId, type: String, required: true })
   @ShareItemGetResponse()
-  async removeShareItem(@Param(RouteTokens.shareId, new ObjectIdPipe()) shareId: ObjectId) {
+  async removeShareItem(@Param(RouteTokens.shareId) shareId: string) {
     return await this.shareItemService.remove(shareId);
   }
 

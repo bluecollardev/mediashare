@@ -1,9 +1,6 @@
 import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ObjectIdGuard } from '@mediashare/core/guards';
 import { Response } from 'express';
-import { ObjectId } from 'mongodb';
-import { ObjectIdPipe } from '@mediashare/shared';
 import { RouteTokens } from '../../core/constants';
 import { PLAYLIST_VISIBILITY } from '../../core/models';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
@@ -29,9 +26,9 @@ export class PlaylistController {
 
   @Get(RouteTokens.playlistId)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: new ObjectId().toHexString() })
+  @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
   @PlaylistGetResponse()
-  async findOne(@Param(RouteTokens.playlistId, new ObjectIdPipe()) playlistId: ObjectId) {
+  async findOne(@Param(RouteTokens.playlistId) playlistId: string) {
     const response = await this.playlistService.getById(playlistId);
     if (!response) throw notFoundResponse('playlist', { args: { playlistId } });
     return response;
@@ -53,14 +50,14 @@ export class PlaylistController {
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUser('_id') userId: string) {
     return await this.playlistService.create({
       ...createPlaylistDto,
-      createdBy: ObjectIdGuard(userId),
+      createdBy: userId,
       cloneOf: createPlaylistDto?.cloneOf ? createPlaylistDto.cloneOf : undefined,
     });
   }
 
   @Put(RouteTokens.playlistId)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: new ObjectId().toHexString() })
+  @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
   @ApiBody({ type: UpdatePlaylistDto })
   @PlaylistPutResponse()
   async update(@Param(RouteTokens.playlistId) playlistId: string, @GetUser('_id') userId: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
@@ -69,7 +66,7 @@ export class PlaylistController {
 
   @Delete(RouteTokens.playlistId)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: new ObjectId().toHexString() })
+  @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
   async remove(@Param(RouteTokens.playlistId) playlistId: string) {
     return await this.playlistService.remove(playlistId);
   }
