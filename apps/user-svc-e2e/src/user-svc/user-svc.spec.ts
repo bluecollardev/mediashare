@@ -2,15 +2,13 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { INestApplication } from '@nestjs/common';
 import axios, { AxiosError } from 'axios';
-import { Mapper } from '@automapper/core';
-import { stub } from 'jest-auto-stub/src/index';
-import { PinoLogger } from 'nestjs-pino';
 import { DataSource, MongoRepository } from 'typeorm';
 import { clone } from 'remeda';
 
 import { allValidations } from './fixtures/validations';
-import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './functions/app';
+import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
+import { createUser as createUserFunction, createAndValidateTestUser, getTestUserId } from './functions/user';
 
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { ApiErrorResponse } from '@mediashare/core/errors/api-error';
@@ -18,18 +16,13 @@ import { CreateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/cre
 import { UpdateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/update-user.dto';
 import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
-import { UserDataService, UserService } from '@mediashare/user-svc/src/app/modules/user/user.service';
-import { createUser as createUserFunction, createAndValidateTestUser, getTestUserId } from './functions/user';
 
 describe('UserAPI.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
 
   let db: DataSource;
-  let userService: UserService;
   let userRepository: MongoRepository<User>;
-  let userDataService: UserDataService;
-  let mapper: Mapper;
   let authResponse: AuthenticationResultType
   let createUser;
 
@@ -38,13 +31,8 @@ describe('UserAPI.e2e', () => {
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
-    const logger = stub<PinoLogger>();
-    mapper = initializeMapper(User, UserDto, CreateUserDto, UpdateUserDto);
     db = await initializeDB([User]);
-
     userRepository = await db.getMongoRepository(User);
-    userDataService = new UserDataService(userRepository, logger)
-    userService = new UserService(userDataService, mapper, logger);
 
     // Delete all test records
     await userRepository.deleteMany({});

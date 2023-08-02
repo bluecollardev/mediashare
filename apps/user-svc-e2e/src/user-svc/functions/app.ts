@@ -85,8 +85,8 @@ export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplicat
       UserConnectionModule,
       LoggerModule.forRoot()
     ],
-    controllers: [AppController],
-    providers: [AppService]
+    controllers: [],
+    providers: []
   }).compile();
 
   const app = moduleFixture.createNestApplication();
