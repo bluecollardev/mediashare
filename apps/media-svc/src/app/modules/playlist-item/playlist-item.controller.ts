@@ -66,7 +66,7 @@ export class PlaylistItemController {
     const playlistId = new ObjectId(createPlaylistItemDto?.playlistId);
     const mediaId = new ObjectId(createPlaylistItemDto?.mediaId);
     const sortIndex = createPlaylistItemDto?.sortIndex;
-    const mediaItem: MediaItem = await this.mediaItemService.findOne(mediaId);
+    const mediaItem = await this.mediaItemService.findOne(mediaId);
     delete mediaItem._id;
     const playlistItem: Omit<PlaylistItem, '_id'> = {
       isPlayable: false,
