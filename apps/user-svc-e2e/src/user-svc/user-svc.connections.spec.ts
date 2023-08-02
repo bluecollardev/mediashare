@@ -125,7 +125,8 @@ describe('UserAPI.connections.e2e', () => {
               "children": [],
               "constraints": {
                 "isDefined": "userId should not be null or undefined",
-                "isMongoId": "userId must be a mongodb id"
+                "isString": "userId must be a string",
+                "isLength": "userId must be longer than or equal to 0 characters"
               }
             },
             {
@@ -138,7 +139,8 @@ describe('UserAPI.connections.e2e', () => {
               "children": [],
               "constraints": {
                 "isDefined": "connectionId should not be null or undefined",
-                "isMongoId": "connectionId must be a mongodb id"
+                "isString": "connectionId must be a string",
+                "isLength": "connectionId must be longer than or equal to 0 characters"
               }
             }
           ];
@@ -148,8 +150,8 @@ describe('UserAPI.connections.e2e', () => {
     });
   });
 
-  let uc1Id: ObjectId;
-  let uc2Id: ObjectId;
+  let uc1Id: string;
+  let uc2Id: string;
 
   describe('UserConnectionApi should create a first user connection', () => {
     it('should create a first user connection', async () => {

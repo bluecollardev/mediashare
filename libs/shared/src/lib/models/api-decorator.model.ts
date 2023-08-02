@@ -1,4 +1,3 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiDecoratorOptions } from './index';
 
-export type ApiDecoratorType = (opts?: ApiDecoratorOptions) => ReturnType<typeof applyDecorators>;
+export type ApiDecoratorType = (opts?: { required?: boolean }) => ReturnType<typeof applyDecorators>;

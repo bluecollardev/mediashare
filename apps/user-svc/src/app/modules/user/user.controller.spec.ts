@@ -133,7 +133,7 @@ describe('UserController.crud', () => {
     });
 
     const data = {
-      _id: new ObjectId('649bf1b109d28ad4892f1548'),
+      _id: '649bf1b109d28ad4892f1548',
       sub: '33a08148-b658-403d-b070-cdc0f34e5274',
       username: 'demosubscriber',
       firstName: 'Lucas',

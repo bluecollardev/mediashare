@@ -18,7 +18,7 @@ export const allValidations = [
     "children": [],
     "constraints": {
       "isString": "username must be a string",
-      "isLength": "username must be longer than or equal to 3 characters"
+      "isLength": "username must be longer than or equal to 2 characters"
     }
   },
   {
@@ -50,7 +50,6 @@ export const allValidations = [
     "property": "lastName",
     "children": [],
     "constraints": {
-      "isDefined": "lastName should not be null or undefined",
       "isString": "lastName must be a string",
       "isLength": "lastName must be longer than or equal to 2 characters"
     }
