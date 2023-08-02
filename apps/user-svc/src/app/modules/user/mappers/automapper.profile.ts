@@ -27,7 +27,7 @@ export const updateUserDtoToUserMappingFactory = (mapper) => createMap(
   mapper,
   UpdateUserDto,
   User,
-  forMember((dest: User) => dest._id, convertUsing(stringToObjectIdConverter as never, (source: UserDto) => source._id)),
+  forMember((dest: User) => dest._id, convertUsing(stringToObjectIdConverter as never, (source: UpdateUserDto) => source._id)),
   // forMember((dest: User) => dest.createdBy, convertUsing(stringToObjectIdConverter as never, (source: UserDto) => source.createdBy)),
 );
 

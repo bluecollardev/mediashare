@@ -2,7 +2,6 @@ import { AutoMap } from '@automapper/classes';
 import { Entity, Column, BeforeInsert } from 'typeorm';
 import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
 import { BcRolesType, BC_ROLES } from '../../../core/models';
-import { ObjectId } from 'mongodb';
 
 @Entity('user')
 export class User extends ApiBaseEntity {

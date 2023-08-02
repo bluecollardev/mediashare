@@ -1,37 +1,29 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
-import { INestApplication } from '@nestjs/common';
 import axios, { AxiosError } from 'axios';
-import { Mapper } from '@automapper/core';
-import { stub } from 'jest-auto-stub/src/index';
-import { ObjectId } from 'mongodb';
-import { PinoLogger } from 'nestjs-pino';
+import { INestApplication } from '@nestjs/common';
 import { DataSource, MongoRepository } from 'typeorm';
 
-import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './functions/app';
+import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createUser as createUserFunction } from './functions/user';
 
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { ApiErrorResponse } from '@mediashare/core/errors/api-error';
 import { CreateUserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/create-user-connection.dto';
-import { UpdateUserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/update-user-connection.dto';
 import { UserConnectionDto } from '@mediashare/user-svc/src/app/modules/user-connection/dto/user-connection.dto';
 import { UserConnection } from '@mediashare/user-svc/src/app/modules/user-connection/entities/user-connection.entity';
-import { UserConnectionDataService, UserConnectionService } from '@mediashare/user-svc/src/app/modules/user-connection/user-connection.service';
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
+
 
 describe('UserAPI.connections.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
 
   let db: DataSource;
-  let userConnectionService: UserConnectionService;
   let userConnectionRepository: MongoRepository<UserConnection>;
-  let userConnectionDataService: UserConnectionDataService;
   let userRepository: MongoRepository<User>;
-  let mapper: Mapper;
   let authResponse: AuthenticationResultType
   let createUser;
 
@@ -44,14 +36,9 @@ describe('UserAPI.connections.e2e', () => {
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
-    const logger = stub<PinoLogger>();
-    mapper = initializeMapper(UserConnection, UserConnectionDto, CreateUserConnectionDto, UpdateUserConnectionDto);
     db = await initializeDB([User, UserConnection]);
-
     userRepository = await db.getMongoRepository(User);
     userConnectionRepository = await db.getMongoRepository(UserConnection);
-    userConnectionDataService = new UserConnectionDataService(userConnectionRepository, logger)
-    userConnectionService = new UserConnectionService(userConnectionDataService, mapper, logger);
 
     // Delete all test records
     await userRepository.deleteMany({});
