@@ -3,10 +3,12 @@
 import { classes } from '@automapper/classes';
 import { createMap, createMapper, Dictionary, forMember, ignore, Mapper, ModelIdentifier } from '@automapper/core';
 import { AutomapperModule } from '@automapper/nestjs';
+import { appConfig, appValidationSchema, dbConfig } from '@mediashare/media-svc/src/app/app.configuration';
 import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { CognitoModuleOptions } from '@nestjs-cognito/core';
 import { CognitoTestingModule } from '@nestjs-cognito/testing';
 import { INestApplication } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { SwaggerModule } from '@nestjs/swagger';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -38,6 +40,15 @@ export const initializeDB = async (entities: any[]) => {
 export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplication> => {
   const moduleFixture = await Test.createTestingModule({
     imports: [
+      ConfigModule.forRoot({
+        envFilePath: 'test.env',
+        load: [appConfig, dbConfig],
+        validationSchema: appValidationSchema,
+        cache: true,
+        isGlobal: true,
+        ignoreEnvFile: process.env.NODE_ENV === 'production',
+        ignoreEnvVars: process.env.NODE_ENV !== 'production',
+      }),
       TypeOrmModule.forRoot({
         type: 'mongodb',
         host: 'localhost',
