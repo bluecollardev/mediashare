@@ -1,6 +1,5 @@
 import { Controller, Body, Param, UseGuards, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ObjectIdGuard } from '@mediashare/core/guards';
 import { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { ObjectIdPipe } from '@mediashare/shared';
@@ -17,7 +16,6 @@ import { PlaylistItem } from './entities/playlist-item.entity';
 import { ShareItemService } from '../share-item/share-item.service';
 import { ShareItem } from '../share-item/entities/share-item.entity';
 import { MediaItemService } from '../media-item/media-item.service';
-import { MediaItem } from '../media-item/entities/media-item.entity';
 
 @ApiTags('playlist-items')
 @Controller('playlist-items')
@@ -72,10 +70,10 @@ export class PlaylistItemController {
       isPlayable: false,
       uri: '',
       ...mediaItem,
-      createdBy: ObjectIdGuard(createdBy),
-      userId: ObjectIdGuard(createdBy),
-      playlistId: ObjectIdGuard(playlistId),
-      mediaId: ObjectIdGuard(mediaId),
+      createdBy,
+      userId: createdBy,
+      playlistId: playlistId,
+      mediaId: mediaId,
       sortIndex,
     } as any;
     return await this.playlistItemService.create({ ...playlistItem } as any);
@@ -106,7 +104,7 @@ export class PlaylistItemController {
   @PlaylistItemShareResponse({ type: ShareItem })
   async share(
     @Param(RouteTokens.playlistItemId, new ObjectIdPipe()) playlistItemId: ObjectId,
-    @Param('userId', new ObjectIdPipe()) userId: ObjectId,
+    @Param(RouteTokens.userId, new ObjectIdPipe()) userId: ObjectId,
     @GetUser('_id') createdBy: ObjectId,
     @Res() response: Response
   ) {

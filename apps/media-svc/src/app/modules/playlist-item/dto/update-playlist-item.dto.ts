@@ -1,4 +1,3 @@
-import { PartialType } from '@nestjs/swagger';
-import { PlaylistItem } from '../entities/playlist-item.entity';
+import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 
-export class UpdatePlaylistItemDto extends PartialType(PlaylistItem) {}
+export class UpdatePlaylistItemDto extends ApiBaseDto {}

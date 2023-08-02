@@ -1,3 +1,4 @@
+import { ApiBaseEntity } from '@mediashare/core/entities';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean } from 'class-validator';
 import { Column, Entity, Index } from 'typeorm';
@@ -6,7 +7,7 @@ import { ObjectId } from 'mongodb';
 import { MediaItem } from '../../media-item/entities/media-item.entity';
 
 @Entity('playlist_item')
-export class PlaylistItem extends MediaItem {
+export class PlaylistItem extends ApiBaseEntity {
   constructor(props: Partial<PlaylistItem> = {}) {
     super();
     Object.assign(this as any, props);

@@ -1,4 +1,5 @@
 import { AutoMap } from '@automapper/classes';
+import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaItemDto } from '../../media-item/dto/media-item.dto';
 import { ApiDecoratorOptions, ApiLongString, ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
@@ -8,7 +9,7 @@ import { ObjectId } from 'mongodb';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
 import { PLAYLIST_VISIBILITY, PlaylistVisibilityType } from '../../../core/models';
 
-export class PlaylistDto {
+export class PlaylistDto extends ApiBaseDto {
   @IsDefined()
   @AutoMap()
   @ApiObjectId()

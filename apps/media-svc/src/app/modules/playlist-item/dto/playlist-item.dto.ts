@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PlaylistItem } from '../entities/playlist-item.entity';
+import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 // import { AuthorProfileDto } from '../user/dto/profile.dto';
 
-export class PlaylistItemDto extends PlaylistItem {
+export class PlaylistItemDto extends ApiBaseDto {
   // @ApiProperty({ type: () => AuthorProfileDto })
   // authorProfile: AuthorProfileDto;
 

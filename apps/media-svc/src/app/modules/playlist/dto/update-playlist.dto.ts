@@ -1,10 +1,10 @@
-import { ApiProperty, PickType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
+import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { IsArray } from 'class-validator';
-import { Playlist } from '../entities/playlist.entity';
 // import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
 import { PlaylistVisibilityType, PLAYLIST_VISIBILITY } from '../../../core/models';
 
-export class UpdatePlaylistDto extends PickType(Playlist, ['title', 'visibility', 'description', '_id', 'imageSrc']) {
+export class UpdatePlaylistDto extends ApiBaseDto {
   @ApiProperty({ required: false })
   @IsArray()
   mediaIds?: string[];

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
+import { ApiString, ApiTextString } from '@mediashare/shared';
 import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
