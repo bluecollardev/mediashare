@@ -68,7 +68,7 @@ describe('PlaylistAPI.current.e2e', () => {
       testPlaylistItem = await createAndValidateTestPlaylistItem(createPlaylistItem, testPlaylistItemData);
       testPlaylistItemId = getTestPlaylistItemId(testPlaylistItem);
 
-      await axios.get(`${baseUrl}/playlist-item`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.get(`${baseUrl}/playlist-items`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -109,7 +109,7 @@ describe('PlaylistAPI.current.e2e', () => {
 
       const dto = clone(testPlaylistItem) as UpdatePlaylistItemDto;
 
-      await axios.put(`${baseUrl}/playlist-item`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.put(`${baseUrl}/playlist-items`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -121,7 +121,7 @@ describe('PlaylistAPI.current.e2e', () => {
           expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(new Date(testPlaylistItem.createdAt).getTime());
 
           // Don't trust the response object - find the playlistItem, and make sure it's updated too
-          await axios.get(`${baseUrl}/playlist-item`, defaultOptionsWithBearer(authResponse?.IdToken))
+          await axios.get(`${baseUrl}/playlist-items`, defaultOptionsWithBearer(authResponse?.IdToken))
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -162,7 +162,7 @@ describe('PlaylistAPI.current.e2e', () => {
       testPlaylistItem = await createAndValidateTestPlaylistItem(createPlaylistItem, testPlaylistItemData);
       testPlaylistItemId = getTestPlaylistItemId(testPlaylistItem);
 
-      await axios.delete(`${baseUrl}/playlist-item`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.delete(`${baseUrl}/playlist-items`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

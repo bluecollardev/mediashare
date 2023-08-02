@@ -66,7 +66,7 @@ describe('PlaylistAPI.current.e2e', () => {
       testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
-      await axios.get(`${baseUrl}/playlist`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.get(`${baseUrl}/playlists`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -107,7 +107,7 @@ describe('PlaylistAPI.current.e2e', () => {
 
       const dto = clone(testPlaylist) as UpdatePlaylistDto;
 
-      await axios.put(`${baseUrl}/playlist`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.put(`${baseUrl}/playlists`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -119,7 +119,7 @@ describe('PlaylistAPI.current.e2e', () => {
           expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(new Date(testPlaylist.createdAt).getTime());
 
           // Don't trust the response object - find the playlist, and make sure it's updated too
-          await axios.get(`${baseUrl}/playlist`, defaultOptionsWithBearer(authResponse?.IdToken))
+          await axios.get(`${baseUrl}/playlists`, defaultOptionsWithBearer(authResponse?.IdToken))
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -160,7 +160,7 @@ describe('PlaylistAPI.current.e2e', () => {
       testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
-      await axios.delete(`${baseUrl}/playlist`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.delete(`${baseUrl}/playlists`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);
