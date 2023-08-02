@@ -5,16 +5,18 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { ConfigService } from '@nestjs/config';
 import { MongoRepository } from 'typeorm';
+import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
 import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
 
 import { ObjectIdGuard } from '@mediashare/core/guards';
-import { FilterableDataService } from '@mediashare/core/services';
 import { IdType, SearchParameters } from '@mediashare/shared';
+import { FilterableDataService } from '@mediashare/core/services';
 import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
+
 import { MediaItem } from './entities/media-item.entity';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
-import { MediaItemDto } from './dto/media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
+import { MediaItemDto } from './dto/media-item.dto';
 
 import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
 
@@ -185,8 +187,6 @@ export class MediaItemService {
   constructor(
     public dataService: MediaItemDataService,
     @InjectMapper() private readonly classMapper: Mapper,
-    logger: PinoLogger,
-    private configService: ConfigService
   ) {}
 
   async create(createMediaItemDto: CreateMediaItemDto): Promise<MediaItemDto> {
@@ -220,6 +220,10 @@ export class MediaItemService {
 
   async findByQuery(query: MongoFindOneOptions<MediaItem>) {
     return await this.dataService.findByQuery(query);
+  }
+
+  async findAllByQuery(query: MongoFindManyOptions<MediaItem>) {
+    return await this.dataService.findAllByQuery(query);
   }
 
   async getPopular() {

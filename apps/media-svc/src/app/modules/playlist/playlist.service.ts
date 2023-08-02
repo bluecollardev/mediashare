@@ -1,20 +1,25 @@
-import { Mapper } from '@automapper/core';
-import { InjectMapper } from '@automapper/nestjs';
+import { PinoLogger } from 'nestjs-pino';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository } from 'typeorm';
-import { PinoLogger } from 'nestjs-pino';
-import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
-import { ObjectIdGuard } from '@mediashare/core/guards';
-import { DataService, FilterableDataService } from '@mediashare/core/services';
-import { IdType } from '@mediashare/shared';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
 import { ConfigService } from '@nestjs/config';
+import { MongoRepository } from 'typeorm';
+import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
+import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
+
+import { ObjectIdGuard } from '@mediashare/core/guards';
+import { IdType } from '@mediashare/shared';
+import { SearchParameters } from '@mediashare/shared';
+import { FilterableDataService } from '@mediashare/core/services';
+
 import { PlaylistItemService } from '../playlist-item/playlist-item.service';
 import { Playlist } from './entities/playlist.entity';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
-import { SearchParameters } from '@mediashare/shared';
+import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/playlist.dto';
 import { PlaylistItem } from '../playlist-item/entities/playlist-item.entity';
+
 import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
 
 /* type CreatePlaylistParameters = {
@@ -28,6 +33,7 @@ export class PlaylistDataService extends FilterableDataService<Playlist, MongoRe
   constructor(
     @InjectRepository(Playlist) repository: MongoRepository<Playlist>,
     logger: PinoLogger,
+    private configService: ConfigService
   ) {
     super(repository, logger);
     this.repository
@@ -38,83 +44,6 @@ export class PlaylistDataService extends FilterableDataService<Playlist, MongoRe
         this.collectionIndexName = indexName;
       });
   }
-}
-
-@Injectable()
-export class PlaylistService {
-  constructor(
-    public dataService: PlaylistDataService,
-    @InjectMapper() private readonly classMapper: Mapper,
-    logger: PinoLogger,
-    private configService: ConfigService,
-    private playlistItemService: PlaylistItemService
-  ) {}
-
-  async create(dto: CreatePlaylistDto & { createdBy: IdType }) {
-    const { title, visibility, description, imageSrc, mediaIds, tags, createdBy, cloneOf } = dto;
-    return await this.dataService.create({
-      title,
-      visibility,
-      description,
-      imageSrc,
-      tags,
-      createdBy: ObjectIdGuard(createdBy),
-      mediaIds: mediaIds.map((id) => ObjectIdGuard(id)),
-      cloneOf,
-    } as any);
-  }
-
-  async update(playlistId: IdType, dto: UpdatePlaylistDto) {
-    const { mediaIds, ...rest } = dto;
-    // TODO: Transaction!
-    // Get playlist items by playlistId
-    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) } as any);
-    // Filter out any deleted media items
-    const playlistItemIdsToDelete = playlistItems
-      // If playlist item mediaId is NOT included in our mediaIds, delete the playlist item
-      .filter((item: PlaylistItem) => !mediaIds.includes(item.mediaId.toString()))
-      .map((item: PlaylistItem) => item._id.toString());
-
-    // Ensure unique ids
-    const uniquePlaylistItemIdsToDelete = Array.from(new Set(playlistItemIdsToDelete));
-    const deletePlaylistItems = uniquePlaylistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
-
-    const result = await Promise.all(deletePlaylistItems);
-    if (!result) {
-      // Handle error
-    }
-
-    return await this.dataService.update(playlistId, {
-      ...rest,
-      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => ObjectIdGuard(id)) : [],
-    } as any);
-  }
-
-  async remove(playlistId: IdType) {
-    // Get playlist items by playlistId
-    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) } as any);
-    const playlistItemIdsToDelete = playlistItems.map((item: PlaylistItem) => item._id.toString());
-    const deletePlaylistItems = playlistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
-
-    const result = await Promise.all(deletePlaylistItems);
-    if (!result) {
-      // Handle error
-    }
-
-    return await this.dataService.remove(playlistId);
-  }
-
-  /* private async createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
-    if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
-    const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
-    return await this.playlistItemService.insertMany(mappedItems);
-  }
-
-  private async updatePlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
-    if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
-    const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
-    return await this.playlistItemService.insertMany(mappedItems);
-  } */
 
   protected buildAggregateQuery(params: SearchParameters) {
     const {
@@ -136,7 +65,7 @@ export class PlaylistService {
       // IMPORTANT! This shouldn't run at any time (fullText = false is hardcoded)
       throw new Error('Elastic search has not been implemented');
     } else if (query && !fullText) {
-      if (this.dataService.useDistributedSearch) {
+      if (this.useDistributedSearch) {
         throw new Error('Elastic search has not been implemented');
       }
     }
@@ -147,12 +76,12 @@ export class PlaylistService {
         {
           $match: query
             ? {
-                $text: { $search: query },
-                $and: [{ createdBy: ObjectIdGuard(userId) }],
-              }
+              $text: { $search: query },
+              $and: [{ createdBy: ObjectIdGuard(userId) }],
+            }
             : {
-                $and: [{ createdBy: ObjectIdGuard(userId) }],
-              },
+              $and: [{ createdBy: ObjectIdGuard(userId) }],
+            },
         },
       ]);
     } else {
@@ -162,18 +91,18 @@ export class PlaylistService {
         {
           $match: query
             ? {
-                $text: { $search: query },
-                $and: [
-                  { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-                  { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-                ],
-              }
+              $text: { $search: query },
+              $and: [
+                { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+                { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+              ],
+            }
             : {
-                $and: [
-                  { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-                  { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-                ],
-              },
+              $and: [
+                { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+                { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+              ],
+            },
         },
       ]);
     }
@@ -260,5 +189,99 @@ export class PlaylistService {
         },
       },
     };
+  }
+}
+
+@Injectable()
+export class PlaylistService {
+  constructor(
+    public dataService: PlaylistDataService,
+    @InjectMapper() private readonly classMapper: Mapper,
+    logger: PinoLogger,
+    private configService: ConfigService,
+    private playlistItemService: PlaylistItemService
+  ) {}
+
+  async create(dto: CreatePlaylistDto & { createdBy: IdType }) {
+    const { title, visibility, description, imageSrc, mediaIds, tags, createdBy, cloneOf } = dto;
+    return await this.dataService.create({
+      title,
+      visibility,
+      description,
+      imageSrc,
+      tags,
+      createdBy: ObjectIdGuard(createdBy),
+      mediaIds: mediaIds.map((id) => ObjectIdGuard(id)),
+      cloneOf,
+    } as any);
+  }
+
+  async update(playlistId: IdType, dto: UpdatePlaylistDto) {
+    const { mediaIds, ...rest } = dto;
+    // TODO: Transaction!
+    // Get playlist items by playlistId
+    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) } as any);
+    // Filter out any deleted media items
+    const playlistItemIdsToDelete = playlistItems
+      // If playlist item mediaId is NOT included in our mediaIds, delete the playlist item
+      .filter((item: PlaylistItem) => !mediaIds.includes(item.mediaId.toString()))
+      .map((item: PlaylistItem) => item._id.toString());
+
+    // Ensure unique ids
+    const uniquePlaylistItemIdsToDelete = Array.from(new Set(playlistItemIdsToDelete));
+    const deletePlaylistItems = uniquePlaylistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
+
+    const result = await Promise.all(deletePlaylistItems);
+    if (!result) {
+      // Handle error
+    }
+
+    return await this.dataService.update(playlistId, {
+      ...rest,
+      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => ObjectIdGuard(id)) : [],
+    } as any);
+  }
+
+  async remove(playlistId: IdType) {
+    // Get playlist items by playlistId
+    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) } as any);
+    const playlistItemIdsToDelete = playlistItems.map((item: PlaylistItem) => item._id.toString());
+    const deletePlaylistItems = playlistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
+
+    const result = await Promise.all(deletePlaylistItems);
+    if (!result) {
+      // Handle error
+    }
+
+    return await this.dataService.remove(playlistId);
+  }
+
+  /* private async createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
+    if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
+    const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
+    return await this.playlistItemService.insertMany(mappedItems);
+  }
+
+  private async updatePlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
+    if (!playlistId || typeof playlistId === 'string') throw new Error('wrong type in createPlaylistItems.id');
+    const mappedItems = items.map((item) => ({ item, playlistId, createdBy }));
+    return await this.playlistItemService.insertMany(mappedItems);
+  } */
+
+  async getById(id: IdType) {
+    return await this.dataService.getById(id);
+  }
+
+  async findOne(id: IdType) {
+    const entity = await this.dataService.findOne(id);
+    return await this.classMapper.mapAsync(entity, Playlist, PlaylistDto);
+  }
+
+  async findByQuery(query: MongoFindOneOptions<Playlist>) {
+    return await this.dataService.findByQuery(query);
+  }
+
+  async findAllByQuery(query: MongoFindManyOptions<Playlist>) {
+    return await this.dataService.findAllByQuery(query);
   }
 }

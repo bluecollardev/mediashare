@@ -1,33 +1,30 @@
-import { Mapper } from '@automapper/core';
-import { InjectMapper } from '@automapper/nestjs';
+import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
+import { PinoLogger } from 'nestjs-pino';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository } from 'typeorm';
-import { PinoLogger } from 'nestjs-pino';
-import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
-import { ObjectIdGuard } from '@mediashare/core/guards';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
 import { ConfigService } from '@nestjs/config';
-import { DataService, FilterableDataService } from '@mediashare/core/services';
+import { MongoRepository } from 'typeorm';
+import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
+import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
+
+import { ObjectIdGuard } from '@mediashare/core/guards';
 import { IdType } from '@mediashare/shared';
-import { PlaylistItem } from './entities/playlist-item.entity';
 import { SearchParameters } from '@mediashare/shared';
+import { FilterableDataService } from '@mediashare/core/services';
+
+import { PlaylistItem } from './entities/playlist-item.entity';
+import { CreatePlaylistItemDto } from './dto/create-playlist-item.dto';
+import { UpdatePlaylistItemDto } from './dto/update-playlist-item.dto';
+import { PlaylistItemDto } from './dto/playlist-item.dto';
+
 import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
 
 @Injectable()
-export class PlaylistItemDataService extends DataService<PlaylistItem, MongoRepository<PlaylistItem>> {
+export class PlaylistItemDataService extends FilterableDataService<PlaylistItem, MongoRepository<PlaylistItem>> {
   constructor(
     @InjectRepository(PlaylistItem) repository: MongoRepository<PlaylistItem>,
-    logger: PinoLogger,
-  ) {
-    super(repository, logger);
-  }
-}
-
-@Injectable()
-export class PlaylistItemService extends FilterableDataService<PlaylistItem, MongoRepository<PlaylistItem>> {
-  constructor(
-    @InjectRepository(PlaylistItem)
-    repository: MongoRepository<PlaylistItem>,
     logger: PinoLogger,
     private configService: ConfigService
   ) {
@@ -41,15 +38,17 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
       });
   }
 
-  protected buildAggregateQuery({
-    userId,
-    query,
-    fullText = false,
-    // textMatchingMode = 'and',
-    tags,
-    // TODO: Complete support for tagsMatchingMode (it's not exposed via controller)
-    tagsMatchingMode = 'all', // all | any // TODO: Type this!
-  }: SearchParameters) {
+  protected buildAggregateQuery(params: SearchParameters) {
+    const {
+      userId,
+      query,
+      fullText = false,
+      // textMatchingMode = 'and',
+      tags,
+      // TODO: Complete support for tagsMatchingMode (it's not exposed via controller)
+      tagsMatchingMode = 'all', // all | any // TODO: Type this!
+    }: SearchParameters = params;
+
     let aggregateQuery = [];
 
     // We have to search by text first as $match->$text is only allowed to be the first part of an aggregate query
@@ -70,12 +69,12 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
         {
           $match: query
             ? {
-                $text: { $search: query },
-                $and: [{ createdBy: ObjectIdGuard(userId) }],
-              }
+              $text: { $search: query },
+              $and: [{ createdBy: ObjectIdGuard(userId) }],
+            }
             : {
-                $and: [{ createdBy: ObjectIdGuard(userId) }],
-              },
+              $and: [{ createdBy: ObjectIdGuard(userId) }],
+            },
         },
       ]);
     } else {
@@ -85,18 +84,18 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
         {
           $match: query
             ? {
-                $text: { $search: query },
-                $and: [
-                  { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-                  { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-                ],
-              }
+              $text: { $search: query },
+              $and: [
+                { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+                { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+              ],
+            }
             : {
-                $and: [
-                  { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-                  { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-                ],
-              },
+              $and: [
+                { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+                { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+              ],
+            },
         },
       ]);
     }
@@ -185,5 +184,50 @@ export class PlaylistItemService extends FilterableDataService<PlaylistItem, Mon
         },
       },
     };
+  }
+}
+
+@Injectable()
+export class PlaylistItemService {
+  constructor(
+    public dataService: PlaylistItemDataService,
+    @InjectMapper() private readonly classMapper: Mapper,
+  ) {}
+
+  async create(createPlaylistItemDto: CreatePlaylistItemDto): Promise<PlaylistItemDto> {
+    const errors = await this.dataService.validateDto(CreatePlaylistItemDto, createPlaylistItemDto);
+    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+    const entity = await this.classMapper.mapAsync(createPlaylistItemDto, CreatePlaylistItemDto, PlaylistItem);
+    const result = await this.dataService.create(entity);
+    return await this.classMapper.mapAsync(result, PlaylistItem, PlaylistItemDto);
+  }
+
+  async update(playlistItemId: IdType, updatePlaylistItemDto: UpdatePlaylistItemDto): Promise<PlaylistItemDto> {
+    const errors = await this.dataService.validateDto(UpdatePlaylistItemDto, updatePlaylistItemDto);
+    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+    const entity = await this.classMapper.mapAsync(updatePlaylistItemDto, UpdatePlaylistItemDto, PlaylistItem);
+    const result = await this.dataService.update(playlistItemId, entity);
+    return await this.classMapper.mapAsync(result, PlaylistItem, PlaylistItemDto);
+  }
+
+  async remove(id: IdType) {
+    return await this.dataService.remove(id);
+  }
+
+  async getById(id: IdType) {
+    return await this.dataService.getById(id);
+  }
+
+  async findOne(id: IdType) {
+    const entity = await this.dataService.findOne(id);
+    return await this.classMapper.mapAsync(entity, PlaylistItem, PlaylistItemDto);
+  }
+
+  async findByQuery(query: MongoFindOneOptions<PlaylistItem>) {
+    return await this.dataService.findByQuery(query);
+  }
+
+  async findAllByQuery(query: MongoFindManyOptions<PlaylistItem>) {
+    return await this.dataService.findAllByQuery(query);
   }
 }
