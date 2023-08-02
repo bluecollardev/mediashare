@@ -1,10 +1,10 @@
 import { AutoMap } from '@automapper/classes';
-import { PLAYLIST_VISIBILITY, PlaylistVisibilityType } from '@mediashare/media-svc/src/app/core/models';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsIn } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { PlaylistDto } from './playlist.dto';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
+import { PLAYLIST_VISIBILITY, PlaylistVisibilityType } from '../../../core/models';
 // import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
 
 export class CreatePlaylistDto {
