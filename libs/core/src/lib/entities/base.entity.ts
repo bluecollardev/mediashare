@@ -8,7 +8,7 @@ export interface IApiBaseEntity {
 }
 
 export abstract class DataProviderBaseEntity<M> implements IApiBaseEntity {
-  @AutoMap()
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
   @ObjectIdColumn()
   _id: ObjectId;
 

@@ -1,32 +1,24 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Mapper } from '@automapper/core';
-import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
-import { CreateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/create-user.dto';
-import { UpdateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/update-user.dto';
-import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
-import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
-import { UserDataService, UserService } from '@mediashare/user-svc/src/app/modules/user/user.service';
-import { INestApplication } from '@nestjs/common';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import { stub } from 'jest-auto-stub/src/index';
-import { PinoLogger } from 'nestjs-pino';
 import { clone } from 'remeda';
 import { DataSource, MongoRepository } from 'typeorm';
-import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './functions/app';
+
+import { initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestUser, createUser as createUserFunction, getTestUserId } from './functions/user';
 
+import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
+import { UpdateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/update-user.dto';
+import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
+import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
+
 describe.skip('UserAPI.current.e2e', () => {
-  let app: INestApplication;
   let baseUrl: string;
 
   let db: DataSource;
-  let userService: UserService;
   let userRepository: MongoRepository<User>;
-  let userDataService: UserDataService;
-  let mapper: Mapper;
   let authResponse: AuthenticationResultType
   let createUser;
   let testUser;
@@ -36,13 +28,8 @@ describe.skip('UserAPI.current.e2e', () => {
     const globalPrefix = 'api'
     baseUrl = `http://localhost:5000/${globalPrefix}`;
 
-    const logger = stub<PinoLogger>();
-    mapper = initializeMapper(User, UserDto, CreateUserDto, UpdateUserDto);
     db = await initializeDB([User]);
-
     userRepository = await db.getMongoRepository(User);
-    userDataService = new UserDataService(userRepository, logger)
-    userService = new UserService(userDataService, mapper, logger);
 
     // Delete all test records
     await userRepository.deleteMany({});
