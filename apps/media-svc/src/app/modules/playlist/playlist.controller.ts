@@ -11,7 +11,7 @@ import { GetUser } from '@mediashare/core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse, PlaylistShareResponse } from './playlist.decorator';
 import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor';
 import { PlaylistService } from './playlist.service';
-import { PlaylistResponseDto } from './dto/playlist-response.dto';
+import { PlaylistDto } from './dto/playlist.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { CreatePlaylistResponseDto } from './dto/create-playlist-response.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
@@ -44,10 +44,10 @@ export class PlaylistController {
   @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
-  @PlaylistGetResponse({ type: PlaylistResponseDto, isArray: true })
+  @PlaylistGetResponse({ type: PlaylistDto, isArray: true })
   async findAll(@GetUser('_id') userId: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
-    return !!(query || tags) ? await this.playlistService.search({ userId, query, tags: parsedTags }) : await this.playlistService.getByUserId(userId);
+    return query || tags ? await this.playlistService.search({ userId, query, tags: parsedTags }) : await this.playlistService.getByUserId(userId);
   }
 
   @Post()
@@ -55,7 +55,7 @@ export class PlaylistController {
   @ApiBearerAuth()
   @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUser('_id') userId: string) {
-    return await this.playlistService.createPlaylistWithItems({
+    return await this.playlistService.create({
       ...createPlaylistDto,
       createdBy: ObjectIdGuard(userId),
       cloneOf: createPlaylistDto?.cloneOf ? createPlaylistDto.cloneOf : undefined,
@@ -69,7 +69,7 @@ export class PlaylistController {
   @ApiBody({ type: UpdatePlaylistDto })
   @PlaylistPutResponse()
   async update(@Param(RouteTokens.playlistId) playlistId: string, @GetUser('_id') userId: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
-    return await this.playlistService.updatePlaylistWithItems(playlistId, updatePlaylistDto);
+    return await this.playlistService.update(playlistId, updatePlaylistDto);
   }
 
   @Delete(RouteTokens.playlistId)
@@ -77,7 +77,7 @@ export class PlaylistController {
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: new ObjectId().toHexString() })
   async remove(@Param(RouteTokens.playlistId) playlistId: string) {
-    return await this.playlistService.removePlaylistWithItems(playlistId);
+    return await this.playlistService.remove(playlistId);
   }
 
   @Post(`${RouteTokens.playlistId}/share/${RouteTokens.userId}`)

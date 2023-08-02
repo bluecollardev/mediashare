@@ -1,35 +1,27 @@
-import { Mapper } from '@automapper/core';
-import { InjectMapper } from '@automapper/nestjs';
+import { PinoLogger } from 'nestjs-pino';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository } from 'typeorm';
-import { PinoLogger } from 'nestjs-pino';
-import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
-import { ObjectIdGuard } from '@mediashare/core/guards';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
 import { ConfigService } from '@nestjs/config';
-import { DataService } from '@mediashare/core/services';
-import { IdType } from '@mediashare/shared';
-import { DataService, FilterableDataService } from '@mediashare/core/services';
+import { MongoRepository } from 'typeorm';
+import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
+
+import { ObjectIdGuard } from '@mediashare/core/guards';
+import { FilterableDataService } from '@mediashare/core/services';
+import { IdType, SearchParameters } from '@mediashare/shared';
+import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
 import { MediaItem } from './entities/media-item.entity';
-import { SearchParameters } from '@mediashare/shared';
+import { CreateMediaItemDto } from './dto/create-media-item.dto';
+import { MediaItemDto } from './dto/media-item.dto';
+import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 
 import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
 
 @Injectable()
-export class MediaItemDataService extends DataService<MediaItem, MongoRepository<MediaItem>> {
+export class MediaItemDataService extends FilterableDataService<MediaItem, MongoRepository<MediaItem>> {
   constructor(
     @InjectRepository(MediaItem) repository: MongoRepository<MediaItem>,
-    logger: PinoLogger,
-  ) {
-    super(repository, logger);
-  }
-}
-
-@Injectable()
-export class MediaItemService extends FilterableDataService<MediaItem, MongoRepository<MediaItem>> {
-  constructor(
-    @InjectRepository(MediaItem)
-    repository: MongoRepository<MediaItem>,
     logger: PinoLogger,
     private configService: ConfigService
   ) {
@@ -43,15 +35,17 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
       });
   }
 
-  protected buildAggregateQuery({
-    userId,
-    query,
-    fullText = false,
-    // textMatchingMode = 'and',
-    tags,
-    // TODO: Complete support for tagsMatchingMode (it's not exposed via controller)
-    tagsMatchingMode = 'all', // all | any // TODO: Type this!
-  }: SearchParameters) {
+  protected buildAggregateQuery(params: SearchParameters) {
+    const {
+      userId,
+      query,
+      fullText = false,
+      // textMatchingMode = 'and',
+      tags,
+      // TODO: Complete support for tagsMatchingMode (it's not exposed via controller)
+      tagsMatchingMode = 'all', // all | any // TODO: Type this!
+    }: SearchParameters = params;
+
     let aggregateQuery = [];
 
     // We have to search by text first as $match->$text is only allowed to be the first part of an aggregate query
@@ -72,12 +66,12 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
         {
           $match: query
             ? {
-                $text: { $search: query },
-                $and: [{ createdBy: ObjectIdGuard(userId) }],
-              }
+              $text: { $search: query },
+              $and: [{ createdBy: ObjectIdGuard(userId) }],
+            }
             : {
-                $and: [{ createdBy: ObjectIdGuard(userId) }],
-              },
+              $and: [{ createdBy: ObjectIdGuard(userId) }],
+            },
         },
       ]);
     } else {
@@ -87,18 +81,18 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
         {
           $match: query
             ? {
-                $text: { $search: query },
-                $and: [
-                  { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-                  { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-                ],
-              }
+              $text: { $search: query },
+              $and: [
+                { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+                { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+              ],
+            }
             : {
-                $and: [
-                  { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-                  { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-                ],
-              },
+              $and: [
+                { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
+                { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
+              ],
+            },
         },
       ]);
     }
@@ -183,5 +177,56 @@ export class MediaItemService extends FilterableDataService<MediaItem, MongoRepo
         },
       },
     };
+  }
+}
+
+@Injectable()
+export class MediaItemService {
+  constructor(
+    public dataService: MediaItemDataService,
+    @InjectMapper() private readonly classMapper: Mapper,
+    logger: PinoLogger,
+    private configService: ConfigService
+  ) {}
+
+  async create(createMediaItemDto: CreateMediaItemDto): Promise<MediaItemDto> {
+    const errors = await this.dataService.validateDto(CreateMediaItemDto, createMediaItemDto);
+    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+    const entity = await this.classMapper.mapAsync(createMediaItemDto, CreateMediaItemDto, MediaItem);
+    const result = await this.dataService.create(entity);
+    return await this.classMapper.mapAsync(result, MediaItem, MediaItemDto);
+  }
+
+  async update(mediaItemId: IdType, updateMediaItemDto: UpdateMediaItemDto): Promise<MediaItemDto> {
+    const errors = await this.dataService.validateDto(UpdateMediaItemDto, updateMediaItemDto);
+    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+    const entity = await this.classMapper.mapAsync(updateMediaItemDto, UpdateMediaItemDto, MediaItem);
+    const result = await this.dataService.update(mediaItemId, entity);
+    return await this.classMapper.mapAsync(result, MediaItem, MediaItemDto);
+  }
+
+  async remove(id: IdType) {
+    return await this.dataService.remove(id);
+  }
+
+  async getById(id: IdType) {
+    return await this.dataService.getById(id);
+  }
+
+  async findOne(id: IdType) {
+    const entity = await this.dataService.findOne(id);
+    return await this.classMapper.mapAsync(entity, MediaItem, MediaItemDto);
+  }
+
+  async findByQuery(query: MongoFindOneOptions<MediaItem>) {
+    return await this.dataService.findByQuery(query);
+  }
+
+  async getPopular() {
+    return await this.dataService.getPopular();
+  }
+
+  async search({ userId, query, tags }) {
+    return await this.dataService.search({ userId, query, tags });
   }
 }

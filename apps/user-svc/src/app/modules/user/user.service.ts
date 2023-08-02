@@ -1,18 +1,19 @@
-import { Mapper } from '@automapper/core';
-import { InjectMapper } from '@automapper/nestjs';
+import { PinoLogger } from 'nestjs-pino';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
 import { MongoRepository } from 'typeorm';
-import { PinoLogger } from 'nestjs-pino';
 import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
+
 import { ObjectIdGuard } from '@mediashare/core/guards';
 import { DataService } from '@mediashare/core/services';
 import { IdType } from '@mediashare/shared';
+import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
-import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
 
 @Injectable()
 export class UserDataService extends DataService<User, MongoRepository<User>> {

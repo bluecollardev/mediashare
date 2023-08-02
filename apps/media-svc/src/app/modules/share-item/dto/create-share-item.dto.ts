@@ -3,41 +3,37 @@ import { IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
 
 export class CreateMediaShareItemDto {
+  @IsString()
   @ApiProperty({ required: true })
-  @IsString()
-  userId: ObjectId;
+  userId: string;
 
+  @IsString()
   @ApiProperty({ required: false })
-  @IsString()
-  mediaId?: ObjectId;
+  mediaId?: string;
 
+  @IsString()
   @ApiProperty({ required: false })
-  @IsString()
-  playlistId?: ObjectId;
+  playlistId?: string;
 
+  @IsString()
   @ApiProperty({ required: true })
-  @IsString()
-  createdBy: ObjectId;
-
-  @ApiProperty({ required: false })
-  @IsString()
-  title: string;
+  createdBy: string;
 }
 
 export class CreatePlaylistShareItemDto {
+  @IsString()
   @ApiProperty({ required: true })
-  @IsString()
-  userId: ObjectId;
+  userId: string;
 
+  @IsString()
   @ApiProperty({ required: false })
-  @IsString()
-  playlistId: ObjectId;
+  mediaId?: string;
 
+  @IsString()
+  @ApiProperty({ required: false })
+  playlistId?: string;
+
+  @IsString()
   @ApiProperty({ required: true })
-  @IsString()
-  createdBy: ObjectId;
-
-  @ApiProperty({ required: false })
-  @IsString()
-  title: string;
+  createdBy: string;
 }

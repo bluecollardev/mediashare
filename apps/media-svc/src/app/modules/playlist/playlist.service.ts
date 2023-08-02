@@ -24,23 +24,10 @@ import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
 }; */
 
 @Injectable()
-export class PlaylistDataService extends DataService<Playlist, MongoRepository<Playlist>> {
+export class PlaylistDataService extends FilterableDataService<Playlist, MongoRepository<Playlist>> {
   constructor(
     @InjectRepository(Playlist) repository: MongoRepository<Playlist>,
     logger: PinoLogger,
-  ) {
-    super(repository, logger);
-  }
-}
-
-@Injectable()
-export class PlaylistService extends FilterableDataService<Playlist, MongoRepository<Playlist>> {
-  constructor(
-    @InjectRepository(Playlist)
-    repository: MongoRepository<Playlist>,
-    logger: PinoLogger,
-    private configService: ConfigService,
-    private playlistItemService: PlaylistItemService
   ) {
     super(repository, logger);
     this.repository
@@ -51,22 +38,33 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
         this.collectionIndexName = indexName;
       });
   }
+}
 
-  async createPlaylistWithItems(dto: CreatePlaylistDto & { createdBy: ObjectId }) {
+@Injectable()
+export class PlaylistService {
+  constructor(
+    public dataService: PlaylistDataService,
+    @InjectMapper() private readonly classMapper: Mapper,
+    logger: PinoLogger,
+    private configService: ConfigService,
+    private playlistItemService: PlaylistItemService
+  ) {}
+
+  async create(dto: CreatePlaylistDto & { createdBy: IdType }) {
     const { title, visibility, description, imageSrc, mediaIds, tags, createdBy, cloneOf } = dto;
-    return await this.create({
+    return await this.dataService.create({
       title,
       visibility,
       description,
       imageSrc,
       tags,
       createdBy: ObjectIdGuard(createdBy),
-      mediaIds: mediaIds.map((id) => new ObjectId(id)),
+      mediaIds: mediaIds.map((id) => ObjectIdGuard(id)),
       cloneOf,
     } as any);
   }
 
-  async updatePlaylistWithItems(playlistId: IdType, dto: UpdatePlaylistDto) {
+  async update(playlistId: IdType, dto: UpdatePlaylistDto) {
     const { mediaIds, ...rest } = dto;
     // TODO: Transaction!
     // Get playlist items by playlistId
@@ -86,13 +84,13 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
       // Handle error
     }
 
-    return await this.update(playlistId, {
+    return await this.dataService.update(playlistId, {
       ...rest,
       mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => ObjectIdGuard(id)) : [],
     } as any);
   }
 
-  async removePlaylistWithItems(playlistId: IdType) {
+  async remove(playlistId: IdType) {
     // Get playlist items by playlistId
     const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) } as any);
     const playlistItemIdsToDelete = playlistItems.map((item: PlaylistItem) => item._id.toString());
@@ -103,7 +101,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
       // Handle error
     }
 
-    return await this.remove(playlistId);
+    return await this.dataService.remove(playlistId);
   }
 
   /* private async createPlaylistItems({ playlistId, items, createdBy }: CreatePlaylistParameters) {
@@ -118,15 +116,17 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
     return await this.playlistItemService.insertMany(mappedItems);
   } */
 
-  protected buildAggregateQuery({
-    userId,
-    query,
-    fullText = false,
-    // textMatchingMode = 'and',
-    tags,
-    // TODO: Complete support for tagsMatchingMode (it's not exposed via controller)
-    tagsMatchingMode = 'all', // all | any // TODO: Type this!
-  }: SearchParameters) {
+  protected buildAggregateQuery(params: SearchParameters) {
+    const {
+      userId,
+      query,
+      fullText = false,
+      // textMatchingMode = 'and',
+      tags,
+      // TODO: Complete support for tagsMatchingMode (it's not exposed via controller)
+      tagsMatchingMode = 'all', // all | any // TODO: Type this!
+    }: SearchParameters = params;
+
     let aggregateQuery = [];
 
     // We have to search by text first as $match->$text is only allowed to be the first part of an aggregate query
@@ -136,7 +136,7 @@ export class PlaylistService extends FilterableDataService<Playlist, MongoReposi
       // IMPORTANT! This shouldn't run at any time (fullText = false is hardcoded)
       throw new Error('Elastic search has not been implemented');
     } else if (query && !fullText) {
-      if (this.useDistributedSearch) {
+      if (this.dataService.useDistributedSearch) {
         throw new Error('Elastic search has not been implemented');
       }
     }

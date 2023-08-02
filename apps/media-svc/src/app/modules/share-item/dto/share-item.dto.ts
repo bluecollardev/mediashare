@@ -1,9 +1,9 @@
 // import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { MediaItemResponseDto } from '../../media-item/dto/media-item-response.dto';
-import { PlaylistResponseDto } from '../../playlist/dto/playlist-response.dto';
+import { MediaItemDto } from '../../media-item/dto/media-item.dto';
+import { PlaylistDto } from '../../playlist/dto/playlist.dto';
 
-export class MediaShareItemResponseDto extends MediaItemResponseDto {
+export class MediaShareItemResponseDto extends MediaItemDto {
   @ApiProperty({ type: 'string' })
   shareId?: string;
 
@@ -11,7 +11,7 @@ export class MediaShareItemResponseDto extends MediaItemResponseDto {
   mediaItemId?: string;
 }
 
-export class PlaylistShareItemResponseDto extends PlaylistResponseDto {
+export class PlaylistShareItemResponseDto extends PlaylistDto {
   @ApiProperty({ type: 'string' })
   shareId?: string;
 

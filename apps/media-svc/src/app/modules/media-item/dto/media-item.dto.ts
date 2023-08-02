@@ -4,9 +4,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsDefined, IsIn, IsOptional, IsString } from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
-// import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
+// import { AuthorProfileDto } from '../user/dto/profile.dto';
 
-export class CreateMediaItemDto extends ApiBaseDto {
+export class MediaItemDto extends ApiBaseDto {
   @IsString()
   @AutoMap()
   @ApiString({ required: true })
@@ -56,11 +56,27 @@ export class CreateMediaItemDto extends ApiBaseDto {
   visibility: MediaVisibilityType;
 
   // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
-  tags: any[]; // TagKeyValue[];
+  tags?: any[]; // TagKeyValue[];
 
   @IsOptional()
   @IsString()
   @AutoMap()
   @ApiString({ required: false })
   eTag?: string;
+
+  // TODO: Fix this type!
+  // @ApiProperty({ type: () => AuthorProfileDto })
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // @ApiProperty({ type: () => {} })
+  // authorProfile: AuthorProfileDto;
+  // authorProfile: any;
+
+  @ApiProperty({ type: 'number' })
+  shareCount?: number;
+
+  @ApiProperty({ type: 'number' })
+  viewCount?: number;
+
+  @ApiProperty({ type: 'number' })
+  likesCount?: number;
 }

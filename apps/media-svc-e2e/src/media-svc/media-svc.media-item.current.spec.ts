@@ -1,20 +1,17 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Mapper } from '@automapper/core';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
+import { clone } from 'remeda';
+import { DataSource, MongoRepository } from 'typeorm';
+
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
-import { CreateMediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/create-media-item.dto';
 import { UpdateMediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/update-media-item.dto';
 import { MediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/media-item.dto';
 import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/entities/media-item.entity';
-import { MediaItemDataService, MediaItemService } from '@mediashare/media-svc/src/app/modules/media-item/media-item.service';
 import { INestApplication } from '@nestjs/common';
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
-import { stub } from 'jest-auto-stub/src/index';
-import { PinoLogger } from 'nestjs-pino';
-import { clone } from 'remeda';
-import { DataSource, MongoRepository } from 'typeorm';
-import { getBaseUrl, initializeApp, initializeDB, initializeMapper } from './functions/app';
+
+import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestMediaItem, createMediaItem as createMediaItemFunction, getTestMediaItemId } from './functions/media-item';
 
@@ -23,10 +20,7 @@ describe('MediaItemAPI.current.e2e', () => {
   let baseUrl: string;
 
   let db: DataSource;
-  let mediaItemService: MediaItemService;
   let mediaItemRepository: MongoRepository<MediaItem>;
-  let mediaItemDataService: MediaItemDataService;
-  let mapper: Mapper;
   let authResponse: AuthenticationResultType
   let createMediaItem;
   let testMediaItem;
@@ -37,13 +31,8 @@ describe('MediaItemAPI.current.e2e', () => {
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
-    const logger = stub<PinoLogger>();
-    mapper = initializeMapper(MediaItem, MediaItemDto, CreateMediaItemDto, UpdateMediaItemDto);
     db = await initializeDB([MediaItem]);
-
     mediaItemRepository = await db.getMongoRepository(MediaItem);
-    mediaItemDataService = new MediaItemDataService(mediaItemRepository, logger)
-    mediaItemService = new MediaItemService(mediaItemDataService, mapper, logger);
 
     // Delete all test records
     await mediaItemRepository.deleteMany({});

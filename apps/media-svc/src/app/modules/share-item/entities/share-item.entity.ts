@@ -1,36 +1,33 @@
-import { Column, Entity, Index, ManyToOne } from 'typeorm';
-import { ApiDecoratorOptions, ApiObjectId, ApiString } from '@mediashare/shared';
+import { AutoMap } from '@automapper/classes';
+import { AutoMapOptions } from '@automapper/classes/lib/automap';
+import { Column, Entity, Index, ObjectIdColumn } from 'typeorm';
+import { ApiDecoratorOptions, ApiObjectId } from '@mediashare/shared';
 import { IsBoolean } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
-// import { User } from '../user/entities/user.entity';
 
 @Entity('share_item')
 export class ShareItem extends ApiBaseEntity {
   @ApiObjectId(<ApiDecoratorOptions>{ readOnly: true })
-  @Column({ name: 'userId' })
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  @ObjectIdColumn({ name: 'userId', nullable: false, unique: false })
   @Index('userId', { unique: false })
   userId: ObjectId;
 
   @ApiObjectId(<ApiDecoratorOptions>{ required: false })
-  @Column('playlistId')
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  @ObjectIdColumn({ name: 'playlistId', nullable: true, unique: false })
   @Index('playlistId', { unique: false })
   playlistId: ObjectId;
 
   @ApiObjectId(<ApiDecoratorOptions>{ required: false })
-  @Column({ name: 'mediaId', unique: false })
-  @Index('mediaId')
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  @ObjectIdColumn({ name: 'mediaId', nullable: true, unique: false })
+  @Index('mediaId', { unique: false })
   mediaId: ObjectId;
 
   @IsBoolean()
-  @Column({ name: 'read', unique: false })
+  @AutoMap()
+  @Column({ name: 'read' })
   read: boolean;
-
-  @ApiString()
-  @Column({ name: 'title', unique: false })
-  title: string;
-
-  // @ManyToOne(() => User, (user) => user.shareItem)
-  @Column({ name: 'owner', unique: false })
-  owner: any; // User;
 }

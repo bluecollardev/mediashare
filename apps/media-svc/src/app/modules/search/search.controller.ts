@@ -3,7 +3,7 @@ import { Controller, Query, Get } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { PlaylistGetResponse } from './search.decorator';
 import { PlaylistService } from '../playlist/playlist.service';
-import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
+import { PlaylistDto } from '../playlist/dto/playlist.dto';
 
 @ApiTags('search')
 @Controller('search')
@@ -22,7 +22,7 @@ export class SearchController {
   @Get()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
-  @PlaylistGetResponse({ type: PlaylistResponseDto, isArray: true })
+  @PlaylistGetResponse({ type: PlaylistDto, isArray: true })
   async findAll(@Query('target') target?: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
     let results = [];

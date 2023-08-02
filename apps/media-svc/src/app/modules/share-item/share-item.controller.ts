@@ -8,8 +8,8 @@ import { ShareItemService } from './share-item.service';
 import { ShareItemsByUserIdDto, ShareItemsDto, ShareItemsResponseDto } from './dto/share-item.dto';
 import { ShareItemGetResponse } from './share-item.decorator';
 import { ShareItem } from './entities/share-item.entity';
-import { MediaItemResponseDto } from '../media-item/dto/media-item-response.dto';
-import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
+import { MediaItemDto } from '../media-item/dto/media-item.dto';
+import { PlaylistDto } from '../playlist/dto/playlist.dto';
 import { UserGuard } from '@mediashare/core/guards/user.guard';
 
 @ApiTags('share-items')
@@ -28,7 +28,7 @@ export class ShareItemController {
   // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-by-user/media-items')
-  @ShareItemGetResponse({ type: MediaItemResponseDto, isArray: true })
+  @ShareItemGetResponse({ type: MediaItemDto, isArray: true })
   async findMediaItemsSharedByUser(@GetUser('_id') userId: string) {
     return await this.shareItemService.getMediaItemsSharedByUser(userId);
   }
@@ -36,7 +36,7 @@ export class ShareItemController {
   // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-by-user/playlists')
-  @ShareItemGetResponse({ type: PlaylistResponseDto, isArray: true })
+  @ShareItemGetResponse({ type: PlaylistDto, isArray: true })
   async findPlaylistsSharedByUser(@GetUser('_id') userId: string) {
     return await this.shareItemService.getPlaylistsSharedByUser(userId);
   }
@@ -52,7 +52,7 @@ export class ShareItemController {
   // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-with-user/media-items')
-  @ShareItemGetResponse({ type: MediaItemResponseDto, isArray: true })
+  @ShareItemGetResponse({ type: MediaItemDto, isArray: true })
   async findMediaItemsSharedWithUser(@GetUser('_id') userId: string) {
     return await this.shareItemService.getMediaItemsSharedWithUser(userId);
   }
@@ -60,7 +60,7 @@ export class ShareItemController {
   // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-with-user/playlists')
-  @ShareItemGetResponse({ type: PlaylistResponseDto, isArray: true })
+  @ShareItemGetResponse({ type: PlaylistDto, isArray: true })
   async findPlaylistsSharedWithUser(@GetUser('_id') userId: string) {
     return await this.shareItemService.getPlaylistsSharedWithUser(userId);
   }

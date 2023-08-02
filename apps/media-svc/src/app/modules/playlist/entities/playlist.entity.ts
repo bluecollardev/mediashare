@@ -8,7 +8,7 @@ import { PlaylistVisibilityType, PLAYLIST_VISIBILITY } from '../../../core/model
 
 @Entity('playlist')
 export class Playlist extends ApiBaseEntity {
-  @ApiObjectId()
+
   @Column({ nullable: true })
   @Index('cloneOf', { unique: false })
   cloneOf?: ObjectId;

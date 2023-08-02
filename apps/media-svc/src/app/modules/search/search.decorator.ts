@@ -3,11 +3,11 @@ import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
 import { CreatePlaylistDto } from '../playlist/dto/create-playlist.dto';
 import { UpdatePlaylistDto } from '../playlist/dto/update-playlist.dto';
-import { PlaylistResponseDto } from '../playlist/dto/playlist-response.dto';
+import { PlaylistDto } from '../playlist/dto/playlist.dto';
 import { Playlist } from '../playlist/entities/playlist.entity';
 import { ShareItem } from '../share-item/entities/share-item.entity';
 
-export function PlaylistGetResponse({ type = PlaylistResponseDto, isArray = false, description }: ApiControllerDecoratorParams = {}) {
+export function PlaylistGetResponse({ type = PlaylistDto, isArray = false, description }: ApiControllerDecoratorParams = {}) {
   // TODO: Fix auth!
   // return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), UseJwtGuard());
   return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }));

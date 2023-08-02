@@ -3,11 +3,11 @@ import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { ApiControllerDecoratorParams } from '@mediashare/shared';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
-import { MediaItemResponseDto } from './dto/media-item-response.dto';
+import { MediaItemDto } from './dto/media-item.dto';
 import { MediaItem } from './entities/media-item.entity';
 import { ShareItem } from '../share-item/entities/share-item.entity';
 
-export function MediaGetResponse({ type = MediaItemResponseDto, isArray = false, description }: ApiControllerDecoratorParams = {}) {
+export function MediaGetResponse({ type = MediaItemDto, isArray = false, description }: ApiControllerDecoratorParams = {}) {
   // TODO: Fix auth!
   // return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), UseJwtGuard());
   return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }));

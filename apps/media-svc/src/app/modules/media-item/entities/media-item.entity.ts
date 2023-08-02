@@ -1,54 +1,52 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ApiObjectId, ApiString, ApiTextString, ApiLongString, ApiUriString } from '@mediashare/shared';
-import { IsBoolean } from 'class-validator';
-import { Column, Entity, Index } from 'typeorm';
+import { AutoMap } from '@automapper/classes';
+import { AutoMapOptions } from '@automapper/classes/lib/automap';
+import { Column, Entity, Index, ObjectIdColumn } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
 // import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
-import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
+import { MediaVisibilityType } from '../../../core/models';
 
 @Entity('media_item')
 export class MediaItem extends ApiBaseEntity {
-  constructor(props: Partial<MediaItem> = {}) {
-    super();
-    Object.assign(this as any, props);
-  }
+  @AutoMap()
+  @Column({ nullable: false, type: 'text' })
+  key: string;
 
-  @ApiObjectId()
-  @Column({ nullable: false, unique: false })
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  // Explicitly set the name option: https://github.com/typeorm/typeorm/issues/4026
+  @ObjectIdColumn({ name: 'userId', nullable: false, unique: false })
   @Index('userId', { unique: false })
   userId: ObjectId;
 
-  @Column({ nullable: true, type: 'text' })
-  @ApiString()
+  @AutoMap()
+  @Column({ nullable: false, type: 'text' })
   title: string;
 
+  @AutoMap()
   @Column({ nullable: true, type: 'text' })
-  @ApiTextString()
   summary: string;
 
-  @Column({ nullable: true, type: 'text' })
-  @ApiTextString()
+  @AutoMap()
+  @Column({ nullable: false, type: 'text' })
   description: string;
 
-  @Column()
-  @ApiUriString()
+  @AutoMap()
+  @Column({ nullable: false, type: 'text' })
   uri: string;
 
+  @AutoMap()
   @Column({ nullable: true })
-  @ApiString()
-  imageSrc?: string;
+  imageSrc: string;
 
+  @AutoMap()
   @Column({ nullable: true })
-  @IsBoolean()
-  @ApiProperty({ required: false })
   isPlayable: boolean;
 
-  @Column({ nullable: true })
-  @ApiProperty({ enum: MEDIA_VISIBILITY, name: 'visibility', enumName: 'MediaVisibilityType', required: false })
+  @AutoMap()
+  @Column({ nullable: false })
   visibility: MediaVisibilityType;
 
-  // @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
+  @AutoMap()
   @Column({ name: 'tags', array: true, nullable: true })
   tags: any[]; // TagKeyValue[];
 }

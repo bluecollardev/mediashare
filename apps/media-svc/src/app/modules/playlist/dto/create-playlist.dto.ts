@@ -1,7 +1,9 @@
-import { ApiProperty, PickType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
+
 import { IsArray } from 'class-validator';
 import { ObjectId } from 'mongodb';
-import { Playlist } from '../entities/playlist.entity';
+import { PlaylistDto } from './playlist.dto';
+import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
 // import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
 
 export class CreatePlaylistDto extends PickType(Playlist, ['visibility', 'title', 'description', 'imageSrc', 'mediaIds', 'cloneOf']) {
@@ -11,4 +13,9 @@ export class CreatePlaylistDto extends PickType(Playlist, ['visibility', 'title'
 
   // @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
   tags: any[]; // TagKeyValue[];
+}
+
+export class CreatePlaylistResponseDto extends PlaylistDto {
+  @ApiProperty({ type: () => PlaylistItemDto, isArray: true })
+  playlistItems: PlaylistItemDto[];
 }

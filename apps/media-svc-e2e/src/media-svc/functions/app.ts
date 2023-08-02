@@ -82,8 +82,8 @@ export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplicat
       MediaItemModule,
       LoggerModule.forRoot()
     ],
-    controllers: [AppController],
-    providers: [AppService]
+    controllers: [],
+    providers: []
   }).compile();
 
   const app = moduleFixture.createNestApplication();
