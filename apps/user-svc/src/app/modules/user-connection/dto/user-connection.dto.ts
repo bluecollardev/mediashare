@@ -1,34 +1,16 @@
 import { AutoMap } from '@automapper/classes';
-import { ApiDecoratorOptions, ApiObjectId, ApiPastDate } from '@mediashare/shared';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsDefined, IsOptional } from 'class-validator';
-import { ObjectId } from 'mongodb';
+import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
+import { ApiDecoratorOptions, ApiString } from '@mediashare/shared';
+import { IsDefined } from 'class-validator';
 
-export class UserConnectionDto {
-  @IsOptional()
+export class UserConnectionDto extends ApiBaseDto {
+  @IsDefined()
   @AutoMap()
-  @ApiObjectId()
-  @ApiProperty({ required: false })
-  _id?: ObjectId;
+  @ApiString(<ApiDecoratorOptions>{ required: true })
+  userId: string;
 
   @IsDefined()
   @AutoMap()
-  @ApiObjectId()
-  @ApiProperty({ required: true })
-  userId: ObjectId;
-
-  @IsDefined()
-  @AutoMap()
-  @ApiObjectId()
-  @ApiProperty({ required: true })
-  connectionId: ObjectId;
-
-  @IsOptional()
-  @AutoMap()
-  @ApiPastDate({ required: false } as ApiDecoratorOptions)
-  createdAt?: Date;
-
-  @IsOptional()
-  @ApiPastDate({ required: false } as ApiDecoratorOptions)
-  updatedDate?: Date;
+  @ApiString(<ApiDecoratorOptions>{ required: true })
+  connectionId: string;
 }

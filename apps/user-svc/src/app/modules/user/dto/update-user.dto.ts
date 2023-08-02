@@ -1,55 +1,47 @@
 import { AutoMap } from '@automapper/classes';
-import { ApiDecoratorOptions, ApiEmail, ApiName, ApiString } from '@mediashare/shared';
+import { ApiEmail, ApiName, ApiString, ApiUriString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDefined, IsEmail, IsOptional, IsPhoneNumber, IsString, Length } from 'class-validator';
+import { IsEmail, IsOptional, IsPhoneNumber, IsString, Length } from 'class-validator';
+import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { BC_ROLES, BcRolesType } from '../../../core/models';
 
-// TODO: Use a pick or something so we're not repeating ourselves
-// export class UpdateUserDto extends UserDto {}
-export class UpdateUserDto {
-  @IsOptional()
+export class UpdateUserDto extends ApiBaseDto {
+  @Length(2, 50)
   @IsString()
   @AutoMap()
-  @ApiString()
-  sub: string;
-
-  @Length(3, 50)
-  @IsString()
-  @AutoMap()
-  @ApiName(<ApiDecoratorOptions>{ required: true })
+  @ApiName({ required: true })
   username: string;
 
   // Min is technically 3 but with real domain it's x@y.zz = 6
   // https://www.rfc-editor.org/rfc/rfc2822
-  @Length(6, 254)
+  @Length(6, 255)
   @IsEmail()
   @AutoMap()
-  @ApiEmail(<ApiDecoratorOptions>{ required: true })
+  @ApiEmail({ required: true })
   email: string;
 
   @Length(2, 50)
   @IsString()
   @AutoMap()
-  @ApiName(<ApiDecoratorOptions>{ required: true })
+  @ApiName({ required: true })
   firstName: string;
 
   @Length(2, 50)
-  @IsDefined()
   @IsString()
   @AutoMap()
-  @ApiName(<ApiDecoratorOptions>{ required: true })
+  @ApiName({ required: true })
   lastName: string;
 
   @IsOptional()
   @IsPhoneNumber()
   @AutoMap()
-  @ApiString()
+  @ApiString({ required: false })
   phoneNumber?: string;
 
   @IsOptional()
   @IsString()
   @AutoMap()
-  @ApiString()
+  @ApiUriString({ required: false })
   imageSrc?: string;
 
   @IsOptional()
@@ -59,21 +51,21 @@ export class UpdateUserDto {
 
   @IsOptional()
   @AutoMap()
-  @ApiProperty()
+  @ApiProperty({ required: false })
   isDisabled?: boolean;
 
   @IsOptional()
   @AutoMap()
-  @ApiProperty()
+  @ApiProperty({ required: false })
   transactionId?: string;
 
   @IsOptional()
   @AutoMap()
-  @ApiProperty()
+  @ApiProperty({ required: false })
   transactionDate?: string;
 
   @IsOptional()
   @AutoMap()
-  @ApiProperty()
+  @ApiProperty({ required: false })
   transactionEndDate?: string;
 }

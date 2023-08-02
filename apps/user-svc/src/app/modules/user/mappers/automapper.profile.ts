@@ -1,11 +1,35 @@
 /* istanbul ignore file */
+import { convertUsing, createMap, forMember, ignore, Mapper } from '@automapper/core';
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
-import { createMap, forMember, ignore, Mapper } from '@automapper/core';
+import { objectIdToStringConverter, stringToObjectIdConverter } from '@mediashare/core/mappings/converters';
 import { Injectable } from '@nestjs/common';
-import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserDto } from '../dto/user.dto';
+import { User } from '../entities/user.entity';
+
+export const userToUserDtoMappingFactory = (mapper) => createMap(
+  mapper,
+  User,
+  UserDto,
+  forMember((dest: UserDto) => dest._id, convertUsing(objectIdToStringConverter as never, (source: User) => source._id)),
+  // forMember((dest: UserDto) => dest.createdBy, convertUsing(objectIdToStringConverter as never, (source: User) => source.createdBy)),
+);
+
+export const createUserDtoToUserMappingFactory = (mapper) => createMap(
+  mapper,
+  CreateUserDto,
+  User,
+  forMember((dest: User) => dest._id, ignore()),
+);
+
+export const updateUserDtoToUserMappingFactory = (mapper) => createMap(
+  mapper,
+  UpdateUserDto,
+  User,
+  forMember((dest: User) => dest._id, convertUsing(stringToObjectIdConverter as never, (source: UserDto) => source._id)),
+  // forMember((dest: User) => dest.createdBy, convertUsing(stringToObjectIdConverter as never, (source: UserDto) => source.createdBy)),
+);
 
 @Injectable()
 export class UserMapping extends AutomapperProfile {
@@ -15,9 +39,9 @@ export class UserMapping extends AutomapperProfile {
 
   override get profile() {
     return (mapper) => {
-      createMap(mapper, User, UserDto);
-      createMap(mapper, CreateUserDto, User, forMember((dest) => dest['_id'], ignore()));
-      createMap(mapper, UpdateUserDto, User);
+      userToUserDtoMappingFactory(mapper);
+      createUserDtoToUserMappingFactory(mapper);
+      updateUserDtoToUserMappingFactory(mapper);
     };
   }
 }

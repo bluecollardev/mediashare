@@ -50,14 +50,15 @@ export class UserConnectionService {
       throw new Error(msg);
     }
 
-    const rel1 = await this.classMapper.map({
-      userId: ObjectIdGuard(userId),
-      connectionId: ObjectIdGuard(connectionId),
-    }, CreateUserConnectionDto, UserConnection);
-    const rel2 = await this.classMapper.map({
-      userId: ObjectIdGuard(connectionId),
-      connectionId: ObjectIdGuard(userId),
-    }, CreateUserConnectionDto, UserConnection);
+    const rel1 = await this.classMapper.mapAsync({
+      userId: userId,
+      connectionId: connectionId,
+    } as CreateUserConnectionDto, CreateUserConnectionDto, UserConnection);
+
+    const rel2 = await this.classMapper.mapAsync({
+      userId: connectionId,
+      connectionId: userId,
+    } as CreateUserConnectionDto, CreateUserConnectionDto, UserConnection);
 
     await Promise.all([
       this.dataService.create(rel1),
@@ -77,7 +78,7 @@ export class UserConnectionService {
     const results = entities.map(async (entity) =>
       await this.classMapper.mapAsync(entity, UserConnection, UserConnectionDto));
 
-    return await Promise.all(results);
+    return Promise.all(results);
   }
 
   async remove({ userId, connectionId }: Partial<UserConnectionDto>): Promise<void> {

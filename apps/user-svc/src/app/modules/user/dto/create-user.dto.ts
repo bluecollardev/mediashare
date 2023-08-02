@@ -1,52 +1,51 @@
 import { AutoMap } from '@automapper/classes';
-import { ApiDecoratorOptions, ApiEmail, ApiName, ApiString } from '@mediashare/shared';
+import { ApiEmail, ApiName, ApiString, ApiUriString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDefined, IsOptional, IsEmail, IsString, Length, IsPhoneNumber } from 'class-validator';
+import { IsOptional, IsEmail, IsString, Length, IsPhoneNumber } from 'class-validator';
 import { BC_ROLES, BcRolesType } from '../../../core/models';
 
 export class CreateUserDto {
   @IsString()
   @AutoMap()
-  @ApiString()
+  @ApiString({ required: true })
   sub: string;
 
-  @Length(3, 50)
+  @Length(2, 50)
   @IsString()
   @AutoMap()
-  @ApiName(<ApiDecoratorOptions>{ required: true })
+  @ApiName({ required: true })
   username: string;
 
   // Min is technically 3 but with real domain it's x@y.zz = 6
   // https://www.rfc-editor.org/rfc/rfc2822
-  @Length(6, 254)
+  @Length(6, 255)
   @IsEmail()
   @AutoMap()
-  @ApiEmail(<ApiDecoratorOptions>{ required: true })
+  @ApiEmail({ required: true })
   email: string;
 
   @Length(2, 50)
   @IsString()
   @AutoMap()
-  @ApiName(<ApiDecoratorOptions>{ required: true })
+  @ApiName({ required: true })
   firstName: string;
 
   @Length(2, 50)
-  @IsDefined()
   @IsString()
   @AutoMap()
-  @ApiName(<ApiDecoratorOptions>{ required: true })
+  @ApiName({ required: true })
   lastName: string;
 
   @IsOptional()
   @IsPhoneNumber()
   @AutoMap()
-  @ApiString()
+  @ApiString({ required: false })
   phoneNumber?: string;
 
   @IsOptional()
   @IsString()
   @AutoMap()
-  @ApiString()
+  @ApiUriString({ required: false })
   imageSrc?: string;
 
   @IsOptional()
@@ -56,6 +55,6 @@ export class CreateUserDto {
 
   @IsOptional()
   @AutoMap()
-  @ApiProperty()
+  @ApiProperty({ required: false })
   isDisabled?: boolean;
 }
