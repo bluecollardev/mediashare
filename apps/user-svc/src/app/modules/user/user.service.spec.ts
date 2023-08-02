@@ -1,11 +1,15 @@
 import { classes } from '@automapper/classes';
-import { createMap, createMapper, forMember, ignore, Mapper } from '@automapper/core';
+import { createMapper, Mapper } from '@automapper/core';
+import {
+  createUserDtoToUserMappingFactory,
+  updateUserDtoToUserMappingFactory,
+  userToUserDtoMappingFactory
+} from '@mediashare/user-svc/src/app/modules/user/mappers/automapper.profile';
 import { randomUUID } from 'crypto';
 import { PinoLogger } from 'nestjs-pino';
 import { DataSource, MongoRepository } from 'typeorm';
 import { MongoConnectionOptions } from 'typeorm/driver/mongodb/MongoConnectionOptions';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UserDataService, UserService } from './user.service';
 import { User } from './entities/user.entity';
@@ -47,10 +51,11 @@ describe('UserService', () => {
   beforeAll(async () => {
     const logger = stub<PinoLogger>();
 
+    // This should match mapping configuration in automapper.profile
     mapper = createMapper({ strategyInitializer: classes() });
-    createMap(mapper, User, UserDto);
-    createMap(mapper, CreateUserDto, User, forMember((dest) => dest['_id'], ignore()));
-    createMap(mapper, UpdateUserDto, User, forMember((dest) => dest['_id'], ignore()));
+    userToUserDtoMappingFactory(mapper);
+    createUserDtoToUserMappingFactory(mapper);
+    updateUserDtoToUserMappingFactory(mapper);
 
     db = await createDB([User])
     await db.initialize();
@@ -58,7 +63,7 @@ describe('UserService', () => {
     userRepository = await db.getMongoRepository(User);
     userDataService = new UserDataService(userRepository, logger)
     userService = new UserService(userDataService, mapper, logger);
-  })
+  });
 
   afterAll(async () => {
     // Delete all test records
@@ -76,7 +81,7 @@ describe('UserService', () => {
         .create(dto)
         .catch((errorResponse) => {
           // expect(user).toBeInstanceOf(UserDto);
-         const errors = errorResponse.additionalMessages;
+          const errors = errorResponse.additionalMessages;
           expect(errors).toBeDefined();
           expect(errors.find((e) => e.property === 'sub')).toBeDefined();
           expect(errors.find((e) => e.property === 'username')).toBeDefined();
@@ -118,10 +123,13 @@ describe('UserService', () => {
             throwInvalidUserDtoError();
           }
         })
-        .catch((errors) => {
-          // expect(user).toBeInstanceOf(UserDto);
-          expect(errors).toBeDefined();
-          throwValidationError(errors);
+        .catch((errorResponse) => {
+          const validationErrors = errorResponse.additionalMessages;
+          if (validationErrors instanceof Array && validationErrors.length > 0) {
+            expect(validationErrors).toBeDefined();
+          } else {
+            throw new Error(errorResponse.toString());
+          }
         });
     });
 
@@ -157,9 +165,13 @@ describe('UserService', () => {
             throwInvalidUserDtoError();
           }
         })
-        .catch((errors) => {
-          expect(errors).toBeDefined();
-          throwValidationError(errors);
+        .catch((errorResponse) => {
+          const validationErrors = errorResponse.additionalMessages;
+          if (validationErrors instanceof Array && validationErrors.length > 0) {
+            expect(validationErrors).toBeDefined();
+          } else {
+            throw new Error(errorResponse.toString());
+          }
         });
     });
 

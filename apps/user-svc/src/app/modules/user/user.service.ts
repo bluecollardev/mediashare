@@ -38,29 +38,30 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
     const errors = await this.dataService.validateDto(CreateUserDto, createUserDto);
     if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
-    const entity = this.classMapper.map(createUserDto, CreateUserDto, User);
+    const entity = await this.classMapper.mapAsync(createUserDto, CreateUserDto, User);
     const result = await this.dataService.create(entity);
-    return this.classMapper.mapAsync(result, User, UserDto);
+    return await this.classMapper.mapAsync(result, User, UserDto);
   }
 
   async update(userId: IdType, updateUserDto: UpdateUserDto): Promise<UserDto> {
     const errors = await this.dataService.validateDto(UpdateUserDto, updateUserDto);
     if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
-    const entity = this.classMapper.map(updateUserDto, UpdateUserDto, User);
+    const entity = await this.classMapper.mapAsync(updateUserDto, UpdateUserDto, User);
     const result = await this.dataService.update(userId, entity);
     return await this.classMapper.mapAsync(result, User, UserDto);
   }
 
   async remove(id: IdType) {
-    return this.dataService.remove(id);
+    return await this.dataService.remove(id);
   }
 
   async findOne(id: IdType) {
-    return this.dataService.findOne(id);
+    const entity = await this.dataService.findOne(id);
+    return await this.classMapper.mapAsync(entity, User, UserDto);
   }
 
   async findByQuery(query: MongoFindOneOptions<User>) {
-    return this.dataService.findByQuery(query);
+    return await this.dataService.findByQuery(query);
   }
 
   // TODO: Use mapper
@@ -96,31 +97,11 @@ export class UserService {
 
   // TODO: Use mapper
   findByIds(ids: IdType[]) {
+    const objectIds = ids.map((id) => ObjectIdGuard(id));
     return this.dataService.repository
       .aggregate([
-        { $match: { _id: { $in: [...ids] } } },
-        {
-          $replaceRoot: {
-            newRoot: {
-              _id: '$_id',
-              username: '$username',
-              email: '$email',
-              firstName: '$firstName',
-              lastName: '$lastName',
-              phoneNumber: '$phoneNumber',
-              role: '$role',
-              imageSrc: '$imageSrc',
-              // TODO: Can we remove author from here?
-              authorId: '$_id',
-              author: '$username',
-              authorImage: '$imageSrc',
-              authorName: { $concat: ['$firstName', ' ', 'lastName'] },
-              transactionId: '$transactionId',
-              transactionDate: '$transactionDate',
-              transactionEndDate: '$transactionEndDate',
-            },
-          },
-        },
+        { $match: { _id: { $in: objectIds } } },
+
       ])
       .toArray();
   }

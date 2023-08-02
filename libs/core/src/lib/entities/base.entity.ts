@@ -1,45 +1,40 @@
 import { AutoMap } from '@automapper/classes';
-import { ObjectId } from 'bson';
-import { ObjectIdColumn, Entity, CreateDateColumn, UpdateDateColumn, Column } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
-import { ApiDecoratorOptions, ApiObjectId, ApiPastDate } from '@mediashare/shared';
-import { IdType } from '@mediashare/shared';
+import { AutoMapOptions } from '@automapper/classes/lib/automap';
+import { ObjectIdColumn, Entity, CreateDateColumn, UpdateDateColumn, ColumnOptions } from 'typeorm';
+import { ObjectId } from 'mongodb';
 
-export interface ApiBaseEntityInterface {
-  _id: IdType;
+export interface IApiBaseEntity {
+  _id: ObjectId;
 }
 
-export abstract class DataProviderBaseEntity<M> implements ApiBaseEntityInterface {
+export abstract class DataProviderBaseEntity<M> implements IApiBaseEntity {
+  @AutoMap()
   @ObjectIdColumn()
-  _id: ObjectId | string;
+  _id: ObjectId;
 
   // TODO: Do we need to update this?
-  //  The constructor part needs to be looked at
-  //  and removed if unnecessary
+  //  The constructor part needs to be looked at!
+  //  Remove if unnecessary...
   protected constructor(model?: Partial<M>) {
     Object.assign(this, model);
   }
 }
 
 @Entity()
-export class ApiBaseEntity implements ApiBaseEntityInterface {
-  @AutoMap()
+export class ApiBaseEntity implements IApiBaseEntity {
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
   @ObjectIdColumn()
-  @ApiObjectId(<ApiDecoratorOptions>{ readOnly: true })
   _id: ObjectId;
 
-  @AutoMap()
-  @Column()
-  @ApiObjectId()
-  readonly createdBy?: Readonly<ObjectId>;
+  // @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  // @ObjectIdColumn()
+  // createdBy: ObjectId;
 
   @AutoMap()
   @CreateDateColumn()
-  @ApiProperty({ readOnly: true, type: Date, required: true })
-  readonly createdAt?: Date;
+  readonly createdAt: Date;
 
   @AutoMap()
-  @UpdateDateColumn()
-  @ApiPastDate(<ApiDecoratorOptions>{ readOnly: true, type: Date, required: false })
-  readonly updatedDate?: Date;
+  @UpdateDateColumn(<ColumnOptions>{ required: false })
+  readonly updatedDate: Date;
 }

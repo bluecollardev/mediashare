@@ -1,6 +1,5 @@
 // @ApiProperty({ type: 'string' })
-
-import { ApiDecoratorType } from '@mediashare/shared';
+import { ApiDecoratorType } from '../models';
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, IsUrl, Length } from 'class-validator';
@@ -13,7 +12,7 @@ const lengthFn = function (minLength: number, maxLength: number) {
 };
 
 export const ApiEmail: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
-  const length = [5, 50] as const;
+  const length = [6, 50] as const;
 
   return applyDecorators(
     ApiProperty({ required, type: String, example: 'test@example.com', ...lengthFn(...length) }),
@@ -26,7 +25,7 @@ export const ApiUsername: ApiDecoratorType = function ({ required } = apiDecorat
 };
 
 export const ApiName: ApiDecoratorType = function ({ required } = apiDecoratorDefaults) {
-  const length = [3, 30] as const;
+  const length = [2, 50] as const;
 
   return applyDecorators(
     ...baseStringValidators(...length),
@@ -54,7 +53,7 @@ export const ApiUriString: ApiDecoratorType = function ({ required } = apiDecora
     ApiProperty({
       required,
       type: String,
-      example: 'http://ihila.sh/ruabcos',
+      example: 'http://www.example.com',
       maxLength: max,
       minLength: min,
     })

@@ -42,7 +42,7 @@ export abstract class FilterableDataService<E extends DataProviderBaseEntity<E>,
   } */
 
   // TODO: Finish this later... options could be Elastic, Mongo Atlas Search or Apache Lucene
-  protected get useDistributedSearch() {
+  get useDistributedSearch() {
     return false; // this.configService.get<string>('dbIsMongoAtlas');
   }
 

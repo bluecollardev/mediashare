@@ -205,7 +205,7 @@ export class UserController {
   @ApiBearerAuth()
   @Get('connections')
   @UserGetResponse({ type: UserDto, isArray: true }) // TODO: Use ProfileDto
-  async getCurrentUserConnections(@Res() res: Response, @GetUser('_id') userId: ObjectId) {
+  async getCurrentUserConnections(@Res() res: Response, @GetUser('_id') userId: string) {
     try {
       const userConnections = await this.userConnectionService.findConnections(userId);
       const connectionUserIds = userConnections.map((uc) => uc.connectionId)
@@ -225,10 +225,10 @@ export class UserController {
   async getUserConnections(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
     try {
       const userConnections = await this.userConnectionService.findConnections(userId);
-      const connectionUserIds = userConnections.map((uc) => uc.connectionId)
+      const userConnectionIds = userConnections.map((uc) => uc.connectionId);
 
       // TODO: Use mapper in findByIds
-      const result = await this.userService.findByIds(connectionUserIds);
+      const result = await this.userService.findByIds(userConnectionIds);
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
       return handleErrorResponse(res, error);
