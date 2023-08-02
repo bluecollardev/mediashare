@@ -91,9 +91,9 @@ export class MediaItemController {
   @ApiParam({ name: RouteTokens.userId, type: String, required: true })
   @MediaShareResponse({ type: ShareItem })
   async share(
-    @Param(RouteTokens.mediaId, new ObjectIdPipe()) mediaId: ObjectId,
-    @Param(RouteTokens.userId, new ObjectIdPipe()) userId: ObjectId,
-    @GetUser('_id') createdBy: ObjectId,
+    @Param(RouteTokens.mediaId) mediaId: string,
+    @Param(RouteTokens.userId) userId: string,
+    @GetUser('_id') createdBy: string,
     @Res() response: Response
   ) {
     const { title } = await this.mediaItemService.findOne(mediaId);
@@ -103,7 +103,6 @@ export class MediaItemController {
       createdBy,
       userId,
       mediaId,
-      title,
     });
     response.status(HttpStatus.CREATED);
     return response.send(shareItem);
