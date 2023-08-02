@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ObjectIdGuard } from '@mediashare/core/guards';
 import { Response } from 'express';
@@ -28,7 +28,6 @@ export class PlaylistController {
   }
 
   @Get(RouteTokens.playlistId)
-  // @UseGuards(UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: new ObjectId().toHexString() })
   @PlaylistGetResponse()
@@ -39,7 +38,6 @@ export class PlaylistController {
   }
 
   @Get()
-  // @UseGuards(UserGuard)
   @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
@@ -50,9 +48,8 @@ export class PlaylistController {
   }
 
   @Post()
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @PlaylistPostResponse({ type: CreatePlaylistResponseDto })
+  @PlaylistPostResponse({ type: PlaylistDto })
   async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUser('_id') userId: string) {
     return await this.playlistService.create({
       ...createPlaylistDto,
@@ -62,7 +59,6 @@ export class PlaylistController {
   }
 
   @Put(RouteTokens.playlistId)
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: new ObjectId().toHexString() })
   @ApiBody({ type: UpdatePlaylistDto })
@@ -72,7 +68,6 @@ export class PlaylistController {
   }
 
   @Delete(RouteTokens.playlistId)
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: new ObjectId().toHexString() })
   async remove(@Param(RouteTokens.playlistId) playlistId: string) {

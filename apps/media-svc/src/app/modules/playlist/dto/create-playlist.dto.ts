@@ -1,7 +1,7 @@
 import { AutoMap } from '@automapper/classes';
-import { ApiDecoratorOptions, ApiObjectId } from '@mediashare/shared';
+import { ApiDecoratorOptions, ApiLongString, ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsIn, IsOptional } from 'class-validator';
+import { IsArray, IsDefined, IsIn, IsOptional, IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { PlaylistDto } from './playlist.dto';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
@@ -13,6 +13,33 @@ export class CreatePlaylistDto {
   @AutoMap()
   @ApiObjectId(<ApiDecoratorOptions>{ required: false })
   cloneOf?: ObjectId;
+
+  @IsDefined()
+  @AutoMap()
+  @ApiString({ required: true })
+  userId: string;
+
+  @IsString()
+  @AutoMap()
+  @ApiString({ required: true })
+  title: string;
+
+  @IsOptional()
+  @IsString()
+  @AutoMap()
+  @ApiLongString({ required: false })
+  summary?: string;
+
+  @IsString()
+  @AutoMap()
+  @ApiTextString({ required: true })
+  description: string;
+
+  @IsOptional()
+  @IsString()
+  @AutoMap()
+  @ApiLongString({ required: false })
+  imageSrc?: string;
 
   @ApiProperty({ isArray: true, type: 'string', writeOnly: true, required: true })
   @IsArray()

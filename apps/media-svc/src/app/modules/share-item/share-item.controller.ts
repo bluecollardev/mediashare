@@ -17,7 +17,6 @@ import { UserGuard } from '@mediashare/core/guards/user.guard';
 export class ShareItemController {
   constructor(private readonly shareItemService: ShareItemService) {}
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-by-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
@@ -25,7 +24,6 @@ export class ShareItemController {
     return await this.shareItemService.getItemsSharedByUser(userId);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-by-user/media-items')
   @ShareItemGetResponse({ type: MediaItemDto, isArray: true })
@@ -33,7 +31,6 @@ export class ShareItemController {
     return await this.shareItemService.getMediaItemsSharedByUser(userId);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-by-user/playlists')
   @ShareItemGetResponse({ type: PlaylistDto, isArray: true })
@@ -41,7 +38,6 @@ export class ShareItemController {
     return await this.shareItemService.getPlaylistsSharedByUser(userId);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-with-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: false })
@@ -49,7 +45,6 @@ export class ShareItemController {
     return await this.shareItemService.getItemsSharedWithUser(userId);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-with-user/media-items')
   @ShareItemGetResponse({ type: MediaItemDto, isArray: true })
@@ -57,7 +52,6 @@ export class ShareItemController {
     return await this.shareItemService.getMediaItemsSharedWithUser(userId);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('shared-with-user/playlists')
   @ShareItemGetResponse({ type: PlaylistDto, isArray: true })

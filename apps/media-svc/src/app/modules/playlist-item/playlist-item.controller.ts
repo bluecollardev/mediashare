@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ObjectId } from 'mongodb';
@@ -56,7 +56,6 @@ export class PlaylistItemController {
     return await this.playlistItemService.getPopular();
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Post()
   @PlaylistItemPostResponse()
@@ -79,7 +78,6 @@ export class PlaylistItemController {
     return await this.playlistItemService.create({ ...playlistItem } as any);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Put(RouteTokens.playlistItemId)
   @ApiParam({ name: RouteTokens.playlistItemId, type: String, required: true })
@@ -88,7 +86,6 @@ export class PlaylistItemController {
     return await this.playlistItemService.update(playlistItemId, updatePlaylistItemDto);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Delete(RouteTokens.playlistItemId)
   @ApiParam({ name: RouteTokens.playlistItemId, type: String, required: true })

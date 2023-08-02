@@ -1,7 +1,7 @@
 import { AutoMap } from '@automapper/classes';
-import { ApiString } from '@mediashare/shared';
+import { ApiLongString, ApiString, ApiTextString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDefined, IsIn, IsInt, IsOptional, IsString } from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
 
@@ -16,11 +16,49 @@ export class UpdatePlaylistItemDto extends ApiBaseDto {
   @ApiString({ required: true })
   mediaId: string;
 
+  @IsDefined()
+  @AutoMap()
+  @ApiString({ required: true })
+  userId: string;
+
+  @IsString()
+  @AutoMap()
+  @ApiString({ required: true })
+  title: string;
+
+  @IsOptional()
+  @IsString()
+  @AutoMap()
+  @ApiLongString({ required: false })
+  summary?: string;
+
+  @IsString()
+  @AutoMap()
+  @ApiTextString({ required: true })
+  description: string;
+
+  @IsString()
+  @AutoMap()
+  @ApiLongString({ required: true })
+  uri: string;
+
+  @IsOptional()
+  @IsString()
+  @AutoMap()
+  @ApiLongString({ required: false })
+  imageSrc?: string;
+
   @IsOptional()
   @IsInt()
   @AutoMap()
   @ApiProperty({ type: 'number', required: false })
   sortIndex?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  @AutoMap()
+  @ApiProperty({ required: false })
+  isPlayable?: boolean;
 
   @IsIn(MEDIA_VISIBILITY)
   @AutoMap()

@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ObjectIdGuard } from '@mediashare/core/guards';
 import { Response } from 'express';
@@ -52,7 +52,6 @@ export class MediaItemController {
     return await this.mediaItemService.getPopular();
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Post()
   @MediaPostResponse()
@@ -67,7 +66,6 @@ export class MediaItemController {
     return await this.mediaItemService.create({ ...mediaItem } as any);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Put(RouteTokens.mediaId)
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
@@ -76,7 +74,6 @@ export class MediaItemController {
     return await this.mediaItemService.update(mediaId, updateMediaItemDto);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Delete(RouteTokens.mediaId)
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
