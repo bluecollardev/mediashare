@@ -2,6 +2,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
 import { clone } from 'remeda';
 import { INestApplication } from '@nestjs/common';
 
@@ -15,7 +16,7 @@ import { UpdatePlaylistItemDto } from '@mediashare/media-svc/src/app/modules/pla
 import { PlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/playlist-item.dto';
 import { PlaylistItem } from '@mediashare/media-svc/src/app/modules/playlist-item/entities/playlist-item.entity';
 
-describe('PlaylistAPI.current.e2e', () => {
+describe('PlaylistAPI.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
 
@@ -48,8 +49,8 @@ describe('PlaylistAPI.current.e2e', () => {
     await db.close();
   });
 
-  describe('PlaylistAPI should get the current playlistItem', () => {
-    it('should get the current playlistItem', async () => {
+  describe('PlaylistAPI should get the playlistItem', () => {
+    it('should get the playlistItem', async () => {
       // Login first
       const creds = {
         username: process.env.COGNITO_USER_EMAIL,
@@ -62,13 +63,19 @@ describe('PlaylistAPI.current.e2e', () => {
       const token = jwt.decode(authResponse?.IdToken) as any;
 
       const testPlaylistItemData = {
+        key: 'test-key',
+        userId: new ObjectId().toHexString(),
+        title: 'Test Media',
+        description: 'Test media description',
+        uri: 'https://www.example.com',
+        visibility: 'public',
       };
       // Create a corresponding playlistItem in the database
       createPlaylistItem = createPlaylistItemFunction({ baseUrl, token: authResponse?.IdToken });
       testPlaylistItem = await createAndValidateTestPlaylistItem(createPlaylistItem, testPlaylistItemData);
       testPlaylistItemId = getTestPlaylistItemId(testPlaylistItem);
 
-      await axios.get(`${baseUrl}/playlist-items`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.get(`${baseUrl}/playlist-items/${testPlaylistItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -87,8 +94,8 @@ describe('PlaylistAPI.current.e2e', () => {
     });
   });
 
-  describe('PlaylistAPI should update the current playlistItem', () => {
-    it('should update the current playlistItem', async () => {
+  describe('PlaylistAPI should update the playlistItem', () => {
+    it('should update the playlistItem', async () => {
       // Login first
       const creds = {
         username: process.env.COGNITO_USER_EMAIL,
@@ -101,6 +108,12 @@ describe('PlaylistAPI.current.e2e', () => {
       const token = jwt.decode(authResponse?.IdToken) as any;
 
       const testPlaylistItemData = {
+        key: 'test-key',
+        userId: new ObjectId().toHexString(),
+        title: 'Test Media',
+        description: 'Test media description',
+        uri: 'https://www.example.com',
+        visibility: 'public',
       };
       // Create a corresponding playlistItem in the database
       createPlaylistItem = createPlaylistItemFunction({ baseUrl, token: authResponse?.IdToken });
@@ -109,7 +122,7 @@ describe('PlaylistAPI.current.e2e', () => {
 
       const dto = clone(testPlaylistItem) as UpdatePlaylistItemDto;
 
-      await axios.put(`${baseUrl}/playlist-items`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.put(`${baseUrl}/playlist-items/${testPlaylistItemId}`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -121,7 +134,7 @@ describe('PlaylistAPI.current.e2e', () => {
           expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(new Date(testPlaylistItem.createdAt).getTime());
 
           // Don't trust the response object - find the playlistItem, and make sure it's updated too
-          await axios.get(`${baseUrl}/playlist-items`, defaultOptionsWithBearer(authResponse?.IdToken))
+          await axios.get(`${baseUrl}/playlist-items/${testPlaylistItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -141,8 +154,8 @@ describe('PlaylistAPI.current.e2e', () => {
     });
   });
 
-  describe('PlaylistAPI should delete the current playlistItem', () => {
-    it('should delete the current playlistItem', async () => {
+  describe('PlaylistAPI should delete the playlistItem', () => {
+    it('should delete the playlistItem', async () => {
       // Login first
       const creds = {
         username: process.env.COGNITO_USER_EMAIL,
@@ -155,6 +168,12 @@ describe('PlaylistAPI.current.e2e', () => {
       const token = jwt.decode(authResponse?.IdToken) as any;
 
       const testPlaylistItemData = {
+        key: 'test-key',
+        userId: new ObjectId().toHexString(),
+        title: 'Test Media',
+        description: 'Test media description',
+        uri: 'https://www.example.com',
+        visibility: 'public',
       };
       // Create a corresponding playlistItem in the database
       createPlaylistItem = createPlaylistItemFunction({ baseUrl, token: authResponse?.IdToken });
@@ -162,7 +181,7 @@ describe('PlaylistAPI.current.e2e', () => {
       testPlaylistItem = await createAndValidateTestPlaylistItem(createPlaylistItem, testPlaylistItemData);
       testPlaylistItemId = getTestPlaylistItemId(testPlaylistItem);
 
-      await axios.delete(`${baseUrl}/playlist-items`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.delete(`${baseUrl}/playlist-items/${testPlaylistItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

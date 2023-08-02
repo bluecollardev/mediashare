@@ -46,11 +46,14 @@ export class PlaylistController {
 
   @Post()
   @ApiBearerAuth()
+  @ApiBody({ type: CreatePlaylistDto })
   @PlaylistPostResponse({ type: PlaylistDto })
-  async create(@CreateDto() createPlaylistDto: CreatePlaylistDto, @GetUser('_id') userId: string) {
+  // async create(@Body() createPlaylistDto: CreatePlaylistDto, @GetUser('_id') userId: string) {
+  async create(@Body() createPlaylistDto: CreatePlaylistDto) {
     return await this.playlistService.create({
       ...createPlaylistDto,
-      createdBy: userId,
+      // createdBy: userId,
+      createdBy: 'testuser',
       cloneOf: createPlaylistDto?.cloneOf ? createPlaylistDto.cloneOf : undefined,
     });
   }

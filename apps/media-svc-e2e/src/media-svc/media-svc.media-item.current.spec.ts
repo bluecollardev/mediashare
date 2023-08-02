@@ -2,6 +2,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
 import { clone } from 'remeda';
 import { DataSource, MongoRepository } from 'typeorm';
 
@@ -15,7 +16,7 @@ import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestMediaItem, createMediaItem as createMediaItemFunction, getTestMediaItemId } from './functions/media-item';
 
-describe('MediaItemAPI.current.e2e', () => {
+describe('MediaItemAPI.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
 
@@ -48,8 +49,8 @@ describe('MediaItemAPI.current.e2e', () => {
     await db.close();
   });
 
-  describe('MediaItemAPI should get the current mediaItem', () => {
-    it('should get the current mediaItem', async () => {
+  describe('MediaItemAPI should get the mediaItem', () => {
+    it('should get the mediaItem', async () => {
       // Login first
       const creds = {
         username: process.env.COGNITO_USER_EMAIL,
@@ -62,13 +63,19 @@ describe('MediaItemAPI.current.e2e', () => {
       const token = jwt.decode(authResponse?.IdToken) as any;
 
       const testMediaItemData = {
+        key: 'test-key',
+        userId: new ObjectId().toHexString(),
+        title: 'Test Media',
+        description: 'Test media description',
+        uri: 'https://www.example.com',
+        visibility: 'public',
       };
       // Create a corresponding mediaItem in the database
       createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
       testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
-      await axios.get(`${baseUrl}/media-items`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.get(`${baseUrl}/media-items/${testMediaItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -87,8 +94,8 @@ describe('MediaItemAPI.current.e2e', () => {
     });
   });
 
-  describe('MediaItemAPI should update the current mediaItem', () => {
-    it('should update the current mediaItem', async () => {
+  describe('MediaItemAPI should update the mediaItem', () => {
+    it('should update the mediaItem', async () => {
       // Login first
       const creds = {
         username: process.env.COGNITO_USER_EMAIL,
@@ -101,6 +108,12 @@ describe('MediaItemAPI.current.e2e', () => {
       const token = jwt.decode(authResponse?.IdToken) as any;
 
       const testMediaItemData = {
+        key: 'test-key',
+        userId: new ObjectId().toHexString(),
+        title: 'Test Media',
+        description: 'Test media description',
+        uri: 'https://www.example.com',
+        visibility: 'public',
       };
       // Create a corresponding mediaItem in the database
       createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
@@ -109,7 +122,7 @@ describe('MediaItemAPI.current.e2e', () => {
 
       const dto = clone(testMediaItem) as UpdateMediaItemDto;
 
-      await axios.put(`${baseUrl}/media-items`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.put(`${baseUrl}/media-items/${testMediaItemId}`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -121,7 +134,7 @@ describe('MediaItemAPI.current.e2e', () => {
           expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(new Date(testMediaItem.createdAt).getTime());
 
           // Don't trust the response object - find the mediaItem, and make sure it's updated too
-          await axios.get(`${baseUrl}/media-items`, defaultOptionsWithBearer(authResponse?.IdToken))
+          await axios.get(`${baseUrl}/media-items/${testMediaItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -141,8 +154,8 @@ describe('MediaItemAPI.current.e2e', () => {
     });
   });
 
-  describe('MediaItemAPI should delete the current mediaItem', () => {
-    it('should delete the current mediaItem', async () => {
+  describe('MediaItemAPI should delete the mediaItem', () => {
+    it('should delete the mediaItem', async () => {
       // Login first
       const creds = {
         username: process.env.COGNITO_USER_EMAIL,
@@ -155,6 +168,12 @@ describe('MediaItemAPI.current.e2e', () => {
       const token = jwt.decode(authResponse?.IdToken) as any;
 
       const testMediaItemData = {
+        key: 'test-key',
+        userId: new ObjectId().toHexString(),
+        title: 'Test Media',
+        description: 'Test media description',
+        uri: 'https://www.example.com',
+        visibility: 'public',
       };
       // Create a corresponding mediaItem in the database
       createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
@@ -162,7 +181,7 @@ describe('MediaItemAPI.current.e2e', () => {
       testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
-      await axios.delete(`${baseUrl}/media-items`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios.delete(`${baseUrl}/media-items/${testMediaItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

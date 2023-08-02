@@ -4,6 +4,8 @@ import { classes } from '@automapper/classes';
 import { createMap, createMapper, Dictionary, forMember, ignore, Mapper, ModelIdentifier } from '@automapper/core';
 import { AutomapperModule } from '@automapper/nestjs';
 import { appConfig, appValidationSchema, dbConfig } from '@mediashare/media-svc/src/app/app.configuration';
+import { PlaylistItemModule } from '@mediashare/media-svc/src/app/modules/playlist-item/playlist-item.module';
+import { PlaylistModule } from '@mediashare/media-svc/src/app/modules/playlist/playlist.module';
 import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { CognitoModuleOptions } from '@nestjs-cognito/core';
 import { CognitoTestingModule } from '@nestjs-cognito/testing';
@@ -88,8 +90,10 @@ export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplicat
           tokenUse: 'id',
         },
       } as CognitoModuleOptions),
+      LoggerModule.forRoot(),
       MediaItemModule,
-      LoggerModule.forRoot()
+      PlaylistItemModule,
+      PlaylistModule,
     ],
     controllers: [],
     providers: []

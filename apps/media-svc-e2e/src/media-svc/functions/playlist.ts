@@ -2,6 +2,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import { randomUUID } from 'crypto';
+import { ObjectId } from 'mongodb';
 import { testAndClonePlaylist } from '../test-components';
 import { defaultOptionsWithBearer } from './auth';
 
@@ -10,7 +11,6 @@ import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/
 
 export const createPlaylist = ({ baseUrl, token }) => (playlist) => {
   const dto = {
-    sub: randomUUID(),
     ...playlist,
   } as CreatePlaylistDto;
 
@@ -18,6 +18,11 @@ export const createPlaylist = ({ baseUrl, token }) => (playlist) => {
 }
 export const createAndValidateTestPlaylist = async (createPlaylistFn, playlistData = {
   // Default data
+  userId: new ObjectId().toHexString(),
+  title: 'Test Playlist',
+  description: 'Test playlist description',
+  mediaIds: [],
+  visibility: 'public',
 }) => {
   return new Promise((resolve, reject) => {
     createPlaylistFn(playlistData)

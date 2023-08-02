@@ -2,6 +2,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import { randomUUID } from 'crypto';
+import { ObjectId } from 'mongodb';
 import { testAndCloneMediaItem } from '../test-components';
 import { defaultOptionsWithBearer } from './auth';
 
@@ -18,6 +19,12 @@ export const createMediaItem = ({ baseUrl, token }) => (mediaItem) => {
 }
 export const createAndValidateTestMediaItem = async (createMediaItemFn, mediaItemData = {
   // Default data
+  key: 'test-key',
+  userId: new ObjectId().toHexString(),
+  title: 'Test Media',
+  description: 'Test media description',
+  uri: 'https://www.example.com',
+  visibility: 'public',
 }) => {
   return new Promise((resolve, reject) => {
     createMediaItemFn(mediaItemData)
