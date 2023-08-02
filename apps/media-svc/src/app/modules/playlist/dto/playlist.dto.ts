@@ -1,18 +1,18 @@
 import { AutoMap } from '@automapper/classes';
-import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
-import { MediaItemDto } from '../../media-item/dto/media-item.dto';
-import { ApiLongString, ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
+import { ApiDecoratorOptions, ApiLongString, ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
 // import { AuthorProfileDto } from '../user/dto/profile.dto';
+import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
+import { MediaItemDto } from '../../media-item/dto/media-item.dto';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
 import { PLAYLIST_VISIBILITY, PlaylistVisibilityType } from '../../../core/models';
 
 export class PlaylistDto extends ApiBaseDto {
   @IsOptional()
   @AutoMap()
-  @ApiObjectId()
+  @ApiObjectId(<ApiDecoratorOptions>{ required: false })
   cloneOf?: ObjectId;
 
   @IsString()

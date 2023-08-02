@@ -1,7 +1,7 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
-import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { IsArray, IsIn } from 'class-validator';
+import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 // import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
 import { PlaylistVisibilityType, PLAYLIST_VISIBILITY } from '../../../core/models';
 
