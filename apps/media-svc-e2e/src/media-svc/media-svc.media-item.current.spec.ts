@@ -1,5 +1,4 @@
 /* Ignore module boundaries, it's just our test scaffolding */
-import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -11,6 +10,7 @@ import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provi
 import { UpdateMediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/update-media-item.dto';
 import { MediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/media-item.dto';
 import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/entities/media-item.entity';
+import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 import { INestApplication } from '@nestjs/common';
 import {
   createAndValidateTestUser,

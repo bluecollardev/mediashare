@@ -6,6 +6,7 @@ import { MEDIA_VISIBILITY } from '../../core/models';
 import { RouteTokens } from '../../core/constants';
 import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
+import { UserGuard } from '../../core/guards';
 import { MediaGetResponse, MediaPostResponse, MediaPutResponse, MediaShareResponse } from './media-item.decorator';
 import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor';
 import { MediaItemService } from './media-item.service';
@@ -25,7 +26,7 @@ export class MediaItemController {
     return MEDIA_VISIBILITY;
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
   @Get(RouteTokens.mediaId)
@@ -36,7 +37,7 @@ export class MediaItemController {
     return response;
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
@@ -48,7 +49,7 @@ export class MediaItemController {
     return query || tags ? await this.mediaItemService.search({ userId, query, tags: parsedTags }) : await this.mediaItemService.getByUserId(userId);
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Get('popular')
   @MediaGetResponse({ isArray: true })
@@ -56,7 +57,7 @@ export class MediaItemController {
     return await this.mediaItemService.getPopular();
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Post()
   @MediaPostResponse()
@@ -71,7 +72,7 @@ export class MediaItemController {
     return await this.mediaItemService.create({ ...mediaItem } as any);
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
   @Put(RouteTokens.mediaId)
@@ -80,7 +81,7 @@ export class MediaItemController {
     return await this.mediaItemService.update(mediaId, updateMediaItemDto);
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
   @Delete(RouteTokens.mediaId)
@@ -90,7 +91,7 @@ export class MediaItemController {
     return deleted;
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
   @ApiParam({ name: RouteTokens.userId, type: String, required: true })

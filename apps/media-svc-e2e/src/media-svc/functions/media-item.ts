@@ -15,7 +15,7 @@ export const createMediaItem = ({ baseUrl, token }) => (mediaItem) => {
     ...mediaItem,
   } as CreateMediaItemDto;
 
-  return axios.post(`${baseUrl}/media-item`, dto, defaultOptionsWithBearer(token))
+  return axios.post(`${baseUrl}/media-items`, dto, defaultOptionsWithBearer(token))
 }
 export const createAndValidateTestMediaItem = async (createMediaItemFn, mediaItemData = {
   // Default data
