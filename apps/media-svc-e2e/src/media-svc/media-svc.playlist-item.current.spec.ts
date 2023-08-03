@@ -1,5 +1,6 @@
 /* Ignore module boundaries, it's just our test scaffolding */
-import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
+
+import { Playlist } from '@mediashare/media-svc/src/app/modules/playlist/entities/playlist.entity';
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -11,7 +12,16 @@ import { DataSource, MongoRepository } from 'typeorm';
 import {
   createAndValidateTestUser,
   createUser as createUserFunction, getTestUserId
-} from '../../../user-svc-e2e/src/user-svc/functions/user';
+} from './functions/user';
+import {
+  createAndValidateTestMediaItem,
+  createMediaItem as createMediaItemFunction, getTestMediaItemId
+} from './functions/media-item';
+import {
+  createAndValidateTestPlaylist,
+  createPlaylist as createPlaylistFunction, getTestPlaylistId
+} from './functions/playlist';
+
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestPlaylistItem, createPlaylistItem as createPlaylistItemFunction, getTestPlaylistItemId } from './functions/playlist-item';
@@ -20,6 +30,8 @@ import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provi
 import { UpdatePlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/update-playlist-item.dto';
 import { PlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/playlist-item.dto';
 import { PlaylistItem } from '@mediashare/media-svc/src/app/modules/playlist-item/entities/playlist-item.entity';
+import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/entities/media-item.entity'
+import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 
 const userApiBaseUrl = `http://localhost:3000/api`;
 
@@ -29,22 +41,32 @@ describe('PlaylistAPI.e2e', () => {
 
   let db: DataSource;
   let playlistItemRepository: MongoRepository<PlaylistItem>;
-  let userRepository: MongoRepository<User>
-  let authResponse: AuthenticationResultType
+  let playlistRepository: MongoRepository<Playlist>;
+  let mediaItemRepository: MongoRepository<MediaItem>;
+  let userRepository: MongoRepository<User>;
+  let authResponse: AuthenticationResultType;
   let createPlaylistItem;
   let testPlaylistItem;
   let testPlaylistItemId;
   let createUser;
   let testUser;
-  let testUserId
+  let testUserId;
+  let createPlaylist;
+  let testPlaylist;
+  let testPlaylistId;
+  let createMediaItem;
+  let testMediaItem;
+  let testMediaItemId;
 
   beforeAll(async () => {
     const globalPrefix = 'api'
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
-    db = await initializeDB([PlaylistItem, User]);
+    db = await initializeDB([PlaylistItem, Playlist, MediaItem, User]);
     playlistItemRepository = await db.getMongoRepository(PlaylistItem);
+    playlistRepository = await db.getMongoRepository(Playlist);
+    mediaItemRepository = await db.getMongoRepository(MediaItem);
     userRepository = await db.getMongoRepository(User);
 
     // Delete all test records
@@ -54,6 +76,8 @@ describe('PlaylistAPI.e2e', () => {
   beforeEach(async () => {
     // Delete all test records
     await playlistItemRepository.deleteMany({});
+    await playlistRepository.deleteMany({});
+    await mediaItemRepository.deleteMany({});
     await userRepository.deleteMany({});
   });
 
@@ -88,10 +112,35 @@ describe('PlaylistAPI.e2e', () => {
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
+      // Create a test media item
+      const testMediaItemData = {
+        key: 'test-key',
+        userId: testUserId,
+        title: 'Test Media',
+        description: 'Test media description',
+        uri: 'https://www.example.com',
+        visibility: 'public',
+      };
+      createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
+      testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
+      testMediaItemId = getTestMediaItemId(testMediaItem);
+
+      // Create a test playlist
+      const testPlaylistData = {
+        userId: testUserId,
+        title: 'Test Playlist',
+        description: 'Test playlist description',
+        mediaIds: [testMediaItemId],
+        visibility: 'public',
+      };
+      createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
+      testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
+      testPlaylistId = getTestPlaylistId(testPlaylist);
+
       const testPlaylistItemData = {
         key: 'test-key',
-        playlistId: new ObjectId().toHexString(),
-        mediaId: new ObjectId().toHexString(),
+        playlistId: testPlaylistId,
+        mediaId: testMediaItemId,
         userId: testUserId,
         title: 'Test Media',
         description: 'Test media description',
@@ -148,10 +197,35 @@ describe('PlaylistAPI.e2e', () => {
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
+      // Create a test media item
+      const testMediaItemData = {
+        key: 'test-key',
+        userId: testUserId,
+        title: 'Test Media',
+        description: 'Test media description',
+        uri: 'https://www.example.com',
+        visibility: 'public',
+      };
+      createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
+      testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
+      testMediaItemId = getTestMediaItemId(testMediaItem);
+
+      // Create a test playlist
+      const testPlaylistData = {
+        userId: testUserId,
+        title: 'Test Playlist',
+        description: 'Test playlist description',
+        mediaIds: [testMediaItemId],
+        visibility: 'public',
+      };
+      createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
+      testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
+      testPlaylistId = getTestPlaylistId(testPlaylist);
+
       const testPlaylistItemData = {
         key: 'test-key',
-        playlistId: new ObjectId().toHexString(),
-        mediaId: new ObjectId().toHexString(),
+        playlistId: testPlaylistId,
+        mediaId: testMediaItemId,
         userId: testUserId,
         title: 'Test Media',
         description: 'Test media description',
@@ -223,10 +297,35 @@ describe('PlaylistAPI.e2e', () => {
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
+      // Create a test media item
+      const testMediaItemData = {
+        key: 'test-key',
+        userId: testUserId,
+        title: 'Test Media',
+        description: 'Test media description',
+        uri: 'https://www.example.com',
+        visibility: 'public',
+      };
+      createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
+      testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
+      testMediaItemId = getTestMediaItemId(testMediaItem);
+
+      // Create a test playlist
+      const testPlaylistData = {
+        userId: testUserId,
+        title: 'Test Playlist',
+        description: 'Test playlist description',
+        mediaIds: [testMediaItemId],
+        visibility: 'public',
+      };
+      createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
+      testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
+      testPlaylistId = getTestPlaylistId(testPlaylist);
+
       const testPlaylistItemData = {
         key: 'test-key',
-        playlistId: new ObjectId().toHexString(),
-        mediaId: new ObjectId().toHexString(),
+        playlistId: testPlaylistId,
+        mediaId: testMediaItemId,
         userId: testUserId,
         title: 'Test Media',
         description: 'Test media description',

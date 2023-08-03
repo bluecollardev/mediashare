@@ -2,7 +2,6 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import { ObjectId } from 'mongodb';
 import { clone } from 'remeda';
 import { INestApplication } from '@nestjs/common';
 import { DataSource, MongoRepository } from 'typeorm';
@@ -10,7 +9,7 @@ import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provi
 import {
   createAndValidateTestUser,
   createUser as createUserFunction, getTestUserId
-} from '../../../user-svc-e2e/src/user-svc/functions/user';
+} from './functions/user';
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestPlaylist, createPlaylist as createPlaylistFunction, getTestPlaylistId } from './functions/playlist';
