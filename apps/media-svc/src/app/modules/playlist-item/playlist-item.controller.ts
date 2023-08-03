@@ -1,3 +1,4 @@
+import { handleErrorResponse, handleSuccessResponse } from '@mediashare/core/http/response';
 import { AuthenticationGuard } from '@nestjs-cognito/auth';
 import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -7,7 +8,6 @@ import { MEDIA_VISIBILITY } from '../../core/models';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
 import { UserGuard } from '../../core/guards';
 import { PlaylistItemGetResponse, PlaylistItemPostResponse, PlaylistItemPutResponse, PlaylistItemShareResponse } from './playlist-item.decorator';
-import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor';
 import { PlaylistItemService } from './playlist-item.service';
 import { CreatePlaylistItemDto } from './dto/create-playlist-item.dto';
 import { UpdatePlaylistItemDto } from './dto/update-playlist-item.dto';
@@ -32,56 +32,30 @@ export class PlaylistItemController {
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: 'playlistItemId', type: String, required: true })
-  @Get(RouteTokens.playlistItemId)
-  @PlaylistItemGetResponse()
-  async findOne(@Param('playlistItemId') playlistItemId: string) {
-    const response = await this.playlistItemService.getById(playlistItemId);
-    if (!response) throw notFoundResponse('playlistItem', { args: { playlistItemId } });
-    return response;
-  }
-
-  @UseGuards(AuthenticationGuard, UserGuard)
-  @ApiBearerAuth()
-  @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
-  @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
-  @Get()
-  @PlaylistItemGetResponse({ isArray: true })
-  async findAll(@Query('text') query?: string, @Query('tags') tags?: string[]) {
-    const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
-    // Always search, we want to run the aggregate query in every case
-    return query || tags ? await this.playlistItemService.search({ query, tags: parsedTags }) : await this.playlistItemService.search({});
-  }
-
-  @UseGuards(AuthenticationGuard, UserGuard)
-  @ApiBearerAuth()
-  @Get('popular')
-  @PlaylistItemGetResponse({ isArray: true })
-  async findPopular() {
-    return await this.playlistItemService.getPopular();
-  }
-
-  @UseGuards(AuthenticationGuard, UserGuard)
-  @ApiBearerAuth()
   @Post()
   @PlaylistItemPostResponse()
-  async create(@Body() createPlaylistItemDto: CreatePlaylistItemDto, @GetUser('_id') createdBy) {
-    const playlistId = createPlaylistItemDto?.playlistId;
-    const mediaId = createPlaylistItemDto?.mediaId;
-    const sortIndex = createPlaylistItemDto?.sortIndex;
-    const mediaItem = await this.mediaItemService.findOne(mediaId);
-    delete mediaItem._id;
-    const playlistItem: Omit<PlaylistItem, '_id'> = {
-      isPlayable: false,
-      uri: '',
-      ...mediaItem,
-      createdBy,
-      userId: createdBy,
-      playlistId: playlistId,
-      mediaId: mediaId,
-      sortIndex,
-    } as any;
-    return await this.playlistItemService.create({ ...playlistItem } as any);
+  async create(@Res() res: Response, @Body() createPlaylistItemDto: CreatePlaylistItemDto, @GetUser('_id') createdBy) {
+    try {
+      const playlistId = createPlaylistItemDto?.playlistId;
+      const mediaId = createPlaylistItemDto?.mediaId;
+      const sortIndex = createPlaylistItemDto?.sortIndex;
+      const mediaItem = await this.mediaItemService.findOne(mediaId);
+      delete mediaItem._id;
+      const playlistItem: Omit<PlaylistItem, '_id'> = {
+        isPlayable: false,
+        uri: '',
+        ...mediaItem,
+        createdBy,
+        userId: createdBy,
+        playlistId: playlistId,
+        mediaId: mediaId,
+        sortIndex,
+      } as any;
+      const result = await this.playlistItemService.create({ ...playlistItem } as any);
+      return handleSuccessResponse(res, HttpStatus.CREATED, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   @UseGuards(AuthenticationGuard, UserGuard)
@@ -89,18 +63,26 @@ export class PlaylistItemController {
   @ApiParam({ name: 'playlistItemId', type: String, required: true })
   @Put(RouteTokens.playlistItemId)
   @PlaylistItemPutResponse()
-  async update(@Param('playlistItemId') playlistItemId: string, @Body() updatePlaylistItemDto: UpdatePlaylistItemDto) {
-    return await this.playlistItemService.update(playlistItemId, updatePlaylistItemDto);
+  async update(@Res() res: Response, @Param('playlistItemId') playlistItemId: string, @Body() updatePlaylistItemDto: UpdatePlaylistItemDto) {
+    try {
+      const result = await this.playlistItemService.update(playlistItemId, updatePlaylistItemDto);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'playlistItemId', type: String, required: true })
   @Delete(RouteTokens.playlistItemId)
-  async remove(@Param('playlistItemId') playlistItemId: string) {
-    const deleted = await this.playlistItemService.remove(playlistItemId);
-    if (!deleted) throw notFoundResponse(playlistItemId);
-    return deleted;
+  async remove(@Res() res: Response, @Param('playlistItemId') playlistItemId: string) {
+    try {
+      const result = await this.playlistItemService.remove(playlistItemId);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   @UseGuards(AuthenticationGuard, UserGuard)
@@ -110,22 +92,69 @@ export class PlaylistItemController {
   @Post(`${RouteTokens.playlistItemId}/share/${RouteTokens.userId}`)
   @PlaylistItemShareResponse({ type: ShareItem })
   async share(
+    @Res() res: Response,
     @Param('playlistItemId') playlistItemId: string,
     @Param(RouteTokens.userId) userId: string,
     @GetUser('_id') createdBy: string,
-    @Res() response: Response
   ) {
-    const { title } = await this.playlistItemService.findOne(playlistItemId);
-    if (!title && !createdBy) return response.status(HttpStatus.NOT_FOUND);
+    try {
+      const result = await this.playlistItemService.findOne(playlistItemId);
+      // TODO: Fix this!
+      /* const shareItem = await this.shareItemService.createMediaShareItem({
+        createdBy,
+        userId,
+        playlistItemId,
+        title,
+      });
+      response.status(HttpStatus.CREATED);
+      return response.sendEmail(shareItem); */
+      return handleSuccessResponse(res, HttpStatus.CREATED, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
 
-    // TODO: Fix this!
-    /* const shareItem = await this.shareItemService.createMediaShareItem({
-      createdBy,
-      userId,
-      playlistItemId,
-      title,
-    });
-    response.status(HttpStatus.CREATED);
-    return response.sendEmail(shareItem); */
+  @UseGuards(AuthenticationGuard, UserGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'playlistItemId', type: String, required: true })
+  @Get(RouteTokens.playlistItemId)
+  @PlaylistItemGetResponse()
+  async findOne(@Res() res: Response, @Param('playlistItemId') playlistItemId: string) {
+    try {
+      const result = await this.playlistItemService.getById(playlistItemId);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
+  @UseGuards(AuthenticationGuard, UserGuard)
+  @ApiBearerAuth()
+  @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
+  @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
+  @Get()
+  @PlaylistItemGetResponse({ isArray: true })
+  async findAll(@Res() res: Response, @Query('text') query?: string, @Query('tags') tags?: string[]) {
+    try {
+      const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
+      // Always search, we want to run the aggregate query in every case
+      const result = query || tags ? await this.playlistItemService.search({ query, tags: parsedTags }) : await this.playlistItemService.search({});
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
+  @UseGuards(AuthenticationGuard, UserGuard)
+  @ApiBearerAuth()
+  @Get('popular')
+  @PlaylistItemGetResponse({ isArray: true })
+  async findPopular(@Res() res: Response, ) {
+    try {
+      const result = await this.playlistItemService.getPopular();
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 }

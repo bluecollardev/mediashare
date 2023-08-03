@@ -1,14 +1,13 @@
+import { handleErrorResponse, handleSuccessResponse } from '@mediashare/core/http/response';
 import { AuthenticationGuard } from '@nestjs-cognito/auth';
 import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { MEDIA_VISIBILITY } from '../../core/models';
 import { RouteTokens } from '../../core/constants';
-import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
 import { UserGuard } from '../../core/guards';
 import { MediaGetResponse, MediaPostResponse, MediaPutResponse, MediaShareResponse } from './media-item.decorator';
-import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor';
 import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
@@ -28,48 +27,22 @@ export class MediaItemController {
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: 'mediaId', type: String, required: true })
-  @Get(RouteTokens.mediaId)
-  @MediaGetResponse()
-  async findOne(@Param('mediaId') mediaId: string) {
-    const response = await this.mediaItemService.getById(mediaId);
-    if (!response) throw notFoundResponse('mediaItem', { args: { mediaId } });
-    return response;
-  }
-
-  @UseGuards(AuthenticationGuard, UserGuard)
-  @ApiBearerAuth()
-  @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
-  @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
-  @Get()
-  @MediaGetResponse({ isArray: true })
-  async findAll(@GetUser('_id') userId: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
-    const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
-    // Always search, we want to run the aggregate query in every case
-    return query || tags ? await this.mediaItemService.search({ userId, query, tags: parsedTags }) : await this.mediaItemService.getByUserId(userId);
-  }
-
-  @UseGuards(AuthenticationGuard, UserGuard)
-  @ApiBearerAuth()
-  @Get('popular')
-  @MediaGetResponse({ isArray: true })
-  async findPopular() {
-    return await this.mediaItemService.getPopular();
-  }
-
-  @UseGuards(AuthenticationGuard, UserGuard)
-  @ApiBearerAuth()
   @Post()
   @MediaPostResponse()
-  async create(@CreateDto() createMediaItemDto: CreateMediaItemDto, @GetUser('_id') createdBy: string) {
-    const mediaItem: Omit<MediaItem, '_id'> = {
-      isPlayable: false,
-      uri: '',
-      ...createMediaItemDto,
-      userId: createdBy,
-      createdBy: createdBy,
-    } as any;
-    return await this.mediaItemService.create({ ...mediaItem } as any);
+  async create(@Res() res: Response, @Body() createMediaItemDto: CreateMediaItemDto, @GetUser('_id') createdBy: string) {
+    try {
+      const mediaItem: Omit<MediaItem, '_id'> = {
+        isPlayable: false,
+        uri: '',
+        ...createMediaItemDto,
+        userId: createdBy,
+        createdBy: createdBy,
+      } as any;
+      const result = await this.mediaItemService.create({ ...mediaItem } as any);
+      return handleSuccessResponse(res, HttpStatus.CREATED, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   @UseGuards(AuthenticationGuard, UserGuard)
@@ -77,18 +50,26 @@ export class MediaItemController {
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @Put(RouteTokens.mediaId)
   @MediaPutResponse()
-  async update(@Param('mediaId') mediaId: string, @Body() updateMediaItemDto: UpdateMediaItemDto) {
-    return await this.mediaItemService.update(mediaId, updateMediaItemDto);
+  async update(@Res() res: Response, @Param('mediaId') mediaId: string, @Body() updateMediaItemDto: UpdateMediaItemDto) {
+    try {
+      const result = await this.mediaItemService.update(mediaId, updateMediaItemDto);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @Delete(RouteTokens.mediaId)
-  async remove(@Param('mediaId') mediaId: string) {
-    const deleted = await this.mediaItemService.remove(mediaId);
-    if (!deleted) throw notFoundResponse(mediaId);
-    return deleted;
+  async remove(@Res() res: Response, @Param('mediaId') mediaId: string) {
+    try {
+      const result = await this.mediaItemService.remove(mediaId);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 
   @UseGuards(AuthenticationGuard, UserGuard)
@@ -98,20 +79,67 @@ export class MediaItemController {
   @Post(`${RouteTokens.mediaId}/share/${RouteTokens.userId}`)
   @MediaShareResponse({ type: ShareItem })
   async share(
+    @Res() res: Response,
     @Param('mediaId') mediaId: string,
-    @Param(RouteTokens.userId) userId: string,
+    @Param('userId') userId: string,
     @GetUser('_id') createdBy: string,
-    @Res() response: Response
   ) {
-    const { title } = await this.mediaItemService.findOne(mediaId);
-    if (!title && !createdBy) return response.status(HttpStatus.NOT_FOUND);
+    try {
+      const { title } = await this.mediaItemService.findOne(mediaId);
+      if (!title && !createdBy) return res.status(HttpStatus.NOT_FOUND);
 
-    const shareItem = await this.shareItemService.createMediaShareItem({
-      createdBy,
-      userId,
-      mediaId,
-    });
-    response.status(HttpStatus.CREATED);
-    return response.send(shareItem);
+      const result = await this.shareItemService.createMediaShareItem({
+        createdBy,
+        userId,
+        mediaId,
+      });
+      return handleSuccessResponse(res, HttpStatus.CREATED, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
+  @UseGuards(AuthenticationGuard, UserGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'mediaId', type: String, required: true })
+  @Get(RouteTokens.mediaId)
+  @MediaGetResponse()
+  async findOne(@Res() res: Response, @Param('mediaId') mediaId: string) {
+    try {
+      const result = await this.mediaItemService.getById(mediaId);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
+  @UseGuards(AuthenticationGuard, UserGuard)
+  @ApiBearerAuth()
+  @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
+  @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
+  @Get()
+  @MediaGetResponse({ isArray: true })
+  async findAll(@Res() res: Response, @GetUser('_id') userId: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
+    try {
+      const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
+      // Always search, we want to run the aggregate query in every case
+      const result = query || tags ? await this.mediaItemService.search({ userId, query, tags: parsedTags }) : await this.mediaItemService.getByUserId(userId);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
+  @UseGuards(AuthenticationGuard, UserGuard)
+  @ApiBearerAuth()
+  @Get('popular')
+  @MediaGetResponse({ isArray: true })
+  async findPopular(@Res() res: Response) {
+    try {
+      const result = await this.mediaItemService.getPopular();
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
   }
 }
