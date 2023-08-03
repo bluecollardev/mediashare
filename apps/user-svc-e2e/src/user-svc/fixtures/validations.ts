@@ -54,4 +54,4 @@ export const allValidations = [
       "isLength": "lastName must be longer than or equal to 2 characters"
     }
   }
-]
+];

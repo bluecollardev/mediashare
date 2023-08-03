@@ -21,7 +21,8 @@
       "@mediashare/shared": ["libs/shared/src/index.ts"],
       "@mediashare/shared/*": ["libs/shared/src/lib/*"],
       "@mediashare/utility": ["libs/utility/src/index.ts"],
-      "@mediashare/user-svc/*": ["apps/user-svc/*"]
+      "@mediashare/user-svc/*": ["apps/user-svc/*"],
+      "@mediashare/media-svc/*": ["apps/media-svc/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

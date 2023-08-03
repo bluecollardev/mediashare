@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response, Request } from 'express';
-import { ObjectIdPipe } from '@mediashare/shared';
 import { handleErrorResponse, handleSuccessResponse } from '@mediashare/core/http/response';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -28,7 +27,6 @@ import { UserService } from './user.service';
 import { UserGetResponse, UserPostResponse } from './user.decorator';
 import { UserGuard } from './user.guard';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
-import { ObjectId } from 'mongodb';
 
 import { defaultImgUrl, defaultUserRole } from './user.constants';
 
@@ -109,7 +107,7 @@ export class UserController {
   @ApiBearerAuth()
   @Get()
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
-  async getCurrentUser(@Res() res: Response, @GetUser('_id') userId: ObjectId) {
+  async getCurrentUser(@Res() res: Response, @GetUser('_id') userId: string) {
     try {
       const result = await this.userService.findById(userId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -123,9 +121,23 @@ export class UserController {
   @ApiParam({ name: 'userId', type: String, required: true })
   @Get(':userId')
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
-  async getUser(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
+  async getUser(@Res() res: Response, @Param('userId') userId: string) {
     try {
       const result = await this.userService.findById(userId);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
+  @ApiParam({ name: 'sub', type: String, required: true })
+  @Get('sub/:sub')
+  @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
+  async getUserBySub(@Res() res: Response, @Param('sub') sub: string) {
+    try {
+      const result = await this.userService.findByQuery({ where: { sub } });
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
       return handleErrorResponse(res, error);
@@ -137,7 +149,7 @@ export class UserController {
   @ApiBody({ type: UpdateUserDto })
   @Put()
   @UserPostResponse({ type: UserDto })
-  async updateCurrentUser(@Res() res: Response, @GetUser('_id') userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+  async updateCurrentUser(@Res() res: Response, @GetUser('_id') userId: string, @Body() updateUserDto: UpdateUserDto) {
     try {
       const result = await this.userService.update(userId, updateUserDto);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -152,7 +164,7 @@ export class UserController {
   @ApiBody({ type: UpdateUserDto })
   @Put(':userId')
   @UserPostResponse({ type: UserDto })
-  async updateUser(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+  async updateUser(@Res() res: Response, @Param('userId') userId: string, @Body() updateUserDto: UpdateUserDto) {
     try {
       const result = await this.userService.update(userId, updateUserDto);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -164,7 +176,7 @@ export class UserController {
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Delete()
-  async deleteCurrentUser(@Res() res: Response, @GetUser('_id') userId: ObjectId) {
+  async deleteCurrentUser(@Res() res: Response, @GetUser('_id') userId: string) {
     try {
       const result = await this.userService.remove(userId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -177,7 +189,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiParam({ name: 'userId', type: String, required: true })
   @Delete(':userId')
-  async deleteUser(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
+  async deleteUser(@Res() res: Response, @Param('userId') userId: string) {
     try {
       const result = await this.userService.remove(userId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -222,7 +234,7 @@ export class UserController {
   @ApiBearerAuth()
   @Get('connections/:userId')
   @UserGetResponse({ type: UserDto, isArray: true }) // TODO: Use ProfileDto
-  async getUserConnections(@Res() res: Response, @Param('userId', ObjectIdPipe) userId: ObjectId) {
+  async getUserConnections(@Res() res: Response, @Param('userId') userId: string) {
     try {
       const userConnections = await this.userConnectionService.findConnections(userId);
       const userConnectionIds = userConnections.map((uc) => uc.connectionId);

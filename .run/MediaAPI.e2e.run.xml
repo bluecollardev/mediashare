@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MediaAPI.e2e" type="JavaScriptTestRunnerJest">
+    <node-interpreter value="$USER_HOME$/.nvm/versions/node/v16.14.2/bin/node" />
+    <node-options value="" />
+    <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+    <working-dir value="$PROJECT_DIR$/apps/media-svc-e2e" />
+    <envs>
+      <env name="COGNITO_USER_EMAIL" value="lucas@bluecollardev.com" />
+      <env name="COGNITO_USER_PASSWORD" value="Staging123!" />
+    </envs>
+    <scope-kind value="ALL" />
+    <method v="2" />
+  </configuration>
+</component>

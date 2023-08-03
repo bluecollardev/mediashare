@@ -1,41 +1,21 @@
 import { classes } from '@automapper/classes';
 import { createMapper, Mapper } from '@automapper/core';
+import { createDB } from '@mediashare/shared/test';
 import {
   createUserDtoToUserMappingFactory,
   updateUserDtoToUserMappingFactory,
   userToUserDtoMappingFactory
 } from '@mediashare/user-svc/src/app/modules/user/mappers/automapper.profile';
 import { randomUUID } from 'crypto';
-import { PinoLogger } from 'nestjs-pino';
-import { DataSource, MongoRepository } from 'typeorm';
-import { MongoConnectionOptions } from 'typeorm/driver/mongodb/MongoConnectionOptions';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UserDto } from './dto/user.dto';
-import { UserDataService, UserService } from './user.service';
-import { User } from './entities/user.entity';
 // import { mockLoggerFactory } from '@mediashare/core/factories/mock-logger.factory';
 import { stub } from 'jest-auto-stub';
+import { PinoLogger } from 'nestjs-pino';
 import { clone } from 'remeda';
-
-export async function createDB(entities) {
-  return new DataSource({
-    synchronize: false,
-    autoLoadEntities: false,
-    type: 'mongodb',
-    host: 'localhost',
-    port: 27017,
-    database: 'mediashare-test',
-    entities,
-    ssl: false,
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    logging: true
-  } as MongoConnectionOptions)
-}
-
-const throwValidationError = (errors) => {
-  throw new Error(`Validation errors detected: ${JSON.stringify(errors, null, 2)}`);
-}
+import { DataSource, MongoRepository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UserDto } from './dto/user.dto';
+import { User } from './entities/user.entity';
+import { UserDataService, UserService } from './user.service';
 
 const throwInvalidUserDtoError = () => {
   throw new Error(`Response was not a valid UserDto`);

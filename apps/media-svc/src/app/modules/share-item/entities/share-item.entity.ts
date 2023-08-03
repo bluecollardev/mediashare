@@ -1,0 +1,27 @@
+import { AutoMap } from '@automapper/classes';
+import { AutoMapOptions } from '@automapper/classes/lib/automap';
+import { Column, Entity, Index, ObjectIdColumn } from 'typeorm';
+import { ObjectId } from 'mongodb';
+import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
+
+@Entity('share_item')
+export class ShareItem extends ApiBaseEntity {
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  @ObjectIdColumn({ name: 'userId', nullable: false, unique: false })
+  @Index('userId', { unique: false })
+  userId: ObjectId;
+
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  @ObjectIdColumn({ name: 'playlistId', nullable: true, unique: false })
+  @Index('playlistId', { unique: false })
+  playlistId: ObjectId;
+
+  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
+  @ObjectIdColumn({ name: 'mediaId', nullable: true, unique: false })
+  @Index('mediaId', { unique: false })
+  mediaId: ObjectId;
+
+  @AutoMap()
+  @Column()
+  read: boolean;
+}

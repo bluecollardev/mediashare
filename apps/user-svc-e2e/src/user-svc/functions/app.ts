@@ -3,6 +3,7 @@
 import { classes } from '@automapper/classes';
 import { createMap, createMapper, Dictionary, forMember, ignore, Mapper, ModelIdentifier } from '@automapper/core';
 import { AutomapperModule } from '@automapper/nestjs';
+import { createDB } from '@mediashare/shared/test';
 import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { CognitoModuleOptions } from '@nestjs-cognito/core';
 import { CognitoTestingModule } from '@nestjs-cognito/testing';
@@ -13,13 +14,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import bodyParser from 'body-parser';
 import { LoggerModule } from 'nestjs-pino';
 import { configureOpenApi } from '@mediashare/shared';
-import { AppController } from '@mediashare/user-svc/src/app/app.controller';
-import { AppService } from '@mediashare/user-svc/src/app/app.service';
 import { UserConnection } from '@mediashare/user-svc/src/app/modules/user-connection/entities/user-connection.entity';
 import { UserConnectionModule } from '@mediashare/user-svc/src/app/modules/user-connection/user-connection.module';
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 import { UserModule } from '@mediashare/user-svc/src/app/modules/user/user.module';
-import { createDB } from '@mediashare/user-svc/src/app/modules/user/user.service.spec';
 
 export const getBaseUrl = async (app: INestApplication, globalPrefix) =>
   (await app.getUrl()).replace('[::1]', 'localhost') + `/${globalPrefix}`;
