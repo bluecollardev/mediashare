@@ -1,7 +1,7 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
-import { ApiString } from '@mediashare/shared';
-import { IsIn, IsInt, IsOptional, IsString } from 'class-validator';
+import { ApiLongString, ApiString, ApiTextString } from '@mediashare/shared';
+import { IsBoolean, IsDefined, IsIn, IsInt, IsOptional, IsString } from 'class-validator';
 import { MEDIA_VISIBILITY, MediaVisibilityType } from '../../../core/models';
 
 export class CreatePlaylistItemDto {
@@ -15,11 +15,54 @@ export class CreatePlaylistItemDto {
   @ApiString({ required: true })
   mediaId: string;
 
+  @IsDefined()
+  @AutoMap()
+  @ApiString({ required: true })
+  userId: string;
+
+  @IsOptional()
+  @AutoMap()
+  @ApiString({ required: true })
+  createdBy?: string;
+
+  @IsString()
+  @AutoMap()
+  @ApiString({ required: true })
+  title: string;
+
+  @IsOptional()
+  @IsString()
+  @AutoMap()
+  @ApiLongString({ required: false })
+  summary?: string;
+
+  @IsString()
+  @AutoMap()
+  @ApiTextString({ required: true })
+  description: string;
+
+  @IsString()
+  @AutoMap()
+  @ApiLongString({ required: true })
+  uri: string;
+
+  @IsOptional()
+  @IsString()
+  @AutoMap()
+  @ApiLongString({ required: false })
+  imageSrc?: string;
+
   @IsOptional()
   @IsInt()
   @AutoMap()
   @ApiProperty({ type: 'number', required: false })
   sortIndex?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  @AutoMap()
+  @ApiProperty({ required: false })
+  isPlayable?: boolean;
 
   @IsIn(MEDIA_VISIBILITY)
   @AutoMap()

@@ -134,21 +134,11 @@ export class PlaylistItemDataService extends FilterableDataService<PlaylistItem,
 
   protected buildFields() {
     return [
-      { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'author' } },
+      // { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'author' } },
       // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'playlistItemId', as: 'shareItems' } },
       // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'playlistItemId', as: 'viewItems' } },
       // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'playlistItemId', as: 'likeItems' } },
-      { $unwind: { path: '$author' } },
-      {
-        $addFields: {
-          /* authorProfile: {
-            authorId: '$author._id',
-            authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
-            authorUsername: '$author.username',
-            authorImage: '$author.imageSrc',
-          }, */
-        },
-      },
+      // { $unwind: { path: '$author' } },
     ];
   }
 
@@ -160,10 +150,10 @@ export class PlaylistItemDataService extends FilterableDataService<PlaylistItem,
             {
               _id: '$_id',
               playlistId: '$playlistId',
-              mediaId: '$mediaId',
-              userId: '$author._id',
-              username: '$author.username',
-              author: '$author',
+              // mediaId: '$mediaId',
+              // userId: '$author._id',
+              // username: '$author.username',
+              // author: '$author',
               // authorProfile: '$authorProfile',
               title: '$title',
               description: '$description',
@@ -176,7 +166,7 @@ export class PlaylistItemDataService extends FilterableDataService<PlaylistItem,
               // likesCount: { $size: '$likeItems' },
               // viewCount: { $size: '$viewItems' },
               // viewCount: { $size: '$viewItems' },
-              createdBy: '$author._id',
+              // createdBy: '$author._id',
               createdAt: '$createdAt',
               updatedDate: '$updatedDate',
             },

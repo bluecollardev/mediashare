@@ -6,6 +6,7 @@ import { ShareItemDataService, ShareItemService } from '../share-item/share-item
 import { PlaylistDataService, PlaylistService } from './playlist.service';
 import { PlaylistController } from './playlist.controller';
 import { Playlist } from './entities/playlist.entity';
+import { PlaylistMapping } from './mappers/automapper.profile';
 import { PlaylistItemDataService, PlaylistItemService } from '../playlist-item/playlist-item.service';
 import { PlaylistItem } from '../playlist-item/entities/playlist-item.entity';
 import { MediaItem } from '../media-item/entities/media-item.entity';
@@ -16,7 +17,7 @@ import { MediaItem } from '../media-item/entities/media-item.entity';
     ShareItemModule
   ],
   controllers: [PlaylistController],
-  providers: [PlaylistService, PlaylistDataService, PlaylistItemService, PlaylistItemDataService, ShareItemService, ShareItemDataService],
+  providers: [PlaylistService, PlaylistDataService, PlaylistMapping, PlaylistItemService, PlaylistItemDataService, ShareItemService, ShareItemDataService],
   exports: [PlaylistService],
 })
 export class PlaylistModule {}

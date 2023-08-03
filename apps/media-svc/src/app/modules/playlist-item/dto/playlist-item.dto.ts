@@ -22,6 +22,11 @@ export class PlaylistItemDto extends ApiBaseDto {
   @ApiString({ required: true })
   userId: string;
 
+  @IsOptional()
+  @AutoMap()
+  @ApiString({ required: true })
+  createdBy?: string;
+
   @IsString()
   @AutoMap()
   @ApiString({ required: true })

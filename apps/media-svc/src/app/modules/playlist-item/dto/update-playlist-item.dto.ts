@@ -21,6 +21,11 @@ export class UpdatePlaylistItemDto extends ApiBaseDto {
   @ApiString({ required: true })
   userId: string;
 
+  @IsOptional()
+  @AutoMap()
+  @ApiString({ required: true })
+  createdBy?: string;
+
   @IsString()
   @AutoMap()
   @ApiString({ required: true })
@@ -60,9 +65,11 @@ export class UpdatePlaylistItemDto extends ApiBaseDto {
   @ApiProperty({ required: false })
   isPlayable?: boolean;
 
+  @IsOptional()
   @IsIn(MEDIA_VISIBILITY)
   @AutoMap()
-  @ApiProperty({ enum: MEDIA_VISIBILITY, name: 'visibility', enumName: 'MediaVisibilityType', required: true })
+  // TODO: Make this required!
+  @ApiProperty({ enum: MEDIA_VISIBILITY, name: 'visibility', enumName: 'MediaVisibilityType', required: false })
   visibility: MediaVisibilityType;
 
   // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })

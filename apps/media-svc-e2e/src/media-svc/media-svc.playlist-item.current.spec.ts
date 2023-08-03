@@ -33,7 +33,7 @@ import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.en
 
 const userApiBaseUrl = `http://localhost:3000/api`;
 
-describe('PlaylistAPI.e2e', () => {
+describe('PlaylistItemAPI.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
 
