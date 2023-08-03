@@ -21,6 +21,7 @@ export const createMediaItemDtoToMediaItemMappingFactory = (mapper) => createMap
   CreateMediaItemDto,
   MediaItem,
   forMember((dest: MediaItem) => dest._id, ignore()),
+  forMember((dest: MediaItem) => dest.userId, convertUsing(stringToObjectIdConverter as never, (source: CreateMediaItemDto) => source.userId)),
 );
 
 export const updateMediaItemDtoToMediaItemMappingFactory = (mapper) => createMap(

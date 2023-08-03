@@ -4,8 +4,8 @@ import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { RouteTokens } from '../../core/constants';
 import { MEDIA_VISIBILITY } from '../../core/models';
-import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
+import { UserGuard } from '../../core/guards';
 import { PlaylistItemGetResponse, PlaylistItemPostResponse, PlaylistItemPutResponse, PlaylistItemShareResponse } from './playlist-item.decorator';
 import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor';
 import { PlaylistItemService } from './playlist-item.service';
@@ -30,18 +30,18 @@ export class PlaylistItemController {
     return MEDIA_VISIBILITY;
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.playlistItemId, type: String, required: true })
+  @ApiParam({ name: 'playlistItemId', type: String, required: true })
   @Get(RouteTokens.playlistItemId)
   @PlaylistItemGetResponse()
-  async findOne(@Param(RouteTokens.playlistItemId) playlistItemId: string) {
+  async findOne(@Param('playlistItemId') playlistItemId: string) {
     const response = await this.playlistItemService.getById(playlistItemId);
     if (!response) throw notFoundResponse('playlistItem', { args: { playlistItemId } });
     return response;
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
@@ -53,7 +53,7 @@ export class PlaylistItemController {
     return query || tags ? await this.playlistItemService.search({ query, tags: parsedTags }) : await this.playlistItemService.search({});
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Get('popular')
   @PlaylistItemGetResponse({ isArray: true })
@@ -61,11 +61,11 @@ export class PlaylistItemController {
     return await this.playlistItemService.getPopular();
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Post()
   @PlaylistItemPostResponse()
-  async create(@CreateDto() createPlaylistItemDto: CreatePlaylistItemDto, @GetUser('_id') createdBy) {
+  async create(@Body() createPlaylistItemDto: CreatePlaylistItemDto, @GetUser('_id') createdBy) {
     const playlistId = createPlaylistItemDto?.playlistId;
     const mediaId = createPlaylistItemDto?.mediaId;
     const sortIndex = createPlaylistItemDto?.sortIndex;
@@ -84,33 +84,33 @@ export class PlaylistItemController {
     return await this.playlistItemService.create({ ...playlistItem } as any);
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.playlistItemId, type: String, required: true })
+  @ApiParam({ name: 'playlistItemId', type: String, required: true })
   @Put(RouteTokens.playlistItemId)
   @PlaylistItemPutResponse()
-  async update(@Param(RouteTokens.playlistItemId) playlistItemId: string, @Body() updatePlaylistItemDto: UpdatePlaylistItemDto) {
+  async update(@Param('playlistItemId') playlistItemId: string, @Body() updatePlaylistItemDto: UpdatePlaylistItemDto) {
     return await this.playlistItemService.update(playlistItemId, updatePlaylistItemDto);
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.playlistItemId, type: String, required: true })
+  @ApiParam({ name: 'playlistItemId', type: String, required: true })
   @Delete(RouteTokens.playlistItemId)
-  async remove(@Param(RouteTokens.playlistItemId) playlistItemId: string) {
+  async remove(@Param('playlistItemId') playlistItemId: string) {
     const deleted = await this.playlistItemService.remove(playlistItemId);
     if (!deleted) throw notFoundResponse(playlistItemId);
     return deleted;
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.playlistItemId, type: String, required: true })
+  @ApiParam({ name: 'playlistItemId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
   @Post(`${RouteTokens.playlistItemId}/share/${RouteTokens.userId}`)
   @PlaylistItemShareResponse({ type: ShareItem })
   async share(
-    @Param(RouteTokens.playlistItemId) playlistItemId: string,
+    @Param('playlistItemId') playlistItemId: string,
     @Param(RouteTokens.userId) userId: string,
     @GetUser('_id') createdBy: string,
     @Res() response: Response

@@ -133,19 +133,19 @@ export class MediaItemDataService extends FilterableDataService<MediaItem, Mongo
 
   protected buildFields() {
     return [
-      { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'author' } },
+      { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'author' } },
       // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'mediaId', as: 'shareItems' } },
       // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'mediaId', as: 'viewItems' } },
       // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'mediaId', as: 'likeItems' } },
       { $unwind: { path: '$author' } },
       {
         $addFields: {
-          /* authorProfile: {
+          authorProfile: {
             authorId: '$author._id',
             authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
             authorUsername: '$author.username',
             authorImage: '$author.imageSrc',
-          }, */
+          },
         },
       },
     ];
@@ -161,7 +161,7 @@ export class MediaItemDataService extends FilterableDataService<MediaItem, Mongo
               userId: '$author._id',
               username: '$author.username',
               author: '$author',
-              // authorProfile: '$authorProfile',
+              authorProfile: '$authorProfile',
               title: '$title',
               description: '$description',
               uri: '$uri',

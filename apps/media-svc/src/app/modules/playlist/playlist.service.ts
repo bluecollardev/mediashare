@@ -141,21 +141,21 @@ export class PlaylistDataService extends FilterableDataService<Playlist, MongoRe
 
   protected buildFields() {
     return [
-      { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'author' } },
+      { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'author' } },
       { $lookup: { from: 'media_item', localField: 'mediaIds', foreignField: '_id', as: 'mediaItems' } },
       { $lookup: { from: 'playlist_item', localField: '_id', foreignField: 'playlistId', as: 'playlistItems' } },
-      { $lookup: { from: 'share_item', localField: '_id', foreignField: 'playlistId', as: 'shareItems' } },
-      { $lookup: { from: 'view_item', localField: '_id', foreignField: 'playlistId', as: 'viewItems' } },
-      { $lookup: { from: 'like_item', localField: '_id', foreignField: 'playlistId', as: 'likeItems' } },
+      // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'playlistId', as: 'shareItems' } },
+      // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'playlistId', as: 'viewItems' } },
+      // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'playlistId', as: 'likeItems' } },
       { $unwind: { path: '$author' } },
       {
         $addFields: {
-          /* authorProfile: {
+          authorProfile: {
             authorId: '$author._id',
             authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
             authorUsername: '$author.username',
             authorImage: '$author.imageSrc',
-          }, */
+          },
         },
       },
     ];
@@ -176,11 +176,11 @@ export class PlaylistDataService extends FilterableDataService<Playlist, MongoRe
               imageSrc: '$imageSrc',
               visibility: '$visibility',
               tags: '$tags',
-              mediaItems: '$mediaItems',
-              playlistItems: '$playlistItems',
-              shareCount: { $size: '$shareItems' },
-              likesCount: { $size: '$likeItems' },
-              viewCount: { $size: '$viewItems' },
+              // mediaItems: '$mediaItems',
+              // playlistItems: '$playlistItems',
+              // shareCount: { $size: '$shareItems' },
+              // likesCount: { $size: '$likeItems' },
+              // viewCount: { $size: '$viewItems' },
               createdBy: '$author._id',
               createdAt: '$createdAt',
               updatedDate: '$updatedDate',

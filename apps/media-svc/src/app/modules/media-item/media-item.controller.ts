@@ -28,10 +28,10 @@ export class MediaItemController {
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
+  @ApiParam({ name: 'mediaId', type: String, required: true })
   @Get(RouteTokens.mediaId)
   @MediaGetResponse()
-  async findOne(@Param(RouteTokens.mediaId) mediaId: string) {
+  async findOne(@Param('mediaId') mediaId: string) {
     const response = await this.mediaItemService.getById(mediaId);
     if (!response) throw notFoundResponse('mediaItem', { args: { mediaId } });
     return response;
@@ -74,18 +74,18 @@ export class MediaItemController {
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
+  @ApiParam({ name: 'mediaId', type: String, required: true })
   @Put(RouteTokens.mediaId)
   @MediaPutResponse()
-  async update(@Param(RouteTokens.mediaId) mediaId: string, @Body() updateMediaItemDto: UpdateMediaItemDto) {
+  async update(@Param('mediaId') mediaId: string, @Body() updateMediaItemDto: UpdateMediaItemDto) {
     return await this.mediaItemService.update(mediaId, updateMediaItemDto);
   }
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
+  @ApiParam({ name: 'mediaId', type: String, required: true })
   @Delete(RouteTokens.mediaId)
-  async remove(@Param(RouteTokens.mediaId) mediaId: string) {
+  async remove(@Param('mediaId') mediaId: string) {
     const deleted = await this.mediaItemService.remove(mediaId);
     if (!deleted) throw notFoundResponse(mediaId);
     return deleted;
@@ -93,12 +93,12 @@ export class MediaItemController {
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
+  @ApiParam({ name: 'mediaId', type: String, required: true })
   @ApiParam({ name: RouteTokens.userId, type: String, required: true })
   @Post(`${RouteTokens.mediaId}/share/${RouteTokens.userId}`)
   @MediaShareResponse({ type: ShareItem })
   async share(
-    @Param(RouteTokens.mediaId) mediaId: string,
+    @Param('mediaId') mediaId: string,
     @Param(RouteTokens.userId) userId: string,
     @GetUser('_id') createdBy: string,
     @Res() response: Response

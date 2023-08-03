@@ -87,7 +87,7 @@ describe('PlaylistAPI.e2e', () => {
       testUserId = getTestUserId(testUser);
 
       const testPlaylistData = {
-        userId: new ObjectId().toHexString(),
+        userId: testUserId,
         title: 'Test Playlist',
         description: 'Test playlist description',
         mediaIds: [],
@@ -144,7 +144,7 @@ describe('PlaylistAPI.e2e', () => {
       testUserId = getTestUserId(testUser);
 
       const testPlaylistData = {
-        userId: new ObjectId().toHexString(),
+        userId: testUserId,
         title: 'Test Playlist',
         description: 'Test playlist description',
         mediaIds: [],
@@ -216,7 +216,7 @@ describe('PlaylistAPI.e2e', () => {
       testUserId = getTestUserId(testUser);
 
       const testPlaylistData = {
-        userId: new ObjectId().toHexString(),
+        userId: testUserId,
         title: 'Test Playlist',
         description: 'Test playlist description',
         mediaIds: [],

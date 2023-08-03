@@ -90,7 +90,7 @@ describe('MediaItemAPI.e2e', () => {
 
       const testMediaItemData = {
         key: 'test-key',
-        userId: new ObjectId().toHexString(),
+        userId: testUserId,
         title: 'Test Media',
         description: 'Test media description',
         uri: 'https://www.example.com',
@@ -148,7 +148,7 @@ describe('MediaItemAPI.e2e', () => {
 
       const testMediaItemData = {
         key: 'test-key',
-        userId: new ObjectId().toHexString(),
+        userId: testUserId,
         title: 'Test Media',
         description: 'Test media description',
         uri: 'https://www.example.com',
@@ -221,7 +221,7 @@ describe('MediaItemAPI.e2e', () => {
 
       const testMediaItemData = {
         key: 'test-key',
-        userId: new ObjectId().toHexString(),
+        userId: testUserId,
         title: 'Test Media',
         description: 'Test media description',
         uri: 'https://www.example.com',

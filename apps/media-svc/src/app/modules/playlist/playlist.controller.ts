@@ -28,9 +28,9 @@ export class PlaylistController {
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Get(RouteTokens.playlistId)
-  @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
+  @ApiParam({ name: 'playlistId', type: String, required: true, example: '123' })
   @PlaylistGetResponse()
-  async findOne(@Param(RouteTokens.playlistId) playlistId: string) {
+  async findOne(@Param('playlistId') playlistId: string) {
     const response = await this.playlistService.getById(playlistId);
     if (!response) throw notFoundResponse('playlist', { args: { playlistId } });
     return response;
@@ -60,33 +60,32 @@ export class PlaylistController {
     });
   }
 
-
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
+  @ApiParam({ name: 'playlistId', type: String, required: true, example: '123' })
   @ApiBody({ type: UpdatePlaylistDto })
   @Put(RouteTokens.playlistId)
   @PlaylistPutResponse()
-  async update(@Param(RouteTokens.playlistId) playlistId: string, @GetUser('_id') userId: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
+  async update(@Param('playlistId') playlistId: string, @GetUser('_id') userId: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
     return await this.playlistService.update(playlistId, updatePlaylistDto);
   }
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Delete(RouteTokens.playlistId)
-  @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
-  async remove(@Param(RouteTokens.playlistId) playlistId: string) {
+  @ApiParam({ name: 'playlistId', type: String, required: true, example: '123' })
+  async remove(@Param('playlistId') playlistId: string) {
     return await this.playlistService.remove(playlistId);
   }
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.playlistId, type: String, required: true })
+  @ApiParam({ name: 'playlistId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
   @Post(`${RouteTokens.playlistId}/share/${RouteTokens.userId}`)
   @PlaylistShareResponse({ type: ShareItem, isArray: true })
   async share(
-    @Param(RouteTokens.playlistId) playlistId: string,
+    @Param('playlistId') playlistId: string,
     @Param(RouteTokens.userId) userId: string,
     @GetUser('_id') createdBy: string,
     @Res() response: Response

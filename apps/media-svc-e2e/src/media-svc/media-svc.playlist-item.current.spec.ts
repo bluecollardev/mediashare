@@ -90,7 +90,9 @@ describe('PlaylistAPI.e2e', () => {
 
       const testPlaylistItemData = {
         key: 'test-key',
-        userId: new ObjectId().toHexString(),
+        playlistId: new ObjectId().toHexString(),
+        mediaId: new ObjectId().toHexString(),
+        userId: testUserId,
         title: 'Test Media',
         description: 'Test media description',
         uri: 'https://www.example.com',
@@ -148,7 +150,9 @@ describe('PlaylistAPI.e2e', () => {
 
       const testPlaylistItemData = {
         key: 'test-key',
-        userId: new ObjectId().toHexString(),
+        playlistId: new ObjectId().toHexString(),
+        mediaId: new ObjectId().toHexString(),
+        userId: testUserId,
         title: 'Test Media',
         description: 'Test media description',
         uri: 'https://www.example.com',
@@ -221,7 +225,9 @@ describe('PlaylistAPI.e2e', () => {
 
       const testPlaylistItemData = {
         key: 'test-key',
-        userId: new ObjectId().toHexString(),
+        playlistId: new ObjectId().toHexString(),
+        mediaId: new ObjectId().toHexString(),
+        userId: testUserId,
         title: 'Test Media',
         description: 'Test media description',
         uri: 'https://www.example.com',
