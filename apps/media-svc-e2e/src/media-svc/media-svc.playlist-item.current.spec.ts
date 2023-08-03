@@ -1,10 +1,7 @@
 /* Ignore module boundaries, it's just our test scaffolding */
-
-import { Playlist } from '@mediashare/media-svc/src/app/modules/playlist/entities/playlist.entity';
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import { ObjectId } from 'mongodb';
 import { clone } from 'remeda';
 import { INestApplication } from '@nestjs/common';
 
@@ -27,6 +24,7 @@ import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestPlaylistItem, createPlaylistItem as createPlaylistItemFunction, getTestPlaylistItemId } from './functions/playlist-item';
 
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
+import { Playlist } from '@mediashare/media-svc/src/app/modules/playlist/entities/playlist.entity';
 import { UpdatePlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/update-playlist-item.dto';
 import { PlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/playlist-item.dto';
 import { PlaylistItem } from '@mediashare/media-svc/src/app/modules/playlist-item/entities/playlist-item.entity';
