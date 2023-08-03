@@ -1,4 +1,5 @@
-import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
+import { AuthenticationGuard } from '@nestjs-cognito/auth';
+import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { MEDIA_VISIBILITY } from '../../core/models';
@@ -24,8 +25,10 @@ export class MediaItemController {
     return MEDIA_VISIBILITY;
   }
 
-  @Get(RouteTokens.mediaId)
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
+  @Get(RouteTokens.mediaId)
   @MediaGetResponse()
   async findOne(@Param(RouteTokens.mediaId) mediaId: string) {
     const response = await this.mediaItemService.getById(mediaId);
@@ -33,9 +36,11 @@ export class MediaItemController {
     return response;
   }
 
-  @Get()
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
+  @Get()
   @MediaGetResponse({ isArray: true })
   async findAll(@GetUser('_id') userId: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
@@ -43,12 +48,15 @@ export class MediaItemController {
     return query || tags ? await this.mediaItemService.search({ userId, query, tags: parsedTags }) : await this.mediaItemService.getByUserId(userId);
   }
 
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
   @Get('popular')
   @MediaGetResponse({ isArray: true })
   async findPopular() {
     return await this.mediaItemService.getPopular();
   }
 
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Post()
   @MediaPostResponse()
@@ -63,26 +71,30 @@ export class MediaItemController {
     return await this.mediaItemService.create({ ...mediaItem } as any);
   }
 
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
-  @Put(RouteTokens.mediaId)
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
+  @Put(RouteTokens.mediaId)
   @MediaPutResponse()
   async update(@Param(RouteTokens.mediaId) mediaId: string, @Body() updateMediaItemDto: UpdateMediaItemDto) {
     return await this.mediaItemService.update(mediaId, updateMediaItemDto);
   }
 
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
-  @Delete(RouteTokens.mediaId)
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
+  @Delete(RouteTokens.mediaId)
   async remove(@Param(RouteTokens.mediaId) mediaId: string) {
     const deleted = await this.mediaItemService.remove(mediaId);
     if (!deleted) throw notFoundResponse(mediaId);
     return deleted;
   }
 
-  @Post(`${RouteTokens.mediaId}/share/${RouteTokens.userId}`)
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.mediaId, type: String, required: true })
   @ApiParam({ name: RouteTokens.userId, type: String, required: true })
+  @Post(`${RouteTokens.mediaId}/share/${RouteTokens.userId}`)
   @MediaShareResponse({ type: ShareItem })
   async share(
     @Param(RouteTokens.mediaId) mediaId: string,

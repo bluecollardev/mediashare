@@ -1,3 +1,4 @@
+import { AuthenticationGuard } from '@nestjs-cognito/auth';
 import { Controller, Param, HttpCode, UseGuards, HttpStatus, Get, Delete, Post, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
@@ -15,6 +16,7 @@ import { UserGuard } from '@mediashare/core/guards/user.guard';
 export class ShareItemController {
   constructor(private readonly shareItemService: ShareItemService) {}
 
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-by-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
@@ -22,6 +24,7 @@ export class ShareItemController {
     return await this.shareItemService.getItemsSharedByUser(userId);
   }
 
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-by-user/media-items')
   @ShareItemGetResponse({ type: MediaItemDto, isArray: true })
@@ -29,6 +32,7 @@ export class ShareItemController {
     return await this.shareItemService.getMediaItemsSharedByUser(userId);
   }
 
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-by-user/playlists')
   @ShareItemGetResponse({ type: PlaylistDto, isArray: true })
@@ -36,6 +40,7 @@ export class ShareItemController {
     return await this.shareItemService.getPlaylistsSharedByUser(userId);
   }
 
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-with-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: false })
@@ -43,6 +48,7 @@ export class ShareItemController {
     return await this.shareItemService.getItemsSharedWithUser(userId);
   }
 
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-with-user/media-items')
   @ShareItemGetResponse({ type: MediaItemDto, isArray: true })
@@ -50,6 +56,7 @@ export class ShareItemController {
     return await this.shareItemService.getMediaItemsSharedWithUser(userId);
   }
 
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-with-user/playlists')
   @ShareItemGetResponse({ type: PlaylistDto, isArray: true })
@@ -57,30 +64,36 @@ export class ShareItemController {
     return await this.shareItemService.getPlaylistsSharedWithUser(userId);
   }
 
-  @Get(RouteTokens.shareId)
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.shareId, type: String, required: true })
+  @Get(RouteTokens.shareId)
   @ShareItemGetResponse()
   async findShareItem(@Param(RouteTokens.shareId) shareId: string) {
     return await this.shareItemService.findOne(shareId);
   }
 
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(UserGuard)
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
-  @Post(`read/${RouteTokens.shareId}`) // TODO: Why is this a POST? Shouldn't we be using ShareItemPostResponse as well?
   @ApiParam({ name: RouteTokens.shareId, type: String, required: true })
   @ApiResponse({ type: ShareItem, status: 200 })
+  @Post(`read/${RouteTokens.shareId}`) // TODO: Why is this a POST? Shouldn't we be using ShareItemPostResponse as well?
+  @HttpCode(HttpStatus.OK)
   async readShareItem(@Param(RouteTokens.shareId) shareId: string) {
     return await this.shareItemService.update(shareId, { read: true });
   }
 
-  @Delete(RouteTokens.shareId)
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.shareId, type: String, required: true })
+  @Delete(RouteTokens.shareId)
   @ShareItemGetResponse()
   async removeShareItem(@Param(RouteTokens.shareId) shareId: string) {
     return await this.shareItemService.remove(shareId);
   }
 
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
   @Post('unshare-all-items')
   @ApiBody({ type: () => ShareItemsDto })
   async removeAllShareItems(@Body() shareItemsDto: ShareItemsDto) {
@@ -88,6 +101,8 @@ export class ShareItemController {
   }
 
   // TODO: Fix me!
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
   @Post('unshare-all-by-user-id')
   @ApiBody({ type: () => ShareItemsByUserIdDto })
   async removeShareItemAllByUserId(@Body() shareItemsByUserIdDto: ShareItemsByUserIdDto) {

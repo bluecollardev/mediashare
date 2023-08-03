@@ -1,9 +1,9 @@
-import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus } from '@nestjs/common';
+import { AuthenticationGuard } from '@nestjs-cognito/auth';
+import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { RouteTokens } from '../../core/constants';
 import { PLAYLIST_VISIBILITY } from '../../core/models';
-import { CreateDto } from '../../core/decorators/create-dto.decorator';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
 import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse, PlaylistShareResponse } from './playlist.decorator';
 import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor';
@@ -24,8 +24,9 @@ export class PlaylistController {
     return { visibilities: PLAYLIST_VISIBILITY };
   }
 
-  @Get(RouteTokens.playlistId)
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
+  @Get(RouteTokens.playlistId)
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
   @PlaylistGetResponse()
   async findOne(@Param(RouteTokens.playlistId) playlistId: string) {
@@ -34,49 +35,54 @@ export class PlaylistController {
     return response;
   }
 
-  @Get()
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
+  @Get()
   @PlaylistGetResponse({ type: PlaylistDto, isArray: true })
   async findAll(@GetUser('_id') userId: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
     const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
     return query || tags ? await this.playlistService.search({ userId, query, tags: parsedTags }) : await this.playlistService.getByUserId(userId);
   }
 
-  @Post()
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @ApiBody({ type: CreatePlaylistDto })
+  @Post()
   @PlaylistPostResponse({ type: PlaylistDto })
-  // async create(@Body() createPlaylistDto: CreatePlaylistDto, @GetUser('_id') userId: string) {
-  async create(@Body() createPlaylistDto: CreatePlaylistDto) {
+  async create(@Body() createPlaylistDto: CreatePlaylistDto, @GetUser('_id') userId: string) {
     return await this.playlistService.create({
       ...createPlaylistDto,
-      // createdBy: userId,
-      createdBy: 'testuser',
+      createdBy: userId,
       cloneOf: createPlaylistDto?.cloneOf ? createPlaylistDto.cloneOf : undefined,
     });
   }
 
-  @Put(RouteTokens.playlistId)
+
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
   @ApiBody({ type: UpdatePlaylistDto })
+  @Put(RouteTokens.playlistId)
   @PlaylistPutResponse()
   async update(@Param(RouteTokens.playlistId) playlistId: string, @GetUser('_id') userId: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
     return await this.playlistService.update(playlistId, updatePlaylistDto);
   }
 
-  @Delete(RouteTokens.playlistId)
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
+  @Delete(RouteTokens.playlistId)
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
   async remove(@Param(RouteTokens.playlistId) playlistId: string) {
     return await this.playlistService.remove(playlistId);
   }
 
-  @Post(`${RouteTokens.playlistId}/share/${RouteTokens.userId}`)
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
+  @Post(`${RouteTokens.playlistId}/share/${RouteTokens.userId}`)
   @PlaylistShareResponse({ type: ShareItem, isArray: true })
   async share(
     @Param(RouteTokens.playlistId) playlistId: string,
