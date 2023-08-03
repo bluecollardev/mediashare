@@ -118,7 +118,7 @@ describe('UserController.crud', () => {
       }
     });
 
-    const result = await controller.getUser(res, new ObjectId());
+    const result = await controller.getUser(res, 'abc');
     expect(result).toBeDefined();
     console.log(result);
   });
@@ -150,7 +150,7 @@ describe('UserController.crud', () => {
       updatedDate: new Date('2023-06-28T08:39:13.264Z'),
     } as UpdateUserDto;
 
-    const result = await controller.updateUser(res, new ObjectId('649bf1b109d28ad4892f1548'), data);
+    const result = await controller.updateUser(res, '649bf1b109d28ad4892f1548', data);
     expect(result).toBeDefined();
     console.log(result);
   });
