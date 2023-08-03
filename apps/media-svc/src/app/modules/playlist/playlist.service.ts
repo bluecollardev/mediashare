@@ -141,14 +141,14 @@ export class PlaylistDataService extends FilterableDataService<Playlist, MongoRe
 
   protected buildFields() {
     return [
-      { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'author' } },
-      { $lookup: { from: 'media_item', localField: 'mediaIds', foreignField: '_id', as: 'mediaItems' } },
-      { $lookup: { from: 'playlist_item', localField: '_id', foreignField: 'playlistId', as: 'playlistItems' } },
+      // { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'author' } },
+      // { $lookup: { from: 'media_item', localField: 'mediaIds', foreignField: '_id', as: 'mediaItems' } },
+      // { $lookup: { from: 'playlist_item', localField: '_id', foreignField: 'playlistId', as: 'playlistItems' } },
       // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'playlistId', as: 'shareItems' } },
       // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'playlistId', as: 'viewItems' } },
       // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'playlistId', as: 'likeItems' } },
-      { $unwind: { path: '$author' } },
-      {
+      // { $unwind: { path: '$author' } },
+      /* {
         $addFields: {
           authorProfile: {
             authorId: '$author._id',
@@ -157,7 +157,7 @@ export class PlaylistDataService extends FilterableDataService<Playlist, MongoRe
             authorImage: '$author.imageSrc',
           },
         },
-      },
+      }, */
     ];
   }
 
@@ -168,8 +168,8 @@ export class PlaylistDataService extends FilterableDataService<Playlist, MongoRe
           $mergeObjects: [
             {
               _id: '$_id',
-              userId: '$author._id',
-              username: '$author.username',
+              // userId: '$author._id',
+              // username: '$author.username',
               // authorProfile: '$authorProfile',
               title: '$title',
               description: '$description',
@@ -181,7 +181,7 @@ export class PlaylistDataService extends FilterableDataService<Playlist, MongoRe
               // shareCount: { $size: '$shareItems' },
               // likesCount: { $size: '$likeItems' },
               // viewCount: { $size: '$viewItems' },
-              createdBy: '$author._id',
+              // createdBy: '$author._id',
               createdAt: '$createdAt',
               updatedDate: '$updatedDate',
             },
