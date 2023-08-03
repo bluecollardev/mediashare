@@ -7,12 +7,19 @@ import { clone } from 'remeda';
 import { INestApplication } from '@nestjs/common';
 import { DataSource, MongoRepository } from 'typeorm';
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  createAndValidateTestUser,
+  createUser as createUserFunction, getTestUserId
+} from '../../../user-svc-e2e/src/user-svc/functions/user';
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestPlaylist, createPlaylist as createPlaylistFunction, getTestPlaylistId } from './functions/playlist';
 import { UpdatePlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/update-playlist.dto';
 import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/playlist.dto';
 import { Playlist } from '@mediashare/media-svc/src/app/modules/playlist/entities/playlist.entity';
+import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
+
+const userApiBaseUrl = `http://localhost:3000/api`;
 
 describe('PlaylistAPI.e2e', () => {
   let app: INestApplication;
@@ -20,18 +27,23 @@ describe('PlaylistAPI.e2e', () => {
 
   let db: DataSource;
   let playlistRepository: MongoRepository<Playlist>;
+  let userRepository: MongoRepository<User>;
   let authResponse: AuthenticationResultType
   let createPlaylist;
   let testPlaylist;
   let testPlaylistId;
+  let createUser;
+  let testUser;
+  let testUserId;
 
   beforeAll(async () => {
     const globalPrefix = 'api'
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
-    db = await initializeDB([Playlist]);
+    db = await initializeDB([Playlist, User]);
     playlistRepository = await db.getMongoRepository(Playlist);
+    userRepository = await db.getMongoRepository(User);
 
     // Delete all test records
     await playlistRepository.deleteMany({});
@@ -58,7 +70,20 @@ describe('PlaylistAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const token = jwt.decode(authResponse?.IdToken) as any;
+      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+
+      const testUserData = {
+        sub,
+        email,
+        username: 'bcdevlucas',
+        firstName: 'Lucas',
+        lastName: 'Lopatka',
+        phoneNumber,
+      };
+      // Create a corresponding user in the database
+      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      testUser = await createAndValidateTestUser(createUser, testUserData);
+      testUserId = getTestUserId(testUser);
 
       const testPlaylistData = {
         userId: new ObjectId().toHexString(),
@@ -102,7 +127,20 @@ describe('PlaylistAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const token = jwt.decode(authResponse?.IdToken) as any;
+      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+
+      const testUserData = {
+        sub,
+        email,
+        username: 'bcdevlucas',
+        firstName: 'Lucas',
+        lastName: 'Lopatka',
+        phoneNumber,
+      };
+      // Create a corresponding user in the database
+      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      testUser = await createAndValidateTestUser(createUser, testUserData);
+      testUserId = getTestUserId(testUser);
 
       const testPlaylistData = {
         userId: new ObjectId().toHexString(),
@@ -161,7 +199,20 @@ describe('PlaylistAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const token = jwt.decode(authResponse?.IdToken) as any;
+      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+
+      const testUserData = {
+        sub,
+        email,
+        username: 'bcdevlucas',
+        firstName: 'Lucas',
+        lastName: 'Lopatka',
+        phoneNumber,
+      };
+      // Create a corresponding user in the database
+      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      testUser = await createAndValidateTestUser(createUser, testUserData);
+      testUserId = getTestUserId(testUser);
 
       const testPlaylistData = {
         userId: new ObjectId().toHexString(),

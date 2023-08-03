@@ -35,7 +35,7 @@ async function bootstrap() {
     tag: `user-svc`,
     servers: [
       {
-        url: `http://localhost:5000`,
+        url: `http://localhost:3000`,
         description: `local`,
       },
       {

@@ -5,6 +5,7 @@ import { Response } from 'express';
 import { RouteTokens } from '../../core/constants';
 import { PLAYLIST_VISIBILITY } from '../../core/models';
 import { GetUser } from '@mediashare/core/decorators/user.decorator';
+import { UserGuard } from '../../core/guards';
 import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse, PlaylistShareResponse } from './playlist.decorator';
 import { notFoundResponse } from '@mediashare/core/functors/http-errors.functor';
 import { PlaylistService } from './playlist.service';
@@ -24,7 +25,7 @@ export class PlaylistController {
     return { visibilities: PLAYLIST_VISIBILITY };
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Get(RouteTokens.playlistId)
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
@@ -35,7 +36,7 @@ export class PlaylistController {
     return response;
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
@@ -46,7 +47,7 @@ export class PlaylistController {
     return query || tags ? await this.playlistService.search({ userId, query, tags: parsedTags }) : await this.playlistService.getByUserId(userId);
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiBody({ type: CreatePlaylistDto })
   @Post()
@@ -60,7 +61,7 @@ export class PlaylistController {
   }
 
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
   @ApiBody({ type: UpdatePlaylistDto })
@@ -70,7 +71,7 @@ export class PlaylistController {
     return await this.playlistService.update(playlistId, updatePlaylistDto);
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Delete(RouteTokens.playlistId)
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true, example: '123' })
@@ -78,7 +79,7 @@ export class PlaylistController {
     return await this.playlistService.remove(playlistId);
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: RouteTokens.playlistId, type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
