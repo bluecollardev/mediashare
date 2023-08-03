@@ -1,4 +1,5 @@
 /* Ignore module boundaries, it's just our test scaffolding */
+import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -7,6 +8,10 @@ import { clone } from 'remeda';
 import { INestApplication } from '@nestjs/common';
 
 import { DataSource, MongoRepository } from 'typeorm';
+import {
+  createAndValidateTestUser,
+  createUser as createUserFunction, getTestUserId
+} from '../../../user-svc-e2e/src/user-svc/functions/user';
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestPlaylistItem, createPlaylistItem as createPlaylistItemFunction, getTestPlaylistItemId } from './functions/playlist-item';
@@ -16,24 +21,31 @@ import { UpdatePlaylistItemDto } from '@mediashare/media-svc/src/app/modules/pla
 import { PlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/playlist-item.dto';
 import { PlaylistItem } from '@mediashare/media-svc/src/app/modules/playlist-item/entities/playlist-item.entity';
 
+const userApiBaseUrl = `http://localhost:3000/api`;
+
 describe('PlaylistAPI.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
 
   let db: DataSource;
   let playlistItemRepository: MongoRepository<PlaylistItem>;
+  let userRepository: MongoRepository<User>
   let authResponse: AuthenticationResultType
   let createPlaylistItem;
   let testPlaylistItem;
   let testPlaylistItemId;
+  let createUser;
+  let testUser;
+  let testUserId
 
   beforeAll(async () => {
     const globalPrefix = 'api'
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
-    db = await initializeDB([PlaylistItem]);
+    db = await initializeDB([PlaylistItem, User]);
     playlistItemRepository = await db.getMongoRepository(PlaylistItem);
+    userRepository = await db.getMongoRepository(User);
 
     // Delete all test records
     await playlistItemRepository.deleteMany({});
@@ -42,6 +54,7 @@ describe('PlaylistAPI.e2e', () => {
   beforeEach(async () => {
     // Delete all test records
     await playlistItemRepository.deleteMany({});
+    await userRepository.deleteMany({});
   });
 
   afterAll(async () => {
@@ -60,7 +73,20 @@ describe('PlaylistAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const token = jwt.decode(authResponse?.IdToken) as any;
+      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+
+      const testUserData = {
+        sub,
+        email,
+        username: 'bcdevlucas',
+        firstName: 'Lucas',
+        lastName: 'Lopatka',
+        phoneNumber,
+      };
+      // Create a corresponding user in the database
+      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      testUser = await createAndValidateTestUser(createUser, testUserData);
+      testUserId = getTestUserId(testUser);
 
       const testPlaylistItemData = {
         key: 'test-key',
@@ -105,7 +131,20 @@ describe('PlaylistAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const token = jwt.decode(authResponse?.IdToken) as any;
+      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+
+      const testUserData = {
+        sub,
+        email,
+        username: 'bcdevlucas',
+        firstName: 'Lucas',
+        lastName: 'Lopatka',
+        phoneNumber,
+      };
+      // Create a corresponding user in the database
+      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      testUser = await createAndValidateTestUser(createUser, testUserData);
+      testUserId = getTestUserId(testUser);
 
       const testPlaylistItemData = {
         key: 'test-key',
@@ -165,7 +204,20 @@ describe('PlaylistAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const token = jwt.decode(authResponse?.IdToken) as any;
+      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+
+      const testUserData = {
+        sub,
+        email,
+        username: 'bcdevlucas',
+        firstName: 'Lucas',
+        lastName: 'Lopatka',
+        phoneNumber,
+      };
+      // Create a corresponding user in the database
+      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      testUser = await createAndValidateTestUser(createUser, testUserData);
+      testUserId = getTestUserId(testUser);
 
       const testPlaylistItemData = {
         key: 'test-key',

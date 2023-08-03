@@ -52,6 +52,7 @@ describe('PlaylistAPI.e2e', () => {
   beforeEach(async () => {
     // Delete all test records
     await playlistRepository.deleteMany({});
+    await userRepository.deleteMany({});
   });
 
   afterAll(async () => {

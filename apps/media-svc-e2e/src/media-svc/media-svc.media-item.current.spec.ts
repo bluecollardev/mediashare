@@ -1,4 +1,5 @@
 /* Ignore module boundaries, it's just our test scaffolding */
+import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -11,10 +12,16 @@ import { UpdateMediaItemDto } from '@mediashare/media-svc/src/app/modules/media-
 import { MediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/media-item.dto';
 import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/entities/media-item.entity';
 import { INestApplication } from '@nestjs/common';
+import {
+  createAndValidateTestUser,
+  createUser as createUserFunction, getTestUserId
+} from '../../../user-svc-e2e/src/user-svc/functions/user';
 
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestMediaItem, createMediaItem as createMediaItemFunction, getTestMediaItemId } from './functions/media-item';
+
+const userApiBaseUrl = `http://localhost:3000/api`;
 
 describe('MediaItemAPI.e2e', () => {
   let app: INestApplication;
@@ -22,18 +29,23 @@ describe('MediaItemAPI.e2e', () => {
 
   let db: DataSource;
   let mediaItemRepository: MongoRepository<MediaItem>;
+  let userRepository: MongoRepository<User>
   let authResponse: AuthenticationResultType
   let createMediaItem;
   let testMediaItem;
   let testMediaItemId;
+  let createUser;
+  let testUser;
+  let testUserId
 
   beforeAll(async () => {
     const globalPrefix = 'api'
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
-    db = await initializeDB([MediaItem]);
+    db = await initializeDB([MediaItem, User]);
     mediaItemRepository = await db.getMongoRepository(MediaItem);
+    userRepository = await db.getMongoRepository(User);
 
     // Delete all test records
     await mediaItemRepository.deleteMany({});
@@ -42,6 +54,7 @@ describe('MediaItemAPI.e2e', () => {
   beforeEach(async () => {
     // Delete all test records
     await mediaItemRepository.deleteMany({});
+    await userRepository.deleteMany({});
   });
 
   afterAll(async () => {
@@ -60,7 +73,20 @@ describe('MediaItemAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const token = jwt.decode(authResponse?.IdToken) as any;
+      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+
+      const testUserData = {
+        sub,
+        email,
+        username: 'bcdevlucas',
+        firstName: 'Lucas',
+        lastName: 'Lopatka',
+        phoneNumber,
+      };
+      // Create a corresponding user in the database
+      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      testUser = await createAndValidateTestUser(createUser, testUserData);
+      testUserId = getTestUserId(testUser);
 
       const testMediaItemData = {
         key: 'test-key',
@@ -105,7 +131,20 @@ describe('MediaItemAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const token = jwt.decode(authResponse?.IdToken) as any;
+      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+
+      const testUserData = {
+        sub,
+        email,
+        username: 'bcdevlucas',
+        firstName: 'Lucas',
+        lastName: 'Lopatka',
+        phoneNumber,
+      };
+      // Create a corresponding user in the database
+      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      testUser = await createAndValidateTestUser(createUser, testUserData);
+      testUserId = getTestUserId(testUser);
 
       const testMediaItemData = {
         key: 'test-key',
@@ -165,7 +204,20 @@ describe('MediaItemAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const token = jwt.decode(authResponse?.IdToken) as any;
+      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+
+      const testUserData = {
+        sub,
+        email,
+        username: 'bcdevlucas',
+        firstName: 'Lucas',
+        lastName: 'Lopatka',
+        phoneNumber,
+      };
+      // Create a corresponding user in the database
+      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      testUser = await createAndValidateTestUser(createUser, testUserData);
+      testUserId = getTestUserId(testUser);
 
       const testMediaItemData = {
         key: 'test-key',
