@@ -25,7 +25,7 @@ export const appConfig = registerAs('app', () => ({
   host: process.env.APP_HOST,
   env: process.env.NODE_ENV,
   name: process.env.APP_NAME,
-  port: process.env.APP_PORT,
+  port: process.env.PORT,
   globalPrefix: process.env.APP_PREFIX,
   title: process.env.APP_TITLE,
   dbIsMongoAtlas: process.env.DB_IS_ATLAS,

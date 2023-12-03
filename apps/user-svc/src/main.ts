@@ -1,59 +1,82 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
-import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import { SwaggerModule } from '@nestjs/swagger';
+import { Logger } from 'nestjs-pino';
+import * as bodyParser from 'body-parser';
+import compression from 'compression';
+import * as http from 'http';
+import * as https from 'https';
+import express from 'express';
+import { readFileSync } from 'fs';
+
 import { AppModule } from './app/app.module';
 import { configureOpenApi } from '@mediashare/shared';
 
+const host = process.env?.APP_HOST;
+const port = process.env?.PORT || 3000;
+const withHttps = process.env?.HTTPS === 'true';
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  try {
+    let httpsOptions;
+    if (withHttps) {
+      httpsOptions = {
+        key: process.env?.HTTPS_KEY || readFileSync(`${__dirname}/../certs/key.pem`),
+        cert: process.env?.HTTPS_CERT || readFileSync(`${__dirname}/../certs/cert.pem`),
+      };
+    }
 
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix, {
-    exclude: ['/.well-known/apple-app-site-association']
-  });
+    const server = express();
+    const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
-  // We configured Pino
-  // app.useLogger(app.get(Logger));
+    const globalPrefix = 'api';
+    app.setGlobalPrefix(globalPrefix, { exclude: ['/.well-known/apple-app-site-association'] });
 
-  // We're handling validations on our own
-  /* app.useGlobalPipes(
-    new ValidationPipe({
-      enableDebugMessages: false,
-    })
-  ); */
+    app.useLogger(app.get(Logger));
+    /* app.useGlobalPipes(
+      new ValidationPipe({
+        enableDebugMessages: false,
+      })
+    );
+    app.useGlobalFilters(new GlobalExceptionFilter()); */
 
-  configureOpenApi(app)(SwaggerModule)({
-    globalPrefix,
-    title: `User Service`,
-    description: `User Service`,
-    version: `0.0.1`,
-    tag: `user-svc`,
-    servers: [
-      {
-        url: `http://localhost:3000`,
-        description: `local`,
-      },
-      {
-        url: `https://mediashare-api-staging.herokuapp.com`,
-        description: `staging`,
-      },
-      {
-        url: `https://mediashare-api-prod.herokuapp.com`,
-        description: `production`,
-      },
-    ]
-  })
+    configureOpenApi(app)(SwaggerModule)({
+      globalPrefix,
+      title: `User Service`,
+      description: `User Service`,
+      version: `0.0.1`,
+      tag: `user-svc`,
+      servers: [
+        {
+          url: `http://localhost:${port}`,
+          description: `local`,
+        },
+        {
+          url: `https://mediashare-api-staging.herokuapp.com`,
+          description: `staging`,
+        },
+        {
+          url: `https://mediashare-api-prod.herokuapp.com`,
+          description: `production`,
+        },
+      ]
+    });
 
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+    app.use(compression());
+    app.use(bodyParser.json({ limit: '5mb' }));
+    app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
+    // app.enableCors();
+
+    http.createServer(server).listen(port);
+    if (withHttps) {
+      https.createServer(httpsOptions, server).listen(443);
+    }
+    await app.init();
+    console.log(`Listening at ${host}:${port}/${globalPrefix}`);
+  } catch (err) {
+    console.error('API bootstrapping failed!');
+    throw err;
+  }
 }
 
 bootstrap().then();
