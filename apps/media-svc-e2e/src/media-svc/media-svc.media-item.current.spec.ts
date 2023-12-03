@@ -1,5 +1,4 @@
 /* Ignore module boundaries, it's just our test scaffolding */
-import { initializeApp as initializeUserApi } from '@mediashare/user-svc-e2e/src/user-svc/functions/app';
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -20,6 +19,7 @@ import {
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestMediaItem, createMediaItem as createMediaItemFunction, getTestMediaItemId } from './functions/media-item';
+import { initializeApp as initializeUserApi } from '@mediashare/user-svc-e2e/src/user-svc/functions/app';
 
 describe('MediaItemAPI.e2e', () => {
   let app: INestApplication;

@@ -30,12 +30,13 @@ import { PlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-
 import { PlaylistItem } from '@mediashare/media-svc/src/app/modules/playlist-item/entities/playlist-item.entity';
 import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/entities/media-item.entity'
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
-
-const userApiBaseUrl = `http://localhost:3000/api`;
+import { initializeApp as initializeUserApi } from '@mediashare/user-svc-e2e/src/user-svc/functions/app';
 
 describe('PlaylistItemAPI.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
+  let userApi: INestApplication;
+  let userApiBaseUrl: string;
 
   let db: DataSource;
   let playlistItemRepository: MongoRepository<PlaylistItem>;
@@ -60,6 +61,9 @@ describe('PlaylistItemAPI.e2e', () => {
     const globalPrefix = 'api'
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
+
+    userApi = await initializeUserApi(globalPrefix);
+    userApiBaseUrl = await getBaseUrl(userApi, globalPrefix);
 
     db = await initializeDB([PlaylistItem, Playlist, MediaItem, User]);
     playlistItemRepository = await db.getMongoRepository(PlaylistItem);
