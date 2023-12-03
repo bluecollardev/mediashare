@@ -2,6 +2,7 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 export const USER_CONTEXT_PROPERTY = 'user';
 
 /**
+ *
  * Decorator that can be used to inject the cognito user into a controller.
  * @param {string} [propertyName] The name of the property to inject the user into.
  * @returns {(target: object, key: string | symbol, descriptor: TypedPropertyDescriptor<any>) => any}
@@ -20,6 +21,7 @@ export const GetUser = createParamDecorator(
 
     if (Array.isArray(data)) {
       return data.reduce((result, key) => {
+        // @ts-ignore
         result[key] = user[key];
         return result;
       }, {});

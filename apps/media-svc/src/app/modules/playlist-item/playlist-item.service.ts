@@ -70,10 +70,10 @@ export class PlaylistItemDataService extends FilterableDataService<PlaylistItem,
           $match: query
             ? {
               $text: { $search: query },
-              $and: [{ createdBy: ObjectIdGuard(userId) }],
+              $and: [{ createdBy: userId }],
             }
             : {
-              $and: [{ createdBy: ObjectIdGuard(userId) }],
+              $and: [{ createdBy: userId }],
             },
         },
       ]);
@@ -134,11 +134,9 @@ export class PlaylistItemDataService extends FilterableDataService<PlaylistItem,
 
   protected buildFields() {
     return [
-      // { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'author' } },
       // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'playlistItemId', as: 'shareItems' } },
       // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'playlistItemId', as: 'viewItems' } },
       // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'playlistItemId', as: 'likeItems' } },
-      // { $unwind: { path: '$author' } },
     ];
   }
 
@@ -151,10 +149,7 @@ export class PlaylistItemDataService extends FilterableDataService<PlaylistItem,
               _id: '$_id',
               playlistId: '$playlistId',
               // mediaId: '$mediaId',
-              // userId: '$author._id',
-              // username: '$author.username',
-              // author: '$author',
-              // authorProfile: '$authorProfile',
+              userId: '$userId',
               title: '$title',
               description: '$description',
               sortIndex: '$sortIndex',
@@ -166,7 +161,7 @@ export class PlaylistItemDataService extends FilterableDataService<PlaylistItem,
               // likesCount: { $size: '$likeItems' },
               // viewCount: { $size: '$viewItems' },
               // viewCount: { $size: '$viewItems' },
-              // createdBy: '$author._id',
+              createdBy: '$createdBy',
               createdAt: '$createdAt',
               updatedDate: '$updatedDate',
             },

@@ -14,9 +14,9 @@ export class MediaItem extends ApiBaseEntity {
 
   @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
   // Explicitly set the name option: https://github.com/typeorm/typeorm/issues/4026
-  @ObjectIdColumn({ name: 'userId', nullable: false, unique: false })
+  @Column({ nullable: false, type: 'text' })
   @Index('userId', { unique: false })
-  userId: ObjectId;
+  userId: string;
 
   @AutoMap()
   @Column({ nullable: false, type: 'text' })

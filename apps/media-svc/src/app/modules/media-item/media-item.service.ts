@@ -69,10 +69,10 @@ export class MediaItemDataService extends FilterableDataService<MediaItem, Mongo
           $match: query
             ? {
               $text: { $search: query },
-              $and: [{ createdBy: ObjectIdGuard(userId) }],
+              $and: [{ createdBy: userId }],
             }
             : {
-              $and: [{ createdBy: ObjectIdGuard(userId) }],
+              $and: [{ createdBy: userId }],
             },
         },
       ]);
@@ -133,21 +133,9 @@ export class MediaItemDataService extends FilterableDataService<MediaItem, Mongo
 
   protected buildFields() {
     return [
-      { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'author' } },
       // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'mediaId', as: 'shareItems' } },
       // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'mediaId', as: 'viewItems' } },
       // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'mediaId', as: 'likeItems' } },
-      { $unwind: { path: '$author' } },
-      {
-        $addFields: {
-          authorProfile: {
-            authorId: '$author._id',
-            authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
-            authorUsername: '$author.username',
-            authorImage: '$author.imageSrc',
-          },
-        },
-      },
     ];
   }
 
@@ -158,10 +146,7 @@ export class MediaItemDataService extends FilterableDataService<MediaItem, Mongo
           $mergeObjects: [
             {
               _id: '$_id',
-              userId: '$author._id',
-              username: '$author.username',
-              author: '$author',
-              authorProfile: '$authorProfile',
+              userId: '$userId',
               title: '$title',
               description: '$description',
               uri: '$uri',
@@ -171,7 +156,7 @@ export class MediaItemDataService extends FilterableDataService<MediaItem, Mongo
               // shareCount: { $size: '$shareItems' },
               // likesCount: { $size: '$likeItems' },
               // viewCount: { $size: '$viewItems' },
-              createdBy: '$author._id',
+              createdBy: '$createdBy',
               createdAt: '$createdAt',
               updatedDate: '$updatedDate',
             },

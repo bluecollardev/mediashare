@@ -7,9 +7,9 @@ import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
 @Entity('share_item')
 export class ShareItem extends ApiBaseEntity {
   @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
-  @ObjectIdColumn({ name: 'userId', nullable: false, unique: false })
+  @Column({ nullable: false, type: 'text' })
   @Index('userId', { unique: false })
-  userId: ObjectId;
+  userId: string;
 
   @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
   @ObjectIdColumn({ name: 'playlistId', nullable: true, unique: false })

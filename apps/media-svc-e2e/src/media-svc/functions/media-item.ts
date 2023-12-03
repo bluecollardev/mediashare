@@ -11,7 +11,7 @@ import { MediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/d
 
 export const createMediaItem = ({ baseUrl, token }) => (mediaItem) => {
   const dto = {
-    sub: randomUUID(),
+    // sub: randomUUID(),
     ...mediaItem,
   } as CreateMediaItemDto;
 
