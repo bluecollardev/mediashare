@@ -7,14 +7,14 @@ import compression from 'compression';
 import * as http from 'http';
 import * as https from 'https';
 import express from 'express';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 
 import { AppModule } from './app/app.module';
 import { configureOpenApi } from '@mediashare/shared';
 
 const host = process.env?.APP_HOST;
 const port = process.env?.PORT || 3000;
-const withHttps = process.env?.HTTPS === 'true';
+const withHttps = false; // process.env?.HTTPS === 'true';
 
 async function bootstrap() {
   try {
@@ -46,7 +46,7 @@ async function bootstrap() {
     );
     app.useGlobalFilters(new GlobalExceptionFilter()); */
 
-    configureOpenApi(app)(SwaggerModule)({
+    const apiSpec = configureOpenApi(app)(SwaggerModule)({
       globalPrefix,
       title: `User Service`,
       description: `User Service`,
@@ -67,15 +67,17 @@ async function bootstrap() {
         },
       ],
     });
+    writeFileSync('./openapi/user-svc.json', JSON.stringify(apiSpec, null, 2));
 
     app.use(compression());
     app.use(bodyParser.json({ limit: '5mb' }));
     app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
     // app.enableCors();
 
-    http.createServer(server).listen(port);
     if (withHttps) {
       https.createServer(httpsOptions, server).listen(443);
+    } else {
+      http.createServer(server).listen(port);
     }
     await app.init();
     console.log(`Listening at ${host}:${port}/${globalPrefix}`);

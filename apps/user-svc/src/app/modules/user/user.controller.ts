@@ -50,10 +50,9 @@ import { defaultImgUrl, defaultUserRole } from './user.constants';
 export class UserController {
   constructor(
     private userService: UserService,
-    private userConnectionService: UserConnectionService
-  ) /*private shareItemService: ShareItemService,
+    private userConnectionService: UserConnectionService /*private shareItemService: ShareItemService,
     private mediaItemService: MediaItemService*/
-  {}
+  ) {}
 
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()

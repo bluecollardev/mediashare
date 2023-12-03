@@ -14,7 +14,7 @@ import { configureOpenApi } from '@mediashare/shared';
 
 const host = process.env?.APP_HOST;
 const port = process.env?.PORT || 3000;
-const withHttps = process.env?.HTTPS === 'true';
+const withHttps = false; // process.env?.HTTPS === 'true';
 
 async function bootstrap() {
   try {

@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 apis/DefaultApi.ts
 apis/MediaItemsApi.ts
 apis/PlaylistItemsApi.ts

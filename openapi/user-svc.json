@@ -1,0 +1,980 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api": {
+      "get": {
+        "operationId": "AppController_getData",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/cognito-testing-login": {
+      "post": {
+        "operationId": "CognitoTestingController_login",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/user/authorize": {
+      "post": {
+        "operationId": "UserController_authorize",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/invite": {
+      "post": {
+        "operationId": "UserController_invite",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["user"]
+      }
+    },
+    "/api/user/logout": {
+      "post": {
+        "operationId": "UserController_logout",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user": {
+      "post": {
+        "operationId": "UserController_createUser",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "UserController_getCurrentUser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "UserController_updateCurrentUser",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "UserController_deleteCurrentUser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/{userId}": {
+      "get": {
+        "operationId": "UserController_getUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "UserController_updateUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "UserController_deleteUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/sub/{sub}": {
+      "get": {
+        "operationId": "UserController_getUserBySub",
+        "parameters": [
+          {
+            "name": "sub",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/connections/create": {
+      "post": {
+        "operationId": "UserController_createUserConnection",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserConnectionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/connections": {
+      "get": {
+        "operationId": "UserController_getCurrentUserConnections",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/connections/{userId}": {
+      "get": {
+        "operationId": "UserController_getUserConnections",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/connection/remove": {
+      "post": {
+        "operationId": "UserController_removeUserConnection",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserConnectionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/connections/remove": {
+      "post": {
+        "operationId": "UserController_removeUserConnections",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UserConnectionDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["user"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "User Service",
+    "description": "User Service",
+    "version": "0.0.1",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "user-svc",
+      "description": ""
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "local"
+    },
+    {
+      "url": "https://mediashare-api-staging.herokuapp.com",
+      "description": "staging"
+    },
+    {
+      "url": "https://mediashare-api-prod.herokuapp.com",
+      "description": "production"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "InviteDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "username"]
+      },
+      "BcRolesType": {
+        "type": "string",
+        "enum": ["guest", "free", "subscriber", "admin"]
+      },
+      "ProfileShareItem": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "example": "z9ZN5VrOrjZuS3pyN8wJp6dhI13uv1FONhJZtka6EZIXHSOLBjjB4rmPK2weXoDO6ZT3ZAi5DO1RIv882YDmzrluYhjGK8A6xyJ7iurT7Y8GYRzhKtpDO9K6V9tTk",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "authorImage": {
+            "type": "string",
+            "example": "hfbENTpqKqZsc9XSS1gUK9TWHdVoFESCtuQIlzYGjr8N6hj36a97DoHYCL4PuwmOckjJ6SyMdG2ZmKVo36J11eZeUbiWA2YwE2ckUrLnWddnF8GURYbSjmplPe80B",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "authorName": {
+            "type": "string",
+            "example": "TgOilWNLJFTwZXTx2MNHErJQ8u5qsxbd2euATcEiLHTir0v9GIhxrZOzYCfiyXBYZWsSsAOD6ln8dJh3he92MRYogIYy9iNB5CnvOS6VdPPgp9pGKL6wPHbr3Aru8",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "author": {
+            "type": "string",
+            "example": "W64CaM3IubCcr7TobDjYKSDnxmSDnbJKv4RaM63eAYgbc6jrIdFUk5g92DfY1R2zp3oxOF2NHVCWLf1NTUdFG35koOB2fkDzqLsy8xeVvlEbEw66fzHQmokva7mdw",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "authorId": {
+            "type": "string",
+            "example": "656c7d5030c23dc691ddda76",
+            "readOnly": false
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "BvTPoXaIUNXCV4XXh0EZECaCHLw3LI68DyDngm29acpbFHyRtmgC9JCRlY9jp0GfJk6FQ7IDSAOv4SehzCVqFsTpW1nwUmQa5080lJ9lSWpMpCXFGyivaUQqAnslw",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "playlistId": {
+            "type": "string",
+            "example": "656c7d5030c23dc691ddda76",
+            "readOnly": false
+          },
+          "shareId": {
+            "type": "string",
+            "example": "656c7d5030c23dc691ddda76",
+            "readOnly": false
+          },
+          "read": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string",
+            "example": "VTXHoOiRLafgx16xMoMZJODLNXKEbB9PqDJ3uLW5lCWeUfuJRJhlyRo1z58QNYZi2CJQZOebGiA0Lc6ImDf0GKGbeMWM9hA0TtwRw2vcbNHeEcuFpwsejYp13JoF6",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "createdAt",
+          "authorImage",
+          "authorName",
+          "author",
+          "authorId",
+          "imageSrc",
+          "playlistId",
+          "shareId",
+          "read",
+          "title"
+        ]
+      },
+      "ProfileDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "MJdWFm3PWE6UyImxBJS2URGWrMVa9gQ4igpxr0zSG4Vqa2z3Ot5i3E5O9BxYIyJlxkaWPBAdC5HbsEvJy5iUS1NjxambGeikHhbK0jhn2Z6NzOAT002gRlNT3Dlk7",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdBy": {
+            "type": "string",
+            "example": "NNDT10Z9ib1YPyfSvy6yf59BQWu36MDj3JV5ABNAEzEB1TpNAWcvQIQhipKVLaZWHBxCNNg2pHIFM0h0FyWFCtSj8nRhpBMXhH5DZPRy1mTadHlBQbCFpOY66Jw1g",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "DnIMD8yH6bhIxKv2kKgXJG3Bh4yYwU4dsK0D92nB95MQNFsGdSDqb6q1nnU5HeRHkh4e0zizm4buB8kGp8eIkt4iQWZPsFJZVHnMIoaxLnNF7p3mweaqBO9GI5pCK",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "firstName": {
+            "type": "string",
+            "example": "tMh6jr90aylo3xOdwolyF1fNqPjCOGqE06KVFUlfOSQRti2RjeVvol9ySrIuKXBq6GSuEjFTXPqedJ5G3jpJYeWdCnqNNfslhkP3bX2z2XKmTNOsnPb6K4Px73MUj",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "lastName": {
+            "type": "string",
+            "example": "U6MTUUSx5hgD645HFwr4AVYcaimMxOOdfd13FQQ8xI9GC8gzKi5Tlfp7C90Wm58OCBWEDWdeCI6PmpIIF0rjyct7hoeDSsmUaA42X5YyMoDtJUukEBgD9p20RBpmi",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "email": {
+            "type": "string",
+            "example": "dmUg189cMac5GNtCkKU3Mrg1sK4KRyWQEv3aOUiflvlRXD48ZVIEMUxT1K1F0VXtmsyhib3ianN3BYxKdKOV6QvVxx6tXoR3SKGILRQYAD80Ic4WRuHqCb0q5EqiP",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "role": {
+            "$ref": "#/components/schemas/BcRolesType"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "3HdGOXEP9pupBfXcfNwFQaohq8nwQkVXn29KoF0U7W9XKtsPKNngk10whBgKzXX0aCnqSeuxDU85XUYmVg3I76bXUBOrqW1OiHCFGVrIsyQDSoJHzWYioPFcOS3QG",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "isDisabled": {
+            "type": "string",
+            "example": "PoM60OtmLO5PbJPQNAXuWbD9Vtq97OkKTWDubpwZdvOJtHS6UnR1QfPISAZJyXbhdgx1EECpb04dD7WcBK0E8wzr247JpYRID6FaOqpz36h7lU6MMrt5XHVnXVzCo",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "username": {
+            "type": "string",
+            "example": "3RFYfqA74vRvgZrrXRy3sKiDi3dm9j6fe5l9ghsaktGbpTEdMlcPyFkbo6Co8FgDhQ4fiyqja7YUIx5ro2bhv3HpjqsKSzLeRZXzLDB6yWbqbzq2ND993ONZcD74q",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "sharedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProfileShareItem"
+            }
+          },
+          "sharedCount": {
+            "type": "number"
+          },
+          "sharesCount": {
+            "type": "number"
+          },
+          "likesCount": {
+            "type": "number"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "transactionDate": {
+            "type": "string"
+          },
+          "transactionEndDate": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "_id",
+          "createdBy",
+          "imageSrc",
+          "firstName",
+          "lastName",
+          "email",
+          "role",
+          "phoneNumber",
+          "isDisabled",
+          "username",
+          "sharedItems",
+          "sharedCount",
+          "sharesCount",
+          "likesCount",
+          "transactionId",
+          "transactionDate",
+          "transactionEndDate"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "sub": {
+            "type": "string",
+            "example": "H3fSWVSiPwwFz1KH6FYvnUESaCTRrAUhkWhMaZ9alTWqzQDqJGYLqR3VEgXes2EtD9fKOWcUayTNzur3De7uqULqhNStk1P8kw3pL1byrLulMRICdYHNjgPATJegN",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "username": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "email": {
+            "type": "string",
+            "example": "test@example.com",
+            "maxLength": 50,
+            "minLength": 6
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "oBT7mV6Z6ORyRF1xDiw6cQ1NEmyift93uIOOYpzMt7DJoJBZtKE1fDnAIxx2ctJzVJZIn6ocAH4541l1zxwcKhhVOzdn0KXz5bUWD87ts9llIzIjZA100mCvKqCqc",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "http://www.example.com",
+            "maxLength": 255,
+            "minLength": 5
+          },
+          "role": {
+            "$ref": "#/components/schemas/BcRolesType"
+          },
+          "isDisabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "sub",
+          "username",
+          "email",
+          "firstName",
+          "lastName",
+          "role"
+        ]
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "aGstOpXa4OYMBVntEPIW7Y8sQQ4GRKNjsbozEr9ChglMtSuh1p7IQ4rrriKE89xOJlbtEc379dQjPzjUGccJ0p3LJxjQnZFOLDMOS6XLbjb5dBfQwFLwaE6op85h3",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "updatedDate": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "sub": {
+            "type": "string",
+            "example": "BXNzqtAY9fmIZpYDebjGhatz0DePWbADfF44QQGFN9ltE0kBbey4Xk0upon6OGzRqiZmApOZIEMwCmKmLOQoVfC5CAtGqoCDugtXWJD4U7tOXGwSoPRv1SS1S6VCt",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "username": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "email": {
+            "type": "string",
+            "example": "test@example.com",
+            "maxLength": 50,
+            "minLength": 6
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "nCTV0blOual5hov3Xk24jZlZXFrNsviTtnAtECSkW4JKShSiZyeTpt9I2JodCSlvNkIRz4nEj9UW3NAoWe08TsisCQADhcpmyvlD11MCaBtf94RoHvkR1IhUgQwZk",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "http://www.example.com",
+            "maxLength": 255,
+            "minLength": 5
+          },
+          "role": {
+            "$ref": "#/components/schemas/BcRolesType"
+          },
+          "isDisabled": {
+            "type": "boolean"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "transactionDate": {
+            "type": "string"
+          },
+          "transactionEndDate": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "_id",
+          "sub",
+          "username",
+          "email",
+          "firstName",
+          "lastName",
+          "role"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "aGstOpXa4OYMBVntEPIW7Y8sQQ4GRKNjsbozEr9ChglMtSuh1p7IQ4rrriKE89xOJlbtEc379dQjPzjUGccJ0p3LJxjQnZFOLDMOS6XLbjb5dBfQwFLwaE6op85h3",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "updatedDate": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "username": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "email": {
+            "type": "string",
+            "example": "test@example.com",
+            "maxLength": 50,
+            "minLength": 6
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "TnBi65DpEOOEEAfmxOqudpitf1DL7zOSfs7pfahLHxtvN3W9uTIJEG0skUYPdkWBUJ7iD3wwfU2QuaBuY9rrVd995XN1abTcJYUXGzLC8olqBcpBRiipZXOnoGM2t",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "http://www.example.com",
+            "maxLength": 255,
+            "minLength": 5
+          },
+          "role": {
+            "$ref": "#/components/schemas/BcRolesType"
+          },
+          "isDisabled": {
+            "type": "boolean"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "transactionDate": {
+            "type": "string"
+          },
+          "transactionEndDate": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "_id",
+          "username",
+          "email",
+          "firstName",
+          "lastName",
+          "role"
+        ]
+      },
+      "CreateUserConnectionDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "example": "0pBgrRbUjnREyfONnTBEi0LVtW3gunOJ4E7JxJd04kwvAnUvOnKTfRmJCKMLSPWPS6eBKOakN3bufOZukCeMhopB3bNHrEUphogEUVYSuuDjT3ADoAy82n5PK8mIZ",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "connectionId": {
+            "type": "string",
+            "example": "hfnXmpZYtNIJFxQ7v3n2HRC5k4wSg0HgRczRZhzK9mxCrwMMRJXySuKuICqX4ZYrYKIJ2z56RfGZu6BAqqTeNqMfC3WBu5EOR5MmJb1L4AeRcw6aQQunyIiSgxMOQ",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": ["userId", "connectionId"]
+      },
+      "UserConnectionDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "aGstOpXa4OYMBVntEPIW7Y8sQQ4GRKNjsbozEr9ChglMtSuh1p7IQ4rrriKE89xOJlbtEc379dQjPzjUGccJ0p3LJxjQnZFOLDMOS6XLbjb5dBfQwFLwaE6op85h3",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "updatedDate": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "userId": {
+            "type": "string",
+            "example": "ph6iPlmZAeCHaxPEVSngg2EPFgtAnoktQXFDCH3I7O19mjOfFpAbWldF5mNkPHH6sdOyUEfjMb4oliKMGf3DZUxJSShB4lM9I5em3fXfXvUjstLKZ7CxGcDVoirx3",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "connectionId": {
+            "type": "string",
+            "example": "a1caJ2NNRBAAeDLEr7HBKRWh4VgAbjalFbV4wSMMMLmpLSEOAbPqChPCMyl1y6k5w7OHoIH1Hq0HaLJdf0iYDYPD9pL5XTwAp56HeEWHaYK0nnpmC77lEqYaCqJBq",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": ["_id", "userId", "connectionId"]
+      }
+    }
+  }
+}
