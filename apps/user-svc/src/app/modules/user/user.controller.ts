@@ -1,5 +1,9 @@
 import { UseGuards } from '@nestjs/common';
-import { Authentication, AuthenticationGuard, CognitoUser } from '@nestjs-cognito/auth';
+import {
+  Authentication,
+  AuthenticationGuard,
+  CognitoUser,
+} from '@nestjs-cognito/auth';
 import {
   Controller,
   Body,
@@ -9,11 +13,21 @@ import {
   Put,
   Req,
   Res,
-  Param, Delete
+  Param,
+  Delete,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Response, Request } from 'express';
-import { handleErrorResponse, handleSuccessResponse } from '@mediashare/core/http/response';
+import {
+  handleErrorResponse,
+  handleSuccessResponse,
+} from '@mediashare/core/http/response';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
@@ -36,8 +50,7 @@ import { defaultImgUrl, defaultUserRole } from './user.constants';
 export class UserController {
   constructor(
     private userService: UserService,
-    private userConnectionService: UserConnectionService,
-    /*private shareItemService: ShareItemService,
+    private userConnectionService: UserConnectionService /*private shareItemService: ShareItemService,
     private mediaItemService: MediaItemService*/
   ) {}
 
@@ -46,8 +59,14 @@ export class UserController {
   // @ApiBody({ type: AuthorizeDto })
   // @ApiResponse({ type: ProfileDto, isArray: false, status: 200 })
   @Post('authorize')
-  async authorize(@CognitoUser() cognitoUser, @Req() req: Request, @Res() res: Response) {
-    const user = await this.userService.findByQuery({ where: { sub: cognitoUser.sub } });
+  async authorize(
+    @CognitoUser() cognitoUser,
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    const user = await this.userService.findByQuery({
+      where: { sub: cognitoUser.sub },
+    });
     // res.setHeader('Authorization', accessToken);
     // res.setHeader('Id', idToken);
     if (!user) {
@@ -67,7 +86,7 @@ export class UserController {
   @Post('invite')
   @ApiBody({ type: InviteDto })
   @ApiResponse({ type: ProfileDto, isArray: false, status: 200 })
-  async invite(@Res() res: Response, @Body() inviteDto: InviteDto, ) {
+  async invite(@Res() res: Response, @Body() inviteDto: InviteDto) {
     const newUser = await this.userService.create({
       email: inviteDto.email,
       username: inviteDto.username,
@@ -149,7 +168,11 @@ export class UserController {
   @ApiBody({ type: UpdateUserDto })
   @Put()
   @UserPostResponse({ type: UserDto })
-  async updateCurrentUser(@Res() res: Response, @GetUser('_id') userId: string, @Body() updateUserDto: UpdateUserDto) {
+  async updateCurrentUser(
+    @Res() res: Response,
+    @GetUser('_id') userId: string,
+    @Body() updateUserDto: UpdateUserDto
+  ) {
     try {
       const result = await this.userService.update(userId, updateUserDto);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -164,7 +187,11 @@ export class UserController {
   @ApiBody({ type: UpdateUserDto })
   @Put(':userId')
   @UserPostResponse({ type: UserDto })
-  async updateUser(@Res() res: Response, @Param('userId') userId: string, @Body() updateUserDto: UpdateUserDto) {
+  async updateUser(
+    @Res() res: Response,
+    @Param('userId') userId: string,
+    @Body() updateUserDto: UpdateUserDto
+  ) {
     try {
       const result = await this.userService.update(userId, updateUserDto);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -176,7 +203,10 @@ export class UserController {
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Delete()
-  async deleteCurrentUser(@Res() res: Response, @GetUser('_id') userId: string) {
+  async deleteCurrentUser(
+    @Res() res: Response,
+    @GetUser('_id') userId: string
+  ) {
     try {
       const result = await this.userService.remove(userId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -217,10 +247,15 @@ export class UserController {
   @ApiBearerAuth()
   @Get('connections')
   @UserGetResponse({ type: UserDto, isArray: true }) // TODO: Use ProfileDto
-  async getCurrentUserConnections(@Res() res: Response, @GetUser('_id') userId: string) {
+  async getCurrentUserConnections(
+    @Res() res: Response,
+    @GetUser('_id') userId: string
+  ) {
     try {
-      const userConnections = await this.userConnectionService.findConnections(userId);
-      const connectionUserIds = userConnections.map((uc) => uc.connectionId)
+      const userConnections = await this.userConnectionService.findConnections(
+        userId
+      );
+      const connectionUserIds = userConnections.map((uc) => uc.connectionId);
 
       // TODO: Use mapper in findByIds
       const result = await this.userService.findByIds(connectionUserIds);
@@ -234,9 +269,14 @@ export class UserController {
   @ApiBearerAuth()
   @Get('connections/:userId')
   @UserGetResponse({ type: UserDto, isArray: true }) // TODO: Use ProfileDto
-  async getUserConnections(@Res() res: Response, @Param('userId') userId: string) {
+  async getUserConnections(
+    @Res() res: Response,
+    @Param('userId') userId: string
+  ) {
     try {
-      const userConnections = await this.userConnectionService.findConnections(userId);
+      const userConnections = await this.userConnectionService.findConnections(
+        userId
+      );
       const userConnectionIds = userConnections.map((uc) => uc.connectionId);
 
       // TODO: Use mapper in findByIds
@@ -251,7 +291,11 @@ export class UserController {
   @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto, isArray: false })
   @Post('connection/remove')
-  async removeUserConnection(@Req() req: Request, @Res() res: Response, @Body() userConnectionDto: UserConnectionDto) {
+  async removeUserConnection(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() userConnectionDto: UserConnectionDto
+  ) {
     try {
       const { userId, connectionId } = req.body as any;
       if (!userId || !connectionId) {
@@ -277,13 +321,19 @@ export class UserController {
   @ApiBearerAuth()
   @ApiBody({ type: UserConnectionDto, isArray: true })
   @Post('connections/remove')
-  async removeUserConnections(@Req() req: Request, @Res() res: Response, @Body() userConnectionDtos: UserConnectionDto[]) {
+  async removeUserConnections(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() userConnectionDtos: UserConnectionDto[]
+  ) {
     // eslint-disable-next-line no-useless-catch
     try {
       // TODO: Add this functionality back in
       // const shareItemsResult = await this.shareItemService.removeUserConnectionShareItems(userConnectionDtos);
       // if (shareItemsResult) {
-      const userConnectionResult = await this.userConnectionService.removeMany(userConnectionDtos);
+      const userConnectionResult = await this.userConnectionService.removeMany(
+        userConnectionDtos
+      );
       return handleSuccessResponse(res, HttpStatus.OK, userConnectionResult);
       // }
 
@@ -295,6 +345,4 @@ export class UserController {
       return handleErrorResponse(res, error);
     }
   }
-
-
 }

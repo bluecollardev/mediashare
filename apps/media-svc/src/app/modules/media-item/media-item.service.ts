@@ -11,7 +11,10 @@ import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOp
 import { ObjectIdGuard } from '@mediashare/core/guards';
 import { IdType, SearchParameters } from '@mediashare/shared';
 import { FilterableDataService } from '@mediashare/core/services';
-import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
+import {
+  ApiErrorResponse,
+  ApiErrorResponses,
+} from '@mediashare/core/errors/api-error';
 
 import { MediaItem } from './entities/media-item.entity';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
@@ -21,7 +24,10 @@ import { MediaItemDto } from './dto/media-item.dto';
 import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
 
 @Injectable()
-export class MediaItemDataService extends FilterableDataService<MediaItem, MongoRepository<MediaItem>> {
+export class MediaItemDataService extends FilterableDataService<
+  MediaItem,
+  MongoRepository<MediaItem>
+> {
   constructor(
     @InjectRepository(MediaItem) repository: MongoRepository<MediaItem>,
     logger: PinoLogger,
@@ -68,33 +74,55 @@ export class MediaItemDataService extends FilterableDataService<MediaItem, Mongo
         {
           $match: query
             ? {
-              $text: { $search: query },
-              $and: [{ createdBy: userId }],
-            }
+                $text: { $search: query },
+                $and: [{ createdBy: userId }],
+              }
             : {
-              $and: [{ createdBy: userId }],
-            },
+                $and: [{ createdBy: userId }],
+              },
         },
       ]);
     } else {
       // Only return search results that are app subscriber content (for paying app subscribers), shared content from a user's network, or public content
-      const appSubscriberContentUserIds = this.configService.get('appSubscriberContentUserIds');
+      const appSubscriberContentUserIds = this.configService.get(
+        'appSubscriberContentUserIds'
+      );
       aggregateQuery = aggregateQuery.concat([
         {
           $match: query
             ? {
-              $text: { $search: query },
-              $and: [
-                { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-                { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-              ],
-            }
+                $text: { $search: query },
+                $and: [
+                  {
+                    $or: [
+                      ...appSubscriberContentUserIds.map((id) => ({
+                        createdBy: ObjectIdGuard(id),
+                      })),
+                    ],
+                  },
+                  {
+                    visibility: {
+                      $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION],
+                    },
+                  },
+                ],
+              }
             : {
-              $and: [
-                { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-                { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-              ],
-            },
+                $and: [
+                  {
+                    $or: [
+                      ...appSubscriberContentUserIds.map((id) => ({
+                        createdBy: ObjectIdGuard(id),
+                      })),
+                    ],
+                  },
+                  {
+                    visibility: {
+                      $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION],
+                    },
+                  },
+                ],
+              },
         },
       ]);
     }
@@ -171,21 +199,40 @@ export class MediaItemDataService extends FilterableDataService<MediaItem, Mongo
 export class MediaItemService {
   constructor(
     public dataService: MediaItemDataService,
-    @InjectMapper() private readonly classMapper: Mapper,
+    @InjectMapper() private readonly classMapper: Mapper
   ) {}
 
   async create(createMediaItemDto: CreateMediaItemDto): Promise<MediaItemDto> {
-    const errors = await this.dataService.validateDto(CreateMediaItemDto, createMediaItemDto);
-    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
-    const entity = await this.classMapper.mapAsync(createMediaItemDto, CreateMediaItemDto, MediaItem);
+    const errors = await this.dataService.validateDto(
+      CreateMediaItemDto,
+      createMediaItemDto
+    );
+    if (errors)
+      throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+    const entity = await this.classMapper.mapAsync(
+      createMediaItemDto,
+      CreateMediaItemDto,
+      MediaItem
+    );
     const result = await this.dataService.create(entity);
     return await this.classMapper.mapAsync(result, MediaItem, MediaItemDto);
   }
 
-  async update(mediaItemId: IdType, updateMediaItemDto: UpdateMediaItemDto): Promise<MediaItemDto> {
-    const errors = await this.dataService.validateDto(UpdateMediaItemDto, updateMediaItemDto);
-    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
-    const entity = await this.classMapper.mapAsync(updateMediaItemDto, UpdateMediaItemDto, MediaItem);
+  async update(
+    mediaItemId: IdType,
+    updateMediaItemDto: UpdateMediaItemDto
+  ): Promise<MediaItemDto> {
+    const errors = await this.dataService.validateDto(
+      UpdateMediaItemDto,
+      updateMediaItemDto
+    );
+    if (errors)
+      throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+    const entity = await this.classMapper.mapAsync(
+      updateMediaItemDto,
+      UpdateMediaItemDto,
+      MediaItem
+    );
     const result = await this.dataService.update(mediaItemId, entity);
     return await this.classMapper.mapAsync(result, MediaItem, MediaItemDto);
   }

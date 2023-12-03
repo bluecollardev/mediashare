@@ -7,7 +7,10 @@ import { UserController } from './user.controller';
 import { UserService, UserDataService } from './user.service';
 import { UserConnection } from '../user-connection/entities/user-connection.entity';
 import { UserConnectionModule } from '../user-connection/user-connection.module';
-import { UserConnectionDataService, UserConnectionService } from '../user-connection/user-connection.service';
+import {
+  UserConnectionDataService,
+  UserConnectionService,
+} from '../user-connection/user-connection.service';
 
 @Module({
   imports: [
@@ -15,7 +18,13 @@ import { UserConnectionDataService, UserConnectionService } from '../user-connec
     UserConnectionModule,
   ],
   controllers: [UserController],
-  providers: [UserService, UserDataService, UserMapping, UserConnectionService, UserConnectionDataService],
+  providers: [
+    UserService,
+    UserDataService,
+    UserMapping,
+    UserConnectionService,
+    UserConnectionDataService,
+  ],
   exports: [UserService],
 })
 export class UserModule {}

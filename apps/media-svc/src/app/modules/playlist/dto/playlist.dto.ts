@@ -1,5 +1,11 @@
 import { AutoMap } from '@automapper/classes';
-import { ApiDecoratorOptions, ApiLongString, ApiObjectId, ApiString, ApiTextString } from '@mediashare/shared';
+import {
+  ApiDecoratorOptions,
+  ApiLongString,
+  ApiObjectId,
+  ApiString,
+  ApiTextString,
+} from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
@@ -7,7 +13,10 @@ import { ObjectId } from 'mongodb';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaItemDto } from '../../media-item/dto/media-item.dto';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
-import { PLAYLIST_VISIBILITY, PlaylistVisibilityType } from '../../../core/models';
+import {
+  PLAYLIST_VISIBILITY,
+  PlaylistVisibilityType,
+} from '../../../core/models';
 
 export class PlaylistDto extends ApiBaseDto {
   @IsOptional()
@@ -33,7 +42,12 @@ export class PlaylistDto extends ApiBaseDto {
 
   @IsIn(PLAYLIST_VISIBILITY)
   @AutoMap()
-  @ApiProperty({ enum: PLAYLIST_VISIBILITY, name: 'visibility', enumName: 'PlaylistVisibilityType', required: true })
+  @ApiProperty({
+    enum: PLAYLIST_VISIBILITY,
+    name: 'visibility',
+    enumName: 'PlaylistVisibilityType',
+    required: true,
+  })
   visibility: PlaylistVisibilityType;
 
   // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })

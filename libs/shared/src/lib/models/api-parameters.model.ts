@@ -20,4 +20,6 @@ interface IContentSearchParameters {
 
 export type ContentSearchParameters = Partial<IContentSearchParameters>;
 
-export type SearchParameters = Partial<ObjectIdParameters & ContentSearchParameters>;
+export type SearchParameters = Partial<
+  ObjectIdParameters & ContentSearchParameters
+>;

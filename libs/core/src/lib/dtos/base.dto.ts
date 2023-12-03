@@ -1,6 +1,6 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiDecoratorOptions, ApiString } from '@mediashare/shared';
-import { ApiProperty,  } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export interface IApiBaseDto {
   _id: string;

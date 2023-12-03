@@ -7,8 +7,8 @@ export const USER_CONTEXT_PROPERTY = 'user';
 export function defaultOptionsWithBearer(token: string) {
   return {
     headers: {
-      'authorization': `Bearer ${token}`
-    }
+      authorization: `Bearer ${token}`,
+    },
   } as AxiosRequestConfig;
 }
 

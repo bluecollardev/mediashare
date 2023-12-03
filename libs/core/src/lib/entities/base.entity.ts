@@ -1,6 +1,12 @@
 import { AutoMap } from '@automapper/classes';
 import { AutoMapOptions } from '@automapper/classes/lib/automap';
-import { ObjectIdColumn, Entity, CreateDateColumn, UpdateDateColumn, ColumnOptions } from 'typeorm';
+import {
+  ObjectIdColumn,
+  Entity,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ColumnOptions,
+} from 'typeorm';
 import { ObjectId } from 'mongodb';
 
 export interface IApiBaseEntity {

@@ -8,11 +8,16 @@ import { DataSource, MongoRepository } from 'typeorm';
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import {
   createAndValidateTestUser,
-  createUser as createUserFunction, getTestUserId
+  createUser as createUserFunction,
+  getTestUserId,
 } from './functions/user';
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
-import { createAndValidateTestPlaylist, createPlaylist as createPlaylistFunction, getTestPlaylistId } from './functions/playlist';
+import {
+  createAndValidateTestPlaylist,
+  createPlaylist as createPlaylistFunction,
+  getTestPlaylistId,
+} from './functions/playlist';
 import { UpdatePlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/update-playlist.dto';
 import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/playlist.dto';
 import { Playlist } from '@mediashare/media-svc/src/app/modules/playlist/entities/playlist.entity';
@@ -28,7 +33,7 @@ describe('PlaylistAPI.e2e', () => {
   let db: DataSource;
   let playlistRepository: MongoRepository<Playlist>;
   let userRepository: MongoRepository<User>;
-  let authResponse: AuthenticationResultType
+  let authResponse: AuthenticationResultType;
   let createPlaylist;
   let testPlaylist;
   let testPlaylistId;
@@ -37,7 +42,7 @@ describe('PlaylistAPI.e2e', () => {
   let testUserId;
 
   beforeAll(async () => {
-    const globalPrefix = 'api'
+    const globalPrefix = 'api';
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
@@ -74,7 +79,11 @@ describe('PlaylistAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -86,7 +95,10 @@ describe('PlaylistAPI.e2e', () => {
       };
       // Create a corresponding user in the database
       try {
-        createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+        createUser = createUserFunction({
+          baseUrl: userApiBaseUrl,
+          token: authResponse?.IdToken,
+        });
         testUser = await createAndValidateTestUser(createUser, testUserData);
         testUserId = getTestUserId(testUser);
       } catch (err) {
@@ -102,14 +114,24 @@ describe('PlaylistAPI.e2e', () => {
       };
       // Create a corresponding playlist in the database
       try {
-        createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
-        testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
+        createPlaylist = createPlaylistFunction({
+          baseUrl,
+          token: authResponse?.IdToken,
+        });
+        testPlaylist = await createAndValidateTestPlaylist(
+          createPlaylist,
+          testPlaylistData
+        );
         testPlaylistId = getTestPlaylistId(testPlaylist);
       } catch (err) {
         throw err;
       }
 
-      await axios.get(`${baseUrl}/playlists/${testPlaylistId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .get(
+          `${baseUrl}/playlists/${testPlaylistId}`,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -139,7 +161,11 @@ describe('PlaylistAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -150,7 +176,10 @@ describe('PlaylistAPI.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl: userApiBaseUrl,
+        token: authResponse?.IdToken,
+      });
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
@@ -162,13 +191,24 @@ describe('PlaylistAPI.e2e', () => {
         visibility: 'public',
       };
       // Create a corresponding playlist in the database
-      createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
-      testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
+      createPlaylist = createPlaylistFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testPlaylist = await createAndValidateTestPlaylist(
+        createPlaylist,
+        testPlaylistData
+      );
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
       const dto = clone(testPlaylist) as UpdatePlaylistDto;
 
-      await axios.put(`${baseUrl}/playlists/${testPlaylistId}`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .put(
+          `${baseUrl}/playlists/${testPlaylistId}`,
+          dto,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -177,10 +217,16 @@ describe('PlaylistAPI.e2e', () => {
           expect(updated._id).toEqual(testPlaylistId);
           expect(updated.createdAt).toEqual(testPlaylist.createdAt);
           expect(updated.updatedDate).toBeDefined();
-          expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(new Date(testPlaylist.createdAt).getTime());
+          expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(
+            new Date(testPlaylist.createdAt).getTime()
+          );
 
           // Don't trust the response object - find the playlist, and make sure it's updated too
-          await axios.get(`${baseUrl}/playlists/${testPlaylistId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+          await axios
+            .get(
+              `${baseUrl}/playlists/${testPlaylistId}`,
+              defaultOptionsWithBearer(authResponse?.IdToken)
+            )
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -211,7 +257,11 @@ describe('PlaylistAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -222,7 +272,10 @@ describe('PlaylistAPI.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl: userApiBaseUrl,
+        token: authResponse?.IdToken,
+      });
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
@@ -234,12 +287,22 @@ describe('PlaylistAPI.e2e', () => {
         visibility: 'public',
       };
       // Create a corresponding playlist in the database
-      createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
+      createPlaylist = createPlaylistFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
       // TODO: Try a get to make sure the playlist is deleted
-      testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
+      testPlaylist = await createAndValidateTestPlaylist(
+        createPlaylist,
+        testPlaylistData
+      );
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
-      await axios.delete(`${baseUrl}/playlists/${testPlaylistId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .delete(
+          `${baseUrl}/playlists/${testPlaylistId}`,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

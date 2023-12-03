@@ -1,13 +1,33 @@
-import { handleErrorResponse, handleSuccessResponse } from '@mediashare/core/http/response';
+import {
+  handleErrorResponse,
+  handleSuccessResponse,
+} from '@mediashare/core/http/response';
 import { AuthenticationGuard } from '@nestjs-cognito/auth';
-import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Param,
+  Query,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Res,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { RouteTokens } from '../../core/constants';
 import { MEDIA_VISIBILITY } from '../../core/models';
 import { GetClaims } from '@mediashare/core/decorators/auth.decorator';
 import { UserGuard } from '../../core/guards';
-import { PlaylistItemGetResponse, PlaylistItemPostResponse, PlaylistItemPutResponse, PlaylistItemShareResponse } from './playlist-item.decorator';
+import {
+  PlaylistItemGetResponse,
+  PlaylistItemPostResponse,
+  PlaylistItemPutResponse,
+  PlaylistItemShareResponse,
+} from './playlist-item.decorator';
 import { PlaylistItemService } from './playlist-item.service';
 import { CreatePlaylistItemDto } from './dto/create-playlist-item.dto';
 import { UpdatePlaylistItemDto } from './dto/update-playlist-item.dto';
@@ -34,7 +54,11 @@ export class PlaylistItemController {
   @ApiBearerAuth()
   @Post()
   @PlaylistItemPostResponse()
-  async create(@Res() res: Response, @Body() createPlaylistItemDto: CreatePlaylistItemDto, @GetClaims('sub') createdBy) {
+  async create(
+    @Res() res: Response,
+    @Body() createPlaylistItemDto: CreatePlaylistItemDto,
+    @GetClaims('sub') createdBy
+  ) {
     try {
       const playlistId = createPlaylistItemDto?.playlistId;
       const mediaId = createPlaylistItemDto?.mediaId;
@@ -51,7 +75,9 @@ export class PlaylistItemController {
         mediaId: mediaId,
         sortIndex,
       } as any;
-      const result = await this.playlistItemService.create({ ...playlistItem } as any);
+      const result = await this.playlistItemService.create({
+        ...playlistItem,
+      } as any);
       return handleSuccessResponse(res, HttpStatus.CREATED, result);
     } catch (error) {
       return handleErrorResponse(res, error);
@@ -63,9 +89,16 @@ export class PlaylistItemController {
   @ApiParam({ name: 'playlistItemId', type: String, required: true })
   @Put(RouteTokens.playlistItemId)
   @PlaylistItemPutResponse()
-  async update(@Res() res: Response, @Param('playlistItemId') playlistItemId: string, @Body() updatePlaylistItemDto: UpdatePlaylistItemDto) {
+  async update(
+    @Res() res: Response,
+    @Param('playlistItemId') playlistItemId: string,
+    @Body() updatePlaylistItemDto: UpdatePlaylistItemDto
+  ) {
     try {
-      const result = await this.playlistItemService.update(playlistItemId, updatePlaylistItemDto);
+      const result = await this.playlistItemService.update(
+        playlistItemId,
+        updatePlaylistItemDto
+      );
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
       return handleErrorResponse(res, error);
@@ -76,7 +109,10 @@ export class PlaylistItemController {
   @ApiBearerAuth()
   @ApiParam({ name: 'playlistItemId', type: String, required: true })
   @Delete(RouteTokens.playlistItemId)
-  async remove(@Res() res: Response, @Param('playlistItemId') playlistItemId: string) {
+  async remove(
+    @Res() res: Response,
+    @Param('playlistItemId') playlistItemId: string
+  ) {
     try {
       const result = await this.playlistItemService.remove(playlistItemId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -95,7 +131,7 @@ export class PlaylistItemController {
     @Res() res: Response,
     @Param('playlistItemId') playlistItemId: string,
     @Param(RouteTokens.userId) userId: string,
-    @GetClaims('sub') createdBy: string,
+    @GetClaims('sub') createdBy: string
   ) {
     try {
       const result = await this.playlistItemService.findOne(playlistItemId);
@@ -119,7 +155,10 @@ export class PlaylistItemController {
   @ApiParam({ name: 'playlistItemId', type: String, required: true })
   @Get(RouteTokens.playlistItemId)
   @PlaylistItemGetResponse()
-  async findOne(@Res() res: Response, @Param('playlistItemId') playlistItemId: string) {
+  async findOne(
+    @Res() res: Response,
+    @Param('playlistItemId') playlistItemId: string
+  ) {
     try {
       const result = await this.playlistItemService.getById(playlistItemId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -131,14 +170,32 @@ export class PlaylistItemController {
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
-  @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
+  @ApiQuery({
+    name: 'tags',
+    type: String,
+    explode: true,
+    isArray: true,
+    required: false,
+    allowEmptyValue: true,
+  })
   @Get()
   @PlaylistItemGetResponse({ isArray: true })
-  async findAll(@Res() res: Response, @Query('text') query?: string, @Query('tags') tags?: string[]) {
+  async findAll(
+    @Res() res: Response,
+    @Query('text') query?: string,
+    @Query('tags') tags?: string[]
+  ) {
     try {
-      const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
+      const parsedTags = Array.isArray(tags)
+        ? tags
+        : typeof tags === 'string'
+        ? [tags]
+        : undefined;
       // Always search, we want to run the aggregate query in every case
-      const result = query || tags ? await this.playlistItemService.search({ query, tags: parsedTags }) : await this.playlistItemService.search({});
+      const result =
+        query || tags
+          ? await this.playlistItemService.search({ query, tags: parsedTags })
+          : await this.playlistItemService.search({});
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
       return handleErrorResponse(res, error);
@@ -149,7 +206,7 @@ export class PlaylistItemController {
   @ApiBearerAuth()
   @Get('popular')
   @PlaylistItemGetResponse({ isArray: true })
-  async findPopular(@Res() res: Response, ) {
+  async findPopular(@Res() res: Response) {
     try {
       const result = await this.playlistItemService.getPopular();
       return handleSuccessResponse(res, HttpStatus.OK, result);

@@ -1,0 +1,1571 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api": {
+      "get": {
+        "operationId": "AppController_getData",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/cognito-testing-login": {
+      "post": {
+        "operationId": "CognitoTestingController_login",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/media-items/visibilities": {
+      "get": {
+        "operationId": "MediaItemController_getVisibilities",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["media-items"]
+      }
+    },
+    "/api/media-items": {
+      "post": {
+        "operationId": "MediaItemController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMediaItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaItem"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["media-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "MediaItemController_findAll",
+        "parameters": [
+          {
+            "name": "text",
+            "required": false,
+            "in": "query",
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "required": false,
+            "in": "query",
+            "explode": true,
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MediaItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["media-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/media-items/{mediaId}": {
+      "put": {
+        "operationId": "MediaItemController_update",
+        "parameters": [
+          {
+            "name": "mediaId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMediaItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaItem"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["media-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "MediaItemController_remove",
+        "parameters": [
+          {
+            "name": "mediaId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["media-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "MediaItemController_findOne",
+        "parameters": [
+          {
+            "name": "mediaId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaItemDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["media-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/media-items/{mediaId}/share/{userId}": {
+      "post": {
+        "operationId": "MediaItemController_share",
+        "parameters": [
+          {
+            "name": "mediaId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": ":userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShareItem"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["media-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/media-items/popular": {
+      "get": {
+        "operationId": "MediaItemController_findPopular",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MediaItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["media-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/playlist-items/visibilities": {
+      "get": {
+        "operationId": "PlaylistItemController_getVisibilities",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["playlist-items"]
+      }
+    },
+    "/api/playlist-items": {
+      "post": {
+        "operationId": "PlaylistItemController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePlaylistItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaylistItem"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlist-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "PlaylistItemController_findAll",
+        "parameters": [
+          {
+            "name": "text",
+            "required": false,
+            "in": "query",
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "required": false,
+            "in": "query",
+            "explode": true,
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlaylistItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlist-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/playlist-items/{playlistItemId}": {
+      "put": {
+        "operationId": "PlaylistItemController_update",
+        "parameters": [
+          {
+            "name": "playlistItemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlaylistItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaylistItem"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlist-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "PlaylistItemController_remove",
+        "parameters": [
+          {
+            "name": "playlistItemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["playlist-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "PlaylistItemController_findOne",
+        "parameters": [
+          {
+            "name": "playlistItemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaylistItemDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlist-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/playlist-items/{playlistItemId}/share/{userId}": {
+      "post": {
+        "operationId": "PlaylistItemController_share",
+        "parameters": [
+          {
+            "name": "playlistItemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": ":userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShareItem"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlist-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/playlist-items/popular": {
+      "get": {
+        "operationId": "PlaylistItemController_findPopular",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlaylistItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlist-items"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/playlists/visibilities": {
+      "get": {
+        "operationId": "PlaylistController_getVisibilities",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["playlists"]
+      }
+    },
+    "/api/playlists": {
+      "post": {
+        "operationId": "PlaylistController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePlaylistDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaylistDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlists"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "PlaylistController_findAll",
+        "parameters": [
+          {
+            "name": "text",
+            "required": false,
+            "in": "query",
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "required": false,
+            "in": "query",
+            "explode": true,
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlaylistDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlists"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/playlists/{playlistId}": {
+      "put": {
+        "operationId": "PlaylistController_update",
+        "parameters": [
+          {
+            "name": "playlistId",
+            "required": true,
+            "in": "path",
+            "example": "123",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlaylistDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playlist"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlists"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "PlaylistController_remove",
+        "parameters": [
+          {
+            "name": "playlistId",
+            "required": true,
+            "in": "path",
+            "example": "123",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["playlists"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "PlaylistController_findOne",
+        "parameters": [
+          {
+            "name": "playlistId",
+            "required": true,
+            "in": "path",
+            "example": "123",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaylistDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlists"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/playlists/{playlistId}/share/{userId}": {
+      "post": {
+        "operationId": "PlaylistController_share",
+        "parameters": [
+          {
+            "name": "playlistId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShareItem"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["playlists"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/search": {
+      "get": {
+        "operationId": "SearchController_findAll",
+        "parameters": [
+          {
+            "name": "target",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "text",
+            "required": false,
+            "in": "query",
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "required": false,
+            "in": "query",
+            "explode": true,
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlaylistDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["search"]
+      }
+    },
+    "/api/search/popular": {
+      "get": {
+        "operationId": "SearchController_findPopular",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlaylistDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["search"]
+      }
+    }
+  },
+  "info": {
+    "title": "Media Service",
+    "description": "Media Service",
+    "version": "0.0.1",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "media-svc",
+      "description": ""
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "local"
+    },
+    {
+      "url": "https://mediashare-api-staging.herokuapp.com",
+      "description": "staging"
+    },
+    {
+      "url": "https://mediashare-api-prod.herokuapp.com",
+      "description": "production"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "CreateMediaItemDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "example": "WAT7f626URdGiDiEs0mDHfOyqiri2vwfCwNg9pxAADX2LTK07WzsF4t1KrSOTdwtizABPOgahLX7Rk0RSK4BHjLNB7ug6AWJCQZDD9YAkDVRC6k74cJLTQb4g4voW",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "userId": {
+            "type": "string",
+            "example": "MejzsJuvybQtgW9gcKoorgzT2SLeGnayG2NQq73QjcmzJzJJYLvrCRDS3psW0nwMbGpdBNzIk4FRxq3gnCXjbWd7QTH7XeBCjMNsTDLKyjMpb03YFIRlfFVx6HE3m",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "title": {
+            "type": "string",
+            "example": "a21PQ5UW2Fx8244mIFk0ZvMYKBGH7Yl0yS4lzHOTVuSj6z2KBCBRxpRRPjClWG4EgndPIcIMTKk9683XcFIc5Jn10xcg29bKxKaRVtZJFmXUDeGaIPOEqOvlrVr97",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "summary": {
+            "type": "string",
+            "example": "TjgjCiOq1YKgbcuATwslDCn3ffjiXlxqhZOQU84btZbxhj78d19rsM5PKCo80Q2WdOVxam4nmrH13j4fepa2gM0fyGwC1U9vtYl6gSlKEaLqTrx6mZR7BHNKLRuFh5q1m5JpinqIKKfy2fBSzSQK0Wo3onSQY5eDT0DRbPZ2MSZhvAcEy16vGxTV1iLKegQ93wrOBJeCf1jizfDtRifSZOGN53CWnCvUpwbG7qF2cfblIHYrJfLl4pRWtpTFwZ7cXUBOuuJ0MruQaJzg7pLUlc6nbOXo8r1Yv7r0wy4iYCe5"
+          },
+          "description": {
+            "type": "string",
+            "example": "PGX3ilWVYBuvTW8AivtDLuZl80D1MuGahD7WUvqAHYWPDuLK7ZhR0FVHHMMO2I8DwBfX1a0xH6gCMRoqpb0Mum5gXfHWAcCHde1GXcGpOqJibKtFCch9ppaKLBz1vjc6ogg4qJfVbe9RREYlq4NPXg8UjZhrGy34FKEUaTUHAWpx0EmZxzk5PulMM0J0qGr4fRaVjfzyharK9LUsdyEgyT9dv7GtdwCOODjTlxkru8wr19uEFgemgZP0Z3qiqL2rIwb8lIF2tZsP4XaGCidqJa2bvZ5pbGkvbnsjDcMymOKL"
+          },
+          "uri": {
+            "type": "string",
+            "example": "gHW6W2MLzNpJHz6e5WCRhUqkPr5tvyS6walygX5X1lD9nIIL1k3jK3aUCp6Z5aFa6tIDmDPP3FgK7bFf5wgmuJubfZMgn6l9WKOEIbvD15HHnMBK8yCbwPAB1RAkrXIrclwlTFkwGdSW1LGI7aYOxlw5mrf3yJjeX5CqJ5EXsqwjbx1ftgU2z8TQ3dIS7lp0M894ncW7O54q2J2qwSUeRiTlbqRSjH19GXCoU5WO6L95xUiIw1KjIAOjfNttC1STd34J5esah9QimfER2kXezT1mRIOewbU9R1T3ojzLei7C"
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "DXFG8jrdyCVTL07zwyLNvqpvkNS4sV1qlWcChlcbeHGKy1KKufYAyAIrjBGWvbNzSzxDiRksxxA4AYmv6i8lniv3hp9qRuqaHTesZ0wlz19mIpcXmFHRSv68Ned0CJSUZC9rcqYZSh1hOKDEDYJiyfaO2wyFlBEdWPxb4A0Rq0soXPzOmbfr09ZuP6VHz1ehGqgChlE7K9RDvKlD1LSgtCCw4KataZyJv2F2NFssqKkF9Ba79IsN95h2S2pbaDUvU8EXnayqLTOqIfGE8TOx3uKqZxoHD5zq8W34PcIkV5mY"
+          },
+          "isPlayable": {
+            "type": "boolean"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": ["private", "shared", "subscription", "public"]
+          },
+          "eTag": {
+            "type": "string",
+            "example": "kztyvnlponLNo5MRfgcp6wsh4yBcyZ3cGduAsJNmkORBBZPk2bWXYIJojZNMpPt19enoOCD36tXUUxAHnR0uU6Ymac7Y94yKqGaFn448o4POObaxMqLaiC9Ma1l7D",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "key",
+          "userId",
+          "title",
+          "description",
+          "uri",
+          "visibility"
+        ]
+      },
+      "MediaItem": {
+        "type": "object",
+        "properties": {}
+      },
+      "MediaVisibilityType": {
+        "type": "string",
+        "enum": ["private", "shared", "subscription", "public"]
+      },
+      "UpdateMediaItemDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "ZGNQhnFqXCWoMuPol7vNgdzEEYxhPFzBZfsm8ZCcFY7NCiQ8tkEE1Kl23arm3o1FBEPB2qLhOsXS5Bbi8ZhGSC0JjSfOyrQVi1WCnVqiXoVbhp2UdC4DvdyI8EGEX",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "updatedDate": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "title": {
+            "type": "string",
+            "example": "Ii7TvWRt9jKl2mylVMjGFN7ZSezlYZHg6fWRmxoRce4KQnJaMUzDqmc0bkRBzACPBOF6nh3SKJi3DEDPKZtg9YMaiYY5GPYoTXlxImGvLdwZ9TpSHAfCh8ZXLQiU4",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "summary": {
+            "type": "string",
+            "example": "F5fdzBcEUtwiAushDKuuXs0hBfaRIfh6gUqIynO0oBsylTrJFrerSo04NylbyGkPEVZ4XG1Sa0zkpu8eT8HV20rqgEzh9kLRqrOG001m3iDB59mwHDPF3E7qx27xVHxKFrwCQ3jE7td5e5DKyvqVW3OdRJYbzcvw6ynWXq9zep1vNZ4U8rpDaxEJ5saqugVPmXINyDfkFcL3eicmEyh1QgoNnSAJa4xNIBiTUqds7C2WQ1DBlmRRxsjXhBRTzJHUGiQ4zr8QKz0gF23QlBuFifzplnEHiJtXddCZ58Sybz4E"
+          },
+          "description": {
+            "type": "string",
+            "example": "6hgFeiapbf9JydCvOElBMHfKGOAj7cpdvEEsr3M859dXvKrhcLfGEKxTzWyHZvzxxfMwPriQdnYpcKeutAK2ozdzOElYInxle1c5SJPZNIK3VcOgeqDtAmzk0lElMzSFmxRINWrIuW4FRiiAdzuz5crFSQEDMN3U1PKulNBme20k4b5S79IuWFTHs55zHVzycJjRmXqrkiT0Slt4eHtq6NNNbChaLbJoQFchg0wRBx54K1BhOXs4yEbJIhPIiGxZgl3yf3KgBJyXgMrqRFtr1MUsNbsqooMaTx3SeEHm8iZe"
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "2UogP2ymPI4RFjOkIhRAqjuXyOjiwvatfnyLnEaBU6RMrNp5moLCuOa3c0vbhjk15YUuYAnhJoGrVskyVIKru5ihN1B7TMopNzIshDzXdeBYmGKj5ubWiOBp87YFEb2Jm0LlpYjnH7fR6IQpV5iGDSAdxCHrjJ6NLXYpuwsgciftruwOHMpvWnLAEUXNmSw7AfIv600UspJ6xTG9xuoxSnMmMKrb9iBclyU17rNgBfwBVyooLwXqnb4mk4tljqaM7qKS3iFXASAyw97SvEr5ReWhkqSb43hkIu6Via6PsJZ4"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/MediaVisibilityType"
+          },
+          "eTag": {
+            "type": "string",
+            "example": "IXmCja2DuKg1IYe9RBTRH4H8SBL8ZnnKuYDd7F2RjjcWDgulWt2elu9JFe4SRkg8TYw1vjdaDNkkYcXIxH7laEEPdspN310c0tKh7ohavYqvE8wAuICzWAXhGUvWR",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": ["_id", "title", "description", "visibility"]
+      },
+      "ShareItem": {
+        "type": "object",
+        "properties": {}
+      },
+      "MediaItemDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "ZGNQhnFqXCWoMuPol7vNgdzEEYxhPFzBZfsm8ZCcFY7NCiQ8tkEE1Kl23arm3o1FBEPB2qLhOsXS5Bbi8ZhGSC0JjSfOyrQVi1WCnVqiXoVbhp2UdC4DvdyI8EGEX",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "updatedDate": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "key": {
+            "type": "string",
+            "example": "hKugiVXFiBcVhaMGuS2objcN1BoAB9LP6K7FFgtT0Jg7i8zZCpXDS9PhEi7wMHd5VpaaKNWk4jyPwF3CEHQDHAuJu0h3rxw0UqdAe4WYfc01RV56vyzHUoQ4J0Nn3",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "userId": {
+            "type": "string",
+            "example": "dOeqvvJTg1FxeHGngg21zd9xmN3odqrENRFtzQ5DXkfOnPuI74I3iGeLGKL6QefSAsroZVONwJ6FalbMI7glattE6NSJiQCxaknnctiWP38O4duP3o0715DqH5zvh",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "title": {
+            "type": "string",
+            "example": "3BybjpmuMmKW2anqtibSuwet7YBOtz1Wklvq4pkm41YDEc5qjKQYRsoHJj2dZ02xFyqr9zRoyLyUhyd8dshziMzYJObO7ildEARKfQLai8MVy07fJbKiYbnVd29vT",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "summary": {
+            "type": "string",
+            "example": "49aAnKi6OjjTSx2c5LkxRLWcy6aVwO3Phz3cJ6i6gRZrjvDTeupILcPRf1bTWAOiCEJqLjhUGfRnOb0xBbqcYlk1T3i5fpPdQQaOAyLrlwlxWujFBSG2p3CDxLzl0LIiSagHES9WOkDDUngUsVD2GDCPGkcmcztxqsijhoJJT12KLTJzsPEziRCzFIXGc0bIfcHQ2QZZYmphdMUOiC44q2W2imu8TTkAQd1pTGuJOPnbnzTdMsT8wb2HZb5gIH73xwxGlmG22XK78a6hAIotvSajOqamubAe0fmq4iptdG4P"
+          },
+          "description": {
+            "type": "string",
+            "example": "Sj3SDSV2FM8FmPOnp9UhXCFTyH0olJVQRaAZ9ip8fdaaxaoe2aviMpl6JZdK58kdZvmQzl3fd4fVII50VuXsIfq0FY5eiKivVC7CG4YpG2wQ8WZmpQ2d4fsgsTAQ8JfD419UBAJSTolk5pRTkTWfBkOyfZRwaMVoS45Rrs4vZbjUF3IMmiSJTjIOUvucWZzZ6l7h7MvJJsiITwa3u2stdZBV5smJMHsw1V0A96itIuyPhQWmv4JX9rQ1SyYcjkBJmzffthCSwUPOv7V2Ndt0N5CVcZ1v13CNRjthrR0rEJAS"
+          },
+          "uri": {
+            "type": "string",
+            "example": "dAQuCubOPlbjHlPmu4LN2HqRFdYie3DqGl7Ye5S3VfUCZ3rGScPBTMhVXqN1FSTmSlEM59Vi7FCKENrXkgfmGfqx42o9gxSlgiCY61vl2g5QMxpMZATprdIZWTHeF16k95kOMxgl5Kue2v4EyLvx55MsGsXsj7sNKIEEHFUc360lLSTGJzdDBRgay4KIyFyCndcVlFxkbuJQQ82cuMIVll265Puz034m97zRf0X3CtAen9HtzfEeHJJyxgrGLntP6Wuu3eQnzXZINRpvqwPFRgldvV1Tf0Grml8fptgY3QAH"
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "HHtxjCNxyJ5a0Td4akermUKR0z3ogA9LGI1tTs2T2cQZoDQG2g0sguauY9QteehJRXLf6VUS3ESR33TmPlTAsEzKJzj8KD6DqdrO6CODnWeirSxg9CJ4O1Q0rxkgFcvhQ0VVvCMOh2D9WbZq4qQJDoOt3HUECPykrXKsNfGFTnU2RsozI9NJD0pzcArqP6BwNLhCoyMbmqFr8DFaSQTOec7rRAiEhXRdmSen8SsdhtAACuIGi5kODR66qfqCI07QcuXdoDax2dNcO3edkQqEr3sBFmYck15wD5b1I8zt9YFT"
+          },
+          "isPlayable": {
+            "type": "boolean"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": ["private", "shared", "subscription", "public"]
+          },
+          "eTag": {
+            "type": "string",
+            "example": "7AUladC2agD9Om80Dv41dyD9VB39Ppry96xSsBhTsd1wU5qQtKfWrMdIGNsrAK2MA1wF6SccWyLHsG4IHyuxdco5ltRs4tW0PPRAh2CPyKniagSXuoBEk0JCsgzT9",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "shareCount": {
+            "type": "number"
+          },
+          "viewCount": {
+            "type": "number"
+          },
+          "likesCount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "_id",
+          "key",
+          "userId",
+          "title",
+          "description",
+          "uri",
+          "visibility",
+          "shareCount",
+          "viewCount",
+          "likesCount"
+        ]
+      },
+      "CreatePlaylistItemDto": {
+        "type": "object",
+        "properties": {
+          "playlistId": {
+            "type": "string",
+            "example": "IlYW7wJcJPu9yydyjaFeNQRs0iuyX12sVQUQqEaFMTp2DrZpnZOO6TjHp1Q90cwD7qSjGWdEFtvHJWu3BKRqIHZvNZ5EFyNNs8CGl0CjRzJI1k2tFhwLqhpa2Cik2",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "mediaId": {
+            "type": "string",
+            "example": "WmYQVReNw0pjxHDMBEcNNtylsQL0zYjpnyXbwRGa5ae58M1BfQVZnuvtAfT6iCKNUf53w0sTRbPYeJwQCdMO6OiZNDMNEG7souJvzI7lGjJW77WmK40JTbKDN4aBk",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "userId": {
+            "type": "string",
+            "example": "qFjdVBfUTy6QpjSt3zte7GbpQY6DUbSAlfnTp3i8NU0zOLyTwH0v3wmpmqzVkJxkiI6gZpHpTUkb9Eh0AfIFEkWjJHHdQ0QNpdmJSV0Ey1mMHobomk2vjJ9iyDtYe",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdBy": {
+            "type": "string",
+            "example": "pBk9XMPJ1taJs3ES7eqyq7DEtajz4nBDBmO4gLX5vbDGr8ZG2BRRZZyGrXHRa9rEpJ9vlpUFCOUNqXF7dDUuzwEgIWN9phtFCzLBkmZiUeUxhdVEDF5JH512b1UfN",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "title": {
+            "type": "string",
+            "example": "sALR3M98m1ggSUpFbJ2dHpsyqoCchAxaDVJVUlAyPXs3LNHlpI87wkIJzwa3QmmlcTztgYgBWGNpx8D55RuhDNBu4VvCn4zeTmY20WyqTWNvh0obtBQPHpnuCjcPU",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "summary": {
+            "type": "string",
+            "example": "Ge9b6hOfpiOFXrZfnauK58I6ujmgGJaTr8p8Kxr2Zm1OWAPnsJa5bV8jn8ElUdyvggj8mk6Juxc3niFnCIpCNutGdtCeGMyKNFXtUOwN6kTX9tmwfgcwbNjRrem3qTSd2wI14oAhSIwYnxqga5axICg61ugmX2HgxYrVmUSIb75GDZ5DvdBH8nQocw4NMKvyCwIp2bIvWgrWJqBsUaIFl4neN7a5q6siU4kwJ7CtNDqw5Vg7izsArCwCvPUlY8ythrIHIZRf6j3uecbSGIY2koH3QG0xtVhC2Gwddbk3zWwr"
+          },
+          "description": {
+            "type": "string",
+            "example": "JfcDeuMXRnP8apB6eyesFDe7N7kzIxowNogZBGYcRys21zzeJJwHmeubntgFQu83TOEqQpRtwdlZStRJOUeND6KZYHT6f4FPQxQQfhqAY0t7s9WuWxvlBP42TYx4qOAEDZ64DAJmKqiEk1v1J9p5eK907YuhJ4VObvq9CWteocfwXk5tZmDfcUU0qfsbEDmkApJCGxmHVVU8WbazNVkC8xSTB3Od0fQBCVNoVrlkaIQxDbSFEzxbY66ThK897I5iY15WrXrYAbiXorywZJRRcHzxduVttlG3cSpfunp0VXTP"
+          },
+          "uri": {
+            "type": "string",
+            "example": "vpHjgYLNPQ8tfl9qYUdBfCQyucIxDfrIc8aiG1YEMckcZApQmZ0CzfWQ0wBcaZPdUPtASrloIsHm6sQ2kPnsncGKkR9uD6zj7nvXR8Hd45u29igsWO3gJDQCy3UsmmJcUkv32b7X2pVOyEieK4wRfTma9Oq2R5XibDoLt6mVYg2dwVErGzCt575Of8Cet00QfFKTKkY2db4hy7HYt3R6xsQQ65ldvGmoFeksuKfFoB1ANi8nUFxRah7ty7clXexJjxk8F5PAZKkAhyhnFJn3J5FCRK6yAFMtbFIEC6x9F2JN"
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "zWFQXLJDu528cWBgSajIGjciRybnlfhr2B37oXctQkoNl8I1ks1ASaPjE5TBXj4Da2YbuF2ELbCoxGTE1t1u5A0mzSQjWgFH0yEjXRCIdDwfAJukowwpdp8u2OtnsA7uFb0rEMiGhah6ArwMmyAeeB1PqtT6ZLRRV5QbxBMuGyIPqI0bLtSlfyCjmN5lCGm8sqvsI8X4Et5mXewehrBkl3bmzx2cGEeZIyvtn0GgilX5Bh76sUF6xt685SqZpPcHBQ1Zoeob7ZArKUFRQZre05ieYI923Y9i9LtKNMGXNFIG"
+          },
+          "sortIndex": {
+            "type": "number"
+          },
+          "isPlayable": {
+            "type": "boolean"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/MediaVisibilityType"
+          }
+        },
+        "required": [
+          "playlistId",
+          "mediaId",
+          "userId",
+          "createdBy",
+          "title",
+          "description",
+          "uri",
+          "visibility"
+        ]
+      },
+      "PlaylistItem": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdatePlaylistItemDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "ZGNQhnFqXCWoMuPol7vNgdzEEYxhPFzBZfsm8ZCcFY7NCiQ8tkEE1Kl23arm3o1FBEPB2qLhOsXS5Bbi8ZhGSC0JjSfOyrQVi1WCnVqiXoVbhp2UdC4DvdyI8EGEX",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "updatedDate": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "playlistId": {
+            "type": "string",
+            "example": "I7CEctAkMZ6L0P1C2ia5wfgrazPYZkgtna6RzxRsOev0BPO0qEbUZIVmWQn3Coxa9ailZfyBesi1Ir227bvqbkETzVkGk6PX6TL1cOE37htxaDG54uAKQL2nio25T",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "mediaId": {
+            "type": "string",
+            "example": "WY36xjb9zjKi7LPbocHTf4x1co24W3OzfJYWO4fLnDRXgQuwSyPCN36VJtOgsR3Xme7FS8efmGeFM7xjJmxbGqcBCvSEYcvv725unzD8kcuamtnDnZkSoPfFHSvfZ",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "userId": {
+            "type": "string",
+            "example": "BRNFaWuZfy0gYWg7LXZWh7eHfQjNWlAPxykJQWGu1j1tw6RuQvtKyYYHNjN8dre0YxmlBZD8jLaA2hP3h11nKvaqbqWxp5MU8GUDKHEhPdX5SM8KelNlDr8s76z65",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdBy": {
+            "type": "string",
+            "example": "KRmmj3aZBNaa4bK9WYZM0PNfJnENRo5aZygbXLE5kU9BIS33wdukiyZ0PnJjN7nALpL7ck26OFCXPStWTIN8gVVEDTOOr16JO8rPbOSoENOapU0GyF1sAXtMb4QOa",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "title": {
+            "type": "string",
+            "example": "MEf3N2dXIMlij56SA4NJHAGY6glP5JotLdQ66oM3e7YhQ46mSwKplcNSdIUZJmFCtriW9prcXJZArvO0BP2LdAcAM1KwtzOjCjyqOmJlRwzRHYRCiLmpjiC0dKFlb",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "summary": {
+            "type": "string",
+            "example": "Medsh8LaY23PlJCxyK8y1Zb8ZfKCQfZ75LI57Gj1vZXMHkbwOBGQiGTxNpP7qyHIludmfsp9l4foKx6ygKDePBIxvcVSalYN7h5h57M5WFBvbJ996tpjtfAu7ph6R9FmUN3odTC9QfIOOjzloQsRcaqBcXJVDc6XM7uFkEX9IjoATDL4wPCqmOccnOMF1wR7gpSCIbH88IxGLhfG9Mi0WG2VQt2LaSJe5iY6eU3IpoFdWsLIZWSCo95k2dpiFr1dYILebCO9gZLWtuJyZOHHG6pc8rGjb5umtFxTlkHtchos"
+          },
+          "description": {
+            "type": "string",
+            "example": "dLVaqp9u54MUwRDkahGBGgIulhT9lOf7H4GfplVFVv2pFwrVzHFaoZOfADDXkjtFQrgHU7p5pDBZNAC9EU01cwKtk8MRI3uPq3DwBC2rA2kr3qofSotPYnaoHiAI7rx1ynFx9SJs5giWuuUdi0I1AEds3HIs0v2mhXR314Gcp3zhXRItQ6BLvVWuTBfH19WJQvDNKAXA5lvl6vxlwmAVtO8ey4xkJKELcWbL7j1rMEmZcZsZYBomx3xie1mg1BU7XPDozYxIVY2y8bYhH8UiG8U24M4YOgkRF6Ne1ABqPT4n"
+          },
+          "uri": {
+            "type": "string",
+            "example": "0EwDlrBLX3c1XRU0VqFhg6dmdPZIahwIuA61osFVw89IncNXHVQTXph7T2ehTFpQz5Mc2JXs85bsQu1kiwZq0716fLNZ8J2cu1hhYDXYBacFlu71l0LB07QzT6W05UTyN8X8PfWVm2nVGnU29IxP0Yq9YSbMhOXSr82DsnuL7kXxzslPAdO1goJpzWcwgyXStd0HRbPnQfsYsxGybfoabLT3WYb616rXGO25JS3smKJLeL4LhzZRs3HGbYUyWQuq8o3EhfnIGWAJCTDlJSpO9ElMOLUT3Tz6AIE1UNJYSilJ"
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "fvAa3sqrtn8csX9XmvpmZu6BhNhYwRjKmuLVqsR8lG9AcG7L6lGOmfxEyQM29s0P4jDTspLEa7LCx1ZvKy1zgDnEaJv2D4XgjVRwIs81CW2vjh2KFmOnaS3OUuvg5khmKb4P0FjJAh5I5At3ib5uCDtbSlLN2cshNbeVOvOnsZvZKzF80WLWP9zX2lQmux8gzr6EvkMQHgfZjkrghkCCb5cwKbn64SaJRZSqhxwwUtmLIPzsChtv9AonQGt1KMpSzjR96znm8GQ5AzuXxq1jZ06flHA31ika6A6j5BKTdFkz"
+          },
+          "sortIndex": {
+            "type": "number"
+          },
+          "isPlayable": {
+            "type": "boolean"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/MediaVisibilityType"
+          }
+        },
+        "required": [
+          "_id",
+          "playlistId",
+          "mediaId",
+          "userId",
+          "createdBy",
+          "title",
+          "description",
+          "uri"
+        ]
+      },
+      "PlaylistItemDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "ZGNQhnFqXCWoMuPol7vNgdzEEYxhPFzBZfsm8ZCcFY7NCiQ8tkEE1Kl23arm3o1FBEPB2qLhOsXS5Bbi8ZhGSC0JjSfOyrQVi1WCnVqiXoVbhp2UdC4DvdyI8EGEX",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "updatedDate": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "playlistId": {
+            "type": "string",
+            "example": "55TjC9cUvh4wpPfogqreJ04Lns712WlCC0Djcx67yLv8GbrNMEz53yp64jRnTvMQ0FJGlniG9xwKKDSkw45PvJiDTte3BzAFtT3sPBDCiebIEOkAhWxvrpYW0uWzQ",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "mediaId": {
+            "type": "string",
+            "example": "RWCY265l02WEZPLn048GKk7DFNfa1kiJxYnK1ME1sj5ocZZMlgX8xSbYyKIrv1Yh10TFqYCf80UNuSxC6MPnmtZhJGt3wxLXIW11qS6swtHemQqQm5PpATLRLDHfn",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "userId": {
+            "type": "string",
+            "example": "ldHYMDk3p4ZJj7U2RWRQl0EcL4PRlE2byQm0HIAB4atFsyGmTYLLd1qFBbe17J8J6KlK9ydzaqsOwOa6neUSUy6lpQWYvsAUUdzRxIgb8uyi8ReR0zaY20KplGVho",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdBy": {
+            "type": "string",
+            "example": "vi8Gf2prZigOecu2p9N2aefOHNmizbHiJNLWPew2SfmxJnZ1wdGBn161TSGE2C0pYGrB4MI5XXMSnQncfenumvEcNSd8ohCtJOUQWwPT9QFJ1NhxMPHWKec77Ri9b",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "title": {
+            "type": "string",
+            "example": "LCS0mDVhtYUafVCRtqNrgQGqf82eLYJQ4q58J9ieKxZP6sqsxU53VaXLq9dPTROHa9Er8VAoE9MkEpiUo0JcJ0eBIIBTiaKWi5RsbN6TWPtDSDjzo9lWJ6DaNU1VT",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "summary": {
+            "type": "string",
+            "example": "B4eBogf0zygLpV6ERkAMnXZ1v4kQ3abmMtNxWDcrNPnA1vzPp4p5XN1xL0PynJ5Fcm8Xou6gGpM0BYcyK3adU2GmEnsHvpBLiQ8NNaMO0JIRGHReLO4qKgVKhGHjMqV3y1Ik986fAv90S1NvfPlyBTVXu6ZON8i0QPz8kGYKqBH2lrKABTnGcMmSZnh49QsjqBmIXdSV2OMs4uYqw5SyMtvmNvBiALqgvv64dwKEaggMaLbJbVkt9sbh3fYUDDj3V7zRSM2YJ3WpY08jztL1Xyh1zjD4Bxdn96zpLZTtuRXp"
+          },
+          "description": {
+            "type": "string",
+            "example": "fjlt7VOeD6OLWV9saLioGVs9JJ3WxTDqgF6sNzUSdc9JenIKntfQZSK0yWTTu3J7QpdXr7JmdnWjYKEmiN3NeaqD4rkcYKYkntJEsJnWxMFw52cZh6xjcqA28R4VOLbj06kbISKfQl6KAGa10SjUG8chZwJHATCFSeCAJEdBtGhRFH4UnAGGfEVdGDjsiABQn8qs38y39RdFOZh1PGqBml2c3C3Hf7SqhlWVkvz3m1kshbwwsw0ztzzGLY6nl7t0uk8JZIPVbA3msREJ4y0PGar9hix7QNiCUbPrYLHGt9Md"
+          },
+          "uri": {
+            "type": "string",
+            "example": "KcgCgrKiPpElctM5DcwgMrfm2SLeBkuOWNulVbTRPQ1sGJjyWYv8U82NQC4goKeBXQZLy5EQlRzUtrh46fGWA11k7aEsavJnA9yofKkEbVtVLaZyYDUxwoqIVlX5NI22XwQ58I75jjysFrU4kSTKQjqUtRsFEKM7HyFmXX8rgA8CjkJEwZVtikrZyEyioPpwIDDZuSq25mWtFp9cOI6wJVilDuJe1pnnNvhM25Hq2vGokZByyTxoKhbIIFWW4HacanKk5P6IkqhMWSO1GCIVjRzS4WyqcyA6gO0gdIcShO4M"
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "KCHUPAQBJQfImxI3DctiDaBZCRT8HlUt41NYO4q62Po8FJxIdGj6n5uX5Y5fiOyevSdK8dIZLUZNA7pPkq6XLCc3OGZm7ZXVGIkmWF8h4eIg419Q2S0JlzdYJ2RMjn4qDCofZoeLB6vivanKduvRYt94bIkKKjsclgXvGvgqCYlCVvh28ZTKuz4flkyHei5p2yYY7ScxZRUDBuXQ5zoBlYc7wIssJ4SpTZLljPfAOoAKBtvvwA9EWb7fML0aUi1YcOrQJS5xphdOm6fHos0G9sm4YfXJ1CJbJ3vnBVS3mar1"
+          },
+          "sortIndex": {
+            "type": "number"
+          },
+          "isPlayable": {
+            "type": "boolean"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/MediaVisibilityType"
+          },
+          "shareCount": {
+            "type": "number"
+          },
+          "viewCount": {
+            "type": "number"
+          },
+          "likesCount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "_id",
+          "playlistId",
+          "mediaId",
+          "userId",
+          "createdBy",
+          "title",
+          "description",
+          "uri",
+          "visibility",
+          "shareCount",
+          "viewCount",
+          "likesCount"
+        ]
+      },
+      "PlaylistVisibilityType": {
+        "type": "string",
+        "enum": ["private", "shared", "subscription", "public"]
+      },
+      "CreatePlaylistDto": {
+        "type": "object",
+        "properties": {
+          "cloneOf": {
+            "type": "string",
+            "example": "656c781d908aab5b8bb86d52",
+            "readOnly": false
+          },
+          "userId": {
+            "type": "string",
+            "example": "QRW5rMIx5goztkcsb1yXZgPxVhLlj8zSCRrsvhMhuoc2kb1HtDI44GjBhgTGgkhZgq7LaJxubFovckwrFuyqvdci2cRUyi19YWOCHqQOD9g70hkfAOZ7Q7J5IHzN9",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "title": {
+            "type": "string",
+            "example": "toLpAxFP3oqn29JGwqGbIzZtx4j7qMWjTJw3rUhr5vlfLYGQ3xEz3cxGnrPXgQSjkdU5DYYMhD7uksSpE5BH7JjA0o4q9MFQrQ2gmraiVps14Auo5q5wHHvmBPAuV",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "summary": {
+            "type": "string",
+            "example": "UwwOHEZa03FNyTHudzPtJ9dtrnf6o0dgTRLK11HICFbd636z2vGtontl9526JmGY5jhWVSwdAzLOmlGvUwrp41iDovVSndIQGCRXWnhXT5ndclRuYfg8Y1usFBvvL3izZUu1ZouKR4E6CeDI449r2qQ0Osd79mseM3DeCpy3QTbDGpseRHTOOHYYdaqpCfXRGmZHa41xcDR1xxks430HgMy1uznSuFzTbEAVp2QKMCBJtHhgCSMoM5V52Qzs3ue8x6cpBugYLfaoZii1hqzSZcfEWK74sY4KkMVb3oA27Toc"
+          },
+          "description": {
+            "type": "string",
+            "example": "XaPXCtfXpBQbIpN2QiruaMw5SvNIIr4g2iYVZ8ZYbdumNSTRqf56WRtWpJOmNDslP5KvJIFyQMqWqLk0Q63wzWxP8KCRBefeujdeaizvIgxmAqJoWGdfMIPfvSGjVCXSMSKmH2sS0Fk3Yew1xDoGenEwaIx0tXQywR1s3YHlhu8lfHd9e9cXmLYiqZALTmYypAcg34jAcm82FodePbjS45iXwItw8BarSHtDmlZ3mABgY2qJIWSrBtozUTBZWvBk7eyITcj2nPOqtbhZCrLP5bVnKQqvYpNVc0yUKwzQmeEC"
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "kkomIIMKohSqDXiVEfDdT2V2WAr7mDcZd2IEbQW4bdmZ7OQtxqnElLPWd0aaA0CzoqwUzgyKPwuaxQO2VFLtTHokEOKxKXAsbxS2ClI4fbBQo2F8SrdeV6tePJMHTooMqL86xtY0NX2slmNbVuzmWDXC0uHRds06AhRrAmTyZHgEYUiEnYfpX7sj58k2a4zEVwNQdDs2qLbUCO50XApbR0T9UZ5ID2uUhOO9bwNVQUJ8RFJimKzd8LuO8zeYSw1ltUSX2wMsTJ54Nw44IikcJpKOSrvEYUmIdK3gkcYUX8iT"
+          },
+          "mediaIds": {
+            "writeOnly": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/PlaylistVisibilityType"
+          }
+        },
+        "required": ["userId", "title", "description", "mediaIds", "visibility"]
+      },
+      "PlaylistDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "ZGNQhnFqXCWoMuPol7vNgdzEEYxhPFzBZfsm8ZCcFY7NCiQ8tkEE1Kl23arm3o1FBEPB2qLhOsXS5Bbi8ZhGSC0JjSfOyrQVi1WCnVqiXoVbhp2UdC4DvdyI8EGEX",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "updatedDate": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "cloneOf": {
+            "type": "string",
+            "example": "656c781d908aab5b8bb86d52",
+            "readOnly": false
+          },
+          "title": {
+            "type": "string",
+            "example": "WDA7vawJPOlah8j9oj2wmoQ9PM7o8bUDrrbyuZnfsDRXXT9FPev7ucapaQ4xfPavrRgpzkv94Gu7L2mDAHxtYm7bqAhAMijh6L3XvxDR9fsLBuPBboIH6QzuDT6p9",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "description": {
+            "type": "string",
+            "example": "hTXNw40qCsrQY59Tzkz423L9Vz1XVxaJtypGPN9PNM21HLc0u67OUwOyNcDCg3zbWlVOMgB8z0Yk5H8irhzkJ6oEoxmwkGDPXH5G9BMd5Ft7N8v680DWDsT3ORTdDZVvbq26Z49PXKs3OWCdOZs3tpRYDRwzXLquIMhRjbXFTdzpb7IDS9wPOIWGKY8D345uaNKYNtwbZnAnJ5Ph3lyQcG7jAJLP7j5L2RDHAUxRX0osWvhjzkICq4iU0zVKjDIta6TNhfgHFltBENZWQQcPil2K9kLs4LMfZyHnB7B0gD7o"
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "YTu6ZzIDP8DV1pmNWtBoH9LPXkMqJNOUzNlKV9dGKPqXPIkuMO9NsgkPEU446jjXbaBCweW6Wz55PR1J87z4kgrU71lUXFQYazLQ2elpXPafQG4aEomRC5g9qnoX8bq5tdLyYiRIDcPLCntI8xpi8NtWRQV49z8I2dr9uf1I0Hb5Up6Ze1WNdXSRNJdGCSJAz3wdjSUlKcpbfRV0d7ipyL7mywdZpRrteVb1BptJpWjufmt9LUn7D4Yrer8T6i8b5LP88Rk9zTULZkLZxttUr09cJyaeCsRCzKhd5kRge1Nr"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/PlaylistVisibilityType"
+          },
+          "mediaItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaItemDto"
+            }
+          },
+          "playlistItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlaylistItemDto"
+            }
+          },
+          "shareCount": {
+            "type": "number"
+          },
+          "viewCount": {
+            "type": "number"
+          },
+          "likesCount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "_id",
+          "title",
+          "description",
+          "imageSrc",
+          "visibility",
+          "mediaItems",
+          "playlistItems",
+          "shareCount",
+          "viewCount",
+          "likesCount"
+        ]
+      },
+      "UpdatePlaylistDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "ZGNQhnFqXCWoMuPol7vNgdzEEYxhPFzBZfsm8ZCcFY7NCiQ8tkEE1Kl23arm3o1FBEPB2qLhOsXS5Bbi8ZhGSC0JjSfOyrQVi1WCnVqiXoVbhp2UdC4DvdyI8EGEX",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "updatedDate": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "mediaIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/PlaylistVisibilityType"
+          }
+        },
+        "required": ["_id", "visibility"]
+      },
+      "Playlist": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "HPMcHHBtikHUmeTpPL9P9EyLv3vt81rSmc34oIEPEVIx6vInRihxXEp4io4ilLoH5nps5pQPkZHOBAhBrWfyaNuiSHZbY8pGSLisD6MjmkMl0Gh2VvqL4y9jPhqAg",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "description": {
+            "type": "string",
+            "example": "sYLTcPXpzFRX1vARSygfIL8G4LXa5L6ykSSttsMQEs68AGR67auvKDipNJgEPKjEO3exCfZLlIY38BPQAIb8o00EuxSuDQLGiBH0oQCnHQiwysroMdtCalD93G6MGIMr9E5N5gxeljoOEAIwsGzlXpD95ju8cr2Ajk2M1OV8jMgElFErbvJOkXRKX0ADupmv7v8hHGGOn7Nzuh2xupRma5P9dDY1KqIDaU8TfK2BF8wF0jIc6vgryc3zn8MTiHxUZBSzcbqqjqS9HjctOVFx6iAtnU8lTpkN6ptkAjZwLyt1"
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "ew4kner3bWSo1S9UohTw8fHBUUE1bgIlG9cXjzl5lPszO3ZPbNt18Jif28b4x3kj3PcV0Eo12Mc9nM1G6Gfnva8teFcqHdgoJj09Mukr01awVXEpW8DCO8Z4ScIth",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "mediaIds": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/PlaylistVisibilityType"
+          }
+        },
+        "required": ["title", "description", "imageSrc", "mediaIds"]
+      }
+    }
+  }
+}

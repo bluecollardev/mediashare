@@ -7,7 +7,10 @@ import { ConflictException, HttpException, HttpStatus } from '@nestjs/common';
  * @return Http Exception with status of 400
  */
 function badRequestResponse(error: string) {
-  return new HttpException({ status: HttpStatus.BAD_REQUEST, error }, HttpStatus.BAD_REQUEST);
+  return new HttpException(
+    { status: HttpStatus.BAD_REQUEST, error },
+    HttpStatus.BAD_REQUEST
+  );
 }
 
 /**
@@ -20,7 +23,11 @@ function badRequestResponse(error: string) {
 function notFoundResponse(entity: string, opts?: { args?: any }) {
   const { args = null } = opts;
   return new HttpException(
-    { status: HttpStatus.NOT_FOUND, error: `${entity} was not found`, ...(args ?? args) },
+    {
+      status: HttpStatus.NOT_FOUND,
+      error: `${entity} was not found`,
+      ...(args ?? args),
+    },
     HttpStatus.NOT_FOUND
   );
 }

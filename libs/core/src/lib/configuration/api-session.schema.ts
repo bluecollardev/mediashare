@@ -5,4 +5,3 @@ export const apiSessionValidationSchema = {
   SESSION_DB_COLLECTION: Joi.string().default('session'),
   SESSION_SECRET: Joi.string().default('this-is-my-secret-key'),
 };
-

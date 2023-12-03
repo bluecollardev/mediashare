@@ -8,22 +8,31 @@ import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOp
 import { ObjectIdGuard } from '@mediashare/core/guards';
 import { DataService } from '@mediashare/core/services';
 import { IdType } from '@mediashare/shared';
-import { CreateMediaShareItemDto, CreatePlaylistShareItemDto } from './dto/create-share-item.dto';
+import {
+  CreateMediaShareItemDto,
+  CreatePlaylistShareItemDto,
+} from './dto/create-share-item.dto';
 // import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
 import { ShareItem } from './entities/share-item.entity';
 
 @Injectable()
-export class ShareItemDataService extends DataService<ShareItem, MongoRepository<ShareItem>> {
+export class ShareItemDataService extends DataService<
+  ShareItem,
+  MongoRepository<ShareItem>
+> {
   constructor(
     @InjectRepository(ShareItem) repository: MongoRepository<ShareItem>,
-    logger: PinoLogger,
+    logger: PinoLogger
   ) {
     super(repository, logger);
   }
 }
 
 @Injectable()
-export class ShareItemService extends DataService<ShareItem, MongoRepository<ShareItem>> {
+export class ShareItemService extends DataService<
+  ShareItem,
+  MongoRepository<ShareItem>
+> {
   constructor(
     @InjectRepository(ShareItem)
     repository: MongoRepository<ShareItem>,
@@ -32,7 +41,11 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     super(repository, logger);
   }
 
-  async createMediaShareItem({ userId, mediaId, createdBy }: CreateMediaShareItemDto): Promise<ShareItem> {
+  async createMediaShareItem({
+    userId,
+    mediaId,
+    createdBy,
+  }: CreateMediaShareItemDto): Promise<ShareItem> {
     return await this.create({
       userId,
       mediaId: ObjectIdGuard(mediaId),
@@ -41,7 +54,11 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     } as any);
   }
 
-  async createPlaylistShareItem({ userId, playlistId, createdBy }: CreatePlaylistShareItemDto): Promise<ShareItem> {
+  async createPlaylistShareItem({
+    userId,
+    playlistId,
+    createdBy,
+  }: CreatePlaylistShareItemDto): Promise<ShareItem> {
     return await this.create({
       userId,
       playlistId: ObjectIdGuard(playlistId),
@@ -60,9 +77,27 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   async getMediaItemsSharedByUser(userId: IdType) {
     return this.repository
       .aggregate([
-        { $match: { $and: [{ createdBy: userId }, { mediaId: { $exists: true } }] } },
-        { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'author' } },
-        { $lookup: { from: 'media_item', localField: 'mediaId', foreignField: '_id', as: 'mediaItem' } },
+        {
+          $match: {
+            $and: [{ createdBy: userId }, { mediaId: { $exists: true } }],
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'createdBy',
+            foreignField: '_id',
+            as: 'author',
+          },
+        },
+        {
+          $lookup: {
+            from: 'media_item',
+            localField: 'mediaId',
+            foreignField: '_id',
+            as: 'mediaItem',
+          },
+        },
         { $unwind: { path: '$author' } },
         { $unwind: { path: '$mediaItem' } },
         {
@@ -89,15 +124,54 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
   async getPlaylistsSharedByUser(userId: IdType) {
     return this.repository
       .aggregate([
-        { $match: { $and: [{ createdBy: userId }, { playlistId: { $exists: true } }] } },
-        { $lookup: { from: 'playlist', localField: 'playlistId', foreignField: '_id', as: 'playlist' } },
-        { $lookup: { from: 'media_item', localField: 'mediaIds', foreignField: '_id', as: 'mediaItems' } },
+        {
+          $match: {
+            $and: [{ createdBy: userId }, { playlistId: { $exists: true } }],
+          },
+        },
+        {
+          $lookup: {
+            from: 'playlist',
+            localField: 'playlistId',
+            foreignField: '_id',
+            as: 'playlist',
+          },
+        },
+        {
+          $lookup: {
+            from: 'media_item',
+            localField: 'mediaIds',
+            foreignField: '_id',
+            as: 'mediaItems',
+          },
+        },
         // { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'sharedBy' } },
         // { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'sharedWith' } },
         // { $lookup: { from: 'user', localField: 'playlist.createdBy', foreignField: '_id', as: 'author' } },
-        { $lookup: { from: 'share_item', localField: 'playlist._id', foreignField: 'playlistId', as: 'shareItems' } },
-        { $lookup: { from: 'view_item', localField: 'playlist._id', foreignField: 'playlistId', as: 'viewItems' } },
-        { $lookup: { from: 'like_item', localField: 'playlist._id', foreignField: 'playlistId', as: 'likeItems' } },
+        {
+          $lookup: {
+            from: 'share_item',
+            localField: 'playlist._id',
+            foreignField: 'playlistId',
+            as: 'shareItems',
+          },
+        },
+        {
+          $lookup: {
+            from: 'view_item',
+            localField: 'playlist._id',
+            foreignField: 'playlistId',
+            as: 'viewItems',
+          },
+        },
+        {
+          $lookup: {
+            from: 'like_item',
+            localField: 'playlist._id',
+            foreignField: 'playlistId',
+            as: 'likeItems',
+          },
+        },
         { $unwind: '$playlist' },
         // { $unwind: '$sharedBy' },
         // { $unwind: '$sharedWith' },
@@ -145,8 +219,22 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     return this.repository
       .aggregate([
         { $match: { $and: [{ userId }, { mediaId: { $exists: true } }] } },
-        { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'author' } },
-        { $lookup: { from: 'media_item', localField: 'mediaId', foreignField: '_id', as: 'mediaItem' } },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'createdBy',
+            foreignField: '_id',
+            as: 'author',
+          },
+        },
+        {
+          $lookup: {
+            from: 'media_item',
+            localField: 'mediaId',
+            foreignField: '_id',
+            as: 'mediaItem',
+          },
+        },
         { $unwind: { path: '$author' } },
         { $unwind: { path: '$mediaItem' } },
         {
@@ -174,14 +262,70 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
     return this.repository
       .aggregate([
         { $match: { $and: [{ userId }, { playlistId: { $exists: true } }] } },
-        { $lookup: { from: 'playlist', localField: 'playlistId', foreignField: '_id', as: 'playlist' } },
-        { $lookup: { from: 'media_item', localField: 'mediaIds', foreignField: '_id', as: 'mediaItems' } },
-        { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'sharedBy' } },
-        { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'sharedWith' } },
-        { $lookup: { from: 'user', localField: 'playlist.createdBy', foreignField: '_id', as: 'author' } },
-        { $lookup: { from: 'share_item', localField: 'playlist._id', foreignField: 'playlistId', as: 'shareItems' } },
-        { $lookup: { from: 'view_item', localField: 'playlist._id', foreignField: 'playlistId', as: 'viewItems' } },
-        { $lookup: { from: 'like_item', localField: 'playlist._id', foreignField: 'playlistId', as: 'likeItems' } },
+        {
+          $lookup: {
+            from: 'playlist',
+            localField: 'playlistId',
+            foreignField: '_id',
+            as: 'playlist',
+          },
+        },
+        {
+          $lookup: {
+            from: 'media_item',
+            localField: 'mediaIds',
+            foreignField: '_id',
+            as: 'mediaItems',
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'createdBy',
+            foreignField: '_id',
+            as: 'sharedBy',
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'sharedWith',
+          },
+        },
+        {
+          $lookup: {
+            from: 'user',
+            localField: 'playlist.createdBy',
+            foreignField: '_id',
+            as: 'author',
+          },
+        },
+        {
+          $lookup: {
+            from: 'share_item',
+            localField: 'playlist._id',
+            foreignField: 'playlistId',
+            as: 'shareItems',
+          },
+        },
+        {
+          $lookup: {
+            from: 'view_item',
+            localField: 'playlist._id',
+            foreignField: 'playlistId',
+            as: 'viewItems',
+          },
+        },
+        {
+          $lookup: {
+            from: 'like_item',
+            localField: 'playlist._id',
+            foreignField: 'playlistId',
+            as: 'likeItems',
+          },
+        },
         { $unwind: '$playlist' },
         { $unwind: '$sharedBy' },
         { $unwind: '$sharedWith' },
@@ -227,7 +371,9 @@ export class ShareItemService extends DataService<ShareItem, MongoRepository<Sha
 
   // Was previously Promise<DeleteWriteOpResultObject>
   async removeShareItems(shareItemIds: IdType[]): Promise<any> {
-    const shareItemObjectIds = shareItemIds.map((id: string) => ObjectIdGuard(id));
+    const shareItemObjectIds = shareItemIds.map((id: string) =>
+      ObjectIdGuard(id)
+    );
     return await this.repository.deleteMany({
       _id: { $in: shareItemObjectIds },
     });

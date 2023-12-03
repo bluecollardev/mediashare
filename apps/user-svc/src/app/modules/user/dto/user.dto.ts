@@ -1,7 +1,14 @@
-import { AutoMap } from '@automapper/classes'
+import { AutoMap } from '@automapper/classes';
 import { ApiEmail, ApiName, ApiString, ApiUriString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDefined, IsEmail, IsOptional, IsPhoneNumber, IsString, Length } from 'class-validator';
+import {
+  IsDefined,
+  IsEmail,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  Length,
+} from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { BC_ROLES, BcRolesType } from '../../../core/models';
 

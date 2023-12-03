@@ -1,9 +1,21 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
 import { classes } from '@automapper/classes';
-import { createMap, createMapper, Dictionary, forMember, ignore, Mapper, ModelIdentifier } from '@automapper/core';
+import {
+  createMap,
+  createMapper,
+  Dictionary,
+  forMember,
+  ignore,
+  Mapper,
+  ModelIdentifier,
+} from '@automapper/core';
 import { AutomapperModule } from '@automapper/nestjs';
-import { appConfig, appValidationSchema, dbConfig } from '@mediashare/media-svc/src/app/app.configuration';
+import {
+  appConfig,
+  appValidationSchema,
+  dbConfig,
+} from '@mediashare/media-svc/src/app/app.configuration';
 import { PlaylistItemModule } from '@mediashare/media-svc/src/app/modules/playlist-item/playlist-item.module';
 import { PlaylistModule } from '@mediashare/media-svc/src/app/modules/playlist/playlist.module';
 import { CognitoAuthModule } from '@nestjs-cognito/auth';
@@ -24,11 +36,30 @@ import { createDB } from '@mediashare/shared/test';
 export const getBaseUrl = async (app: INestApplication, globalPrefix) =>
   (await app.getUrl()).replace('[::1]', 'localhost') + `/${globalPrefix}`;
 
-export const initializeMapper = <E, D, C, U>(entity: E, dto: D, createDto: C, updateDto: U): Mapper => {
+export const initializeMapper = <E, D, C, U>(
+  entity: E,
+  dto: D,
+  createDto: C,
+  updateDto: U
+): Mapper => {
   const mapper = createMapper({ strategyInitializer: classes() });
-  createMap(mapper, entity as ModelIdentifier<Dictionary<E>>, dto as ModelIdentifier<Dictionary<D>>);
-  createMap(mapper, createDto as ModelIdentifier<Dictionary<C>>, entity as ModelIdentifier<Dictionary<E>>, forMember((dest) => dest['_id'], ignore()));
-  createMap(mapper, updateDto as ModelIdentifier<Dictionary<U>>, entity as ModelIdentifier<Dictionary<E>>, forMember((dest) => dest['_id'], ignore()));
+  createMap(
+    mapper,
+    entity as ModelIdentifier<Dictionary<E>>,
+    dto as ModelIdentifier<Dictionary<D>>
+  );
+  createMap(
+    mapper,
+    createDto as ModelIdentifier<Dictionary<C>>,
+    entity as ModelIdentifier<Dictionary<E>>,
+    forMember((dest) => dest['_id'], ignore())
+  );
+  createMap(
+    mapper,
+    updateDto as ModelIdentifier<Dictionary<U>>,
+    entity as ModelIdentifier<Dictionary<E>>,
+    forMember((dest) => dest['_id'], ignore())
+  );
   return mapper;
 };
 
@@ -39,7 +70,9 @@ export const initializeDB = async (entities: any[]) => {
   return db;
 };
 
-export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplication> => {
+export const initializeApp = async (
+  globalPrefix = 'api'
+): Promise<INestApplication> => {
   const moduleFixture = await Test.createTestingModule({
     imports: [
       ConfigModule.forRoot({
@@ -65,10 +98,10 @@ export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplicat
         useUnifiedTopology: true,
         useNewUrlParser: true,
         logging: true,
-        dropSchema: true
+        dropSchema: true,
       }),
       AutomapperModule.forRoot({
-        strategyInitializer: classes()
+        strategyInitializer: classes(),
       }),
       CognitoAuthModule.register({
         identityProvider: {
@@ -76,7 +109,8 @@ export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplicat
         },
         jwtVerifier: {
           userPoolId: process.env.COGNITO_USER_POOL_ID || 'us-west-2_NIibhhG4d',
-          clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
+          clientId:
+            process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
           tokenUse: 'id',
         },
       }),
@@ -86,7 +120,8 @@ export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplicat
         },
         jwtVerifier: {
           userPoolId: process.env.COGNITO_USER_POOL_ID || 'us-west-2_NIibhhG4d',
-          clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
+          clientId:
+            process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
           tokenUse: 'id',
         },
       } as CognitoModuleOptions),
@@ -96,7 +131,7 @@ export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplicat
       PlaylistModule,
     ],
     controllers: [],
-    providers: []
+    providers: [],
   }).compile();
 
   const app = moduleFixture.createNestApplication();
@@ -113,17 +148,17 @@ export const initializeApp = async (globalPrefix = 'api'): Promise<INestApplicat
       {
         // TODO: Fix the port so swagger works? This is just tests so we probably don't care...
         url: `http://localhost:5555`,
-        description: `local`
+        description: `local`,
       },
       {
         url: `https://mediashare-api-staging.herokuapp.com`,
-        description: `staging`
+        description: `staging`,
       },
       {
         url: `https://mediashare-api-prod.herokuapp.com`,
-        description: `production`
-      }
-    ]
+        description: `production`,
+      },
+    ],
   });
 
   app.use(bodyParser.json()); // For parsing application/json

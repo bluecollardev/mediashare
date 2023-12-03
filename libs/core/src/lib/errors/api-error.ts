@@ -19,7 +19,7 @@ export const ApiErrorResponses: Record<ApiErrorCodes, (errors) => ApiError> = {
     message: `Validation failed`,
     additionalMessages: errors,
   }),
-}
+};
 
 export const ApiErrorResponseName = 'ApiErrorResponse';
 

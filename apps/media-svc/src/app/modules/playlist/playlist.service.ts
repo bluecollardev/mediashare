@@ -29,7 +29,10 @@ import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
 }; */
 
 @Injectable()
-export class PlaylistDataService extends FilterableDataService<Playlist, MongoRepository<Playlist>> {
+export class PlaylistDataService extends FilterableDataService<
+  Playlist,
+  MongoRepository<Playlist>
+> {
   constructor(
     @InjectRepository(Playlist) repository: MongoRepository<Playlist>,
     logger: PinoLogger,
@@ -76,33 +79,55 @@ export class PlaylistDataService extends FilterableDataService<Playlist, MongoRe
         {
           $match: query
             ? {
-              $text: { $search: query },
-              $and: [{ createdBy: userId }],
-            }
+                $text: { $search: query },
+                $and: [{ createdBy: userId }],
+              }
             : {
-              $and: [{ createdBy: userId }],
-            },
+                $and: [{ createdBy: userId }],
+              },
         },
       ]);
     } else {
       // Only return search results that are app subscriber content (for paying app subscribers), shared content from a user's network, or public content
-      const appSubscriberContentUserIds = this.configService.get('appSubscriberContentUserIds');
+      const appSubscriberContentUserIds = this.configService.get(
+        'appSubscriberContentUserIds'
+      );
       aggregateQuery = aggregateQuery.concat([
         {
           $match: query
             ? {
-              $text: { $search: query },
-              $and: [
-                { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-                { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-              ],
-            }
+                $text: { $search: query },
+                $and: [
+                  {
+                    $or: [
+                      ...appSubscriberContentUserIds.map((id) => ({
+                        createdBy: ObjectIdGuard(id),
+                      })),
+                    ],
+                  },
+                  {
+                    visibility: {
+                      $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION],
+                    },
+                  },
+                ],
+              }
             : {
-              $and: [
-                { $or: [...appSubscriberContentUserIds.map((id) => ({ createdBy: ObjectIdGuard(id) }))] },
-                { visibility: { $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION] } },
-              ],
-            },
+                $and: [
+                  {
+                    $or: [
+                      ...appSubscriberContentUserIds.map((id) => ({
+                        createdBy: ObjectIdGuard(id),
+                      })),
+                    ],
+                  },
+                  {
+                    visibility: {
+                      $in: [VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION],
+                    },
+                  },
+                ],
+              },
         },
       ]);
     }
@@ -189,7 +214,16 @@ export class PlaylistService {
   ) {}
 
   async create(dto: CreatePlaylistDto & { createdBy: IdType }) {
-    const { title, visibility, description, imageSrc, mediaIds, tags, createdBy, cloneOf } = dto;
+    const {
+      title,
+      visibility,
+      description,
+      imageSrc,
+      mediaIds,
+      tags,
+      createdBy,
+      cloneOf,
+    } = dto;
     return await this.dataService.create({
       title,
       visibility,
@@ -206,16 +240,25 @@ export class PlaylistService {
     const { mediaIds, ...rest } = dto;
     // TODO: Transaction!
     // Get playlist items by playlistId
-    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) } as any);
+    const playlistItems = await this.playlistItemService.findAllByQuery({
+      playlistId: ObjectIdGuard(playlistId),
+    } as any);
     // Filter out any deleted media items
     const playlistItemIdsToDelete = playlistItems
       // If playlist item mediaId is NOT included in our mediaIds, delete the playlist item
-      .filter((item: PlaylistItem) => !mediaIds.includes(item.mediaId.toString()))
+      .filter(
+        (item: PlaylistItem) => !mediaIds.includes(item.mediaId.toString())
+      )
       .map((item: PlaylistItem) => item._id.toString());
 
     // Ensure unique ids
-    const uniquePlaylistItemIdsToDelete = Array.from(new Set(playlistItemIdsToDelete));
-    const deletePlaylistItems = uniquePlaylistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
+    const uniquePlaylistItemIdsToDelete = Array.from(
+      new Set(playlistItemIdsToDelete)
+    );
+    const deletePlaylistItems = uniquePlaylistItemIdsToDelete.map(
+      async (playlistItemId) =>
+        await this.playlistItemService.remove(playlistItemId)
+    );
 
     const result = await Promise.all(deletePlaylistItems);
     if (!result) {
@@ -224,15 +267,23 @@ export class PlaylistService {
 
     return await this.dataService.update(playlistId, {
       ...rest,
-      mediaIds: mediaIds.length > 0 ? mediaIds.map((id) => ObjectIdGuard(id)) : [],
+      mediaIds:
+        mediaIds.length > 0 ? mediaIds.map((id) => ObjectIdGuard(id)) : [],
     } as any);
   }
 
   async remove(playlistId: IdType) {
     // Get playlist items by playlistId
-    const playlistItems = await this.playlistItemService.findAllByQuery({ playlistId: ObjectIdGuard(playlistId) } as any);
-    const playlistItemIdsToDelete = playlistItems.map((item: PlaylistItem) => item._id.toString());
-    const deletePlaylistItems = playlistItemIdsToDelete.map(async (playlistItemId) => await this.playlistItemService.remove(playlistItemId));
+    const playlistItems = await this.playlistItemService.findAllByQuery({
+      playlistId: ObjectIdGuard(playlistId),
+    } as any);
+    const playlistItemIdsToDelete = playlistItems.map((item: PlaylistItem) =>
+      item._id.toString()
+    );
+    const deletePlaylistItems = playlistItemIdsToDelete.map(
+      async (playlistItemId) =>
+        await this.playlistItemService.remove(playlistItemId)
+    );
 
     const result = await Promise.all(deletePlaylistItems);
     if (!result) {

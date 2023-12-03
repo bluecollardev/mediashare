@@ -1,6 +1,6 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
-import axios  from 'axios';
+import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { INestApplication } from '@nestjs/common';
 import { DataSource, MongoRepository } from 'typeorm';
@@ -8,7 +8,11 @@ import { clone } from 'remeda';
 
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
-import { createAndValidateTestUser, createUser as createUserFunction, getTestUserId } from './functions/user';
+import {
+  createAndValidateTestUser,
+  createUser as createUserFunction,
+  getTestUserId,
+} from './functions/user';
 
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { UpdateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/update-user.dto';
@@ -21,13 +25,13 @@ describe('UserAPI.current.e2e', () => {
 
   let db: DataSource;
   let userRepository: MongoRepository<User>;
-  let authResponse: AuthenticationResultType
+  let authResponse: AuthenticationResultType;
   let createUser;
   let testUser;
   let testUserId;
 
   beforeAll(async () => {
-    const globalPrefix = 'api'
+    const globalPrefix = 'api';
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
@@ -59,7 +63,11 @@ describe('UserAPI.current.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -70,11 +78,15 @@ describe('UserAPI.current.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
-      await axios.get(`${baseUrl}/user`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .get(`${baseUrl}/user`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -111,7 +123,11 @@ describe('UserAPI.current.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -122,7 +138,10 @@ describe('UserAPI.current.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
@@ -133,7 +152,12 @@ describe('UserAPI.current.e2e', () => {
       dto.firstName = 'Michael';
       dto.lastName = 'Laosee';
 
-      await axios.put(`${baseUrl}/user`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .put(
+          `${baseUrl}/user`,
+          dto,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -147,10 +171,16 @@ describe('UserAPI.current.e2e', () => {
           expect(updated.lastName).toEqual(dto.lastName);
           expect(updated.createdAt).toEqual(testUser.createdAt);
           expect(updated.updatedDate).toBeDefined();
-          expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(new Date(testUser.createdAt).getTime());
+          expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(
+            new Date(testUser.createdAt).getTime()
+          );
 
           // Don't trust the response object - find the user, and make sure it's updated too
-          await axios.get(`${baseUrl}/user`, defaultOptionsWithBearer(authResponse?.IdToken))
+          await axios
+            .get(
+              `${baseUrl}/user`,
+              defaultOptionsWithBearer(authResponse?.IdToken)
+            )
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -186,7 +216,11 @@ describe('UserAPI.current.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -197,12 +231,19 @@ describe('UserAPI.current.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
       // TODO: Try a get to make sure the user is deleted
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
-      await axios.delete(`${baseUrl}/user`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .delete(
+          `${baseUrl}/user`,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

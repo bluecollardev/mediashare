@@ -8,17 +8,26 @@ import { defaultOptionsWithBearer } from './auth';
 import { CreatePlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/create-playlist-item.dto';
 import { PlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/playlist-item.dto';
 
-export const createPlaylistItem = ({ baseUrl, token }) => (playlistItem) => {
-  const dto = {
-    sub: randomUUID(),
-    ...playlistItem,
-  } as CreatePlaylistItemDto;
+export const createPlaylistItem =
+  ({ baseUrl, token }) =>
+  (playlistItem) => {
+    const dto = {
+      sub: randomUUID(),
+      ...playlistItem,
+    } as CreatePlaylistItemDto;
 
-  return axios.post(`${baseUrl}/playlist-items`, dto, defaultOptionsWithBearer(token))
-}
-export const createAndValidateTestPlaylistItem = async (createPlaylistItemFn, playlistItemData = {
-  // Default data
-}) => {
+    return axios.post(
+      `${baseUrl}/playlist-items`,
+      dto,
+      defaultOptionsWithBearer(token)
+    );
+  };
+export const createAndValidateTestPlaylistItem = async (
+  createPlaylistItemFn,
+  playlistItemData = {
+    // Default data
+  }
+) => {
   return new Promise((resolve, reject) => {
     createPlaylistItemFn(playlistItemData)
       .then((res) => {
@@ -33,4 +42,5 @@ export const createAndValidateTestPlaylistItem = async (createPlaylistItemFn, pl
       });
   });
 };
-export const getTestPlaylistItemId = (testPlaylistItem) => testPlaylistItem._id.toString();
+export const getTestPlaylistItemId = (testPlaylistItem) =>
+  testPlaylistItem._id.toString();

@@ -9,21 +9,30 @@ import { defaultOptionsWithBearer } from './auth';
 import { CreatePlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/create-playlist.dto';
 import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/playlist.dto';
 
-export const createPlaylist = ({ baseUrl, token }) => (playlist) => {
-  const dto = {
-    ...playlist,
-  } as CreatePlaylistDto;
+export const createPlaylist =
+  ({ baseUrl, token }) =>
+  (playlist) => {
+    const dto = {
+      ...playlist,
+    } as CreatePlaylistDto;
 
-  return axios.post(`${baseUrl}/playlists`, dto, defaultOptionsWithBearer(token))
-}
-export const createAndValidateTestPlaylist = async (createPlaylistFn, playlistData = {
-  // Default data
-  userId: new ObjectId().toHexString(),
-  title: 'Test Playlist',
-  description: 'Test playlist description',
-  mediaIds: [],
-  visibility: 'public',
-}) => {
+    return axios.post(
+      `${baseUrl}/playlists`,
+      dto,
+      defaultOptionsWithBearer(token)
+    );
+  };
+export const createAndValidateTestPlaylist = async (
+  createPlaylistFn,
+  playlistData = {
+    // Default data
+    userId: new ObjectId().toHexString(),
+    title: 'Test Playlist',
+    description: 'Test playlist description',
+    mediaIds: [],
+    visibility: 'public',
+  }
+) => {
   return new Promise((resolve, reject) => {
     createPlaylistFn(playlistData)
       .then((res) => {

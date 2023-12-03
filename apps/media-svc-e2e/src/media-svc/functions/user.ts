@@ -7,21 +7,26 @@ import { defaultOptionsWithBearer } from './auth';
 import { CreateUserDto } from '@mediashare/user-svc/src/app/modules/user/dto/create-user.dto';
 import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
 
-export const createUser = ({ baseUrl, token }) => (user) => {
-  const dto = {
-    sub: randomUUID(),
-    ...user,
-  } as CreateUserDto;
+export const createUser =
+  ({ baseUrl, token }) =>
+  (user) => {
+    const dto = {
+      sub: randomUUID(),
+      ...user,
+    } as CreateUserDto;
 
-  return axios.post(`${baseUrl}/user`, dto, defaultOptionsWithBearer(token))
-}
-export const createAndValidateTestUser = async (createUserFn, userData = {
-  // Default data
-  username: 'jsmith',
-  email: 'jsmith@example.com',
-  firstName: 'John',
-  lastName: 'Smith'
-}) => {
+    return axios.post(`${baseUrl}/user`, dto, defaultOptionsWithBearer(token));
+  };
+export const createAndValidateTestUser = async (
+  createUserFn,
+  userData = {
+    // Default data
+    username: 'jsmith',
+    email: 'jsmith@example.com',
+    firstName: 'John',
+    lastName: 'Smith',
+  }
+) => {
   return new Promise((resolve, reject) => {
     createUserFn(userData)
       .then((res) => {

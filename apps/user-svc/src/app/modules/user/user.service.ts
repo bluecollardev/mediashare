@@ -9,7 +9,10 @@ import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOp
 import { ObjectIdGuard } from '@mediashare/core/guards';
 import { DataService } from '@mediashare/core/services';
 import { IdType } from '@mediashare/shared';
-import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
+import {
+  ApiErrorResponse,
+  ApiErrorResponses,
+} from '@mediashare/core/errors/api-error';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -19,7 +22,7 @@ import { UserDto } from './dto/user.dto';
 export class UserDataService extends DataService<User, MongoRepository<User>> {
   constructor(
     @InjectRepository(User) repository: MongoRepository<User>,
-    logger: PinoLogger,
+    logger: PinoLogger
   ) {
     super(repository, logger);
   }
@@ -33,21 +36,37 @@ export class UserService {
   constructor(
     public dataService: UserDataService,
     @InjectMapper() private readonly classMapper: Mapper,
-    protected logger: PinoLogger,
+    protected logger: PinoLogger
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
-    const errors = await this.dataService.validateDto(CreateUserDto, createUserDto);
-    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
-    const entity = await this.classMapper.mapAsync(createUserDto, CreateUserDto, User);
+    const errors = await this.dataService.validateDto(
+      CreateUserDto,
+      createUserDto
+    );
+    if (errors)
+      throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+    const entity = await this.classMapper.mapAsync(
+      createUserDto,
+      CreateUserDto,
+      User
+    );
     const result = await this.dataService.create(entity);
     return await this.classMapper.mapAsync(result, User, UserDto);
   }
 
   async update(userId: IdType, updateUserDto: UpdateUserDto): Promise<UserDto> {
-    const errors = await this.dataService.validateDto(UpdateUserDto, updateUserDto);
-    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
-    const entity = await this.classMapper.mapAsync(updateUserDto, UpdateUserDto, User);
+    const errors = await this.dataService.validateDto(
+      UpdateUserDto,
+      updateUserDto
+    );
+    if (errors)
+      throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+    const entity = await this.classMapper.mapAsync(
+      updateUserDto,
+      UpdateUserDto,
+      User
+    );
     const result = await this.dataService.update(userId, entity);
     return await this.classMapper.mapAsync(result, User, UserDto);
   }
@@ -100,10 +119,7 @@ export class UserService {
   findByIds(ids: IdType[]) {
     const objectIds = ids.map((id) => ObjectIdGuard(id));
     return this.dataService.repository
-      .aggregate([
-        { $match: { _id: { $in: objectIds } } },
-
-      ])
+      .aggregate([{ $match: { _id: { $in: objectIds } } }])
       .toArray();
   }
 

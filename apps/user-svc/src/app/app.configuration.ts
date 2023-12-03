@@ -11,7 +11,9 @@ import {
 } from '@mediashare/core/configuration';
 
 export const appValidationSchema = Joi.object({
-  NODE_ENV: Joi.string().valid('development', 'production', 'test', 'provision').default('development'),
+  NODE_ENV: Joi.string()
+    .valid('development', 'production', 'test', 'provision')
+    .default('development'),
   ...apiValidationSchema,
   ...apiSessionValidationSchema,
   ...awsValidationSchema,
@@ -25,7 +27,7 @@ export const appConfig = registerAs('app', () => ({
   host: process.env.APP_HOST,
   env: process.env.NODE_ENV,
   name: process.env.APP_NAME,
-  port: process.env.APP_PORT,
+  port: process.env.PORT,
   globalPrefix: process.env.APP_PREFIX,
   title: process.env.APP_TITLE,
   dbIsMongoAtlas: process.env.DB_IS_ATLAS,
@@ -43,7 +45,9 @@ export const appConfig = registerAs('app', () => ({
   invitationEmailSubject: process.env.INVITATION_EMAIL_SUBJECT,
   invitationEmailSender: process.env.INVITATION_EMAIL_SENDER,
   acceptInvitationDeeplink: process.env.ACCEPT_INVITATION_DEEPLINK,
-  appSubscriberContentUserIds: process.env.APP_SUBSCRIBER_CONTENT_USER_IDS ? process.env.APP_SUBSCRIBER_CONTENT_USER_IDS.split(',') : [],
+  appSubscriberContentUserIds: process.env.APP_SUBSCRIBER_CONTENT_USER_IDS
+    ? process.env.APP_SUBSCRIBER_CONTENT_USER_IDS.split(',')
+    : [],
 }));
 
 export const dbConfig = registerAs('db', () => ({

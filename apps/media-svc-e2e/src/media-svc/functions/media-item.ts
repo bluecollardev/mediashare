@@ -9,23 +9,32 @@ import { defaultOptionsWithBearer } from './auth';
 import { CreateMediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/create-media-item.dto';
 import { MediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/media-item.dto';
 
-export const createMediaItem = ({ baseUrl, token }) => (mediaItem) => {
-  const dto = {
-    // sub: randomUUID(),
-    ...mediaItem,
-  } as CreateMediaItemDto;
+export const createMediaItem =
+  ({ baseUrl, token }) =>
+  (mediaItem) => {
+    const dto = {
+      // sub: randomUUID(),
+      ...mediaItem,
+    } as CreateMediaItemDto;
 
-  return axios.post(`${baseUrl}/media-items`, dto, defaultOptionsWithBearer(token))
-}
-export const createAndValidateTestMediaItem = async (createMediaItemFn, mediaItemData = {
-  // Default data
-  key: 'test-key',
-  userId: new ObjectId().toHexString(),
-  title: 'Test Media',
-  description: 'Test media description',
-  uri: 'https://www.example.com',
-  visibility: 'public',
-}) => {
+    return axios.post(
+      `${baseUrl}/media-items`,
+      dto,
+      defaultOptionsWithBearer(token)
+    );
+  };
+export const createAndValidateTestMediaItem = async (
+  createMediaItemFn,
+  mediaItemData = {
+    // Default data
+    key: 'test-key',
+    userId: new ObjectId().toHexString(),
+    title: 'Test Media',
+    description: 'Test media description',
+    uri: 'https://www.example.com',
+    visibility: 'public',
+  }
+) => {
   return new Promise((resolve, reject) => {
     createMediaItemFn(mediaItemData)
       .then((res) => {
@@ -40,4 +49,5 @@ export const createAndValidateTestMediaItem = async (createMediaItemFn, mediaIte
       });
   });
 };
-export const getTestMediaItemId = (testMediaItem) => testMediaItem._id.toString();
+export const getTestMediaItemId = (testMediaItem) =>
+  testMediaItem._id.toString();

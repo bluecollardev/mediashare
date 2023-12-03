@@ -34,7 +34,12 @@ export class User extends ApiBaseEntity {
   imageSrc: string;
 
   @AutoMap()
-  @Column({ enum: BC_ROLES, name: 'role', enumName: 'BcRolesType', nullable: true })
+  @Column({
+    enum: BC_ROLES,
+    name: 'role',
+    enumName: 'BcRolesType',
+    nullable: true,
+  })
   role: BcRolesType;
 
   @AutoMap()
