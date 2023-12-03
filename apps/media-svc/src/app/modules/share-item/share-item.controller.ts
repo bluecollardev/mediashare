@@ -1,7 +1,7 @@
 import { AuthenticationGuard } from '@nestjs-cognito/auth';
 import { Controller, Param, HttpCode, UseGuards, HttpStatus, Get, Delete, Post, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GetUser } from '@mediashare/core/decorators/user.decorator';
+import { GetClaims } from '@mediashare/core/decorators/auth.decorator';
 import { RouteTokens } from '../../core/constants';
 import { ShareItemService } from './share-item.service';
 import { ShareItemsByUserIdDto, ShareItemsDto, ShareItemsResponseDto } from './dto/share-item.dto';
@@ -9,7 +9,6 @@ import { ShareItemGetResponse } from './share-item.decorator';
 import { ShareItem } from './entities/share-item.entity';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
 import { PlaylistDto } from '../playlist/dto/playlist.dto';
-import { UserGuard } from '@mediashare/core/guards/user.guard';
 
 @ApiTags('share-items')
 @Controller('share-items')
@@ -20,7 +19,7 @@ export class ShareItemController {
   @ApiBearerAuth()
   @Get('shared-by-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
-  async findItemsSharedByUser(@GetUser('_id') userId: string) {
+  async findItemsSharedByUser(@GetClaims('sub') userId: string) {
     return await this.shareItemService.getItemsSharedByUser(userId);
   }
 
@@ -28,7 +27,7 @@ export class ShareItemController {
   @ApiBearerAuth()
   @Get('shared-by-user/media-items')
   @ShareItemGetResponse({ type: MediaItemDto, isArray: true })
-  async findMediaItemsSharedByUser(@GetUser('_id') userId: string) {
+  async findMediaItemsSharedByUser(@GetClaims('sub') userId: string) {
     return await this.shareItemService.getMediaItemsSharedByUser(userId);
   }
 
@@ -36,7 +35,7 @@ export class ShareItemController {
   @ApiBearerAuth()
   @Get('shared-by-user/playlists')
   @ShareItemGetResponse({ type: PlaylistDto, isArray: true })
-  async findPlaylistsSharedByUser(@GetUser('_id') userId: string) {
+  async findPlaylistsSharedByUser(@GetClaims('sub') userId: string) {
     return await this.shareItemService.getPlaylistsSharedByUser(userId);
   }
 
@@ -44,7 +43,7 @@ export class ShareItemController {
   @ApiBearerAuth()
   @Get('shared-with-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: false })
-  async findItemsSharedWithUser(@GetUser('_id') userId: string) {
+  async findItemsSharedWithUser(@GetClaims('sub') userId: string) {
     return await this.shareItemService.getItemsSharedWithUser(userId);
   }
 
@@ -52,7 +51,7 @@ export class ShareItemController {
   @ApiBearerAuth()
   @Get('shared-with-user/media-items')
   @ShareItemGetResponse({ type: MediaItemDto, isArray: true })
-  async findMediaItemsSharedWithUser(@GetUser('_id') userId: string) {
+  async findMediaItemsSharedWithUser(@GetClaims('sub') userId: string) {
     return await this.shareItemService.getMediaItemsSharedWithUser(userId);
   }
 
@@ -60,7 +59,7 @@ export class ShareItemController {
   @ApiBearerAuth()
   @Get('shared-with-user/playlists')
   @ShareItemGetResponse({ type: PlaylistDto, isArray: true })
-  async findPlaylistsSharedWithUser(@GetUser('_id') userId: string) {
+  async findPlaylistsSharedWithUser(@GetClaims('sub') userId: string) {
     return await this.shareItemService.getPlaylistsSharedWithUser(userId);
   }
 

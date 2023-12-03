@@ -1,4 +1,5 @@
 /* Ignore module boundaries, it's just our test scaffolding */
+import { initializeApp as initializeUserApi } from '@mediashare/user-svc-e2e/src/user-svc/functions/app';
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -20,11 +21,11 @@ import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
 import { createAndValidateTestMediaItem, createMediaItem as createMediaItemFunction, getTestMediaItemId } from './functions/media-item';
 
-const userApiBaseUrl = `http://localhost:3000/api`;
-
 describe('MediaItemAPI.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
+  let userApi: INestApplication;
+  let userApiBaseUrl: string;
 
   let db: DataSource;
   let mediaItemRepository: MongoRepository<MediaItem>;
@@ -41,6 +42,9 @@ describe('MediaItemAPI.e2e', () => {
     const globalPrefix = 'api'
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
+
+    userApi = await initializeUserApi(globalPrefix);
+    userApiBaseUrl = await getBaseUrl(userApi, globalPrefix);
 
     db = await initializeDB([MediaItem, User]);
     mediaItemRepository = await db.getMongoRepository(MediaItem);

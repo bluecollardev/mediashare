@@ -12,7 +12,6 @@ export const createMediaShareItemDtoToShareItemMappingFactory = (mapper) => crea
   CreateMediaShareItemDto,
   ShareItem,
   forMember((dest: ShareItem) => dest._id, ignore()),
-  forMember((dest: ShareItem) => dest.userId, convertUsing(stringToObjectIdConverter as never, (source: CreateMediaShareItemDto) => source.userId)),
   forMember((dest: ShareItem) => dest.playlistId, convertUsing(stringToObjectIdConverter as never, (source: CreateMediaShareItemDto) => source.playlistId)),
   forMember((dest: ShareItem) => dest.mediaId, convertUsing(stringToObjectIdConverter as never, (source: CreateMediaShareItemDto) => source.mediaId)),
 );
@@ -22,7 +21,6 @@ export const createPlaylistShareItemDtoToShareItemMappingFactory = (mapper) => c
   CreatePlaylistShareItemDto,
   ShareItem,
   forMember((dest: ShareItem) => dest._id, ignore()),
-  forMember((dest: ShareItem) => dest.userId, convertUsing(stringToObjectIdConverter as never, (source: CreatePlaylistShareItemDto) => source.userId)),
   forMember((dest: ShareItem) => dest.playlistId, convertUsing(stringToObjectIdConverter as never, (source: CreatePlaylistShareItemDto) => source.playlistId)),
   forMember((dest: ShareItem) => dest.mediaId, convertUsing(stringToObjectIdConverter as never, (source: CreatePlaylistShareItemDto) => source.mediaId)),
 );

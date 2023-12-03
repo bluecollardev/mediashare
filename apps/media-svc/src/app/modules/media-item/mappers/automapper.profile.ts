@@ -13,7 +13,6 @@ export const mediaItemToMediaItemDtoMappingFactory = (mapper) => createMap(
   MediaItem,
   MediaItemDto,
   forMember((dest: MediaItemDto) => dest._id, convertUsing(objectIdToStringConverter as never, (source: MediaItem) => source._id)),
-  forMember((dest: MediaItemDto) => dest.userId, convertUsing(objectIdToStringConverter as never, (source: MediaItem) => source.userId)),
 );
 
 export const createMediaItemDtoToMediaItemMappingFactory = (mapper) => createMap(
@@ -21,7 +20,6 @@ export const createMediaItemDtoToMediaItemMappingFactory = (mapper) => createMap
   CreateMediaItemDto,
   MediaItem,
   forMember((dest: MediaItem) => dest._id, ignore()),
-  forMember((dest: MediaItem) => dest.userId, convertUsing(stringToObjectIdConverter as never, (source: CreateMediaItemDto) => source.userId)),
 );
 
 export const updateMediaItemDtoToMediaItemMappingFactory = (mapper) => createMap(
@@ -29,7 +27,6 @@ export const updateMediaItemDtoToMediaItemMappingFactory = (mapper) => createMap
   UpdateMediaItemDto,
   MediaItem,
   forMember((dest: MediaItem) => dest._id, convertUsing(stringToObjectIdConverter as never, (source: MediaItemDto) => source._id)),
-  forMember((dest: MediaItem) => dest.userId, convertUsing(stringToObjectIdConverter as never, (source: MediaItemDto) => source.userId)),
 );
 
 @Injectable()

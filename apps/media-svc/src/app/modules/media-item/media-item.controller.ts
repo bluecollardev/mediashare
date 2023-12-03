@@ -5,7 +5,7 @@ import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { MEDIA_VISIBILITY } from '../../core/models';
 import { RouteTokens } from '../../core/constants';
-import { GetUser } from '@mediashare/core/decorators/user.decorator';
+import { GetClaims } from '@mediashare/core/decorators/auth.decorator';
 import { UserGuard } from '../../core/guards';
 import { MediaGetResponse, MediaPostResponse, MediaPutResponse, MediaShareResponse } from './media-item.decorator';
 import { MediaItemService } from './media-item.service';
@@ -29,14 +29,14 @@ export class MediaItemController {
   @ApiBearerAuth()
   @Post()
   @MediaPostResponse()
-  async create(@Res() res: Response, @Body() createMediaItemDto: CreateMediaItemDto, @GetUser('_id') createdBy: string) {
+  async create(@Res() res: Response, @Body() createMediaItemDto: CreateMediaItemDto, @GetClaims('sub') createdBy: string) {
     try {
       const mediaItem: Omit<MediaItem, '_id'> = {
         isPlayable: false,
         uri: '',
         ...createMediaItemDto,
         userId: createdBy,
-        createdBy: createdBy,
+        createdBy,
       } as any;
       const result = await this.mediaItemService.create({ ...mediaItem } as any);
       return handleSuccessResponse(res, HttpStatus.CREATED, result);
@@ -82,7 +82,7 @@ export class MediaItemController {
     @Res() res: Response,
     @Param('mediaId') mediaId: string,
     @Param('userId') userId: string,
-    @GetUser('_id') createdBy: string,
+    @GetClaims('sub') createdBy: string,
   ) {
     try {
       const { title } = await this.mediaItemService.findOne(mediaId);
@@ -119,7 +119,7 @@ export class MediaItemController {
   @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
   @Get()
   @MediaGetResponse({ isArray: true })
-  async findAll(@Res() res: Response, @GetUser('_id') userId: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
+  async findAll(@Res() res: Response, @GetClaims('sub') userId: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
     try {
       const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
       // Always search, we want to run the aggregate query in every case

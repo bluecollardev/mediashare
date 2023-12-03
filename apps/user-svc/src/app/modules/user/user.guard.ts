@@ -15,6 +15,6 @@ export class UserGuard implements CanActivate {
     const sub = payload[`cognito:${idKey}`] || payload[idKey]
 
     request[USER_CONTEXT_PROPERTY] = await this.userSvc.findByQuery({ where: { sub } });
-    return !!request.user;
+    return !!request[USER_CONTEXT_PROPERTY];
   }
 }

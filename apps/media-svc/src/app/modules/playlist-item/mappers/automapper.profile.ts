@@ -15,8 +15,6 @@ export const playlistItemToPlaylistItemDtoMappingFactory = (mapper) => createMap
   forMember((dest: PlaylistItemDto) => dest._id, convertUsing(objectIdToStringConverter as never, (source: PlaylistItem) => source._id)),
   forMember((dest: PlaylistItemDto) => dest.playlistId, convertUsing(objectIdToStringConverter as never, (source: PlaylistItem) => source.playlistId)),
   forMember((dest: PlaylistItemDto) => dest.mediaId, convertUsing(objectIdToStringConverter as never, (source: PlaylistItem) => source.mediaId)),
-  forMember((dest: PlaylistItemDto) => dest.userId, convertUsing(objectIdToStringConverter as never, (source: PlaylistItem) => source.userId)),
-  forMember((dest: PlaylistItemDto) => dest.createdBy, convertUsing(objectIdToStringConverter as never, (source: PlaylistItem) => source.createdBy)),
 );
 
 export const createPlaylistItemDtoToPlaylistItemMappingFactory = (mapper) => createMap(
@@ -26,8 +24,6 @@ export const createPlaylistItemDtoToPlaylistItemMappingFactory = (mapper) => cre
   forMember((dest: PlaylistItem) => dest._id, ignore()),
   forMember((dest: PlaylistItem) => dest.playlistId, convertUsing(stringToObjectIdConverter as never, (source: CreatePlaylistItemDto) => source.playlistId)),
   forMember((dest: PlaylistItem) => dest.mediaId, convertUsing(stringToObjectIdConverter as never, (source: CreatePlaylistItemDto) => source.mediaId)),
-  forMember((dest: PlaylistItem) => dest.userId, convertUsing(stringToObjectIdConverter as never, (source: CreatePlaylistItemDto) => source.userId)),
-  forMember((dest: PlaylistItem) => dest.createdBy, convertUsing(stringToObjectIdConverter as never, (source: CreatePlaylistItemDto) => source.createdBy)),
 );
 
 export const updatePlaylistItemDtoToPlaylistItemMappingFactory = (mapper) => createMap(
@@ -37,8 +33,6 @@ export const updatePlaylistItemDtoToPlaylistItemMappingFactory = (mapper) => cre
   forMember((dest: PlaylistItem) => dest._id, convertUsing(stringToObjectIdConverter as never, (source: UpdatePlaylistItemDto) => source._id)),
   forMember((dest: PlaylistItem) => dest.playlistId, convertUsing(stringToObjectIdConverter as never, (source: UpdatePlaylistItemDto) => source.playlistId)),
   forMember((dest: PlaylistItem) => dest.mediaId, convertUsing(stringToObjectIdConverter as never, (source: UpdatePlaylistItemDto) => source.mediaId)),
-  forMember((dest: PlaylistItem) => dest.userId, convertUsing(stringToObjectIdConverter as never, (source: UpdatePlaylistItemDto) => source.userId)),
-  forMember((dest: PlaylistItem) => dest.createdBy, convertUsing(stringToObjectIdConverter as never, (source: UpdatePlaylistItemDto) => source.createdBy)),
 );
 
 @Injectable()

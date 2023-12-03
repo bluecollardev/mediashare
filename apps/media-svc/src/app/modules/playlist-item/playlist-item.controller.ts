@@ -5,7 +5,7 @@ import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { RouteTokens } from '../../core/constants';
 import { MEDIA_VISIBILITY } from '../../core/models';
-import { GetUser } from '@mediashare/core/decorators/user.decorator';
+import { GetClaims } from '@mediashare/core/decorators/auth.decorator';
 import { UserGuard } from '../../core/guards';
 import { PlaylistItemGetResponse, PlaylistItemPostResponse, PlaylistItemPutResponse, PlaylistItemShareResponse } from './playlist-item.decorator';
 import { PlaylistItemService } from './playlist-item.service';
@@ -34,7 +34,7 @@ export class PlaylistItemController {
   @ApiBearerAuth()
   @Post()
   @PlaylistItemPostResponse()
-  async create(@Res() res: Response, @Body() createPlaylistItemDto: CreatePlaylistItemDto, @GetUser('_id') createdBy) {
+  async create(@Res() res: Response, @Body() createPlaylistItemDto: CreatePlaylistItemDto, @GetClaims('sub') createdBy) {
     try {
       const playlistId = createPlaylistItemDto?.playlistId;
       const mediaId = createPlaylistItemDto?.mediaId;
@@ -95,7 +95,7 @@ export class PlaylistItemController {
     @Res() res: Response,
     @Param('playlistItemId') playlistItemId: string,
     @Param(RouteTokens.userId) userId: string,
-    @GetUser('_id') createdBy: string,
+    @GetClaims('sub') createdBy: string,
   ) {
     try {
       const result = await this.playlistItemService.findOne(playlistItemId);

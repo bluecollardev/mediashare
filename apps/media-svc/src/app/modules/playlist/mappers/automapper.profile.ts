@@ -28,7 +28,6 @@ export const updatePlaylistDtoToPlaylistMappingFactory = (mapper) => createMap(
   UpdatePlaylistDto,
   Playlist,
   forMember((dest: Playlist) => dest._id, convertUsing(stringToObjectIdConverter as never, (source: UpdatePlaylistDto) => source._id)),
-  // forMember((dest: Playlist) => dest.createdBy, convertUsing(stringToObjectIdConverter as never, (source: PlaylistDto) => source.createdBy)),
 );
 
 @Injectable()

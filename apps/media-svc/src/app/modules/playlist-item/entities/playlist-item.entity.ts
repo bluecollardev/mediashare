@@ -20,9 +20,9 @@ export class PlaylistItem extends ApiBaseEntity {
   mediaId: ObjectId;
 
   @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
-  @ObjectIdColumn({ name: 'userId', nullable: false, unique: false })
+  @Column({ nullable: false, type: 'text' })
   @Index('userId', { unique: false })
-  userId: ObjectId;
+  userId: string;
 
   @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
   @ObjectIdColumn({ name: 'createdBy', nullable: true, unique: false })

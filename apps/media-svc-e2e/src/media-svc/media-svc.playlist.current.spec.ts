@@ -17,12 +17,13 @@ import { UpdatePlaylistDto } from '@mediashare/media-svc/src/app/modules/playlis
 import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/playlist.dto';
 import { Playlist } from '@mediashare/media-svc/src/app/modules/playlist/entities/playlist.entity';
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
-
-const userApiBaseUrl = `http://localhost:3000/api`;
+import { initializeApp as initializeUserApi } from '@mediashare/user-svc-e2e/src/user-svc/functions/app';
 
 describe('PlaylistAPI.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
+  let userApi: INestApplication;
+  let userApiBaseUrl: string;
 
   let db: DataSource;
   let playlistRepository: MongoRepository<Playlist>;
@@ -39,6 +40,9 @@ describe('PlaylistAPI.e2e', () => {
     const globalPrefix = 'api'
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
+
+    userApi = await initializeUserApi(globalPrefix);
+    userApiBaseUrl = await getBaseUrl(userApi, globalPrefix);
 
     db = await initializeDB([Playlist, User]);
     playlistRepository = await db.getMongoRepository(Playlist);
@@ -81,9 +85,13 @@ describe('PlaylistAPI.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
-      testUser = await createAndValidateTestUser(createUser, testUserData);
-      testUserId = getTestUserId(testUser);
+      try {
+        createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+        testUser = await createAndValidateTestUser(createUser, testUserData);
+        testUserId = getTestUserId(testUser);
+      } catch (err) {
+        throw err;
+      }
 
       const testPlaylistData = {
         userId: testUserId,
@@ -93,9 +101,13 @@ describe('PlaylistAPI.e2e', () => {
         visibility: 'public',
       };
       // Create a corresponding playlist in the database
-      createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
-      testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
-      testPlaylistId = getTestPlaylistId(testPlaylist);
+      try {
+        createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
+        testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
+        testPlaylistId = getTestPlaylistId(testPlaylist);
+      } catch (err) {
+        throw err;
+      }
 
       await axios.get(`${baseUrl}/playlists/${testPlaylistId}`, defaultOptionsWithBearer(authResponse?.IdToken))
         .then((res) => {
