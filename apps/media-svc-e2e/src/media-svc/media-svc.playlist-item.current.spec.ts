@@ -8,27 +8,34 @@ import { INestApplication } from '@nestjs/common';
 import { DataSource, MongoRepository } from 'typeorm';
 import {
   createAndValidateTestUser,
-  createUser as createUserFunction, getTestUserId
+  createUser as createUserFunction,
+  getTestUserId,
 } from './functions/user';
 import {
   createAndValidateTestMediaItem,
-  createMediaItem as createMediaItemFunction, getTestMediaItemId
+  createMediaItem as createMediaItemFunction,
+  getTestMediaItemId,
 } from './functions/media-item';
 import {
   createAndValidateTestPlaylist,
-  createPlaylist as createPlaylistFunction, getTestPlaylistId
+  createPlaylist as createPlaylistFunction,
+  getTestPlaylistId,
 } from './functions/playlist';
 
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
-import { createAndValidateTestPlaylistItem, createPlaylistItem as createPlaylistItemFunction, getTestPlaylistItemId } from './functions/playlist-item';
+import {
+  createAndValidateTestPlaylistItem,
+  createPlaylistItem as createPlaylistItemFunction,
+  getTestPlaylistItemId,
+} from './functions/playlist-item';
 
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { Playlist } from '@mediashare/media-svc/src/app/modules/playlist/entities/playlist.entity';
 import { UpdatePlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/update-playlist-item.dto';
 import { PlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/playlist-item.dto';
 import { PlaylistItem } from '@mediashare/media-svc/src/app/modules/playlist-item/entities/playlist-item.entity';
-import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/entities/media-item.entity'
+import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/entities/media-item.entity';
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 import { initializeApp as initializeUserApi } from '@mediashare/user-svc-e2e/src/user-svc/functions/app';
 
@@ -58,7 +65,7 @@ describe('PlaylistItemAPI.e2e', () => {
   let testMediaItemId;
 
   beforeAll(async () => {
-    const globalPrefix = 'api'
+    const globalPrefix = 'api';
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
@@ -99,7 +106,11 @@ describe('PlaylistItemAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -110,7 +121,10 @@ describe('PlaylistItemAPI.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl: userApiBaseUrl,
+        token: authResponse?.IdToken,
+      });
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
@@ -123,8 +137,14 @@ describe('PlaylistItemAPI.e2e', () => {
         uri: 'https://www.example.com',
         visibility: 'public',
       };
-      createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
-      testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
+      createMediaItem = createMediaItemFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testMediaItem = await createAndValidateTestMediaItem(
+        createMediaItem,
+        testMediaItemData
+      );
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       // Create a test playlist
@@ -135,8 +155,14 @@ describe('PlaylistItemAPI.e2e', () => {
         mediaIds: [testMediaItemId],
         visibility: 'public',
       };
-      createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
-      testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
+      createPlaylist = createPlaylistFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testPlaylist = await createAndValidateTestPlaylist(
+        createPlaylist,
+        testPlaylistData
+      );
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
       const testPlaylistItemData = {
@@ -150,11 +176,21 @@ describe('PlaylistItemAPI.e2e', () => {
         visibility: 'public',
       };
       // Create a corresponding playlistItem in the database
-      createPlaylistItem = createPlaylistItemFunction({ baseUrl, token: authResponse?.IdToken });
-      testPlaylistItem = await createAndValidateTestPlaylistItem(createPlaylistItem, testPlaylistItemData);
+      createPlaylistItem = createPlaylistItemFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testPlaylistItem = await createAndValidateTestPlaylistItem(
+        createPlaylistItem,
+        testPlaylistItemData
+      );
       testPlaylistItemId = getTestPlaylistItemId(testPlaylistItem);
 
-      await axios.get(`${baseUrl}/playlist-items/${testPlaylistItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .get(
+          `${baseUrl}/playlist-items/${testPlaylistItemId}`,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -184,7 +220,11 @@ describe('PlaylistItemAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -195,7 +235,10 @@ describe('PlaylistItemAPI.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl: userApiBaseUrl,
+        token: authResponse?.IdToken,
+      });
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
@@ -208,8 +251,14 @@ describe('PlaylistItemAPI.e2e', () => {
         uri: 'https://www.example.com',
         visibility: 'public',
       };
-      createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
-      testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
+      createMediaItem = createMediaItemFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testMediaItem = await createAndValidateTestMediaItem(
+        createMediaItem,
+        testMediaItemData
+      );
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       // Create a test playlist
@@ -220,8 +269,14 @@ describe('PlaylistItemAPI.e2e', () => {
         mediaIds: [testMediaItemId],
         visibility: 'public',
       };
-      createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
-      testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
+      createPlaylist = createPlaylistFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testPlaylist = await createAndValidateTestPlaylist(
+        createPlaylist,
+        testPlaylistData
+      );
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
       const testPlaylistItemData = {
@@ -235,13 +290,24 @@ describe('PlaylistItemAPI.e2e', () => {
         visibility: 'public',
       };
       // Create a corresponding playlistItem in the database
-      createPlaylistItem = createPlaylistItemFunction({ baseUrl, token: authResponse?.IdToken });
-      testPlaylistItem = await createAndValidateTestPlaylistItem(createPlaylistItem, testPlaylistItemData);
+      createPlaylistItem = createPlaylistItemFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testPlaylistItem = await createAndValidateTestPlaylistItem(
+        createPlaylistItem,
+        testPlaylistItemData
+      );
       testPlaylistItemId = getTestPlaylistItemId(testPlaylistItem);
 
       const dto = clone(testPlaylistItem) as UpdatePlaylistItemDto;
 
-      await axios.put(`${baseUrl}/playlist-items/${testPlaylistItemId}`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .put(
+          `${baseUrl}/playlist-items/${testPlaylistItemId}`,
+          dto,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -250,10 +316,16 @@ describe('PlaylistItemAPI.e2e', () => {
           expect(updated._id).toEqual(testPlaylistItemId);
           expect(updated.createdAt).toEqual(testPlaylistItem.createdAt);
           expect(updated.updatedDate).toBeDefined();
-          expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(new Date(testPlaylistItem.createdAt).getTime());
+          expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(
+            new Date(testPlaylistItem.createdAt).getTime()
+          );
 
           // Don't trust the response object - find the playlistItem, and make sure it's updated too
-          await axios.get(`${baseUrl}/playlist-items/${testPlaylistItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+          await axios
+            .get(
+              `${baseUrl}/playlist-items/${testPlaylistItemId}`,
+              defaultOptionsWithBearer(authResponse?.IdToken)
+            )
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -284,7 +356,11 @@ describe('PlaylistItemAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -295,7 +371,10 @@ describe('PlaylistItemAPI.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl: userApiBaseUrl,
+        token: authResponse?.IdToken,
+      });
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
@@ -308,8 +387,14 @@ describe('PlaylistItemAPI.e2e', () => {
         uri: 'https://www.example.com',
         visibility: 'public',
       };
-      createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
-      testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
+      createMediaItem = createMediaItemFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testMediaItem = await createAndValidateTestMediaItem(
+        createMediaItem,
+        testMediaItemData
+      );
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       // Create a test playlist
@@ -320,8 +405,14 @@ describe('PlaylistItemAPI.e2e', () => {
         mediaIds: [testMediaItemId],
         visibility: 'public',
       };
-      createPlaylist = createPlaylistFunction({ baseUrl, token: authResponse?.IdToken });
-      testPlaylist = await createAndValidateTestPlaylist(createPlaylist, testPlaylistData);
+      createPlaylist = createPlaylistFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testPlaylist = await createAndValidateTestPlaylist(
+        createPlaylist,
+        testPlaylistData
+      );
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
       const testPlaylistItemData = {
@@ -335,12 +426,22 @@ describe('PlaylistItemAPI.e2e', () => {
         visibility: 'public',
       };
       // Create a corresponding playlistItem in the database
-      createPlaylistItem = createPlaylistItemFunction({ baseUrl, token: authResponse?.IdToken });
+      createPlaylistItem = createPlaylistItemFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
       // TODO: Try a get to make sure the playlistItem is deleted
-      testPlaylistItem = await createAndValidateTestPlaylistItem(createPlaylistItem, testPlaylistItemData);
+      testPlaylistItem = await createAndValidateTestPlaylistItem(
+        createPlaylistItem,
+        testPlaylistItemData
+      );
       testPlaylistItemId = getTestPlaylistItemId(testPlaylistItem);
 
-      await axios.delete(`${baseUrl}/playlist-items/${testPlaylistItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .delete(
+          `${baseUrl}/playlist-items/${testPlaylistItemId}`,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

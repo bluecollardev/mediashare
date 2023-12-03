@@ -7,8 +7,7 @@
   },
   "scripts": {
     "install:tools:mongocli": "brew install mongocli",
-    "gen:client-api": "npm run gen:models && npm run format",
-    "gen:models": "openapi-generator-cli generate",
+    "gen:client": "openapi-generator-cli generate && npm run format",
     "gen:certs": "mkdir -p ./certs && rm -rf ./certs/* && mkcert -key-file ./certs/key.pem -cert-file ./certs/cert.pem localhost 0.0.0.0 127.0.0.1 ",
     "seed:users": "ts-node --project scripts/tsconfig.json -r tsconfig-paths/register scripts/gen-users.script.ts",
     "media-svc:serve": "nx serve media-svc",
@@ -80,6 +79,7 @@
     "@nx/node": "16.4.2",
     "@nx/webpack": "16.4.2",
     "@nx/workspace": "16.4.2",
+    "@openapitools/openapi-generator-cli": "^2.7.0",
     "@types/faker": "^6.6.9",
     "@types/jest": "^29.4.0",
     "@types/node": "~18.7.1",

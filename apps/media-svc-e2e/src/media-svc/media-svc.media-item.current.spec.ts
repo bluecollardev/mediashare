@@ -13,12 +13,17 @@ import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.en
 import { INestApplication } from '@nestjs/common';
 import {
   createAndValidateTestUser,
-  createUser as createUserFunction, getTestUserId
+  createUser as createUserFunction,
+  getTestUserId,
 } from './functions/user';
 
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
-import { createAndValidateTestMediaItem, createMediaItem as createMediaItemFunction, getTestMediaItemId } from './functions/media-item';
+import {
+  createAndValidateTestMediaItem,
+  createMediaItem as createMediaItemFunction,
+  getTestMediaItemId,
+} from './functions/media-item';
 import { initializeApp as initializeUserApi } from '@mediashare/user-svc-e2e/src/user-svc/functions/app';
 
 describe('MediaItemAPI.e2e', () => {
@@ -29,17 +34,17 @@ describe('MediaItemAPI.e2e', () => {
 
   let db: DataSource;
   let mediaItemRepository: MongoRepository<MediaItem>;
-  let userRepository: MongoRepository<User>
-  let authResponse: AuthenticationResultType
+  let userRepository: MongoRepository<User>;
+  let authResponse: AuthenticationResultType;
   let createMediaItem;
   let testMediaItem;
   let testMediaItemId;
   let createUser;
   let testUser;
-  let testUserId
+  let testUserId;
 
   beforeAll(async () => {
-    const globalPrefix = 'api'
+    const globalPrefix = 'api';
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
@@ -76,7 +81,11 @@ describe('MediaItemAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -87,7 +96,10 @@ describe('MediaItemAPI.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl: userApiBaseUrl,
+        token: authResponse?.IdToken,
+      });
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
@@ -100,11 +112,21 @@ describe('MediaItemAPI.e2e', () => {
         visibility: 'public',
       };
       // Create a corresponding mediaItem in the database
-      createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
-      testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
+      createMediaItem = createMediaItemFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testMediaItem = await createAndValidateTestMediaItem(
+        createMediaItem,
+        testMediaItemData
+      );
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
-      await axios.get(`${baseUrl}/media-items/${testMediaItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .get(
+          `${baseUrl}/media-items/${testMediaItemId}`,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -134,7 +156,11 @@ describe('MediaItemAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -145,7 +171,10 @@ describe('MediaItemAPI.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl: userApiBaseUrl,
+        token: authResponse?.IdToken,
+      });
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
@@ -158,13 +187,24 @@ describe('MediaItemAPI.e2e', () => {
         visibility: 'public',
       };
       // Create a corresponding mediaItem in the database
-      createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
-      testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
+      createMediaItem = createMediaItemFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
+      testMediaItem = await createAndValidateTestMediaItem(
+        createMediaItem,
+        testMediaItemData
+      );
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       const dto = clone(testMediaItem) as UpdateMediaItemDto;
 
-      await axios.put(`${baseUrl}/media-items/${testMediaItemId}`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .put(
+          `${baseUrl}/media-items/${testMediaItemId}`,
+          dto,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -173,10 +213,16 @@ describe('MediaItemAPI.e2e', () => {
           expect(updated._id).toEqual(testMediaItemId);
           expect(updated.createdAt).toEqual(testMediaItem.createdAt);
           expect(updated.updatedDate).toBeDefined();
-          expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(new Date(testMediaItem.createdAt).getTime());
+          expect(new Date(updated.updatedDate).getTime()).toBeLessThanOrEqual(
+            new Date(testMediaItem.createdAt).getTime()
+          );
 
           // Don't trust the response object - find the mediaItem, and make sure it's updated too
-          await axios.get(`${baseUrl}/media-items/${testMediaItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+          await axios
+            .get(
+              `${baseUrl}/media-items/${testMediaItemId}`,
+              defaultOptionsWithBearer(authResponse?.IdToken)
+            )
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -207,7 +253,11 @@ describe('MediaItemAPI.e2e', () => {
       authResponse = await login(baseUrl, creds);
       console.log(`Logged in`, authResponse);
       // const idToken = jwt.decode(authResponse?.IdToken);
-      const { sub, email, phone_number: phoneNumber } = jwt.decode(authResponse?.IdToken) as any;
+      const {
+        sub,
+        email,
+        phone_number: phoneNumber,
+      } = jwt.decode(authResponse?.IdToken) as any;
 
       const testUserData = {
         sub,
@@ -218,7 +268,10 @@ describe('MediaItemAPI.e2e', () => {
         phoneNumber,
       };
       // Create a corresponding user in the database
-      createUser = createUserFunction({ baseUrl: userApiBaseUrl, token: authResponse?.IdToken });
+      createUser = createUserFunction({
+        baseUrl: userApiBaseUrl,
+        token: authResponse?.IdToken,
+      });
       testUser = await createAndValidateTestUser(createUser, testUserData);
       testUserId = getTestUserId(testUser);
 
@@ -231,12 +284,22 @@ describe('MediaItemAPI.e2e', () => {
         visibility: 'public',
       };
       // Create a corresponding mediaItem in the database
-      createMediaItem = createMediaItemFunction({ baseUrl, token: authResponse?.IdToken });
+      createMediaItem = createMediaItemFunction({
+        baseUrl,
+        token: authResponse?.IdToken,
+      });
       // TODO: Try a get to make sure the mediaItem is deleted
-      testMediaItem = await createAndValidateTestMediaItem(createMediaItem, testMediaItemData);
+      testMediaItem = await createAndValidateTestMediaItem(
+        createMediaItem,
+        testMediaItemData
+      );
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
-      await axios.delete(`${baseUrl}/media-items/${testMediaItemId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .delete(
+          `${baseUrl}/media-items/${testMediaItemId}`,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

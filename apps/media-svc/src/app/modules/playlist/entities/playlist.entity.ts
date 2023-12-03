@@ -4,11 +4,13 @@ import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
 // import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
-import { PlaylistVisibilityType, PLAYLIST_VISIBILITY } from '../../../core/models';
+import {
+  PlaylistVisibilityType,
+  PLAYLIST_VISIBILITY,
+} from '../../../core/models';
 
 @Entity('playlist')
 export class Playlist extends ApiBaseEntity {
-
   @Column({ nullable: true })
   @Index('cloneOf', { unique: false })
   cloneOf?: ObjectId;
@@ -30,7 +32,12 @@ export class Playlist extends ApiBaseEntity {
   mediaIds: ObjectId[];
 
   @Column({ nullable: true })
-  @ApiProperty({ enum: PLAYLIST_VISIBILITY, name: 'visibility', enumName: 'PlaylistVisibilityType', required: false })
+  @ApiProperty({
+    enum: PLAYLIST_VISIBILITY,
+    name: 'visibility',
+    enumName: 'PlaylistVisibilityType',
+    required: false,
+  })
   visibility: PlaylistVisibilityType;
 
   // @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })

@@ -11,8 +11,14 @@ interface SessionStoreFactory {
   secret: string;
 }
 
-const SessionStoreFactory = function ({ mongoUrl, dbName, collectionName, secret }: SessionStoreFactory) {
-  if (!mongoUrl || !dbName || !collectionName || !secret) Logger.error('invalid arguments in SessionStoreFactory');
+const SessionStoreFactory = function ({
+  mongoUrl,
+  dbName,
+  collectionName,
+  secret,
+}: SessionStoreFactory) {
+  if (!mongoUrl || !dbName || !collectionName || !secret)
+    Logger.error('invalid arguments in SessionStoreFactory');
 
   const store = MongoStore.create({ mongoUrl, dbName, collectionName });
 

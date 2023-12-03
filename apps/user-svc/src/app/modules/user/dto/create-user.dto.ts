@@ -1,7 +1,13 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiEmail, ApiName, ApiString, ApiUriString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsEmail, IsString, Length, IsPhoneNumber } from 'class-validator';
+import {
+  IsOptional,
+  IsEmail,
+  IsString,
+  Length,
+  IsPhoneNumber,
+} from 'class-validator';
 import { BC_ROLES, BcRolesType } from '../../../core/models';
 
 export class CreateUserDto {

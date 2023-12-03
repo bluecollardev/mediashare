@@ -1,7 +1,13 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiLongString, ApiString, ApiTextString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDefined, IsIn, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDefined,
+  IsIn,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
 // import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
 

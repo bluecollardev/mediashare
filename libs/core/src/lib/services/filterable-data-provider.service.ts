@@ -16,8 +16,14 @@ import { DataProviderBaseEntity } from '../entities/base.entity';
  * @template R - repository extends MongoRepository<Model>
  */
 @Injectable()
-export abstract class FilterableDataService<E extends DataProviderBaseEntity<E>, R extends MongoRepository<E>> extends DataService<E, R> {
-  protected constructor(public repository: R, protected readonly logger: PinoLogger) {
+export abstract class FilterableDataService<
+  E extends DataProviderBaseEntity<E>,
+  R extends MongoRepository<E>
+> extends DataService<E, R> {
+  protected constructor(
+    public repository: R,
+    protected readonly logger: PinoLogger
+  ) {
     super(repository, logger);
   }
 
@@ -47,13 +53,21 @@ export abstract class FilterableDataService<E extends DataProviderBaseEntity<E>,
   }
 
   getById(id) {
-    const pipeline = [{ $match: { _id: ObjectIdGuard(id) } }, ...this.buildFields(), this.replaceRoot()];
+    const pipeline = [
+      { $match: { _id: ObjectIdGuard(id) } },
+      ...this.buildFields(),
+      this.replaceRoot(),
+    ];
     return this.repository.aggregate(pipeline).next();
   }
 
   getByUserId(userId: IdType) {
     try {
-      const pipeline = [{ $match: { createdBy: ObjectIdGuard(userId) } }, ...this.buildFields(), this.replaceRoot()];
+      const pipeline = [
+        { $match: { createdBy: ObjectIdGuard(userId) } },
+        ...this.buildFields(),
+        this.replaceRoot(),
+      ];
       return this.repository.aggregate(pipeline).toArray();
     } catch (err) {
       console.log(err);
@@ -62,7 +76,12 @@ export abstract class FilterableDataService<E extends DataProviderBaseEntity<E>,
   }
 
   getPopular() {
-    const pipeline = [...this.buildAggregateQuery({}), ...this.buildFields(), { $sort: { likesCount: -1 } }, this.replaceRoot()];
+    const pipeline = [
+      ...this.buildAggregateQuery({}),
+      ...this.buildFields(),
+      { $sort: { likesCount: -1 } },
+      this.replaceRoot(),
+    ];
     return this.repository.aggregate(pipeline).toArray();
   }
 
@@ -82,7 +101,10 @@ export abstract class FilterableDataService<E extends DataProviderBaseEntity<E>,
   }
 
   protected buildTextScore() {
-    return [{ $addFields: { score: { $meta: 'textScore' } } }, { $sort: { score: { $meta: 'textScore' } } }];
+    return [
+      { $addFields: { score: { $meta: 'textScore' } } },
+      { $sort: { score: { $meta: 'textScore' } } },
+    ];
   }
 
   protected abstract buildAggregateQuery(params: SearchParameters): any[];

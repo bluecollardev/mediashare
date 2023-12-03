@@ -34,7 +34,11 @@ export class ShareItemsDto {
 
 // TODO: Fix this type!
 export class ShareItemsByUserIdDto {
-  @ApiProperty({ name: 'shareItemByUserIds', type: () => String, isArray: true })
+  @ApiProperty({
+    name: 'shareItemByUserIds',
+    type: () => String,
+    isArray: true,
+  })
   shareItemByUserIds: any[];
   // shareItemByUserIds: UserConnectionDto[];
 }

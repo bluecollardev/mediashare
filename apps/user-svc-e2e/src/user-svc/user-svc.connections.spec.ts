@@ -16,7 +16,6 @@ import { UserConnection } from '@mediashare/user-svc/src/app/modules/user-connec
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 import { UserDto } from '@mediashare/user-svc/src/app/modules/user/dto/user.dto';
 
-
 describe('UserAPI.connections.e2e', () => {
   let app: INestApplication;
   let baseUrl: string;
@@ -24,7 +23,7 @@ describe('UserAPI.connections.e2e', () => {
   let db: DataSource;
   let userConnectionRepository: MongoRepository<UserConnection>;
   let userRepository: MongoRepository<User>;
-  let authResponse: AuthenticationResultType
+  let authResponse: AuthenticationResultType;
   let createUser;
 
   let user;
@@ -32,7 +31,7 @@ describe('UserAPI.connections.e2e', () => {
   let conn2;
 
   beforeAll(async () => {
-    const globalPrefix = 'api'
+    const globalPrefix = 'api';
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
@@ -55,26 +54,32 @@ describe('UserAPI.connections.e2e', () => {
     createUser = createUserFunction({ baseUrl, token: authResponse?.IdToken });
 
     // Create some users for our test
-    user = (await createUser({
-      username: 'jsmith',
-      email: 'jsmith@example.com',
-      firstName: 'John',
-      lastName: 'Smith',
-    })).data;
+    user = (
+      await createUser({
+        username: 'jsmith',
+        email: 'jsmith@example.com',
+        firstName: 'John',
+        lastName: 'Smith',
+      })
+    ).data;
 
-    conn1 = (await createUser({
-      username: 'ryanjohnson',
-      email: 'ryanj@example.com',
-      firstName: 'Ryan',
-      lastName: 'Johnson',
-    })).data;
+    conn1 = (
+      await createUser({
+        username: 'ryanjohnson',
+        email: 'ryanj@example.com',
+        firstName: 'Ryan',
+        lastName: 'Johnson',
+      })
+    ).data;
 
-    conn2 = (await createUser({
-      username: 'barbs',
-      email: 'barbs@example.com',
-      firstName: 'Barbra',
-      lastName: 'Streisand',
-    })).data;
+    conn2 = (
+      await createUser({
+        username: 'barbs',
+        email: 'barbs@example.com',
+        firstName: 'Barbra',
+        lastName: 'Streisand',
+      })
+    ).data;
   });
 
   afterAll(async () => {
@@ -86,16 +91,18 @@ describe('UserAPI.connections.e2e', () => {
     it('should return the correct validation errors', async () => {
       const dto = {
         userId: null,
-        connectionId: null
+        connectionId: null,
       };
 
-      await axios.post(`${baseUrl}/user/connections/create`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .post(
+          `${baseUrl}/user/connections/create`,
+          dto,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .catch((res: AxiosError) => {
-          const {
-            code,
-            displayMessage,
-            additionalMessages,
-          }: ApiErrorResponse = res.response.data as ApiErrorResponse;
+          const { code, displayMessage, additionalMessages }: ApiErrorResponse =
+            res.response.data as ApiErrorResponse;
           expect(res.response.status).toEqual(422);
           expect(code).toEqual('ValidationError');
           expect(displayMessage).toEqual('Validation failed');
@@ -103,36 +110,38 @@ describe('UserAPI.connections.e2e', () => {
 
           const validationMessages = [
             {
-              "target": {
-                "userId": null,
-                "connectionId": null
+              target: {
+                userId: null,
+                connectionId: null,
               },
-              "value": null,
-              "property": "userId",
-              "children": [],
-              "constraints": {
-                "isDefined": "userId should not be null or undefined",
-                "isString": "userId must be a string",
-                "isLength": "userId must be longer than or equal to 0 characters"
-              }
+              value: null,
+              property: 'userId',
+              children: [],
+              constraints: {
+                isDefined: 'userId should not be null or undefined',
+                isString: 'userId must be a string',
+                isLength: 'userId must be longer than or equal to 0 characters',
+              },
             },
             {
-              "target": {
-                "userId": null,
-                "connectionId": null
+              target: {
+                userId: null,
+                connectionId: null,
               },
-              "value": null,
-              "property": "connectionId",
-              "children": [],
-              "constraints": {
-                "isDefined": "connectionId should not be null or undefined",
-                "isString": "connectionId must be a string",
-                "isLength": "connectionId must be longer than or equal to 0 characters"
-              }
-            }
+              value: null,
+              property: 'connectionId',
+              children: [],
+              constraints: {
+                isDefined: 'connectionId should not be null or undefined',
+                isString: 'connectionId must be a string',
+                isLength:
+                  'connectionId must be longer than or equal to 0 characters',
+              },
+            },
           ];
-          expect(JSON.stringify(additionalMessages))
-            .toEqual(JSON.stringify(validationMessages));
+          expect(JSON.stringify(additionalMessages)).toEqual(
+            JSON.stringify(validationMessages)
+          );
         });
     });
   });
@@ -148,7 +157,12 @@ describe('UserAPI.connections.e2e', () => {
       } as CreateUserConnectionDto;
 
       // Create user connection 1
-      await axios.post(`${baseUrl}/user/connections/create`, uc1dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .post(
+          `${baseUrl}/user/connections/create`,
+          uc1dto,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           expect(res.status).toEqual(201);
 
@@ -174,7 +188,12 @@ describe('UserAPI.connections.e2e', () => {
         connectionId: conn2._id,
       } as CreateUserConnectionDto;
 
-      await axios.post(`${baseUrl}/user/connections/create`, uc2dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .post(
+          `${baseUrl}/user/connections/create`,
+          uc2dto,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           expect(res.status).toEqual(201);
 
@@ -194,14 +213,22 @@ describe('UserAPI.connections.e2e', () => {
 
   describe('UserConnectionApi should get the two user connections we created', () => {
     it('should get the two user connections we created', async () => {
-      await axios.get(`${baseUrl}/user/connections/${user._id.toString()}`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .get(
+          `${baseUrl}/user/connections/${user._id.toString()}`,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           expect(res.status).toEqual(200);
           const users: UserDto[] = res.data as UserDto[];
           expect(users).toBeInstanceOf(Array);
           expect(users).toHaveLength(2);
-          const uc1 = users.find((u) => u._id.toString() === conn1._id.toString());
-          const uc2 = users.find((u) => u._id.toString() === conn2._id.toString());
+          const uc1 = users.find(
+            (u) => u._id.toString() === conn1._id.toString()
+          );
+          const uc2 = users.find(
+            (u) => u._id.toString() === conn2._id.toString()
+          );
           expect(uc1._id).toEqual(conn1._id);
           expect(uc2._id).toEqual(conn2._id);
         })

@@ -32,4 +32,3 @@ export const testAndCloneUser = (user, expected) => {
   expect(user.updatedDate).toBeDefined();
   return clone(user);
 };
-

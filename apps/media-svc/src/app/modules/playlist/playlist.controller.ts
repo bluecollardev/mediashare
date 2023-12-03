@@ -1,13 +1,39 @@
 import { AuthenticationGuard } from '@nestjs-cognito/auth';
-import { Controller, Body, Param, Query, Get, Post, Put, Delete, Res, HttpStatus, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Body,
+  Param,
+  Query,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Res,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Response } from 'express';
 import { RouteTokens } from '../../core/constants';
 import { PLAYLIST_VISIBILITY } from '../../core/models';
 import { GetClaims } from '@mediashare/core/decorators/auth.decorator';
-import { handleErrorResponse, handleSuccessResponse } from '@mediashare/core/http/response';
+import {
+  handleErrorResponse,
+  handleSuccessResponse,
+} from '@mediashare/core/http/response';
 import { UserGuard } from '../../core/guards';
-import { PlaylistGetResponse, PlaylistPostResponse, PlaylistPutResponse, PlaylistShareResponse } from './playlist.decorator';
+import {
+  PlaylistGetResponse,
+  PlaylistPostResponse,
+  PlaylistPutResponse,
+  PlaylistShareResponse,
+} from './playlist.decorator';
 import { PlaylistService } from './playlist.service';
 import { PlaylistDto } from './dto/playlist.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
@@ -18,7 +44,10 @@ import { ShareItem } from '../share-item/entities/share-item.entity';
 @ApiTags('playlists')
 @Controller('playlists')
 export class PlaylistController {
-  constructor(private readonly playlistService: PlaylistService, private shareItemService: ShareItemService) {}
+  constructor(
+    private readonly playlistService: PlaylistService,
+    private shareItemService: ShareItemService
+  ) {}
 
   @Get('visibilities')
   getVisibilities() {
@@ -30,12 +59,18 @@ export class PlaylistController {
   @ApiBody({ type: CreatePlaylistDto })
   @Post()
   @PlaylistPostResponse({ type: PlaylistDto })
-  async create(@Res() res: Response, @Body() createPlaylistDto: CreatePlaylistDto, @GetClaims('sub') userId: string) {
+  async create(
+    @Res() res: Response,
+    @Body() createPlaylistDto: CreatePlaylistDto,
+    @GetClaims('sub') userId: string
+  ) {
     try {
       const result = await this.playlistService.create({
         ...createPlaylistDto,
         createdBy: userId,
-        cloneOf: createPlaylistDto?.cloneOf ? createPlaylistDto.cloneOf : undefined,
+        cloneOf: createPlaylistDto?.cloneOf
+          ? createPlaylistDto.cloneOf
+          : undefined,
       });
       return handleSuccessResponse(res, HttpStatus.CREATED, result);
     } catch (error) {
@@ -45,13 +80,26 @@ export class PlaylistController {
 
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: 'playlistId', type: String, required: true, example: '123' })
+  @ApiParam({
+    name: 'playlistId',
+    type: String,
+    required: true,
+    example: '123',
+  })
   @ApiBody({ type: UpdatePlaylistDto })
   @Put(RouteTokens.playlistId)
   @PlaylistPutResponse()
-  async update(@Res() res: Response, @Param('playlistId') playlistId: string, @GetClaims('sub') userId: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
+  async update(
+    @Res() res: Response,
+    @Param('playlistId') playlistId: string,
+    @GetClaims('sub') userId: string,
+    @Body() updatePlaylistDto: UpdatePlaylistDto
+  ) {
     try {
-      const result = await this.playlistService.update(playlistId, updatePlaylistDto);
+      const result = await this.playlistService.update(
+        playlistId,
+        updatePlaylistDto
+      );
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
       return handleErrorResponse(res, error);
@@ -61,7 +109,12 @@ export class PlaylistController {
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Delete(RouteTokens.playlistId)
-  @ApiParam({ name: 'playlistId', type: String, required: true, example: '123' })
+  @ApiParam({
+    name: 'playlistId',
+    type: String,
+    required: true,
+    example: '123',
+  })
   async remove(@Res() res: Response, @Param('playlistId') playlistId: string) {
     try {
       const result = await this.playlistService.remove(playlistId);
@@ -81,10 +134,14 @@ export class PlaylistController {
     @Res() res: Response,
     @Param('playlistId') playlistId: string,
     @Param('userId') userId: string,
-    @GetClaims('sub') createdBy: string,
+    @GetClaims('sub') createdBy: string
   ) {
     try {
-      const result = await this.shareItemService.createPlaylistShareItem({ userId, playlistId, createdBy });
+      const result = await this.shareItemService.createPlaylistShareItem({
+        userId,
+        playlistId,
+        createdBy,
+      });
       return handleSuccessResponse(res, HttpStatus.CREATED, result);
     } catch (error) {
       return handleErrorResponse(res, error);
@@ -94,7 +151,12 @@ export class PlaylistController {
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Get(RouteTokens.playlistId)
-  @ApiParam({ name: 'playlistId', type: String, required: true, example: '123' })
+  @ApiParam({
+    name: 'playlistId',
+    type: String,
+    required: true,
+    example: '123',
+  })
   @PlaylistGetResponse()
   async findOne(@Res() res: Response, @Param('playlistId') playlistId: string) {
     try {
@@ -108,13 +170,36 @@ export class PlaylistController {
   @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
-  @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
+  @ApiQuery({
+    name: 'tags',
+    type: String,
+    explode: true,
+    isArray: true,
+    required: false,
+    allowEmptyValue: true,
+  })
   @Get()
   @PlaylistGetResponse({ type: PlaylistDto, isArray: true })
-  async findAll(@Res() res: Response, @GetClaims('sub') userId: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
+  async findAll(
+    @Res() res: Response,
+    @GetClaims('sub') userId: string,
+    @Query('text') query?: string,
+    @Query('tags') tags?: string[]
+  ) {
     try {
-      const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
-      const result = query || tags ? await this.playlistService.search({ userId, query, tags: parsedTags }) : await this.playlistService.getByUserId(userId);
+      const parsedTags = Array.isArray(tags)
+        ? tags
+        : typeof tags === 'string'
+        ? [tags]
+        : undefined;
+      const result =
+        query || tags
+          ? await this.playlistService.search({
+              userId,
+              query,
+              tags: parsedTags,
+            })
+          : await this.playlistService.getByUserId(userId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
       return handleErrorResponse(res, error);

@@ -7,26 +7,52 @@ import { PlaylistItemDto } from './dto/playlist-item.dto';
 import { PlaylistItem } from './entities/playlist-item.entity';
 import { ShareItem } from '../share-item/entities/share-item.entity';
 
-export function PlaylistItemGetResponse({ type = PlaylistItemDto, isArray = false, description }: ApiControllerDecoratorParams = {}) {
+export function PlaylistItemGetResponse({
+  type = PlaylistItemDto,
+  isArray = false,
+  description,
+}: ApiControllerDecoratorParams = {}) {
   // TODO: Fix auth!
   // return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), UseJwtGuard());
-  return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }));
+  return applyDecorators(
+    ApiResponse({ type, isArray, description, status: 200 })
+  );
 }
 
-export function PlaylistItemPostResponse({ type = PlaylistItem, isArray = false, description }: ApiControllerDecoratorParams = {}) {
+export function PlaylistItemPostResponse({
+  type = PlaylistItem,
+  isArray = false,
+  description,
+}: ApiControllerDecoratorParams = {}) {
   // TODO: Fix auth!
   // return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), ApiBody({ type: CreatePlaylistItemDto }), UseJwtGuard());
-  return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), ApiBody({ type: CreatePlaylistItemDto }));
+  return applyDecorators(
+    ApiResponse({ type, isArray, description, status: 201 }),
+    ApiBody({ type: CreatePlaylistItemDto })
+  );
 }
 
-export function PlaylistItemPutResponse({ type = PlaylistItem, isArray = false, description }: ApiControllerDecoratorParams = {}) {
+export function PlaylistItemPutResponse({
+  type = PlaylistItem,
+  isArray = false,
+  description,
+}: ApiControllerDecoratorParams = {}) {
   // TODO: Fix auth!
   // return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), ApiBody({ type: UpdatePlaylistItemDto }), UseJwtGuard());
-  return applyDecorators(ApiResponse({ type, isArray, description, status: 200 }), ApiBody({ type: UpdatePlaylistItemDto }));
+  return applyDecorators(
+    ApiResponse({ type, isArray, description, status: 200 }),
+    ApiBody({ type: UpdatePlaylistItemDto })
+  );
 }
 
-export function PlaylistItemShareResponse({ type = ShareItem, isArray = false, description }: ApiControllerDecoratorParams = {}) {
+export function PlaylistItemShareResponse({
+  type = ShareItem,
+  isArray = false,
+  description,
+}: ApiControllerDecoratorParams = {}) {
   // TODO: Fix auth!
   // return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), UseJwtGuard());
-  return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }));
+  return applyDecorators(
+    ApiResponse({ type, isArray, description, status: 201 })
+  );
 }

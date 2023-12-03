@@ -8,11 +8,11 @@ import {
   createRequest,
   createResponse,
   MockRequest,
-  MockResponse
+  MockResponse,
 } from 'node-mocks-http';
 
 const baseUrl = `http://localhost:3000/api`;
-const ValidBearerToken = 'abc'
+const ValidBearerToken = 'abc';
 
 // TODO: These are basically useless tests right now, but we don't care too much
 //  about isolated controller tests anyway, we barely do anything in the controllers.
@@ -29,9 +29,7 @@ describe('UserController.authorization', () => {
     res = createResponse();
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
-      providers: [
-        { provide: UserService, useValue: mockUserService }
-      ],
+      providers: [{ provide: UserService, useValue: mockUserService }],
     }).compile();
 
     controller = module.get(UserController);
@@ -48,8 +46,8 @@ describe('UserController.authorization', () => {
       method: 'GET',
       url: `${baseUrl}/`,
       headers: {
-        'authorization': `bearer ${ValidBearerToken}`
-      }
+        authorization: `bearer ${ValidBearerToken}`,
+      },
     });
     const user = {};
     const result = await controller.authorize(user, req, res);
@@ -62,8 +60,8 @@ describe('UserController.authorization', () => {
       method: 'GET',
       url: `${baseUrl}/`,
       headers: {
-        'authorization': `bearer ${ValidBearerToken}`
-      }
+        authorization: `bearer ${ValidBearerToken}`,
+      },
     });
     const user = {};
     const result = await controller.authorize(user, req, res);
@@ -76,8 +74,8 @@ describe('UserController.authorization', () => {
       method: 'POST',
       url: `${baseUrl}/`,
       headers: {
-        'authorization': `bearer ${ValidBearerToken}`
-      }
+        authorization: `bearer ${ValidBearerToken}`,
+      },
     });
     const user = {};
     const result = await controller.authorize(user, req, res);
@@ -85,7 +83,6 @@ describe('UserController.authorization', () => {
     console.log(result);
   });
 });
-
 
 describe('UserController.crud', () => {
   let controller: UserController;
@@ -100,9 +97,7 @@ describe('UserController.crud', () => {
     res = createResponse();
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
-      providers: [
-        { provide: UserService, useValue: mockUserService }
-      ],
+      providers: [{ provide: UserService, useValue: mockUserService }],
     }).compile();
 
     controller = module.get(UserController);
@@ -114,8 +109,8 @@ describe('UserController.crud', () => {
       method: 'GET',
       url: `${baseUrl}/`,
       headers: {
-        'authorization': `bearer ${ValidBearerToken}`
-      }
+        authorization: `bearer ${ValidBearerToken}`,
+      },
     });
 
     const result = await controller.getUser(res, 'abc');
@@ -128,8 +123,8 @@ describe('UserController.crud', () => {
       method: 'GET',
       url: `${baseUrl}/`,
       headers: {
-        'authorization': `bearer ${ValidBearerToken}`
-      }
+        authorization: `bearer ${ValidBearerToken}`,
+      },
     });
 
     const data = {
@@ -141,7 +136,8 @@ describe('UserController.crud', () => {
       email: 'lucaslopatka@gmail.com',
       phoneNumber: null,
       role: 'subscriber',
-      imageSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/assets/default-user.png',
+      imageSrc:
+        'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/assets/default-user.png',
       isDisabled: false,
       transactionId: '12345',
       transactionDate: '2023-06-28T08:39:13.264Z',
@@ -150,9 +146,12 @@ describe('UserController.crud', () => {
       updatedDate: new Date('2023-06-28T08:39:13.264Z'),
     } as UpdateUserDto;
 
-    const result = await controller.updateUser(res, '649bf1b109d28ad4892f1548', data);
+    const result = await controller.updateUser(
+      res,
+      '649bf1b109d28ad4892f1548',
+      data
+    );
     expect(result).toBeDefined();
     console.log(result);
   });
 });
-

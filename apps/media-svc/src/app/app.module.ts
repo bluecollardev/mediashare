@@ -65,7 +65,10 @@ import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
   exports: [],
 })
 export class AppModule {
-  constructor(private configService: ConfigService, private dataSource: DataSource) {
+  constructor(
+    private configService: ConfigService,
+    private dataSource: DataSource
+  ) {
     const appConfig = configService.get('app');
     const dbConfig = configService.get('db');
     console.log(appConfig);

@@ -13,6 +13,6 @@ export async function createDB(entities) {
     ssl: false,
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    logging: true
+    logging: true,
   } as MongoConnectionOptions);
 }

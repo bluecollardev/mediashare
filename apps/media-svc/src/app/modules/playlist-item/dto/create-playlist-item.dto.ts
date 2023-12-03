@@ -1,7 +1,14 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
 import { ApiLongString, ApiString, ApiTextString } from '@mediashare/shared';
-import { IsBoolean, IsDefined, IsIn, IsInt, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDefined,
+  IsIn,
+  IsInt,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { MEDIA_VISIBILITY, MediaVisibilityType } from '../../../core/models';
 
 export class CreatePlaylistItemDto {
@@ -66,7 +73,12 @@ export class CreatePlaylistItemDto {
 
   @IsIn(MEDIA_VISIBILITY)
   @AutoMap()
-  @ApiProperty({ enum: MEDIA_VISIBILITY, name: 'visibility', enumName: 'MediaVisibilityType', required: true })
+  @ApiProperty({
+    enum: MEDIA_VISIBILITY,
+    name: 'visibility',
+    enumName: 'MediaVisibilityType',
+    required: true,
+  })
   visibility: MediaVisibilityType;
 
   // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })

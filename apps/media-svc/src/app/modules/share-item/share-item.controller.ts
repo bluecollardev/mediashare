@@ -1,10 +1,30 @@
 import { AuthenticationGuard } from '@nestjs-cognito/auth';
-import { Controller, Param, HttpCode, UseGuards, HttpStatus, Get, Delete, Post, Body } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Param,
+  HttpCode,
+  UseGuards,
+  HttpStatus,
+  Get,
+  Delete,
+  Post,
+  Body,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { GetClaims } from '@mediashare/core/decorators/auth.decorator';
 import { RouteTokens } from '../../core/constants';
 import { ShareItemService } from './share-item.service';
-import { ShareItemsByUserIdDto, ShareItemsDto, ShareItemsResponseDto } from './dto/share-item.dto';
+import {
+  ShareItemsByUserIdDto,
+  ShareItemsDto,
+  ShareItemsResponseDto,
+} from './dto/share-item.dto';
 import { ShareItemGetResponse } from './share-item.decorator';
 import { ShareItem } from './entities/share-item.entity';
 import { MediaItemDto } from '../media-item/dto/media-item.dto';
@@ -15,7 +35,7 @@ import { PlaylistDto } from '../playlist/dto/playlist.dto';
 export class ShareItemController {
   constructor(private readonly shareItemService: ShareItemService) {}
 
-  @UseGuards(AuthenticationGuard)
+  /*@UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-by-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
@@ -106,5 +126,5 @@ export class ShareItemController {
   @ApiBody({ type: () => ShareItemsByUserIdDto })
   async removeShareItemAllByUserId(@Body() shareItemsByUserIdDto: ShareItemsByUserIdDto) {
     // await this.shareItemService.removeUserConnectionShareItems(shareItemsByUserIdDto.shareItemByUserIds);
-  }
+  }*/
 }

@@ -7,7 +7,7 @@ import compression from 'compression';
 import * as http from 'http';
 import * as https from 'https';
 import express from 'express';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 
 import { AppModule } from './app/app.module';
 import { configureOpenApi } from '@mediashare/shared';
@@ -21,8 +21,12 @@ async function bootstrap() {
     let httpsOptions;
     if (withHttps) {
       httpsOptions = {
-        key: process.env?.HTTPS_KEY || readFileSync(`${__dirname}/../certs/key.pem`),
-        cert: process.env?.HTTPS_CERT || readFileSync(`${__dirname}/../certs/cert.pem`),
+        key:
+          process.env?.HTTPS_KEY ||
+          readFileSync(`${__dirname}/../certs/key.pem`),
+        cert:
+          process.env?.HTTPS_CERT ||
+          readFileSync(`${__dirname}/../certs/cert.pem`),
       };
     }
 
@@ -30,7 +34,9 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
     const globalPrefix = 'api';
-    app.setGlobalPrefix(globalPrefix, { exclude: ['/.well-known/apple-app-site-association'] });
+    app.setGlobalPrefix(globalPrefix, {
+      exclude: ['/.well-known/apple-app-site-association'],
+    });
 
     app.useLogger(app.get(Logger));
     /* app.useGlobalPipes(
@@ -40,7 +46,7 @@ async function bootstrap() {
     );
     app.useGlobalFilters(new GlobalExceptionFilter()); */
 
-    configureOpenApi(app)(SwaggerModule)({
+    const apiSpec = configureOpenApi(app)(SwaggerModule)({
       globalPrefix,
       title: `Media Service`,
       description: `Media Service`,
@@ -59,8 +65,9 @@ async function bootstrap() {
           url: `https://mediashare-api-prod.herokuapp.com`,
           description: `production`,
         },
-      ]
+      ],
     });
+    writeFileSync('./openapi/media-svc.json', JSON.stringify(apiSpec, null, 2));
 
     app.use(compression());
     app.use(bodyParser.json({ limit: '5mb' }));

@@ -31,7 +31,12 @@ export class UpdateMediaItemDto extends ApiBaseDto {
 
   @IsIn(MEDIA_VISIBILITY)
   @AutoMap()
-  @ApiProperty({ enum: MEDIA_VISIBILITY, name: 'visibility', enumName: 'MediaVisibilityType', required: true })
+  @ApiProperty({
+    enum: MEDIA_VISIBILITY,
+    name: 'visibility',
+    enumName: 'MediaVisibilityType',
+    required: true,
+  })
   visibility: MediaVisibilityType;
 
   // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })

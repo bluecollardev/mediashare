@@ -6,6 +6,10 @@ export type OptionalApiDecoratorOptions = Pick<
   'enum' | 'readOnly' | 'example' | 'description'
 >;
 
-export type RequiredApiDecoratorOptions = Pick<ApiPropertyOptions & ValidationOptions, 'required' | 'type'>;
+export type RequiredApiDecoratorOptions = Pick<
+  ApiPropertyOptions & ValidationOptions,
+  'required' | 'type'
+>;
 
-export type ApiDecoratorOptions = RequiredApiDecoratorOptions & OptionalApiDecoratorOptions;
+export type ApiDecoratorOptions = RequiredApiDecoratorOptions &
+  OptionalApiDecoratorOptions;

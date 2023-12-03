@@ -18,12 +18,12 @@
       "@mediashare/api-lib": ["libs/api-lib/src/index.ts"],
       "@mediashare/core": ["libs/core/src/index.ts"],
       "@mediashare/core/*": ["libs/core/src/lib/*"],
+      "@mediashare/media-svc/*": ["apps/media-svc/*"],
       "@mediashare/shared": ["libs/shared/src/index.ts"],
       "@mediashare/shared/*": ["libs/shared/src/lib/*"],
-      "@mediashare/utility": ["libs/utility/src/index.ts"],
-      "@mediashare/user-svc/*": ["apps/user-svc/*"],
       "@mediashare/user-svc-e2e/*": ["apps/user-svc-e2e/*"],
-      "@mediashare/media-svc/*": ["apps/media-svc/*"]
+      "@mediashare/user-svc/*": ["apps/user-svc/*"],
+      "@mediashare/utility": ["libs/utility/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

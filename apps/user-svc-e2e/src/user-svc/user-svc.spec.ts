@@ -8,7 +8,11 @@ import { clone } from 'remeda';
 import { allValidations } from './fixtures/validations';
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer, login } from './functions/auth';
-import { createUser as createUserFunction, createAndValidateTestUser, getTestUserId } from './functions/user';
+import {
+  createUser as createUserFunction,
+  createAndValidateTestUser,
+  getTestUserId,
+} from './functions/user';
 
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { ApiErrorResponse } from '@mediashare/core/errors/api-error';
@@ -23,11 +27,11 @@ describe('UserAPI.e2e', () => {
 
   let db: DataSource;
   let userRepository: MongoRepository<User>;
-  let authResponse: AuthenticationResultType
+  let authResponse: AuthenticationResultType;
   let createUser;
 
   beforeAll(async () => {
-    const globalPrefix = 'api'
+    const globalPrefix = 'api';
     app = await initializeApp(globalPrefix);
     baseUrl = await getBaseUrl(app, globalPrefix);
 
@@ -56,54 +60,51 @@ describe('UserAPI.e2e', () => {
   describe('UserApi validation', () => {
     it('POST /user should return the correct validation errors', async () => {
       const dto = {
-        firstName: 'J'
+        firstName: 'J',
       } as CreateUserDto;
 
       console.log(authResponse?.IdToken);
-      await axios.post(`${baseUrl}/user`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .post(
+          `${baseUrl}/user`,
+          dto,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .catch((res: AxiosError) => {
-          const {
-            code,
-            displayMessage,
-            additionalMessages,
-          }: ApiErrorResponse = res.response.data as ApiErrorResponse;
+          const { code, displayMessage, additionalMessages }: ApiErrorResponse =
+            res.response.data as ApiErrorResponse;
           expect(res.response.status).toEqual(422);
           expect(code).toEqual('ValidationError');
           expect(displayMessage).toEqual('Validation failed');
           expect(additionalMessages).toBeInstanceOf(Array);
-          expect(JSON.stringify(additionalMessages))
-            .toEqual(JSON.stringify(allValidations));
+          expect(JSON.stringify(additionalMessages)).toEqual(
+            JSON.stringify(allValidations)
+          );
         });
     });
 
     it('it should NOT save extra fields to db when you supply extra fields', async () => {
       const junkData = {
-        'likesCount': 0,
-        'sharesCount': 4,
-        'sharedCount': 2,
-        'sharedItems': [
+        likesCount: 0,
+        sharesCount: 4,
+        sharedCount: 2,
+        sharedItems: [
           {
-            '_id': '6190693aa0c0e20021fa2324',
-            'title': 'Test',
-            'category': 'free',
-            'description': 'Make a longer test description for this!',
-            'mediaIds': [
-              '619a2f18affc010021370ba7',
-              '619a2f1caffc010021370ba8'
-            ],
+            _id: '6190693aa0c0e20021fa2324',
+            title: 'Test',
+            category: 'free',
+            description: 'Make a longer test description for this!',
+            mediaIds: ['619a2f18affc010021370ba7', '619a2f1caffc010021370ba8'],
           },
           {
-            '_id': '6190693aa0c0e20021fa2324',
-            'title': 'Test',
-            'category': 'free',
-            'description': 'We need a longer description for this playlist.',
-            'mediaIds': [
-              '619a2f18affc010021370ba7',
-              '619a2f1caffc010021370ba8'
-            ],
-          }
+            _id: '6190693aa0c0e20021fa2324',
+            title: 'Test',
+            category: 'free',
+            description: 'We need a longer description for this playlist.',
+            mediaIds: ['619a2f18affc010021370ba7', '619a2f1caffc010021370ba8'],
+          },
         ],
-      }
+      };
       const userData = {
         username: 'jsmith',
         email: 'jsmith@example.com',
@@ -111,25 +112,23 @@ describe('UserAPI.e2e', () => {
         lastName: 'Smith',
         ...junkData,
       };
-      createUser(userData)
-        .then((res) => {
-          expect(res.status).toEqual(201);
+      createUser(userData).then((res) => {
+        expect(res.status).toEqual(201);
 
-          const user: UserDto = res.data;
-          expect(user._id).toBeDefined();
-          const junkUserKeys = Object.keys(junkData);
-          const userKeys = [ ...Object.keys(user) ];
-          const matches = junkUserKeys.reduce((acc, cur) => {
-            if (userKeys.includes(cur)) {
-              acc.push(cur);
-            }
-            return acc;
-          }, []);
-          expect(matches).toHaveLength(0);
-        })
+        const user: UserDto = res.data;
+        expect(user._id).toBeDefined();
+        const junkUserKeys = Object.keys(junkData);
+        const userKeys = [...Object.keys(user)];
+        const matches = junkUserKeys.reduce((acc, cur) => {
+          if (userKeys.includes(cur)) {
+            acc.push(cur);
+          }
+          return acc;
+        }, []);
+        expect(matches).toHaveLength(0);
+      });
     });
   });
-
 
   describe('UserApi should create, find, update and delete a new user', () => {
     it('should create a new user', async () => {
@@ -140,7 +139,11 @@ describe('UserAPI.e2e', () => {
       const testUser = await createAndValidateTestUser(createUser);
       const testUserId = getTestUserId(testUser);
 
-      await axios.get(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .get(
+          `${baseUrl}/user/${testUserId}`,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           expect(res.status).toEqual(200);
 
@@ -164,14 +167,19 @@ describe('UserAPI.e2e', () => {
     });
 
     it('should update the user we create', async () => {
-      const testUser = await createAndValidateTestUser(createUser) as UserDto;
+      const testUser = (await createAndValidateTestUser(createUser)) as UserDto;
       const testUserId = getTestUserId(testUser);
 
       const dto = clone(testUser) as UpdateUserDto;
       dto.username = 'jr.smith';
       dto.email = 'jr.smith@example.com';
 
-      await axios.put(`${baseUrl}/user/${testUserId}`, dto, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .put(
+          `${baseUrl}/user/${testUserId}`,
+          dto,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then(async (res) => {
           expect(res.status).toEqual(200);
 
@@ -187,7 +195,11 @@ describe('UserAPI.e2e', () => {
           expect(updated.updatedDate).toBeDefined();
 
           // Don't trust the response object - find the user, and make sure it's updated too
-          await axios.get(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+          await axios
+            .get(
+              `${baseUrl}/user/${testUserId}`,
+              defaultOptionsWithBearer(authResponse?.IdToken)
+            )
             .then((res) => {
               expect(res.status).toEqual(200);
 
@@ -211,7 +223,11 @@ describe('UserAPI.e2e', () => {
       const testUser = await createAndValidateTestUser(createUser);
       const testUserId = getTestUserId(testUser);
 
-      await axios.delete(`${baseUrl}/user/${testUserId}`, defaultOptionsWithBearer(authResponse?.IdToken))
+      await axios
+        .delete(
+          `${baseUrl}/user/${testUserId}`,
+          defaultOptionsWithBearer(authResponse?.IdToken)
+        )
         .then((res) => {
           // TODO: Make response 204 if no content
           expect(res.status).toEqual(200);

@@ -26,8 +26,14 @@ const validationErrorResponse = (errors) => ({ errors });
  * @template R - repository extends MongoRepository<Model>
  */
 @Injectable()
-export abstract class DataService<E extends DataProviderBaseEntity<E>, R extends MongoRepository<E>> {
-  protected constructor(public repository: R, protected readonly logger: PinoLogger) {}
+export abstract class DataService<
+  E extends DataProviderBaseEntity<E>,
+  R extends MongoRepository<E>
+> {
+  protected constructor(
+    public repository: R,
+    protected readonly logger: PinoLogger
+  ) {}
 
   /**
    * The final stop-gap against bad data insertion.
@@ -37,11 +43,12 @@ export abstract class DataService<E extends DataProviderBaseEntity<E>, R extends
    * @param dto
    * @private
    */
-  async validateDto(dtoClass, dto): Promise<boolean | DataServiceValidationResponse> {
+  async validateDto(
+    dtoClass,
+    dto
+  ): Promise<boolean | DataServiceValidationResponse> {
     const errors = await validate(plainToInstance(dtoClass, dto));
-    return (errors.length === 0)
-      ? false
-      : validationErrorResponse(errors);
+    return errors.length === 0 ? false : validationErrorResponse(errors);
   }
 
   /**
@@ -70,16 +77,16 @@ export abstract class DataService<E extends DataProviderBaseEntity<E>, R extends
    */
   async update(id: IdType, entity: Partial<E>): Promise<E> {
     try {
-      const entityWithNoId = omit(entity, ['_id'])
+      const entityWithNoId = omit(entity, ['_id']);
       await this.repository.findOneAndUpdate(
         { _id: ObjectIdGuard(id) },
-        { $set: { ...entityWithNoId }
-        });
+        { $set: { ...entityWithNoId } }
+      );
       // Node.js Mongo https://mongodb.github.io/node-mongodb-native/3.1/api/Collection.html#~findAndModifyWriteOpResult
       // For whatever reason, although the return type is Promise<Document>,
       // we're getting back a findAndModifyWriteOpResultObject:
       // { value, lastErrorObject, ok }
-      return await this.findOne(id) as E;
+      return (await this.findOne(id)) as E;
       // return result.value as E;
     } catch (error) {
       this.logger.error(`${this.constructor.name}.update ${error}`);
@@ -111,9 +118,14 @@ export abstract class DataService<E extends DataProviderBaseEntity<E>, R extends
    * @return {*}
    * @memberof DataService
    */
-  async findOne(id: IdType, opts: MongoFindOneOptions | undefined = undefined): Promise<E> {
+  async findOne(
+    id: IdType,
+    opts: MongoFindOneOptions | undefined = undefined
+  ): Promise<E> {
     try {
-      const document = await this.repository.findOneBy({ _id: ObjectIdGuard(id) });
+      const document = await this.repository.findOneBy({
+        _id: ObjectIdGuard(id),
+      });
       return document as E;
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findOne ${error}`);
@@ -133,7 +145,10 @@ export abstract class DataService<E extends DataProviderBaseEntity<E>, R extends
       return findAll as E[];
     } catch (error) {
       this.logger.error(`${this.constructor.name}.findAll ${error}`);
-      throw new HttpException('InternalServerErrorException', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'InternalServerErrorException',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -176,7 +191,9 @@ export abstract class DataService<E extends DataProviderBaseEntity<E>, R extends
       const inserted = await this.repository.save(items);
       return inserted as E[];
     } catch (error) {
-      this.logger.error(`${this.constructor.name}.insertMany failed with: ${error}`);
+      this.logger.error(
+        `${this.constructor.name}.insertMany failed with: ${error}`
+      );
       throw error;
     }
   }

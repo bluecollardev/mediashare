@@ -11,10 +11,15 @@ const ApiArray = function ({
   example = ['item'],
   readOnly,
 }: ApiDecoratorOptions = apiDecoratorDefaults) {
-  return applyDecorators(IsArray(), ApiProperty({ type: type, required, isArray: true, example, readOnly }));
+  return applyDecorators(
+    IsArray(),
+    ApiProperty({ type: type, required, isArray: true, example, readOnly })
+  );
 };
 
-const ObjectIdArray = function ({ required }: ApiDecoratorOptions = apiDecoratorDefaults) {
+const ObjectIdArray = function ({
+  required,
+}: ApiDecoratorOptions = apiDecoratorDefaults) {
   return ApiArray({ required, type: ObjectId, example: [objectId] });
 };
 

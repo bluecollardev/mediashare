@@ -21,8 +21,12 @@ async function bootstrap() {
     let httpsOptions;
     if (withHttps) {
       httpsOptions = {
-        key: process.env?.HTTPS_KEY || readFileSync(`${__dirname}/../certs/key.pem`),
-        cert: process.env?.HTTPS_CERT || readFileSync(`${__dirname}/../certs/cert.pem`),
+        key:
+          process.env?.HTTPS_KEY ||
+          readFileSync(`${__dirname}/../certs/key.pem`),
+        cert:
+          process.env?.HTTPS_CERT ||
+          readFileSync(`${__dirname}/../certs/cert.pem`),
       };
     }
 
@@ -30,7 +34,9 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
     const globalPrefix = 'api';
-    app.setGlobalPrefix(globalPrefix, { exclude: ['/.well-known/apple-app-site-association'] });
+    app.setGlobalPrefix(globalPrefix, {
+      exclude: ['/.well-known/apple-app-site-association'],
+    });
 
     app.useLogger(app.get(Logger));
     /* app.useGlobalPipes(
@@ -59,7 +65,7 @@ async function bootstrap() {
           url: `https://mediashare-api-prod.herokuapp.com`,
           description: `production`,
         },
-      ]
+      ],
     });
 
     app.use(compression());

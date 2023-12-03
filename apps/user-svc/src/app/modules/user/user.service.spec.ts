@@ -4,7 +4,7 @@ import { createDB } from '@mediashare/shared/test';
 import {
   createUserDtoToUserMappingFactory,
   updateUserDtoToUserMappingFactory,
-  userToUserDtoMappingFactory
+  userToUserDtoMappingFactory,
 } from '@mediashare/user-svc/src/app/modules/user/mappers/automapper.profile';
 import { randomUUID } from 'crypto';
 // import { mockLoggerFactory } from '@mediashare/core/factories/mock-logger.factory';
@@ -19,7 +19,7 @@ import { UserDataService, UserService } from './user.service';
 
 const throwInvalidUserDtoError = () => {
   throw new Error(`Response was not a valid UserDto`);
-}
+};
 
 describe('UserService', () => {
   let db: DataSource;
@@ -37,11 +37,11 @@ describe('UserService', () => {
     createUserDtoToUserMappingFactory(mapper);
     updateUserDtoToUserMappingFactory(mapper);
 
-    db = await createDB([User])
+    db = await createDB([User]);
     await db.initialize();
 
     userRepository = await db.getMongoRepository(User);
-    userDataService = new UserDataService(userRepository, logger)
+    userDataService = new UserDataService(userRepository, logger);
     userService = new UserService(userDataService, mapper, logger);
   });
 
@@ -54,21 +54,19 @@ describe('UserService', () => {
   describe('UserService validation', () => {
     it('should return the correct validation errors', async () => {
       const dto = {
-        firstName: 'J'
+        firstName: 'J',
       } as CreateUserDto;
 
-      await userService
-        .create(dto)
-        .catch((errorResponse) => {
-          // expect(user).toBeInstanceOf(UserDto);
-          const errors = errorResponse.additionalMessages;
-          expect(errors).toBeDefined();
-          expect(errors.find((e) => e.property === 'sub')).toBeDefined();
-          expect(errors.find((e) => e.property === 'username')).toBeDefined();
-          expect(errors.find((e) => e.property === 'email')).toBeDefined();
-          expect(errors.find((e) => e.property === 'firstName')).toBeDefined();
-          expect(errors.find((e) => e.property === 'lastName')).toBeDefined();
-        });
+      await userService.create(dto).catch((errorResponse) => {
+        // expect(user).toBeInstanceOf(UserDto);
+        const errors = errorResponse.additionalMessages;
+        expect(errors).toBeDefined();
+        expect(errors.find((e) => e.property === 'sub')).toBeDefined();
+        expect(errors.find((e) => e.property === 'username')).toBeDefined();
+        expect(errors.find((e) => e.property === 'email')).toBeDefined();
+        expect(errors.find((e) => e.property === 'firstName')).toBeDefined();
+        expect(errors.find((e) => e.property === 'lastName')).toBeDefined();
+      });
     });
   });
 
@@ -105,7 +103,10 @@ describe('UserService', () => {
         })
         .catch((errorResponse) => {
           const validationErrors = errorResponse.additionalMessages;
-          if (validationErrors instanceof Array && validationErrors.length > 0) {
+          if (
+            validationErrors instanceof Array &&
+            validationErrors.length > 0
+          ) {
             expect(validationErrors).toBeDefined();
           } else {
             throw new Error(errorResponse.toString());
@@ -130,7 +131,8 @@ describe('UserService', () => {
       const updatedUser = clone(user);
       updatedUser.username = 'jr.smith';
       updatedUser.email = 'jr.smith@example.com';
-      await userService.update(createdUserId, updatedUser)
+      await userService
+        .update(createdUserId, updatedUser)
         .then((updated) => {
           if (updated instanceof UserDto) {
             expect(updated).toBeDefined();
@@ -147,7 +149,10 @@ describe('UserService', () => {
         })
         .catch((errorResponse) => {
           const validationErrors = errorResponse.additionalMessages;
-          if (validationErrors instanceof Array && validationErrors.length > 0) {
+          if (
+            validationErrors instanceof Array &&
+            validationErrors.length > 0
+          ) {
             expect(validationErrors).toBeDefined();
           } else {
             throw new Error(errorResponse.toString());
@@ -169,12 +174,14 @@ describe('UserService', () => {
     });
 
     it('should delete the user we created', async () => {
-      await userService.remove(createdUserId)
+      await userService
+        .remove(createdUserId)
         .then((result) => {
           expect(result).toBeDefined();
           expect(result.affected).toEqual(1);
           expect(result.raw.acknowledged).toEqual(true);
-        }).catch((error) => {
+        })
+        .catch((error) => {
           console.error(error);
           throw new Error('Delete failed');
         });

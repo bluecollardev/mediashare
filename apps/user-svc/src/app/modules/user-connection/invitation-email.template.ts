@@ -16,8 +16,7 @@ export default ({ _id, firstName, lastName }: ProfileDto, email) => {
   const emailUnsubscribeUrl = process.env['EMAIL_UNSUBSCRIBE_URL'];
   const emailPreferencesUrl = process.env['EMAIL_PREFERENCES_URL'];
   const fullName = [firstName, lastName].join(' ');
-  const formAction = invitationRequestUrl
-    .replace('{{userId}}', _id)
+  const formAction = invitationRequestUrl.replace('{{userId}}', _id);
   return `
     <html>
       <body>
@@ -36,8 +35,14 @@ export default ({ _id, firstName, lastName }: ProfileDto, email) => {
           <p>
             <small>
               If you don't want to receive these emails from Mediashare in the future, you can
-              <a href="${emailPreferencesUrl.replace('{{userId}}', _id)}">edit your profile</a> or
-              <a href="${emailUnsubscribeUrl.replace('{{userId}}', _id)}">unsubscribe</a>.
+              <a href="${emailPreferencesUrl.replace(
+                '{{userId}}',
+                _id
+              )}">edit your profile</a> or
+              <a href="${emailUnsubscribeUrl.replace(
+                '{{userId}}',
+                _id
+              )}">unsubscribe</a>.
              </small>
           </p>
         </form>

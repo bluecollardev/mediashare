@@ -8,7 +8,10 @@ import { PlaylistDto } from '../playlist/dto/playlist.dto';
 @ApiTags('search')
 @Controller('search')
 export class SearchController {
-  constructor(private readonly playlistService: PlaylistService, private readonly mediaItemService: MediaItemService) {}
+  constructor(
+    private readonly playlistService: PlaylistService,
+    private readonly mediaItemService: MediaItemService
+  ) {}
 
   /**
    * TODO: Type contentType!
@@ -21,29 +24,53 @@ export class SearchController {
    */
   @Get()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
-  @ApiQuery({ name: 'tags', type: String, explode: true, isArray: true, required: false, allowEmptyValue: true })
+  @ApiQuery({
+    name: 'tags',
+    type: String,
+    explode: true,
+    isArray: true,
+    required: false,
+    allowEmptyValue: true,
+  })
   @PlaylistGetResponse({ type: PlaylistDto, isArray: true })
-  async findAll(@Query('target') target?: string, @Query('text') query?: string, @Query('tags') tags?: string[]) {
-    const parsedTags = Array.isArray(tags) ? tags : typeof tags === 'string' ? [tags] : undefined;
+  async findAll(
+    @Query('target') target?: string,
+    @Query('text') query?: string,
+    @Query('tags') tags?: string[]
+  ) {
+    const parsedTags = Array.isArray(tags)
+      ? tags
+      : typeof tags === 'string'
+      ? [tags]
+      : undefined;
     let results = [];
     switch (target) {
       case 'playlists':
         results = !!(query || tags)
           ? await this.playlistService.search({ query, tags: parsedTags })
           : await this.playlistService.findAll();
-        results = results.map((result) => ({ ...result, contentType: 'playlist' }))
+        results = results.map((result) => ({
+          ...result,
+          contentType: 'playlist',
+        }));
         break;
       case 'media':
         results = !!(query || tags)
           ? await this.mediaItemService.search({ query, tags: parsedTags })
           : await this.mediaItemService.search({ query: '', tags: [] });
-        results = results.map((result) => ({ ...result, contentType: 'mediaItem' }))
+        results = results.map((result) => ({
+          ...result,
+          contentType: 'mediaItem',
+        }));
         break;
       default:
         results = !!(query || tags)
           ? await this.playlistService.search({ query, tags: parsedTags })
           : await this.playlistService.findAll();
-        results = results.map((result) => ({ ...result, contentType: 'playlist' }))
+        results = results.map((result) => ({
+          ...result,
+          contentType: 'playlist',
+        }));
         break;
     }
     return results;

@@ -12,9 +12,11 @@ export class UserGuard implements CanActivate {
     const request = ctx.switchToHttp().getRequest();
     const payload = request[COGNITO_JWT_PAYLOAD_CONTEXT_PROPERTY];
     const idKey = 'sub';
-    const sub = payload[`cognito:${idKey}`] || payload[idKey]
+    const sub = payload[`cognito:${idKey}`] || payload[idKey];
 
-    request[USER_CONTEXT_PROPERTY] = await this.userSvc.findByQuery({ where: { sub } });
+    request[USER_CONTEXT_PROPERTY] = await this.userSvc.findByQuery({
+      where: { sub },
+    });
     return !!request[USER_CONTEXT_PROPERTY];
   }
 }

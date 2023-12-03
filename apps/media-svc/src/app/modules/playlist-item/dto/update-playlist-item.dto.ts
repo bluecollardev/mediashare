@@ -1,7 +1,14 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiLongString, ApiString, ApiTextString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDefined, IsIn, IsInt, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDefined,
+  IsIn,
+  IsInt,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
 
@@ -69,7 +76,12 @@ export class UpdatePlaylistItemDto extends ApiBaseDto {
   @IsIn(MEDIA_VISIBILITY)
   @AutoMap()
   // TODO: Make this required!
-  @ApiProperty({ enum: MEDIA_VISIBILITY, name: 'visibility', enumName: 'MediaVisibilityType', required: false })
+  @ApiProperty({
+    enum: MEDIA_VISIBILITY,
+    name: 'visibility',
+    enumName: 'MediaVisibilityType',
+    required: false,
+  })
   visibility: MediaVisibilityType;
 
   // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })

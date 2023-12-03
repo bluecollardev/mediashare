@@ -10,8 +10,10 @@ import { DataService } from '@mediashare/core/services';
 import { UserConnection } from './entities/user-connection.entity';
 import { CreateUserConnectionDto } from './dto/create-user-connection.dto';
 import { UserConnectionDto } from './dto/user-connection.dto';
-import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api-error';
-
+import {
+  ApiErrorResponse,
+  ApiErrorResponses,
+} from '@mediashare/core/errors/api-error';
 
 // const options: SesEmailOptions = {
 //   from: '',
@@ -21,10 +23,14 @@ import { ApiErrorResponse, ApiErrorResponses } from '@mediashare/core/errors/api
 // };
 
 @Injectable()
-export class UserConnectionDataService extends DataService<UserConnection, MongoRepository<UserConnection>> {
+export class UserConnectionDataService extends DataService<
+  UserConnection,
+  MongoRepository<UserConnection>
+> {
   constructor(
-    @InjectRepository(UserConnection) repository: MongoRepository<UserConnection>,
-    logger: PinoLogger,
+    @InjectRepository(UserConnection)
+    repository: MongoRepository<UserConnection>,
+    logger: PinoLogger
   ) {
     super(repository, logger);
   }
@@ -36,12 +42,18 @@ export class UserConnectionService {
     protected dataService: UserConnectionDataService,
     @InjectMapper() private readonly classMapper: Mapper,
     // private sesService: SesService,
-    protected logger: PinoLogger,
+    protected logger: PinoLogger
   ) {}
 
-  async create(createUserConnectionDto: CreateUserConnectionDto): Promise<UserConnectionDto> {
-    const errors = await this.dataService.validateDto(CreateUserConnectionDto, createUserConnectionDto);
-    if (errors) throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+  async create(
+    createUserConnectionDto: CreateUserConnectionDto
+  ): Promise<UserConnectionDto> {
+    const errors = await this.dataService.validateDto(
+      CreateUserConnectionDto,
+      createUserConnectionDto
+    );
+    if (errors)
+      throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
 
     const { userId, connectionId } = createUserConnectionDto;
     if (userId === connectionId) {
@@ -50,22 +62,34 @@ export class UserConnectionService {
       throw new Error(msg);
     }
 
-    const rel1 = await this.classMapper.mapAsync({
-      userId: userId,
-      connectionId: connectionId,
-    } as CreateUserConnectionDto, CreateUserConnectionDto, UserConnection);
+    const rel1 = await this.classMapper.mapAsync(
+      {
+        userId: userId,
+        connectionId: connectionId,
+      } as CreateUserConnectionDto,
+      CreateUserConnectionDto,
+      UserConnection
+    );
 
-    const rel2 = await this.classMapper.mapAsync({
-      userId: connectionId,
-      connectionId: userId,
-    } as CreateUserConnectionDto, CreateUserConnectionDto, UserConnection);
+    const rel2 = await this.classMapper.mapAsync(
+      {
+        userId: connectionId,
+        connectionId: userId,
+      } as CreateUserConnectionDto,
+      CreateUserConnectionDto,
+      UserConnection
+    );
 
     await Promise.all([
       this.dataService.create(rel1),
-      this.dataService.create(rel2)
+      this.dataService.create(rel2),
     ]);
 
-    return await this.classMapper.mapAsync(rel1, UserConnection, UserConnectionDto);
+    return await this.classMapper.mapAsync(
+      rel1,
+      UserConnection,
+      UserConnectionDto
+    );
   }
 
   async findConnections(userId: IdType): Promise<UserConnectionDto[]> {
@@ -75,40 +99,55 @@ export class UserConnectionService {
       } as FindOptionsWhere<UserConnection>,
     });
 
-    const results = entities.map(async (entity) =>
-      await this.classMapper.mapAsync(entity, UserConnection, UserConnectionDto));
+    const results = entities.map(
+      async (entity) =>
+        await this.classMapper.mapAsync(
+          entity,
+          UserConnection,
+          UserConnectionDto
+        )
+    );
 
     return Promise.all(results);
   }
 
-  async remove({ userId, connectionId }: Partial<UserConnectionDto>): Promise<void> {
+  async remove({
+    userId,
+    connectionId,
+  }: Partial<UserConnectionDto>): Promise<void> {
     if (!userId || !connectionId) {
       throw new Error('userId and connectionId are both required parameters');
     }
 
-    const query = [{
-      $match: {
-        $or: [
-          {
-            $and: [
-              { userId: ObjectIdGuard(userId) },
-              { connectionId: ObjectIdGuard(connectionId) }
-            ]
-          },
-          {
-            $and: [
-              { userId: ObjectIdGuard(connectionId) },
-              { connectionId: ObjectIdGuard(userId) }
-            ]
-          }
-        ],
-      }
-    }];
-    const userConnections = await this.dataService.repository.aggregate(query).toArray();
+    const query = [
+      {
+        $match: {
+          $or: [
+            {
+              $and: [
+                { userId: ObjectIdGuard(userId) },
+                { connectionId: ObjectIdGuard(connectionId) },
+              ],
+            },
+            {
+              $and: [
+                { userId: ObjectIdGuard(connectionId) },
+                { connectionId: ObjectIdGuard(userId) },
+              ],
+            },
+          ],
+        },
+      },
+    ];
+    const userConnections = await this.dataService.repository
+      .aggregate(query)
+      .toArray();
     await this.dataService.repository.remove(userConnections);
   }
 
-  async removeMany(userConnections: Partial<UserConnectionDto>[]): Promise<void> {
+  async removeMany(
+    userConnections: Partial<UserConnectionDto>[]
+  ): Promise<void> {
     const removeConnections = async ({ userId, connectionId }) => {
       await this.remove({ userId, connectionId });
     };
