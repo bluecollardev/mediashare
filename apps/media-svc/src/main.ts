@@ -15,6 +15,7 @@ import { configureOpenApi } from '@mediashare/shared';
 const host = process.env?.APP_HOST;
 const port = process.env?.PORT || 3000;
 const withHttps = false; // process.env?.HTTPS === 'true';
+const isProduction = process.env?.NODE_ENV === 'production';
 
 async function bootstrap() {
   try {
@@ -67,7 +68,9 @@ async function bootstrap() {
         },
       ],
     });
-    writeFileSync('./openapi/media-svc.json', JSON.stringify(apiSpec, null, 2));
+    if (!isProduction) {
+      writeFileSync('./openapi/media-svc.json', JSON.stringify(apiSpec, null, 2));
+    }
 
     app.use(compression());
     app.use(bodyParser.json({ limit: '5mb' }));
