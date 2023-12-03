@@ -6,7 +6,7 @@
     "generators": {
       "media-svc-0.0.1": {
         "generatorName": "typescript-rxjs",
-        "output": "#{cwd}/apps/#{name}/src/rxjs-api",
+        "output": "#{cwd}/openapi/clients/#{name}/rxjs-api",
         "glob": "openapi/*.{json,yaml}",
         "additionalProperties": {
           "supportsES6": "true",
