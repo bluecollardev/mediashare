@@ -9,7 +9,6 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
-// import { AuthorProfileDto } from '../user/tags/profile.tags';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaItemDto } from '../../media-item/dto/media-item.dto';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
@@ -51,11 +50,13 @@ export class PlaylistDto extends ApiBaseDto {
   })
   visibility: PlaylistVisibilityType;
 
-  @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
+  @ApiProperty({
+    type: () => TagKeyValue,
+    required: false,
+    isArray: true,
+    nullable: true,
+  })
   tags?: TagKeyValue[];
-
-  // @ApiProperty({ type: () => AuthorProfileDto })
-  // authorProfile: AuthorProfileDto;
 
   @ApiProperty({ type: () => MediaItemDto, isArray: true })
   mediaItems: MediaItemDto[];

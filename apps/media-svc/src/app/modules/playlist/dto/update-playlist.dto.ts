@@ -49,11 +49,13 @@ export class UpdatePlaylistDto extends ApiBaseDto {
   })
   visibility: PlaylistVisibilityType;
 
-  @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
+  @ApiProperty({
+    type: () => TagKeyValue,
+    required: false,
+    isArray: true,
+    nullable: true,
+  })
   tags?: TagKeyValue[];
-
-  // @ApiProperty({ type: () => AuthorProfileDto })
-  // authorProfile: AuthorProfileDto;
 
   @ApiProperty({ type: () => String, isArray: true })
   mediaIds: string[];

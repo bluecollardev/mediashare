@@ -85,6 +85,11 @@ export class UpdatePlaylistItemDto extends ApiBaseDto {
   })
   visibility: MediaVisibilityType;
 
-  @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
+  @ApiProperty({
+    type: () => TagKeyValue,
+    required: false,
+    isArray: true,
+    nullable: true,
+  })
   tags?: TagKeyValue[];
 }

@@ -4,9 +4,7 @@ import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
 import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
-import {
-  PlaylistVisibilityType,
-} from '../../../core/models';
+import { PlaylistVisibilityType } from '../../../core/models';
 
 @Entity('playlist')
 export class Playlist extends ApiBaseEntity {
