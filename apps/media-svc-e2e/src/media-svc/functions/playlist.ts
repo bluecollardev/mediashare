@@ -11,7 +11,7 @@ import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/
 
 export const createPlaylist =
   ({ baseUrl, token }) =>
-  (playlist) => {
+  async (playlist) => {
     const dto = {
       ...playlist,
     } as CreatePlaylistDto;
@@ -48,3 +48,21 @@ export const createAndValidateTestPlaylist = async (
   });
 };
 export const getTestPlaylistId = (testPlaylist) => testPlaylist._id.toString();
+
+export const initializeTestPlaylist = (baseUrl: string, token: string) => async (testUserId: string, testMediaItemId?: string) => {
+  const testPlaylistData = {
+    userId: testUserId,
+    title: 'Test Playlist',
+    description: 'Test playlist description',
+    mediaIds: testMediaItemId ? [testMediaItemId] : [],
+    visibility: 'public',
+  };
+  const createPlaylistFn = createPlaylist({
+    baseUrl,
+    token,
+  });
+  return await createAndValidateTestPlaylist(
+    createPlaylistFn,
+    testPlaylistData
+  );
+}

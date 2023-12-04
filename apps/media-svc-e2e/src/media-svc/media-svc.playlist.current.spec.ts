@@ -1,22 +1,17 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
 import { clone } from 'remeda';
 import { INestApplication } from '@nestjs/common';
 import { DataSource, MongoRepository } from 'typeorm';
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import {
-  createAndValidateTestUser,
-  createUser as createUserFunction,
-  getTestUserId,
+  getTestUserId, initializeTestUser
 } from './functions/user';
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
-import { defaultOptionsWithBearer, login } from './functions/auth';
+import { defaultOptionsWithBearer } from './functions/auth';
 import {
-  createAndValidateTestPlaylist,
-  createPlaylist as createPlaylistFunction,
-  getTestPlaylistId,
+  getTestPlaylistId, initializeTestPlaylist
 } from './functions/playlist';
 import { UpdatePlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/update-playlist.dto';
 import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/playlist.dto';
@@ -34,10 +29,8 @@ describe('PlaylistAPI.e2e', () => {
   let playlistRepository: MongoRepository<Playlist>;
   let userRepository: MongoRepository<User>;
   let authResponse: AuthenticationResultType;
-  let createPlaylist;
   let testPlaylist;
   let testPlaylistId;
-  let createUser;
   let testUser;
   let testUserId;
 
@@ -70,62 +63,11 @@ describe('PlaylistAPI.e2e', () => {
 
   describe('PlaylistAPI should get the playlist', () => {
     it('should get the playlist', async () => {
-      // Login first
-      const creds = {
-        username: process.env.COGNITO_USER_EMAIL,
-        password: process.env.COGNITO_USER_PASSWORD,
-        clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
-      };
-      authResponse = await login(baseUrl, creds);
-      console.log(`Logged in`, authResponse);
-      // const idToken = jwt.decode(authResponse?.IdToken);
-      const {
-        sub,
-        email,
-        phone_number: phoneNumber,
-      } = jwt.decode(authResponse?.IdToken) as any;
+      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
+      testUserId = getTestUserId(testUser);
 
-      const testUserData = {
-        sub,
-        email,
-        username: 'bcdevlucas',
-        firstName: 'Lucas',
-        lastName: 'Lopatka',
-        phoneNumber,
-      };
-      // Create a corresponding user in the database
-      try {
-        createUser = createUserFunction({
-          baseUrl: userApiBaseUrl,
-          token: authResponse?.IdToken,
-        });
-        testUser = await createAndValidateTestUser(createUser, testUserData);
-        testUserId = getTestUserId(testUser);
-      } catch (err) {
-        throw err;
-      }
-
-      const testPlaylistData = {
-        userId: testUserId,
-        title: 'Test Playlist',
-        description: 'Test playlist description',
-        mediaIds: [],
-        visibility: 'public',
-      };
-      // Create a corresponding playlist in the database
-      try {
-        createPlaylist = createPlaylistFunction({
-          baseUrl,
-          token: authResponse?.IdToken,
-        });
-        testPlaylist = await createAndValidateTestPlaylist(
-          createPlaylist,
-          testPlaylistData
-        );
-        testPlaylistId = getTestPlaylistId(testPlaylist);
-      } catch (err) {
-        throw err;
-      }
+      testPlaylist = await initializeTestPlaylist(baseUrl, authResponse?.IdToken)(testUserId);
+      testPlaylistId = getTestPlaylistId(testPlaylist);
 
       await axios
         .get(
@@ -152,53 +94,10 @@ describe('PlaylistAPI.e2e', () => {
 
   describe('PlaylistAPI should update the playlist', () => {
     it('should update the playlist', async () => {
-      // Login first
-      const creds = {
-        username: process.env.COGNITO_USER_EMAIL,
-        password: process.env.COGNITO_USER_PASSWORD,
-        clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
-      };
-      authResponse = await login(baseUrl, creds);
-      console.log(`Logged in`, authResponse);
-      // const idToken = jwt.decode(authResponse?.IdToken);
-      const {
-        sub,
-        email,
-        phone_number: phoneNumber,
-      } = jwt.decode(authResponse?.IdToken) as any;
-
-      const testUserData = {
-        sub,
-        email,
-        username: 'bcdevlucas',
-        firstName: 'Lucas',
-        lastName: 'Lopatka',
-        phoneNumber,
-      };
-      // Create a corresponding user in the database
-      createUser = createUserFunction({
-        baseUrl: userApiBaseUrl,
-        token: authResponse?.IdToken,
-      });
-      testUser = await createAndValidateTestUser(createUser, testUserData);
+      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
       testUserId = getTestUserId(testUser);
 
-      const testPlaylistData = {
-        userId: testUserId,
-        title: 'Test Playlist',
-        description: 'Test playlist description',
-        mediaIds: [],
-        visibility: 'public',
-      };
-      // Create a corresponding playlist in the database
-      createPlaylist = createPlaylistFunction({
-        baseUrl,
-        token: authResponse?.IdToken,
-      });
-      testPlaylist = await createAndValidateTestPlaylist(
-        createPlaylist,
-        testPlaylistData
-      );
+      testPlaylist = await initializeTestPlaylist(baseUrl, authResponse?.IdToken)(testUserId);
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
       const dto = clone(testPlaylist) as UpdatePlaylistDto;
@@ -248,54 +147,10 @@ describe('PlaylistAPI.e2e', () => {
 
   describe('PlaylistAPI should delete the playlist', () => {
     it('should delete the playlist', async () => {
-      // Login first
-      const creds = {
-        username: process.env.COGNITO_USER_EMAIL,
-        password: process.env.COGNITO_USER_PASSWORD,
-        clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
-      };
-      authResponse = await login(baseUrl, creds);
-      console.log(`Logged in`, authResponse);
-      // const idToken = jwt.decode(authResponse?.IdToken);
-      const {
-        sub,
-        email,
-        phone_number: phoneNumber,
-      } = jwt.decode(authResponse?.IdToken) as any;
-
-      const testUserData = {
-        sub,
-        email,
-        username: 'bcdevlucas',
-        firstName: 'Lucas',
-        lastName: 'Lopatka',
-        phoneNumber,
-      };
-      // Create a corresponding user in the database
-      createUser = createUserFunction({
-        baseUrl: userApiBaseUrl,
-        token: authResponse?.IdToken,
-      });
-      testUser = await createAndValidateTestUser(createUser, testUserData);
+      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
       testUserId = getTestUserId(testUser);
 
-      const testPlaylistData = {
-        userId: testUserId,
-        title: 'Test Playlist',
-        description: 'Test playlist description',
-        mediaIds: [],
-        visibility: 'public',
-      };
-      // Create a corresponding playlist in the database
-      createPlaylist = createPlaylistFunction({
-        baseUrl,
-        token: authResponse?.IdToken,
-      });
-      // TODO: Try a get to make sure the playlist is deleted
-      testPlaylist = await createAndValidateTestPlaylist(
-        createPlaylist,
-        testPlaylistData
-      );
+      testPlaylist = await initializeTestPlaylist(baseUrl, authResponse?.IdToken)(testUserId);
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
       await axios

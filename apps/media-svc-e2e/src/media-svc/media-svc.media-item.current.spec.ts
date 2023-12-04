@@ -1,10 +1,8 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
 import { clone } from 'remeda';
 import { DataSource, MongoRepository } from 'typeorm';
-
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { UpdateMediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/update-media-item.dto';
 import { MediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/media-item.dto';
@@ -12,17 +10,12 @@ import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/enti
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 import { INestApplication } from '@nestjs/common';
 import {
-  createAndValidateTestUser,
-  createUser as createUserFunction,
-  getTestUserId,
+  getTestUserId, initializeTestUser
 } from './functions/user';
-
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
-import { defaultOptionsWithBearer, login } from './functions/auth';
+import { defaultOptionsWithBearer } from './functions/auth';
 import {
-  createAndValidateTestMediaItem,
-  createMediaItem as createMediaItemFunction,
-  getTestMediaItemId,
+  getTestMediaItemId, initializeTestMediaItem
 } from './functions/media-item';
 import { initializeApp as initializeUserApi } from '@mediashare/user-svc-e2e/src/user-svc/functions/app';
 
@@ -36,10 +29,8 @@ describe('MediaItemAPI.e2e', () => {
   let mediaItemRepository: MongoRepository<MediaItem>;
   let userRepository: MongoRepository<User>;
   let authResponse: AuthenticationResultType;
-  let createMediaItem;
   let testMediaItem;
   let testMediaItemId;
-  let createUser;
   let testUser;
   let testUserId;
 
@@ -72,54 +63,10 @@ describe('MediaItemAPI.e2e', () => {
 
   describe('MediaItemAPI should get the mediaItem', () => {
     it('should get the mediaItem', async () => {
-      // Login first
-      const creds = {
-        username: process.env.COGNITO_USER_EMAIL,
-        password: process.env.COGNITO_USER_PASSWORD,
-        clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
-      };
-      authResponse = await login(baseUrl, creds);
-      console.log(`Logged in`, authResponse);
-      // const idToken = jwt.decode(authResponse?.IdToken);
-      const {
-        sub,
-        email,
-        phone_number: phoneNumber,
-      } = jwt.decode(authResponse?.IdToken) as any;
-
-      const testUserData = {
-        sub,
-        email,
-        username: 'bcdevlucas',
-        firstName: 'Lucas',
-        lastName: 'Lopatka',
-        phoneNumber,
-      };
-      // Create a corresponding user in the database
-      createUser = createUserFunction({
-        baseUrl: userApiBaseUrl,
-        token: authResponse?.IdToken,
-      });
-      testUser = await createAndValidateTestUser(createUser, testUserData);
+      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
       testUserId = getTestUserId(testUser);
 
-      const testMediaItemData = {
-        key: 'test-key',
-        userId: testUserId,
-        title: 'Test Media',
-        description: 'Test media description',
-        uri: 'https://www.example.com',
-        visibility: 'public',
-      };
-      // Create a corresponding mediaItem in the database
-      createMediaItem = createMediaItemFunction({
-        baseUrl,
-        token: authResponse?.IdToken,
-      });
-      testMediaItem = await createAndValidateTestMediaItem(
-        createMediaItem,
-        testMediaItemData
-      );
+      testMediaItem = await initializeTestMediaItem(baseUrl, authResponse?.IdToken)(testUserId);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       await axios
@@ -147,54 +94,10 @@ describe('MediaItemAPI.e2e', () => {
 
   describe('MediaItemAPI should update the mediaItem', () => {
     it('should update the mediaItem', async () => {
-      // Login first
-      const creds = {
-        username: process.env.COGNITO_USER_EMAIL,
-        password: process.env.COGNITO_USER_PASSWORD,
-        clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
-      };
-      authResponse = await login(baseUrl, creds);
-      console.log(`Logged in`, authResponse);
-      // const idToken = jwt.decode(authResponse?.IdToken);
-      const {
-        sub,
-        email,
-        phone_number: phoneNumber,
-      } = jwt.decode(authResponse?.IdToken) as any;
-
-      const testUserData = {
-        sub,
-        email,
-        username: 'bcdevlucas',
-        firstName: 'Lucas',
-        lastName: 'Lopatka',
-        phoneNumber,
-      };
-      // Create a corresponding user in the database
-      createUser = createUserFunction({
-        baseUrl: userApiBaseUrl,
-        token: authResponse?.IdToken,
-      });
-      testUser = await createAndValidateTestUser(createUser, testUserData);
+      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
       testUserId = getTestUserId(testUser);
 
-      const testMediaItemData = {
-        key: 'test-key',
-        userId: testUserId,
-        title: 'Test Media',
-        description: 'Test media description',
-        uri: 'https://www.example.com',
-        visibility: 'public',
-      };
-      // Create a corresponding mediaItem in the database
-      createMediaItem = createMediaItemFunction({
-        baseUrl,
-        token: authResponse?.IdToken,
-      });
-      testMediaItem = await createAndValidateTestMediaItem(
-        createMediaItem,
-        testMediaItemData
-      );
+      testMediaItem = await initializeTestMediaItem(baseUrl, authResponse?.IdToken)(testUserId);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       const dto = clone(testMediaItem) as UpdateMediaItemDto;
@@ -244,55 +147,10 @@ describe('MediaItemAPI.e2e', () => {
 
   describe('MediaItemAPI should delete the mediaItem', () => {
     it('should delete the mediaItem', async () => {
-      // Login first
-      const creds = {
-        username: process.env.COGNITO_USER_EMAIL,
-        password: process.env.COGNITO_USER_PASSWORD,
-        clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
-      };
-      authResponse = await login(baseUrl, creds);
-      console.log(`Logged in`, authResponse);
-      // const idToken = jwt.decode(authResponse?.IdToken);
-      const {
-        sub,
-        email,
-        phone_number: phoneNumber,
-      } = jwt.decode(authResponse?.IdToken) as any;
-
-      const testUserData = {
-        sub,
-        email,
-        username: 'bcdevlucas',
-        firstName: 'Lucas',
-        lastName: 'Lopatka',
-        phoneNumber,
-      };
-      // Create a corresponding user in the database
-      createUser = createUserFunction({
-        baseUrl: userApiBaseUrl,
-        token: authResponse?.IdToken,
-      });
-      testUser = await createAndValidateTestUser(createUser, testUserData);
+      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
       testUserId = getTestUserId(testUser);
 
-      const testMediaItemData = {
-        key: 'test-key',
-        userId: testUserId,
-        title: 'Test Media',
-        description: 'Test media description',
-        uri: 'https://www.example.com',
-        visibility: 'public',
-      };
-      // Create a corresponding mediaItem in the database
-      createMediaItem = createMediaItemFunction({
-        baseUrl,
-        token: authResponse?.IdToken,
-      });
-      // TODO: Try a get to make sure the mediaItem is deleted
-      testMediaItem = await createAndValidateTestMediaItem(
-        createMediaItem,
-        testMediaItemData
-      );
+      testMediaItem = await initializeTestMediaItem(baseUrl, authResponse?.IdToken)(testUserId);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       await axios

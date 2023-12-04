@@ -32,9 +32,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "media-items"
-        ]
+        "tags": ["media-items"]
       }
     },
     "/api/media-items": {
@@ -63,9 +61,7 @@
             }
           }
         },
-        "tags": [
-          "media-items"
-        ],
+        "tags": ["media-items"],
         "security": [
           {
             "bearer": []
@@ -113,9 +109,7 @@
             }
           }
         },
-        "tags": [
-          "media-items"
-        ],
+        "tags": ["media-items"],
         "security": [
           {
             "bearer": []
@@ -158,9 +152,7 @@
             }
           }
         },
-        "tags": [
-          "media-items"
-        ],
+        "tags": ["media-items"],
         "security": [
           {
             "bearer": []
@@ -184,9 +176,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "media-items"
-        ],
+        "tags": ["media-items"],
         "security": [
           {
             "bearer": []
@@ -217,9 +207,7 @@
             }
           }
         },
-        "tags": [
-          "media-items"
-        ],
+        "tags": ["media-items"],
         "security": [
           {
             "bearer": []
@@ -268,9 +256,7 @@
             }
           }
         },
-        "tags": [
-          "media-items"
-        ],
+        "tags": ["media-items"],
         "security": [
           {
             "bearer": []
@@ -297,9 +283,7 @@
             }
           }
         },
-        "tags": [
-          "media-items"
-        ],
+        "tags": ["media-items"],
         "security": [
           {
             "bearer": []
@@ -326,9 +310,7 @@
             }
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -355,9 +337,7 @@
             }
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -384,9 +364,7 @@
             }
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -410,9 +388,7 @@
             }
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -439,9 +415,7 @@
             }
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -468,9 +442,7 @@
             }
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -503,9 +475,7 @@
             }
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -536,9 +506,7 @@
             }
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -571,9 +539,7 @@
             }
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -600,9 +566,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -629,9 +593,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "share-items"
-        ],
+        "tags": ["share-items"],
         "security": [
           {
             "bearer": []
@@ -648,9 +610,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "playlist-items"
-        ]
+        "tags": ["playlist-items"]
       }
     },
     "/api/playlist-items": {
@@ -679,9 +639,7 @@
             }
           }
         },
-        "tags": [
-          "playlist-items"
-        ],
+        "tags": ["playlist-items"],
         "security": [
           {
             "bearer": []
@@ -729,9 +687,7 @@
             }
           }
         },
-        "tags": [
-          "playlist-items"
-        ],
+        "tags": ["playlist-items"],
         "security": [
           {
             "bearer": []
@@ -774,9 +730,7 @@
             }
           }
         },
-        "tags": [
-          "playlist-items"
-        ],
+        "tags": ["playlist-items"],
         "security": [
           {
             "bearer": []
@@ -800,9 +754,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "playlist-items"
-        ],
+        "tags": ["playlist-items"],
         "security": [
           {
             "bearer": []
@@ -833,9 +785,7 @@
             }
           }
         },
-        "tags": [
-          "playlist-items"
-        ],
+        "tags": ["playlist-items"],
         "security": [
           {
             "bearer": []
@@ -884,9 +834,7 @@
             }
           }
         },
-        "tags": [
-          "playlist-items"
-        ],
+        "tags": ["playlist-items"],
         "security": [
           {
             "bearer": []
@@ -913,9 +861,7 @@
             }
           }
         },
-        "tags": [
-          "playlist-items"
-        ],
+        "tags": ["playlist-items"],
         "security": [
           {
             "bearer": []
@@ -932,9 +878,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "playlists"
-        ]
+        "tags": ["playlists"]
       }
     },
     "/api/playlists": {
@@ -963,9 +907,7 @@
             }
           }
         },
-        "tags": [
-          "playlists"
-        ],
+        "tags": ["playlists"],
         "security": [
           {
             "bearer": []
@@ -1013,9 +955,7 @@
             }
           }
         },
-        "tags": [
-          "playlists"
-        ],
+        "tags": ["playlists"],
         "security": [
           {
             "bearer": []
@@ -1059,9 +999,7 @@
             }
           }
         },
-        "tags": [
-          "playlists"
-        ],
+        "tags": ["playlists"],
         "security": [
           {
             "bearer": []
@@ -1086,9 +1024,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "playlists"
-        ],
+        "tags": ["playlists"],
         "security": [
           {
             "bearer": []
@@ -1120,9 +1056,7 @@
             }
           }
         },
-        "tags": [
-          "playlists"
-        ],
+        "tags": ["playlists"],
         "security": [
           {
             "bearer": []
@@ -1166,9 +1100,7 @@
             }
           }
         },
-        "tags": [
-          "playlists"
-        ],
+        "tags": ["playlists"],
         "security": [
           {
             "bearer": []
@@ -1226,9 +1158,7 @@
             }
           }
         },
-        "tags": [
-          "search"
-        ]
+        "tags": ["search"]
       }
     },
     "/api/search/popular": {
@@ -1250,9 +1180,7 @@
             }
           }
         },
-        "tags": [
-          "search"
-        ]
+        "tags": ["search"]
       }
     }
   },
@@ -1301,10 +1229,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "key",
-          "value"
-        ]
+        "required": ["key", "value"]
       },
       "CreateMediaItemDto": {
         "type": "object",
@@ -1348,12 +1273,7 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "private",
-              "shared",
-              "subscription",
-              "public"
-            ]
+            "enum": ["private", "shared", "subscription", "public"]
           },
           "tags": {
             "nullable": true,
@@ -1384,12 +1304,7 @@
       },
       "MediaVisibilityType": {
         "type": "string",
-        "enum": [
-          "private",
-          "shared",
-          "subscription",
-          "public"
-        ]
+        "enum": ["private", "shared", "subscription", "public"]
       },
       "UpdateMediaItemDto": {
         "type": "object",
@@ -1445,12 +1360,7 @@
             "minLength": 0
           }
         },
-        "required": [
-          "_id",
-          "title",
-          "description",
-          "visibility"
-        ]
+        "required": ["_id", "title", "description", "visibility"]
       },
       "ShareItem": {
         "type": "object",
@@ -1514,12 +1424,7 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "private",
-              "shared",
-              "subscription",
-              "public"
-            ]
+            "enum": ["private", "shared", "subscription", "public"]
           },
           "tags": {
             "nullable": true,
@@ -1615,12 +1520,7 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "private",
-              "shared",
-              "subscription",
-              "public"
-            ]
+            "enum": ["private", "shared", "subscription", "public"]
           },
           "tags": {
             "nullable": true,
@@ -1668,12 +1568,7 @@
       },
       "PlaylistVisibilityType": {
         "type": "string",
-        "enum": [
-          "private",
-          "shared",
-          "subscription",
-          "public"
-        ]
+        "enum": ["private", "shared", "subscription", "public"]
       },
       "PlaylistItemDto": {
         "type": "object",
@@ -1890,10 +1785,7 @@
             ]
           }
         },
-        "required": [
-          "mediaItems",
-          "playlists"
-        ]
+        "required": ["mediaItems", "playlists"]
       },
       "PlaylistDto": {
         "type": "object",
@@ -1988,9 +1880,7 @@
             }
           }
         },
-        "required": [
-          "shareItemIds"
-        ]
+        "required": ["shareItemIds"]
       },
       "ShareItemsByUserIdDto": {
         "type": "object",
@@ -2002,9 +1892,7 @@
             }
           }
         },
-        "required": [
-          "shareItemByUserIds"
-        ]
+        "required": ["shareItemByUserIds"]
       },
       "CreatePlaylistItemDto": {
         "type": "object",
@@ -2230,13 +2118,7 @@
             }
           }
         },
-        "required": [
-          "userId",
-          "title",
-          "description",
-          "mediaIds",
-          "visibility"
-        ]
+        "required": ["userId", "title", "description", "mediaIds", "visibility"]
       },
       "UpdatePlaylistDto": {
         "type": "object",

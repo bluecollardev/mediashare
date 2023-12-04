@@ -26,3 +26,13 @@ export async function login(
     .post(`${baseUrl}/cognito-testing-login`, formData, options)
     .then((res) => res.data as AuthenticationResultType);
 }
+
+
+export function buildTestCreds() {
+  const creds = {
+    username: process.env.COGNITO_USER_EMAIL,
+    password: process.env.COGNITO_USER_PASSWORD,
+    clientId: process.env.COGNITO_CLIENT_ID || '1n3of997k64in850vgp1hn849v',
+  };
+  return creds;
+}
