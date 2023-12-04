@@ -12,7 +12,6 @@ export const createPlaylistItem =
   ({ baseUrl, token }) =>
   (playlistItem) => {
     const dto = {
-      sub: randomUUID(),
       ...playlistItem,
     } as CreatePlaylistItemDto;
 

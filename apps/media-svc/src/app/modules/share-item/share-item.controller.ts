@@ -35,7 +35,7 @@ import { PlaylistDto } from '../playlist/dto/playlist.dto';
 export class ShareItemController {
   constructor(private readonly shareItemService: ShareItemService) {}
 
-  /*@UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-by-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
@@ -124,7 +124,9 @@ export class ShareItemController {
   @ApiBearerAuth()
   @Post('unshare-all-by-user-id')
   @ApiBody({ type: () => ShareItemsByUserIdDto })
-  async removeShareItemAllByUserId(@Body() shareItemsByUserIdDto: ShareItemsByUserIdDto) {
+  async removeShareItemAllByUserId(
+    @Body() shareItemsByUserIdDto: ShareItemsByUserIdDto
+  ) {
     // await this.shareItemService.removeUserConnectionShareItems(shareItemsByUserIdDto.shareItemByUserIds);
-  }*/
+  }
 }

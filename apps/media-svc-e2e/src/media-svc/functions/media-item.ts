@@ -13,7 +13,6 @@ export const createMediaItem =
   ({ baseUrl, token }) =>
   (mediaItem) => {
     const dto = {
-      // sub: randomUUID(),
       ...mediaItem,
     } as CreateMediaItemDto;
 
