@@ -6,12 +6,8 @@ import { INestApplication } from '@nestjs/common';
 import { DataSource, MongoRepository } from 'typeorm';
 import { initializePopulatedTestUser } from './functions/populated-user';
 import { getTestUserId } from './functions/user';
-import {
-  getTestMediaItemId,
-} from './functions/media-item';
-import {
-  getTestPlaylistId,
-} from './functions/playlist';
+import { getTestMediaItemId } from './functions/media-item';
+import { getTestPlaylistId } from './functions/playlist';
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer } from './functions/auth';
 import {
@@ -78,10 +74,11 @@ describe('PlaylistItemAPI.e2e', () => {
 
   describe('PlaylistAPI should get the playlistItem', () => {
     it('should get the playlistItem', async () => {
-      const { user: testUser, mediaItem: testMediaItem, playlist: testPlaylist } = await initializePopulatedTestUser(
-        baseUrl,
-        userApiBaseUrl
-      );
+      const {
+        user: testUser,
+        mediaItem: testMediaItem,
+        playlist: testPlaylist,
+      } = await initializePopulatedTestUser(baseUrl, userApiBaseUrl);
       testUserId = getTestUserId(testUser);
       testMediaItemId = getTestMediaItemId(testMediaItem);
       testPlaylistId = getTestPlaylistId(testPlaylist);
@@ -117,10 +114,11 @@ describe('PlaylistItemAPI.e2e', () => {
 
   describe('PlaylistAPI should update the playlistItem', () => {
     it('should update the playlistItem', async () => {
-      const { user: testUser, mediaItem: testMediaItem, playlist: testPlaylist } = await initializePopulatedTestUser(
-        baseUrl,
-        userApiBaseUrl
-      );
+      const {
+        user: testUser,
+        mediaItem: testMediaItem,
+        playlist: testPlaylist,
+      } = await initializePopulatedTestUser(baseUrl, userApiBaseUrl);
       testUserId = getTestUserId(testUser);
       testMediaItemId = getTestMediaItemId(testMediaItem);
       testPlaylistId = getTestPlaylistId(testPlaylist);
@@ -178,10 +176,11 @@ describe('PlaylistItemAPI.e2e', () => {
 
   describe('PlaylistAPI should delete the playlistItem', () => {
     it('should delete the playlistItem', async () => {
-      const { user: testUser, mediaItem: testMediaItem, playlist: testPlaylist } = await initializePopulatedTestUser(
-        baseUrl,
-        userApiBaseUrl
-      );
+      const {
+        user: testUser,
+        mediaItem: testMediaItem,
+        playlist: testPlaylist,
+      } = await initializePopulatedTestUser(baseUrl, userApiBaseUrl);
       testUserId = getTestUserId(testUser);
       testMediaItemId = getTestMediaItemId(testMediaItem);
       testPlaylistId = getTestPlaylistId(testPlaylist);

@@ -24,5 +24,10 @@ export const initializePopulatedTestUser = async (
     authResponse?.['IdToken']
   )(testUserId, testMediaItemId);
 
-  return { user: testUserId, mediaItem: testMediaItem, playlist: testPlaylist, authCtx: authResponse };
-}
+  return {
+    user: testUserId,
+    mediaItem: testMediaItem,
+    playlist: testPlaylist,
+    authCtx: authResponse,
+  };
+};
