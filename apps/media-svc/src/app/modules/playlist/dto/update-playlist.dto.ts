@@ -1,6 +1,5 @@
 import { AutoMap } from '@automapper/classes';
-import { MediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/dto/media-item.dto';
-import { PlaylistItemDto } from '@mediashare/media-svc/src/app/modules/playlist-item/dto/playlist-item.dto';
+import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
 import {
   ApiDecoratorOptions,
   ApiLongString,
@@ -9,10 +8,10 @@ import {
   ApiTextString,
 } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsIn, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsOptional, IsString } from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { ObjectId } from 'mongodb';
-// import { TagKeyValue } from '../tags/tags/tags-key-value.tags';
+import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
 import {
   PlaylistVisibilityType,
   PLAYLIST_VISIBILITY,
@@ -50,8 +49,8 @@ export class UpdatePlaylistDto extends ApiBaseDto {
   })
   visibility: PlaylistVisibilityType;
 
-  // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
-  tags?: any[]; // TagKeyValue[];
+  @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
+  tags?: TagKeyValue[];
 
   // @ApiProperty({ type: () => AuthorProfileDto })
   // authorProfile: AuthorProfileDto;

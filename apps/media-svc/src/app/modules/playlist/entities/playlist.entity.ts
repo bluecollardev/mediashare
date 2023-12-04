@@ -1,14 +1,11 @@
 import { AutoMap } from '@automapper/classes';
 import { AutoMapOptions } from '@automapper/classes/lib/automap';
-import { ApiProperty } from '@nestjs/swagger';
-import { ApiString, ApiTextString } from '@mediashare/shared';
 import { Column, Entity, Index } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
-// import { TagKeyValue } from '../tags/tags/tags-key-value.tags';
+import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
 import {
   PlaylistVisibilityType,
-  PLAYLIST_VISIBILITY,
 } from '../../../core/models';
 
 @Entity('playlist')
@@ -40,5 +37,5 @@ export class Playlist extends ApiBaseEntity {
 
   @AutoMap()
   @Column({ name: 'tags', array: true, nullable: true })
-  tags: any[]; // TagKeyValue[];
+  tags: TagKeyValue[];
 }

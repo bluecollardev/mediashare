@@ -17,11 +17,11 @@ import {
 import { ObjectId } from 'mongodb';
 import { PlaylistDto } from './playlist.dto';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
+import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
 import {
   PLAYLIST_VISIBILITY,
   PlaylistVisibilityType,
 } from '../../../core/models';
-// import { TagKeyValue } from '../tags/tags/tags-key-value.tags';
 
 export class CreatePlaylistDto {
   @IsOptional()
@@ -75,8 +75,8 @@ export class CreatePlaylistDto {
   })
   visibility: PlaylistVisibilityType;
 
-  // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
-  tags?: any[]; // TagKeyValue[];
+   @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
+  tags?: TagKeyValue[];
 }
 
 export class CreatePlaylistResponseDto extends PlaylistDto {

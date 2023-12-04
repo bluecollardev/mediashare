@@ -13,6 +13,7 @@ import { ObjectId } from 'mongodb';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaItemDto } from '../../media-item/dto/media-item.dto';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';
+import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
 import {
   PLAYLIST_VISIBILITY,
   PlaylistVisibilityType,
@@ -50,8 +51,8 @@ export class PlaylistDto extends ApiBaseDto {
   })
   visibility: PlaylistVisibilityType;
 
-  // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
-  tags?: any[]; // TagKeyValue[];
+  @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
+  tags?: TagKeyValue[];
 
   // @ApiProperty({ type: () => AuthorProfileDto })
   // authorProfile: AuthorProfileDto;

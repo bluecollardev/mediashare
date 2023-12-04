@@ -3,8 +3,8 @@ import { ApiString, ApiLongString, ApiTextString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
+import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
-// import { TagKeyValue } from '../tags/tags/tags-key-value.tags';
 
 export class UpdateMediaItemDto extends ApiBaseDto {
   @IsString()
@@ -39,8 +39,8 @@ export class UpdateMediaItemDto extends ApiBaseDto {
   })
   visibility: MediaVisibilityType;
 
-  // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
-  tags?: any[]; // TagKeyValue[];
+  @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
+  tags?: TagKeyValue[];
 
   @IsOptional()
   @IsString()
