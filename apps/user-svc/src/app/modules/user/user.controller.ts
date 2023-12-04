@@ -32,7 +32,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
 import { CreateUserConnectionDto } from '../user-connection/dto/create-user-connection.dto';
-// import { UpdateUserConnectionDto } from '../user-connection/dto/update-user-connection.dto';
+// import { UpdateUserConnectionDto } from '../user-connection/tags/update-user-connection.tags';
 import { UserConnectionService } from '../user-connection/user-connection.service';
 import { UserDto } from './dto/user.dto';
 import { InviteDto } from './dto/authorize.dto';

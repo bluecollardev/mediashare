@@ -21,8 +21,8 @@ export abstract class FilterableDataService<
   R extends MongoRepository<E>
 > extends DataService<E, R> {
   protected constructor(
-    public repository: R,
-    protected readonly logger: PinoLogger
+    public override repository: R,
+    protected override readonly logger: PinoLogger
   ) {
     super(repository, logger);
   }
@@ -109,6 +109,8 @@ export abstract class FilterableDataService<
 
   protected abstract buildAggregateQuery(params: SearchParameters): any[];
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   protected abstract buildFields(): any[];
 
   protected abstract replaceRoot(): object;

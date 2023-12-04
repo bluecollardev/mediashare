@@ -9,7 +9,7 @@ import {
   IsString,
 } from 'class-validator';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
-// import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
+// import { TagKeyValue } from '../tags/tags/tags-key-value.tags';
 
 export class CreateMediaItemDto {
   @IsString()

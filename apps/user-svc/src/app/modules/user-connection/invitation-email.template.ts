@@ -6,7 +6,7 @@ import { ProfileDto } from '../user/dto/profile.dto';
  * (i.e exampleapp://).
  *
  * Moreover, these email clients usually strip away the value in hrefs or
- * remove the <a> tag altogether due to security concerns.
+ * remove the <a> tags altogether due to security concerns.
  * This prevents the user from clicking on the link and thus the whole
  * redirection process from email to mobile app is halted.
  */

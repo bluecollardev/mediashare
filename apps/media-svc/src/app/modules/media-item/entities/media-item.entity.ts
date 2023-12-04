@@ -3,7 +3,7 @@ import { AutoMapOptions } from '@automapper/classes/lib/automap';
 import { Column, Entity, Index, ObjectIdColumn } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
-// import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
+// import { TagKeyValue } from '../tags/tags/tags-key-value.tags';
 import { MediaVisibilityType } from '../../../core/models';
 
 @Entity('media_item')

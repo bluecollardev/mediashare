@@ -9,7 +9,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
-// import { AuthorProfileDto } from '../user/dto/profile.dto';
+// import { AuthorProfileDto } from '../user/tags/profile.tags';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaItemDto } from '../../media-item/dto/media-item.dto';
 import { PlaylistItemDto } from '../../playlist-item/dto/playlist-item.dto';

@@ -68,8 +68,12 @@ async function bootstrap() {
         },
       ],
     });
+    console.log(isProduction);
     if (!isProduction) {
-      writeFileSync('./openapi/user-svc.json', JSON.stringify(apiSpec, null, 2));
+      writeFileSync(
+        './openapi/user-svc.json',
+        JSON.stringify(apiSpec, null, 2)
+      );
     }
 
     app.use(compression());

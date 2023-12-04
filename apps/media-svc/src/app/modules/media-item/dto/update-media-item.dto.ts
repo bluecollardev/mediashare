@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
-// import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
+// import { TagKeyValue } from '../tags/tags/tags-key-value.tags';
 
 export class UpdateMediaItemDto extends ApiBaseDto {
   @IsString()

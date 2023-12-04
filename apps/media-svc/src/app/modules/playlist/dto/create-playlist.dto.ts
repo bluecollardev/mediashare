@@ -21,7 +21,7 @@ import {
   PLAYLIST_VISIBILITY,
   PlaylistVisibilityType,
 } from '../../../core/models';
-// import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
+// import { TagKeyValue } from '../tags/tags/tags-key-value.tags';
 
 export class CreatePlaylistDto {
   @IsOptional()

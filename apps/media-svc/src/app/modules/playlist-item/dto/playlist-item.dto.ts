@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MEDIA_VISIBILITY, MediaVisibilityType } from '../../../core/models';
-// import { AuthorProfileDto } from '../user/dto/profile.dto';
+// import { AuthorProfileDto } from '../user/tags/profile.tags';
 
 export class PlaylistItemDto extends ApiBaseDto {
   @IsString()

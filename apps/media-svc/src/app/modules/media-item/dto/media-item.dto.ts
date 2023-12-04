@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
-// import { AuthorProfileDto } from '../user/dto/profile.dto';
+// import { AuthorProfileDto } from '../user/tags/profile.tags';
 
 export class MediaItemDto extends ApiBaseDto {
   @IsString()

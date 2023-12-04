@@ -15,7 +15,7 @@ export interface DataServiceValidationResponse {
   errors: ValidationError[];
 }
 
-const validationErrorResponse = (errors) => ({ errors });
+const validationErrorResponse = (errors: any) => ({ errors });
 
 /**
  * Base class to extend for interacting with the database through a repository pattern.
@@ -39,7 +39,7 @@ export abstract class DataService<
    * The final stop-gap against bad data insertion.
    * This uses class-validator annotations in the Entity
    * in order to validate the Entity prior to insertion.
-   * @param type
+   * @param dtoClass
    * @param dto
    * @private
    */

@@ -1,4 +1,4 @@
-// import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
+// import { UserConnectionDto } from '../user-connection/tags/user-connection.tags';
 import { ApiProperty } from '@nestjs/swagger';
 import { MediaItemDto } from '../../media-item/dto/media-item.dto';
 import { PlaylistDto } from '../../playlist/dto/playlist.dto';
