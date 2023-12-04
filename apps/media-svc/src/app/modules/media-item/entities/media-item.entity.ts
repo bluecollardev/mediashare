@@ -3,7 +3,7 @@ import { AutoMapOptions } from '@automapper/classes/lib/automap';
 import { Column, Entity, Index, ObjectIdColumn } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { ApiBaseEntity } from '@mediashare/core/entities/base.entity';
-// import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
+import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
 import { MediaVisibilityType } from '../../../core/models';
 
 @Entity('media_item')
@@ -48,5 +48,5 @@ export class MediaItem extends ApiBaseEntity {
 
   @AutoMap()
   @Column({ name: 'tags', array: true, nullable: true })
-  tags: any[]; // TagKeyValue[];
+  tags: TagKeyValue[];
 }

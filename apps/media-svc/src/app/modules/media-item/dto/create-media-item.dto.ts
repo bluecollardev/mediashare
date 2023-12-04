@@ -8,8 +8,8 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
-// import { TagKeyValue } from '../tag/dto/tag-key-value.dto';
 
 export class CreateMediaItemDto {
   @IsString()
@@ -60,8 +60,13 @@ export class CreateMediaItemDto {
   @ApiProperty({ required: true, enum: MEDIA_VISIBILITY })
   visibility: MediaVisibilityType;
 
-  // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
-  tags: any[]; // TagKeyValue[];
+  @ApiProperty({
+    type: () => TagKeyValue,
+    required: false,
+    isArray: true,
+    nullable: true,
+  })
+  tags: TagKeyValue[];
 
   @IsOptional()
   @IsString()

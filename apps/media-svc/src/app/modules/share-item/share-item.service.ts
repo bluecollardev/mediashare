@@ -12,7 +12,7 @@ import {
   CreateMediaShareItemDto,
   CreatePlaylistShareItemDto,
 } from './dto/create-share-item.dto';
-// import { UserConnectionDto } from '../user-connection/dto/user-connection.dto';
+// import { UserConnectionDto } from '../user-connection/tags/user-connection.tags';
 import { ShareItem } from './entities/share-item.entity';
 
 @Injectable()

@@ -10,6 +10,7 @@ import {
   IsString,
 } from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
+import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
 
 export class UpdatePlaylistItemDto extends ApiBaseDto {
@@ -84,6 +85,11 @@ export class UpdatePlaylistItemDto extends ApiBaseDto {
   })
   visibility: MediaVisibilityType;
 
-  // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
-  tags?: any[]; // TagKeyValue[];
+  @ApiProperty({
+    type: () => TagKeyValue,
+    required: false,
+    isArray: true,
+    nullable: true,
+  })
+  tags?: TagKeyValue[];
 }

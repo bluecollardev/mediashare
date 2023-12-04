@@ -39,13 +39,13 @@ export class AuthorProfileDto {
   authorId: string;
 
   @ApiString()
-  authorName;
+  authorName: string;
 
   @ApiString()
   authorUsername: string;
 
   @ApiString()
-  authorImage;
+  authorImage: string;
 }
 
 export class ProfileDto {

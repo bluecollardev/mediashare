@@ -69,7 +69,10 @@ async function bootstrap() {
       ],
     });
     if (!isProduction) {
-      writeFileSync('./openapi/media-svc.json', JSON.stringify(apiSpec, null, 2));
+      writeFileSync(
+        './openapi/media-svc.json',
+        JSON.stringify(apiSpec, null, 2)
+      );
     }
 
     app.use(compression());

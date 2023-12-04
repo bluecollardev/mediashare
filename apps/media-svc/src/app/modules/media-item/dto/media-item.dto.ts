@@ -9,8 +9,8 @@ import {
   IsString,
 } from 'class-validator';
 import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
+import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
 import { MediaVisibilityType, MEDIA_VISIBILITY } from '../../../core/models';
-// import { AuthorProfileDto } from '../user/dto/profile.dto';
 
 export class MediaItemDto extends ApiBaseDto {
   @IsString()
@@ -61,21 +61,19 @@ export class MediaItemDto extends ApiBaseDto {
   @ApiProperty({ required: true, enum: MEDIA_VISIBILITY })
   visibility: MediaVisibilityType;
 
-  // @ApiProperty({ type: () => TagKeyValue, required: false, isArray: true, nullable: true })
-  tags?: any[]; // TagKeyValue[];
+  @ApiProperty({
+    type: () => TagKeyValue,
+    required: false,
+    isArray: true,
+    nullable: true,
+  })
+  tags?: TagKeyValue[];
 
   @IsOptional()
   @IsString()
   @AutoMap()
   @ApiString({ required: false })
   eTag?: string;
-
-  // TODO: Fix this type!
-  // @ApiProperty({ type: () => AuthorProfileDto })
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  // @ApiProperty({ type: () => {} })
-  // authorProfile: AuthorProfileDto;
-  // authorProfile: any;
 
   @ApiProperty({ type: 'number' })
   shareCount?: number;

@@ -4,6 +4,7 @@ import { IsIn } from 'class-validator';
 import { Column, Entity, Index, ObjectIdColumn } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { ApiBaseEntity } from '@mediashare/core/entities';
+import { TagKeyValue } from '@mediashare/core/modules/tags/dto/tag-key-value.dto';
 
 import { MEDIA_VISIBILITY, MediaVisibilityType } from '../../../core/models';
 
@@ -62,7 +63,6 @@ export class PlaylistItem extends ApiBaseEntity {
   @Column({ nullable: true })
   visibility: MediaVisibilityType;
 
-  /* @ApiProperty({ type: () => TagKeyValue, isArray: true, nullable: true })
   @Column({ name: 'tags', array: true, nullable: true })
-  tags: TagKeyValue[]; */
+  tags: TagKeyValue[];
 }
