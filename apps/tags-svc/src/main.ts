@@ -71,7 +71,7 @@ async function bootstrap() {
     console.log(isProduction);
     if (!isProduction) {
       writeFileSync(
-        './openapi/user-svc.json',
+        './openapi/tags-svc.json',
         JSON.stringify(apiSpec, null, 2)
       );
     }
