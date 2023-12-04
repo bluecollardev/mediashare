@@ -76,7 +76,7 @@ export const initializeApp = async (
   const moduleFixture = await Test.createTestingModule({
     imports: [
       ConfigModule.forRoot({
-        envFilePath: 'test.env',
+        // envFilePath: 'test.env',
         load: [appConfig, dbConfig],
         validationSchema: appValidationSchema,
         cache: true,

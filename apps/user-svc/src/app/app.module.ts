@@ -17,7 +17,7 @@ import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: 'test.env',
+      // envFilePath: 'test.env',
       load: [appConfig, dbConfig],
       validationSchema: appValidationSchema,
       cache: true,
