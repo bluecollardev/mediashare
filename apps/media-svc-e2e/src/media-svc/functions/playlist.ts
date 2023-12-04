@@ -1,11 +1,9 @@
 /* Ignore module boundaries, it's just our test scaffolding */
 /* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
-import { randomUUID } from 'crypto';
 import { ObjectId } from 'mongodb';
 import { testAndClonePlaylist } from '../test-components';
 import { defaultOptionsWithBearer } from './auth';
-
 import { CreatePlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/create-playlist.dto';
 import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/playlist.dto';
 
@@ -49,20 +47,22 @@ export const createAndValidateTestPlaylist = async (
 };
 export const getTestPlaylistId = (testPlaylist) => testPlaylist._id.toString();
 
-export const initializeTestPlaylist = (baseUrl: string, token: string) => async (testUserId: string, testMediaItemId?: string) => {
-  const testPlaylistData = {
-    userId: testUserId,
-    title: 'Test Playlist',
-    description: 'Test playlist description',
-    mediaIds: testMediaItemId ? [testMediaItemId] : [],
-    visibility: 'public',
+export const initializeTestPlaylist =
+  (baseUrl: string, token: string) =>
+  async (testUserId: string, testMediaItemId?: string) => {
+    const testPlaylistData = {
+      userId: testUserId,
+      title: 'Test Playlist',
+      description: 'Test playlist description',
+      mediaIds: testMediaItemId ? [testMediaItemId] : [],
+      visibility: 'public',
+    };
+    const createPlaylistFn = createPlaylist({
+      baseUrl,
+      token,
+    });
+    return await createAndValidateTestPlaylist(
+      createPlaylistFn,
+      testPlaylistData
+    );
   };
-  const createPlaylistFn = createPlaylist({
-    baseUrl,
-    token,
-  });
-  return await createAndValidateTestPlaylist(
-    createPlaylistFn,
-    testPlaylistData
-  );
-}

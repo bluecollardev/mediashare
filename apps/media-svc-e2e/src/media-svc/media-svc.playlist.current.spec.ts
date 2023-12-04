@@ -5,13 +5,12 @@ import { clone } from 'remeda';
 import { INestApplication } from '@nestjs/common';
 import { DataSource, MongoRepository } from 'typeorm';
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
-import {
-  getTestUserId, initializeTestUser
-} from './functions/user';
+import { getTestUserId, initializeTestUser } from './functions/user';
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer } from './functions/auth';
 import {
-  getTestPlaylistId, initializeTestPlaylist
+  getTestPlaylistId,
+  initializeTestPlaylist,
 } from './functions/playlist';
 import { UpdatePlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/update-playlist.dto';
 import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/playlist.dto';
@@ -63,10 +62,16 @@ describe('PlaylistAPI.e2e', () => {
 
   describe('PlaylistAPI should get the playlist', () => {
     it('should get the playlist', async () => {
-      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
+      [testUser, authResponse] = await initializeTestUser(
+        baseUrl,
+        userApiBaseUrl
+      );
       testUserId = getTestUserId(testUser);
 
-      testPlaylist = await initializeTestPlaylist(baseUrl, authResponse?.IdToken)(testUserId);
+      testPlaylist = await initializeTestPlaylist(
+        baseUrl,
+        authResponse?.IdToken
+      )(testUserId);
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
       await axios
@@ -94,10 +99,16 @@ describe('PlaylistAPI.e2e', () => {
 
   describe('PlaylistAPI should update the playlist', () => {
     it('should update the playlist', async () => {
-      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
+      [testUser, authResponse] = await initializeTestUser(
+        baseUrl,
+        userApiBaseUrl
+      );
       testUserId = getTestUserId(testUser);
 
-      testPlaylist = await initializeTestPlaylist(baseUrl, authResponse?.IdToken)(testUserId);
+      testPlaylist = await initializeTestPlaylist(
+        baseUrl,
+        authResponse?.IdToken
+      )(testUserId);
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
       const dto = clone(testPlaylist) as UpdatePlaylistDto;
@@ -147,10 +158,16 @@ describe('PlaylistAPI.e2e', () => {
 
   describe('PlaylistAPI should delete the playlist', () => {
     it('should delete the playlist', async () => {
-      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
+      [testUser, authResponse] = await initializeTestUser(
+        baseUrl,
+        userApiBaseUrl
+      );
       testUserId = getTestUserId(testUser);
 
-      testPlaylist = await initializeTestPlaylist(baseUrl, authResponse?.IdToken)(testUserId);
+      testPlaylist = await initializeTestPlaylist(
+        baseUrl,
+        authResponse?.IdToken
+      )(testUserId);
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
       await axios

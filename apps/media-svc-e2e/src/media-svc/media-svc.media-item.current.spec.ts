@@ -9,13 +9,12 @@ import { MediaItemDto } from '@mediashare/media-svc/src/app/modules/media-item/d
 import { MediaItem } from '@mediashare/media-svc/src/app/modules/media-item/entities/media-item.entity';
 import { User } from '@mediashare/user-svc/src/app/modules/user/entities/user.entity';
 import { INestApplication } from '@nestjs/common';
-import {
-  getTestUserId, initializeTestUser
-} from './functions/user';
+import { getTestUserId, initializeTestUser } from './functions/user';
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer } from './functions/auth';
 import {
-  getTestMediaItemId, initializeTestMediaItem
+  getTestMediaItemId,
+  initializeTestMediaItem,
 } from './functions/media-item';
 import { initializeApp as initializeUserApi } from '@mediashare/user-svc-e2e/src/user-svc/functions/app';
 
@@ -63,10 +62,16 @@ describe('MediaItemAPI.e2e', () => {
 
   describe('MediaItemAPI should get the mediaItem', () => {
     it('should get the mediaItem', async () => {
-      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
+      [testUser, authResponse] = await initializeTestUser(
+        baseUrl,
+        userApiBaseUrl
+      );
       testUserId = getTestUserId(testUser);
 
-      testMediaItem = await initializeTestMediaItem(baseUrl, authResponse?.IdToken)(testUserId);
+      testMediaItem = await initializeTestMediaItem(
+        baseUrl,
+        authResponse?.IdToken
+      )(testUserId);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       await axios
@@ -94,10 +99,16 @@ describe('MediaItemAPI.e2e', () => {
 
   describe('MediaItemAPI should update the mediaItem', () => {
     it('should update the mediaItem', async () => {
-      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
+      [testUser, authResponse] = await initializeTestUser(
+        baseUrl,
+        userApiBaseUrl
+      );
       testUserId = getTestUserId(testUser);
 
-      testMediaItem = await initializeTestMediaItem(baseUrl, authResponse?.IdToken)(testUserId);
+      testMediaItem = await initializeTestMediaItem(
+        baseUrl,
+        authResponse?.IdToken
+      )(testUserId);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       const dto = clone(testMediaItem) as UpdateMediaItemDto;
@@ -147,10 +158,16 @@ describe('MediaItemAPI.e2e', () => {
 
   describe('MediaItemAPI should delete the mediaItem', () => {
     it('should delete the mediaItem', async () => {
-      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
+      [testUser, authResponse] = await initializeTestUser(
+        baseUrl,
+        userApiBaseUrl
+      );
       testUserId = getTestUserId(testUser);
 
-      testMediaItem = await initializeTestMediaItem(baseUrl, authResponse?.IdToken)(testUserId);
+      testMediaItem = await initializeTestMediaItem(
+        baseUrl,
+        authResponse?.IdToken
+      )(testUserId);
       testMediaItemId = getTestMediaItemId(testMediaItem);
 
       await axios

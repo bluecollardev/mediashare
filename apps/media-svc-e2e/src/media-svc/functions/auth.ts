@@ -27,7 +27,6 @@ export async function login(
     .then((res) => res.data as AuthenticationResultType);
 }
 
-
 export function buildTestCreds() {
   const creds = {
     username: process.env.COGNITO_USER_EMAIL,

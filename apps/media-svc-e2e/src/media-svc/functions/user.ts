@@ -46,7 +46,10 @@ export const createAndValidateTestUser = async (
 export const getTestUserId = (testUser: any) => testUser._id.toString();
 
 // TODO: Update so we can supply custom user data
-export const initializeTestUser = async (baseUrl: string, userApiBaseUrl: string) => {
+export const initializeTestUser = async (
+  baseUrl: string,
+  userApiBaseUrl: string
+) => {
   // Login first
   const creds = buildTestCreds();
   const authResponse: AuthenticationResultType = await login(baseUrl, creds);
@@ -72,5 +75,5 @@ export const initializeTestUser = async (baseUrl: string, userApiBaseUrl: string
     token: authResponse?.IdToken,
   });
   const testUser = await createAndValidateTestUser(createUserFn, testUserData);
-  return [testUser, authResponse]
-}
+  return [testUser, authResponse as AuthenticationResultType];
+};

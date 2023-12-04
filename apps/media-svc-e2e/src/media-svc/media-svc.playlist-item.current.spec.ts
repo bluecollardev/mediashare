@@ -4,19 +4,19 @@ import axios from 'axios';
 import { clone } from 'remeda';
 import { INestApplication } from '@nestjs/common';
 import { DataSource, MongoRepository } from 'typeorm';
+import { initializePopulatedTestUser } from './functions/populated-user';
+import { getTestUserId } from './functions/user';
 import {
-  getTestUserId, initializeTestUser
-} from './functions/user';
-import {
-  getTestMediaItemId, initializeTestMediaItem
+  getTestMediaItemId,
 } from './functions/media-item';
 import {
-  getTestPlaylistId, initializeTestPlaylist
+  getTestPlaylistId,
 } from './functions/playlist';
 import { getBaseUrl, initializeApp, initializeDB } from './functions/app';
 import { defaultOptionsWithBearer } from './functions/auth';
 import {
-  getTestPlaylistItemId, initializeTestPlaylistItem
+  getTestPlaylistItemId,
+  initializeTestPlaylistItem,
 } from './functions/playlist-item';
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { Playlist } from '@mediashare/media-svc/src/app/modules/playlist/entities/playlist.entity';
@@ -41,11 +41,8 @@ describe('PlaylistItemAPI.e2e', () => {
   let authResponse: AuthenticationResultType;
   let testPlaylistItem;
   let testPlaylistItemId;
-  let testUser;
   let testUserId;
-  let testPlaylist;
   let testPlaylistId;
-  let testMediaItem;
   let testMediaItemId;
 
   beforeAll(async () => {
@@ -81,16 +78,18 @@ describe('PlaylistItemAPI.e2e', () => {
 
   describe('PlaylistAPI should get the playlistItem', () => {
     it('should get the playlistItem', async () => {
-      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
+      const { user: testUser, mediaItem: testMediaItem, playlist: testPlaylist } = await initializePopulatedTestUser(
+        baseUrl,
+        userApiBaseUrl
+      );
       testUserId = getTestUserId(testUser);
-
-      testMediaItem = await initializeTestMediaItem(baseUrl, authResponse?.IdToken)(testUserId);
       testMediaItemId = getTestMediaItemId(testMediaItem);
-
-      testPlaylist = await initializeTestPlaylist(baseUrl, authResponse?.IdToken)(testUserId, testMediaItemId);
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
-      testPlaylistItem = await initializeTestPlaylistItem(baseUrl, authResponse?.IdToken)(testUserId, testPlaylistId, testMediaItemId);
+      testPlaylistItem = await initializeTestPlaylistItem(
+        baseUrl,
+        authResponse?.IdToken
+      )(testUserId, testPlaylistId, testMediaItemId);
       testPlaylistItemId = getTestPlaylistItemId(testPlaylistItem);
 
       await axios
@@ -118,16 +117,18 @@ describe('PlaylistItemAPI.e2e', () => {
 
   describe('PlaylistAPI should update the playlistItem', () => {
     it('should update the playlistItem', async () => {
-      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
+      const { user: testUser, mediaItem: testMediaItem, playlist: testPlaylist } = await initializePopulatedTestUser(
+        baseUrl,
+        userApiBaseUrl
+      );
       testUserId = getTestUserId(testUser);
-
-      testMediaItem = await initializeTestMediaItem(baseUrl, authResponse?.IdToken)(testUserId);
       testMediaItemId = getTestMediaItemId(testMediaItem);
-
-      testPlaylist = await initializeTestPlaylist(baseUrl, authResponse?.IdToken)(testUserId, testMediaItemId);
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
-      testPlaylistItem = await initializeTestPlaylistItem(baseUrl, authResponse?.IdToken)(testUserId, testPlaylistId, testMediaItemId);
+      testPlaylistItem = await initializeTestPlaylistItem(
+        baseUrl,
+        authResponse?.IdToken
+      )(testUserId, testPlaylistId, testMediaItemId);
       testPlaylistItemId = getTestPlaylistItemId(testPlaylistItem);
 
       const dto = clone(testPlaylistItem) as UpdatePlaylistItemDto;
@@ -177,16 +178,18 @@ describe('PlaylistItemAPI.e2e', () => {
 
   describe('PlaylistAPI should delete the playlistItem', () => {
     it('should delete the playlistItem', async () => {
-      [testUser, authResponse] = await initializeTestUser(baseUrl, userApiBaseUrl);
+      const { user: testUser, mediaItem: testMediaItem, playlist: testPlaylist } = await initializePopulatedTestUser(
+        baseUrl,
+        userApiBaseUrl
+      );
       testUserId = getTestUserId(testUser);
-
-      testMediaItem = await initializeTestMediaItem(baseUrl, authResponse?.IdToken)(testUserId);
       testMediaItemId = getTestMediaItemId(testMediaItem);
-
-      testPlaylist = await initializeTestPlaylist(baseUrl, authResponse?.IdToken)(testUserId, testMediaItemId);
       testPlaylistId = getTestPlaylistId(testPlaylist);
 
-      testPlaylistItem = await initializeTestPlaylistItem(baseUrl, authResponse?.IdToken)(testUserId, testPlaylistId, testMediaItemId);
+      testPlaylistItem = await initializeTestPlaylistItem(
+        baseUrl,
+        authResponse?.IdToken
+      )(testUserId, testPlaylistId, testMediaItemId);
       testPlaylistItemId = getTestPlaylistItemId(testPlaylistItem);
 
       await axios
