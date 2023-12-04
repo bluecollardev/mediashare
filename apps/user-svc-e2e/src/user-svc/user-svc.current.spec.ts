@@ -148,7 +148,7 @@ describe('UserAPI.current.e2e', () => {
       const dto = clone(testUser) as UpdateUserDto;
       dto.username = 'bcdevtest';
       // TODO: Don't allow updating email, somehow we have to do this with Cognito
-      // tags.email = 'lucastest@bluecollardev.com';
+      // dto.email = 'lucastest@bluecollardev.com';
       dto.firstName = 'Michael';
       dto.lastName = 'Laosee';
 
