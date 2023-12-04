@@ -40,7 +40,8 @@ Thumbs.db
 
 # Env
 *.env
-.env.off
+.env
+.env.*
 
 # OpenAPI Clients
 openapi/clients/*
