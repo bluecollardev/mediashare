@@ -2,7 +2,7 @@ import {
   handleErrorResponse,
   handleSuccessResponse,
 } from '@mediashare/core/http/response';
-import { AuthenticationGuard } from '@nestjs-cognito/auth';
+import { AuthenticationGuard, CognitoUser } from '@nestjs-cognito/auth';
 import {
   Controller,
   Body,
@@ -20,8 +20,6 @@ import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { MEDIA_VISIBILITY } from '../../core/models';
 import { RouteTokens } from '../../core/constants';
-import { GetClaims } from '@mediashare/core/decorators/auth.decorator';
-import { UserGuard } from '../../core/guards';
 import {
   MediaGetResponse,
   MediaPostResponse,
@@ -48,14 +46,14 @@ export class MediaItemController {
     return MEDIA_VISIBILITY;
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Post()
   @MediaPostResponse()
   async create(
     @Res() res: Response,
     @Body() createMediaItemDto: CreateMediaItemDto,
-    @GetClaims('sub') createdBy: string
+    @CognitoUser('sub') createdBy: string
   ) {
     try {
       const mediaItem: Omit<MediaItem, '_id'> = {
@@ -74,7 +72,7 @@ export class MediaItemController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @Put(RouteTokens.mediaId)
@@ -95,7 +93,7 @@ export class MediaItemController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @Delete(RouteTokens.mediaId)
@@ -108,7 +106,7 @@ export class MediaItemController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @ApiParam({ name: RouteTokens.userId, type: String, required: true })
@@ -118,7 +116,7 @@ export class MediaItemController {
     @Res() res: Response,
     @Param('mediaId') mediaId: string,
     @Param('userId') userId: string,
-    @GetClaims('sub') createdBy: string
+    @CognitoUser('sub') createdBy: string
   ) {
     try {
       const { title } = await this.mediaItemService.findOne(mediaId);
@@ -135,7 +133,7 @@ export class MediaItemController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'mediaId', type: String, required: true })
   @Get(RouteTokens.mediaId)
@@ -149,7 +147,7 @@ export class MediaItemController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({
@@ -164,7 +162,7 @@ export class MediaItemController {
   @MediaGetResponse({ isArray: true })
   async findAll(
     @Res() res: Response,
-    @GetClaims('sub') userId: string,
+    @CognitoUser('sub') userId: string,
     @Query('text') query?: string,
     @Query('tags') tags?: string[]
   ) {
@@ -182,14 +180,14 @@ export class MediaItemController {
               query,
               tags: parsedTags,
             })
-          : await this.mediaItemService.getByUserId(userId);
+          : await this.mediaItemService.getBySub(userId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
       return handleErrorResponse(res, error);
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Get('popular')
   @MediaGetResponse({ isArray: true })

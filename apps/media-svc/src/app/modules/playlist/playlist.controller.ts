@@ -1,4 +1,4 @@
-import { AuthenticationGuard } from '@nestjs-cognito/auth';
+import { AuthenticationGuard, CognitoUser } from '@nestjs-cognito/auth';
 import {
   Controller,
   Body,
@@ -22,12 +22,10 @@ import {
 import { Response } from 'express';
 import { RouteTokens } from '../../core/constants';
 import { PLAYLIST_VISIBILITY } from '../../core/models';
-import { GetClaims } from '@mediashare/core/decorators/auth.decorator';
 import {
   handleErrorResponse,
   handleSuccessResponse,
 } from '@mediashare/core/http/response';
-import { UserGuard } from '../../core/guards';
 import {
   PlaylistGetResponse,
   PlaylistPostResponse,
@@ -54,7 +52,7 @@ export class PlaylistController {
     return { visibilities: PLAYLIST_VISIBILITY };
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiBody({ type: CreatePlaylistDto })
   @Post()
@@ -62,7 +60,7 @@ export class PlaylistController {
   async create(
     @Res() res: Response,
     @Body() createPlaylistDto: CreatePlaylistDto,
-    @GetClaims('sub') userId: string
+    @CognitoUser('sub') userId: string
   ) {
     try {
       const result = await this.playlistService.create({
@@ -78,7 +76,7 @@ export class PlaylistController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({
     name: 'playlistId',
@@ -92,7 +90,7 @@ export class PlaylistController {
   async update(
     @Res() res: Response,
     @Param('playlistId') playlistId: string,
-    @GetClaims('sub') userId: string,
+    @CognitoUser('sub') userId: string,
     @Body() updatePlaylistDto: UpdatePlaylistDto
   ) {
     try {
@@ -106,7 +104,7 @@ export class PlaylistController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Delete(RouteTokens.playlistId)
   @ApiParam({
@@ -124,7 +122,7 @@ export class PlaylistController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'playlistId', type: String, required: true })
   @ApiParam({ name: 'userId', type: String, required: true })
@@ -134,7 +132,7 @@ export class PlaylistController {
     @Res() res: Response,
     @Param('playlistId') playlistId: string,
     @Param('userId') userId: string,
-    @GetClaims('sub') createdBy: string
+    @CognitoUser('sub') createdBy: string
   ) {
     try {
       const result = await this.shareItemService.createPlaylistShareItem({
@@ -148,7 +146,7 @@ export class PlaylistController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @Get(RouteTokens.playlistId)
   @ApiParam({
@@ -167,7 +165,7 @@ export class PlaylistController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiQuery({ name: 'text', required: false, allowEmptyValue: true })
   @ApiQuery({
@@ -182,7 +180,7 @@ export class PlaylistController {
   @PlaylistGetResponse({ type: PlaylistDto, isArray: true })
   async findAll(
     @Res() res: Response,
-    @GetClaims('sub') userId: string,
+    @CognitoUser('sub') userId: string,
     @Query('text') query?: string,
     @Query('tags') tags?: string[]
   ) {
@@ -199,7 +197,7 @@ export class PlaylistController {
               query,
               tags: parsedTags,
             })
-          : await this.playlistService.getByUserId(userId);
+          : await this.playlistService.getBySub(userId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
       return handleErrorResponse(res, error);

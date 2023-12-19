@@ -245,8 +245,8 @@ export class MediaItemService {
     return await this.dataService.getById(id);
   }
 
-  async getByUserId(id: IdType) {
-    return await this.dataService.getByUserId(id);
+  async getBySub(id: IdType) {
+    return await this.dataService.getBySub(id);
   }
 
   async findOne(id: IdType) {

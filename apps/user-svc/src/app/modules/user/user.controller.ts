@@ -1,9 +1,5 @@
-import { UseGuards } from '@nestjs/common';
-import {
-  Authentication,
-  AuthenticationGuard,
-  CognitoUser,
-} from '@nestjs-cognito/auth';
+import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import { AuthenticationGuard, CognitoUser } from '@nestjs-cognito/auth';
 import {
   Controller,
   Body,
@@ -35,7 +31,7 @@ import { CreateUserConnectionDto } from '../user-connection/dto/create-user-conn
 // import { UpdateUserConnectionDto } from '../user-connection/tags/update-user-connection.tags';
 import { UserConnectionService } from '../user-connection/user-connection.service';
 import { UserDto } from './dto/user.dto';
-import { InviteDto } from './dto/authorize.dto';
+import { AuthorizeDto, InviteDto } from './dto/authorize.dto';
 import { ProfileDto } from './dto/profile.dto';
 import { UserService } from './user.service';
 import { UserGetResponse, UserPostResponse } from './user.decorator';
@@ -45,7 +41,6 @@ import { GetUser } from '@mediashare/core/decorators/user.decorator';
 import { defaultImgUrl, defaultUserRole } from './user.constants';
 
 @ApiTags('user')
-@Authentication()
 @Controller({ path: ['user'] })
 export class UserController {
   constructor(
@@ -54,36 +49,42 @@ export class UserController {
     private mediaItemService: MediaItemService*/
   ) {}
 
+  @Post('authorize')
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
-  // @ApiBody({ type: AuthorizeDto })
-  // @ApiResponse({ type: ProfileDto, isArray: false, status: 200 })
-  @Post('authorize')
+  @ApiResponse({ type: ProfileDto, isArray: false, status: 200 })
   async authorize(
-    @CognitoUser() cognitoUser,
     @Req() req: Request,
-    @Res() res: Response
+    @Res() res: Response,
+    @CognitoUser() cognitoUser: any
   ) {
-    const user = await this.userService.findByQuery({
-      where: { sub: cognitoUser.sub },
-    });
-    // res.setHeader('Authorization', accessToken);
-    // res.setHeader('Id', idToken);
+    // const valid = this.userService.validateToken({ token: accessToken, idToken });
+    // if (!valid) throw new UnauthorizedException();
+    const user = cognitoUser; // await this.userService.findByQuery({ sub: valid.sub } as any);
+
+    /*res.setHeader('Authorization', cognitoUser);
+    res.setHeader('Id', idToken);
     if (!user) {
       const newUser = await this.userService.create({
-        ...cognitoUser,
-        role: defaultUserRole,
-        imageSrc: defaultImgUrl,
-      });
-      const profile = await this.userService.findById(newUser._id);
-      return handleSuccessResponse(res, 201, profile);
-    }
+        // ...valid,
+        // TODO: All new users should probably be free, not subscribers, complete this!
+        role: 'subscriber',
+        // TODO: Replace this string!
+        imageSrc: 'https://mediashare0079445c24114369af875159b71aee1c04439-dev.s3.us-west-2.amazonaws.com/public/assets/default-user.png',
+      } as any);
+      const profile = await this.userService.findById(newUser._id.toString());
+      if (!profile) return res.send(user);
+      return res.send(profile);
+    }*/
+    const profile = await this.userService.findById(user._id.toString());
+    if (!profile) return res.send(user);
 
-    const profile = await this.userService.findById(user._id);
-    return handleSuccessResponse(res, 200, profile);
+    // return res.send(profile) */
   }
 
   @Post('invite')
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
   @ApiBody({ type: InviteDto })
   @ApiResponse({ type: ProfileDto, isArray: false, status: 200 })
   async invite(@Res() res: Response, @Body() inviteDto: InviteDto) {

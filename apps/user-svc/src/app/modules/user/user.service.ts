@@ -81,7 +81,8 @@ export class UserService {
   }
 
   async findByQuery(query: MongoFindOneOptions<User>) {
-    return await this.dataService.findByQuery(query);
+    const entity = await this.dataService.findByQuery(query);
+    return await this.classMapper.mapAsync(entity, User, UserDto);
   }
 
   // TODO: Use mapper

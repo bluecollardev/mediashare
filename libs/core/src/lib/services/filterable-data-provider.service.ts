@@ -1,6 +1,6 @@
 import { IdType } from '@mediashare/shared';
 import { Injectable } from '@nestjs/common';
-import { ObjectIdGuard } from '../guards';
+import { ObjectIdGuard, StringIdGuard } from '../guards';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoRepository } from 'typeorm';
 import { DataService } from './data-provider.service';
@@ -65,6 +65,20 @@ export abstract class FilterableDataService<
     try {
       const pipeline = [
         { $match: { createdBy: ObjectIdGuard(userId) } },
+        ...this.buildFields(),
+        this.replaceRoot(),
+      ];
+      return this.repository.aggregate(pipeline).toArray();
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  getBySub(userId: IdType) {
+    try {
+      const pipeline = [
+        { $match: { createdBy: StringIdGuard(userId) } },
         ...this.buildFields(),
         this.replaceRoot(),
       ];

@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { SwaggerModule } from '@nestjs/swagger';
+import cors from 'cors';
 import { Logger } from 'nestjs-pino';
 import * as bodyParser from 'body-parser';
 import compression from 'compression';
@@ -79,6 +80,25 @@ async function bootstrap() {
     app.use(bodyParser.json({ limit: '5mb' }));
     app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
     // app.enableCors();
+
+    const allowedOrigins: string | string[] = '*';
+    app.use(
+      cors({
+        credentials: true,
+        origin: (origin, callback) => {
+          // Allow requests with no origin (like mobile apps or curl requests)
+          if (!origin || allowedOrigins === '*') return callback(null, true);
+
+          if (allowedOrigins.indexOf(origin) === -1) {
+            const msg =
+              'The CORS policy for this site does not allow access from the specified Origin';
+            return callback(new Error(msg), false);
+          }
+          return callback(null, true);
+        },
+        allowedHeaders: '*',
+      })
+    );
 
     if (withHttps) {
       https.createServer(httpsOptions, server).listen(443);
