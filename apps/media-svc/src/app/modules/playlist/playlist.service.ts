@@ -167,8 +167,22 @@ export class PlaylistDataService extends FilterableDataService<
 
   protected buildFields() {
     return [
-      { $lookup: { from: 'media_item', localField: 'mediaIds', foreignField: '_id', as: 'mediaItems' } },
-      { $lookup: { from: 'playlist_item', localField: '_id', foreignField: 'playlistId', as: 'playlistItems' } },
+      {
+        $lookup: {
+          from: 'media_item',
+          localField: 'mediaIds',
+          foreignField: '_id',
+          as: 'mediaItems',
+        },
+      },
+      {
+        $lookup: {
+          from: 'playlist_item',
+          localField: '_id',
+          foreignField: 'playlistId',
+          as: 'playlistItems',
+        },
+      },
       // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'playlistId', as: 'shareItems' } },
       // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'playlistId', as: 'viewItems' } },
       // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'playlistId', as: 'likeItems' } },
