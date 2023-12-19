@@ -39,9 +39,7 @@
             }
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -75,9 +73,7 @@
             }
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -94,9 +90,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -130,9 +124,7 @@
             }
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -154,9 +146,7 @@
             }
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -188,9 +178,7 @@
             }
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -205,9 +193,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -240,9 +226,7 @@
             }
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -283,9 +267,7 @@
             }
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -309,9 +291,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -344,9 +324,7 @@
             }
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -373,9 +351,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -402,9 +378,7 @@
             }
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -440,9 +414,7 @@
             }
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -469,9 +441,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -501,9 +471,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "security": [
           {
             "bearer": []
@@ -549,12 +517,7 @@
     "schemas": {
       "BcRolesType": {
         "type": "string",
-        "enum": [
-          "guest",
-          "free",
-          "subscriber",
-          "admin"
-        ]
+        "enum": ["guest", "free", "subscriber", "admin"]
       },
       "ProfileShareItem": {
         "type": "object",
@@ -742,10 +705,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "email",
-          "username"
-        ]
+        "required": ["email", "username"]
       },
       "CreateUserDto": {
         "type": "object",
@@ -991,10 +951,7 @@
             "minLength": 0
           }
         },
-        "required": [
-          "userId",
-          "connectionId"
-        ]
+        "required": ["userId", "connectionId"]
       },
       "UserConnectionDto": {
         "type": "object",
@@ -1028,11 +985,7 @@
             "minLength": 0
           }
         },
-        "required": [
-          "_id",
-          "userId",
-          "connectionId"
-        ]
+        "required": ["_id", "userId", "connectionId"]
       }
     }
   }
