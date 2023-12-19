@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="MediaItemAPI.e2e" type="JavaScriptTestRunnerJest" nameIsGenerated="true">
-    <node-interpreter value="$USER_HOME$/.nvm/versions/node/v16.13.1/bin/node" />
+    <node-interpreter value="$USER_HOME$/.nvm/versions/node/v16.14.2/bin/node" />
     <jest-package value="$PROJECT_DIR$/node_modules/jest" />
     <working-dir value="$PROJECT_DIR$" />
     <envs>

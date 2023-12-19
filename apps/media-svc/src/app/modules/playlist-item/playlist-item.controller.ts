@@ -55,7 +55,7 @@ export class PlaylistItemController {
   async create(
     @Res() res: Response,
     @Body() createPlaylistItemDto: CreatePlaylistItemDto,
-    @CognitoUser('sub') createdBy
+    @CognitoUser('sub') createdBy: string
   ) {
     try {
       const playlistId = createPlaylistItemDto?.playlistId;

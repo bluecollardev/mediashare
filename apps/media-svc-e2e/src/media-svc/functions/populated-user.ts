@@ -25,7 +25,9 @@ export const initializePopulatedTestUser = async (
   )(testUserId, testMediaItemId);
 
   return {
-    user: testUserId,
+    authResponse: authResponse as any,
+    testUser,
+    testUserId,
     mediaItem: testMediaItem,
     playlist: testPlaylist,
     authCtx: authResponse,

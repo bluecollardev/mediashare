@@ -75,7 +75,8 @@ describe('PlaylistItemAPI.e2e', () => {
   describe('PlaylistAPI should get the playlistItem', () => {
     it('should get the playlistItem', async () => {
       const {
-        user: testUser,
+        testUser,
+        authResponse,
         mediaItem: testMediaItem,
         playlist: testPlaylist,
       } = await initializePopulatedTestUser(baseUrl, userApiBaseUrl);
@@ -115,7 +116,8 @@ describe('PlaylistItemAPI.e2e', () => {
   describe('PlaylistAPI should update the playlistItem', () => {
     it('should update the playlistItem', async () => {
       const {
-        user: testUser,
+        testUser,
+        authResponse,
         mediaItem: testMediaItem,
         playlist: testPlaylist,
       } = await initializePopulatedTestUser(baseUrl, userApiBaseUrl);
@@ -177,7 +179,8 @@ describe('PlaylistItemAPI.e2e', () => {
   describe('PlaylistAPI should delete the playlistItem', () => {
     it('should delete the playlistItem', async () => {
       const {
-        user: testUser,
+        testUser,
+        authResponse,
         mediaItem: testMediaItem,
         playlist: testPlaylist,
       } = await initializePopulatedTestUser(baseUrl, userApiBaseUrl);

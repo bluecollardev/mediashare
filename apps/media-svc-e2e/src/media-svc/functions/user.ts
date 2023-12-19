@@ -43,7 +43,7 @@ export const createAndValidateTestUser = async (
       });
   });
 };
-export const getTestUserId = (testUser: any) => testUser._id.toString();
+export const getTestUserId = (testUser: any) => testUser?._id?.toString();
 
 // TODO: Update so we can supply custom user data
 export const initializeTestUser = async (

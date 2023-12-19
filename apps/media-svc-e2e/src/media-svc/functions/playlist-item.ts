@@ -64,8 +64,16 @@ export const initializeTestPlaylistItem =
       baseUrl,
       token,
     });
-    return await createAndValidateTestPlaylistItem(
-      createPlaylistItemFn,
-      testPlaylistItemData
-    );
+
+    let result;
+    try {
+      result = await createAndValidateTestPlaylistItem(
+        createPlaylistItemFn,
+        testPlaylistItemData
+      );
+    } catch (err) {
+      throw err;
+    }
+
+    return result;
   };

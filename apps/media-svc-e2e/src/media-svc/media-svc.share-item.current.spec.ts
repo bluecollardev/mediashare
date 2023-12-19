@@ -75,7 +75,7 @@ describe('ShareItemAPI.e2e', () => {
   describe('ShareItemsAPI should get the shareItem', () => {
     it('should get the shareItem', async () => {
       const {
-        user: testUser,
+        testUser,
         mediaItem: testMediaItem,
         playlist: testPlaylist,
       } = await initializePopulatedTestUser(baseUrl, userApiBaseUrl);
@@ -115,7 +115,7 @@ describe('ShareItemAPI.e2e', () => {
   describe('ShareItemsAPI should update the shareItem', () => {
     it('should update the shareItem', async () => {
       const {
-        user: testUser,
+        testUser,
         mediaItem: testMediaItem,
         playlist: testPlaylist,
       } = await initializePopulatedTestUser(baseUrl, userApiBaseUrl);
@@ -177,7 +177,7 @@ describe('ShareItemAPI.e2e', () => {
   describe('ShareItemsAPI should delete the shareItem', () => {
     it('should delete the shareItem', async () => {
       const {
-        user: testUser,
+        testUser,
         mediaItem: testMediaItem,
         playlist: testPlaylist,
       } = await initializePopulatedTestUser(baseUrl, userApiBaseUrl);
