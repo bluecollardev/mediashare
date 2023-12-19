@@ -1,26 +1,8 @@
 import { Query } from '@nestjs/common';
-import {
-  Controller,
-  Body,
-  HttpStatus,
-  Get,
-  Post,
-  Put,
-  Req,
-  Res,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { Request, Response } from 'express';
-import { ProfileDto } from '../../../../../../openapi/clients/user-svc/rxjs-api';
+import { Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+// import { ProfileDto } from '../../../../../../openapi/clients/user-svc/rxjs-api';
 import { UserConnectionService } from '../user-connection/user-connection.service';
 import { UserService } from '../user/user.service';
 import { SesService } from '../nestjs-ses';
@@ -48,8 +30,8 @@ export class EmailController {
   })
   async sendEmail(
     @Res() res: Response,
-    @Query('userId') userId,
-    @Query('email') email
+    @Query('userId') userId: string,
+    @Query('email') email: string
   ) {
     try {
       if (!userId || !email) {
@@ -58,7 +40,7 @@ export class EmailController {
         });
       }
 
-      // Does email already exist?
+      // TODO: Does email already exist?
       // Note that we can have multiple matching users to a single email, as a single user can currently have
       // multiple accounts with different user names corresponding to a single email address.
       // We do this so that I can personally test this with multiple accounts, I don't want to have to create a bunch of
@@ -76,7 +58,7 @@ export class EmailController {
         // TODO: Fix this type!
         const currentUser = (await this.userService.findById(
           userId
-        )) as unknown as ProfileDto;
+        )) as unknown as any;
         const mail = {
           to: email,
           subject: emailSubject,
@@ -87,7 +69,7 @@ export class EmailController {
         console.log(
           `Sending email invitation on behalf on ${currentUser.email} [${userId}] to: ${email} `
         );
-        const result = await this.sesService.sendEmail(mail);
+        await this.sesService.sendEmail(mail);
       };
 
       // Does the user receiving the invitation already have an account?
