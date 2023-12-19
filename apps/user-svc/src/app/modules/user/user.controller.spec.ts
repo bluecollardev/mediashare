@@ -49,7 +49,7 @@ describe('UserController.authorization', () => {
         authorization: `bearer ${ValidBearerToken}`,
       },
     });
-    const user = {};
+    const user = {} as any;
     const result = await controller.authorize(user, req, res);
     expect(result).toBeDefined();
     console.log(result);
@@ -63,7 +63,7 @@ describe('UserController.authorization', () => {
         authorization: `bearer ${ValidBearerToken}`,
       },
     });
-    const user = {};
+    const user = {} as any;
     const result = await controller.authorize(user, req, res);
     expect(result).toBeDefined();
     console.log(result);
@@ -77,7 +77,7 @@ describe('UserController.authorization', () => {
         authorization: `bearer ${ValidBearerToken}`,
       },
     });
-    const user = {};
+    const user = {} as any;
     const result = await controller.authorize(user, req, res);
     expect(result).toBeDefined();
     console.log(result);
