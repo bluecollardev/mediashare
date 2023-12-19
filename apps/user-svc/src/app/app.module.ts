@@ -12,6 +12,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { UserConnectionModule } from './modules/user-connection/user-connection.module';
+import { EmailModule } from './modules/email/email.module';
 import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
 
 @Module({
@@ -53,6 +54,7 @@ import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
     LoggerModule.forRoot(),
     UserModule,
     UserConnectionModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
