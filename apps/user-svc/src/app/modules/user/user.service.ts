@@ -85,6 +85,16 @@ export class UserService {
     return await this.classMapper.mapAsync(entity, User, UserDto);
   }
 
+  async findByEmail(email: string) {
+    const entities = await this.dataService.findAllByQuery({
+      where: { email: email.toLowerCase() },
+    });
+    const fns = entities.map((entity) =>
+      this.classMapper.mapAsync(entity, User, UserDto)
+    );
+    return await Promise.all(fns);
+  }
+
   // TODO: Use mapper
   findById(id: IdType) {
     return this.dataService.repository
