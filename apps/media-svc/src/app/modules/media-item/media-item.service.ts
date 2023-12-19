@@ -8,7 +8,7 @@ import { MongoRepository } from 'typeorm';
 import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
 import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
 
-import { ObjectIdGuard } from '@mediashare/core/guards';
+import { StringIdGuard } from '@mediashare/core/guards';
 import { IdType, SearchParameters } from '@mediashare/shared';
 import { FilterableDataService } from '@mediashare/core/services';
 import {
@@ -85,7 +85,8 @@ export class MediaItemDataService extends FilterableDataService<
     } else {
       // Only return search results that are app subscriber content (for paying app subscribers), shared content from a user's network, or public content
       const appSubscriberContentUserIds = this.configService.get(
-        'appSubscriberContentUserIds'
+        'appSubscriberContentUserIds',
+        ['default']
       );
       aggregateQuery = aggregateQuery.concat([
         {
@@ -96,7 +97,7 @@ export class MediaItemDataService extends FilterableDataService<
                   {
                     $or: [
                       ...appSubscriberContentUserIds.map((id) => ({
-                        createdBy: ObjectIdGuard(id),
+                        createdBy: StringIdGuard(id),
                       })),
                     ],
                   },
@@ -112,7 +113,7 @@ export class MediaItemDataService extends FilterableDataService<
                   {
                     $or: [
                       ...appSubscriberContentUserIds.map((id) => ({
-                        createdBy: ObjectIdGuard(id),
+                        createdBy: StringIdGuard(id),
                       })),
                     ],
                   },

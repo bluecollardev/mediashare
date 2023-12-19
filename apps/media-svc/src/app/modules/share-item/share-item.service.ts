@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { PinoLogger } from 'nestjs-pino';
 import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
-import { ObjectIdGuard } from '@mediashare/core/guards';
+import { StringIdGuard, ObjectIdGuard } from '@mediashare/core/guards';
 import { DataService } from '@mediashare/core/services';
 import { IdType } from '@mediashare/shared';
 import {
