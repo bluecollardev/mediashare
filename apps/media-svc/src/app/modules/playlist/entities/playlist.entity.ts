@@ -25,7 +25,7 @@ export class Playlist extends ApiBaseEntity {
   @Column({ nullable: true })
   imageSrc?: string;
 
-  // @AutoMap()
+  @AutoMap()
   @Column('mediaIds')
   mediaIds: ObjectId[];
 
