@@ -95,7 +95,8 @@ export class UserConnectionService {
   async findConnections(userId: IdType): Promise<UserConnectionDto[]> {
     const entities = await this.dataService.repository.find({
       where: {
-        userId: ObjectIdGuard(userId),
+        // userId: ObjectIdGuard(userId),
+        userId: userId,
       } as FindOptionsWhere<UserConnection>,
     });
 
@@ -125,14 +126,18 @@ export class UserConnectionService {
           $or: [
             {
               $and: [
-                { userId: ObjectIdGuard(userId) },
-                { connectionId: ObjectIdGuard(connectionId) },
+                // { userId: ObjectIdGuard(userId) },
+                { userId: userId },
+                // { connectionId: ObjectIdGuard(connectionId) },
+                { connectionId: connectionId },
               ],
             },
             {
               $and: [
-                { userId: ObjectIdGuard(connectionId) },
-                { connectionId: ObjectIdGuard(userId) },
+                // { userId: ObjectIdGuard(connectionId) },
+                { userId: connectionId },
+                // { connectionId: ObjectIdGuard(userId) },
+                { connectionId: userId },
               ],
             },
           ],

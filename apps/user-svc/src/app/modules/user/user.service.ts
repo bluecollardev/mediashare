@@ -104,6 +104,7 @@ export class UserService {
           $replaceRoot: {
             newRoot: {
               _id: '$_id',
+              sub: '$sub',
               username: '$username',
               email: '$email',
               firstName: '$firstName',

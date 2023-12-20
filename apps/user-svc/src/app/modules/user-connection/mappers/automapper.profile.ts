@@ -28,8 +28,8 @@ export const connectionToConnectionDtoMappingFactory = (mapper) =>
         objectIdToStringConverter as never,
         (source: UserConnection) => source._id
       )
-    ),
-    forMember(
+    )
+    /* forMember(
       (dest: UserConnectionDto) => dest.userId,
       convertUsing(
         objectIdToStringConverter as never,
@@ -42,7 +42,7 @@ export const connectionToConnectionDtoMappingFactory = (mapper) =>
         objectIdToStringConverter as never,
         (source: UserConnection) => source.connectionId
       )
-    )
+    ) */
   );
 
 export const createConnectionDtoToConnectionMappingFactory = (mapper) =>
@@ -50,8 +50,8 @@ export const createConnectionDtoToConnectionMappingFactory = (mapper) =>
     mapper,
     CreateUserConnectionDto,
     UserConnection,
-    forMember((dest: UserConnection) => dest._id, ignore()),
-    forMember(
+    forMember((dest: UserConnection) => dest._id, ignore())
+    /* forMember(
       (dest: UserConnection) => dest.userId,
       convertUsing(
         stringToObjectIdConverter as never,
@@ -64,7 +64,7 @@ export const createConnectionDtoToConnectionMappingFactory = (mapper) =>
         stringToObjectIdConverter as never,
         (source: UserConnectionDto) => source.connectionId
       )
-    )
+    ) */
   );
 
 export const updateConnectionDtoToConnectionMappingFactory = (mapper) =>
