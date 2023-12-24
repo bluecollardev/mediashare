@@ -163,6 +163,7 @@ export class PlaylistItemDataService extends FilterableDataService<
 
   protected buildFields() {
     return [
+      ...this.buildAuthorFields(),
       // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'playlistItemId', as: 'shareItems' } },
       // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'playlistItemId', as: 'viewItems' } },
       // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'playlistItemId', as: 'likeItems' } },
@@ -179,6 +180,7 @@ export class PlaylistItemDataService extends FilterableDataService<
               playlistId: '$playlistId',
               // mediaId: '$mediaId',
               userId: '$userId',
+              ...this.buildAuthorReplaceRootDetails(),
               title: '$title',
               description: '$description',
               sortIndex: '$sortIndex',

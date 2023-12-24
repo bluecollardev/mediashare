@@ -162,6 +162,7 @@ export class MediaItemDataService extends FilterableDataService<
 
   protected buildFields() {
     return [
+      ...this.buildAuthorFields(),
       // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'mediaId', as: 'shareItems' } },
       // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'mediaId', as: 'viewItems' } },
       // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'mediaId', as: 'likeItems' } },
@@ -176,6 +177,7 @@ export class MediaItemDataService extends FilterableDataService<
             {
               _id: '$_id',
               userId: '$userId',
+              ...this.buildAuthorReplaceRootDetails(),
               title: '$title',
               description: '$description',
               uri: '$uri',
