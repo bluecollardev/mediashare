@@ -6,7 +6,7 @@ import { Mapper } from '@automapper/core';
 import { MongoRepository } from 'typeorm';
 import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
 
-import { ObjectIdGuard } from '@mediashare/core/guards';
+import { ObjectIdGuard, StringIdGuard } from '@mediashare/core/guards';
 import { DataService } from '@mediashare/core/services';
 import { IdType } from '@mediashare/shared';
 import {
@@ -132,6 +132,13 @@ export class UserService {
     const objectIds = ids.map((id) => ObjectIdGuard(id));
     return this.dataService.repository
       .aggregate([{ $match: { _id: { $in: objectIds } } }])
+      .toArray();
+  }
+
+  findBySubs(subs: string[]) {
+    const safeSubs = subs.map((sub) => StringIdGuard(sub));
+    return this.dataService.repository
+      .aggregate([{ $match: { sub: { $in: safeSubs } } }])
       .toArray();
   }
 

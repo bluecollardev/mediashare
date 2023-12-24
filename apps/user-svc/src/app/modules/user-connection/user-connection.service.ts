@@ -55,8 +55,9 @@ export class UserConnectionService {
     if (errors)
       throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
 
-    const { userId, connectionId } = createUserConnectionDto;
-    if (userId === connectionId) {
+    const { userId: userSub, connectionId: connectionSub } =
+      createUserConnectionDto;
+    if (userSub === connectionSub) {
       const msg = `${this.constructor.name}.createUserConnection userId cannot be the same as connectionId`;
       this.logger.error(msg);
       throw new Error(msg);
@@ -64,8 +65,8 @@ export class UserConnectionService {
 
     const rel1 = await this.classMapper.mapAsync(
       {
-        userId: userId,
-        connectionId: connectionId,
+        userId: userSub,
+        connectionId: connectionSub,
       } as CreateUserConnectionDto,
       CreateUserConnectionDto,
       UserConnection
@@ -73,8 +74,8 @@ export class UserConnectionService {
 
     const rel2 = await this.classMapper.mapAsync(
       {
-        userId: connectionId,
-        connectionId: userId,
+        userId: connectionSub,
+        connectionId: userSub,
       } as CreateUserConnectionDto,
       CreateUserConnectionDto,
       UserConnection
@@ -92,11 +93,11 @@ export class UserConnectionService {
     );
   }
 
-  async findConnections(userId: IdType): Promise<UserConnectionDto[]> {
+  async findConnections(userSub: string): Promise<UserConnectionDto[]> {
     const entities = await this.dataService.repository.find({
       where: {
         // userId: ObjectIdGuard(userId),
-        userId: userId,
+        userId: userSub,
       } as FindOptionsWhere<UserConnection>,
     });
 
@@ -113,10 +114,10 @@ export class UserConnectionService {
   }
 
   async remove({
-    userId,
-    connectionId,
+    userId: userSub,
+    connectionId: connectionSub,
   }: Partial<UserConnectionDto>): Promise<void> {
-    if (!userId || !connectionId) {
+    if (!userSub || !connectionSub) {
       throw new Error('userId and connectionId are both required parameters');
     }
 
@@ -127,17 +128,17 @@ export class UserConnectionService {
             {
               $and: [
                 // { userId: ObjectIdGuard(userId) },
-                { userId: userId },
+                { userId: userSub },
                 // { connectionId: ObjectIdGuard(connectionId) },
-                { connectionId: connectionId },
+                { connectionId: connectionSub },
               ],
             },
             {
               $and: [
                 // { userId: ObjectIdGuard(connectionId) },
-                { userId: connectionId },
+                { userId: connectionSub },
                 // { connectionId: ObjectIdGuard(userId) },
-                { connectionId: userId },
+                { connectionId: userSub },
               ],
             },
           ],
@@ -153,17 +154,15 @@ export class UserConnectionService {
   async removeMany(
     userConnections: Partial<UserConnectionDto>[]
   ): Promise<void> {
-    const removeConnections = async ({ userId, connectionId }) => {
-      await this.remove({ userId, connectionId });
+    const removeConnections = async ({
+      userId: userSub,
+      connectionId: connectionSub,
+    }) => {
+      await this.remove({ userId: userSub, connectionId: connectionSub });
     };
     const removeUserConnections = userConnections.map(removeConnections);
     await Promise.all(removeUserConnections);
   }
-
-  // TODO: Move this out so we don't have dependencies
-  /* async sendEmail(mail) {
-    return await this.sesService.sendEmail(mail);
-  } */
 
   // TODO: Move this out so we don't have dependencies
   /* async findUsersByEmail(email: string) {

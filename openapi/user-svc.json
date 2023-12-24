@@ -104,256 +104,6 @@
         ]
       }
     },
-    "/api/user": {
-      "post": {
-        "operationId": "UserController_createUser",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "get": {
-        "operationId": "UserController_getCurrentUser",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "put": {
-        "operationId": "UserController_updateCurrentUser",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "delete": {
-        "operationId": "UserController_deleteCurrentUser",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/api/user/{userId}": {
-      "get": {
-        "operationId": "UserController_getUser",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "put": {
-        "operationId": "UserController_updateUser",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "delete": {
-        "operationId": "UserController_deleteUser",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/api/user/sub/{sub}": {
-      "get": {
-        "operationId": "UserController_getUserBySub",
-        "parameters": [
-          {
-            "name": "sub",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
     "/api/user/connections/create": {
       "post": {
         "operationId": "UserController_createUserConnection",
@@ -511,6 +261,256 @@
         ]
       }
     },
+    "/api/user": {
+      "post": {
+        "operationId": "UserController_createUser",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "UserController_getCurrentUser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "UserController_updateCurrentUser",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "UserController_deleteCurrentUser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/sub/{sub}": {
+      "get": {
+        "operationId": "UserController_getUserBySub",
+        "parameters": [
+          {
+            "name": "sub",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/{userId}": {
+      "get": {
+        "operationId": "UserController_getUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "UserController_updateUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "UserController_deleteUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/email/send-email": {
       "post": {
         "operationId": "EmailController_sendEmail",
@@ -594,47 +594,47 @@
         "properties": {
           "createdAt": {
             "type": "string",
-            "example": "owQJnfIlnvWqA4HH7i9Pp6Ar34rqwp74YejPJ3u0HA2Uhg0svGeQcTu5PyT4hDevVRFPm6GYG9LUzdjM0AeyloQR1OOc8WRI9XtpaDsnSzDNzinl6no981bXTCwCL",
+            "example": "QC2Gj2ipPfGgXlRROgYlRcc9JrxLf8k8i1D4EKuM54bhbknbIKzMX5KX2PtOSbl1PePmlM8O9eSmLg60tiWQvNmFQ4fkbTo2hRMHEgDVwAtDTypf19QN9Us5n5srg",
             "maxLength": 255,
             "minLength": 0
           },
           "authorImage": {
             "type": "string",
-            "example": "rGHJGT63v5F5fmgL1zscv5WS381jQeneTzEW9GL3o6ypG2CXzVPqfmvYkbGBfZwTI4yfwc2THHFC4NWpZbuQ83p9loufs2KE2Z7NM2PfLLake6PHEYbaUln5SYQgw",
+            "example": "bysgVtXnbd5nL14ps2wDcvkADIVNLp8OxeB7rqjsszoItxxo7Tynz6JEeUVWFP6Q7ETuXudILpukLBAumnjoMoIB7O1d9E83K6l4N1oF1OWV1iCMc8xbla5fpkzgO",
             "maxLength": 255,
             "minLength": 0
           },
           "authorName": {
             "type": "string",
-            "example": "wAv73CRWPfCdw42YohvS2t5QGOZcUh7tVmcpwR8NVm4tzgj9PxQi4DJOSzBn9Gpw8O0kVLwtD7j7KXI2kST0Isj2c4rn8kRaAIdY5vrn76tLajiSOP4XgOVswPaKP",
+            "example": "L2OHYg6gYWRMHydkeKGgZXtmnoJY85rVoJaqnJfjgDShEZxQmFpCHUTV1L46qw1Q0LSh7XAjIYdLIcAbRxUs3rJDAiE0Pl5KuMDDMZ6dTAq4rbK5xyQsgpqMgweLU",
             "maxLength": 255,
             "minLength": 0
           },
           "author": {
             "type": "string",
-            "example": "4Kq0Gz6ABS5LYKuFN0Q2kRDLZU3VCTZCuvDYl3rFyMUgoHvlTgZOaTmjumqxJH6Qa1UumMyUA3AyNIEB2X0FVn21hfcw5lGh4ThjW7YQMSlIufnE3ju4Amush09SI",
+            "example": "Q9TtJdvPlK5v7BkmVvdysRAViKZtIxxaC85J7kZzXrBMya4HWPZwKOq5UXfkb6kXRrSxCTFCzu5GutANfPfUIlWf9YJSD53k4EmZ6hmjaOVDGcgqmcwuDEki0ODoO",
             "maxLength": 255,
             "minLength": 0
           },
           "authorId": {
             "type": "string",
-            "example": "658285bbce37694a50fcab75",
+            "example": "6587e109cb7484ee59977a16",
             "readOnly": false
           },
           "imageSrc": {
             "type": "string",
-            "example": "5EEOIkibzwXAZ39elY1hoIjO1hxD9HjfL2tXw7gHWrtpIqUJ178r6csQu6XO9liNxS02UAwaGWog888UtdvrC9qARcOoym9Jha61R6ClswZ0OuOMMfYwxHuWKkOSf",
+            "example": "jftNRUW8VpN7XyIoGDiBH6P3DfIQYLN6azvmyq6boA3eKIb9PLBwXDJfnXJCmIVnoWS5oA4pchkZNRXEOdnhY5L2ys81WQynUU08xIecRw7uZBVyuShcUoD3UscBP",
             "maxLength": 255,
             "minLength": 0
           },
           "playlistId": {
             "type": "string",
-            "example": "658285bbce37694a50fcab75",
+            "example": "6587e109cb7484ee59977a16",
             "readOnly": false
           },
           "shareId": {
             "type": "string",
-            "example": "658285bbce37694a50fcab75",
+            "example": "6587e109cb7484ee59977a16",
             "readOnly": false
           },
           "read": {
@@ -642,7 +642,7 @@
           },
           "title": {
             "type": "string",
-            "example": "FWQMBVKFpbCvCyDmE6xgtinjSBPHPUiBGk1AqwSjyw7vmim0c5bcdCiuFeqqoz4p1tAxWECaZhPZDs4B6qrZIZdCuHZTmlQKvt0CQEsvN1HD8u2jJIq6XCt7CcCc0",
+            "example": "pvJyR3ORuqmOaZxioIdGIJoyEYz2y5AGLLyjAT9sKgVUyQpQiv2L83BvZPijl17GNkptbfnnx0mQgz4HPLLn7NoICidyaI5hXekfNMWaYJMahtE2YGgabjuY8AyvF",
             "maxLength": 255,
             "minLength": 0
           }
@@ -665,37 +665,37 @@
         "properties": {
           "_id": {
             "type": "string",
-            "example": "gIazgcyrj42axnKJvs3KX2ZmEyaCsD1KZWnG5pm7sUII4RmsCjd52XdgwDa4xH6xn71Y5F6qWjSNjhiRdaLiTm2wcmbJaGbYPNak0No3vRJ3T07ae7HfArupbuwii",
+            "example": "8pu8mGlHFY2fGPleDMx2zX4WYH6fNWIXheRVoS9tZuo6hQwYjal4QszSKsbkDuvXzPdwK7H0CkB2ag9ieCochJ5S3z9b9WDnvzQourXuQptMnDVKoHsqMzxT9wWsf",
             "maxLength": 255,
             "minLength": 0
           },
           "createdBy": {
             "type": "string",
-            "example": "lxB7Q5NbxhO1BY78rh4whAJAaHFlIT4ipbdPve4t8wG4KqFh9Qg3QUIs6SpXGXVBO7F8yKD85ylcIY4jcQSYdZHmEk7g1uXWiUWF1drGqe3nGg5HKQkZ5Af5uhBYr",
+            "example": "53XOg2wzVqPay81kn2QmX35ZT3bfYg2GVEfuPawPzVp1Vpm9jqyXacXIoTFm8GlquNOySvUv8dujdMAx4rcp8N7zrwEE4jVKhnAfGmUTjqXYvrkLpU9IjxhMEFSck",
             "maxLength": 255,
             "minLength": 0
           },
           "imageSrc": {
             "type": "string",
-            "example": "WTkLN6pEB9FCdnV3qXGZPJ5VaNaR1A52P8hwyCb0x8voFloBzsntQyz4EzC28MvuzSv0E55ZTCMGGM8qjr33kD6Ouw5tvJjXwxvgR6BeByFszHBFsxVQws43x9nrM",
+            "example": "vR7ZZebx0WeUsAW11PO6blBrAsF7qQSwvde8Rh54tDa2XtynTKDp4eACgyqQ2FeM5wmChskVKcWHulvzepXOW5nLW39tnzG1sgwnN5Em1pZXwrQLJeQcuY4G40X01",
             "maxLength": 255,
             "minLength": 0
           },
           "firstName": {
             "type": "string",
-            "example": "ce65ODHCkCju0JTVvmsEQQNTbNtrchMAydxApmCluQZKk8fET5UWa6AGDmI85WGYwuwKwqevdFtp3vk0ZOy4eYPcEegjW2GuwcTK4ugGnLWaFH9KcpQoodMQbb2qC",
+            "example": "qiSTAbYAddaFvwX0dXvWAin6YqIHIdBTpTSf60yj03XXvEVsb27hWnP1RBCLoxm5z6LX9UxHDazeaIEzuAMFc5XFp7NrbdueNOa9cis7WBt0FMAei0na1BlUAGbvE",
             "maxLength": 255,
             "minLength": 0
           },
           "lastName": {
             "type": "string",
-            "example": "u35YvAgYBWeCfQpRAQBWm9FM7XNL8eQ9NcysHurQ6ofiN44HboCYVz0LsCilZIA98qY5RwpADzwOfP7exRKL26oFNo8q7EKlC3gMlZn4sYURCx6oEQipXN2G8TAy5",
+            "example": "Od6HJ3yb4OyOsbgaTUJPZSgxJuzp9XZ769L6411RnlD0CyKSGCqj9NZATGLnzYgsSkTreugiHD1dr9lDg4nyOK62BbMb2dHypXIHuBGgIOTo6eBW2XGstkWoRJahX",
             "maxLength": 255,
             "minLength": 0
           },
           "email": {
             "type": "string",
-            "example": "aUKI6lSDQtV3PJEwrWGqJFAjHngccVgCuB0OdZi8gxn21QphOQ42NDwLaJIf3LKG2nkngAV2sZ7RW80Y7qa8kquK40yoqAGjKMZLwLyt22f845rEZ52VVTmZk2zQX",
+            "example": "pe8EIyomD6AbRKLNLFGj91Pgqe1Xnbs0H729qgLzi1ABI7zdXDNSwBDcITQXeqnl3Xzfu4GtiCNNSRHB07S4upsQj3TSwLUWt3MGoz0TtXb5tWwNi73XSaf83G0LR",
             "maxLength": 255,
             "minLength": 0
           },
@@ -704,19 +704,19 @@
           },
           "phoneNumber": {
             "type": "string",
-            "example": "tghSwPtN0SfYL5QKFx8fLPCj9KZJ8McbqjvWL7MAWB2v9F59ig7r5u15FIGB2F21PgrSWbNIguQTpcFbirCCrenryIAfzavJpjptnXKESYfMsZ3fWjj2aQI8gt8SM",
+            "example": "oDam8gAlmQ6B4s6UNHaYjBl7ZvJCEopSjz19BP7yOpJrY6VRG0TZaLEi8P5GWhmZSf5r6y6VYI4qGz7wuAxT5wkoTfzYKyebJ8C39ixH99M3WXwveQjdGbEzbYhkk",
             "maxLength": 255,
             "minLength": 0
           },
           "isDisabled": {
             "type": "string",
-            "example": "drfDMpsWcbDQzLRbOaZIO078AJKg2wFKVQXvYKew7fpNk2UdmZk5RRK7NHAB9oC4lU75ypC6634sCevPfdkGNZIwHCN1rouKFDyFz7ob5i4gAxIpgm9aINRFdmIPj",
+            "example": "CfqsxdTX5qbHLlxn8WyRK6N3U6lmAyvqHS4OIfSsq5cKI7UojLiM8JQARePgF1bUEx3x64wh74bLTvstRWXbpPAJKBzzxoPQji42ZVYXKbH4J1ggvUyeirRy70QBy",
             "maxLength": 255,
             "minLength": 0
           },
           "username": {
             "type": "string",
-            "example": "ZqBHynUfapsbsmlvb0Eo1nKRRF0UCdXyKvLgm4LxHDq3A3DW2L2oWc82vmfezxMg1K9FNI0ZVljbrQTMUjcryXZ73FoY2q229WGUhyMGrpc4FzmnQksDPozgNmqP2",
+            "example": "LnsylPgihXU5Ouks3bcB08WZMSg7QAja4M6PbnAzVSMNt4quBVPh3r1v7EQ863e1vMYV5KdWdp0fQFxTQKO5vR2Ws7f2bp14ZxtXmOK3kUzhZ59LDuxbwQoP5U2As",
             "maxLength": 255,
             "minLength": 0
           },
@@ -780,65 +780,25 @@
           "username"
         ]
       },
-      "CreateUserDto": {
+      "CreateUserConnectionDto": {
         "type": "object",
         "properties": {
-          "sub": {
+          "userId": {
             "type": "string",
-            "example": "BjFkv1ANEaxTJyqzCtG5hhVvyexky7aWkAxEWyN978uRSn69rWsyTA5zmygkATcGwMQKdLqbbCgecthPkcC592KJXWlvRmcbzlJMPd2GEeQvReKHu80odzH40TD9R",
+            "example": "cufnFgju0x8OzaYtJezEpvvnn75dY5Jv3zuTb3FXZ1uWqWUims8HUV9tXH0KJ36kWeE8zDlD0aBwidodft5Fs2yZqLl92MIJL6lucQ8PlbbDJVd7lFSacGVeXg2jO",
             "maxLength": 255,
             "minLength": 0
           },
-          "username": {
+          "connectionId": {
             "type": "string",
-            "example": "Jose",
-            "maxLength": 50,
-            "minLength": 2
-          },
-          "email": {
-            "type": "string",
-            "example": "test@example.com",
-            "maxLength": 50,
-            "minLength": 6
-          },
-          "firstName": {
-            "type": "string",
-            "example": "Jose",
-            "maxLength": 50,
-            "minLength": 2
-          },
-          "lastName": {
-            "type": "string",
-            "example": "Jose",
-            "maxLength": 50,
-            "minLength": 2
-          },
-          "phoneNumber": {
-            "type": "string",
-            "example": "5iE5AE01wrpp5cBV7b1eryNjFUydQziwa59VOf4aYib7xAA9BNU3YuJk6287AWaGgFywr6osmQhBqeDTXcIvhWYiqMGJEgzXhn0GsuyFI3gPPLnyov7EP5GAPSy49",
+            "example": "c6cPABK643shvb49Wgg33FXCjSFT6gW7XTySZmW7CTl9jCwIezUkcY6wgwQtefv0f2gm1dFkIsBXvmsCmhGRIzWXHyt7uqiybPeN79HFWSYjN3vtOWtjx0ZivMuva",
             "maxLength": 255,
             "minLength": 0
-          },
-          "imageSrc": {
-            "type": "string",
-            "example": "http://www.example.com",
-            "maxLength": 255,
-            "minLength": 5
-          },
-          "role": {
-            "$ref": "#/components/schemas/BcRolesType"
-          },
-          "isDisabled": {
-            "type": "boolean"
           }
         },
         "required": [
-          "sub",
-          "username",
-          "email",
-          "firstName",
-          "lastName",
-          "role"
+          "userId",
+          "connectionId"
         ]
       },
       "UserDto": {
@@ -846,7 +806,7 @@
         "properties": {
           "_id": {
             "type": "string",
-            "example": "VdTztsWZ2o4sh2XPVueqw0KkZwV7Berfnlmu1a3dl9xEfKwRjaAk6KRbKwADi9l6eUIGRgAM0zUhZ5vTLHOLEOKNkP2Q1VXnxTUOGIkp2qgT9IYjgswbyc6DiGEx0",
+            "example": "aSHP7Kbw2XTu0Xnmc7QmIHzj417FOcTN1yARWTgOTr4zHxVXRcXFYFCyhs6GrDzBgDKsYokGVt9JaUYG1TFKzIuFgNVvJHAbdhdI169PpcTm6t2ho94YzZDpQGO96",
             "maxLength": 255,
             "minLength": 0
           },
@@ -862,7 +822,7 @@
           },
           "sub": {
             "type": "string",
-            "example": "sX8jj0xFZsf9EIVsb0YUn2hERw0NvNVysQ9C9mdMeNHXpakE2Rw1hrvH7aQ3lBKfhpp8a37n1QwbxVMd3Guo0lL6IHcUcEn4n474OTDnH2ECaHcFeWoacLD4x5zuh",
+            "example": "nf3bzH6iRdWcIWKTg9qkY0YGMFMoIa7lULek1OBgH5Dt7E5Qv2ACZ17NmKST7VXSWQZU4cbZNEO4WG2gjbMx2idMEHUvui2NSlMwADGwOgYwrf5SaaFMguz79e2Lx",
             "maxLength": 255,
             "minLength": 0
           },
@@ -892,7 +852,7 @@
           },
           "phoneNumber": {
             "type": "string",
-            "example": "7KPkUNkAbRA9DaeNlhGNK0HqvkB0gnPEjKBHMp3yGm3zYRaQNp0Uo25mF0o87IUGEVQzmyjgzno9HHeQBLZFqEFq8fLSBAfqg7YLpJO0kRMucL6ojcJ8B51R3cuCN",
+            "example": "B1cKFWxggTOdA7erD4L13uzuIkYPNG1uFgZatKQfEmcDl9K3kJdtLjFmsDjCyIYqohXpsPc7XFugCEnfYatfG0AB4gcnxeiw8Jeazjfllrws4DvND5sWIvAVaBw6i",
             "maxLength": 255,
             "minLength": 0
           },
@@ -920,6 +880,105 @@
         },
         "required": [
           "_id",
+          "sub",
+          "username",
+          "email",
+          "firstName",
+          "lastName",
+          "role"
+        ]
+      },
+      "UserConnectionDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "aSHP7Kbw2XTu0Xnmc7QmIHzj417FOcTN1yARWTgOTr4zHxVXRcXFYFCyhs6GrDzBgDKsYokGVt9JaUYG1TFKzIuFgNVvJHAbdhdI169PpcTm6t2ho94YzZDpQGO96",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "updatedDate": {
+            "format": "date-time",
+            "type": "string",
+            "readOnly": true
+          },
+          "userId": {
+            "type": "string",
+            "example": "DbMU2HsOULNYlUgKAcg0mLaGsMLDW85uiHPpMKMh0T0SoSOpWTfRhfChdZUzPVH0tOnActwSkqq7b8CVlCFaot3akkDMqB0FnM61YjOoV1Ufm8GI7UWd1PMFTzgBh",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "connectionId": {
+            "type": "string",
+            "example": "DdZ1F2qclnrAuy8xwfuTPhNfiWaXbDZBZ9ikXoFTDflQk6eTRdGJ6tfqzva1gYEVnwnkwxoFSaJwkCQoB1yk5ifI4TZBTg60FXYhl6oGzW64myuMmKH8S9D6Zh7U9",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "_id",
+          "userId",
+          "connectionId"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "sub": {
+            "type": "string",
+            "example": "fDy8P809B7koId4YUH7rckmg0MCoqpYBp3t75YuNzA70ck0JkVQFswfg5C62cfgFVo60wL2D0YaIYKrPZJV4bxRXosja9NhDsu4wevdidOd4ExwnTPpV1vwNhmHEy",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "username": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "email": {
+            "type": "string",
+            "example": "test@example.com",
+            "maxLength": 50,
+            "minLength": 6
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Jose",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "njBfb48PjPiX5A0gVHxSkvGDoqRQ02ZnZmpYuZ4h3FEKyj6SlHd8iRv1rWeTUTfbmaDE64RfNZmyQNEzsUwqxzeJcfggQrTlEhRimAqHTncVA9KZCRLjpJ1faN8S1",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "imageSrc": {
+            "type": "string",
+            "example": "http://www.example.com",
+            "maxLength": 255,
+            "minLength": 5
+          },
+          "role": {
+            "$ref": "#/components/schemas/BcRolesType"
+          },
+          "isDisabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
           "sub",
           "username",
           "email",
@@ -933,7 +992,7 @@
         "properties": {
           "_id": {
             "type": "string",
-            "example": "VdTztsWZ2o4sh2XPVueqw0KkZwV7Berfnlmu1a3dl9xEfKwRjaAk6KRbKwADi9l6eUIGRgAM0zUhZ5vTLHOLEOKNkP2Q1VXnxTUOGIkp2qgT9IYjgswbyc6DiGEx0",
+            "example": "aSHP7Kbw2XTu0Xnmc7QmIHzj417FOcTN1yARWTgOTr4zHxVXRcXFYFCyhs6GrDzBgDKsYokGVt9JaUYG1TFKzIuFgNVvJHAbdhdI169PpcTm6t2ho94YzZDpQGO96",
             "maxLength": 255,
             "minLength": 0
           },
@@ -973,7 +1032,7 @@
           },
           "phoneNumber": {
             "type": "string",
-            "example": "GKxfpdvN3kx5yYS8kbyYJ1iDAg4FpjW8mTGBsu4JK2gN0GaPD35qXdWBjWkDZFILAhTsULH4etNtFyuneloGslnA7ldKokyRStkgzuLtJgOtDO93E5uxh5zvGTAJ7",
+            "example": "Q06EiftPyPzv74APFhhq7DeqltDErPSiSHO2nZmgsThBGXMo0fLxoRQX1CBQRe5idYORvt4wIaAkU1mkF93S4k5Pi82NUuqYd6VOzSVznpmw1JmXjoLjX0uHwiXBT",
             "maxLength": 255,
             "minLength": 0
           },
@@ -1006,65 +1065,6 @@
           "firstName",
           "lastName",
           "role"
-        ]
-      },
-      "CreateUserConnectionDto": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string",
-            "example": "XokXyfvFH6s2y1GByOPvKjqUv66cGQEhg5cBEqyVlA46sXmJA8tQjIpjD81aaJflZnvFg0q8sUWzheh1kCXnvudrzX5x1heerdoFbeKuX4XLAD4LFsvhs7ovNwd0Y",
-            "maxLength": 255,
-            "minLength": 0
-          },
-          "connectionId": {
-            "type": "string",
-            "example": "ttKprWKEMnRrZvqpSkbIBlPIUcp1s9DmdPUG9Ox5NCoyRWT9j20FthCdKLU0Ll9Hscgk0xfetfgyTODbLv7XZ2W2LdcOY244RPGmf4BMKgHAZHcdOxuA2T7fpuvW3",
-            "maxLength": 255,
-            "minLength": 0
-          }
-        },
-        "required": [
-          "userId",
-          "connectionId"
-        ]
-      },
-      "UserConnectionDto": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string",
-            "example": "VdTztsWZ2o4sh2XPVueqw0KkZwV7Berfnlmu1a3dl9xEfKwRjaAk6KRbKwADi9l6eUIGRgAM0zUhZ5vTLHOLEOKNkP2Q1VXnxTUOGIkp2qgT9IYjgswbyc6DiGEx0",
-            "maxLength": 255,
-            "minLength": 0
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "readOnly": true
-          },
-          "updatedDate": {
-            "format": "date-time",
-            "type": "string",
-            "readOnly": true
-          },
-          "userId": {
-            "type": "string",
-            "example": "LLMgPppC8S9SAYkW8MicIn7x3SFk3LihAOitTXWpqXyefX3iqNVjAcEn5UB0CRbVcW1EcetT3cCvINucjmCQNPdzhyjjmU7m8c1MlD6TOKGimoItJrmqus1XDoy6x",
-            "maxLength": 255,
-            "minLength": 0
-          },
-          "connectionId": {
-            "type": "string",
-            "example": "lgfaxeE0iSBdDavCW0VbQKzRS3tas8N6f9VMaptaCqLpmXdMmpADJiQnCCVIiIk4dC7LzbVP2Aspoqepxd50SNPhpGf6CbMJ09OMQjuhiNJoFXFlsdLbkBcgj0I1q",
-            "maxLength": 255,
-            "minLength": 0
-          }
-        },
-        "required": [
-          "_id",
-          "userId",
-          "connectionId"
         ]
       }
     }

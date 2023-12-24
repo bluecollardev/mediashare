@@ -108,6 +108,122 @@ export class UserController {
     return res.status(HttpStatus.OK).send();
   }
 
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
+  @ApiBody({ type: CreateUserConnectionDto })
+  @Post('/connections/create')
+  async createUserConnection(@Req() req: Request, @Res() res: Response) {
+    try {
+      // We do it this way instead of using the decorator on purpose
+      const userConnectionDto: CreateUserConnectionDto = req.body;
+      const result = await this.userConnectionService.create(userConnectionDto);
+      return handleSuccessResponse(res, HttpStatus.CREATED, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
+  @UseGuards(AuthenticationGuard, UserGuard)
+  @ApiBearerAuth()
+  @Get('/connections')
+  @UserGetResponse({ type: UserDto, isArray: true }) // TODO: Use ProfileDto
+  async getCurrentUserConnections(
+    @Res() res: Response,
+    @GetUser('sub') userSub: string
+  ) {
+    try {
+      const userConnections = await this.userConnectionService.findConnections(
+        userSub
+      );
+      const connectionUserSubs = userConnections.map((uc) => uc.connectionId);
+
+      const result = await this.userService.findBySubs(connectionUserSubs);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
+  @Get('/connections/:userId')
+  @UserGetResponse({ type: UserDto, isArray: true }) // TODO: Use ProfileDto
+  async getUserConnections(
+    @Res() res: Response,
+    @Param('userId') userSub: string
+  ) {
+    try {
+      const userConnections = await this.userConnectionService.findConnections(
+        userSub
+      );
+      const userConnectionSubs = userConnections.map((uc) => uc.connectionId);
+
+      const result = await this.userService.findBySubs(userConnectionSubs);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
+  @ApiBody({ type: UserConnectionDto, isArray: false })
+  @Post('/connection/remove')
+  async removeUserConnection(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() userConnectionDto: UserConnectionDto
+  ) {
+    try {
+      const { userId, connectionId } = req.body as any;
+      if (!userId || !connectionId) {
+        return res.status(HttpStatus.BAD_REQUEST).json({
+          statusCode: 400,
+          message: `User ID and Connection ID are required fields`,
+        });
+      }
+      if (userId === connectionId) {
+        return res.status(HttpStatus.BAD_REQUEST).json({
+          statusCode: 400,
+          message: `User ID and Connection ID cannot be the same`,
+        });
+      }
+      const result = await this.userConnectionService.remove(userConnectionDto);
+      return handleSuccessResponse(res, HttpStatus.OK, result);
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
+  @UseGuards(AuthenticationGuard)
+  @ApiBearerAuth()
+  @ApiBody({ type: UserConnectionDto, isArray: true })
+  @Post('/connections/remove')
+  async removeUserConnections(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() userConnectionDtos: UserConnectionDto[]
+  ) {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      // TODO: Add this functionality back in
+      // const shareItemsResult = await this.shareItemService.removeUserConnectionShareItems(userConnectionDtos);
+      // if (shareItemsResult) {
+      const userConnectionResult = await this.userConnectionService.removeMany(
+        userConnectionDtos
+      );
+      return handleSuccessResponse(res, HttpStatus.OK, userConnectionResult);
+      // }
+
+      /* return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        statusCode: 500,
+        message: `There was a problem removing user connection share items`,
+      }); */
+    } catch (error) {
+      return handleErrorResponse(res, error);
+    }
+  }
+
   // TODO: Make sure only admins and test users can access this endpoint!
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
@@ -123,13 +239,14 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthenticationGuard, UserGuard)
+  @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
-  @Get()
+  @ApiParam({ name: 'sub', type: String, required: true })
+  @Get('/sub/:sub')
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
-  async getCurrentUser(@Res() res: Response, @GetUser('_id') userId: string) {
+  async getUserBySub(@Res() res: Response, @Param('sub') sub: string) {
     try {
-      const result = await this.userService.findById(userId);
+      const result = await this.userService.findByQuery({ where: { sub } });
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
       return handleErrorResponse(res, error);
@@ -139,7 +256,7 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'userId', type: String, required: true })
-  @Get(':userId')
+  @Get('/:userId')
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
   async getUser(@Res() res: Response, @Param('userId') userId: string) {
     try {
@@ -150,14 +267,13 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: 'sub', type: String, required: true })
-  @Get('sub/:sub')
+  @Get()
   @UserGetResponse({ type: UserDto }) // TODO: Change this back to ProfileDto
-  async getUserBySub(@Res() res: Response, @Param('sub') sub: string) {
+  async getCurrentUser(@Res() res: Response, @GetUser('_id') userId: string) {
     try {
-      const result = await this.userService.findByQuery({ where: { sub } });
+      const result = await this.userService.findById(userId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
     } catch (error) {
       return handleErrorResponse(res, error);
@@ -186,7 +302,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiParam({ name: 'userId', type: String, required: true })
   @ApiBody({ type: UpdateUserDto })
-  @Put(':userId')
+  @Put('/:userId')
   @UserPostResponse({ type: UserDto })
   async updateUser(
     @Res() res: Response,
@@ -219,129 +335,11 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'userId', type: String, required: true })
-  @Delete(':userId')
+  @Delete('/:userId')
   async deleteUser(@Res() res: Response, @Param('userId') userId: string) {
     try {
       const result = await this.userService.remove(userId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
-    } catch (error) {
-      return handleErrorResponse(res, error);
-    }
-  }
-
-  @UseGuards(AuthenticationGuard)
-  @ApiBearerAuth()
-  @ApiBody({ type: CreateUserConnectionDto })
-  @Post('connections/create')
-  async createUserConnection(@Req() req: Request, @Res() res: Response) {
-    try {
-      // We do it this way instead of using the decorator on purpose
-      const userConnectionDto: CreateUserConnectionDto = req.body;
-      const result = await this.userConnectionService.create(userConnectionDto);
-      return handleSuccessResponse(res, HttpStatus.CREATED, result);
-    } catch (error) {
-      return handleErrorResponse(res, error);
-    }
-  }
-
-  @UseGuards(AuthenticationGuard, UserGuard)
-  @ApiBearerAuth()
-  @Get('connections')
-  @UserGetResponse({ type: UserDto, isArray: true }) // TODO: Use ProfileDto
-  async getCurrentUserConnections(
-    @Res() res: Response,
-    @GetUser('_id') userId: string
-  ) {
-    try {
-      const userConnections = await this.userConnectionService.findConnections(
-        userId
-      );
-      const connectionUserIds = userConnections.map((uc) => uc.connectionId);
-
-      // TODO: Use mapper in findByIds
-      const result = await this.userService.findByIds(connectionUserIds);
-      return handleSuccessResponse(res, HttpStatus.OK, result);
-    } catch (error) {
-      return handleErrorResponse(res, error);
-    }
-  }
-
-  @UseGuards(AuthenticationGuard)
-  @ApiBearerAuth()
-  @Get('connections/:userId')
-  @UserGetResponse({ type: UserDto, isArray: true }) // TODO: Use ProfileDto
-  async getUserConnections(
-    @Res() res: Response,
-    @Param('userId') userId: string
-  ) {
-    try {
-      const userConnections = await this.userConnectionService.findConnections(
-        userId
-      );
-      const userConnectionIds = userConnections.map((uc) => uc.connectionId);
-
-      // TODO: Use mapper in findByIds
-      const result = await this.userService.findByIds(userConnectionIds);
-      return handleSuccessResponse(res, HttpStatus.OK, result);
-    } catch (error) {
-      return handleErrorResponse(res, error);
-    }
-  }
-
-  @UseGuards(AuthenticationGuard)
-  @ApiBearerAuth()
-  @ApiBody({ type: UserConnectionDto, isArray: false })
-  @Post('connection/remove')
-  async removeUserConnection(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Body() userConnectionDto: UserConnectionDto
-  ) {
-    try {
-      const { userId, connectionId } = req.body as any;
-      if (!userId || !connectionId) {
-        return res.status(HttpStatus.BAD_REQUEST).json({
-          statusCode: 400,
-          message: `User ID and Connection ID are required fields`,
-        });
-      }
-      if (userId === connectionId) {
-        return res.status(HttpStatus.BAD_REQUEST).json({
-          statusCode: 400,
-          message: `User ID and Connection ID cannot be the same`,
-        });
-      }
-      const result = await this.userConnectionService.remove(userConnectionDto);
-      return handleSuccessResponse(res, HttpStatus.OK, result);
-    } catch (error) {
-      return handleErrorResponse(res, error);
-    }
-  }
-
-  @UseGuards(AuthenticationGuard)
-  @ApiBearerAuth()
-  @ApiBody({ type: UserConnectionDto, isArray: true })
-  @Post('connections/remove')
-  async removeUserConnections(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Body() userConnectionDtos: UserConnectionDto[]
-  ) {
-    // eslint-disable-next-line no-useless-catch
-    try {
-      // TODO: Add this functionality back in
-      // const shareItemsResult = await this.shareItemService.removeUserConnectionShareItems(userConnectionDtos);
-      // if (shareItemsResult) {
-      const userConnectionResult = await this.userConnectionService.removeMany(
-        userConnectionDtos
-      );
-      return handleSuccessResponse(res, HttpStatus.OK, userConnectionResult);
-      // }
-
-      /* return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        statusCode: 500,
-        message: `There was a problem removing user connection share items`,
-      }); */
     } catch (error) {
       return handleErrorResponse(res, error);
     }
