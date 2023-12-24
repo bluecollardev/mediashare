@@ -6,7 +6,7 @@ export class CreateMediaShareItemDto {
   @IsString()
   @AutoMap()
   @ApiProperty({ required: true })
-  userId: string;
+  sub: string;
 
   @IsOptional()
   @IsString()
@@ -31,7 +31,7 @@ export class CreatePlaylistShareItemDto {
   @IsString()
   @AutoMap()
   @ApiProperty({ required: true })
-  userId: string;
+  sub: string;
 
   @IsOptional()
   @IsString()

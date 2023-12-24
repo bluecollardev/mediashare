@@ -38,48 +38,48 @@ export class ShareItemController {
   @ApiBearerAuth()
   @Get('shared-by-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: true })
-  async findItemsSharedByUser(@CognitoUser('sub') userId: string) {
-    return await this.shareItemService.getItemsSharedByUser(userId);
+  async findItemsSharedByUser(@CognitoUser('sub') sub: string) {
+    return await this.shareItemService.getItemsSharedByUser(sub);
   }
 
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-by-user/media-items')
   @ShareItemGetResponse({ type: MediaItemDto, isArray: true })
-  async findMediaItemsSharedByUser(@CognitoUser('sub') userId: string) {
-    return await this.shareItemService.getMediaItemsSharedByUser(userId);
+  async findMediaItemsSharedByUser(@CognitoUser('sub') sub: string) {
+    return await this.shareItemService.getMediaItemsSharedByUser(sub);
   }
 
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-by-user/playlists')
   @ShareItemGetResponse({ type: PlaylistDto, isArray: true })
-  async findPlaylistsSharedByUser(@CognitoUser('sub') userId: string) {
-    return await this.shareItemService.getPlaylistsSharedByUser(userId);
+  async findPlaylistsSharedByUser(@CognitoUser('sub') sub: string) {
+    return await this.shareItemService.getPlaylistsSharedByUser(sub);
   }
 
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-with-user')
   @ShareItemGetResponse({ type: ShareItemsResponseDto, isArray: false })
-  async findItemsSharedWithUser(@CognitoUser('sub') userId: string) {
-    return await this.shareItemService.getItemsSharedWithUser(userId);
+  async findItemsSharedWithUser(@CognitoUser('sub') sub: string) {
+    return await this.shareItemService.getItemsSharedWithUser(sub);
   }
 
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-with-user/media-items')
   @ShareItemGetResponse({ type: MediaItemDto, isArray: true })
-  async findMediaItemsSharedWithUser(@CognitoUser('sub') userId: string) {
-    return await this.shareItemService.getMediaItemsSharedWithUser(userId);
+  async findMediaItemsSharedWithUser(@CognitoUser('sub') sub: string) {
+    return await this.shareItemService.getMediaItemsSharedWithUser(sub);
   }
 
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Get('shared-with-user/playlists')
   @ShareItemGetResponse({ type: PlaylistDto, isArray: true })
-  async findPlaylistsSharedWithUser(@CognitoUser('sub') userId: string) {
-    return await this.shareItemService.getPlaylistsSharedWithUser(userId);
+  async findPlaylistsSharedWithUser(@CognitoUser('sub') sub: string) {
+    return await this.shareItemService.getPlaylistsSharedWithUser(sub);
   }
 
   @UseGuards(AuthenticationGuard)

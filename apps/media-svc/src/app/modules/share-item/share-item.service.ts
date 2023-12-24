@@ -42,12 +42,12 @@ export class ShareItemService extends DataService<
   }
 
   async createMediaShareItem({
-    userId,
+    sub,
     mediaId,
     createdBy,
   }: CreateMediaShareItemDto): Promise<ShareItem> {
     return await this.create({
-      userId,
+      sub,
       mediaId: ObjectIdGuard(mediaId),
       createdBy,
       read: false,
@@ -55,31 +55,31 @@ export class ShareItemService extends DataService<
   }
 
   async createPlaylistShareItem({
-    userId,
+    sub,
     playlistId,
     createdBy,
   }: CreatePlaylistShareItemDto): Promise<ShareItem> {
     return await this.create({
-      userId,
+      sub,
       playlistId: ObjectIdGuard(playlistId),
       createdBy,
       read: false,
     } as any);
   }
 
-  async getItemsSharedByUser(userId: IdType) {
+  async getItemsSharedByUser(sub: IdType) {
     return {
-      mediaItems: await this.getMediaItemsSharedByUser(userId),
-      playlists: await this.getPlaylistsSharedByUser(userId),
+      mediaItems: await this.getMediaItemsSharedByUser(sub),
+      playlists: await this.getPlaylistsSharedByUser(sub),
     };
   }
 
-  async getMediaItemsSharedByUser(userId: IdType) {
+  async getMediaItemsSharedByUser(sub: IdType) {
     return this.repository
       .aggregate([
         {
           $match: {
-            $and: [{ createdBy: userId }, { mediaId: { $exists: true } }],
+            $and: [{ createdBy: sub }, { mediaId: { $exists: true } }],
           },
         },
         {
@@ -105,7 +105,7 @@ export class ShareItemService extends DataService<
             newRoot: {
               $mergeObjects: [
                 {
-                  userId: 0,
+                  sub: 0,
                   playlistId: 0,
                   mediaId: 0,
                 },
@@ -121,12 +121,12 @@ export class ShareItemService extends DataService<
       .toArray();
   }
 
-  async getPlaylistsSharedByUser(userId: IdType) {
+  async getPlaylistsSharedByUser(sub: IdType) {
     return this.repository
       .aggregate([
         {
           $match: {
-            $and: [{ createdBy: userId }, { playlistId: { $exists: true } }],
+            $and: [{ createdBy: sub }, { playlistId: { $exists: true } }],
           },
         },
         {
@@ -146,7 +146,7 @@ export class ShareItemService extends DataService<
           },
         },
         // { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'sharedBy' } },
-        // { $lookup: { from: 'user', localField: 'userId', foreignField: '_id', as: 'sharedWith' } },
+        // { $lookup: { from: 'user', localField: 'sub', foreignField: '_id', as: 'sharedWith' } },
         // { $lookup: { from: 'user', localField: 'playlist.createdBy', foreignField: '_id', as: 'author' } },
         {
           $lookup: {
@@ -208,17 +208,17 @@ export class ShareItemService extends DataService<
       .toArray();
   }
 
-  async getItemsSharedWithUser(userId: IdType) {
+  async getItemsSharedWithUser(sub: IdType) {
     return {
-      mediaItems: await this.getMediaItemsSharedWithUser(userId),
-      playlists: await this.getPlaylistsSharedWithUser(userId),
+      mediaItems: await this.getMediaItemsSharedWithUser(sub),
+      playlists: await this.getPlaylistsSharedWithUser(sub),
     };
   }
 
-  async getMediaItemsSharedWithUser(userId: IdType) {
+  async getMediaItemsSharedWithUser(sub: IdType) {
     return this.repository
       .aggregate([
-        { $match: { $and: [{ userId }, { mediaId: { $exists: true } }] } },
+        { $match: { $and: [{ sub }, { mediaId: { $exists: true } }] } },
         {
           $lookup: {
             from: 'user',
@@ -242,7 +242,7 @@ export class ShareItemService extends DataService<
             newRoot: {
               $mergeObjects: [
                 {
-                  userId: 0,
+                  sub: 0,
                   playlistId: 0,
                   mediaId: 0,
                 },
@@ -258,10 +258,10 @@ export class ShareItemService extends DataService<
       .toArray();
   }
 
-  async getPlaylistsSharedWithUser(userId: IdType) {
+  async getPlaylistsSharedWithUser(sub: IdType) {
     return this.repository
       .aggregate([
-        { $match: { $and: [{ userId }, { playlistId: { $exists: true } }] } },
+        { $match: { $and: [{ sub }, { playlistId: { $exists: true } }] } },
         {
           $lookup: {
             from: 'playlist',
@@ -289,7 +289,7 @@ export class ShareItemService extends DataService<
         {
           $lookup: {
             from: 'user',
-            localField: 'userId',
+            localField: 'sub',
             foreignField: '_id',
             as: 'sharedWith',
           },
@@ -383,9 +383,9 @@ export class ShareItemService extends DataService<
     try {
       const shareItemsToRemove = [];
       const removeShareItems = userConnectionDtos.map(async (userConnectionDto) => {
-        const { userId, connectionId }: Partial<UserConnectionDto> = userConnectionDto;
-        if (!userId || !connectionId) {
-          throw new Error('userId and connectionId are both required parameters');
+        const { sub, connectionId }: Partial<UserConnectionDto> = userConnectionDto;
+        if (!sub || !connectionId) {
+          throw new Error('sub and connectionId are both required parameters');
         }
 
         const query = [
@@ -393,10 +393,10 @@ export class ShareItemService extends DataService<
             $match: {
               $or: [
                 {
-                  $and: [{ createdBy: userId }, { userId: ObjectIdGuard(connectionId) }],
+                  $and: [{ createdBy: sub }, { sub: ObjectIdGuard(connectionId) }],
                 },
                 {
-                  $and: [{ createdBy: ObjectIdGuard(connectionId) }, { userId }],
+                  $and: [{ createdBy: ObjectIdGuard(connectionId) }, { sub }],
                 },
               ],
             },
