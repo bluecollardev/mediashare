@@ -14,6 +14,7 @@ import { MediaItemModule } from './modules/media-item/media-item.module';
 import { PlaylistItemModule } from './modules/playlist-item/playlist-item.module';
 import { PlaylistModule } from './modules/playlist/playlist.module';
 import { SearchModule } from './modules/search/search.module';
+import { ShareItemModule } from './modules/share-item/share-item.module';
 import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
 
 @Module({
@@ -57,6 +58,7 @@ import { appConfig, dbConfig, appValidationSchema } from './app.configuration';
     PlaylistItemModule,
     PlaylistModule,
     SearchModule,
+    ShareItemModule,
   ],
   controllers: [AppController],
   providers: [AppService],
