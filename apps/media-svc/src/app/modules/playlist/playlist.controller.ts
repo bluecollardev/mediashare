@@ -30,22 +30,16 @@ import {
   PlaylistGetResponse,
   PlaylistPostResponse,
   PlaylistPutResponse,
-  PlaylistShareResponse,
 } from './playlist.decorator';
 import { PlaylistService } from './playlist.service';
 import { PlaylistDto } from './dto/playlist.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
-import { ShareItemService } from '../share-item/share-item.service';
-import { ShareItem } from '../share-item/entities/share-item.entity';
 
 @ApiTags('playlists')
 @Controller('playlists')
 export class PlaylistController {
-  constructor(
-    private readonly playlistService: PlaylistService,
-    private shareItemService: ShareItemService
-  ) {}
+  constructor(private readonly playlistService: PlaylistService) {}
 
   @Get('visibilities')
   getVisibilities() {
@@ -117,30 +111,6 @@ export class PlaylistController {
     try {
       const result = await this.playlistService.remove(playlistId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
-    } catch (error) {
-      return handleErrorResponse(res, error);
-    }
-  }
-
-  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
-  @ApiBearerAuth()
-  @ApiParam({ name: 'playlistId', type: String, required: true })
-  @ApiParam({ name: 'userId', type: String, required: true })
-  @Post(`${RouteTokens.playlistId}/share/${RouteTokens.userId}`)
-  @PlaylistShareResponse({ type: ShareItem, isArray: true })
-  async share(
-    @Res() res: Response,
-    @Param('playlistId') playlistId: string,
-    @Param('userId') userId: string,
-    @CognitoUser('sub') createdBy: string
-  ) {
-    try {
-      const result = await this.shareItemService.createPlaylistShareItem({
-        userId,
-        playlistId,
-        createdBy,
-      });
-      return handleSuccessResponse(res, HttpStatus.CREATED, result);
     } catch (error) {
       return handleErrorResponse(res, error);
     }

@@ -1,5 +1,6 @@
 export const RouteTokens = {
   userId: ':userId',
+  userSub: ':userSub',
   shareId: ':shareId',
   playlistId: ':playlistId',
   mediaId: ':mediaId',

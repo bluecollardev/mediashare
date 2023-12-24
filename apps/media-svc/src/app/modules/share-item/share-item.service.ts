@@ -1,18 +1,21 @@
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
+import {
+  ApiErrorResponse,
+  ApiErrorResponses,
+} from '@mediashare/core/errors/api-error';
+import { MediaShareItemDto, PlaylistShareItemDto } from './dto/share-item.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { PinoLogger } from 'nestjs-pino';
-import { MongoFindOneOptions } from 'typeorm/find-options/mongodb/MongoFindOneOptions';
-import { StringIdGuard, ObjectIdGuard } from '@mediashare/core/guards';
+import { ObjectIdGuard } from '@mediashare/core/guards';
 import { DataService } from '@mediashare/core/services';
 import { IdType } from '@mediashare/shared';
 import {
   CreateMediaShareItemDto,
   CreatePlaylistShareItemDto,
 } from './dto/create-share-item.dto';
-// import { UserConnectionDto } from '../user-connection/tags/user-connection.tags';
 import { ShareItem } from './entities/share-item.entity';
 
 @Injectable()
@@ -29,57 +32,70 @@ export class ShareItemDataService extends DataService<
 }
 
 @Injectable()
-export class ShareItemService extends DataService<
-  ShareItem,
-  MongoRepository<ShareItem>
-> {
+export class ShareItemService {
   constructor(
-    @InjectRepository(ShareItem)
-    repository: MongoRepository<ShareItem>,
-    logger: PinoLogger
-  ) {
-    super(repository, logger);
+    public dataService: ShareItemDataService,
+    @InjectMapper() private readonly classMapper: Mapper,
+    public logger: PinoLogger
+  ) {}
+
+  async createMediaShareItem(
+    createMediaShareItemDto: CreateMediaShareItemDto
+  ): Promise<MediaShareItemDto> {
+    const errors = await this.dataService.validateDto(
+      CreateMediaShareItemDto,
+      createMediaShareItemDto
+    );
+    if (errors)
+      throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+    const entity = await this.classMapper.mapAsync(
+      createMediaShareItemDto,
+      CreateMediaShareItemDto,
+      ShareItem
+    );
+    const result = await this.dataService.create(entity);
+    return await this.classMapper.mapAsync(
+      result,
+      ShareItem,
+      MediaShareItemDto
+    );
   }
 
-  async createMediaShareItem({
-    sub,
-    mediaId,
-    createdBy,
-  }: CreateMediaShareItemDto): Promise<ShareItem> {
-    return await this.create({
-      sub,
-      mediaId: ObjectIdGuard(mediaId),
-      createdBy,
-      read: false,
-    } as any);
+  async createPlaylistShareItem(
+    createPlaylistShareItemDto: CreatePlaylistShareItemDto
+  ): Promise<PlaylistShareItemDto> {
+    const errors = await this.dataService.validateDto(
+      CreatePlaylistShareItemDto,
+      createPlaylistShareItemDto
+    );
+    if (errors)
+      throw new ApiErrorResponse(ApiErrorResponses.ValidationError(errors));
+    const entity = await this.classMapper.mapAsync(
+      createPlaylistShareItemDto,
+      CreatePlaylistShareItemDto,
+      ShareItem
+    );
+    const result = await this.dataService.create(entity);
+    return await this.classMapper.mapAsync(
+      result,
+      ShareItem,
+      PlaylistShareItemDto
+    );
   }
 
-  async createPlaylistShareItem({
-    sub,
-    playlistId,
-    createdBy,
-  }: CreatePlaylistShareItemDto): Promise<ShareItem> {
-    return await this.create({
-      sub,
-      playlistId: ObjectIdGuard(playlistId),
-      createdBy,
-      read: false,
-    } as any);
-  }
-
-  async getItemsSharedByUser(sub: IdType) {
+  async getItemsSharedByUser(userSub: string) {
     return {
-      mediaItems: await this.getMediaItemsSharedByUser(sub),
-      playlists: await this.getPlaylistsSharedByUser(sub),
+      mediaItems: await this.getMediaItemsSharedByUser(userSub),
+      playlists: await this.getPlaylistsSharedByUser(userSub),
     };
   }
 
-  async getMediaItemsSharedByUser(sub: IdType) {
-    return this.repository
+  async getMediaItemsSharedByUser(userSub: string) {
+    return this.dataService.repository
       .aggregate([
         {
           $match: {
-            $and: [{ createdBy: sub }, { mediaId: { $exists: true } }],
+            $and: [{ createdBy: userSub }, { mediaId: { $exists: true } }],
           },
         },
         {
@@ -105,7 +121,7 @@ export class ShareItemService extends DataService<
             newRoot: {
               $mergeObjects: [
                 {
-                  sub: 0,
+                  userSub: 0,
                   playlistId: 0,
                   mediaId: 0,
                 },
@@ -121,12 +137,12 @@ export class ShareItemService extends DataService<
       .toArray();
   }
 
-  async getPlaylistsSharedByUser(sub: IdType) {
-    return this.repository
+  async getPlaylistsSharedByUser(userSub: string) {
+    return this.dataService.repository
       .aggregate([
         {
           $match: {
-            $and: [{ createdBy: sub }, { playlistId: { $exists: true } }],
+            $and: [{ createdBy: userSub }, { playlistId: { $exists: true } }],
           },
         },
         {
@@ -146,7 +162,7 @@ export class ShareItemService extends DataService<
           },
         },
         // { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'sharedBy' } },
-        // { $lookup: { from: 'user', localField: 'sub', foreignField: '_id', as: 'sharedWith' } },
+        // { $lookup: { from: 'user', localField: 'userSub', foreignField: '_id', as: 'sharedWith' } },
         // { $lookup: { from: 'user', localField: 'playlist.createdBy', foreignField: '_id', as: 'author' } },
         {
           $lookup: {
@@ -208,17 +224,17 @@ export class ShareItemService extends DataService<
       .toArray();
   }
 
-  async getItemsSharedWithUser(sub: IdType) {
+  async getItemsSharedWithUser(userSub: string) {
     return {
-      mediaItems: await this.getMediaItemsSharedWithUser(sub),
-      playlists: await this.getPlaylistsSharedWithUser(sub),
+      mediaItems: await this.getMediaItemsSharedWithUser(userSub),
+      playlists: await this.getPlaylistsSharedWithUser(userSub),
     };
   }
 
-  async getMediaItemsSharedWithUser(sub: IdType) {
-    return this.repository
+  async getMediaItemsSharedWithUser(userSub: string) {
+    return this.dataService.repository
       .aggregate([
-        { $match: { $and: [{ sub }, { mediaId: { $exists: true } }] } },
+        { $match: { $and: [{ userSub }, { mediaId: { $exists: true } }] } },
         {
           $lookup: {
             from: 'user',
@@ -242,7 +258,7 @@ export class ShareItemService extends DataService<
             newRoot: {
               $mergeObjects: [
                 {
-                  sub: 0,
+                  userSub: 0,
                   playlistId: 0,
                   mediaId: 0,
                 },
@@ -258,10 +274,10 @@ export class ShareItemService extends DataService<
       .toArray();
   }
 
-  async getPlaylistsSharedWithUser(sub: IdType) {
-    return this.repository
+  async getPlaylistsSharedWithUser(userSub: string) {
+    return this.dataService.repository
       .aggregate([
-        { $match: { $and: [{ sub }, { playlistId: { $exists: true } }] } },
+        { $match: { $and: [{ userSub }, { playlistId: { $exists: true } }] } },
         {
           $lookup: {
             from: 'playlist',
@@ -289,7 +305,7 @@ export class ShareItemService extends DataService<
         {
           $lookup: {
             from: 'user',
-            localField: 'sub',
+            localField: 'userSub',
             foreignField: '_id',
             as: 'sharedWith',
           },
@@ -374,7 +390,7 @@ export class ShareItemService extends DataService<
     const shareItemObjectIds = shareItemIds.map((id: string) =>
       ObjectIdGuard(id)
     );
-    return await this.repository.deleteMany({
+    return await this.dataService.repository.deleteMany({
       _id: { $in: shareItemObjectIds },
     });
   }
@@ -383,9 +399,9 @@ export class ShareItemService extends DataService<
     try {
       const shareItemsToRemove = [];
       const removeShareItems = userConnectionDtos.map(async (userConnectionDto) => {
-        const { sub, connectionId }: Partial<UserConnectionDto> = userConnectionDto;
-        if (!sub || !connectionId) {
-          throw new Error('sub and connectionId are both required parameters');
+        const { userSub, connectionId }: Partial<UserConnectionDto> = userConnectionDto;
+        if (!userSub || !connectionId) {
+          throw new Error('userSub and connectionId are both required parameters');
         }
 
         const query = [
@@ -393,20 +409,20 @@ export class ShareItemService extends DataService<
             $match: {
               $or: [
                 {
-                  $and: [{ createdBy: sub }, { sub: ObjectIdGuard(connectionId) }],
+                  $and: [{ createdBy: userSub }, { userSub: ObjectIdGuard(connectionId) }],
                 },
                 {
-                  $and: [{ createdBy: ObjectIdGuard(connectionId) }, { sub }],
+                  $and: [{ createdBy: ObjectIdGuard(connectionId) }, { userSub }],
                 },
               ],
             },
           },
         ];
-        const shareItems = await this.repository.aggregate(query).toArray();
+        const shareItems = await this.dataService.repository.aggregate(query).toArray();
         shareItemsToRemove.push(...shareItems);
       });
       await Promise.all(removeShareItems);
-      return await this.repository.remove(shareItemsToRemove);
+      return await this.dataService.repository.remove(shareItemsToRemove);
     } catch (error) {
       this.logger.error(`${this.constructor.name}.removeUserConnection ${error}`);
       throw error;

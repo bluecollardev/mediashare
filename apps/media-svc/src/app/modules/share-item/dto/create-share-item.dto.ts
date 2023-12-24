@@ -1,4 +1,5 @@
 import { AutoMap } from '@automapper/classes';
+import { ApiString } from '@mediashare/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
@@ -6,7 +7,7 @@ export class CreateMediaShareItemDto {
   @IsString()
   @AutoMap()
   @ApiProperty({ required: true })
-  sub: string;
+  userSub: string;
 
   @IsOptional()
   @IsString()
@@ -30,24 +31,24 @@ export class CreateMediaShareItemDto {
 export class CreatePlaylistShareItemDto {
   @IsString()
   @AutoMap()
-  @ApiProperty({ required: true })
-  sub: string;
+  @ApiString({ required: true })
+  userSub: string;
 
   @IsOptional()
   @IsString()
   @AutoMap()
-  @ApiProperty({ required: false })
+  @ApiString({ required: true })
   mediaId?: string;
 
   @IsOptional()
   @IsString()
   @AutoMap()
-  @ApiProperty({ required: false })
+  @ApiString({ required: true })
   playlistId?: string;
 
   @IsOptional()
   @IsString()
   @AutoMap()
-  @ApiProperty({ required: true })
+  @ApiString({ required: true })
   createdBy?: string;
 }

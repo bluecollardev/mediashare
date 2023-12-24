@@ -24,22 +24,16 @@ import {
   MediaGetResponse,
   MediaPostResponse,
   MediaPutResponse,
-  MediaShareResponse,
 } from './media-item.decorator';
 import { MediaItemService } from './media-item.service';
 import { CreateMediaItemDto } from './dto/create-media-item.dto';
 import { UpdateMediaItemDto } from './dto/update-media-item.dto';
 import { MediaItem } from './entities/media-item.entity';
-import { ShareItemService } from '../share-item/share-item.service';
-import { ShareItem } from '../share-item/entities/share-item.entity';
 
 @ApiTags('media-items')
 @Controller('media-items')
 export class MediaItemController {
-  constructor(
-    private readonly mediaItemService: MediaItemService,
-    private shareItemService: ShareItemService
-  ) {}
+  constructor(private readonly mediaItemService: MediaItemService) {}
 
   @Get('visibilities')
   getVisibilities() {
@@ -101,33 +95,6 @@ export class MediaItemController {
     try {
       const result = await this.mediaItemService.remove(mediaId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
-    } catch (error) {
-      return handleErrorResponse(res, error);
-    }
-  }
-
-  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
-  @ApiBearerAuth()
-  @ApiParam({ name: 'mediaId', type: String, required: true })
-  @ApiParam({ name: RouteTokens.userId, type: String, required: true })
-  @Post(`${RouteTokens.mediaId}/share/${RouteTokens.userId}`)
-  @MediaShareResponse({ type: ShareItem })
-  async share(
-    @Res() res: Response,
-    @Param('mediaId') mediaId: string,
-    @Param('userId') userId: string,
-    @CognitoUser('sub') createdBy: string
-  ) {
-    try {
-      const { title } = await this.mediaItemService.findOne(mediaId);
-      if (!title && !createdBy) return res.status(HttpStatus.NOT_FOUND);
-
-      const result = await this.shareItemService.createMediaShareItem({
-        createdBy,
-        userId,
-        mediaId,
-      });
-      return handleSuccessResponse(res, HttpStatus.CREATED, result);
     } catch (error) {
       return handleErrorResponse(res, error);
     }
