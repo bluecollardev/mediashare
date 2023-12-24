@@ -1,11 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ShareItem } from '../share-item/entities/share-item.entity';
-import { ShareItemModule } from '../share-item/share-item.module';
-import {
-  ShareItemDataService,
-  ShareItemService,
-} from '../share-item/share-item.service';
 import {
   PlaylistItemDataService,
   PlaylistItemService,
@@ -22,9 +16,8 @@ import { MediaItem } from '../media-item/entities/media-item.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PlaylistItem, MediaItem, ShareItem]),
+    TypeOrmModule.forFeature([PlaylistItem, MediaItem]),
     MediaItemModule,
-    ShareItemModule,
   ],
   controllers: [PlaylistItemController],
   providers: [
@@ -33,8 +26,6 @@ import { MediaItem } from '../media-item/entities/media-item.entity';
     PlaylistItemMapping,
     MediaItemService,
     MediaItemDataService,
-    ShareItemService,
-    ShareItemDataService,
   ],
   exports: [PlaylistItemService],
 })

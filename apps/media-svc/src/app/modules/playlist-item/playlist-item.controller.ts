@@ -39,8 +39,7 @@ import { MediaItemService } from '../media-item/media-item.service';
 export class PlaylistItemController {
   constructor(
     private readonly playlistItemService: PlaylistItemService,
-    private mediaItemService: MediaItemService,
-    private shareItemService: ShareItemService
+    private mediaItemService: MediaItemService
   ) {}
 
   @Get('visibilities')
@@ -114,35 +113,6 @@ export class PlaylistItemController {
     try {
       const result = await this.playlistItemService.remove(playlistItemId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
-    } catch (error) {
-      return handleErrorResponse(res, error);
-    }
-  }
-
-  @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
-  @ApiBearerAuth()
-  @ApiParam({ name: 'playlistItemId', type: String, required: true })
-  @ApiParam({ name: 'userId', type: String, required: true })
-  @Post(`${RouteTokens.playlistItemId}/share/${RouteTokens.userId}`)
-  @PlaylistItemShareResponse({ type: ShareItem })
-  async share(
-    @Res() res: Response,
-    @Param('playlistItemId') playlistItemId: string,
-    @Param(RouteTokens.userId) userId: string,
-    @CognitoUser('sub') createdBy: string
-  ) {
-    try {
-      const result = await this.playlistItemService.findOne(playlistItemId);
-      // TODO: Fix this!
-      /* const shareItem = await this.shareItemService.createMediaShareItem({
-        createdBy,
-        userId,
-        playlistItemId,
-        title,
-      });
-      response.status(HttpStatus.CREATED);
-      return response.sendEmail(shareItem); */
-      return handleSuccessResponse(res, HttpStatus.CREATED, result);
     } catch (error) {
       return handleErrorResponse(res, error);
     }
