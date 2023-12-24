@@ -24,14 +24,11 @@ import {
   PlaylistItemGetResponse,
   PlaylistItemPostResponse,
   PlaylistItemPutResponse,
-  PlaylistItemShareResponse,
 } from './playlist-item.decorator';
 import { PlaylistItemService } from './playlist-item.service';
 import { CreatePlaylistItemDto } from './dto/create-playlist-item.dto';
 import { UpdatePlaylistItemDto } from './dto/update-playlist-item.dto';
 import { PlaylistItem } from './entities/playlist-item.entity';
-import { ShareItemService } from '../share-item/share-item.service';
-import { ShareItem } from '../share-item/entities/share-item.entity';
 import { MediaItemService } from '../media-item/media-item.service';
 
 @ApiTags('playlist-items')

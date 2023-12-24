@@ -5,7 +5,6 @@ import { CreatePlaylistItemDto } from './dto/create-playlist-item.dto';
 import { UpdatePlaylistItemDto } from './dto/update-playlist-item.dto';
 import { PlaylistItemDto } from './dto/playlist-item.dto';
 import { PlaylistItem } from './entities/playlist-item.entity';
-import { ShareItem } from '../share-item/entities/share-item.entity';
 
 export function PlaylistItemGetResponse({
   type = PlaylistItemDto,
@@ -42,17 +41,5 @@ export function PlaylistItemPutResponse({
   return applyDecorators(
     ApiResponse({ type, isArray, description, status: 200 }),
     ApiBody({ type: UpdatePlaylistItemDto })
-  );
-}
-
-export function PlaylistItemShareResponse({
-  type = ShareItem,
-  isArray = false,
-  description,
-}: ApiControllerDecoratorParams = {}) {
-  // TODO: Fix auth!
-  // return applyDecorators(ApiResponse({ type, isArray, description, status: 201 }), UseJwtGuard());
-  return applyDecorators(
-    ApiResponse({ type, isArray, description, status: 201 })
   );
 }

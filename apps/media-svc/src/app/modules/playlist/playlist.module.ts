@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ShareItemModule } from '../share-item/share-item.module';
 import { PlaylistDataService, PlaylistService } from './playlist.service';
 import { PlaylistController } from './playlist.controller';
 import { Playlist } from './entities/playlist.entity';

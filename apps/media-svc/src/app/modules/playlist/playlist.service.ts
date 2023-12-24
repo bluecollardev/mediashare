@@ -17,7 +17,7 @@ import { PlaylistItemService } from '../playlist-item/playlist-item.service';
 import { Playlist } from './entities/playlist.entity';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
-import { PlaylistDto } from '@mediashare/media-svc/src/app/modules/playlist/dto/playlist.dto';
+import { PlaylistDto } from '../playlist/dto/playlist.dto';
 import { PlaylistItem } from '../playlist-item/entities/playlist-item.entity';
 
 import { VISIBILITY_PUBLIC, VISIBILITY_SUBSCRIPTION } from '../../core/models';
@@ -183,6 +183,7 @@ export class PlaylistDataService extends FilterableDataService<
           as: 'playlistItems',
         },
       },
+      ...this.buildAuthorFields(),
       // { $lookup: { from: 'share_item', localField: '_id', foreignField: 'playlistId', as: 'shareItems' } },
       // { $lookup: { from: 'view_item', localField: '_id', foreignField: 'playlistId', as: 'viewItems' } },
       // { $lookup: { from: 'like_item', localField: '_id', foreignField: 'playlistId', as: 'likeItems' } },
@@ -197,6 +198,7 @@ export class PlaylistDataService extends FilterableDataService<
             {
               _id: '$_id',
               userId: '$userId',
+              ...this.buildAuthorReplaceRootDetails(),
               title: '$title',
               description: '$description',
               imageSrc: '$imageSrc',
