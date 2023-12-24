@@ -205,7 +205,7 @@ describe('UserAPI.e2e', () => {
 
               const user: UserDto = res.data;
               expect(user).toBeDefined();
-              expect(user.sub).toBeUndefined();
+              expect(user.sub).toBeDefined();
               expect(user.username).toEqual('jr.smith');
               expect(user.email).toEqual('jr.smith@example.com');
               expect(user.firstName).toEqual('John');

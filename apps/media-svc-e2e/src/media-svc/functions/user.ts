@@ -64,7 +64,7 @@ export const initializeTestUser = async (
   const testUserData = {
     sub,
     email,
-    username: 'bcdevlucas',
+    username: 'lucas@bluecollardev.com',
     firstName: 'Lucas',
     lastName: 'Lopatka',
     phoneNumber,

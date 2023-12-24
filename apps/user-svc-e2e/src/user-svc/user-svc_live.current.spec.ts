@@ -69,7 +69,7 @@ describe.skip('UserAPI.current.e2e', () => {
       const testUserData = {
         sub,
         email,
-        username: 'bcdevlucas',
+        username: 'lucas@bluecollardev.com',
         firstName: 'Lucas',
         lastName: 'Lopatka',
         phoneNumber,
@@ -129,7 +129,7 @@ describe.skip('UserAPI.current.e2e', () => {
       const testUserData = {
         sub,
         email,
-        username: 'bcdevlucas',
+        username: 'lucas@bluecollardev.com',
         firstName: 'Lucas',
         lastName: 'Lopatka',
         phoneNumber,
@@ -222,7 +222,7 @@ describe.skip('UserAPI.current.e2e', () => {
       const testUserData = {
         sub,
         email,
-        username: 'bcdevlucas',
+        username: 'lucas@bluecollardev.com',
         firstName: 'Lucas',
         lastName: 'Lopatka',
         phoneNumber,

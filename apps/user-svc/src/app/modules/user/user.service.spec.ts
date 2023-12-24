@@ -163,7 +163,7 @@ describe('UserService', () => {
     it('should find the user we updated', async () => {
       const user = await userService.findById(createdUserId);
       expect(user).toBeDefined();
-      expect(user.sub).toBeUndefined();
+      expect(user.sub).toBeDefined();
       expect(user.username).toEqual('jr.smith');
       expect(user.email).toEqual('jr.smith@example.com');
       expect(user.firstName).toEqual('John');
