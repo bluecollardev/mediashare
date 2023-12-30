@@ -39,21 +39,15 @@ export class FlaggedItemDataService extends DataService<
         newRoot: {
           $mergeObjects: [
             {
+              _id: '$_id',
               playlistId: '$playlistId',
-              shareId: '$_id',
-              sharedWith: '$sharedWith.username',
-              sharedWithUserId: '$sharedWith.sub',
-              sharedBy: '$sharedBy.username',
-              sharedByUserId: '$sharedBy.sub',
+              mediaId: '$mediaId',
+              flaggedBy: '$flaggedBy.username',
+              flaggedByUserId: '$flaggedBy.sub',
               ...this.buildAuthorReplaceRootDetails(),
-              read: '$read',
-              /* tags: '$tags',
-              shareCount: { $size: '$flaggedItems' },
-              likesCount: { $size: '$likeItems' },
-              viewCount: { $size: '$viewItems' }, */
+              count: '$count',
               createdAt: '$createdAt',
             },
-            '$playlist',
           ],
         },
       },
@@ -129,56 +123,8 @@ export class FlaggedItemService {
           },
         },
         ...this.dataService.buildAuthorFields(),
-        /* {
-          $lookup: {
-            from: 'media_item',
-            localField: 'mediaId',
-            foreignField: '_id',
-            as: 'mediaItem',
-          },
-        },
-        { $unwind: { path: '$author' } },
-        { $unwind: { path: '$mediaItem' } },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: [
-                {
-                  userSub: 0,
-                  playlistId: 0,
-                  mediaId: 0,
-                },
-                '$mediaItem',
-                {
-                  createdBy: '$author',
-                },
-              ],
-            },
-          },
-        }, */
       ])
       .toArray();
-  }
-
-  private buildStatsLookupFields() {
-    return [
-      {
-        $lookup: {
-          from: 'view_item',
-          localField: 'playlist._id',
-          foreignField: 'playlistId',
-          as: 'viewItems',
-        },
-      },
-      {
-        $lookup: {
-          from: 'like_item',
-          localField: 'playlist._id',
-          foreignField: 'playlistId',
-          as: 'likeItems',
-        },
-      },
-    ];
   }
 
   async getPlaylistsFlaggedByUser(userSub: string) {
@@ -194,167 +140,15 @@ export class FlaggedItemService {
             from: 'user',
             localField: 'createdBy',
             foreignField: 'sub',
-            as: 'sharedBy',
-          },
-        },
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'userSub',
-            foreignField: 'sub',
-            as: 'sharedWith',
+            as: 'flaggedBy',
           },
         },
         ...this.dataService.buildAuthorFields(),
-        {
-          $lookup: {
-            from: 'playlist',
-            localField: 'playlistId',
-            foreignField: '_id',
-            as: 'playlist',
-          },
-        },
-        /*{
-          $lookup: {
-            from: 'media_item',
-            localField: 'mediaIds',
-            foreignField: '_id',
-            as: 'mediaItems',
-          },
-        },*/
-
-        /* {
-          $lookup: {
-            from: 'share_item',
-            localField: 'playlist._id',
-            foreignField: 'playlistId',
-            as: 'flaggedItems',
-          },
-        },*/
-        ...this.buildStatsLookupFields(),
-        { $unwind: '$playlist' },
-        { $unwind: '$sharedBy' },
-        { $unwind: '$sharedWith' },
-        /* {
-          $addFields: {
-            tags: '$playlist.tags',
-          },
-        },*/
+        { $unwind: '$flaggedBy' },
         { ...this.dataService.replaceRoot() },
       ])
       .toArray();
 
-    return result;
-  }
-
-  async getItemsFlaggedWithUser(userSub: string) {
-    return {
-      mediaItems: await this.getMediaItemsFlaggedWithUser(userSub),
-      playlists: await this.getPlaylistsFlaggedWithUser(userSub),
-    };
-  }
-
-  async getMediaItemsFlaggedWithUser(userSub: string) {
-    return this.dataService.repository
-      .aggregate([
-        { $match: { $and: [{ userSub }, { mediaId: { $exists: true } }] } },
-        ...this.dataService.buildAuthorFields(),
-        {
-          $lookup: {
-            from: 'media_item',
-            localField: 'mediaId',
-            foreignField: '_id',
-            as: 'mediaItem',
-          },
-        },
-        { $unwind: { path: '$author' } },
-        { $unwind: { path: '$mediaItem' } },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: [
-                {
-                  userSub: 0,
-                  playlistId: 0,
-                  mediaId: 0,
-                },
-                '$mediaItem',
-                {
-                  createdBy: '$author',
-                },
-              ],
-            },
-          },
-        },
-      ])
-      .toArray();
-  }
-
-  async getPlaylistsFlaggedWithUser(userSub: string) {
-    const result = await this.dataService.repository
-      .aggregate([
-        { $match: { $and: [{ userSub }, { playlistId: { $exists: true } }] } },
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'createdBy',
-            foreignField: 'sub',
-            as: 'sharedBy',
-          },
-        },
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'userSub',
-            foreignField: 'sub',
-            as: 'sharedWith',
-          },
-        },
-        ...this.dataService.buildAuthorFields(),
-        {
-          $lookup: {
-            from: 'playlist',
-            localField: 'playlistId',
-            foreignField: '_id',
-            as: 'playlist',
-          },
-        },
-        /*{
-          $lookup: {
-            from: 'media_item',
-            localField: 'mediaIds',
-            foreignField: '_id',
-            as: 'mediaItems',
-          },
-        },
-        {
-          $lookup: {
-            from: 'share_item',
-            localField: 'playlist._id',
-            foreignField: 'playlistId',
-            as: 'flaggedItems',
-          },
-        },*/
-        ...this.buildStatsLookupFields(),
-        { $unwind: '$playlist' },
-        { $unwind: '$sharedBy' },
-        { $unwind: '$sharedWith' },
-        /*{
-          $addFields: {
-            tags: '$playlist.tags',
-            authorProfile: {
-              authorId: '$author._id',
-              authorName: {
-                $concat: ['$author.firstName', ' ', '$author.lastName'],
-              },
-              authorUsername: '$author.username',
-              authorImage: '$author.imageSrc',
-            },
-          },
-        },*/
-        { ...this.dataService.replaceRoot() },
-      ])
-      .toArray();
     return result;
   }
 
@@ -367,38 +161,4 @@ export class FlaggedItemService {
       _id: { $in: flaggedItemObjectIds },
     });
   }
-
-  /* async removeUserConnectionFlaggedItems(userConnectionDtos: UserConnectionDto[]): Promise<FlaggedItem[]> {
-    try {
-      const flaggedItemsToRemove = [];
-      const removeFlaggedItems = userConnectionDtos.map(async (userConnectionDto) => {
-        const { userSub, connectionId }: Partial<UserConnectionDto> = userConnectionDto;
-        if (!userSub || !connectionId) {
-          throw new Error('userSub and connectionId are both required parameters');
-        }
-
-        const query = [
-          {
-            $match: {
-              $or: [
-                {
-                  $and: [{ createdBy: userSub }, { userSub: ObjectIdGuard(connectionId) }],
-                },
-                {
-                  $and: [{ createdBy: ObjectIdGuard(connectionId) }, { userSub }],
-                },
-              ],
-            },
-          },
-        ];
-        const flaggedItems = await this.dataService.repository.aggregate(query).toArray();
-        flaggedItemsToRemove.push(...flaggedItems);
-      });
-      await Promise.all(removeFlaggedItems);
-      return await this.dataService.repository.remove(flaggedItemsToRemove);
-    } catch (error) {
-      this.logger.error(`${this.constructor.name}.removeUserConnection ${error}`);
-      throw error;
-    }
-  } */
 }
