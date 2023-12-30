@@ -20,7 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Response } from 'express';
-import { RouteTokens } from '../../core/constants';
+import { ParamTokens, RouteTokens } from '../../core/constants';
 import { PLAYLIST_VISIBILITY } from '../../core/models';
 import {
   handleErrorResponse,
@@ -73,7 +73,7 @@ export class PlaylistController {
   @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
   @ApiParam({
-    name: 'playlistId',
+    name: ParamTokens.playlistId,
     type: String,
     required: true,
     example: '123',
@@ -83,7 +83,7 @@ export class PlaylistController {
   @PlaylistPutResponse()
   async update(
     @Res() res: Response,
-    @Param('playlistId') playlistId: string,
+    @Param(ParamTokens.playlistId) playlistId: string,
     @CognitoUser('sub') userId: string,
     @Body() updatePlaylistDto: UpdatePlaylistDto
   ) {
@@ -102,12 +102,15 @@ export class PlaylistController {
   @ApiBearerAuth()
   @Delete(RouteTokens.playlistId)
   @ApiParam({
-    name: 'playlistId',
+    name: ParamTokens.playlistId,
     type: String,
     required: true,
     example: '123',
   })
-  async remove(@Res() res: Response, @Param('playlistId') playlistId: string) {
+  async remove(
+    @Res() res: Response,
+    @Param(ParamTokens.playlistId) playlistId: string
+  ) {
     try {
       const result = await this.playlistService.remove(playlistId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -120,13 +123,16 @@ export class PlaylistController {
   @ApiBearerAuth()
   @Get(RouteTokens.playlistId)
   @ApiParam({
-    name: 'playlistId',
+    name: ParamTokens.playlistId,
     type: String,
     required: true,
     example: '123',
   })
   @PlaylistGetResponse()
-  async findOne(@Res() res: Response, @Param('playlistId') playlistId: string) {
+  async findOne(
+    @Res() res: Response,
+    @Param(ParamTokens.playlistId) playlistId: string
+  ) {
     try {
       const result = await this.playlistService.getById(playlistId);
       return handleSuccessResponse(res, HttpStatus.OK, result);

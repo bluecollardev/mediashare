@@ -20,6 +20,7 @@
     "docker:media-svc:production": "PORT=3000 nx serve media-svc --host=0.0.0.0 --configuration=production --skip-nx-cache",
     "docker:user-svc:development": "PORT=3001 nx serve user-svc --host=0.0.0.0 --configuration=development --skip-nx-cache",
     "docker:user-svc:production": "PORT=3001 nx serve user-svc --host=0.0.0.0 --configuration=production --skip-nx-cache",
+    "db:backup": "timestamp=$(date \"+%Y%m%d-%H%M%S\") && mongodump -d mediashare --gzip --archive=./data/mediashare-backup.$timestamp.tar.gz",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:watch": "jest --watch",

@@ -23,7 +23,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Response } from 'express';
-import { RouteTokens } from '../../core/constants';
+import { ParamTokens, RouteTokens } from '../../core/constants';
 import { ShareItemService } from './share-item.service';
 import { MediaItemService } from '../media-item/media-item.service';
 import { PlaylistService } from '../playlist/playlist.service';
@@ -51,12 +51,12 @@ export class ShareItemController {
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Post(`user/${RouteTokens.userSub}/playlist/${RouteTokens.playlistId}`)
-  @ApiParam({ name: 'playlistId', type: String, required: true })
-  @ApiParam({ name: 'userSub', type: String, required: true })
+  @ApiParam({ name: ParamTokens.playlistId, type: String, required: true })
+  @ApiParam({ name: ParamTokens.userSub, type: String, required: true })
   @ShareItemGetResponse({ type: PlaylistShareItemDto, isArray: true })
   async sharePlaylist(
-    @Param('playlistId') playlistId: string,
-    @Param('userSub') userSub: string,
+    @Param(ParamTokens.playlistId) playlistId: string,
+    @Param(ParamTokens.userSub) userSub: string,
     @CognitoUser('sub') createdBy: string,
     @Res() res: Response
   ) {
@@ -78,12 +78,12 @@ export class ShareItemController {
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @Post(`user/${RouteTokens.userSub}/media-item/${RouteTokens.mediaId}`)
-  @ApiParam({ name: 'mediaId', type: String, required: true })
-  @ApiParam({ name: 'userSub', type: String, required: true })
+  @ApiParam({ name: ParamTokens.mediaId, type: String, required: true })
+  @ApiParam({ name: ParamTokens.userSub, type: String, required: true })
   @ShareItemGetResponse({ type: MediaShareItemDto, isArray: true })
   async shareMediaItem(
-    @Param('mediaId') mediaId: string,
-    @Param('userSub') userSub: string,
+    @Param(ParamTokens.mediaId) mediaId: string,
+    @Param(ParamTokens.userSub) userSub: string,
     @CognitoUser('sub') createdBy: string,
     @Res() res: Response
   ) {
@@ -152,20 +152,20 @@ export class ShareItemController {
 
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.shareId, type: String, required: true })
+  @ApiParam({ name: ParamTokens.shareId, type: String, required: true })
   @Get(RouteTokens.shareId)
   @ShareItemGetResponse()
-  async findShareItem(@Param(RouteTokens.shareId) shareId: string) {
+  async findShareItem(@Param(ParamTokens.shareId) shareId: string) {
     return await this.shareItemService.dataService.findOne(shareId);
   }
 
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.shareId, type: String, required: true })
+  @ApiParam({ name: ParamTokens.shareId, type: String, required: true })
   @ApiResponse({ type: ShareItem, status: 200 })
   @Post(`read/${RouteTokens.shareId}`) // TODO: Why is this a POST? Shouldn't we be using ShareItemPostResponse as well?
   @HttpCode(HttpStatus.OK)
-  async readShareItem(@Param(RouteTokens.shareId) shareId: string) {
+  async readShareItem(@Param(ParamTokens.shareId) shareId: string) {
     return await this.shareItemService.dataService.update(shareId, {
       read: true,
     });
@@ -173,10 +173,10 @@ export class ShareItemController {
 
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: RouteTokens.shareId, type: String, required: true })
+  @ApiParam({ name: ParamTokens.shareId, type: String, required: true })
   @Delete(RouteTokens.shareId)
   @ShareItemGetResponse()
-  async removeShareItem(@Param(RouteTokens.shareId) shareId: string) {
+  async removeShareItem(@Param(ParamTokens.shareId) shareId: string) {
     return await this.shareItemService.dataService.remove(shareId);
   }
 

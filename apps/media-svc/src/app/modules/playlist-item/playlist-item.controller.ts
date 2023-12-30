@@ -18,7 +18,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { RouteTokens } from '../../core/constants';
+import { ParamTokens, RouteTokens } from '../../core/constants';
 import { MEDIA_VISIBILITY } from '../../core/models';
 import {
   PlaylistItemGetResponse,
@@ -80,12 +80,12 @@ export class PlaylistItemController {
 
   @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: 'playlistItemId', type: String, required: true })
+  @ApiParam({ name: ParamTokens.playlistItemId, type: String, required: true })
   @Put(RouteTokens.playlistItemId)
   @PlaylistItemPutResponse()
   async update(
     @Res() res: Response,
-    @Param('playlistItemId') playlistItemId: string,
+    @Param(ParamTokens.playlistItemId) playlistItemId: string,
     @Body() updatePlaylistItemDto: UpdatePlaylistItemDto
   ) {
     try {
@@ -101,11 +101,11 @@ export class PlaylistItemController {
 
   @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: 'playlistItemId', type: String, required: true })
+  @ApiParam({ name: ParamTokens.playlistItemId, type: String, required: true })
   @Delete(RouteTokens.playlistItemId)
   async remove(
     @Res() res: Response,
-    @Param('playlistItemId') playlistItemId: string
+    @Param(ParamTokens.playlistItemId) playlistItemId: string
   ) {
     try {
       const result = await this.playlistItemService.remove(playlistItemId);
@@ -117,12 +117,12 @@ export class PlaylistItemController {
 
   @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: 'playlistItemId', type: String, required: true })
+  @ApiParam({ name: ParamTokens.playlistItemId, type: String, required: true })
   @Get(RouteTokens.playlistItemId)
   @PlaylistItemGetResponse()
   async findOne(
     @Res() res: Response,
-    @Param('playlistItemId') playlistItemId: string
+    @Param(ParamTokens.playlistItemId) playlistItemId: string
   ) {
     try {
       const result = await this.playlistItemService.getById(playlistItemId);

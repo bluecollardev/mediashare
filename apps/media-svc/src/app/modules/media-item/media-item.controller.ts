@@ -19,7 +19,7 @@ import {
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { MEDIA_VISIBILITY } from '../../core/models';
-import { RouteTokens } from '../../core/constants';
+import { ParamTokens, RouteTokens } from '../../core/constants';
 import {
   MediaGetResponse,
   MediaPostResponse,
@@ -68,12 +68,12 @@ export class MediaItemController {
 
   @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: 'mediaId', type: String, required: true })
+  @ApiParam({ name: ParamTokens.mediaId, type: String, required: true })
   @Put(RouteTokens.mediaId)
   @MediaPutResponse()
   async update(
     @Res() res: Response,
-    @Param('mediaId') mediaId: string,
+    @Param(ParamTokens.mediaId) mediaId: string,
     @Body() updateMediaItemDto: UpdateMediaItemDto
   ) {
     try {
@@ -89,9 +89,12 @@ export class MediaItemController {
 
   @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: 'mediaId', type: String, required: true })
+  @ApiParam({ name: ParamTokens.mediaId, type: String, required: true })
   @Delete(RouteTokens.mediaId)
-  async remove(@Res() res: Response, @Param('mediaId') mediaId: string) {
+  async remove(
+    @Res() res: Response,
+    @Param(ParamTokens.mediaId) mediaId: string
+  ) {
     try {
       const result = await this.mediaItemService.remove(mediaId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
@@ -102,10 +105,13 @@ export class MediaItemController {
 
   @UseGuards(AuthenticationGuard) // @UseGuards(AuthenticationGuard, UserGuard)
   @ApiBearerAuth()
-  @ApiParam({ name: 'mediaId', type: String, required: true })
+  @ApiParam({ name: ParamTokens.mediaId, type: String, required: true })
   @Get(RouteTokens.mediaId)
   @MediaGetResponse()
-  async findOne(@Res() res: Response, @Param('mediaId') mediaId: string) {
+  async findOne(
+    @Res() res: Response,
+    @Param(ParamTokens.mediaId) mediaId: string
+  ) {
     try {
       const result = await this.mediaItemService.getById(mediaId);
       return handleSuccessResponse(res, HttpStatus.OK, result);
