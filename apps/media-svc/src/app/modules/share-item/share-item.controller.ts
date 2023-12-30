@@ -159,6 +159,7 @@ export class ShareItemController {
     return await this.shareItemService.dataService.findOne(shareId);
   }
 
+  // TODO: Why do we care about this? Can we delete?
   @UseGuards(AuthenticationGuard)
   @ApiBearerAuth()
   @ApiParam({ name: ParamTokens.shareId, type: String, required: true })
@@ -167,7 +168,7 @@ export class ShareItemController {
   @HttpCode(HttpStatus.OK)
   async readShareItem(@Param(ParamTokens.shareId) shareId: string) {
     return await this.shareItemService.dataService.update(shareId, {
-      read: true,
+      // read: true,
     });
   }
 

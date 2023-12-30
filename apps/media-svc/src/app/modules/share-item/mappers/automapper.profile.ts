@@ -11,6 +11,10 @@ import { stringToObjectIdConverter } from '@mediashare/core/mappings/converters'
 import { Injectable } from '@nestjs/common';
 import { ShareItem } from '../entities/share-item.entity';
 import {
+  MediaShareItemDto,
+  PlaylistShareItemDto,
+} from '../dto/share-item.dto';
+import {
   CreateMediaShareItemDto,
   CreatePlaylistShareItemDto,
 } from '../dto/create-share-item.dto';
@@ -19,26 +23,64 @@ import {
   UpdatePlaylistShareItemDto,
 } from '../dto/update-share-item.dto';
 
+export const shareItemToMediaShareItemDtoMappingFactory = (mapper) =>
+  createMap(
+    mapper,
+    ShareItem,
+    MediaShareItemDto,
+    forMember((dest: MediaShareItemDto) => dest._id, ignore()),
+    forMember(
+      (dest: MediaShareItemDto) => dest.mediaId,
+      convertUsing(
+        stringToObjectIdConverter as never,
+        (source: ShareItem) => source.mediaId
+      )
+    ),
+    forMember(
+      (dest: MediaShareItemDto) => dest.playlistId,
+      convertUsing(
+        stringToObjectIdConverter as never,
+        (source: ShareItem) => source.playlistId
+      )
+    )
+  );
+
+export const shareItemToPlaylistShareItemDtoMappingFactory = (mapper) =>
+  createMap(
+    mapper,
+    ShareItem,
+    PlaylistShareItemDto,
+    forMember((dest: PlaylistShareItemDto) => dest._id, ignore()),
+    forMember(
+      (dest: PlaylistShareItemDto) => dest.mediaId,
+      convertUsing(
+        stringToObjectIdConverter as never,
+        (source: ShareItem) => source.mediaId
+      )
+    ),
+    forMember(
+      (dest: PlaylistShareItemDto) => dest.playlistId,
+      convertUsing(
+        stringToObjectIdConverter as never,
+        (source: ShareItem) => source.playlistId
+      )
+    )
+  );
+
 export const createMediaShareItemDtoToShareItemMappingFactory = (mapper) =>
   createMap(
     mapper,
     CreateMediaShareItemDto,
     ShareItem,
-    forMember((dest: ShareItem) => dest._id, ignore()),
-    forMember(
-      (dest: ShareItem) => dest.playlistId,
-      convertUsing(
-        stringToObjectIdConverter as never,
-        (source: CreateMediaShareItemDto) => source.playlistId
-      )
-    ),
+    // forMember((dest: ShareItem) => dest._id, ignore()),
     forMember(
       (dest: ShareItem) => dest.mediaId,
       convertUsing(
         stringToObjectIdConverter as never,
         (source: CreateMediaShareItemDto) => source.mediaId
       )
-    )
+    ),
+    forMember((dest: ShareItem) => dest.playlistId, ignore()),
   );
 
 export const createPlaylistShareItemDtoToShareItemMappingFactory = (mapper) =>
@@ -54,13 +96,7 @@ export const createPlaylistShareItemDtoToShareItemMappingFactory = (mapper) =>
         (source: CreatePlaylistShareItemDto) => source.playlistId
       )
     ),
-    forMember(
-      (dest: ShareItem) => dest.mediaId,
-      convertUsing(
-        stringToObjectIdConverter as never,
-        (source: CreatePlaylistShareItemDto) => source.mediaId
-      )
-    )
+    forMember((dest: ShareItem) => dest.mediaId, ignore()),
   );
 
 export const updateMediaShareItemDtoToShareItemMappingFactory = (mapper) =>
@@ -100,6 +136,8 @@ export class ShareItemMapping extends AutomapperProfile {
   override get profile() {
     return (mapper) => {
       // shareItemToShareItemDtoMappingFactory(mapper);
+      shareItemToMediaShareItemDtoMappingFactory(mapper);
+      shareItemToPlaylistShareItemDtoMappingFactory(mapper);
       createMediaShareItemDtoToShareItemMappingFactory(mapper);
       createPlaylistShareItemDtoToShareItemMappingFactory(mapper);
       updateMediaShareItemDtoToShareItemMappingFactory(mapper);

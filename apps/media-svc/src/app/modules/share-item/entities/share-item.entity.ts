@@ -21,7 +21,7 @@ export class ShareItem extends ApiBaseEntity {
   @Index('mediaId', { unique: false })
   mediaId: ObjectId;
 
-  @AutoMap()
+  /* @AutoMap()
   @Column()
-  read: boolean;
+  read: boolean; */
 }

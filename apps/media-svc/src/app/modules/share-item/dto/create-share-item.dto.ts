@@ -18,14 +18,8 @@ export class CreateMediaShareItemDto {
   @IsOptional()
   @IsString()
   @AutoMap()
-  @ApiProperty({ required: false })
-  playlistId?: string;
-
-  @IsOptional()
-  @IsString()
-  @AutoMap()
   @ApiProperty({ required: true })
-  createdBy?: string;
+  createdBy: string;
 }
 
 export class CreatePlaylistShareItemDto {
@@ -37,18 +31,12 @@ export class CreatePlaylistShareItemDto {
   @IsOptional()
   @IsString()
   @AutoMap()
-  @ApiString({ required: true })
-  mediaId?: string;
-
-  @IsOptional()
-  @IsString()
-  @AutoMap()
-  @ApiString({ required: true })
+  @ApiString({ required: false })
   playlistId?: string;
 
   @IsOptional()
   @IsString()
   @AutoMap()
   @ApiString({ required: true })
-  createdBy?: string;
+  createdBy: string;
 }

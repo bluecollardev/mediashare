@@ -1,26 +1,45 @@
 // import { UserConnectionDto } from '../user-connection/tags/user-connection.tags';
+import { AutoMap } from '@automapper/classes';
+import { ApiBaseDto } from '@mediashare/core/dtos/base.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { MediaItemDto } from '../../media-item/dto/media-item.dto';
-import { PlaylistDto } from '../../playlist/dto/playlist.dto';
+import { IsOptional, IsString } from 'class-validator';
 
-export class MediaShareItemDto extends MediaItemDto {
+export class MediaShareItemDto extends ApiBaseDto {
+  @IsOptional()
+  @IsString()
+  @AutoMap()
   @ApiProperty({ type: 'string' })
   shareId?: string;
 
+  @IsOptional()
+  @IsString()
+  @AutoMap()
   @ApiProperty({ type: 'string' })
-  mediaItemId?: string;
+  mediaId?: string;
 
+  @IsOptional()
+  @IsString()
+  @AutoMap()
   @ApiProperty({ type: 'string' })
   playlistId?: string;
 }
 
-export class PlaylistShareItemDto extends PlaylistDto {
+export class PlaylistShareItemDto extends ApiBaseDto {
+  @IsOptional()
+  @IsString()
+  @AutoMap()
   @ApiProperty({ type: 'string' })
   shareId?: string;
 
+  @IsOptional()
+  @IsString()
+  @AutoMap()
   @ApiProperty({ type: 'string' })
-  mediaItemId?: string;
+  mediaId?: string;
 
+  @IsOptional()
+  @IsString()
+  @AutoMap()
   @ApiProperty({ type: 'string' })
   playlistId?: string;
 }
