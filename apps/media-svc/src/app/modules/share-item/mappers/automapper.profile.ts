@@ -10,10 +10,7 @@ import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { stringToObjectIdConverter } from '@mediashare/core/mappings/converters';
 import { Injectable } from '@nestjs/common';
 import { ShareItem } from '../entities/share-item.entity';
-import {
-  MediaShareItemDto,
-  PlaylistShareItemDto,
-} from '../dto/share-item.dto';
+import { MediaShareItemDto, PlaylistShareItemDto } from '../dto/share-item.dto';
 import {
   CreateMediaShareItemDto,
   CreatePlaylistShareItemDto,
@@ -80,7 +77,7 @@ export const createMediaShareItemDtoToShareItemMappingFactory = (mapper) =>
         (source: CreateMediaShareItemDto) => source.mediaId
       )
     ),
-    forMember((dest: ShareItem) => dest.playlistId, ignore()),
+    forMember((dest: ShareItem) => dest.playlistId, ignore())
   );
 
 export const createPlaylistShareItemDtoToShareItemMappingFactory = (mapper) =>
@@ -96,7 +93,7 @@ export const createPlaylistShareItemDtoToShareItemMappingFactory = (mapper) =>
         (source: CreatePlaylistShareItemDto) => source.playlistId
       )
     ),
-    forMember((dest: ShareItem) => dest.mediaId, ignore()),
+    forMember((dest: ShareItem) => dest.mediaId, ignore())
   );
 
 export const updateMediaShareItemDtoToShareItemMappingFactory = (mapper) =>

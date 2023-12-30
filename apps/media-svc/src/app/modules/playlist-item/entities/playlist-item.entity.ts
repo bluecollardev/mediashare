@@ -25,11 +25,6 @@ export class PlaylistItem extends ApiBaseEntity {
   @Index('userId', { unique: false })
   userId: string;
 
-  @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
-  @ObjectIdColumn({ name: 'createdBy', nullable: true, unique: false })
-  @Index('createdBy', { unique: false })
-  createdBy: ObjectId;
-
   @AutoMap()
   @Column({ nullable: true })
   sortIndex?: number;

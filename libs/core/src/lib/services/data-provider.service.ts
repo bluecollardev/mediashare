@@ -218,4 +218,38 @@ export abstract class DataService<
   protected buildFields() {
     return [];
   }
+
+  public buildAuthorFields() {
+    return [
+      {
+        $lookup: {
+          from: 'user',
+          localField: 'createdBy',
+          foreignField: 'sub',
+          as: 'author',
+        },
+      },
+      { $unwind: { path: '$author' } },
+      {
+        $addFields: {
+          authorProfile: {
+            authorSub: '$author.sub',
+            authorName: {
+              $concat: ['$author.firstName', ' ', '$author.lastName'],
+            },
+            authorUsername: '$author.username',
+            authorImage: '$author.imageSrc',
+          },
+        },
+      },
+    ];
+  }
+
+  public buildAuthorReplaceRootDetails() {
+    return {
+      username: '$author.username',
+      author: '$author',
+      authorProfile: '$authorProfile',
+    };
+  }
 }

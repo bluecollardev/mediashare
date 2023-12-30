@@ -131,7 +131,8 @@ export class ShareItemController {
   @Get('shared-with-user')
   @ShareItemGetResponse({ type: ShareItemsDto, isArray: false })
   async findItemsSharedWithUser(@CognitoUser('sub') userSub: string) {
-    return await this.shareItemService.getItemsSharedWithUser(userSub);
+    const result = await this.shareItemService.getItemsSharedWithUser(userSub);
+    return result;
   }
 
   @UseGuards(AuthenticationGuard)

@@ -127,39 +127,5 @@ export abstract class FilterableDataService<
   // @ts-ignore
   protected abstract buildFields(): any[];
 
-  protected buildAuthorFields() {
-    return [
-      {
-        $lookup: {
-          from: 'user',
-          localField: 'createdBy',
-          foreignField: 'sub',
-          as: 'author',
-        },
-      },
-      { $unwind: { path: '$author' } },
-      {
-        $addFields: {
-          authorProfile: {
-            authorSub: '$author.sub',
-            authorName: {
-              $concat: ['$author.firstName', ' ', '$author.lastName'],
-            },
-            authorUsername: '$author.username',
-            authorImage: '$author.imageSrc',
-          },
-        },
-      },
-    ];
-  }
-
-  protected buildAuthorReplaceRootDetails() {
-    return {
-      username: '$author.username',
-      author: '$author',
-      authorProfile: '$authorProfile',
-    };
-  }
-
   protected abstract replaceRoot(): object;
 }

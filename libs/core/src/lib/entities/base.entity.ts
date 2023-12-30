@@ -5,7 +5,7 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
-  ColumnOptions,
+  ColumnOptions, Column
 } from 'typeorm';
 import { ObjectId } from 'mongodb';
 
@@ -32,9 +32,9 @@ export class ApiBaseEntity implements IApiBaseEntity {
   @ObjectIdColumn()
   _id: ObjectId;
 
-  // @AutoMap({ typeFn: () => ObjectId } as AutoMapOptions)
-  // @ObjectIdColumn()
-  // createdBy: ObjectId;
+  @AutoMap()
+  @Column({ name: 'createdBy', nullable: false, unique: false })
+  createdBy: string;
 
   @AutoMap()
   @CreateDateColumn()

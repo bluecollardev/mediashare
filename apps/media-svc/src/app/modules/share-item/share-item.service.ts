@@ -29,6 +29,33 @@ export class ShareItemDataService extends DataService<
   ) {
     super(repository, logger);
   }
+
+  public replaceRoot(): object {
+    return {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: [
+            {
+              playlistId: '$playlistId',
+              shareId: '$_id',
+              sharedWith: '$sharedWith.username',
+              sharedWithUserId: '$sharedWith.sub',
+              sharedBy: '$sharedBy.username',
+              sharedByUserId: '$sharedBy.sub',
+              ...this.buildAuthorReplaceRootDetails(),
+              read: '$read',
+              /* tags: '$tags',
+              shareCount: { $size: '$shareItems' },
+              likesCount: { $size: '$likeItems' },
+              viewCount: { $size: '$viewItems' }, */
+              createdAt: '$createdAt',
+            },
+            '$playlist',
+          ],
+        },
+      },
+    };
+  }
 }
 
 @Injectable()
@@ -98,15 +125,8 @@ export class ShareItemService {
             $and: [{ createdBy: userSub }, { mediaId: { $exists: true } }],
           },
         },
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'createdBy',
-            foreignField: '_id',
-            as: 'author',
-          },
-        },
-        {
+        ...this.dataService.buildAuthorFields(),
+        /* {
           $lookup: {
             from: 'media_item',
             localField: 'mediaId',
@@ -132,19 +152,41 @@ export class ShareItemService {
               ],
             },
           },
-        },
+        }, */
       ])
       .toArray();
   }
 
+  private buildStatsLookupFields() {
+    return [{
+      $lookup: {
+        from: 'view_item',
+        localField: 'playlist._id',
+        foreignField: 'playlistId',
+        as: 'viewItems',
+      },
+    },
+    {
+      $lookup: {
+        from: 'like_item',
+        localField: 'playlist._id',
+        foreignField: 'playlistId',
+        as: 'likeItems',
+      },
+    }];
+  }
+
   async getPlaylistsSharedByUser(userSub: string) {
-    return this.dataService.repository
+    const result = await this.dataService.repository
       .aggregate([
         {
           $match: {
             $and: [{ createdBy: userSub }, { playlistId: { $exists: true } }],
           },
         },
+        { $lookup: { from: 'user', localField: 'createdBy', foreignField: 'sub', as: 'sharedBy' } },
+        { $lookup: { from: 'user', localField: 'userSub', foreignField: 'sub', as: 'sharedWith' } },
+        ...this.dataService.buildAuthorFields(),
         {
           $lookup: {
             from: 'playlist',
@@ -153,75 +195,37 @@ export class ShareItemService {
             as: 'playlist',
           },
         },
-        {
+        /*{
           $lookup: {
             from: 'media_item',
             localField: 'mediaIds',
             foreignField: '_id',
             as: 'mediaItems',
           },
-        },
-        // { $lookup: { from: 'user', localField: 'createdBy', foreignField: '_id', as: 'sharedBy' } },
-        // { $lookup: { from: 'user', localField: 'userSub', foreignField: '_id', as: 'sharedWith' } },
-        // { $lookup: { from: 'user', localField: 'playlist.createdBy', foreignField: '_id', as: 'author' } },
-        {
+        },*/
+
+        /* {
           $lookup: {
             from: 'share_item',
             localField: 'playlist._id',
             foreignField: 'playlistId',
             as: 'shareItems',
           },
-        },
-        {
-          $lookup: {
-            from: 'view_item',
-            localField: 'playlist._id',
-            foreignField: 'playlistId',
-            as: 'viewItems',
-          },
-        },
-        {
-          $lookup: {
-            from: 'like_item',
-            localField: 'playlist._id',
-            foreignField: 'playlistId',
-            as: 'likeItems',
-          },
-        },
+        },*/
+        ...this.buildStatsLookupFields(),
         { $unwind: '$playlist' },
-        // { $unwind: '$sharedBy' },
-        // { $unwind: '$sharedWith' },
-        {
+        { $unwind: '$sharedBy' },
+        { $unwind: '$sharedWith' },
+        /* {
           $addFields: {
             tags: '$playlist.tags',
           },
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: [
-                {
-                  playlistId: '$playlistId',
-                  shareId: '$_id',
-                  sharedWith: '$sharedWith.username',
-                  sharedWithUserId: '$sharedWith._id',
-                  sharedBy: '$sharedBy.username',
-                  sharedByUserId: '$sharedBy._id',
-                  // authorProfile: '$authorProfile',
-                  read: '$read',
-                  tags: '$tags',
-                  shareCount: { $size: '$shareItems' },
-                  likesCount: { $size: '$likeItems' },
-                  viewCount: { $size: '$viewItems' },
-                  createdAt: '$createdAt',
-                },
-                '$playlist',
-              ],
-            },
-          },
-        },
+        },*/
+        { ...this.dataService.replaceRoot() }
       ])
       .toArray();
+
+    return result;
   }
 
   async getItemsSharedWithUser(userSub: string) {
@@ -235,14 +239,7 @@ export class ShareItemService {
     return this.dataService.repository
       .aggregate([
         { $match: { $and: [{ userSub }, { mediaId: { $exists: true } }] } },
-        {
-          $lookup: {
-            from: 'user',
-            localField: 'createdBy',
-            foreignField: '_id',
-            as: 'author',
-          },
-        },
+        ...this.dataService.buildAuthorFields(),
         {
           $lookup: {
             from: 'media_item',
@@ -275,7 +272,7 @@ export class ShareItemService {
   }
 
   async getPlaylistsSharedWithUser(userSub: string) {
-    return this.dataService.repository
+    const result = await this.dataService.repository
       .aggregate([
         { $match: { $and: [{ userSub }, { playlistId: { $exists: true } }] } },
         {
@@ -326,22 +323,7 @@ export class ShareItemService {
             as: 'shareItems',
           },
         },
-        {
-          $lookup: {
-            from: 'view_item',
-            localField: 'playlist._id',
-            foreignField: 'playlistId',
-            as: 'viewItems',
-          },
-        },
-        {
-          $lookup: {
-            from: 'like_item',
-            localField: 'playlist._id',
-            foreignField: 'playlistId',
-            as: 'likeItems',
-          },
-        },
+        ...this.buildStatsLookupFields(),
         { $unwind: '$playlist' },
         { $unwind: '$sharedBy' },
         { $unwind: '$sharedWith' },
@@ -349,12 +331,12 @@ export class ShareItemService {
         {
           $addFields: {
             tags: '$playlist.tags',
-            /* authorProfile: {
+            authorProfile: {
               authorId: '$author._id',
               authorName: { $concat: ['$author.firstName', ' ', '$author.lastName'] },
               authorUsername: '$author.username',
               authorImage: '$author.imageSrc',
-            } */
+            }
           },
         },
         {
@@ -383,6 +365,7 @@ export class ShareItemService {
         },
       ])
       .toArray();
+    return result;
   }
 
   // Was previously Promise<DeleteWriteOpResultObject>
