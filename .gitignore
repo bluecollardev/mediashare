@@ -45,3 +45,6 @@ Thumbs.db
 
 # OpenAPI Clients
 openapi/clients/*
+
+# Gitlab
+dynamic-gitlab-ci.yml

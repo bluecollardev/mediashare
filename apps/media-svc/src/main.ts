@@ -20,6 +20,7 @@ const isProduction = process.env?.NODE_ENV === 'production';
 
 async function bootstrap() {
   try {
+    console.log('Test this!');
     let httpsOptions;
     if (withHttps) {
       httpsOptions = {
