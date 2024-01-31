@@ -1,0 +1,111 @@
+.build-common-envs: &build-common-envs
+  - echo SAMPLE=$SAMPLE >> .env
+
+default:
+  image: docker:24.0.5
+  services:
+    - name: docker:24.0.5-dind
+      alias: dockerhost
+    # - name: mysql
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  after_script:
+    - docker logout
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://dockerhost:2375
+  # This instructs Docker not to start over TLS.
+  DOCKER_TLS_CERTDIR: ""
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
+
+stages:
+  # - test
+  - build
+  - build-staging
+  - release-staging
+  - deploy-staging
+#  - build-production
+#  - release-production
+#  - deploy-production
+
+build-branch:
+  stage: build
+  rules:
+    - if: $CI_COMMIT_BRANCH != "develop" && $CI_COMMIT_BRANCH != "master" && $CI_PIPELINE_SOURCE == "merge_request_event"
+  environment:
+    name: staging
+    url: https://dev.mydomain.com
+  script:
+    - docker build --pull -t $CONTAINER_TEST_IMAGE . --progress=plain
+    - docker push $CONTAINER_TEST_IMAGE
+
+#test:
+#  stage: test
+#  script:
+#    - docker pull $CONTAINER_TEST_IMAGE
+#    - docker run $CONTAINER_TEST_IMAGE /script/to/run/tests
+
+build-staging:
+  stage: build-staging
+#  rules:
+#    - if: $CI_COMMIT_BRANCH == "develop"
+  environment:
+    name: staging
+    url: https://dev.mydomain.com
+  script:
+    - docker build --pull -t $CONTAINER_TEST_IMAGE . --progress=plain
+    - docker push $CONTAINER_TEST_IMAGE
+
+release-staging-image:
+  stage: release-staging
+#  rules:
+#    - if: $CI_COMMIT_BRANCH == "develop"
+  dependencies:
+    - build-staging
+  environment:
+    name: staging
+    url: https://dev.mydomain.com
+  script:
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_TEST_IMAGE
+    - docker push $CONTAINER_TEST_IMAGE
+
+deploy-staging:
+  stage: deploy-staging
+#  rules:
+#    - if: $CI_COMMIT_BRANCH == "develop"
+  dependencies:
+    - release-staging-image
+  tags:
+    - deployment
+  when: manual
+  environment:
+    name: staging
+    url: https://dev.mydomain.com
+#  script:
+#    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#    - eval $(ssh-agent -s)
+#    - chmod og= $DEV_ID_RSA
+#    - echo $DEV_ID_RSA
+#    - echo $DEV_ID_RSA_PUB
+#    #- echo $CI_COMMIT_SHA
+#    # Write the environment variable value to the agent store, create the ssh dir and assign the right permissions
+#    - cat $DEV_ID_RSA | ssh-add -
+#    - mkdir -p ~/.ssh
+#    # Make sure that ssh will trust the new host, instead of asking
+#    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+#    # -- Finished setting GitLab variables to .env file --
+#    - chmod -R og= ~/.ssh
+#    # Set GitLab variables to .env file
+#    - cd ~
+#    - rm -f .env && touch .env
+#    - echo APP_NAME=mediashare >> .env
+#    - *build-common-envs
+#    - ssh -i $DEV_ID_RSA -o StrictHostKeyChecking=no $DEV_SERVER_USER@$DEV_SERVER_IP "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+#    - ssh -i $DEV_ID_RSA -o StrictHostKeyChecking=no $DEV_SERVER_USER@$DEV_SERVER_IP "docker pull $CONTAINER_TEST_IMAGE"
+#    - ssh -i $DEV_ID_RSA -o StrictHostKeyChecking=no $DEV_SERVER_USER@$DEV_SERVER_IP "docker container rm -f app || true"
+#    - scp -i $DEV_ID_RSA -o StrictHostKeyChecking=no -v $(pwd)/.env $DEV_SERVER_USER@$DEV_SERVER_IP:~/.env
+#    - ssh -i $DEV_ID_RSA -o StrictHostKeyChecking=no $DEV_SERVER_USER@$DEV_SERVER_IP cat ~/.env
+#    - ssh -i $DEV_ID_RSA -o StrictHostKeyChecking=no $DEV_SERVER_USER@$DEV_SERVER_IP "docker run -d -p 8000:8000 --name app --env-file ~/.env $CONTAINER_TEST_IMAGE"
