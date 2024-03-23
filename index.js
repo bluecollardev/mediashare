@@ -17,15 +17,16 @@ publish:${service}:
   stage: publish
   image: docker
   variables:
-    SERVICE: ${service}
+    SERVICE: ${service}-dev
+    TAG_NAME: $CI_COMMIT_SHORT_SHA
   services:
     - name: docker:dind
       alias: docker
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker build --pull --cache-from $CI_REGISTRY_IMAGE --tag $CI_REGISTRY_IMAGE/${service} .
-    - docker push $CI_REGISTRY_IMAGE/${service}
+    - docker build --pull --cache-from $CI_REGISTRY_IMAGE --tag $CI_REGISTRY_IMAGE/${service}-dev:$TAG_NAME .
+    - docker push $CI_REGISTRY_IMAGE/${service}-dev:$TAG_NAME
 `;
 
 const createCIFile = (projects) => {
